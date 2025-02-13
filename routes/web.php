@@ -25,5 +25,5 @@ Route::resource('bienthes', BienTheController::class);
 Route::resource('taikhoans', TaiKhoanController::class);
 Route::resource('donhangs', DonHangController::class);
 Route::resource('baiviets', BaiVietController::class);
-Route::resource('vaitros', controller: VaiTroController::class);
+Route::resource('vaitros', VaiTroController::class);
 Route::resource('phieugiamgias', PhieuGiamGiaController::class);
