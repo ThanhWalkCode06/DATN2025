@@ -88,7 +88,7 @@
                     <div class="contain-404">
                         <h3 class="text-content">Không tìm thấy địa chỉ trang. Đường link này có thể đã hết hạn hoặc
                             đã bị chuyển rời sang một cái tên khác.</h3>
-                        <button onclick="location.href = '{{ route('login') }}';"
+                        <button onclick="location.href = '{{ url()->previous() }}';"
                             class="btn btn-md text-white theme-bg-color mt-4 mx-auto">Trở lại trang chính</button>
                     </div>
                 </div>
