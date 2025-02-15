@@ -37,7 +37,7 @@ class BaiVietController extends Controller
      */
     public function show(BaiViet $baiViet)
     {
-        //
+        return view('admins.baiviets.show');
     }
 
     /**
@@ -45,7 +45,7 @@ class BaiVietController extends Controller
      */
     public function edit(BaiViet $baiViet)
     {
-        //
+        return view('admins.baiviets.edit');
     }
 
     /**
