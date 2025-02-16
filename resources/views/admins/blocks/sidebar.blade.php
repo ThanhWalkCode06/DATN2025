@@ -160,12 +160,12 @@
                         </a>
                     </li>
 
-                    <li class="sidebar-list">
+                    {{-- <li class="sidebar-list">
                         <a class="sidebar-link sidebar-title link-nav" href="{{ route('lienhe') }}">
                             <i class="ri-phone-line"></i>
                             <span>Liên hệ</span>
                         </a>
-                    </li>
+                    </li> --}}
 
                     <li class="sidebar-list">
                         <a class="linear-icon-link sidebar-link sidebar-title" href="javascript:void(0)">
