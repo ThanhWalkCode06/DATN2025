@@ -41,7 +41,7 @@
             <div class="custome-1-bg b-r-4 card-body">
                 <div class="media align-items-center static-top-widget">
                     <div class="media-body p-0">
-                        <span class="m-0">Total Revenue</span>
+                        <span class="m-0">Tổng doanh thu</span>
                         <h4 class="mb-0 counter">$6659
                             <span class="badge badge-light-primary grow">
                                 <i data-feather="trending-up"></i>8.5%</span>
@@ -60,7 +60,7 @@
             <div class="custome-2-bg b-r-4 card-body">
                 <div class="media static-top-widget">
                     <div class="media-body p-0">
-                        <span class="m-0">Total Orders</span>
+                        <span class="m-0">Số lượng đơn hàng</span>
                         <h4 class="mb-0 counter">9856
                             <span class="badge badge-light-danger grow">
                                 <i data-feather="trending-down"></i>8.5%</span>
@@ -79,7 +79,7 @@
             <div class="custome-3-bg b-r-4 card-body">
                 <div class="media static-top-widget">
                     <div class="media-body p-0">
-                        <span class="m-0">Total Products</span>
+                        <span class="m-0">Số lượng sản phẩm</span>
                         <h4 class="mb-0 counter">893
                             <a href="add-new-product.html" class="badge badge-light-secondary grow">
                                 ADD NEW</a>
@@ -99,7 +99,7 @@
             <div class="custome-4-bg b-r-4 card-body">
                 <div class="media static-top-widget">
                     <div class="media-body p-0">
-                        <span class="m-0">Total Customers</span>
+                        <span class="m-0">Tổng số lượng khách hàng</span>
                         <h4 class="mb-0 counter">4.6k
                             <span class="badge badge-light-success grow">
                                 <i data-feather="trending-down"></i>8.5%</span>
@@ -114,7 +114,7 @@
         </div>
     </div>
 
-    <div class="col-12">
+    {{-- <div class="col-12">
         <div class="card o-hidden card-hover">
             <div class="card-header border-0 pb-1">
                 <div class="card-header-title p-0">
@@ -279,7 +279,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
     <!-- chart card section End -->
 
 
@@ -288,7 +288,7 @@
         <div class="card o-hidden card-hover">
             <div class="card-header border-0 pb-1">
                 <div class="card-header-title">
-                    <h4>Revenue Report</h4>
+                    <h4>Doanh thu hàng tháng</h4>
                 </div>
             </div>
             <div class="card-body p-0">
@@ -304,18 +304,18 @@
         <div class="card o-hidden card-hover">
             <div class="card-header card-header-top card-header--2 px-0 pt-0">
                 <div class="card-header-title">
-                    <h4>Best Selling Product</h4>
+                    <h4>Sản phẩm bán chạy</h4>
                 </div>
 
                 <div class="best-selling-box d-sm-flex d-none">
-                    <span>Short By:</span>
+                    <span>Sắp xếp:</span>
                     <div class="dropdown">
                         <button class="btn p-0 dropdown-toggle" type="button" id="dropdownMenuButton1"
-                            data-bs-toggle="dropdown" data-bs-auto-close="true">Today</button>
+                            data-bs-toggle="dropdown" data-bs-auto-close="true">Giá</button>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                            <li><a class="dropdown-item" href="#">Action</a></li>
-                            <li><a class="dropdown-item" href="#">Another action</a></li>
-                            <li><a class="dropdown-item" href="#">Something else here</a></li>
+                            <li><a class="dropdown-item" href="#">Giá</a></li>
+                            <li><a class="dropdown-item" href="#">Lượt mua</a></li>
+                            <li><a class="dropdown-item" href="#">Tổng</a></li>
                         </ul>
                     </div>
                 </div>
@@ -344,28 +344,22 @@
 
                                     <td>
                                         <div class="product-detail-box">
-                                            <h6>Price</h6>
+                                            <h6>Giá</h6>
                                             <h5>$29.00</h5>
                                         </div>
                                     </td>
 
                                     <td>
                                         <div class="product-detail-box">
-                                            <h6>Orders</h6>
+                                            <h6>Lượt mua</h6>
                                             <h5>62</h5>
                                         </div>
                                     </td>
 
+            
                                     <td>
                                         <div class="product-detail-box">
-                                            <h6>Stock</h6>
-                                            <h5>510</h5>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="product-detail-box">
-                                            <h6>Amount</h6>
+                                            <h6>Tổng</h6>
                                             <h5>$1,798</h5>
                                         </div>
                                     </td>
@@ -465,22 +459,23 @@
 
 
     <!-- Recent orders start-->
-    <div class="col-xl-6">
+    <div class="col-xl-12">
         <div class="card o-hidden card-hover">
             <div class="card-header card-header-top card-header--2 px-0 pt-0">
                 <div class="card-header-title">
-                    <h4>Recent Orders</h4>
+                    <h4>Đơn hàng gần đây</h4>
                 </div>
 
                 <div class="best-selling-box d-sm-flex d-none">
-                    <span>Short By:</span>
+                    <span>Sắp xếp:</span>
                     <div class="dropdown">
                         <button class="btn p-0 dropdown-toggle" type="button" id="dropdownMenuButton2"
-                            data-bs-toggle="dropdown" data-bs-auto-close="true">Today</button>
+                            data-bs-toggle="dropdown" data-bs-auto-close="true">Ngày đặt</button>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
-                            <li><a class="dropdown-item" href="#">Action</a></li>
-                            <li><a class="dropdown-item" href="#">Another action</a></li>
-                            <li><a class="dropdown-item" href="#">Something else here</a></li>
+                            <li><a class="dropdown-item" href="#">Ngày đặt</a></li>
+                            <li><a class="dropdown-item" href="#">Tổng tiền</a></li>
+                            <li><a class="dropdown-item" href="#">Trạng thái đơn hàng</a></li>
+                            <li><a class="dropdown-item" href="#">Trạng thái thanh toán</a></li>
                         </ul>
                     </div>
                 </div>
@@ -503,28 +498,28 @@
 
                                     <td>
                                         <div class="product-detail-box">
-                                            <h6>Date Placed</h6>
+                                            <h6>Ngày đặt</h6>
                                             <h5>5/1/22</h5>
                                         </div>
                                     </td>
 
                                     <td>
                                         <div class="product-detail-box">
-                                            <h6>Price</h6>
+                                            <h6>Tổng tiền</h6>
                                             <h5>$250.00</h5>
                                         </div>
                                     </td>
 
                                     <td>
                                         <div class="product-detail-box">
-                                            <h6>Order Status</h6>
+                                            <h6>Trạng thái đơn hàng</h6>
                                             <h5>Completed</h5>
                                         </div>
                                     </td>
 
                                     <td>
                                         <div class="product-detail-box">
-                                            <h6>Payment</h6>
+                                            <h6>Trạng thái thanh toán</h6>
                                             <h5 class="text-danger">Unpaid</h5>
                                         </div>
                                     </td>
@@ -659,7 +654,7 @@
     <!-- Recent orders end-->
 
     <!-- Earning chart star-->
-    <div class="col-xl-6">
+    {{-- <div class="col-xl-6">
         <div class="card o-hidden card-hover">
             <div class="card-header border-0 mb-0">
                 <div class="card-header-title">
@@ -670,12 +665,12 @@
                 <div id="bar-chart-earning"></div>
             </div>
         </div>
-    </div>
+    </div> --}}
     <!-- Earning chart end-->
 
 
     <!-- Transactions start-->
-    <div class="col-xxl-4 col-md-6">
+    {{-- <div class="col-xxl-4 col-md-6">
         <div class="card o-hidden card-hover">
             <div class="card-header border-0">
                 <div class="card-header-title">
@@ -759,11 +754,11 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
     <!-- Transactions end-->
 
     <!-- visitors chart start-->
-    <div class="col-xxl-4 col-md-6">
+    {{-- <div class="col-xxl-4 col-md-6">
         <div class="h-100">
             <div class="card o-hidden card-hover">
                 <div class="card-header border-0">
@@ -780,12 +775,12 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
     <!-- visitors chart end-->
 
 
     <!-- To Do List start-->
-    <div class="col-xxl-4 col-md-6">
+    {{-- <div class="col-xxl-4 col-md-6">
         <div class="card o-hidden card-hover">
             <div class="card-header border-0">
                 <div class="card-header-title">
@@ -849,7 +844,7 @@
                 </ul>
             </div>
         </div>
-    </div>
+    </div> --}}
     <!-- To Do List end-->
 @endsection
 
