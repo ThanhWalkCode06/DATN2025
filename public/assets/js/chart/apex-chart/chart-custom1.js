@@ -221,7 +221,7 @@ var options = {
 var options = {
     series: [{
         name: 'series1',
-        data: [60, 70, 54, 51, 42, 109, 100]
+        data: [60, 70, 54, 51, 42, 109]
     }],
     chart: {
         height: 320,

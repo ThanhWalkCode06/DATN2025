@@ -43,20 +43,19 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="card-header-2">
-                            <h5>Category Information</h5>
+                            <h5>Thêm danh mục</h5>
                         </div>
 
                         <div class="theme-form theme-form-2 mega-form">
                             <div class="mb-4 row align-items-center">
-                                <label class="form-label-title col-sm-3 mb-0">Category Name</label>
+                                <label class="form-label-title col-sm-3 mb-0">Tên danh mục</label>
                                 <div class="col-sm-9">
-                                    <input class="form-control" type="text" placeholder="Category Name">
+                                    <input class="form-control" type="text" placeholder="Tên danh mục">
                                 </div>
                             </div>
 
                             <div class="mb-4 row align-items-center">
-                                <label class="col-sm-3 col-form-label form-label-title">Category
-                                    Image</label>
+                                <label class="col-sm-3 col-form-label form-label-title">Ảnh danh mục</label>
                                 <div class="form-group col-sm-9">
                                     <form class="dropzone custom-dropzone" id="multiFileUpload"
                                         action="https://themes.pixelstrap.com/upload.php">
@@ -64,22 +63,18 @@
                                             <div class="dz-message needsclick">
                                                 <div>
                                                     <i class="icon-cloud-up"></i>
-                                                    <h6>Drop files here or click to upload.</h6>
+                                                    <h6>Tải lên từ thiết bị.</h6>
                                                 </div>
                                             </div>
                                         </div>
                                     </form>
                                 </div>
                             </div>
-
-                            <div class="mb-4 row align-items-center">
-                                <div class="col-sm-3 form-label-title">Select Category Icon</div>
-                                <div class="col-sm-9">
-                                    <div class="dropdown icon-dropdown">
-                                        <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton1"
-                                            data-bs-toggle="dropdown">
-                                            Select Icon
-                                        </button>
+                            <form class="d-inline-flex">
+                        <a href="add-new-category.html" class="align-items-center btn btn-theme d-flex">
+                            <i data-feather="plus-square"></i>Thêm
+                        </a>
+                    </form>
                                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                                             <li>
                                                 <a class="dropdown-item" href="#">

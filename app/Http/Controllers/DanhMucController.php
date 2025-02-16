@@ -45,7 +45,7 @@ class DanhMucController extends Controller
      */
     public function edit(DanhMuc $danhMuc)
     {
-        //
+        return view('admins.danhmucs.edit');
     }
 
     /**

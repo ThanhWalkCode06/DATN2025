@@ -43,41 +43,46 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="card-header-2">
-                            <h5>Add Attribute</h5>
+                            <h5>Thêm biến thể</h5>
                         </div>
 
                         <form class="theme-form theme-form-2 mega-form">
                             <div class="mb-4 row align-items-center">
-                                <label class="form-label-title col-sm-3 mb-0">Attribute
-                                    Name</label>
+                                <label class="form-label-title col-sm-3 mb-0">Tên biến thể</label>
                                 <div class="col-sm-9">
-                                    <input class="form-control" type="text" placeholder="Attribute Name">
+                                    <input class="form-control" type="text" placeholder="Tên biến thể">
                                 </div>
                             </div>
 
                             <div class="mb-4 row align-items-start">
-                                <label class="col-sm-3 col-form-label form-label-title">Attribute
-                                    Value</label>
+                                <label class="col-sm-3 col-form-label form-label-title">Thuộc tính</label>
                                 <div class="col-sm-9">
                                     <div class="row g-sm-4 g-3">
                                         <div class="col-sm-10 col-9">
-                                            <input class="form-control" type="text" placeholder="Attribute Value">
+                                            <input class="form-control" type="text" placeholder="Thuộc tính">
                                         </div>
 
                                         <div class="col-sm-2 col-3">
                                             <button class="btn text-danger h-100 w-100">Remove</button>
                                         </div>
 
-                                        <div class="col-xxl-4">
+                                        {{-- <div class="col-xxl-4">
                                             <button class="btn text-white theme-bg-color">Add
                                                 Value</button>
-                                        </div>
+                                        </div> --}}
                                     </div>
                                 </div>
                             </div>
+                            <div class="mb-4 row align-items-center">
+                                <label class="form-label-title col-sm-3 mb-0">Giá trị thuộc tính</label>
+                                <div class="col-sm-9">
+                                    <input class="form-control" type="text" placeholder="Giá trị thuộc tính">
+                                </div>
+                            </div>
+
                         </form>
 
-                        <button class="btn ms-auto theme-bg-color text-white">Add Attribute</button>
+                        <button class="btn ms-auto theme-bg-color text-white">Thêm mới</button>
 
                     </div>
                 </div>
