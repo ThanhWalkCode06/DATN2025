@@ -34,19 +34,19 @@
             <!-- Table Start -->
             <div class="card-body">
                 <div class="title-header option-title">
-                    <h5>Product Reviews</h5>
+                    <h5>Đánh giá sản phẩm</h5>
                 </div>
                 <div>
                     <div class="table-responsive">
                         <table class="user-table ticket-table review-table theme-table table" id="table_id">
                             <thead>
                                 <tr>
-                                    <th>No.</th>
-                                    <th>Customer Name</th>
-                                    <th>Product Name</th>
-                                    <th>Rating</th>
-                                    <th>Comment</th>
-                                    <th>Published</th>
+                                    <th>STT</th>
+                                    <th>Tên khách hàng</th>
+                                    <th>Tên sản phẩm</th>
+                                    <th>Đánh giá</th>
+                                    <th>Nhận xét</th>
+                                    <th>Ẩn/hiện</th>
                                 </tr>
                             </thead>
                             <tbody>
