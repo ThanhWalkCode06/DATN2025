@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('title')
-    Thêm mới sản phẩm
+    Sửa mới sản phẩm
 @endsection
 
 @section('css')
@@ -32,7 +32,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="title-header option-title">
-                            <h5>Thêm mã giảm giá</h5>
+                            <h5>Sửa mã giảm giá</h5>
                         </div>
                         <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                             <li class="nav-item" role="presentation">
@@ -180,7 +180,7 @@
                         </div>
                         <ul>
                             <li>
-                                <a class="btn btn-solid" href="add-new-product.html">Add Coupon</a>
+                                <a class="btn btn-solid" href="add-new-product.html">Sửa</a>
                             </li>
                         </ul>
                     </div>

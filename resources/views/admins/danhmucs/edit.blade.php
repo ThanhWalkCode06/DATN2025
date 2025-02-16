@@ -43,7 +43,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="card-header-2">
-                            <h5>Thêm danh mục</h5>
+                            <h5>Sửa danh mục</h5>
                         </div>
 
                         <div class="theme-form theme-form-2 mega-form">
@@ -72,7 +72,7 @@
                             </div>
                             <form class="d-inline-flex">
                         <a href="add-new-category.html" class="align-items-center btn btn-theme d-flex">
-                            <i data-feather="plus-square"></i>Thêm
+                            <i data-feather="plus-square"></i>Sửa
                         </a>
                     </form>
                                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
