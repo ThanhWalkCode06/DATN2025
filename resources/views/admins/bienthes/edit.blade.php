@@ -43,7 +43,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="card-header-2">
-                            <h5>Thêm biến thể</h5>
+                            <h5>Sửa biến thể</h5>
                         </div>
 
                         <form class="theme-form theme-form-2 mega-form">
@@ -82,7 +82,7 @@
 
                         </form>
 
-                        <button class="btn ms-auto theme-bg-color text-white">Thêm mới</button>
+                        <button class="btn ms-auto theme-bg-color text-white">Cập nhật</button>
 
                     </div>
                 </div>
