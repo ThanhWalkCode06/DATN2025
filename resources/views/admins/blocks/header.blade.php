@@ -20,7 +20,7 @@
                 <div class="Typeahead Typeahead--twitterUsers">
                     <div class="u-posRelative">
                         <input class="demo-input Typeahead-input form-control-plaintext w-100" type="text"
-                            placeholder="Search .." name="q" title="">
+                            placeholder="Tìm kiếm .." name="q" title="">
                         <i class="close-search" data-feather="x"></i>
                         <div class="spinner-border Typeahead-spinner" role="status">
                             <span class="sr-only">Loading...</span>
