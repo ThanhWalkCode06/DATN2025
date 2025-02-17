@@ -167,7 +167,7 @@
                         </a>
                     </li> --}}
 
-                    <li class="sidebar-list">
+                    {{-- <li class="sidebar-list">
                         <a class="linear-icon-link sidebar-link sidebar-title" href="javascript:void(0)">
                             <i class="ri-settings-line"></i>
                             <span>Cài đặt</span>
@@ -177,7 +177,7 @@
                                 <a href="profile-setting.html">Tài khoản</a>
                             </li>
                         </ul>
-                    </li>
+                    </li> --}}
                 </ul>
             </div>
 

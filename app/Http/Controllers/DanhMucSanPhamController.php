@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DanhMuc;
-use App\Http\Requests\StoreDanhMucRequest;
-use App\Http\Requests\UpdateDanhMucRequest;
+use App\Models\DanhMucSanPham;
+use App\Http\Requests\StoreDanhMucSanPhamRequest;
+use App\Http\Requests\UpdateDanhMucSanPhamRequest;
 
-class DanhMucController extends Controller
+class DanhMucSanPhamController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -27,7 +27,7 @@ class DanhMucController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreDanhMucRequest $request)
+    public function store(StoreDanhMucSanPhamRequest $request)
     {
         //
     }
@@ -35,7 +35,7 @@ class DanhMucController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(DanhMuc $danhMuc)
+    public function show(DanhMucSanPham $danhMuc)
     {
         //
     }
@@ -43,7 +43,7 @@ class DanhMucController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(DanhMuc $danhMuc)
+    public function edit(DanhMucSanPham $danhMuc)
     {
         return view('admins.danhmucs.edit');
     }
@@ -51,7 +51,7 @@ class DanhMucController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateDanhMucRequest $request, DanhMuc $danhMuc)
+    public function update(UpdateDanhMucSanPhamRequest $request, DanhMucSanPham $danhMuc)
     {
         //
     }
@@ -59,7 +59,7 @@ class DanhMucController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(DanhMuc $danhMuc)
+    public function destroy(DanhMucSanPham $danhMuc)
     {
         //
     }
