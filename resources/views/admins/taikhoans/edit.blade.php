@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('title')
-    Thêm mới tài khoản
+    Sửa tài khoản
 @endsection
 
 @section('css')
@@ -37,7 +37,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="title-header option-title">
-                            <h5>Thêm mới tài khoản</h5>
+                            <h5>Sửa tài khoản</h5>
                         </div>
                         <div class="tab-content " id="pills-tabContent">
                             <div class="tab-pane fade show active" id="pills-home" role="tabpanel">
@@ -150,7 +150,7 @@
                                 </form>
                                 <div class="mt-5 d-flex justify-content-between">
                                     <a href="{{ route('taikhoans.index') }}" class="btn btn-secondary">Quay lại</a>
-                                    <button class="btn btn-primary" type="submit">Thêm mới</button>
+                                    <button class="btn btn-primary" type="submit">Sửa</button>
                                 </div>
                             </div>
 
