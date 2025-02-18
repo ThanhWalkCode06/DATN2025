@@ -1,0 +1,22 @@
+- composer create-project laravel/laravel:^10.0 asm  
+-composer install: cài đặt lại tất cả các thư viện hệ thống sử dụng
+-composer update: cập nhật lại các thư viện hệ thống sử dụng
+- php artisan ser: chạy dự án
+-php artisan key:generate:   gender ra app_key trong file env
+- php artisan make:migration create_flights_table: tạo file migration
+-tên bảng là danh từ số nhiều tiếng việt: san_phams, danh_mucs
+- php artisan migrate: chạy các migration
+- php artisan migrate:rollback  :Rollback lại thao tác cuối cùng của migration
+- php artisan migrate:reset  :Rollback lại tất cả các thao tác của migration
+- php artisan migrate:refresh  :Rollback lại tất cả thao tác của migration sau đó tự động chạy migration
+- php artisan make:seeder UserSeeder:  tạo 1 file seeder để tạo giữu liệu mẫu
+-php artisan db:seed : chạy toàn bộ seeder
+- php artisan db:seed --class=UserSeeder: chạy 1 class seeder
+-php artisan migration:fresh --seed: vừa reset, migrate và seeder
+-php artisan make:controller UserController:  tạo 1 controller mới
+-php artisan route:list   :List ra toàn bộ route có trong dự án
+- php artisan make:controller Admins/AdminSanPhamController --resource: 
+-php artisan storage:link  :tạo liên kết các file để hiển thị ra người dùng 
+-php artisan make:request AdminSanPhamRequest  : Tạo 1 file  request để thực hiện validate
+-php artisan make:model Tên --all  : tạo tất cả
+-php artisan make:resource Tên : tạo 1 file để hiển thị dữ liệu api

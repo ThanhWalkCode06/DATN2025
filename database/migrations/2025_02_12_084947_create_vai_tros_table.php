@@ -13,7 +13,10 @@ return new class extends Migration
     {
         Schema::create('vai_tros', function (Blueprint $table) {
             $table->id();
+            $table->string('ten_vai_tro');
+            $table->string('slug');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

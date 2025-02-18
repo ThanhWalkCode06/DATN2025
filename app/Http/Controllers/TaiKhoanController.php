@@ -37,7 +37,7 @@ class TaiKhoanController extends Controller
      */
     public function show(TaiKhoan $taiKhoan)
     {
-        //
+        return view('admins.taikhoans.show');
     }
 
     /**
@@ -45,7 +45,8 @@ class TaiKhoanController extends Controller
      */
     public function edit(TaiKhoan $taiKhoan)
     {
-        //
+        return view('admins.taikhoans.edit');
+
     }
 
     /**

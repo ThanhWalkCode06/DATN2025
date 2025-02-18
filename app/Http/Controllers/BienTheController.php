@@ -45,7 +45,7 @@ class BienTheController extends Controller
      */
     public function edit(BienThe $bienThe)
     {
-        //
+        return view('admins.bienthes.edit');
     }
 
     /**
