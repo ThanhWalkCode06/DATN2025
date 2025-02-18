@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('anh_danh_muc')->nullable();
             $table->text('mo_ta')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

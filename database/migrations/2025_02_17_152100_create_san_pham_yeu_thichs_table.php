@@ -11,8 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('san_phams', function (Blueprint $table) {
-            $table->foreign('danh_muc_id')->references('id')->on('danh_mucs');
+        Schema::create('san_pham_yeu_thichs', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('san_pham_id');
+            $table->unsignedBigInteger('user_id');
+            $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -21,8 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('san_phams', function (Blueprint $table) {
-            $table->dropForeign('san_phams_danh_muc_id_foreign');
-        });
+        Schema::dropIfExists('san_pham_yeu_thichs');
     }
 };

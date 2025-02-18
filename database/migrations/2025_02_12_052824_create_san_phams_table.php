@@ -20,9 +20,10 @@ return new class extends Migration
             $table->integer('so_luong')->default(0);
             $table->integer('luot_xem')->default(0);
             $table->text('mo_ta')->nullable();
-            $table->foreignId('danh_muc_id');
+            $table->unsignedBigInteger('danh_muc_id');
             $table->boolean('trang_thai')->default(1);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

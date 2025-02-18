@@ -13,7 +13,11 @@ return new class extends Migration
     {
         Schema::create('bien_thes', function (Blueprint $table) {
             $table->id();
+            $table->string('ten_bien_the');
+            $table->string('anh_bien_the')->nullable();
+            $table->double('gia')->default(0);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
