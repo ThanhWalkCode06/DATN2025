@@ -45,7 +45,7 @@ class PhieuGiamGiaController extends Controller
      */
     public function edit(PhieuGiamGia $phieuGiamGia)
     {
-        //
+        return view('admins.phieugiamgias.edit');
     }
 
     /**

@@ -37,7 +37,7 @@ class DonHangController extends Controller
      */
     public function show(DonHang $donHang)
     {
-        //
+        return view('admins.donhangs.show');
     }
 
     /**

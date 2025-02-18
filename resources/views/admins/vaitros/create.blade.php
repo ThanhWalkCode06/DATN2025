@@ -74,7 +74,7 @@
                                                 <li>
                                                     <input class="checkbox_animated check-it" type="checkbox" id="role2"
                                                         value="" />
-                                                    <label class="form-check-label m-0" for="role2">Index</label>
+                                                    <label class="form-check-label m-0" for="role2">View</label>
                                                 </li>
                                                 <li>
                                                     <input class="checkbox_animated check-it" type="checkbox" id="role3"
@@ -104,7 +104,7 @@
                                                 <li>
                                                     <input class="checkbox_animated check-it1" type="checkbox"
                                                         id="role02" value="" />
-                                                    <label class="form-check-label m-0" for="role02">Index</label>
+                                                    <label class="form-check-label m-0" for="role02">View</label>
                                                 </li>
                                                 <li>
                                                     <input class="checkbox_animated check-it1" type="checkbox"
@@ -134,7 +134,7 @@
                                                 <li>
                                                     <input class="checkbox_animated check-it2" type="checkbox"
                                                         id="role7" value="" />
-                                                    <label class="form-check-label m-0" for="role7">Index</label>
+                                                    <label class="form-check-label m-0" for="role7">View</label>
                                                 </li>
                                                 <li>
                                                     <input class="checkbox_animated check-it2" type="checkbox"
@@ -164,7 +164,7 @@
                                                 <li>
                                                     <input class="checkbox_animated check-it3" type="checkbox"
                                                         id="role07" value="" />
-                                                    <label class="form-check-label m-0" for="role07">Index</label>
+                                                    <label class="form-check-label m-0" for="role07">View</label>
                                                 </li>
                                                 <li>
                                                     <input class="checkbox_animated check-it3" type="checkbox"
@@ -194,7 +194,7 @@
                                                 <li>
                                                     <input class="checkbox_animated check-it4" type="checkbox"
                                                         id="r2" value="" />
-                                                    <label class="form-check-label m-0" for="r2">Index</label>
+                                                    <label class="form-check-label m-0" for="r2">View</label>
                                                 </li>
                                                 <li>
                                                     <input class="checkbox_animated check-it4" type="checkbox"
@@ -224,7 +224,7 @@
                                                 <li>
                                                     <input class="checkbox_animated check-it5" type="checkbox"
                                                         id="r7" value="" />
-                                                    <label class="form-check-label m-0" for="r7">Index</label>
+                                                    <label class="form-check-label m-0" for="r7">View</label>
                                                 </li>
                                                 <li>
                                                     <input class="checkbox_animated check-it5" type="checkbox"
@@ -259,7 +259,7 @@
                                                 <li>
                                                     <input class="checkbox_animated check-it6" type="checkbox"
                                                         id="rl2" value="" />
-                                                    <label class="form-check-label m-0" for="rl2">Index</label>
+                                                    <label class="form-check-label m-0" for="rl2">View</label>
                                                 </li>
                                                 <li>
                                                     <input class="checkbox_animated check-it6" type="checkbox"
@@ -289,7 +289,7 @@
                                                 <li>
                                                     <input class="checkbox_animated check-it7" type="checkbox"
                                                         id="rl7" value="" />
-                                                    <label class="form-check-label m-0" for="rl7">Index</label>
+                                                    <label class="form-check-label m-0" for="rl7">View</label>
                                                 </li>
                                                 <li>
                                                     <input class="checkbox_animated check-it7" type="checkbox"
@@ -319,7 +319,7 @@
                                                 <li>
                                                     <input class="checkbox_animated check-it8" type="checkbox"
                                                         id="r-2" value="" />
-                                                    <label class="form-check-label m-0" for="r-2">Index</label>
+                                                    <label class="form-check-label m-0" for="r-2">View</label>
                                                 </li>
                                                 <li>
                                                     <input class="checkbox_animated check-it8" type="checkbox"
@@ -349,7 +349,7 @@
                                                 <li>
                                                     <input class="checkbox_animated check-it9" type="checkbox"
                                                         id="r-7" value="" />
-                                                    <label class="form-check-label m-0" for="r-7">Index</label>
+                                                    <label class="form-check-label m-0" for="r-7">View</label>
                                                 </li>
                                                 <li>
                                                     <input class="checkbox_animated check-it9" type="checkbox"
@@ -379,7 +379,7 @@
                                                 <li>
                                                     <input class="checkbox_animated check-it10" type="checkbox"
                                                         id="a2" value="" />
-                                                    <label class="form-check-label m-0" for="a2">Index</label>
+                                                    <label class="form-check-label m-0" for="a2">View</label>
                                                 </li>
                                                 <li>
                                                     <input class="checkbox_animated check-it10" type="checkbox"
@@ -409,7 +409,7 @@
                                                 <li>
                                                     <input class="checkbox_animated check-it11" type="checkbox"
                                                         id="a7" value="" />
-                                                    <label class="form-check-label m-0" for="a7">Index</label>
+                                                    <label class="form-check-label m-0" for="a7">View</label>
                                                 </li>
                                                 <li>
                                                     <input class="checkbox_animated check-it11" type="checkbox"
