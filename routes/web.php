@@ -29,7 +29,7 @@ Route::prefix('admin')->controller(AuthController::class)->group(function () {
     Route::post('/getTokenOfPass/{token}/restore', 'storeResetPass')->name('storeResetPass.store');
 
     Route::get('/pass/edit', 'editPass')->name('pass.edit');
-    Route::put('/pass/update', 'updatePass')->name('pass.update');
+    Route::post('/pass/update', 'updatePass')->name('pass.update');
 });
 
 

@@ -63,39 +63,10 @@
                             <div class="row g-sm-4 g-2">
                                 <div class="col-xl-6">
                                     <div class="row roles-form">
+
                                         <div class="col-12">
                                             <ul>
-                                                <li>Roles :</li>
-                                                <li>
-                                                    <input class="checkbox_animated checkall" type="checkbox" value=""
-                                                        id="role1" />
-                                                    <label class="form-check-label m-0" for="role1">All</label>
-                                                </li>
-                                                <li>
-                                                    <input class="checkbox_animated check-it" type="checkbox" id="role2"
-                                                        value="" />
-                                                    <label class="form-check-label m-0" for="role2">View</label>
-                                                </li>
-                                                <li>
-                                                    <input class="checkbox_animated check-it" type="checkbox" id="role3"
-                                                        value="" />
-                                                    <label class="form-check-label m-0" for="role3">Create</label>
-                                                </li>
-                                                <li>
-                                                    <input class="checkbox_animated check-it" type="checkbox" id="role4"
-                                                        value="" />
-                                                    <label class="form-check-label m-0" for="role4">Edit</label>
-                                                </li>
-                                                <li>
-                                                    <input class="checkbox_animated check-it" type="checkbox" id="role5"
-                                                        value="" />
-                                                    <label class="form-check-label m-0" for="role5">Destroy</label>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div class="col-12">
-                                            <ul>
-                                                <li>Users :</li>
+                                                <li>Tài khoản :</li>
                                                 <li>
                                                     <input class="checkbox_animated checkall1" type="checkbox"
                                                         value="" id="role01" />
@@ -125,7 +96,7 @@
                                         </div>
                                         <div class="col-12">
                                             <ul>
-                                                <li>Product :</li>
+                                                <li>Sản phẩm :</li>
                                                 <li>
                                                     <input class="checkbox_animated checkall2" type="checkbox"
                                                         value="" id="role6" />
@@ -155,7 +126,7 @@
                                         </div>
                                         <div class="col-12">
                                             <ul>
-                                                <li>Category :</li>
+                                                <li>Danh mục :</li>
                                                 <li>
                                                     <input class="checkbox_animated checkall3" type="checkbox"
                                                         value="" id="role06" />
@@ -185,7 +156,7 @@
                                         </div>
                                         <div class="col-12">
                                             <ul>
-                                                <li>Attributes :</li>
+                                                <li>Biến thể :</li>
                                                 <li>
                                                     <input class="checkbox_animated checkall4" type="checkbox"
                                                         value="" id="r1" />
@@ -215,7 +186,7 @@
                                         </div>
                                         <div class="col-12">
                                             <ul>
-                                                <li>Order :</li>
+                                                <li>Đơn hàng :</li>
                                                 <li>
                                                     <input class="checkbox_animated checkall5" type="checkbox"
                                                         value="" id="r6" />
@@ -250,7 +221,7 @@
                                     <div class="row roles-form">
                                         <div class="col-12">
                                             <ul>
-                                                <li>Localization :</li>
+                                                <li>Bài viết :</li>
                                                 <li>
                                                     <input class="checkbox_animated checkall6" type="checkbox"
                                                         value="" id="rl1" />
@@ -280,7 +251,7 @@
                                         </div>
                                         <div class="col-12">
                                             <ul>
-                                                <li>Coupons :</li>
+                                                <li>Phiếu giảm giá :</li>
                                                 <li>
                                                     <input class="checkbox_animated checkall7" type="checkbox"
                                                         value="" id="rl6" />
@@ -310,7 +281,7 @@
                                         </div>
                                         <div class="col-12">
                                             <ul>
-                                                <li>Tax :</li>
+                                                <li>Đánh giá sản phẩm :</li>
                                                 <li>
                                                     <input class="checkbox_animated checkall8" type="checkbox"
                                                         value="" id="r-1" />
@@ -338,7 +309,7 @@
                                                 </li>
                                             </ul>
                                         </div>
-                                        <div class="col-12">
+                                        {{-- <div class="col-12">
                                             <ul>
                                                 <li>Product Review :</li>
                                                 <li>
@@ -398,8 +369,8 @@
                                                 </li>
                                             </ul>
                                         </div>
-                                        <div class="col-12">
-                                            <ul>
+                                        <div class="col-12"> --}}
+                                            {{-- <ul>
                                                 <li>Reports :</li>
                                                 <li>
                                                     <input class="checkbox_animated checkall11" type="checkbox"
@@ -427,7 +398,7 @@
                                                     <label class="form-check-label m-0" for="a10">Destroy</label>
                                                 </li>
                                             </ul>
-                                        </div>
+                                        </div> --}}
                                     </div>
                                 </div>
                             </div>
