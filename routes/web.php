@@ -6,7 +6,7 @@ use App\Http\Controllers\VaiTroController;
 use App\Http\Controllers\BaiVietController;
 use App\Http\Controllers\BienTheController;
 use App\Http\Controllers\DanhGiaController;
-use App\Http\Controllers\DanhMucController;
+use App\Http\Controllers\DanhMucSanPhamController;
 use App\Http\Controllers\DonHangController;
 use App\Http\Controllers\SanPhamController;
 use App\Http\Controllers\ThongKeController;
@@ -15,7 +15,7 @@ use App\Http\Controllers\PhieuGiamGiaController;
 use App\Http\Controllers\Admins\Auth\AuthController;
 
 // Login Admin Controller
-Route::prefix('admin')->controller(AuthController::class)->group(function () {
+Route::prefix('/admin')->controller(AuthController::class)->group(function () {
     Route::get('/login', 'showLogin')->name('login');
     Route::post('/login/restore', 'login')->name('login.restore');
 
@@ -37,7 +37,7 @@ Route::get("/", [ThongKeController::class, "index"])->name('index');
 Route::get("/lienhe", [LienHeController::class, "index"])->name('lienhe');
 Route::get("/danhgia", [DanhGiaController::class, "index"])->name('danhgia');
 
-Route::resource('danhmucs', DanhMucController::class);
+Route::resource('danhmucs', DanhMucSanPhamController::class);
 Route::resource('sanphams', SanPhamController::class);
 Route::resource('bienthes', BienTheController::class);
 Route::resource('taikhoans', TaiKhoanController::class);
@@ -47,6 +47,6 @@ Route::resource('vaitros', VaiTroController::class);
 Route::resource('phieugiamgias', PhieuGiamGiaController::class);
 
 
-Route::get('mail',function(){
+Route::get('mail', function () {
     return view('admins.auth.mailForgetPass');
 });

@@ -152,7 +152,6 @@
                         <div class="card-header-2">
                             <h5>Product Videos</h5>
                         </div>
-
                         <form class="theme-form theme-form-2 mega-form">
                             <div class="mb-4 row align-items-center">
                                 <label class="col-sm-3 col-form-label form-label-title">Video
@@ -163,6 +162,7 @@
                                         <option>Youtube</option>
                                         <option>Dailymotion</option>
                                         <option>Vimeo</option>
+                                        <option>maki</option>
                                     </select>
                                 </div>
                             </div>
@@ -177,11 +177,6 @@
                         </form>
                     </div>
                 </div>
-
-
-
-
-
                 <div class="card">
                     <div class="card-body">
                         <div class="card-header-2">

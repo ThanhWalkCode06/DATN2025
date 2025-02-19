@@ -11,13 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('bai_viets', function (Blueprint $table) {
+        Schema::create('san_pham_bien_thes', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->string('tieu_de');
-            $table->unsignedBigInteger('danh_muc_id');
-            $table->text('noi_dung');
-            $table->string('anh_bia')->nullable();
+            $table->unsignedBigInteger('san_pham_id');
+            $table->unsignedBigInteger('bien_the_id');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -28,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('bai_viets');
+        Schema::dropIfExists('san_pham_bien_thes');
     }
 };

@@ -13,7 +13,20 @@ return new class extends Migration
     {
         Schema::create('don_hangs', function (Blueprint $table) {
             $table->id();
+            $table->string('ma_don_hang')->unique();
+            $table->unsignedBigInteger('user_id');
+            $table->string('ten_nguoi_nhan');
+            $table->string('email_nguoi_nhan');
+            $table->string('sdt_nguoi_nhan');
+            $table->text('dia_chi_nguoi_nhan');
+            $table->date('ngay_dat');
+            $table->double('tong_tien')->default(0);
+            $table->text('ghi_chu')->nullable();
+            $table->unsignedBigInteger('phuong_thuc_thanh_toan_id');
+            $table->tinyInteger('trang_thai_don_hang')->default(0);
+            $table->boolean('trang_thai_thanh_toan')->default(0);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -13,7 +13,13 @@ return new class extends Migration
     {
         Schema::create('phieu_giam_gias', function (Blueprint $table) {
             $table->id();
+            $table->string('ma_phieu')->unique();
+            $table->string('ten_phieu');
+            $table->date('ngay_bat_dau');
+            $table->date('ngay_ket_thuc');
+            $table->double('gia_tri')->default(0);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
