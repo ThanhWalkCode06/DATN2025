@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\TaiKhoan;
-use App\Http\Requests\StoreTaiKhoanRequest;
-use App\Http\Requests\UpdateTaiKhoanRequest;
+use App\Models\PhuongThucThanhToan;
+use App\Http\Requests\StorePhuongThucThanhToanRequest;
+use App\Http\Requests\UpdatePhuongThucThanhToanRequest;
 
-class TaiKhoanController extends Controller
+class PhuongThucThanhToanController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return view('admins.taikhoans.index');
+        //
     }
 
     /**
@@ -21,13 +21,13 @@ class TaiKhoanController extends Controller
      */
     public function create()
     {
-        return view('admins.taikhoans.create');
+        //
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreTaiKhoanRequest $request)
+    public function store(StorePhuongThucThanhToanRequest $request)
     {
         //
     }
@@ -35,24 +35,23 @@ class TaiKhoanController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(TaiKhoan $taiKhoan)
+    public function show(PhuongThucThanhToan $phuongThucThanhToan)
     {
-        return view('admins.taikhoans.show');
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(TaiKhoan $taiKhoan)
+    public function edit(PhuongThucThanhToan $phuongThucThanhToan)
     {
-        return view('admins.taikhoans.edit');
-
+        //
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateTaiKhoanRequest $request, TaiKhoan $taiKhoan)
+    public function update(UpdatePhuongThucThanhToanRequest $request, PhuongThucThanhToan $phuongThucThanhToan)
     {
         //
     }
@@ -60,7 +59,7 @@ class TaiKhoanController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(TaiKhoan $taiKhoan)
+    public function destroy(PhuongThucThanhToan $phuongThucThanhToan)
     {
         //
     }

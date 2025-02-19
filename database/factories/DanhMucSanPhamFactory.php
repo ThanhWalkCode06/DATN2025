@@ -17,7 +17,8 @@ class DanhMucSanPhamFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'ten_danh_muc' => $this->faker->name(),
+            'mo_ta' => $this->faker->text()
         ];
     }
 }
