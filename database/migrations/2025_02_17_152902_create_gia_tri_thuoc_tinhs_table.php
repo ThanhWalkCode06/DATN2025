@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('gia_tri_thuoc_tinhs', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('thuoc_tinh_id');
-            $table->unsignedBigInteger('bien_the_id');
             $table->string('gia_tri');
             $table->timestamps();
             $table->softDeletes();

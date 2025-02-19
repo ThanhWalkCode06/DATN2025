@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('thuoc_tinhs', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('bien_the_id');
             $table->string('ten_thuoc_tinh');
             $table->timestamps();
             $table->softDeletes();
