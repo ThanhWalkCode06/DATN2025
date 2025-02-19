@@ -65,7 +65,7 @@
                 <div class="col-12">
                     <center>
                         <div class="breadcrumb-contain">
-                            <h2>404 Page</h2>
+                            <h2>403 Page</h2>
                             <nav>
                             </nav>
                         </div>
@@ -90,8 +90,7 @@
 
                 <div class="col-12">
                     <div class="contain-404">
-                        <h3 class="text-content">Không tìm thấy địa chỉ trang. Đường link này có thể đã hết hạn hoặc
-                            đã bị chuyển rời sang một cái tên khác.</h3>
+                        <h3 class="text-content">Bạn không có quyền truy cập vào website vui lòng quay lại.</h3>
                             <button onclick="window.history.back();"
                             class="btn btn-md text-white theme-bg-color mt-4 mx-auto">Trở lại trang trước đó</button>
 

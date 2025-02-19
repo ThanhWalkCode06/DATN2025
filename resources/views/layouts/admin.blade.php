@@ -8,6 +8,7 @@
     <meta name="author" content="pixelstrap">
     <link rel="icon" href="{{ asset('assets/images/favicon.png') }}" type="image/x-icon">
     <link rel="shortcut icon" href="{{ asset('assets/images/favicon.png') }}" type="image/x-icon">
+
     <title>@yield('title')</title>
 
     <!-- Google font-->
@@ -26,8 +27,36 @@
 
     <!-- App css -->
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/themify.css') }}">
+
+    <!-- ratio css -->
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/ratio.css') }}">
+
+    <!-- remixicon css -->
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/remixicon.css') }}">
+
+    <!-- Feather icon css-->
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/feather-icon.css') }}">
+
+    <!-- Plugins css -->
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/scrollbar.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/animate.css') }}">
+
+    <!-- Bootstrap css-->
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/bootstrap.css') }}">
+
+    <!-- vector map css -->
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vector-map.css') }}">
+
+    <!-- Slick Slider Css -->
+    <link rel="stylesheet" href="{{ asset('assets/css/vendors/slick.css') }}">
+
+    <!-- App css -->
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css') }}">
+
 
     @yield('css')
+
 </head>
 
 <body>
@@ -80,18 +109,15 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     <div class="button-box">
                         <button type="button" class="btn btn--no" data-bs-dismiss="modal">No</button>
-                        <button type="button" class="btn  btn--yes btn-primary">Yes</button>
+                        <a href="{{ route('logout') }}"><button type="button" class="btn  btn--yes btn-primary">Yes</button></a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Modal End -->
-
-    <!-- latest js -->
-    <script src="{{ asset('assets/js/jquery-3.6.0.min.js') }}"></script>
 
     <!-- Bootstrap js -->
+    <script src="{{ asset('assets/js/jquery-3.6.0.min.js') }}"></script>
     <script src="{{ asset('assets/js/bootstrap/bootstrap.bundle.min.js') }}"></script>
 
     <!-- feather icon js -->
@@ -107,6 +133,61 @@
 
     <!-- Theme js -->
     <script src="{{ asset('assets/js/script.js') }}"></script>
+
+    <script src="{{ asset('assets/js/config.js') }}"></script>
+
+    <!-- tooltip init js -->
+    <script src="{{ asset('assets/js/tooltip-init.js') }}"></script>
+
+    <!-- Plugins JS -->
+    <script src="{{ asset('assets/js/sidebar-menu.js') }}"></script>
+    <script src="{{ asset('assets/js/notify/bootstrap-notify.min.js') }}"></script>
+
+    <!-- Apexchar js -->
+    <script src="{{ asset('assets/js/chart/apex-chart/apex-chart1.js') }}"></script>
+    <script src="{{ asset('assets/js/chart/apex-chart/moment.min.js') }}"></script>
+    <script src="{{ asset('assets/js/chart/apex-chart/apex-chart.js') }}"></script>
+    <script src="{{ asset('assets/js/chart/apex-chart/stock-prices.js') }}"></script>
+    <script src="{{ asset('assets/js/chart/apex-chart/chart-custom1.js') }}"></script>
+
+
+    <!-- slick slider js -->
+    <script src="{{ asset('assets/js/slick.min.js') }}"></script>
+    <script src="{{ asset('assets/js/custom-slick.js') }}"></script>
+
+    <!-- customizer js -->
+    <script src="{{ asset('assets/js/customizer.js') }}"></script>
+
+    <!-- ratio js -->
+    <script src="{{ asset('assets/js/ratio.js') }}"></script>
+    {{-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> --}}
+
+@if (session('success'))
+<script>
+    $(window).ready(function(){
+        $.notify({
+            title: "Thực hiện thao tác thành công!",
+            message: "{{ session('success') }}"
+        }, {
+            type: "primary",
+            delay: 5000
+        });
+    })
+    </script>
+@endif
+@if (session('error'))
+<script>
+    $(window).ready(function(){
+        $.notify({
+            title: "Thao tác thất bại!!",
+            message: "{{ session('error') }}"
+        }, {
+            type: "secondary",
+            delay: 5000
+        });
+    })
+    </script>
+@endif
 
     @yield('js')
 </body>

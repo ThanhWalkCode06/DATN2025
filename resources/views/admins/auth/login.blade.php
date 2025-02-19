@@ -95,28 +95,41 @@
                         </div>
 
                         <div class="input-box">
-                            <form class="row g-4">
+                            <form class="row g-4" action="{{ route('login.store') }}" method="post">
+                                @csrf
                                 <div class="col-12">
                                     <div class="form-floating theme-form-floating log-in-form">
-                                        <input type="email" class="form-control" id="email" placeholder="Email Address">
-                                        <label for="email">Email Address</label>
+                                        <input name="name" type="text" class="form-control @error('password') is-invalid @enderror" id="email"
+                                        placeholder="Username Address" value="{{ old('name') }}">
+                                        <label for="email">Username</label>
                                     </div>
+                                @error('name')
+                                <p class="text-danger">{{ $message }}</p>
+                                @enderror
                                 </div>
 
                                 <div class="col-12">
                                     <div class="form-floating theme-form-floating log-in-form">
-                                        <input type="password" class="form-control" id="password"
-                                            placeholder="Password">
+                                        <input name="password" type="password"
+                                            class="form-control @error('password') is-invalid @enderror"
+                                            id="password" placeholder="Password">
                                         <label for="password">Password</label>
                                     </div>
+                                    @error('password')
+                                        <p class="text-danger">{{ $message }}</p>
+                                    @enderror
                                 </div>
+
+                                @error('error')
+                                <p class="text-danger">{{ $message }}</p>
+                                @enderror
 
                                 <div class="col-12">
                                     <div class="forgot-box">
                                         <div class="form-check ps-0 m-0 remember-box">
-                                            <input class="checkbox_animated check-box" type="checkbox"
+                                            <input name="remember_token" value="{{ bin2hex(random_bytes(32)) }}" class="checkbox_animated check-box" type="checkbox"
                                                 id="flexCheckDefault">
-                                            <label class="form-check-label" for="flexCheckDefault">Remember me</label>
+                                            <label  class="form-check-label" for="flexCheckDefault">Remember me</label>
                                         </div>
                                         <a href="{{ route('pass.forget')}}" class="forgot-password">Forgot Password?</a>
                                     </div>

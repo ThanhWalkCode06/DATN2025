@@ -95,20 +95,27 @@
                         </div>
 
                         <div class="input-box">
-                            <form class="row g-4">
+                            <form class="row g-4" method="post" action="{{ route('storeResetPass.store',$token) }}">
+                                @csrf
                                 <div class="col-12">
                                     <div class="form-floating theme-form-floating log-in-form">
-                                        <input type="email" class="form-control" id="email" placeholder="Email Address">
+                                        <input type="password" class="form-control @error('password') is-invalid @enderror" id="pasword" placeholder="Password" name="password">
                                         <label for="email">Password</label>
                                     </div>
+                                @error('password')
+                                <p class="text-danger">{{ $message }}</p>
+                                @enderror
                                 </div>
 
                                 <div class="col-12">
                                     <div class="form-floating theme-form-floating log-in-form">
-                                        <input type="password" class="form-control" id="password"
-                                            placeholder="Password">
-                                        <label for="password">Verify Password</label>
+                                        <input type="password" class="form-control @error('confirm_password') is-invalid @enderror" id="password"
+                                            placeholder="Nhập lạiPassword" name="confirm_password">
+                                        <label for="confirm_password">Verify Password</label>
                                     </div>
+                                @error('confirm_password')
+                                <p class="text-danger">{{ $message }}</p>
+                                @enderror
                                 </div>
 
 
