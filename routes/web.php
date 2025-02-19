@@ -10,7 +10,7 @@ use App\Http\Controllers\DanhMucSanPhamController;
 use App\Http\Controllers\DonHangController;
 use App\Http\Controllers\SanPhamController;
 use App\Http\Controllers\ThongKeController;
-use App\Http\Controllers\TaiKhoanController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\PhieuGiamGiaController;
 use App\Http\Controllers\Admins\Auth\AuthController;
 
@@ -40,7 +40,7 @@ Route::get("/danhgia", [DanhGiaController::class, "index"])->name('danhgia');
 Route::resource('danhmucs', DanhMucSanPhamController::class);
 Route::resource('sanphams', SanPhamController::class);
 Route::resource('bienthes', BienTheController::class);
-Route::resource('taikhoans', TaiKhoanController::class);
+Route::resource('taikhoans', UserController::class);
 Route::resource('donhangs', DonHangController::class);
 Route::resource('baiviets', BaiVietController::class);
 Route::resource('vaitros', VaiTroController::class);
