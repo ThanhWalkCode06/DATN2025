@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('bien_the_id');
             $table->string('ten_thuoc_tinh');
-            $table->string('gia_tri_thuoc_tinh');
             $table->timestamps();
             $table->softDeletes();
         });

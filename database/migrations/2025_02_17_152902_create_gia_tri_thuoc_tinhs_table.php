@@ -11,13 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('binh_luans', function (Blueprint $table) {
+        Schema::create('gia_tri_thuoc_tinhs', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('san_pham_id');
-            $table->unsignedBigInteger('user_id');
-            $table->text('noi_dung');
-            $table->date('ngay_dang');
-            $table->boolean('trang_thai')->default(1);
+            $table->unsignedBigInteger('thuoc_tinh_id');
+            $table->unsignedBigInteger('bien_the_id');
+            $table->string('gia_tri');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -28,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('binh_luans');
+        Schema::dropIfExists('gia_tri_thuoc_tinhs');
     }
 };
