@@ -11,7 +11,7 @@ class UpdateBaiVietRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,11 @@ class UpdateBaiVietRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'user_id' => 'required|exists:users,id',
+            'tieu_de' => 'required|string|max:255',
+            'danh_muc_id' => 'required|exists:danh_mucs,id',
+            'noi_dung' => 'required',
+            'anh_bia' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ];
     }
 }

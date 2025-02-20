@@ -13,7 +13,8 @@ class BaiVietController extends Controller
      */
     public function index()
     {
-        return view('admins.baiviets.index');
+        $baiViets = BaiViet::latest()->paginate(10);
+        return view('admins.baiviets.index', compact('baiViets'));
     }
 
     /**
@@ -29,7 +30,8 @@ class BaiVietController extends Controller
      */
     public function store(StoreBaiVietRequest $request)
     {
-        //
+        BaiViet::create($request->validated());
+        return redirect()->route('baiviets.index')->with('success', 'Bài viết được tạo thành công.');
     }
 
     /**
@@ -37,7 +39,7 @@ class BaiVietController extends Controller
      */
     public function show(BaiViet $baiViet)
     {
-        return view('admins.baiviets.show');
+        return view('baiviets.show', compact('baiViet'));
     }
 
     /**
@@ -45,7 +47,7 @@ class BaiVietController extends Controller
      */
     public function edit(BaiViet $baiViet)
     {
-        return view('admins.baiviets.edit');
+        return view('baiviets.edit', compact('baiViet'));
     }
 
     /**
@@ -53,7 +55,8 @@ class BaiVietController extends Controller
      */
     public function update(UpdateBaiVietRequest $request, BaiViet $baiViet)
     {
-        //
+        $baiViet->update($request->validated());
+        return redirect()->route('baiviets.index')->with('success', 'Bài viết được cập nhật thành công.');
     }
 
     /**
@@ -61,6 +64,7 @@ class BaiVietController extends Controller
      */
     public function destroy(BaiViet $baiViet)
     {
-        //
+        $baiViet->delete();
+        return redirect()->route('baiviets.index')->with('success', 'Bài viết đã bị xóa.');
     }
 }
