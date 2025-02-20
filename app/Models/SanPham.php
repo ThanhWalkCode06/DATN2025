@@ -11,10 +11,8 @@ class SanPham extends Model
 
     protected $fillable = [
         'ten_san_pham',
-        'gia_san_pham',
-        'gia_khuyen_mai',
-        'hinh_anh',
-        'so_luong',
+        'ma_san_pham',
+        'khuyen_mai',
         'luot_xem',
         'mo_ta',
         'danh_muc_id',
