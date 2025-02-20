@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ThuocTinhController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LienHeController;
 use App\Http\Controllers\VaiTroController;
@@ -13,6 +14,7 @@ use App\Http\Controllers\ThongKeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PhieuGiamGiaController;
 use App\Http\Controllers\Admins\Auth\AuthController;
+use App\Http\Controllers\GiaTriThuocTinhController;
 
 // Login Admin Controller
 Route::prefix('/admin')->controller(AuthController::class)->group(function () {
@@ -40,6 +42,8 @@ Route::get("/danhgia", [DanhGiaController::class, "index"])->name('danhgia');
 Route::resource('danhmucs', DanhMucSanPhamController::class);
 Route::resource('sanphams', SanPhamController::class);
 Route::resource('bienthes', BienTheController::class);
+Route::resource('thuoctinhs', ThuocTinhController::class);
+Route::resource('giatrithuoctinhs', GiaTriThuocTinhController::class);
 Route::resource('taikhoans', UserController::class);
 Route::resource('donhangs', DonHangController::class);
 Route::resource('baiviets', BaiVietController::class);

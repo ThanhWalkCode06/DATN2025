@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('title')
-    Thêm mới biến thể
+    Thêm mới giá trị thuộc tính
 @endsection
 
 @section('css')
@@ -43,28 +43,54 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="card-header-2">
-                            <h5>Thêm biến thể</h5>
+                            <h5>Thêm giá trị thuộc tính</h5>
                         </div>
 
-                        <form class="theme-form theme-form-2 mega-form">
+                        <form class="theme-form theme-form-2 mega-form" action="{{ route('giatrithuoctinhs.store') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
                             <div class="mb-4 row align-items-center">
-                                <label class="form-label-title col-sm-3 mb-0">Tên biến thể</label>
+                                <label class="form-label-title col-sm-3 mb-0"
+                                for="gia_tri">Giá trị thuộc tính</label>
                                 <div class="col-sm-9">
-                                    <input class="form-control" type="text" placeholder="Tên biến thể">
+                                    <input class="form-control" id="gia_tri" name="gia_tri" 
+                                    type="text" placeholder="Giá trị thuộc tính"
+                                  >
+                                    @error('gia_tri')
+                                    <p class="text-danger">{{ $message }}</p>
+                                @enderror
                                 </div>
+                               
                             </div>
 
+                            <div class="mb-4 row align-items-center">
+                                <label class="form-label-title col-sm-3 mb-0" for="thuoc_tinh_id">Thuộc tính</label>
+                                <div class="col-sm-9">
+                                    <select class="form-control" id="thuoc_tinh_id" name="thuoc_tinh_id">
+                                        <option value="">-- Chọn thuộc tính --</option>
+                                        @foreach($thuocTinhs as $thuocTinh)
+                                            <option value="{{ $thuocTinh->id }}" {{ old('thuoc_tinh_id') == $thuocTinh->id ? 'selected' : '' }}>
+                                                {{ $thuocTinh->ten_thuoc_tinh }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('thuoc_tinh_id')
+                                        <p class="text-danger">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            </div>
+                            
+
                             <div class="mb-4 row align-items-start">
-                                <label class="col-sm-3 col-form-label form-label-title">Thuộc tính</label>
+                                {{-- <label class="col-sm-3 col-form-label form-label-title">Giá trị thuộc tính</label>
                                 <div class="col-sm-9">
                                     <div class="row g-sm-4 g-3">
                                         <div class="col-sm-10 col-9">
-                                            <input class="form-control" type="text" placeholder="Thuộc tính">
+                                            <input class="form-control" type="text" placeholder="Giá trị thuộc tính">
                                         </div>
 
                                         <div class="col-sm-2 col-3">
                                             <button class="btn text-danger h-100 w-100">Remove</button>
-                                        </div>
+                                        </div> --}}
 
                                         {{-- <div class="col-xxl-4">
                                             <button class="btn text-white theme-bg-color">Add
@@ -73,16 +99,16 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="mb-4 row align-items-center">
+                            {{-- <div class="mb-4 row align-items-center">
                                 <label class="form-label-title col-sm-3 mb-0">Giá trị thuộc tính</label>
                                 <div class="col-sm-9">
                                     <input class="form-control" type="text" placeholder="Giá trị thuộc tính">
                                 </div>
-                            </div>
-
+                            </div> --}}
+                            
+                        <button class="btn ms-auto theme-bg-color text-white" type="submit">Thêm mới</button>
                         </form>
 
-                        <button class="btn ms-auto theme-bg-color text-white">Thêm mới</button>
 
                     </div>
                 </div>
