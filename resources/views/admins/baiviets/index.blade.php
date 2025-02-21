@@ -25,9 +25,11 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css') }}">
 @endsection
 <div class="container mt-4">
-    <div class="card">
+    <div class="card card-body">
         <div class="card-header d-flex justify-content-between align-items-center">
-            <h4>Danh sách bài viết</h4>
+            <div class="title-header option-title">
+                <h4>Danh sách bài viết</h4>
+            </div>
             <a href="{{ route('baiviets.create') }}" class="btn btn-primary">Thêm mới</a>
         </div>
         <div class="card-body">
@@ -37,7 +39,7 @@
                         <th>#</th>
                         <th>Tiêu đề</th>
                         <th>Hình ảnh</th>
-                        <th>Tóm tắt</th>
+                        <th>Danh Mục</th>
                         <th>Thao tác</th>
                     </tr>
                 </thead>
@@ -49,7 +51,7 @@
                             <td>
                                 <img src="{{ asset('uploads/bai_viets/' . $baiViet->hinh_anh) }}" alt="Hình ảnh" width="100">
                             </td>
-                            <td>{{ Str::limit($baiViet->tom_tat, 50) }}</td>
+                            <td> {{$baiViet->danh_muc_id}} </td>
                             <td>
                                 <a href="{{ route('baiviets.show', $baiViet->id) }}" class="btn btn-info btn-sm">Xem</a>
                                 <a href="{{ route('baiviets.edit', $baiViet->id) }}" class="btn btn-warning btn-sm">Sửa</a>
