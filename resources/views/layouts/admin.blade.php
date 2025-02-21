@@ -140,7 +140,7 @@
     <script src="{{ asset('assets/js/tooltip-init.js') }}"></script>
 
     <!-- Plugins JS -->
-    <script src="{{ asset('assets/js/sidebar-menu.js') }}"></script>
+    {{-- <script src="{{ asset('assets/js/sidebar-menu.js') }}"></script> --}}
     <script src="{{ asset('assets/js/notify/bootstrap-notify.min.js') }}"></script>
 
     <!-- Apexchar js -->
@@ -152,44 +152,43 @@
 
 
     <!-- slick slider js -->
-    <script src="{{ asset('assets/js/slick.min.js') }}"></script>
-    <script src="{{ asset('assets/js/custom-slick.js') }}"></script>
+    {{-- <script src="{{ asset('assets/js/slick.min.js') }}"></script>
+    <script src="{{ asset('assets/js/custom-slick.js') }}"></script> --}}
 
     <!-- customizer js -->
     <script src="{{ asset('assets/js/customizer.js') }}"></script>
 
     <!-- ratio js -->
     <script src="{{ asset('assets/js/ratio.js') }}"></script>
-    {{-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> --}}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src=""></script>
 
 @if (session('success'))
-<script>
-    $(window).ready(function(){
-        $.notify({
-            title: "Thực hiện thao tác thành công!",
-            message: "{{ session('success') }}"
-        }, {
-            type: "primary",
-            delay: 5000
-        });
-    })
-    </script>
-@endif
-@if (session('error'))
-<script>
-    $(window).ready(function(){
-        $.notify({
-            title: "Thao tác thất bại!!",
-            message: "{{ session('error') }}"
-        }, {
-            type: "secondary",
-            delay: 5000
-        });
-    })
-    </script>
+<script>$(window).ready(function(){
+    $.notify({
+        title: "Thực hiện thao tác thành công!",
+        message: "{{ session('success') }}"
+    }, {
+        type: "primary",
+        delay: 5000
+    });
+})</script>
 @endif
 
-    @yield('js')
+@if (session('error'))
+<script>$(window).ready(function(){
+    $.notify({
+        title: "Thao tác thất bại!!",
+        message: "{{ session('error') }}"
+    }, {
+        type: "secondary",
+        delay: 5000
+    });
+})</script>
+@endif
+
+<script src="{{ asset('assets/js/alert/confirmalert.js') }}"></script>
+@yield('js')
 </body>
 
 </html>

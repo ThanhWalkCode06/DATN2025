@@ -825,5 +825,5 @@
 
 @section('js')
     <!-- Sidebar jquery -->
-
+    <script src="{{ asset('assets/js/sidebar-menu.js') }}"></script>
 @endsection

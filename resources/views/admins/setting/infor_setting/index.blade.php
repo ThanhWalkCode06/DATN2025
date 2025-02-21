@@ -94,5 +94,5 @@
 
 @endsection
 @section('js')
-
+<script src="{{ asset('assets/js/sidebar-menu.js') }}"></script>
 @endsection

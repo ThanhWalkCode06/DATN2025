@@ -91,14 +91,15 @@
                         </a>
                         <ul class="sidebar-submenu">
                             <li>
-                                <a href="{{ route('taikhoans.index') }}">Danh sách</a>
+                                <a href="{{ route('users.index') }}">Danh sách</a>
                             </li>
                             <li>
-                                <a href="{{ route('taikhoans.create') }}">Thêm mới</a>
+                                <a href="{{ route('users.create') }}">Thêm mới</a>
                             </li>
                         </ul>
                     </li>
 
+                    @role('SuperAdmin')
                     <li class="sidebar-list">
                         <a class="sidebar-link sidebar-title" href="javascript:void(0)">
                             <i class="ri-user-3-line"></i>
@@ -106,13 +107,29 @@
                         </a>
                         <ul class="sidebar-submenu">
                             <li>
-                                <a href="{{ route('vaitros.index') }}">Danh sách</a>
+                                <a href="{{ route('roles.index') }}">Danh sách</a>
                             </li>
                             <li>
-                                <a href="{{ route('vaitros.create') }}">Thêm mới</a>
+                                <a href="{{ route('roles.create') }}">Thêm mới</a>
                             </li>
                         </ul>
                     </li>
+
+                    <li class="sidebar-list">
+                        <a class="sidebar-link sidebar-title" href="javascript:void(0)">
+                            <i class="ri-chat-smile-3-line"></i>
+                            <span>Quyền</span>
+                        </a>
+                        <ul class="sidebar-submenu">
+                            <li>
+                                <a href="{{ route('permissions.index') }}">Danh sách</a>
+                            </li>
+                            <li>
+                                <a href="{{ route('permissions.create') }}">Thêm mới</a>
+                            </li>
+                        </ul>
+                    </li>
+                    @endrole
 
                     <li class="sidebar-list">
                         <a class="sidebar-link sidebar-title link-nav" href="{{ route('donhangs.index') }}">

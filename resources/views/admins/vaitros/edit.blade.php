@@ -44,18 +44,19 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="card-header-2">
-                            <h5>Create Role</h5>
+                            <h5>Update vai trò</h5>
                         </div>
 
 
-                        <form action="{{ route('roles.store') }}" method="POST">
+                        <form action="{{ route('roles.update',$itemId->id) }}" method="POST">
                             @csrf
+                            @method('PUT')
                             <div class="mb-4 row align-items-center">
                                 <label class="form-label-title col-sm-3 mb-0">Tên vai trò: <span
                                         class="theme-color">*</span></label>
                                 <div class="col-sm-5">
                                     <input class="form-control @error('name') is-invalid @enderror" type="text" placeholder="Author Name"
-                                    name="name" value="{{ old('name') }}"/>
+                                    name="name" value="{{ $itemId->name }}"/>
                                     @error('name')
                                     <p class="text-danger">{{ $message }}</p>
                                     @enderror
@@ -63,7 +64,6 @@
 
                             </div>
                             <h4>Chọn quyền:</h4>
-
                             <div class="row mt-4">
                                 @foreach($permissions->chunk(ceil(count($permissions) / 2)) as $chunk)
                                     <div class="col-md-6"> {{-- Chia làm 2 cột --}}
@@ -72,7 +72,8 @@
                                             <ul class="list-unstyled">
                                                 @foreach($perms as $perm)
                                                     <li>
-                                                        <input class="checkbox_animated checkall" type="checkbox" name="permissions[]" value="{{ $perm->name }}" id="perm_{{ $perm->id }}">
+                                                        <input class="checkbox_animated checkall" type="checkbox" name="permissions[]" value="{{ $perm->name }}" id="perm_{{ $perm->id }}
+                                                        " {{ $itemId->id && $itemId->hasPermissionTo($perm->name) ? 'checked' : '' }}>
                                                         <label for="perm_{{ $perm->id }}">{{ ucfirst(str_replace('-', ' ', $perm->name)) }}</label>
                                                     </li>
                                                 @endforeach

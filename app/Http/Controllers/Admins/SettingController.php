@@ -23,10 +23,10 @@ class SettingController extends Controller
                 'so_dien_thoai' => ['required', 'regex:/^0[0-9]{9,10}$/'], // Bắt đầu bằng 0, có 10-11 số
                 'email' => 'required|email',
                 'anh_dai_dien' => 'nullable|image|max:2048'
-            ]);;
+            ]);
             // dd(Auth::user()->id);
             if($request->hasFile('anh_dai_dien')){
-                if(file_exists(storage_path("app/public/".Auth::user()->anh_dai_dien))){
+                if(Auth::user()->anh_dai_dien && file_exists(storage_path("app/public/".Auth::user()->anh_dai_dien))){
                     // dd('in');
                     unlink(storage_path('app/public/'.Auth::user()->anh_dai_dien)); // Xóa ảnh c�� nếu có
                 }

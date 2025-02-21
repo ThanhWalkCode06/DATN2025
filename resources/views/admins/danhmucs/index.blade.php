@@ -59,12 +59,12 @@
                                         </div>
                                     </td>
 
-                          
+
 
 
                                     <td>
                                         <ul>
-                                        
+
 
                                             <li>
                                                 <a href="{{ route('danhmucs.edit',1) }}">
@@ -96,7 +96,7 @@
 
                                     <td>
                                         <ul>
-                                            
+
 
                                             <li>
                                                 <a href="javascript:void(0)">
@@ -159,7 +159,7 @@
 
                                     <td>
                                         <ul>
-                                            
+
 
                                             <li>
                                                 <a href="javascript:void(0)">
@@ -191,7 +191,7 @@
 
                                     <td>
                                         <ul>
-                                            
+
 
                                             <li>
                                                 <a href="javascript:void(0)">
@@ -210,7 +210,7 @@
                                 </tr>
 
 
-                            
+
                             </tbody>
                         </table>
                     </div>

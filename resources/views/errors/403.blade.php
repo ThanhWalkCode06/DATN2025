@@ -83,14 +83,13 @@
                 <center>
                     <div style="margin: auto" class="col-12">
                         <div class="image-404">
-                            <img src="../assets/images/inner-page/404.png" class="img-fluid blur-up lazyload" alt="">
+                            <img style="height: 500px; width: 100%; border-radius:24px" src="../assets/images/inner-page/403.webp" class="img-fluid blur-up lazyload" alt="">
                         </div>
                     </div>
                 </center>
 
                 <div class="col-12">
                     <div class="contain-404">
-                        <h3 class="text-content">Bạn không có quyền truy cập vào website vui lòng quay lại.</h3>
                             <button onclick="window.history.back();"
                             class="btn btn-md text-white theme-bg-color mt-4 mx-auto">Trở lại trang trước đó</button>
 

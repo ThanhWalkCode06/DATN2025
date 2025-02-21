@@ -35,7 +35,7 @@
                 <div class="title-header option-title">
                     <h5>Danh sách phiếu giảm giá</h5>
                     <div class="right-options">
-                
+
                     </div>
                 </div>
                 <div>
@@ -54,7 +54,7 @@
                             </thead>
 
                             <tbody>
-                                
+
                                 <tr>
 
                                     <td>80% Off</td>
