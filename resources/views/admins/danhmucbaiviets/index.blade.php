@@ -32,185 +32,48 @@
     <div class="col-sm-12">
         <div class="card card-table">
             <div class="card-body">
-                <div class="title-header option-title">
-                    <h5>Quản lý danh mục</h5>
-
-                </div>
-
+                    <div class="title-header option-title">
+                        <h5>Quản lý danh mục</h5>
+                        <a href="{{ route('danhmucbaiviets.create') }}" class="btn btn-primary">Thêm mới</a>
+                    </div>
                 <div class="table-responsive category-table">
                     <div>
                         <table class="table all-package theme-table" id="table_id">
                             <thead>
                                 <tr>
+                                    <th>ID</th>
                                     <th>Tên danh mục</th>
-                                    <th>Ảnh danh mục</th>
+                                    <th>Mô Tả</th>
                                     <th>Hành động</th>
                                 </tr>
                             </thead>
 
                             <tbody>
-                                <tr>
-                                    <td>Áo dài tay</td>
-
-
-                                    <td>
-                                        <div class="table-image">
-                                            <img src="https://th.bing.com/th/id/OIP.5lVZVJxK63aTGaVvj-ATzAHaHa?rs=1&pid=ImgDetMain" class="img-fluid" alt="">
-                                        </div>
-                                    </td>
-
-
-
-
-                                    <td>
-                                        <ul>
-
-
-                                            <li>
-                                                <a href="{{ route('danhmucs.edit',1) }}">
-                                                    <i class="ri-pencil-line"></i>
-                                                </a>
-                                            </li>
-
-                                            <li>
-                                                <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                    data-bs-target="#exampleModalToggle">
-                                                    <i class="ri-delete-bin-line"></i>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>Áo ngắn tay</td>
-
-
-                                    <td>
-                                        <div class="table-image">
-                                            <img src="https://th.bing.com/th?id=OIF.RpWQcTsQUd%2byUmbK8OwTHw&rs=1&pid=ImgDetMain" class="img-fluid" alt="">
-                                        </div>
-                                    </td>
-
-
-
-                                    <td>
-                                        <ul>
-
-
-                                            <li>
-                                                <a href="javascript:void(0)">
-                                                    <i class="ri-pencil-line"></i>
-                                                </a>
-                                            </li>
-
-                                            <li>
-                                                <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                    data-bs-target="#exampleModalToggle">
-                                                    <i class="ri-delete-bin-line"></i>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>Quần dài</td>
-
-
-                                    <td>
-                                        <div class="table-image">
-                                            <img src="https://th.bing.com/th/id/OIP.xYGVt4EpeIELcHgFB4TsHwHaLH?rs=1&pid=ImgDetMain" class="img-fluid" alt="">
-                                        </div>
-                                    </td>
-
-
-
-                                    <td>
-                                        <ul>
-
-                                            <li>
-                                                <a href="javascript:void(0)">
-                                                    <i class="ri-pencil-line"></i>
-                                                </a>
-                                            </li>
-
-                                            <li>
-                                                <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                    data-bs-target="#exampleModalToggle">
-                                                    <i class="ri-delete-bin-line"></i>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>Quần ngắn</td>
-
-
-                                    <td>
-                                        <div class="table-image">
-                                            <img src="https://th.bing.com/th/id/R.84e05068c314e6833878b21571c8de88?rik=%2brbuZEd%2f52C6aQ&pid=ImgRaw&r=0" class="img-fluid" alt="">
-                                        </div>
-                                    </td>
-
-
-
-                                    <td>
-                                        <ul>
-
-
-                                            <li>
-                                                <a href="javascript:void(0)">
-                                                    <i class="ri-pencil-line"></i>
-                                                </a>
-                                            </li>
-
-                                            <li>
-                                                <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                    data-bs-target="#exampleModalToggle">
-                                                    <i class="ri-delete-bin-line"></i>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>Đồ bộ</td>
-
-
-                                    <td>
-                                        <div class="table-image">
-                                            <img src="https://dongphuchaianh.vn/wp-content/uploads/2021/07/quan-ao-the-thao-nam-adidas-1.jpg" class="img-fluid" alt="">
-                                        </div>
-                                    </td>
-
-
-
-                                    <td>
-                                        <ul>
-
-
-                                            <li>
-                                                <a href="javascript:void(0)">
-                                                    <i class="ri-pencil-line"></i>
-                                                </a>
-                                            </li>
-
-                                            <li>
-                                                <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                    data-bs-target="#exampleModalToggle">
-                                                    <i class="ri-delete-bin-line"></i>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </td>
-                                </tr>
-
-
-
+                                @foreach ($danhMucBaiViets as $index => $danhMucBaiViet)
+                                    <tr>
+                                        <td>{{ $index + 1 }}</td>
+                                        <td>{{ $danhMucBaiViet->ten_danh_muc }}</td>
+                                        <td>{{ $danhMucBaiViet->mo_ta }}</td>
+                                        <td>
+                                            <ul>
+                                                <li>
+                                                    <a href="{{ route('danhmucbaiviets.edit', $danhMucBaiViet->id) }}">
+                                                        <i class="ri-pencil-line"></i>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <form action="{{ route('danhmucbaiviets.destroy', $danhMucBaiViet->id) }}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa?');">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" style="border: none; background: none;">
+                                                            <i class="ri-delete-bin-line"></i>
+                                                        </button>
+                                                    </form>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>

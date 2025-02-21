@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\DonHang;
 use App\Http\Requests\StoreDonHangRequest;
 use App\Http\Requests\UpdateDonHangRequest;
+use App\Models\ChiTietDonHang;
 
 class DonHangController extends Controller
 {
@@ -13,7 +14,12 @@ class DonHangController extends Controller
      */
     public function index()
     {
-        return view('admins.donhangs.index');
+        $donHangs = DonHang::select('don_hangs.*', 'users.name', 'phuong_thuc_thanh_toans.ten_phuong_thuc')
+            ->join('users', 'users.id', '=', 'user_id')
+            ->join('phuong_thuc_thanh_toans', 'phuong_thuc_thanh_toans.id', '=', 'phuong_thuc_thanh_toan_id')
+            ->get();
+        // dd($donHangs);
+        return view('admins.donhangs.index', compact('donHangs'));
     }
 
     /**
@@ -35,15 +41,25 @@ class DonHangController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(DonHang $donHang)
+    public function show(DonHang $donhang)
     {
-        return view('admins.donhangs.show');
+        $donHang = DonHang::select('don_hangs.*', 'users.name', 'phuong_thuc_thanh_toans.ten_phuong_thuc')
+            ->join('users', 'users.id', '=', 'user_id')
+            ->join('phuong_thuc_thanh_toans', 'phuong_thuc_thanh_toans.id', '=', 'phuong_thuc_thanh_toan_id')
+            ->find($donhang->id);
+
+        $chiTietDonHangs = ChiTietDonHang::select('chi_tiet_don_hangs.*', 'bien_thes.ten_bien_the', 'bien_thes.anh_bien_the', 'bien_thes.gia_ban')
+            ->join('bien_thes', 'bien_thes.id', '=', 'bien_the_id')
+            ->where('don_hang_id', '=', $donhang->id)
+            ->get();
+        // dd($chiTietDonHangs);
+        return view('admins.donhangs.show', compact('donHang', 'chiTietDonHangs'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(DonHang $donHang)
+    public function edit(DonHang $donhang)
     {
         //
     }

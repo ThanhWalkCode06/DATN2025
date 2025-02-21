@@ -52,3 +52,4 @@ Route::resource('phieugiamgias', PhieuGiamGiaController::class);
 Route::get('mail', function () {
     return view('admins.auth.mailForgetPass');
 });
+
