@@ -2,65 +2,99 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Models\DanhMucSanPham;
-use App\Http\Requests\StoreDanhMucSanPhamRequest;
-use App\Http\Requests\UpdateDanhMucSanPhamRequest;
+use Illuminate\Support\Facades\Storage;
 
 class DanhMucSanPhamController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        return view('admins.danhmucs.index');
+        $danhMucs = DanhMucSanPham::all(); 
+         return view('admins.danhmucs.index', compact('danhMucs'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         return view('admins.danhmucs.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreDanhMucSanPhamRequest $request)
+    public function store(Request $request)
     {
-        //
+        $request->validate([
+            'ten_danh_muc' => 'required|string|max:255',
+            'anh_danh_muc' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'mo_ta' => 'nullable|string',
+        ]);
+
+        $anhDanhMuc = null;
+        if ($request->hasFile('anh_danh_muc')) {
+            $anhDanhMuc = $request->file('anh_danh_muc')->store('danhmuc_images', 'public');
+        }
+
+        DanhMucSanPham::create([
+            'ten_danh_muc' => $request->ten_danh_muc,
+            'anh_danh_muc' => $anhDanhMuc,
+            'mo_ta' => $request->mo_ta,
+        ]);
+
+        return redirect()->route('danhmucs.index')->with('success', 'Danh mục đã được thêm.');
+
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(DanhMucSanPham $danhMuc)
+    public function show($id)
     {
-        //
+
+    $danhMuc = DanhMucSanPham::findOrFail($id);
+    return view('danhmucs.show', compact('danhMuc'));
+    
+   }
+
+
+    public function edit($id)
+    {
+    $danhMuc = DanhMucSanPham::findOrFail($id);
+    return view('admins.danhmucs.edit', compact('danhMuc'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(DanhMucSanPham $danhMuc)
-    {
-        return view('admins.danhmucs.edit');
+   public function update(Request $request, $id)
+   {
+    $request->validate([
+        'ten_danh_muc' => 'required|string|max:255',
+        'anh_danh_muc' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+    ]);
+
+    $danhMuc = DanhMucSanPham::findOrFail($id);
+    $danhMuc->ten_danh_muc = $request->ten_danh_muc;
+
+    if ($request->hasFile('anh_danh_muc')) {
+        if ($danhMuc->anh_danh_muc) {
+            Storage::delete('public/' . $danhMuc->anh_danh_muc);
+        }
+        $path = $request->file('anh_danh_muc')->store('danhmuc_images', 'public');
+        $danhMuc->anh_danh_muc = $path;
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateDanhMucSanPhamRequest $request, DanhMucSanPham $danhMuc)
-    {
-        //
-    }
+    $danhMuc->save();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(DanhMucSanPham $danhMuc)
-    {
-        //
-    }
+    return redirect()->route('danhmucs.index')->with('success', 'Danh mục đã được cập nhật.');
+   }
+
+   public function destroy($id)
+   {
+       // Kiểm tra danh mục có tồn tại không
+       $danhMuc = DanhMucSanPham::findOrFail($id);
+   
+       // Xóa ảnh nếu có
+       if ($danhMuc->anh_danh_muc) {
+           Storage::disk('public')->delete($danhMuc->anh_danh_muc);
+       }
+   
+       // Thực hiện xóa danh mục
+       $danhMuc->delete();
+   
+       return redirect()->route('danhmucs.index')->with('success', 'Danh mục đã được xóa thành công.');
+   }
+   
+
 }
