@@ -17,7 +17,7 @@ class PhuongThucThanhToanFactory extends Factory
     public function definition(): array
     {
         return [
-            'ten_phuong_thuc' => $this->faker->name()
+            'ten_phuong_thuc' => $this->faker->creditCardType()
         ];
     }
 }

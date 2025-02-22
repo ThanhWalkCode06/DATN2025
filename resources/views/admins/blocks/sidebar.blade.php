@@ -84,9 +84,9 @@
                             <li>
                                 <a href="{{ route('thuoctinhs.index') }}">Thuộc tính</a>
                             </li>
-                            <li>
+                            {{-- <li>
                                 <a href="{{ route('giatrithuoctinhs.index') }}">Giá trị thuộc tính</a>
-                            </li>
+                            </li> --}}
                         </ul>
                     </li>
 

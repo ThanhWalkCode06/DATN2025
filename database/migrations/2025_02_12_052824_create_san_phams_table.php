@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('san_phams', function (Blueprint $table) {
             $table->id();
             $table->string('ten_san_pham');
+            $table->string('ma_san_pham');
             $table->double('khuyen_mai')->default(0);
             $table->integer('luot_xem')->default(0);
             $table->text('mo_ta')->nullable();

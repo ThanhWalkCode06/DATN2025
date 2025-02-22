@@ -59,7 +59,7 @@
                 <!-- Container-fluid Ends-->
 
                 <!-- footer start-->
-                @include('admins.blocks.footer')
+                {{-- @include('admins.blocks.footer') --}}
                 <!-- footer End-->
             </div>
             <!-- index body end -->

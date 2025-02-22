@@ -18,9 +18,8 @@ class SanPhamFactory extends Factory
     {
         return [
             'ten_san_pham' => $this->faker->name(),
-            'gia_san_pham' => $this->faker->randomNumber(5, true),
-            'gia_khuyen_mai' => $this->faker->randomNumber(4, true),
-            'so_luong' => $this->faker->randomNumber(2, true),
+            'ma_san_pham' => $this->faker->ean13(),
+            'khuyen_mai' => $this->faker->numberBetween(0, 99),
             'luot_xem' => $this->faker->randomNumber(4, false),
             'mo_ta' => $this->faker->paragraph(),
             'danh_muc_id' => $this->faker->randomNumber(1, true),

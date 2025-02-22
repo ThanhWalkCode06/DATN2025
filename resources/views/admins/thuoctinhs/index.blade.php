@@ -49,12 +49,22 @@
                 </div>
                     
                 @endif
+
+                @if (session('error'))
+                                        
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong> {{session('error')}} </strong> 
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                    
+                @endif
                 <div class="table-responsive category-table">
                     <table class="table all-package theme-table" id="table_id">
                         <thead>
                             <tr>
                                 <th>STT</th>
                                 <th>Tên thuộc tính</th>
+                                <th>Giá trị thuộc tính</th>
                                 <th>Hành động</th>
                             </tr>
                         </thead>
@@ -64,7 +74,7 @@
                             <tr>
                                 <td>{{$index+1}}</td>
                                 <td>{{$thuocTinh->ten_thuoc_tinh}}</td>
-                                
+                                <td>{{ $thuocTinh->danh_sach_gia_tri}}</td> 
                                 <td>
                                     <ul>
                                         <li>

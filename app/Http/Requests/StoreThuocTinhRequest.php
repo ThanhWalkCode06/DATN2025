@@ -23,6 +23,8 @@ class StoreThuocTinhRequest extends FormRequest
     {
         return [
             'ten_thuoc_tinh' => 'required|max:255|unique:thuoc_tinhs,ten_thuoc_tinh,' .$this->thuoctinh,
+         
+         
         ];
     }
 
@@ -31,6 +33,7 @@ class StoreThuocTinhRequest extends FormRequest
             'ten_thuoc_tinh.required' => 'Tên thuộc tính bắt buộc điền.',
             'ten_thuoc_tinh.max'      => 'Tên thuộc tính quá dài',
             'ten_thuoc_tinh.unique'      => 'Tên thuộc tính không được trùng',
+           
         ];
     }
 }

@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('title')
-    Thêm mới thuộc tính
+    Thêm mới thuộc tính và giá trị
 @endsection
 
 @section('css')
@@ -46,53 +46,41 @@
                             <h5>Thêm thuộc tính</h5>
                         </div>
 
-                        <form class="theme-form theme-form-2 mega-form" action="{{ route('thuoctinhs.store') }}" method="POST" enctype="multipart/form-data">
+                        <form class="theme-form theme-form-2 mega-form" action="{{ route('thuoctinhs.store') }}" method="POST">
                             @csrf
+                            
+                            <!-- Tên thuộc tính -->
                             <div class="mb-4 row align-items-center">
-                                <label class="form-label-title col-sm-3 mb-0"
-                                for="ten_thuoc_tinh">Tên thuộc tính</label>
+                                <label class="form-label-title col-sm-3 mb-0" for="ten_thuoc_tinh">Tên thuộc tính</label>
                                 <div class="col-sm-9">
-                                    <input class="form-control" id="ten_thuoc_tinh" name="ten_thuoc_tinh" 
-                                    type="text" placeholder="Tên thuộc tính"
-                                  >
+                                    <input class="form-control" id="ten_thuoc_tinh" name="ten_thuoc_tinh" type="text" placeholder="Tên thuộc tính">
                                     @error('ten_thuoc_tinh')
-                                    <p class="text-danger">{{ $message }}</p>
-                                @enderror
+                                        <p class="text-danger">{{ $message }}</p>
+                                    @enderror
                                 </div>
-                               
                             </div>
 
+                            <!-- Giá trị thuộc tính -->
                             <div class="mb-4 row align-items-start">
-                                {{-- <label class="col-sm-3 col-form-label form-label-title">Giá trị thuộc tính</label>
-                                <div class="col-sm-9">
-                                    <div class="row g-sm-4 g-3">
-                                        <div class="col-sm-10 col-9">
-                                            <input class="form-control" type="text" placeholder="Giá trị thuộc tính">
-                                        </div>
-
-                                        <div class="col-sm-2 col-3">
-                                            <button class="btn text-danger h-100 w-100">Remove</button>
-                                        </div> --}}
-
-                                        {{-- <div class="col-xxl-4">
-                                            <button class="btn text-white theme-bg-color">Add
-                                                Value</button>
-                                        </div> --}}
-                                    </div>
-                                </div>
-                            </div>
-                            {{-- <div class="mb-4 row align-items-center">
                                 <label class="form-label-title col-sm-3 mb-0">Giá trị thuộc tính</label>
                                 <div class="col-sm-9">
-                                    <input class="form-control" type="text" placeholder="Giá trị thuộc tính">
+                                    <div id="giaTriContainer">
+                                        <div class="input-group mb-2">
+                                            <input type="text" name="gia_tri[]" class="form-control" placeholder="Giá trị thuộc tính">
+                                           
+                                            <button type="button" class="btn btn-danger removeGiaTri">Xóa</button>
+                                        </div>
+                                    </div>
+                                    <button type="button" id="addGiaTri" class="btn btn-primary mt-2">Thêm giá trị</button>
                                 </div>
-                            </div> --}}
+                            </div>
                             
-                        <button class="btn ms-auto theme-bg-color text-white" type="submit">Thêm mới</button>
+                            <button class="btn ms-auto theme-bg-color text-white" type="submit">Thêm mới</button>
                         </form>
 
-
                     </div>
+
+                   
                 </div>
             </div>
         </div>
@@ -117,4 +105,31 @@
     <!-- select2 js -->
     <script src="{{ asset('assets/js/select2.min.js') }}"></script>
     <script src="{{ asset('assets/js/select2-custom.js') }}"></script>
+
+
+
+    <script src="{{ asset('assets/js/select2.min.js') }}"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const giaTriContainer = document.getElementById('giaTriContainer');
+            const addGiaTriButton = document.getElementById('addGiaTri');
+
+            addGiaTriButton.addEventListener('click', function() {
+                const newInputGroup = document.createElement('div');
+                newInputGroup.classList.add('input-group', 'mb-2');
+                newInputGroup.innerHTML = `
+                    <input type="text" name="gia_tri[]" class="form-control" placeholder="Giá trị thuộc tính">
+                    <button type="button" class="btn btn-danger removeGiaTri">Xóa</button>
+                `;
+                giaTriContainer.appendChild(newInputGroup);
+            });
+
+            giaTriContainer.addEventListener('click', function(event) {
+                if (event.target.classList.contains('removeGiaTri')) {
+                    event.target.closest('.input-group').remove();
+                }
+            });
+        });
+    </script>
 @endsection
