@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\SanPham;
 use Illuminate\Http\Request;
 use App\Models\DanhMucSanPham;
 use Illuminate\Support\Facades\Storage;
@@ -82,19 +83,27 @@ class DanhMucSanPhamController extends Controller
 
    public function destroy($id)
    {
-       // Kiểm tra danh mục có tồn tại không
-       $danhMuc = DanhMucSanPham::findOrFail($id);
-   
-       // Xóa ảnh nếu có
-       if ($danhMuc->anh_danh_muc) {
-           Storage::disk('public')->delete($danhMuc->anh_danh_muc);
-       }
-   
-       // Thực hiện xóa danh mục
-       $danhMuc->delete();
-   
-       return redirect()->route('danhmucs.index')->with('success', 'Danh mục đã được xóa thành công.');
-   }
+    // Kiểm tra danh mục có tồn tại không
+    $danhMuc = DanhMucSanPham::findOrFail($id);
+
+    // Kiểm tra xem danh mục có sản phẩm nào không
+    $soSanPham = SanPham::where('danh_muc_id', $id)->count();
+    
+    if ($soSanPham > 0) {
+        return redirect()->route('danhmucs.index')->with('error', 'Không thể xóa danh mục vì vẫn còn sản phẩm thuộc danh mục này.');
+    }
+
+    // Xóa ảnh nếu có
+    if ($danhMuc->anh_danh_muc) { 
+        Storage::disk('public')->delete($danhMuc->anh_danh_muc);
+    }
+
+    // Thực hiện xóa danh mục
+    $danhMuc->delete();
+
+    return redirect()->route('danhmucs.index')->with('success', 'Danh mục đã được xóa thành công.');
+}
+
    
 
 }
