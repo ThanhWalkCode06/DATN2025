@@ -14,11 +14,9 @@ return new class extends Migration
         Schema::create('san_phams', function (Blueprint $table) {
             $table->id();
             $table->string('ten_san_pham');
-            $table->double('gia_san_pham');
-            $table->double('gia_khuyen_mai')->nullable();
+            $table->string('ma_san_pham');
+            $table->double('khuyen_mai')->default(0);
             $table->string('hinh_anh')->nullable();
-            $table->integer('so_luong')->default(0);
-            $table->integer('luot_xem')->default(0);
             $table->text('mo_ta')->nullable();
             $table->unsignedBigInteger('danh_muc_id');
             $table->boolean('trang_thai')->default(1);
