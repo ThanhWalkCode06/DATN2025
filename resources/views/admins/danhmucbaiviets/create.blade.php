@@ -1,6 +1,8 @@
 @extends('layouts.admin')
 
-@section('title', 'Chi Tiết Bài Viết')
+@section('title')
+    Thêm mới danh muc bài viết
+@endsection
 
 @section('css')
     <!-- Themify icon css -->
@@ -35,48 +37,38 @@
 @endsection
 
 @section('content')
-    <div class="container mt-4">
-        <div class="card shadow-lg border-0">
-            <div class="card-header bg-primary text-white text-center">
-                <h3 class="mb-0">📖 Chi Tiết Bài Viết</h3>
-            </div>
-            <div class="card-body p-4">
-                <div class="row">
-                    <!-- Cột trái -->
-                    <div class="col-md-8">
-                        <div class="mb-3">
-                            <h5><i class="ri-user-line"></i> Người Viết:</h5>
-                            <p class="text-muted">{{ $baiViet->user->name }} ({{ $baiViet->user->email }})</p>
+    <div class="col-12">
+        <div class="row">
+            <div class="col-sm-8 m-auto">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="title-header option-title">
+                            <h5>Thêm danh mục bài viết</h5>
                         </div>
-                        <div class="mb-3">
-                            <h5><i class="ri-book-2-line"></i> Tiêu Đề:</h5>
-                            <p class="fw-bold">{{ $baiViet->tieu_de }}</p>
-                        </div>
-                        <div class="mb-3">
-                            <h5><i class="ri-folder-line"></i> Danh Mục:</h5>
-                            <p class="text-dark fw-bold">{{ $baiViet->danhMuc->ten_danh_muc }}</p>
-                        </div>
-                        <div class="mb-3">
-                            <h5><i class="ri-file-text-line"></i> Nội Dung:</h5>
-                            <p class="text-muted">{!! nl2br(e($baiViet->noi_dung)) !!}</p>
-                        </div>
-                    </div>
+                        <form action="{{ route('danhmucbaiviets.store') }}" method="POST">
+                            @csrf
+                            <div class="mb-3">
+                                <label class="form-label">Tên danh mục</label>
+                                <input type="text" class="form-control" name="ten_danh_muc" value="{{ old('ten_danh_muc') }}" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Mô tả</label>
+                                <textarea class="form-control" name="mo_ta">{{ old('mo_ta') }}</textarea>
+                            </div>
+                            <div class="mt-5 d-flex justify-content-between">
+                                <a href="{{ route('danhmucbaiviets.index') }}" class="btn btn-secondary">Quay lại</a>
+                                <button class="btn btn-primary" type="submit">Thêm mới</button>
+                            </div>
+                        </form>
 
-                    <!-- Cột phải -->
-                    <div class="col-md-4 text-center">
-                        <h5><i class="ri-image-line"></i> Ảnh Bìa:</h5>
-                        <img src="{{ asset('storage/' . $baiViet->anh_bia) }}" class="img-fluid rounded shadow-lg" style="max-width: 100%; height: auto;">
+                        </form>
                     </div>
                 </div>
-            </div>
-            <div class="card-footer text-end">
-                <a href="{{ route('baiviets.index') }}" class="btn btn-outline-primary">
-                    <i class="ri-arrow-go-back-line"></i> Quay lại
-                </a>
             </div>
         </div>
     </div>
 @endsection
+
 @section('js')
     <!-- Sidebar js -->
     <script src="{{ asset('assets/js/config.js') }}"></script>

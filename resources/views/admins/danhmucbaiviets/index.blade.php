@@ -1,11 +1,3 @@
-@if (session('success'))
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        {{ session('success') }}
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-@endif
 
 @extends('layouts.admin')
 
@@ -36,55 +28,42 @@
     <!-- App css -->
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css') }}">
 @endsection
+
 @section('content')
     <div class="col-sm-12">
         <div class="card card-table">
             <div class="card-body">
-                <div class="title-header option-title">
-                    <h5>Quản lý danh mục bài viết</h5>
-                    <a href="{{ route('baiviets.create') }}" class="btn btn-primary">Thêm mới</a>
-                </div>
+                    <div class="title-header option-title">
+                        <h5>Quản lý danh mục</h5>
+                        <a href="{{ route('danhmucbaiviets.create') }}" class="btn btn-primary">Thêm mới</a>
+                    </div>
                 <div class="table-responsive category-table">
                     <div>
                         <table class="table all-package theme-table" id="table_id">
                             <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Tên tài khoản</th>
-                                    <th>Tiêu Đề</th>
                                     <th>Tên danh mục</th>
-                                    <th>Ảnh Bìa</th>
+                                    <th>Mô Tả</th>
                                     <th>Hành động</th>
                                 </tr>
                             </thead>
 
                             <tbody>
-                                @foreach ($baiViets as $index => $baiViet)
+                                @foreach ($danhMucBaiViets as $index => $danhMucBaiViet)
                                     <tr>
                                         <td>{{ $index + 1 }}</td>
-                                        <td>{{ $baiViet->user->name }}</td>
-                                        <td>{{ $baiViet->tieu_de }}</td>
-                                        <td>{{ $baiViet->danh_muc_id }}</td>
-                                        <td>
-                                            <img src="{{ asset('storage/' . $baiViet->anh_bia) }}" alt="Ảnh bài viết" width="100" >
-                                        </td>
+                                        <td>{{ $danhMucBaiViet->ten_danh_muc }}</td>
+                                        <td>{{ $danhMucBaiViet->mo_ta }}</td>
                                         <td>
                                             <ul>
                                                 <li>
-                                                    <a href="{{ route('baiviets.show', $baiViet->id) }}">
-                                                        <i class="ri-eye-line"></i>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="{{ route('baiviets.edit', $baiViet->id) }}">
+                                                    <a href="{{ route('danhmucbaiviets.edit', $danhMucBaiViet->id) }}">
                                                         <i class="ri-pencil-line"></i>
                                                     </a>
                                                 </li>
                                                 <li>
-                                                    <form
-                                                        action="{{ route('baiviets.destroy', $baiViet->id) }}"
-                                                        method="POST"
-                                                        onsubmit="return confirm('Bạn có chắc chắn muốn xóa?');">
+                                                    <form action="{{ route('danhmucbaiviets.destroy', $danhMucBaiViet->id) }}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa?');">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit" style="border: none; background: none;">
@@ -104,6 +83,7 @@
         </div>
     </div>
 @endsection
+
 @section('js')
     <!-- customizer js -->
     <script src="{{ asset('assets/js/customizer.js') }}"></script>

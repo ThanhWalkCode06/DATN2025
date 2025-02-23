@@ -1,3 +1,5 @@
+
+
 @extends('layouts.admin')
 
 @section('title')
@@ -46,173 +48,82 @@
                             <h5>Thêm Mới Bài Viết</h5>
                         </div>
 
-                        <form class="theme-form theme-form-2 mega-form">
-                            <div class="mb-4 row align-items-center">
-                                <label class="form-label-title col-sm-3 mb-0">Tiêu Đề
-                                    </label>
-                                <div class="col-sm-9">
-                                    <input class="form-control" type="text" placeholder="Product Name">
-                                </div>
-                            </div>
+                        <form action="{{ route('admins.baiviets.store') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
 
+                            <!-- Chọn người dùng -->
                             <div class="mb-4 row align-items-center">
-                                <label class="col-sm-3 col-form-label form-label-title"> Danh Mục Tiêu Đề
-                                    </label>
+                                <label class="form-label-title col-sm-3 mb-0">Người Viết</label>
                                 <div class="col-sm-9">
-                                    <select class="js-example-basic-single w-100" name="state">
-                                        <option disabled>Static Menu</option>
-                                        <option>Áo Khoác</option>
-                                        <option>Áo Thu Đông</option>
+                                    <select class="form-control" name="user_id" required>
+                                        <option value="" disabled selected>Chọn người viết</option>
+                                        @foreach ($users as $user)
+                                            <option value="{{ $user->id }}">{{ $user->name }} ({{ $user->email }})
+                                            </option>
+                                        @endforeach
                                     </select>
+                                    @error('user_id')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
                                 </div>
                             </div>
 
-
-
-
+                            <!-- Tiêu đề -->
                             <div class="mb-4 row align-items-center">
-                                <label class="col-sm-3 col-form-label form-label-title">Tags</label>
+                                <label class="form-label-title col-sm-3 mb-0">Tiêu Đề</label>
                                 <div class="col-sm-9">
-                                    <div class="bs-example">
-                                        <input type="text" class="form-control" placeholder="Type tag & hit enter"
-                                            id="#inputTag" data-role="tagsinput">
-                                    </div>
+                                    <input class="form-control" type="text" name="tieu_de"
+                                        placeholder="Nhập tiêu đề bài viết" required>
+                                    @error('tieu_de')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
                                 </div>
                             </div>
+
+                            <!-- Danh mục -->
                             <div class="mb-4 row align-items-center">
-                                <label class="col-sm-3 col-form-label form-label-title">Exchangeable</label>
+                                <label class="col-sm-3 col-form-label form-label-title">Danh Mục</label>
                                 <div class="col-sm-9">
-                                    <label class="switch">
-                                        <input type="checkbox"><span class="switch-state"></span>
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="row align-items-center">
-                                <label class="col-sm-3 col-form-label form-label-title">Refundable</label>
-                                <div class="col-sm-9">
-                                    <label class="switch">
-                                        <input type="checkbox" checked=""><span class="switch-state"></span>
-                                    </label>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-body">
-                        <div class="card-header-2">
-                            <h5>Description</h5>
-                        </div>
-
-                        <form class="theme-form theme-form-2 mega-form">
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="row">
-                                        <label class="form-label-title col-sm-3 mb-0">Product
-                                            Description</label>
-                                        <div class="col-sm-9">
-                                            <div id="editor"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-body">
-                        <div class="card-header-2">
-                            <h5>Product Images</h5>
-                        </div>
-
-                        <form class="theme-form theme-form-2 mega-form">
-                            <div class="mb-4 row align-items-center">
-                                <label class="col-sm-3 col-form-label form-label-title">Images</label>
-                                <div class="col-sm-9">
-                                    <input class="form-control form-choose" type="file" id="formFile" multiple>
-                                </div>
-                            </div>
-
-                            <div class="row align-items-center">
-                                <label class="col-sm-3 col-form-label form-label-title">Thumbnail
-                                    Image</label>
-                                <div class="col-sm-9">
-                                    <input class="form-control form-choose" type="file" id="formFileMultiple1"
-                                        multiple>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-body">
-                        <div class="card-header-2">
-                            <h5>Product Videos</h5>
-                        </div>
-                        <form class="theme-form theme-form-2 mega-form">
-                            <div class="mb-4 row align-items-center">
-                                <label class="col-sm-3 col-form-label form-label-title">Video
-                                    Provider</label>
-                                <div class="col-sm-9">
-                                    <select class="js-example-basic-single w-100" name="state">
-                                        <option>Vimeo</option>
-                                        <option>Youtube</option>
-                                        <option>Dailymotion</option>
-                                        <option>Vimeo</option>
-                                        <option>maki</option>
+                                    <select class="form-control" name="danh_muc_id" required>
+                                        <option value="" disabled selected>Chọn danh mục</option>
+                                        @foreach ($danhMucs as $danhMuc)
+                                            <option value="{{ $danhMuc->id }}">{{ $danhMuc->ten_danh_muc }}</option>
+                                        @endforeach
                                     </select>
+                                    @error('danh_muc_id')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
                                 </div>
                             </div>
 
-                            <div class="row align-items-center">
-                                <label class="form-label-title col-sm-3 mb-0">Video
-                                    Link</label>
-                                <div class="col-sm-9">
-                                    <input class="form-control" type="text" placeholder="Video Link">
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-body">
-                        <div class="card-header-2">
-                            <h5>Search engine listing</h5>
-                        </div>
-
-                        <div class="seo-view">
-                            <span class="link">https://fastkart.com</span>
-                            <h5>Buy fresh vegetables & Fruits online at best price</h5>
-                            <p>Online Vegetable Store - Buy fresh vegetables & Fruits online at best
-                                prices. Order online and get free delivery.</p>
-                        </div>
-
-                        <form class="theme-form theme-form-2 mega-form">
-                            <div class="mb-4 row align-items-center">
-                                <label class="form-label-title col-sm-3 mb-0">Page title</label>
-                                <div class="col-sm-9">
-                                    <input class="form-control" type="search" placeholder="Fresh Fruits">
-                                </div>
-                            </div>
-
+                            <!-- Nội dung -->
                             <div class="mb-4 row">
-                                <label class="form-label-title col-sm-3 mb-0">Meta
-                                    description</label>
+                                <label class="col-sm-3 col-form-label form-label-title">Nội Dung</label>
                                 <div class="col-sm-9">
-                                    <textarea class="form-control" rows="3"></textarea>
+                                    <textarea class="form-control" name="noi_dung" rows="5" required></textarea>
+                                    @error('noi_dung')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
                                 </div>
                             </div>
 
-                            <div class="row">
-                                <label class="form-label-title col-sm-3 mb-0">URL handle</label>
+                            <!-- Ảnh bìa -->
+                            <div class="mb-4 row align-items-center">
+                                <label class="col-sm-3 col-form-label form-label-title">Ảnh Bìa</label>
                                 <div class="col-sm-9">
-                                    <input class="form-control" type="search"
-                                        placeholder="https://fastkart.com/fresh-veggies">
+                                    <input class="form-control" type="file" name="anh_bia" accept="image/*">
+                                    @error('anh_bia')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
                                 </div>
                             </div>
+
+                            <!-- Nút Submit -->
+                            <div class="mt-5 d-flex justify-content-between">
+                                <a href="{{ route('baiviets.index') }}" class="btn btn-secondary">Quay lại</a>
+                                <button class="btn btn-primary" type="submit">Thêm mới</button>
+                            </div>
+
                         </form>
                     </div>
                 </div>

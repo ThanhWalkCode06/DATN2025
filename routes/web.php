@@ -18,6 +18,7 @@ use App\Http\Controllers\Admins\UserController;
 use App\Http\Controllers\Admins\SettingController;
 use App\Http\Controllers\PhieuGiamGiaController;
 use App\Http\Controllers\DanhMucSanPhamController;
+use App\Http\Controllers\DanhMucBaiVietController;
 use App\Http\Controllers\Admins\Auth\AuthController;
 use App\Http\Controllers\Admins\Responsibility\RoleController;
 use App\Http\Controllers\Admins\Responsibility\PermissionController;
@@ -55,7 +56,6 @@ Route::prefix('/admin')->controller(AuthController::class)->group(function () {
     //     Auth::user()->syncRoles('SuperAdmin');
     //     dd(Auth::user()->hasRole('SuperAdmin'));
     // });
-    Route::resource('users', UserController::class);
 
     Route::get("/", [ThongKeController::class, "index"])->name('index');
     Route::get("/lienhe", [LienHeController::class, "index"])->name('lienhe');
@@ -63,17 +63,15 @@ Route::prefix('/admin')->controller(AuthController::class)->group(function () {
     Route::resource('danhmucs', DanhMucSanPhamController::class);
     Route::resource('sanphams', SanPhamController::class);
     Route::resource('bienthes', BienTheController::class);
+    Route::resource('users', UserController::class);
     Route::resource('thuoctinhs', ThuocTinhController::class);
     Route::resource('giatrithuoctinhs', GiaTriThuocTinhController::class);
-    Route::resource('taikhoans', TaiKhoanController::class);
     Route::resource('donhangs', DonHangController::class);
     Route::resource('baiviets', BaiVietController::class);
+    Route::resource('danhmucbaiviets', DanhMucBaiVietController::class);
     Route::resource('vaitros', VaiTroController::class);
     Route::resource('phieugiamgias', PhieuGiamGiaController::class);
     });
-
-
-
 
 // Route::get('mail', function () {
 //     return view('admins.auth.mailForgetPass');
