@@ -39,16 +39,12 @@ Route::prefix('/admin')->controller(AuthController::class)->group(function () {
 
     Route::get('/pass/edit', 'editPass')->name('pass.edit');
     Route::post('/pass/update', 'updatePass')->name('pass.update');
-
-
 });
-    Route::prefix('admin')->middleware('auth')->group(function(){
-    Route::get('/logout',[AuthController::class, 'logout'])->name('logout');
 
-
-    Route::match(['post', 'get'],'/setting-infor',[SettingController::class,'index'])->name('setting-infor.private');
-
-    Route::middleware(['role:SuperAdmin'])->group(function(){
+Route::prefix('admin')->middleware('auth')->group(function () {
+    Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::match(['post', 'get'], '/setting-infor', [SettingController::class, 'index'])->name('setting-infor.private');
+    Route::middleware(['role:SuperAdmin'])->group(function () {
         Route::resource('permissions', PermissionController::class);
         Route::resource('roles', RoleController::class);
     });
@@ -65,13 +61,13 @@ Route::prefix('/admin')->controller(AuthController::class)->group(function () {
     Route::resource('bienthes', BienTheController::class);
     Route::resource('users', UserController::class);
     Route::resource('thuoctinhs', ThuocTinhController::class);
-    Route::resource('giatrithuoctinhs', GiaTriThuocTinhController::class);
     Route::resource('donhangs', DonHangController::class);
     Route::resource('baiviets', BaiVietController::class);
     Route::resource('danhmucbaiviets', DanhMucBaiVietController::class);
+    Route::resource('baiviets', BaiVietController::class);
     Route::resource('vaitros', VaiTroController::class);
     Route::resource('phieugiamgias', PhieuGiamGiaController::class);
-    });
+});
 
 // Route::get('mail', function () {
 //     return view('admins.auth.mailForgetPass');

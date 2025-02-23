@@ -1,5 +1,3 @@
-
-
 @extends('layouts.admin')
 
 @section('title')
@@ -48,7 +46,7 @@
                             <h5>Thêm Mới Bài Viết</h5>
                         </div>
 
-                        <form action="{{ route('admins.baiviets.store') }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('baiviets.store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
 
                             <!-- Chọn người dùng -->
