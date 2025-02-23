@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admins\Auth;
 
+use App\Models\User;
 use Illuminate\Support\Str;
 use App\Mail\Mail\ResetPass;
 use Illuminate\Http\Request;
@@ -26,26 +27,32 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
-        // $user = $request->validate([
-        //     'username' => 'required',
-        //     'password' => 'required',
-        // ]);
-        // if(Auth::attempt($user)){
-        //     if($request->remember_token == true) {
-        //         $currentUser = Auth::user();
-        //         $currentUser->remember_token = $request->remember_token;
-        //         $currentUser->save();
+        $user = $request->validate([
+            'name' => 'required',
+            'password' => 'required',
+        ]);
 
-        //         setcookie('remember_token', $request->remember_token, time() + (86400 * 30), "/"); // 30 ngày
-        //         setcookie('name', $request->username, time() + (86400 * 30), "/");
+        if(Auth::attempt($user)){
+            if($request->remember_token == true) {
+                // dd($request->remember_token);
+                $currentUser = Auth::user();
+                $currentUser->remember_token = $request->remember_token;
+                $currentUser->save();
 
-        //     }
-        //     $userName = Auth::user()->name;
-        //     // $roles = Auth::user()->getRoleNames()->first();
-        //     // dd($roles);
-        //     // session(['userName' => $userName, 'roleNames' => $roles]);
-        //     redirect()->intended('/');
-        // }
+                setcookie('remember_token', $request->remember_token, time() + (86400 * 30), "/"); // 30 ngày
+                setcookie('name', $request->username, time() + (86400 * 30), "/");
+
+            }
+            $userName = Auth::user()->name;
+            // dd($userName);
+            // $roles = Auth::user()->getRoleNames()->first();
+            // dd($roles);
+            session(['userName' => $userName]);
+           return  redirect()->route('index');
+        }
+        return redirect()->back()->withErrors([
+            'error' => 'Username or password incorrect'
+        ]);
     }
 
     /**
@@ -53,33 +60,37 @@ class AuthController extends Controller
      */
     public function logout(Request $request)
     {
-        // Auth::logout();
-        // Cookie::queue(Cookie::forget('remember_token'));
-        // Cookie::queue(Cookie::forget('name'));
-        // $request->session()->forget('userName');
-        return redirect()->route('admin.logout');
+        Auth::logout();
+        Cookie::queue(Cookie::forget('remember_token'));
+        Cookie::queue(Cookie::forget('name'));
+        $request->session()->forget('userName');
+        return redirect()->route('login');
     }
     public function showForgetPass(){
         return view('admins.auth.forgetPass');
     }
 
     public function sendLinkForgetPass(Request $request){
-    //     $user = User::query()->where('email',$request->email)->first();
-    //     $email = $request->email;
-    //     $request->validate([
-    //         'email' =>'required|email|exists:users,email',
-    //     ],['email.exists' => 'Email not exists']);
-
-    // // Tạo token
+        $user = User::query()->where('email',$request->email)->first();
+        // dd($user,$request->email);
+        $email = $request->email;
+        $request->validate([
+            'email' =>'required|email|exists:users,email',
+        ]);
+    if($user){
+        // // Tạo token
     $token = Str::random(60);
     // Lưu token vào bảng password_resets
-    // DB::table('password_reset_tokens')->updateOrInsert(
-    //     ['email' => $email],
-    //     ['token' => $token, 'created_at' => now()]
-    // );
-    Mail::to('thanhnguyen062004@gmail.com')->send(new ResetPass($token));
-
-    return redirect()->route('login')->with(['success' => 'you can check your mail let access link!']);
+    DB::table('password_reset_tokens')->updateOrInsert(
+        ['email' => $email],
+        ['token' => $token, 'created_at' => now()]
+    );
+    Mail::to($email)->send(new ResetPass($token));
+    return redirect()->route('login')->withErrors(['error' => 'Bạn đã có thể vào gmail để lấy đường link lấy lại mật khẩu!']);
+    }
+    return redirect()->back()->withErrors([
+        'error' => 'Thông tin người dùng không đúng'
+    ]);
 }
     /**
      * Display the specified resource.
@@ -90,16 +101,17 @@ class AuthController extends Controller
     }
 
     public function storeResetPass(Request $request, $token){
-        // $user = DB::table('password_reset_tokens')->where('token',$token)->first();
-        // $email = $user->email;
-        // $request->validate([
-        //     'password' => 'required',
-        //     'confirm_password' => 'required|same:password',
-        // ]);
-        // $pass = bcrypt($request->password);
-        // DB::table('users')->where('email', $email)->update(['password' => $pass]);
+        $request->validate([
+            'password' => 'required',
+            'confirm_password' => 'required|same:password',
+        ]);
+        $user = DB::table('password_reset_tokens')->where('token',$token)->first();
+        // dd($user);
+        $email = $user->email;
+        $pass = bcrypt($request->password);
+        DB::table('users')->where('email', $email)->update(['password' => $pass]);
 
-    return redirect()->route('login')->with('success','You could login');
+    return redirect()->route('login')->withErrors(['error' => 'Chào mừng bạn trở lại, hãy đăng nhập thôi nào.']);
     }
 
     public function editPass(){
@@ -113,15 +125,16 @@ class AuthController extends Controller
     public function UpdatePass(Request $request){
     if(Auth::user()){
         $user = Auth::user();
-    //     $request->validate([
-    //         'password' => 'required',
-    //         'confirm_password' => 'required|same:password',
-    //     ]);
-    //     $pass = bcrypt($request->password);
-    //     // dd($pass, $user->id);
-    //     DB::table('users')->where('id', $user->id)->update(['password' => $pass]);
+        $request->validate([
+            'password' => 'required',
+            'confirm_password' => 'required|same:password',
+        ]);
+        $pass = bcrypt($request->password);
+        // dd($pass, $user->id);
+        DB::table('users')->where('id', $user->id)->update(['password' => $pass]);
+        $this->logout($request);
 
-    // return redirect()->route('login')->with('success',', you did change password. Please login again');
+    return redirect()->route('login')->withErrors(['error' =>'You could login with new password!']);
     }else{
         abort(403);
     }
