@@ -72,7 +72,7 @@
                             </thead>
 
                             <tbody>
-                                @foreach ($danhMucs as $index => $danhMuc)
+ @foreach ($danhMucs as $index => $danhMuc)
                                     <tr>
                                         <td>{{ $index + 1 }}</td>
 
