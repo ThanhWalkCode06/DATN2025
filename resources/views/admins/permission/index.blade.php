@@ -34,9 +34,9 @@
         <div class="card card-table">
             <div class="card-body">
                 <div class="title-header option-title">
-                    <h5>Danh sách người dùng </h5>
+                    <h5>Tất cả quyền </h5>
                     <form class="d-inline-flex">
-                        <a href="{{route('users.create')}}" class="align-items-center btn btn-theme d-flex">
+                        <a href="{{route('permissions.create')}}" class="align-items-center btn btn-theme d-flex">
                             <i data-feather="plus-square"></i>Thêm mới
                         </a>
                     </form>
@@ -55,16 +55,14 @@
                                         <span>STT</span>
                                     </div>
                                 </th>
-                                <th>Tên tài khoản</th>
-                                <th>email</th>
-                                <th>Ảnh</th>
-                                <th>Trạng thái</th>
+                                <th>Tên quyền</th>
+                                <th>Mô tả quyền</th>
                                 <th>Hành động</th>
                             </tr>
                         </thead>
 
                         <tbody>
-                        @if($lists)
+                        @if($lists != null)
                             @foreach ( $lists as $key => $item)
                                 <tr class="justify-content-center">
                                     <td>
@@ -79,20 +77,12 @@
 
                                     <td>{{ $item->name }}</td>
 
-                                    <td>{{ $item->email }}</td>
-
-                                    <td>
-                                        <img style="width:100px;height:100px" src="{{ Storage::url($item->anh_dai_dien) }}" alt="">
-                                    </td>
-
-                                    <td class="status-close">
-                                        <span>{{ $item->trang_thai == 1 ? 'Hoạt động' : 'Không hoạt động' }}</span>
-                                    </td>
+                                    <td>{{ $item->description }}</td>
 
                                     <td>
                                         <ul>
                                             <li>
-                                                <a href="{{ route('users.edit', $item->id) }}">
+                                                <a href="{{ route('permissions.edit', $item->id) }}">
                                                     <i class="ri-pencil-line"></i>
                                                 </a>
                                             </li>
@@ -102,7 +92,7 @@
                                                     <i class="ri-delete-bin-line"></i>
                                                 </a>
 
-                                                <form id="delete-form-{{ $item->id }}" action="{{ route('users.destroy', $item->id) }}" method="POST" style="display: none;">
+                                                <form id="delete-form-{{ $item->id }}" action="{{ route('permissions.destroy', $item->id) }}" method="POST" style="display: none;">
                                                     @csrf
                                                     @method('DELETE')
                                                 </form>
@@ -120,7 +110,7 @@
             </div>
         </div>
     </div>
-    {{-- {{ $lists->onEachSide(5)->links("pagination::bootstrap-5") }} --}}
+    {{ $lists->onEachSide(5)->links("pagination::bootstrap-5") }}
 @endsection
 
 @section('js')

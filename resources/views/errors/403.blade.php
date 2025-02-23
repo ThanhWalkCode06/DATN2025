@@ -65,7 +65,7 @@
                 <div class="col-12">
                     <center>
                         <div class="breadcrumb-contain">
-                            <h2>404 Page</h2>
+                            <h2>403 Page</h2>
                             <nav>
                             </nav>
                         </div>
@@ -83,15 +83,13 @@
                 <center>
                     <div style="margin: auto" class="col-12">
                         <div class="image-404">
-                            <img src="../assets/images/inner-page/404.png" class="img-fluid blur-up lazyload" alt="">
+                            <img style="height: 500px; width: 100%; border-radius:24px" src="../assets/images/inner-page/403.webp" class="img-fluid blur-up lazyload" alt="">
                         </div>
                     </div>
                 </center>
 
                 <div class="col-12">
                     <div class="contain-404">
-                        <h3 class="text-content">Không tìm thấy địa chỉ trang. Đường link này có thể đã hết hạn hoặc
-                            đã bị chuyển rời sang một cái tên khác.</h3>
                             <button onclick="window.history.back();"
                             class="btn btn-md text-white theme-bg-color mt-4 mx-auto">Trở lại trang trước đó</button>
 
