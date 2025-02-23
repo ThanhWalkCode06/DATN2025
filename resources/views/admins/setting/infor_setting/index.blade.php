@@ -77,7 +77,7 @@
                                     </div>
 
                                 </div>
-                                <input onclick="showNotification()" class="btn btn-solid" type="submit" value="Lưu">
+                                <input  class="btn btn-solid" type="submit" value="Lưu">
                             </form>
                         </div>
                     </div>

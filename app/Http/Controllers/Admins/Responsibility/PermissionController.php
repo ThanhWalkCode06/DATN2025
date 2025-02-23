@@ -50,17 +50,34 @@ class PermissionController extends Controller
      */
     public function store(PermissionRequest $request)
     {
-        // dd($request->all());
         try{
-        foreach ($request->name as $index => $name) {
-            Permission::create([
-                'name' => $name,
-                'description' => $request->description[$index],
-                'guard_name' => 'web',
-            ]);
-        }
+            $names = $request->name; // Danh sách quyền cần xử lý
+
+            // Tìm các quyền đã bị xóa mềm
+            $deletedPermissions = Permission::withTrashed()
+                ->whereIn('name', $names)
+                ->whereNotNull('deleted_at')
+                ->get()
+                ->keyBy('name'); // Tạo key để tra cứu nhanh
+            foreach ($names as $index => $name) {
+
+                if (isset($deletedPermissions[$name])) {
+                    $deletedPermissions[$name]->restore();
+                    if($request->description[$index]){
+                        $deletedPermissions[$name]->update(['description' => $request->description[$index]]);
+                    }
+                } else {
+                    // Kiểm tra description có tồn tại không trước khi tạo mới
+                    Permission::create([
+                        'name' => $name,
+                        'description' => $request->description[$index] ?? null,
+                        'guard_name' => 'web',
+                    ]);
+                }
+            }
         session()->flash('success', 'Tạo thành công quyền');
         return redirect()->route('permissions.index');
+
         }catch(Exception $e){
             session()->flash('error', 'Lỗi tạo quyền'.$e);
             return redirect()->back();
@@ -92,8 +109,13 @@ class PermissionController extends Controller
     public function update(Request $request, string $id)
     {
         $itemId = Permission::find($id);
+        $deletedPermissions = Permission::withTrashed()
+                ->where('name', $request->name)
+                ->whereNotNull('deleted_at')
+                ->get()
+                ->keyBy('name');
         $data = $request->validate([
-            'name' => ['required','regex:/^[^-]*-[^-]*$/', Rule::unique('permissions', 'name')->ignore($id)],
+            'name' => ['required','regex:/^[^-]*-[^-]*$/', Rule::unique('permissions', 'name')->WhereNull('deleted_at')->ignore($id)],
             'description' => ['required'],
         ],[
             'name.required' => 'Tên quyền không được để trống',
@@ -101,9 +123,20 @@ class PermissionController extends Controller
             'name.regex' => 'Tên phải chứa dấu gạch (-).',
             'description.required' => 'Mô tả quyền không được để trống',
         ]);
-        // dd($data);
-        $itemId->where('id',$id)->update($data);
-        session()->flash('success', 'Update quyền thành công');
+        if($deletedPermissions){
+            $deletedPermissions[$request->name]->restore();
+            if($request->description){
+                $deletedPermissions[$request->name]->update(['description' => $request->description]);
+            }
+            $itemId = Permission::find($id);
+            $deleteSP = $itemId->delete();
+            $itemId->where('id', $id)
+            ->update(['deleted_at' => Carbon::now()]);
+        }else{
+            $itemId->where('id',$id)->update($data);
+
+        }
+        session()->flash('success', 'Update công quyền');
         return redirect()->route('permissions.index');
     }
 

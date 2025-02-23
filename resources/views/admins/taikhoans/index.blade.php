@@ -64,7 +64,7 @@
                         </thead>
 
                         <tbody>
-                        @if($lists)
+                        @if(@$lists)
                             @foreach ( $lists as $key => $item)
                                 <tr class="justify-content-center">
                                     <td>
@@ -85,12 +85,18 @@
                                         <img style="width:100px;height:100px" src="{{ Storage::url($item->anh_dai_dien) }}" alt="">
                                     </td>
 
-                                    <td class="status-close">
+                                    <td class="{{ $item->trang_thai == 1 ? 'status-close' : 'status-danger' }}">
                                         <span>{{ $item->trang_thai == 1 ? 'Hoạt động' : 'Không hoạt động' }}</span>
                                     </td>
 
                                     <td>
                                         <ul>
+                                            <li>
+                                                <a href="{{ route('users.show', $item->id) }}">
+                                                    <i class="ri-eye-line"></i>
+                                                </a>
+                                            </li>
+
                                             <li>
                                                 <a href="{{ route('users.edit', $item->id) }}">
                                                     <i class="ri-pencil-line"></i>

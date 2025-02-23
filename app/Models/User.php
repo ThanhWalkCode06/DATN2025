@@ -22,6 +22,15 @@ class User extends Authenticatable
     protected $fillable = [
         'username',
         'password',
+<<<<<<< HEAD
+        'anh_dai_dien',
+        'ten_nguoi_dung',
+        'dia_chi',
+        'ngay_sinh',
+        'gioi_tinh',
+        'so_dien_thoai',
+        'trang_thai',
+=======
         'email',
         'name',
         'gioi_tinh',
@@ -30,6 +39,7 @@ class User extends Authenticatable
         'so_dien_thoai',
         'dia_chi',
         'trang_thai'
+>>>>>>> b1724c3f8d4ec28bf988f179c1d45fdd122071d8
     ];
 
     /**

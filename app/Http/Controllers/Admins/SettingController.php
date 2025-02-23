@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admins;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Psy\Exception\Exception;
+use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
@@ -18,13 +19,17 @@ class SettingController extends Controller
         }
         return view('admins.setting.infor_setting.index');
     }else if($request->isMethod('post')){
-        try{
+
             $data = $request->validate([
-                'so_dien_thoai' => ['required', 'regex:/^0[0-9]{9,10}$/'], // Bắt đầu bằng 0, có 10-11 số
-                'email' => 'required|email',
-                'anh_dai_dien' => 'nullable|image|max:2048'
+                'so_dien_thoai' => ['required', 'digits:10',Rule::unique('users','so_dien_thoai')->ignore(Auth::id())], // Bắt đầu bằng 0, có 10-11 số
+                'email' => ['required','email',Rule::unique('users','email')->ignore(Auth::id())],
+                'anh_dai_dien' => 'nullable|image|max:2048',
+                // 'ten_nguoi_dung' => 'required',
+                // 'dia_chi' => 'required',
+                // 'ngay_sinh' => 'required|date',
+                // 'gioi_tinh' => 'required',
             ]);
-            // dd(Auth::user()->id);
+            // dd($data);
             if($request->hasFile('anh_dai_dien')){
                 if(Auth::user()->anh_dai_dien && file_exists(storage_path("app/public/".Auth::user()->anh_dai_dien))){
                     // dd('in');
@@ -36,12 +41,8 @@ class SettingController extends Controller
             // dd($request->hasFile($request->anh_dai_dien));
             User::where('id',Auth::user()->id)->update($data);
             session()->flash('success', 'Sửa thông tin thành công!');
-        }catch(Exception $e){
-            dd($e);
-            session()->flash('error', 'Sửa thông tin thất bại!');
-            return redirect()->back()->withInput($request->all());
-        }
-        return redirect()->back();
+
+        return redirect()->route('setting-infor.private');
     }
 }
 }
