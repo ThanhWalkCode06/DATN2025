@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\TaiKhoan>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\PhuongThucThanhToan>
  */
-class TaiKhoanFactory extends Factory
+class PhuongThucThanhToanFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,7 +17,7 @@ class TaiKhoanFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'ten_phuong_thuc' => $this->faker->creditCardType()
         ];
     }
 }

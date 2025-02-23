@@ -29,18 +29,19 @@ return new class extends Migration
             $table->foreign('san_pham_id')->references('id')->on('san_phams');
         });
 
-        Schema::table('san_pham_bien_thes', function (Blueprint $table) {
+        Schema::table('bien_thes', function (Blueprint $table) {
             $table->foreign('san_pham_id')->references('id')->on('san_phams');
-            $table->foreign('bien_the_id')->references('id')->on('bien_thes');
+            $table->foreign('thuoc_tinh_id')->references('id')->on('thuoc_tinhs');
+            $table->foreign('gia_tri_thuoc_tinh_id')->references('id')->on('gia_tri_thuoc_tinhs');
+        });
+
+        Schema::table('gia_tri_thuoc_tinhs', function (Blueprint $table) {
+            $table->foreign('thuoc_tinh_id')->references('id')->on('thuoc_tinhs');
         });
 
         Schema::table('san_pham_yeu_thichs', function (Blueprint $table) {
             $table->foreign('san_pham_id')->references('id')->on('san_phams');
             $table->foreign('user_id')->references('id')->on('users');
-        });
-
-        Schema::table('thuoc_tinhs', function (Blueprint $table) {
-            $table->foreign('bien_the_id')->references('id')->on('bien_thes');
         });
 
         Schema::table('chi_tiet_phieu_giam_gias', function (Blueprint $table) {
@@ -72,11 +73,6 @@ return new class extends Migration
             $table->foreign('bien_the_id')->references('id')->on('bien_thes');
         });
 
-        Schema::table('binh_luans', function (Blueprint $table) {
-            $table->foreign('san_pham_id')->references('id')->on('san_phams');
-            $table->foreign('user_id')->references('id')->on('users');
-        });
-
         Schema::table('bai_viets', function (Blueprint $table) {
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('danh_muc_id')->references('id')->on('danh_muc_bai_viets');
@@ -106,18 +102,19 @@ return new class extends Migration
             $table->dropForeign('anh_san_phams_san_pham_id_foreign');
         });
 
-        Schema::table('san_pham_bien_thes', function (Blueprint $table) {
-            $table->dropForeign('san_pham_bien_thes_san_pham_id_foreign');
-            $table->dropForeign('san_pham_bien_thes_bien_the_id_foreign');
+        Schema::table('bien_thes', function (Blueprint $table) {
+            $table->dropForeign('bien_thes_san_pham_id_foreign');
+            $table->dropForeign('bien_thes_thuoc_tinh_id_foreign');
+            $table->dropForeign('bien_thes_gia_tri_thuoc_tinh_id_foreign');
+        });
+
+        Schema::table('gia_tri_thuoc_tinhs', function (Blueprint $table) {
+            $table->dropForeign('gia_tri_thuoc_tinhs_thuoc_tinh_id_foreign');
         });
 
         Schema::table('san_pham_yeu_thichs', function (Blueprint $table) {
             $table->dropForeign('san_pham_yeu_thichs_san_pham_id_foreign');
             $table->dropForeign('san_pham_yeu_thichs_user_id_foreign');
-        });
-
-        Schema::table('thuoc_tinhs', function (Blueprint $table) {
-            $table->dropForeign('thuoc_tinhs_bien_the_id_foreign');
         });
 
         Schema::table('chi_tiet_phieu_giam_gias', function (Blueprint $table) {
@@ -147,11 +144,6 @@ return new class extends Migration
         Schema::table('chi_tiet_don_hangs', function (Blueprint $table) {
             $table->dropForeign('chi_tiet_don_hangs_don_hang_id_foreign');
             $table->dropForeign('chi_tiet_don_hangs_bien_the_id_foreign');
-        });
-
-        Schema::table('binh_luans', function (Blueprint $table) {
-            $table->dropForeign('binh_luans_san_pham_id_foreign');
-            $table->dropForeign('binh_luans_user_id_foreign');
         });
 
         Schema::table('bai_viets', function (Blueprint $table) {
