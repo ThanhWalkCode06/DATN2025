@@ -23,6 +23,13 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'anh_dai_dien',
+        'ten_nguoi_dung',
+        'dia_chi',
+        'ngay_sinh',
+        'gioi_tinh',
+        'so_dien_thoai',
+        'trang_thai',
     ];
 
     /**

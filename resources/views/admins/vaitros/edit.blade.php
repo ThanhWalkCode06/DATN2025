@@ -38,7 +38,7 @@
 
 @section('content')
     <div class="col-12">
-        <a style="float: left" href="{{ route('roles.index') }}" class="btn ms-auto theme-bg-color text-white col-1">Trở lại</a>
+        <a style="float: left" href="{{ route('roles.index') }}" class="btn btn-secondary col-1">Trở lại</a>
         <div class="row">
             <div class="col-12">
                 <div class="card">

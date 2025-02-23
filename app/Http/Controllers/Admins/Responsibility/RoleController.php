@@ -53,19 +53,20 @@ class RoleController extends Controller
      */
     public function store(RoleRequest $request)
     {
-        // dd($request->permissions);
-        $role = Role::create([
-            'name' => $request->name,
-            'guard_name' => 'web',
-        ]);
+        $role = Role::withTrashed()->where('name', $request->name)->whereNotNull('deleted_at')->first();
         if($role){
-            $role->syncPermissions(Permission::whereIn('name', $request->permissions)->get());
-            session()->flash('success', 'Tạo thành công vai trò');
-            return redirect()->route('roles.index');
+            $role->restore();
         }else{
-            session()->flash('error', 'Lỗi tạo vai trò');
-            return redirect()->back();
+            $role = Role::create([
+                'name' => $request->name,
+                'guard_name' => 'web',
+            ]);
         }
+        if($request->permissions){
+            $role->syncPermissions(Permission::whereIn('name', $request->permissions)->get());
+        }
+        session()->flash('success', 'Tạo thành công vai trò');
+        return redirect()->route('roles.index');
 
 
 
@@ -99,14 +100,26 @@ class RoleController extends Controller
     public function update(Request $request, string $id)
     {
         $itemId = Role::find($id);
+        $role = Role::withTrashed()->where('name', $request->name)->whereNotNull('deleted_at')->first();
         $data = $request->validate([
-            'name' => ['required', Rule::unique('roles', 'name')->ignore($id)],
+            'name' => ['required', Rule::unique('roles', 'name')->whereNull('deleted_at')->ignore($id)],
         ],[
             'name.required' => 'Tên vai trò không được để trống',
             'name.unique' => 'Tên vai trò này đã tồn tại',
         ]);
-        $itemId->update($data);
-        $itemId->syncPermissions($request->permissions);
+        // dd($role);
+        if($role){
+            $itemId = Role::find($id);
+            $deleteSP = $itemId->delete();
+            $itemId->where('id', $id)
+            ->update(['deleted_at' => Carbon::now()]);
+
+            $role->restore();
+            $role->syncPermissions($request->permissions);
+        }else{
+            $itemId->update($data);
+            $itemId->syncPermissions($request->permissions);
+        }
         session()->flash('success', 'Update vai trò thành công');
         return redirect()->route('roles.index');
     }

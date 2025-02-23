@@ -39,7 +39,7 @@
 @section('content')
 
 <div class="col-12">
-    <a style="float: left" href="{{ route('permissions.index') }}" class="btn ms-auto theme-bg-color text-white col-1">Trở lại</a>
+    <a style="float: left" href="{{ route('permissions.index') }}" class="btn btn-secondary col-1">Trở lại</a>
         <div class="row">
             <div class="col-xxl-8 col-lg-10 m-auto">
                 <div class="card">
