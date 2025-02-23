@@ -64,7 +64,7 @@
                                         <td>{{ $index + 1 }}</td>
                                         <td>{{ $baiViet->user->name }}</td>
                                         <td>{{ $baiViet->tieu_de }}</td>
-                                        <td>{{ $baiViet->danh_muc_id }}</td>
+                                        <td>{{ $baiViet->danhMuc->ten_danh_muc }}</td>
                                         <td>
                                             <img src="{{ asset('storage/' . $baiViet->anh_bia) }}" alt="Ảnh bài viết"
                                                 width="100">
