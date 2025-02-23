@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('title')
-    Thêm mới danh mục sản phẩm
+    Sửa danh mục sản phẩm
 @endsection
 
 @section('css')
@@ -36,6 +36,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css') }}">
 @endsection
 
+
 @section('content')
     <div class="col-12">
         <div class="row">
@@ -46,107 +47,54 @@
                             <h5>Sửa danh mục</h5>
                         </div>
 
-                        <div class="theme-form theme-form-2 mega-form">
-                            <div class="mb-4 row align-items-center">
-                                <label class="form-label-title col-sm-3 mb-0">Tên danh mục</label>
-                                <div class="col-sm-9">
-                                    <input class="form-control" type="text" placeholder="Tên danh mục">
-                                </div>
-                            </div>
+                        <form action="{{ route('danhmucs.update', $danhMuc->id) }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            @method('PUT')
 
-                            <div class="mb-4 row align-items-center">
-                                <label class="col-sm-3 col-form-label form-label-title">Ảnh danh mục</label>
-                                <div class="form-group col-sm-9">
-                                    <form class="dropzone custom-dropzone" id="multiFileUpload"
-                                        action="https://themes.pixelstrap.com/upload.php">
-                                        <div class="dropzone-wrapper">
-                                            <div class="dz-message needsclick">
-                                                <div>
-                                                    <i class="icon-cloud-up"></i>
-                                                    <h6>Tải lên từ thiết bị.</h6>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                            <form class="d-inline-flex">
-                        <a href="add-new-category.html" class="align-items-center btn btn-theme d-flex">
-                            <i data-feather="plus-square"></i>Sửa
-                        </a>
-                    </form>
-                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                            <li>
-                                                <a class="dropdown-item" href="#">
-                                                    <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/vegetable.svg"
-                                                        class="img-fluid" alt="">
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item" href="#">
-                                                    <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/cup.svg"
-                                                        class="blur-up lazyload" alt="">
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item" href="#">
-                                                    <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/meats.svg"
-                                                        class="img-fluid" alt="">
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item" href="#">
-                                                    <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/breakfast.svg"
-                                                        class="img-fluid" alt="">
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item" href="#">
-                                                    <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/frozen.svg"
-                                                        class="img-fluid" alt="">
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item" href="#">
-                                                    <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/biscuit.svg"
-                                                        class="img-fluid" alt="">
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item" href="#">
-                                                    <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/grocery.svg"
-                                                        class="img-fluid" alt="">
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item" href="#">
-                                                    <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/drink.svg"
-                                                        class="img-fluid" alt="">
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item" href="#">
-                                                    <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/milk.svg"
-                                                        class="img-fluid" alt="">
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item" href="#">
-                                                    <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/pet.svg"
-                                                        class="img-fluid" alt="">
-                                                </a>
-                                            </li>
-                                        </ul>
+                            <div class="theme-form theme-form-2 mega-form">
+                                <div class="mb-4 row align-items-center">
+                                    <label class="form-label-title col-sm-3 mb-0">Tên danh mục</label>
+                                    <div class="col-sm-9">
+                                        <input class="form-control @error('ten_danh_muc') is-invalid @enderror"
+                                               type="text" name="ten_danh_muc"
+                                               value="{{ old('ten_danh_muc', $danhMuc->ten_danh_muc) }}"
+                                               placeholder="Tên danh mục">
+                                        @error('ten_danh_muc')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div>
+
+                                <div class="mb-4 row align-items-center">
+                                    <label class="col-sm-3 col-form-label form-label-title">Ảnh danh mục</label>
+                                    <div class="col-sm-9">
+                                        @if($danhMuc->anh_danh_muc)
+                                            <img src="{{ asset('storage/' . $danhMuc->anh_danh_muc) }}" 
+                                                 alt="Ảnh danh mục" class="img-thumbnail mb-2" width="150">
+                                        @endif
+                                        <input type="file" name="anh_danh_muc"
+                                               class="form-control @error('anh_danh_muc') is-invalid @enderror">
+                                        @error('anh_danh_muc')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-theme">
+                                        <i data-feather="edit"></i> Cập nhật danh mục
+                                    </button>
+                                </div>
                             </div>
-                        </div>
+                        </form>
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
 @endsection
+
 
 @section('js')
     <!-- Sidebar js -->
