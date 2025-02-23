@@ -52,4 +52,7 @@ Route::resource('phieugiamgias', PhieuGiamGiaController::class);
 Route::get('mail', function () {
     return view('admins.auth.mailForgetPass');
 });
+Route::prefix('admins')->name('admins.')->group(function () {
+    Route::resource('baiviets', BaiVietController::class);
+});
 

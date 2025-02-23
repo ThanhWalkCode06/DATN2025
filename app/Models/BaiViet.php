@@ -16,11 +16,11 @@ class BaiViet extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function danhMuc()
     {
-        return $this->belongsTo(DanhMucSanPham::class);
+        return $this->belongsTo(DanhMucBaiViet::class, 'danh_muc_id');
     }
 }

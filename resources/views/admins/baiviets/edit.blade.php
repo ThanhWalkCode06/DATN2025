@@ -1,93 +1,161 @@
 @extends('layouts.admin')
+
 @section('title')
-    Quản lý tài khoản
+    Cập Nhập bài viết
 @endsection
-@section('page-title')
-    Sửa Bài Viết
-@endsection
+
 @section('css')
-    <!-- remixicon css -->
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/remixicon.css') }}">
-
-    <!-- Data Table css -->
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/datatables.css') }}">
-
     <!-- Themify icon css -->
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/themify.css') }}">
+
+    <!-- Dropzon css -->
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/dropzone.css') }}">
 
     <!-- Feather icon css -->
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/feather-icon.css') }}">
 
+    <!-- remixicon css -->
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/remixicon.css') }}">
+
+    <!-- Select2 css -->
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/select2.min.css') }}">
+
     <!-- Plugins css -->
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/scrollbar.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/animate.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/chartist.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/date-picker.css') }}">
 
     <!-- Bootstrap css -->
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/bootstrap.css') }}">
+
+    <!-- Bootstrap-tag input css -->
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/bootstrap-tagsinput.css') }}">
 
     <!-- App css -->
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css') }}">
 @endsection
 
 @section('content')
-    <div class="col-sm-12">
-        <div class="card card-table">
-            <!-- Table Start -->
-            <div class="card-body">
-                <form action="" method="POST" enctype="multipart/form-data">
-                    {{-- khi sử dụng form trong Laravel bắt buộc phải có @csrf --}}
-                    @csrf
-                    <div class="row gy-4">
-                        <div class="col-md-4">
-                            <div class="mt-3">
-                                <label for="id" class="form-label">ID</label>
-                                <input type="text" class="form-control" id="id" name="id"
-                                    placeholder="Nhập ID">
-                            </div>
-                            <div class="mt-3">
-                                <label for="ten_bai_viet" class="form-label">Tiêu Đề Bài Viết</label>
-                                <input type="text" class="form-control" id="ten_bai_viet" name="ten_bai_viet"
-                                    placeholder="Nhập tên bài viết">
-                            </div>
-                            <div class="mt-3">
-                                <label for="hinh_anh" class="form-label">Hình ảnh</label>
-                                <input type="file" class="form-control" id="hinh_anh" name="hinh_anh">
-                            </div>
-                            <div class="col-md-4">
-                            </div>
-                            <div class="mt-3">
-                                <label for="noi_dung" class="form-label">Nội Dung</label>
-                                <textarea class="form-control" id="noi_dung" name="noi_dung" rows="10" placeholder="Nhập nội dung"></textarea>
-                            </div>
-                            <div class="mt-5 d-flex justify-content-between">
-                                <a href="{{ route('baiviets.index') }}" class="btn btn-secondary">Quay lại</a>
-                                <button class="btn btn-primary" type="submit">Sửa</button>
-                            </div>
+    <div class="col-12">
+        <div class="row">
+            <div class="col-sm-8 m-auto">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-header-2">
+                            <h5>Cập Nhập Bài Viết</h5>
                         </div>
+
+                        <form action="{{ route('admins.baiviets.update', $baiViet->id) }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            @method('PUT')
+
+                            <!-- Chọn người dùng -->
+                            <div class="mb-4 row align-items-center">
+                                <label class="form-label-title col-sm-3 mb-0">Người Viết</label>
+                                <div class="col-sm-9">
+                                    <select class="form-control" name="user_id" required>
+                                        <option value="" disabled>Chọn người viết</option>
+                                        @foreach ($users as $user)
+                                            <option value="{{ $user->id }}" {{ $baiViet->user_id == $user->id ? 'selected' : '' }}>
+                                                {{ $user->name }} ({{ $user->email }})
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('user_id')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <!-- Tiêu đề -->
+                            <div class="mb-4 row align-items-center">
+                                <label class="form-label-title col-sm-3 mb-0">Tiêu Đề</label>
+                                <div class="col-sm-9">
+                                    <input class="form-control" type="text" name="tieu_de"
+                                        value="{{ old('tieu_de', $baiViet->tieu_de) }}" required>
+                                    @error('tieu_de')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <!-- Danh mục -->
+                            <div class="mb-4 row align-items-center">
+                                <label class="col-sm-3 col-form-label form-label-title">Danh Mục</label>
+                                <div class="col-sm-9">
+                                    <select class="form-control" name="danh_muc_id" required>
+                                        <option value="" disabled>Chọn danh mục</option>
+                                        @foreach ($danhMucs as $danhMuc)
+                                            <option value="{{ $danhMuc->id }}" {{ $baiViet->danh_muc_id == $danhMuc->id ? 'selected' : '' }}>
+                                                {{ $danhMuc->ten_danh_muc }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('danh_muc_id')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <!-- Nội dung -->
+                            <div class="mb-4 row">
+                                <label class="col-sm-3 col-form-label form-label-title">Nội Dung</label>
+                                <div class="col-sm-9">
+                                    <textarea class="form-control" name="noi_dung" rows="5" required>{{ old('noi_dung', $baiViet->noi_dung) }}</textarea>
+                                    @error('noi_dung')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <!-- Ảnh bìa -->
+                            <div class="mb-4 row align-items-center">
+                                <label class="col-sm-3 col-form-label form-label-title">Ảnh Bìa</label>
+                                <div class="col-sm-9">
+                                    <input class="form-control" type="file" name="anh_bia" accept="image/*">
+                                    <div class="mt-2">
+                                        <img src="{{ asset('storage/' . $baiViet->anh_bia) }}" alt="Ảnh bài viết" width="150">
+                                    </div>
+                                    @error('anh_bia')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <!-- Nút Submit -->
+                            <div class="mt-5 d-flex justify-content-between">
+                                <a href="{{ route('admins.baiviets.index') }}" class="btn btn-secondary">Quay lại</a>
+                                <button class="btn btn-primary" type="submit">Cập nhật</button>
+                            </div>
+                        </form>
                     </div>
+                </div>
             </div>
-            </form>
         </div>
-        <!-- /.card-body -->
-    </div>
-    <!-- /.card -->
-    </div>
     </div>
 @endsection
-@section('js')
-    <!-- customizer js -->
-    <script src="{{ asset('assets/js/customizer.js') }}"></script>
 
+@section('js')
     <!-- Sidebar js -->
     <script src="{{ asset('assets/js/config.js') }}"></script>
 
-    <!-- Plugins js -->
+    <!-- bootstrap tag-input js -->
+    <script src="{{ asset('assets/js/bootstrap-tagsinput.min.js') }}"></script>
     <script src="{{ asset('assets/js/sidebar-menu.js') }}"></script>
 
-    <!-- Data table js -->
-    <script src="{{ asset('assets/js/jquery.dataTables.js') }}"></script>
-    <script src="{{ asset('assets/js/custom-data-table.js') }}"></script>
+    <!-- customizer js -->
+    <script src="{{ asset('assets/js/customizer.js') }}"></script>
 
-    <!-- all checkbox select js -->
-    <script src="{{ asset('assets/js/checkbox-all-check.js') }}"></script>
+    <!-- Dropzon js -->
+    <script src="{{ asset('assets/js/dropzone/dropzone.js') }}"></script>
+    <script src="{{ asset('assets/js/dropzone/dropzone-script.js') }}"></script>
+
+    <!-- ck editor js -->
+    <script src="{{ asset('assets/js/ckeditor.js') }}"></script>
+    <script src="{{ asset('assets/js/ckeditor-custom.js') }}"></script>
+
+    <!-- select2 js -->
+    <script src="{{ asset('assets/js/select2.min.js') }}"></script>
+    <script src="{{ asset('assets/js/select2-custom.js') }}"></script>
 @endsection
