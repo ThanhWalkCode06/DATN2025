@@ -81,6 +81,12 @@
                             <li>
                                 <a href="{{ route('bienthes.create') }}">Thêm mới</a>
                             </li>
+                            <li>
+                                <a href="{{ route('thuoctinhs.index') }}">Thuộc tính</a>
+                            </li>
+                            {{-- <li>
+                                <a href="{{ route('giatrithuoctinhs.index') }}">Giá trị thuộc tính</a>
+                            </li> --}}
                         </ul>
                     </li>
 
