@@ -13,16 +13,16 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('username');
+            $table->string('password');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
+            $table->string('name')->nullable();
+            $table->boolean('gioi_tinh')->nullable();
             $table->string('anh_dai_dien')->nullable();
             $table->date('ngay_sinh')->nullable();
-            $table->string('so_dien_thoai')->unique()->nullable();
-            $table->boolean('gioi_tinh')->nullable();
+            $table->string('so_dien_thoai')->unique();
             $table->string('dia_chi')->nullable();
-            $table->tinyInteger('quyen')->default(0);
             $table->boolean('trang_thai')->default(1);
             $table->rememberToken();
             $table->timestamps();

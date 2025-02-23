@@ -31,12 +31,12 @@
             <div class="card-body">
                 <div class="title-header title-header-block package-card">
                     <div>
-                        <h5>Đơn hàng #36648</h5>
+                        <h5>Đơn hàng #{{ $donHang->ma_don_hang }}</h5>
                     </div>
                     <div class="card-order-section">
                         <ul>
-                            <li>01/01/2025 | 9:08</li>
-                            <li>3 sản phẩm</li>
+                            <li>{{ $donHang->created_at }}</li>
+                            <li>{{ count($chiTietDonHangs) }} sản phẩm</li>
                         </ul>
                     </div>
                 </div>
@@ -55,68 +55,28 @@
                                     </thead>
 
                                     <tbody>
-                                        <tr class="table-order">
-                                            <td>
-                                                <a href="javascript:void(0)">
-                                                    <img src="{{ asset('assets/images/profile/1.jpg') }}"
-                                                        class="img-fluid blur-up lazyload" alt="">
-                                                </a>
-                                            </td>
-                                            <td>
-                                                <p>Tên sản phẩm</p>
-                                                <h5>Outwear & Coats</h5>
-                                            </td>
-                                            <td>
-                                                <p>Số lượng</p>
-                                                <h5>1</h5>
-                                            </td>
-                                            <td>
-                                                <p>Giá</p>
-                                                <h5>$63.54</h5>
-                                            </td>
-                                        </tr>
-
-                                        <tr class="table-order">
-                                            <td>
-                                                <a href="javascript:void(0)">
-                                                    <img src="{{ asset('assets/images/profile/2.jpg') }}"
-                                                        class="img-fluid blur-up lazyload" alt="">
-                                                </a>
-                                            </td>
-                                            <td>
-                                                <p>Tên sản phẩm</p>
-                                                <h5>Slim Fit Plastic Coat</h5>
-                                            </td>
-                                            <td>
-                                                <p>Số lượng</p>
-                                                <h5>5</h5>
-                                            </td>
-                                            <td>
-                                                <p>Giá</p>
-                                                <h5>$63.54</h5>
-                                            </td>
-                                        </tr>
-
-                                        <tr class="table-order">
-                                            <td>
-                                                <a href="javascript:void(0)">
-                                                    <img src="{{ asset('assets/images/profile/3.jpg') }}"
-                                                        class="img-fluid blur-up lazyload" alt="">
-                                                </a>
-                                            </td>
-                                            <td>
-                                                <p>Tên sản phẩm</p>
-                                                <h5>Men's Sweatshirt</h5>
-                                            </td>
-                                            <td>
-                                                <p>Số lượng</p>
-                                                <h5>1</h5>
-                                            </td>
-                                            <td>
-                                                <p>Giá</p>
-                                                <h5>$63.54</h5>
-                                            </td>
-                                        </tr>
+                                        @foreach ($chiTietDonHangs as $chiTietDonHang)
+                                            <tr class="table-order">
+                                                <td>
+                                                    <a href="javascript:void(0)">
+                                                        <img src="{{ asset('assets/images/profile/3.jpg') }}"
+                                                            class="img-fluid blur-up lazyload" alt="">
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <p>Tên sản phẩm</p>
+                                                    <h5>{{ $chiTietDonHang->ten_bien_the }}</h5>
+                                                </td>
+                                                <td>
+                                                    <p>Số lượng</p>
+                                                    <h5>{{ $chiTietDonHang->so_luong }}</h5>
+                                                </td>
+                                                <td>
+                                                    <p>Giá</p>
+                                                    <h5>{{ $chiTietDonHang->gia_ban }}đ</h5>
+                                                </td>
+                                            </tr>
+                                        @endforeach
                                     </tbody>
 
                                     <tfoot>
@@ -152,7 +112,7 @@
                                                 <h4 class="theme-color fw-bold">Tổng tiền :</h4>
                                             </td>
                                             <td>
-                                                <h4 class="theme-color fw-bold">$6935.00</h4>
+                                                <h4 class="theme-color fw-bold">{{ $donHang->tong_tien }}đ</h4>
                                             </td>
                                         </tr>
                                     </tfoot>
@@ -165,17 +125,18 @@
                                 <div class="row g-4">
                                     <h4>Thông tin đơn hàng</h4>
                                     <ul class="order-details">
-                                        <li>Mã đơn hàng: 5563853658932</li>
-                                        <li>Ngày đặt hàng: October 22, 2018</li>
-                                        <li>Tổng tiền: $907.28</li>
-                                        <li>Hình thức thanh toán: COD</li>
+                                        <li>Mã đơn hàng: {{ $donHang->ma_don_hang }}</li>
+                                        <li>Người đặt: {{ $donHang->name }}</li>
+                                        <li>Ngày đặt hàng: {{ $donHang->created_at }}</li>
+                                        <li>Tổng tiền: {{ $donHang->tong_tien }}</li>
+                                        <li>Hình thức thanh toán: {{ $donHang->ten_phuong_thuc }}</li>
                                     </ul>
 
                                     <h4>Địa chỉ giao hàng</h4>
                                     <ul class="order-details">
-                                        <li>Nguyễn Văn A</li>
-                                        <li>0987654321</li>
-                                        <li>Austrlia, 235153 Contact No. 48465465465</li>
+                                        <li>{{ $donHang->ten_nguoi_nhan }}</li>
+                                        <li>{{ $donHang->sdt_nguoi_nhan }}</li>
+                                        <li>{{ $donHang->dia_chi_nguoi_nhan }}</li>
                                     </ul>
 
                                     {{-- <div class="payment-mode">
@@ -185,11 +146,11 @@
                                             availability.</p>
                                     </div> --}}
 
-                                    <div class="delivery-sec">
+                                    {{-- <div class="delivery-sec">
                                         <h3>Ngày nhận hàng dự kiến: <span>10/01/2025</span>
                                         </h3>
-                                        {{-- <a href="order-tracking.html">track order</a> --}}
-                                    </div>
+                                        <a href="order-tracking.html">track order</a>
+                                    </div> --}}
                                 </div>
                             </div>
                         </div>

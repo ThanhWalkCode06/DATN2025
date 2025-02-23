@@ -2,17 +2,17 @@
 
 namespace Database\Seeders;
 
-use App\Models\BienThe;
+use App\Models\PhuongThucThanhToan;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class BienTheSeeder extends Seeder
+class PhuongThucThanhToanSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        BienThe::factory()->count(100)->create();
+        PhuongThucThanhToan::factory()->count(5)->create();
     }
 }

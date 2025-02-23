@@ -9,20 +9,21 @@ use App\Http\Controllers\BaiVietController;
 use App\Http\Controllers\BienTheController;
 use App\Http\Controllers\DanhGiaController;
 use App\Http\Controllers\DonHangController;
+use App\Http\Controllers\GiaTriThuocTinhController;
 use App\Http\Controllers\SanPhamController;
-use App\Http\Controllers\ThongKeController;
 use App\Http\Controllers\TaiKhoanController;
+use App\Http\Controllers\ThongKeController;
+use App\Http\Controllers\ThuocTinhController;
 use App\Http\Controllers\Admins\UserController;
-use App\Http\Controllers\PhieuGiamGiaController;
 use App\Http\Controllers\Admins\SettingController;
+use App\Http\Controllers\PhieuGiamGiaController;
 use App\Http\Controllers\DanhMucSanPhamController;
 use App\Http\Controllers\Admins\Auth\AuthController;
 use App\Http\Controllers\Admins\Responsibility\RoleController;
 use App\Http\Controllers\Admins\Responsibility\PermissionController;
 
-
 // Login Admin Controller
-Route::prefix('admin')->controller(AuthController::class)->group(function () {
+Route::prefix('/admin')->controller(AuthController::class)->group(function () {
     Route::get('/login', 'showLogin')->name('login');
     Route::post('/login/restore', 'login')->name('login.store');
 
@@ -62,6 +63,8 @@ Route::prefix('admin')->controller(AuthController::class)->group(function () {
     Route::resource('danhmucs', DanhMucSanPhamController::class);
     Route::resource('sanphams', SanPhamController::class);
     Route::resource('bienthes', BienTheController::class);
+    Route::resource('thuoctinhs', ThuocTinhController::class);
+    Route::resource('giatrithuoctinhs', GiaTriThuocTinhController::class);
     Route::resource('taikhoans', TaiKhoanController::class);
     Route::resource('donhangs', DonHangController::class);
     Route::resource('baiviets', BaiVietController::class);
