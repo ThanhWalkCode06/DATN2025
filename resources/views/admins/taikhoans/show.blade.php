@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('title')
-    Sửa tài khoản
+    Chi tiết tài khoản
 @endsection
 
 @section('css')
