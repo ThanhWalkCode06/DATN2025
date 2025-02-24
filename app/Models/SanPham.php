@@ -17,12 +17,14 @@ class SanPham extends Model
         'mo_ta',  
         'danh_muc_id',  
         'trang_thai',  
-        'created_at'  
+        'created_at',
+        'updated_at'
     ];  
-
-    // Liên kết với bảng danh_muc_san_phams  
+    
+    
+ 
     public function danhMuc()  
     {  
-        return $this->belongsTo(DanhMucSanPham::class, 'danh_muc_id', 'id'); // Xác định rõ các trường khóa  
+        return $this->belongsTo(DanhMucSanPham::class, 'danh_muc_id', 'id'); 
     }  
 }

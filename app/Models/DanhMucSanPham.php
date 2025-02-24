@@ -1,5 +1,5 @@
-<?php  
-
+<?php 
+ 
 namespace App\Models;  
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;  
@@ -17,6 +17,6 @@ class DanhMucSanPham extends Model
 
     public function sanPhams()  
     {  
-        return $this->hasMany(SanPham::class, 'danh_muc_id', 'id'); // Xác định khóa  
+        return $this->hasMany(SanPham::class, 'danh_muc_id', 'id');  
     }  
 }

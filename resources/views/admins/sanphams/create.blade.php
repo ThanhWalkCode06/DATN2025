@@ -78,15 +78,15 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div class="mb-4 row align-items-center">
+                            {{-- <div class="mb-4 row align-items-center">
                                 <label class="form-label-title col-sm-3 mb-0">Ngày nhập</label>
                                 <div class="col-sm-9">
-                                    <input class="form-control" type="date" name="created_at" value="{{ old('created_at') }}">
-                                    @error('created_at')
+                                    <input class="form-control" type="date" name="ngay_nhap" value="{{ old('ngay_nhap') }}">
+                                    @error('ngay_nhap')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
-                            </div>
+                            </div> --}}
                             <div class="mb-4 row align-items-center">
                                 <label class="col-sm-3 col-form-label form-label-title">Danh mục</label>
                                 <div class="col-sm-9">
@@ -117,8 +117,8 @@
                                 <div class="col-sm-9">
                                     <select class="js-example-basic-single w-100" name="trang_thai">
                                         <option disabled selected>Chọn trạng thái</option>
-                                        <option value="1">Hoạt động</option>
-                                        <option value="0">Không hoạt động</option>
+                                        <option value="1">Còn hàng</option>
+                                        <option value="0">Hết hàng</option>
                                     </select>
                                     @error('trang_thai')
                                         <div class="text-danger">{{ $message }}</div>
@@ -126,16 +126,15 @@
                                 </div>
                             </div>
                         
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="row">
-                                        <label class="form-label-title col-sm-3 mb-0">Mô tả sản phẩm</label>
-                                        <div class="col-sm-9">
-                                           
-                                            <div id="editor"></div>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="row">  
+                                <div class="col-12">  
+                                    <div class="row">  
+                                        <label class="form-label-title col-sm-3 mb-0">Mô tả sản phẩm</label>  
+                                        <div class="col-sm-9">  
+                                            <textarea id="editor" name="mo_ta">{{ old('mo_ta') }}</textarea>6
+                                        </div>  
+                                    </div>  
+                                </div>  
                             </div>
                             <br>
                         
@@ -216,11 +215,24 @@
 @endsection
 
 @section('js')
+<script>
+    ClassicEditor
+        .create(document.querySelector('#editor'))
+        .then(editor => {
+            document.querySelector('form').addEventListener('submit', () => {
+                document.querySelector('#editor').value = editor.getData();
+            });
+        })
+        .catch(error => {
+            console.error(error);
+        });
+</script>
+
     <!-- Sidebar js -->
     <script src="{{ asset('assets/js/config.js') }}"></script>
 
     <!-- bootstrap tag-input js -->
-    <script src="{{ asset('assets/js/bootstrap-tagsinput.min.js') }}"></script>
+    <script src="{{ asset('assets/js/bootstrap-tagsinput.min.js') }}"></scrip>
     <script src="{{ asset('assets/js/sidebar-menu.js') }}"></script>
 
     <!-- customizer js -->

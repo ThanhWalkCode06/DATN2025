@@ -53,7 +53,6 @@
                                     <th>Danh mục</th>
                                     <th>Hình ảnh</th>
                                     <th>Khuyến mãi</th>
-                                    <th>Ngày nhập</th>
                                     <th>Trạng thái</th>
                                     <th>Hành động</th>
                                 </tr>
@@ -72,14 +71,13 @@
 
                                         <td>
                                             <div class="table-image">
-                                                <img src="{{ asset('storage/' . $sanpham->hinh_anh) }}" 
-                                                            class="img-thumbnail" alt="Hình ảnh" width="100px">
+                                                <img src="{{ asset('storage/' . $sanpham->hinh_anh) }}" class="img-thumbnail" alt="Hình ảnh" width="100px">
                                             </div>
                                         </td>
 
                                         <td>{{ $sanpham->khuyen_mai }}</td>
 
-                                        <td class="">{{ $sanpham->created_at->format('d/m/Y') }}</td>
+                                        {{-- <td class="">{{ $sanpham->ngay_nhap->format('d/m/Y') }}</td> --}}
 
                                         <td>  
                                             @if ($sanpham->trang_thai == 1)  
@@ -92,22 +90,36 @@
                                         <td>
                                             <ul>
                                                 <li>
-                                                    <a href="order-detail.html">
+                                                    <a href="{{route('sanphams.show', $sanpham->id)}}">
                                                         <i class="ri-eye-line"></i>
                                                     </a>
                                                 </li>
 
                                                 <li>
-                                                    <a href="javascript:void(0)">
+                                                    <a href="{{ route('sanphams.edit', $sanpham->id) }}">
                                                         <i class="ri-pencil-line"></i>
                                                     </a>
                                                 </li>
 
                                                 <li>
-                                                    <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                        data-bs-target="#exampleModalToggle">
+                                                    <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $sanpham->id }}">
                                                         <i class="ri-delete-bin-line"></i>
                                                     </a>
+                                                
+                                                    <div class="modal fade" id="deleteModal{{ $sanpham->id }}" tabindex="-1">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                                <div class="modal-body">Bạn muốn xóa sản phẩm {{ $sanpham->ten_san_pham }} đúng không ?</div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                                                    <form action="{{ route('sanphams.destroy', $sanpham->id) }}" method="POST">
+                                                                        @csrf @method('DELETE')
+                                                                        <button type="submit" class="btn btn-danger">Xóa</button>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </li>
                                             </ul>
                                         </td>

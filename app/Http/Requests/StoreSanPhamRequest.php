@@ -27,7 +27,7 @@ class StoreSanPhamRequest extends FormRequest
         'khuyen_mai' => 'nullable|numeric',  
         'hinh_anh' => 'nullable|image|max:2048',  
         'mo_ta' => 'nullable|string',  
-        'danh_muc_id' => 'required|exists:danh_muc_san_phams,id',  // Sửa tên bảng thành danh_muc_san_phams  
+        'danh_muc_id' => 'required|exists:danh_muc_san_phams,id',  
         'trang_thai' => 'boolean'  
     ];  
 }
@@ -39,7 +39,7 @@ class StoreSanPhamRequest extends FormRequest
             'ma_san_pham.unique' => 'Mã sản phẩm đã tồn tại.',
             'danh_muc_id.required' => 'Danh mục sản phẩm không được để trống.',
             'danh_muc_id.exists' => 'Danh mục sản phẩm không hợp lệ.',
-            'trang_thai.boolean' => 'Trạng thái phải là giá trị đúng hoặc sai.'
+            'trang_thai.boolean' => 'Trạng thái phải là còn hàng hoặc hết hàng.'
         ];
     }
 }
