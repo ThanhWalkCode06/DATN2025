@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\Admins;
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admins\UserRequest;
 
 class UserController extends Controller
 {
@@ -32,14 +35,18 @@ class UserController extends Controller
      */
     public function create()
     {
-
-        return view('admins.permission.create');
+        $roles = Role::where('name', '!=', 'SuperAdmin')->get();
+        // dd($roles,User::all());
+        // foreach($roles as $item=>$role){
+        //     dd($role);
+        // }
+        return view('admins.taikhoans.create', compact('roles'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(PermissionRequest $request)
+    public function store(UserRequest $request)
     {
         // dd($request->all());
         try {
@@ -61,9 +68,10 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Permission $permission)
+    public function show(string $id)
     {
-        //
+        $user = User::find($id);
+        return view('admins.taikhoans.show', compact('user'));
     }
 
     /**
@@ -78,7 +86,7 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UserRequest $request, string $id)
     {
         $itemId = Permission::find($id);
         $data = $request->validate([
@@ -101,8 +109,7 @@ class UserController extends Controller
     public function destroy(string $id)
     {
         // $itemId = DB::table('nhan_viens')->find($id);
-        $itemId = Permission::find($id);
-        // dd($itemId);
+        $itemId = User::find($id);
         $deleteSP = $itemId->delete();
         $itemId
             ->where('id', $id)
