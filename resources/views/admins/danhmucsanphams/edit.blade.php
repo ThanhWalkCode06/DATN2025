@@ -47,7 +47,8 @@
                             <h5>Sửa danh mục</h5>
                         </div>
 
-                        <form action="{{ route('danhmucs.update', $danhMuc->id) }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('danhmucsanphams.update', $danhMuc->id) }}" method="POST"
+                            enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
 
@@ -56,9 +57,9 @@
                                     <label class="form-label-title col-sm-3 mb-0">Tên danh mục</label>
                                     <div class="col-sm-9">
                                         <input class="form-control @error('ten_danh_muc') is-invalid @enderror"
-                                               type="text" name="ten_danh_muc"
-                                               value="{{ old('ten_danh_muc', $danhMuc->ten_danh_muc) }}"
-                                               placeholder="Tên danh mục">
+                                            type="text" name="ten_danh_muc"
+                                            value="{{ old('ten_danh_muc', $danhMuc->ten_danh_muc) }}"
+                                            placeholder="Tên danh mục">
                                         @error('ten_danh_muc')
                                             <div class="text-danger">{{ $message }}</div>
                                         @enderror
@@ -68,12 +69,12 @@
                                 <div class="mb-4 row align-items-center">
                                     <label class="col-sm-3 col-form-label form-label-title">Ảnh danh mục</label>
                                     <div class="col-sm-9">
-                                        @if($danhMuc->anh_danh_muc)
-                                            <img src="{{ asset('storage/' . $danhMuc->anh_danh_muc) }}" 
-                                                 alt="Ảnh danh mục" class="img-thumbnail mb-2" width="150">
+                                        @if ($danhMuc->anh_danh_muc)
+                                            <img src="{{ asset('storage/' . $danhMuc->anh_danh_muc) }}" alt="Ảnh danh mục"
+                                                class="img-thumbnail mb-2" width="150">
                                         @endif
                                         <input type="file" name="anh_danh_muc"
-                                               class="form-control @error('anh_danh_muc') is-invalid @enderror">
+                                            class="form-control @error('anh_danh_muc') is-invalid @enderror">
                                         @error('anh_danh_muc')
                                             <div class="text-danger">{{ $message }}</div>
                                         @enderror

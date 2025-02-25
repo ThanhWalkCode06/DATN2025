@@ -35,7 +35,7 @@
                 <div class="title-header option-title">
                     <h5>Quản lý danh mục</h5>
                     <form class="d-inline-flex">
-                        <a href="{{ route('danhmucs.create', 1) }}" class="align-items-center btn btn-theme d-flex">
+                        <a href="{{ route('danhmucsanphams.create', 1) }}" class="align-items-center btn btn-theme d-flex">
                             <i data-feather="plus"></i>Thêm mới
                         </a>
                     </form>
@@ -76,21 +76,21 @@
 
                                         <td>
                                             <div class="table-image">
-                                                <img src="{{ Storage::url($danhMuc->anh_danh_muc) }}" class="img-thumbnail"
-                                                    alt="Hình ảnh" width="100px">
+                                                <img src="{{ Storage::url('uploads/danhmucsanphams/' . $danhMuc->anh_danh_muc) }}"
+                                                    class="img-thumbnail" alt="Hình ảnh" width="100px">
                                             </div>
                                         </td>
 
                                         <td>
                                             <ul>
                                                 <li>
-                                                    <a href="{{ route('danhmucs.edit', $danhMuc->id) }}">
+                                                    <a href="{{ route('danhmucsanphams.edit', $danhMuc->id) }}">
                                                         <i class="ri-pencil-line"></i>
                                                     </a>
                                                 </li>
 
                                                 <li>
-                                                    <form action="{{ route('danhmucs.destroy', $danhMuc->id) }}"
+                                                    <form action="{{ route('danhmucsanphams.destroy', $danhMuc->id) }}"
                                                         method="POST"
                                                         onsubmit="return confirm('Bạn có chắc chắn muốn xóa danh mục này không?');">
                                                         @csrf

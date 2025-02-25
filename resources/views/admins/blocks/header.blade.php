@@ -1,4 +1,3 @@
-
 <div class="page-header">
     <div class="header-wrapper m-0">
         <div class="header-logo-wrapper p-0">
@@ -85,10 +84,10 @@
                 </li>
                 <li class="profile-nav onhover-dropdown pe-0 me-0">
                     <div class="media profile-media">
-                        <img class="user-profile rounded-circle" src="{{ Storage::url(Auth::user()->anh_dai_dien) }}"
-                            alt="">
+                        <img class="user-profile rounded-circle"
+                            src="{{ Storage::url('uploads/users/' . Auth::user()->anh_dai_dien) }}" alt="">
                         <div class="user-name-hide media-body">
-                            <span>{{ session('userName') }}</span>
+                            <span>{{ Auth::user()->name }}</span>
                             <p class="mb-0 font-roboto">Admin<i class="middle ri-arrow-down-s-line"></i></p>
                         </div>
                     </div>

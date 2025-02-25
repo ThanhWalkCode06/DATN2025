@@ -13,19 +13,18 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        if($request->isMethod('get')){
+        if ($request->isMethod('get')) {
             $lists = User::whereNull('deleted_at')
-            ->orderByDesc('id')
-            ->paginate(10)
-            ->onEachSide(5);
-            return view('admins.taikhoans.index',compact('lists'));
-        }else{
-            $lists = User::where('name','like','%'.$request->key.'%')
-            ->orwhere('email','like','%'.$request->key.'%')
-            ->orderBy('id','DESC')->paginate(10);
-            return view('admins.taikhoans.index',compact('lists'));
+                ->orderByDesc('id')->get();
+            // ->paginate(10)
+            // ->onEachSide(5);
+            return view('admins.users.index', compact('lists'));
+        } else {
+            $lists = User::where('name', 'like', '%' . $request->key . '%')
+                ->orwhere('email', 'like', '%' . $request->key . '%')
+                ->orderBy('id', 'DESC')->paginate(10);
+            return view('admins.users.index', compact('lists'));
         }
-
     }
 
     /**
@@ -43,21 +42,20 @@ class UserController extends Controller
     public function store(PermissionRequest $request)
     {
         // dd($request->all());
-        try{
-        foreach ($request->name as $index => $name) {
-            Permission::create([
-                'name' => $name,
-                'description' => $request->description[$index],
-                'guard_name' => 'web',
-            ]);
-        }
-        session()->flash('success', 'Tạo thành công vai trò');
-        return redirect()->route('permissions.index');
-        }catch(Exception $e){
-            session()->flash('error', 'Lỗi tạo vai trò'.$e);
+        try {
+            foreach ($request->name as $index => $name) {
+                Permission::create([
+                    'name' => $name,
+                    'description' => $request->description[$index],
+                    'guard_name' => 'web',
+                ]);
+            }
+            session()->flash('success', 'Tạo thành công vai trò');
+            return redirect()->route('permissions.index');
+        } catch (Exception $e) {
+            session()->flash('error', 'Lỗi tạo vai trò' . $e);
             return redirect()->back();
         }
-
     }
 
     /**
@@ -74,8 +72,7 @@ class UserController extends Controller
     public function edit(string $id)
     {
         $itemId = Permission::query()->findOrFail($id);
-        return view('admins.permission.edit',compact('itemId'));
-
+        return view('admins.permission.edit', compact('itemId'));
     }
 
     /**
@@ -87,13 +84,13 @@ class UserController extends Controller
         $data = $request->validate([
             'name' => ['required', Rule::unique('permissions', 'name')->ignore($id)],
             'description' => ['required'],
-        ],[
+        ], [
             'name.required' => 'Tên quyền không được để trống',
             'name.unique' => 'Tên quyền này đã tồn tại',
             'description.required' => 'Mô tả quyền không được để trống',
         ]);
         // dd($data);
-        $itemId->where('id',$id)->update($data);
+        $itemId->where('id', $id)->update($data);
         session()->flash('success', 'Update quyền thành công');
         return redirect()->route('permissions.index');
     }
@@ -108,8 +105,8 @@ class UserController extends Controller
         // dd($itemId);
         $deleteSP = $itemId->delete();
         $itemId
-        ->where('id', $id)
-        ->update(['deleted_at' => Carbon::now()]);
+            ->where('id', $id)
+            ->update(['deleted_at' => Carbon::now()]);
         session()->flash('success', 'Xóa thành công vai trò');
         return redirect()->route('permissions.index');
     }

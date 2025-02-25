@@ -54,7 +54,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get("/lienhe", [LienHeController::class, "index"])->name('lienhe');
     Route::get("/danhgia", [DanhGiaController::class, "index"])->name('danhgia');
 
-    Route::resource('danhmucs', DanhMucSanPhamController::class);
+    Route::resource('danhmucsanphams', DanhMucSanPhamController::class);
     Route::resource('sanphams', SanPhamController::class);
     Route::resource('bienthes', BienTheController::class);
     Route::resource('users', UserController::class);

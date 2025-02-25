@@ -13,7 +13,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        return view('admins.taikhoans.index');
+        return view('admins.users.index');
     }
 
     /**
@@ -21,7 +21,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('admins.taikhoans.create');
+        return view('admins.users.create');
     }
 
     /**
@@ -37,7 +37,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        return view('admins.taikhoans.show');
+        return view('admins.users.show');
     }
 
     /**
@@ -45,7 +45,7 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        return view('admins.taikhoans.edit');
+        return view('admins.users.edit');
     }
 
     /**

@@ -17,9 +17,9 @@ return new class extends Migration
             $table->string('password');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('name')->nullable();
+            $table->string('name');
             $table->boolean('gioi_tinh')->nullable();
-            $table->string('anh_dai_dien')->nullable();
+            $table->string('anh_dai_dien')->default('default.png');
             $table->date('ngay_sinh')->nullable();
             $table->string('so_dien_thoai')->unique();
             $table->string('dia_chi')->nullable();

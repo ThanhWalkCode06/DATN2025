@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\GiaTriThuocTinh;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -13,16 +14,6 @@ class GiaTriThuocTinhSeeder extends Seeder
      */
     public function run(): void
     {
-        for ($i=1; $i <=5; $i++) { 
-            DB::table('gia_tri_thuoc_tinhs')->insert([
-              
-                'id'=> "$i",
-                'thuoc_tinh_id'=>7,
-                'gia_tri'=>"L",
-                'created_at' => now(),
-                'updated_at' => now(),
-               
-            ]);
-        }
+        GiaTriThuocTinh::factory()->count(10)->create();
     }
 }
