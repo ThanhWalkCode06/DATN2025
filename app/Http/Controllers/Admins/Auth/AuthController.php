@@ -33,6 +33,12 @@ class AuthController extends Controller
         ]);
 
         if(Auth::attempt($user)){
+            // if(Auth::user()->trang_thai == 0){
+            //     Auth::logout();
+            //     return redirect()->back()->withErrors([
+            //         'error' => 'Tài khoản đang bị khoá'
+            //     ]);
+            // }
             if($request->remember_token == true) {
                 // dd($request->remember_token);
                 $currentUser = Auth::user();

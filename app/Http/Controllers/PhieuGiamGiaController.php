@@ -8,6 +8,9 @@ use App\Http\Requests\UpdatePhieuGiamGiaRequest;
 
 class PhieuGiamGiaController extends Controller
 {
+    public function __construct()
+    {
+    }
     /**
      * Display a listing of the resource.
      */

@@ -25,9 +25,11 @@
 
     <!-- Bootstrap css -->
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/bootstrap.css') }}">
-
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/bootstrap-tagsinput.css') }}">
     <!-- App css -->
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css') }}">
+
+
 @endsection
 
 @section('content')
@@ -42,13 +44,12 @@
                         </div>
                         <div class="tab-content " id="pills-tabContent">
                             <div class="tab-pane fade show active" id="pills-home" role="tabpanel">
-                                <form method="post" class="theme-form theme-form-2 mega-form" action="{{ route('users.store') }}" enctype="multipart/form-data">
+                                <form method="post" class=" theme-form theme-form-2 mega-form" action="{{ route('users.store') }}" enctype="multipart/form-data">
                                     @csrf
                                     <div class="card-header-1 pagination justify-content-center">
                                         <h5>Thông tin tài khoản</h5>
                                     </div>
 
-                                    <div class="row">
 
                                     <div class="row">
                                         <div class="mb-4 row align-items-center">
@@ -161,11 +162,14 @@
 
                                         </div>
 
+
+
                                         <div class="mb-4 row align-items-center">
                                             <label class="col-lg-2 col-md-3 col-form-label form-label-title">Chức vụ
                                              </label>
                                             <div class="col-md-9 col-lg-10">
-                                                <select name="role" class="" id="Select" aria-label="Floating label select example">
+                                                <select name="role" class="js-example-basic-single w-100 select2-hidden-accessible" name="state" data-select2-id="select2-data-1-vf8b" tabindex="-1" aria-hidden="true" id="Select" aria-label="Floating label select example">
+                                                    <option value="[]">Khách hàng</option>
                                                     @foreach ($roles as $item=>$role)
                                                         <option value="{{ $role->name }}">{{ $role->name }}</option>
                                                     @endforeach
@@ -176,8 +180,6 @@
                                             </div>
 
                                         </div>
-
-
 
                                         <div class="mb-4 row align-items-center">
                                             <label
@@ -221,7 +223,7 @@
                                                         <span >Không hoạt động</span>
                                                     </div>
                                                 </div>
-                                                @error('gioi_tinh')
+                                                @error('trang_thai')
                                             <p class="text-danger">{{ $message }}</p>
                                             @enderror
                                             </div>
@@ -230,10 +232,11 @@
 
 
                                     </div>
+                                    <div class="mt-5 d-flex justify-content-between">
+                                        <button class="btn btn-primary" type="submit">Thêm mới</button>
+                                    </div>
                                 </form>
-                                <div class="mt-5 d-flex justify-content-between">
-                                    <button class="btn btn-primary" type="submit">Thêm mới</button>
-                                </div>
+
                             </div>
 
 

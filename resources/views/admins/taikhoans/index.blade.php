@@ -97,12 +97,20 @@
                                                 </a>
                                             </li>
 
+
+
+
+                                            @if ($item->roles->pluck('name')->first() == Auth()->user()->roles->pluck('name')->first())
+
+                                            @else
+                                            @can('users-update', $item->id)
                                             <li>
                                                 <a href="{{ route('users.edit', $item->id) }}">
                                                     <i class="ri-pencil-line"></i>
                                                 </a>
                                             </li>
-
+                                            @endcan
+                                            @can('users-delete', $item->id)
                                             <li>
                                                 <a href="#" onclick="confirmDelete(event, {{ $item->id }})">
                                                     <i class="ri-delete-bin-line"></i>
@@ -113,6 +121,10 @@
                                                     @method('DELETE')
                                                 </form>
                                             </li>
+                                            @endcan
+                                            @endif
+
+
                                         </ul>
                                     </td>
                                 </tr>

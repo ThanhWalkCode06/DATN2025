@@ -54,7 +54,7 @@
                                             <label class="form-label-title col-lg-2 col-md-3 mb-0">Tên tài khoản</label>
                                             <div class="col-md-9 col-lg-10">
                                                 <input style="border: 1px solid #ced4da;" class="form-control @error('name') is-invalid @enderror" type="text" name="name"
-                                                value="{{ $itemId->name }}">
+                                                value="{{ $itemId->name }}" readonly>
                                                 @error('name')
                                             <p class="text-danger">{{ $message }}</p>
                                             @enderror
@@ -64,9 +64,9 @@
 
                                         <div class="mb-4 row align-items-center">
                                             <label class="form-label-title col-lg-2 col-md-3 mb-0">Họ và tên</label>
-                                            <div class="col-md-9 col-lg-10">
+                                            <div class="col-md-9 col-lg-10" readonly>
                                                 <input style="border: 1px solid #ced4da;" class="form-control @error('ten_nguoi_dung') is-invalid @enderror" type="text" name="ten_nguoi_dung"
-                                                value="{{ $itemId->ten_nguoi_dung }}">
+                                                value="{{ $itemId->ten_nguoi_dung }}" readonly>
                                                 @error('ten_nguoi_dung')
                                             <p class="text-danger">{{ $message }}</p>
                                             @enderror
@@ -79,7 +79,7 @@
                                              </label>
                                             <div class="col-md-9 col-lg-10">
                                                 <input style="border: 1px solid #ced4da;" class="form-control @error('email') is-invalid @enderror" type="email" name="email"
-                                                value="{{ $itemId->email }}">
+                                                value="{{ $itemId->email }}" readonly>
                                                 @error('email')
                                             <p class="text-danger">{{ $message }}</p>
                                             @enderror
@@ -92,7 +92,7 @@
                                              </label>
                                             <div class="col-md-9 col-lg-10">
                                                 <input style="border: 1px solid #ced4da;" class="form-control @error('so_dien_thoai') is-invalid @enderror" type="number" name="so_dien_thoai"
-                                                value="{{ $itemId->so_dien_thoai }}">
+                                                value="{{ $itemId->so_dien_thoai }}" readonly>
                                                 @error('so_dien_thoai')
                                             <p class="text-danger">{{ $message }}</p>
                                             @enderror
@@ -105,7 +105,7 @@
                                              </label>
                                             <div class="col-md-9 col-lg-10">
                                                 <input style="border: 1px solid #ced4da;" class="form-control " type="date" name="ngay_sinh"
-                                                value="{{ $itemId->ngay_sinh }}">
+                                                value="{{ $itemId->ngay_sinh }}" readonly>
                                                 @error('ngay_sinh')
                                             <p class="text-danger">{{ $message }}</p>
                                             @enderror
@@ -118,7 +118,7 @@
                                              </label>
                                             <div class="col-md-9 col-lg-10">
                                                 <input style="border: 1px solid #ced4da;" class="form-control @error('dia_chi') is-invalid @enderror  @error('dia_chi') is-invalid @enderror" type="text"
-                                                name="dia_chi" value="{{ $itemId->dia_chi }}">
+                                                name="dia_chi" value="{{ $itemId->dia_chi }}" readonly>
                                                 @error('dia_chi')
                                             <p class="text-danger">{{ $message }}</p>
                                             @enderror
@@ -126,17 +126,17 @@
 
                                         </div>
 
-                                        <div class="mb-4 row align-items-center">
+                                        {{-- <div class="mb-4 row align-items-center">
                                             <label class="col-lg-2 col-md-3 col-form-label form-label-title">Giới tính</label>
                                             <div class="col-lg-10 col-md-9 d-flex gap-3">
                                                 <div class="form-check">
                                                     <input style="border: 1px solid #ced4da;" type="radio" class="form-check-input" id="gioi_tinh_nam" name="gioi_tinh" value="Nam"
-                                                    {{ $itemId->gioi_tinh == 1 ? 'checked' : '' }}>
+                                                    {{ $itemId->gioi_tinh == 1 ? 'checked' : '' }} readonly>
                                                     <label for="gioi_tinh_nam" class="form-check-label ms-1">Nam</label>
                                                 </div>
                                                 <div class="form-check">
                                                     <input style="border: 1px solid #ced4da;" type="radio" class="form-check-input" id="gioi_tinh_nu" name="gioi_tinh" value="Nữ"
-                                                    {{ $itemId->gioi_tinh == 0 ? 'checked' : '' }}>
+                                                    {{ $itemId->gioi_tinh == 0 ? 'checked' : '' }} readonly>
                                                     <label for="gioi_tinh_nu" class="form-check-label ms-1">Nữ</label>
                                                 </div>
                                                 @error('gioi_tinh')
@@ -144,15 +144,15 @@
                                             @enderror
                                             </div>
 
-                                        </div>
+                                        </div> --}}
 
 
                                         <div class="mb-4 row align-items-center">
                                             <label class="col-lg-2 col-md-3 col-form-label form-label-title">Hình ảnh
                                              </label>
                                             <div class="col-md-9 col-lg-10">
-                                                <input style="border: 1px solid #ced4da;" class="form-control @error('anh_dai_dien') is-invalid @enderror" type="file"
-                                                name="anh_dai_dien" value="{{ old('anh_dai_dien') }}">
+                                                {{-- <input style="border: 1px solid #ced4da;" class="form-control @error('anh_dai_dien') is-invalid @enderror" type="file"
+                                                name="anh_dai_dien" value="{{ old('anh_dai_dien') }}" readonly> --}}
                                                 @error('anh_dai_dien')
                                             <p class="text-danger">{{ $message }}</p>
                                             @enderror
@@ -166,8 +166,9 @@
                                              </label>
                                             <div class="col-md-9 col-lg-10">
                                                 <select name="role" class="" id="Select" aria-label="Floating label select example">
+                                                    <option value="[]">Khách hàng</option>
                                                     @foreach ($roles as $item=>$role)
-                                                        <option {{ $itemId->roles->pluck('name')->first() == $role->name ? 'checked' : '' }} value="{{ $role->name }}">
+                                                        <option {{ $itemId->roles->pluck('name')->first() == $role->name ? 'selected' : '' }} value="{{$role->name }}">
                                                             {{ $role->name }}</option>
                                                     @endforeach
                                                 </select>
@@ -180,7 +181,7 @@
 
 
 
-                                        <div class="mb-4 row align-items-center">
+                                        {{-- <div class="mb-4 row align-items-center">
                                             <label
                                                 class="col-lg-2 col-md-3 col-form-label form-label-title">Mật khẩu</label>
                                             <div class="col-md-9 col-lg-10">
@@ -201,7 +202,7 @@
                                                 @error('password_verify')
                                             <p class="text-danger">{{ $message }}</p>
                                             @enderror
-                                            </div>
+                                            </div> --}}
 
                                         </div>
 
@@ -222,7 +223,7 @@
                                                         <span >Không hoạt động</span>
                                                     </div>
                                                 </div>
-                                                @error('gioi_tinh')
+                                                @error('trang_thai')
                                             <p class="text-danger">{{ $message }}</p>
                                             @enderror
                                             </div>

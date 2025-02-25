@@ -9,6 +9,9 @@ use App\Models\ChiTietDonHang;
 
 class DonHangController extends Controller
 {
+    public function __construct()
+    {
+    }
     /**
      * Display a listing of the resource.
      */

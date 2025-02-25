@@ -54,6 +54,7 @@ class RoleController extends Controller
     public function store(RoleRequest $request)
     {
         $role = Role::withTrashed()->where('name', $request->name)->whereNotNull('deleted_at')->first();
+
         if($role){
             $role->restore();
         }else{
@@ -62,6 +63,7 @@ class RoleController extends Controller
                 'guard_name' => 'web',
             ]);
         }
+        // dd($role);
         if($request->permissions){
             $role->syncPermissions(Permission::whereIn('name', $request->permissions)->get());
         }

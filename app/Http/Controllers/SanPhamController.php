@@ -8,6 +8,9 @@ use App\Http\Requests\UpdateSanPhamRequest;
 
 class SanPhamController extends Controller
 {
+    public function __construct()
+    {
+    }
     /**
      * Display a listing of the resource.
      */

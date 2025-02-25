@@ -11,9 +11,9 @@ use App\Http\Requests\Admins\UserRequest;
 
 class UserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    public function __construct()
+    {
+    }
     public function index(Request $request)
     {
         if($request->isMethod('get')){
@@ -78,7 +78,7 @@ class UserController extends Controller
             "so_dien_thoai" => $data['so_dien_thoai'],
             "password" => bcrypt($data['password']),
         ]);
-        if (!empty($data['role'])) {
+        if (!empty($data['role']) && $data['role'] != '[]' ) {
             $user->assignRole($data['role']);
         }
         session()->flash('success', 'Tạo thành công tài khoản');
@@ -108,36 +108,36 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UserRequest $request, string $id)
+    public function update(Request $request, string $id)
     {
         $itemId = User::find($id);
-        $data = $request->validated();
-
-        if ($request->hasFile('anh_dai_dien')) {
-            if($itemId->anh_dai_dien && file_exists(storage_path("app/public/".$itemId->anh_dai_dien))){
-                unlink(storage_path("app/public/".$itemId->anh_dai_dien));
-            }
-            $file = $request->file('anh_dai_dien');
-            $path = $file->store('uploads/user/img','public');
-            $data['anh_dai_dien'] = $path;
-        } else {
-            $data['anh_dai_dien'] = $itemId->anh_dai_dien;
-        }
-        $data['gioi_tinh'] = $data['gioi_tinh'] == 'Nam' ? 1 : 0;
+        $data = $request->all();
+// dd($data);
+        // if ($request->hasFile('anh_dai_dien')) {
+        //     if($itemId->anh_dai_dien && file_exists(storage_path("app/public/".$itemId->anh_dai_dien))){
+        //         unlink(storage_path("app/public/".$itemId->anh_dai_dien));
+        //     }
+        //     $file = $request->file('anh_dai_dien');
+        //     $path = $file->store('uploads/user/img','public');
+        //     $data['anh_dai_dien'] = $path;
+        // } else {
+        //     $data['anh_dai_dien'] = $itemId->anh_dai_dien;
+        // }
+        // $data['gioi_tinh'] = $data['gioi_tinh'] == 'Nam' ? 1 : 0;
 
         $itemId->update([
-            "name" => $data['name'],
-            "email" => $data['email'],
-            "anh_dai_dien" => $data['anh_dai_dien'],
-            "ten_nguoi_dung" => $data['ten_nguoi_dung'],
-            "dia_chi" => $data['dia_chi'],
-            "ngay_sinh" => $data['ngay_sinh'],
-            "gioi_tinh" => $data['gioi_tinh'],
-            "so_dien_thoai" => $data['so_dien_thoai'],
+            // "name" => $data['name'],
+            // "email" => $data['email'],
+            // "anh_dai_dien" => $data['anh_dai_dien'],
+            // "ten_nguoi_dung" => $data['ten_nguoi_dung'],
+            // "dia_chi" => $data['dia_chi'],
+            // "ngay_sinh" => $data['ngay_sinh'],
+            // "gioi_tinh" => $data['gioi_tinh'],
+            // "so_dien_thoai" => $data['so_dien_thoai'],
             "trang_thai" => $data['trang_thai'],
-            "password" => bcrypt($data['password']),
+            // "password" => bcrypt($data['password']),
         ]);
-        if (!empty($data['role'])) {
+        if (!empty($data['role']) && $data['role'] != "[]") {
             $itemId->syncRoles($data['role']);
         }
         session()->flash('success', 'Update thành công tài khoản');

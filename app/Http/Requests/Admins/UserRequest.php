@@ -35,7 +35,9 @@ class UserRequest extends FormRequest
             'role' => '',
             'ten_nguoi_dung' => 'required',
             'dia_chi' => 'required',
-            'ngay_sinh' => 'required|date',
+            'ngay_sinh' => ['required','date'
+                ,'before_or_equal:' .  now()->subYear(18)->format('Y-m-d')
+            ],
             'gioi_tinh' => 'required',
             'so_dien_thoai' => [
                 'required','digits:10',
@@ -63,6 +65,7 @@ class UserRequest extends FormRequest
             'ten_nguoi_dung.required' => 'Vui lòng nhập tên ',
             'dia_chi.required' => 'Vui lòng nhập địa chỉ dùng',
             'ngay_sinh.required' => 'Vui lòng nhập ngày sinh ',
+            'ngay_sinh.before_or_equal' => 'Chưa đủ 18 tuổi',
             'gioi_tinh.required' => 'Vui lòng chọn giới tính ',
 
             'so_dien_thoai.required' => 'Vui lòng nhập số điện thoại',

@@ -28,9 +28,17 @@
 
     <!-- App css -->
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/load.css') }}">
 <body>
 
-
+    <div class="fullpage-loader">
+        <span></span>
+        <span></span>
+        {{-- <span></span>
+        {{-- <span></span> --}}
+        <span></span>
+        <span></span>
+    </div>
 
     <!-- mobile fix menu start -->
     <div class="mobile-menu d-md-none d-block mobile-cart">
@@ -83,7 +91,7 @@
             <div class="row">
                 <div class="col-xxl-6 col-xl-5 col-lg-6 d-lg-block d-none ms-auto">
                     <div class="image-contain">
-                        <img src="{{ asset('assets/images/inner-page/log-in.png') }}" class="img-fluid" alt="">
+                        <img src="{{ asset('assets/images/3275432.png') }}" class="img-fluid" alt="">
                     </div>
                 </div>
 
@@ -102,14 +110,17 @@
                                         <input name="email" type="text" class="form-control @error('email') is-invalid @enderror" id="email" placeholder="Email Address">
                                         <label for="email">Email Address</label>
                                     </div>
+
                                 </div>
                                 @error('email')
                                 <p class="text-danger">{{ $message }}</p>
                                 @enderror
-
-                                @error('error')
-                                <p class="text-danger">{{ $message }}</p>
-                                @enderror
+                                <div class="col-12">
+                                    <div class="forgot-box">
+                                        <label for=""></label>
+                                        <a style="float: right" href="{{ route('login')}}" class="forgot-password">Back home</a>
+                                    </div>
+                                </div>
 
                                 <div class="col-12">
                                     <button class="btn btn-animation w-100 justify-content-center" type="submit">Send
@@ -139,13 +150,26 @@
     <div class="bg-overlay"></div>
     <!-- Bg overlay End -->
 
-
+    <script>
+        window.addEventListener('load', function () {
+            let loader = document.querySelector('.fullpage-loader');
+            console.log(loader)
+            if (loader) { // Kiểm tra loader có tồn tại không
+                loader.style.opacity = '0';
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                }, 500); // Ẩn hẳn sau 0.5 giây
+            }
+        });
+    </script>
 </body>
 
 
 <!-- Mirrored from themes.pixelstrap.com/fastkart/front-end/login.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 11 Feb 2025 13:59:13 GMT -->
 </html>
+
 @section('js')
+
 <script src="{{ asset('assets/js/config.js') }}"></script>
 
     <!-- bootstrap tag-input js -->

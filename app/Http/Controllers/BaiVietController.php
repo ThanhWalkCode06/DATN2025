@@ -8,6 +8,9 @@ use App\Http\Requests\UpdateBaiVietRequest;
 
 class BaiVietController extends Controller
 {
+    public function __construct()
+    {
+    }
     /**
      * Display a listing of the resource.
      */

@@ -90,6 +90,7 @@
                         </ul>
                     </li>
 
+                    @haspermission('users-view')
                     <li class="sidebar-list">
                         <a class="sidebar-link sidebar-title" href="javascript:void(0)">
                             <i class="ri-user-3-line"></i>
@@ -99,11 +100,14 @@
                             <li>
                                 <a href="{{ route('users.index') }}">Danh sách</a>
                             </li>
+                            @haspermission('users-add')
                             <li>
                                 <a href="{{ route('users.create') }}">Thêm mới</a>
                             </li>
+                            @endhaspermission
                         </ul>
                     </li>
+                    @endhaspermission
 
                     @role('SuperAdmin')
                     <li class="sidebar-list">
@@ -145,7 +149,7 @@
                     </li>
 
                     <li class="sidebar-list">
-                        <a class="linear-icon-link sidebar-link sidebar-title" href="javascript:void(0)">
+                        <a class="linear-icon-link sidebar-link sidebar-title " href="javascript:void(0)">
                             <i class="ri-book-2-line"></i>
                             <span>Bài viết</span>
                         </a>
@@ -190,17 +194,15 @@
                         </a>
                     </li> --}}
 
-                    {{-- <li class="sidebar-list">
-                        <a class="linear-icon-link sidebar-link sidebar-title" href="javascript:void(0)">
+                    @can('role:SuperAdmin')
+                    <li class="sidebar-list">
+                        <a href="{{ route('configuration.common')}}" class="linear-icon-link sidebar-link sidebar-title link-nav" >
                             <i class="ri-settings-line"></i>
                             <span>Cài đặt</span>
                         </a>
-                        <ul class="sidebar-submenu">
-                            <li>
-                                <a href="profile-setting.html">Tài khoản</a>
-                            </li>
-                        </ul>
-                    </li> --}}
+
+                    </li>
+                    @endcan
                 </ul>
             </div>
 

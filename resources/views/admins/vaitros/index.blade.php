@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('title')
-    Biến thể
+    Vai trò
 @endsection
 
 @section('css')
@@ -78,16 +78,20 @@
 
                                     <td>
                                         <ul>
+                                            @if($item->name != 'SuperAdmin')
                                             <li>
                                                 <a href="{{ route('roles.edit', $item->id) }}">
                                                     <i class="ri-pencil-line"></i>
                                                 </a>
                                             </li>
+                                            @endif
 
                                             <li>
+                                                @if($item->name != 'SuperAdmin')
                                                 <a href="#" onclick="confirmDelete(event, {{ $item->id }})">
                                                     <i class="ri-delete-bin-line"></i>
                                                 </a>
+                                                @endif
 
                                                 <form id="delete-form-{{ $item->id }}" action="{{ route('roles.destroy', $item->id) }}" method="POST" style="display: none;">
                                                     @csrf

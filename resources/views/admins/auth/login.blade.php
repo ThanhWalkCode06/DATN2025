@@ -1,3 +1,4 @@
+
 @section('js')
 @endsection
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/themify.css') }}">
@@ -28,9 +29,17 @@
 
     <!-- App css -->
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/load.css') }}">
 <body>
 
-
+    <div class="fullpage-loader">
+        <span></span>
+        <span></span>
+        {{-- <span></span>
+        {{-- <span></span> --}}
+        <span></span>
+        <span></span>
+    </div>
 
     <!-- mobile fix menu start -->
     <div class="mobile-menu d-md-none d-block mobile-cart">
@@ -169,6 +178,18 @@
 
 <!-- Mirrored from themes.pixelstrap.com/fastkart/front-end/login.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 11 Feb 2025 13:59:13 GMT -->
 </html>
+<script>
+    window.addEventListener('load', function () {
+        let loader = document.querySelector('.fullpage-loader');
+        console.log(loader)
+        if (loader) { // Kiểm tra loader có tồn tại không
+            loader.style.opacity = '0';
+            setTimeout(() => {
+                loader.style.display = 'none';
+            }, 500); // Ẩn hẳn sau 0.5 giây
+        }
+    });
+</script>
 @section('js')
 <script src="{{ asset('assets/js/config.js') }}"></script>
 

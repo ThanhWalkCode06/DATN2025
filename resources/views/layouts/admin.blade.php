@@ -55,11 +55,21 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css') }}">
 
 
+
     @yield('css')
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/load.css') }}">
 
 </head>
 
-<body>
+<body >
+    <div class="fullpage-loader">
+        <span></span>
+        <span></span>
+        {{-- <span></span>
+        {{-- <span></span> --}}
+        <span></span>
+        <span></span>
+    </div>
     <!-- tap on top start -->
     <div class="tap-top">
         <span class="lnr lnr-chevron-up"></span>
@@ -118,6 +128,7 @@
 
     <!-- Bootstrap js -->
     <script src="{{ asset('assets/js/jquery-3.6.0.min.js') }}"></script>
+    {{-- <script src="{{ asset('assets/js/bootstrap/bootstrap.bundle.js') }}"></script> --}}
     <script src="{{ asset('assets/js/bootstrap/bootstrap.bundle.min.js') }}"></script>
 
     <!-- feather icon js -->
@@ -161,7 +172,15 @@
     <!-- ratio js -->
     <script src="{{ asset('assets/js/ratio.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src=""></script>
+    <script>
+    window.addEventListener('load', function () {
+        let loader = document.querySelector('.fullpage-loader');
+    loader.style.opacity = '0';
+    setTimeout(() => {
+        loader.style.display = 'none';
+    }, 500); // Ẩn hẳn sau 0.5 giây
+    });
+    </script>
 
 @if (session('success'))
 <script>$(window).ready(function(){
@@ -172,6 +191,8 @@
         type: "primary",
         delay: 5000
     });
+
+
 })</script>
 @endif
 

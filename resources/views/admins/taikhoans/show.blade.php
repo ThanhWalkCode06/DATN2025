@@ -44,7 +44,7 @@
                         <div class="col-md-6 text-center">
                             <img src="{{ asset(Storage::url($user->anh_dai_dien)) }}" alt="Hình ảnh tài khoản" class="rounded-circle border shadow-lg" width="180">
                             <h5 class="mt-3 text-primary h5">{{ $user->name }}</h5>
-                            <span class="badge bg-danger ">{{ $user->roles->pluck('name')->first() }}</span>
+                            <span class="badge bg-danger ">{{ $user->roles->pluck('name')->first() ?? 'Khách hàng' }}</span>
                         </div>
                         <div class="col-md-6">
                             <ul class="list-group list-group-flush">

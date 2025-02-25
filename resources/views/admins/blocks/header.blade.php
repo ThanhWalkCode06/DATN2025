@@ -89,7 +89,7 @@
                             alt="">
                         <div class="user-name-hide media-body">
                             <span>{{ session('userName') }}</span>
-                            <p class="mb-0 font-roboto">Admin<i class="middle ri-arrow-down-s-line"></i></p>
+                            <p class="mb-0 font-roboto">{{ Auth::user()->roles->pluck('name')->first() }}<i class="middle ri-arrow-down-s-line"></i></p>
                         </div>
                     </div>
                     <ul class="profile-dropdown onhover-show-div">

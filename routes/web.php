@@ -41,7 +41,7 @@ Route::prefix('/admin')->controller(AuthController::class)->group(function () {
 
 
 });
-    Route::prefix('admin')->middleware('auth')->group(function(){
+    Route::prefix('admin')->middleware(['auth','checkStatus'])->group(function(){
     Route::get('/logout',[AuthController::class, 'logout'])->name('logout');
 
 
@@ -50,26 +50,31 @@ Route::prefix('/admin')->controller(AuthController::class)->group(function () {
     Route::middleware(['role:SuperAdmin'])->group(function(){
         Route::resource('permissions', PermissionController::class);
         Route::resource('roles', RoleController::class);
+        Route::match(['post', 'get'],'/configuration-mail',[SettingController::class,'mail'])->name('configuration.setting-mail');
+        Route::match(['post', 'get'],'/configuration-common',[SettingController::class,'common'])->name('configuration.common');
     });
-    // Route::get('/checkrole',function(){
-    //     Auth::user()->syncRoles('SuperAdmin');
-    //     dd(Auth::user()->hasRole('SuperAdmin'));
-    // });
-    Route::resource('users', UserController::class);
-
+    Route::get('/checkrole',function(){
+        $permissions = App\Models\Role::findByName('admin')->getPermissionNames();
+        dd($permissions,Auth::user()->roles);
+    });
     Route::get("/", [ThongKeController::class, "index"])->name('index');
     Route::get("/lienhe", [LienHeController::class, "index"])->name('lienhe');
     Route::get("/danhgia", [DanhGiaController::class, "index"])->name('danhgia');
-    Route::resource('danhmucs', DanhMucSanPhamController::class);
-    Route::resource('sanphams', SanPhamController::class);
-    Route::resource('bienthes', BienTheController::class);
-    Route::resource('thuoctinhs', ThuocTinhController::class);
-    Route::resource('giatrithuoctinhs', GiaTriThuocTinhController::class);
-    Route::resource('taikhoans', TaiKhoanController::class);
-    Route::resource('donhangs', DonHangController::class);
-    Route::resource('baiviets', BaiVietController::class);
-    Route::resource('vaitros', VaiTroController::class);
-    Route::resource('phieugiamgias', PhieuGiamGiaController::class);
+
+    // Chức năng thì cho vào đây đánh tên route->name phải giống quyền
+    Route::middleware('dynamic')->group(function(){
+        Route::resource('users', UserController::class);
+        Route::resource('danhmucs', DanhMucSanPhamController::class);
+        Route::resource('sanphams', SanPhamController::class);
+        Route::resource('bienthes', BienTheController::class);
+        Route::resource('thuoctinhs', ThuocTinhController::class);
+        // Route::resource('giatrithuoctinhs', GiaTriThuocTinhController::class);
+        Route::resource('donhangs', DonHangController::class);
+        Route::resource('baiviets', BaiVietController::class);
+        Route::resource('phieugiamgias', PhieuGiamGiaController::class);
+    });
+
+
     });
 
 
