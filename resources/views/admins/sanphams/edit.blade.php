@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('title')
-    Thêm mới sản phẩm
+    Cập nhật sản phẩm
 @endsection
 
 @section('css')
@@ -43,109 +43,125 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="card-header-2">
-                            <h5>Thêm mới sản phẩm</h5>
+                            <h5>Cập nhật sản phẩm</h5>
                         </div>
 
-                        <form class="theme-form theme-form-2 mega-form" action="{{route('sanphams.store')}}" method="POST" enctype="multipart/form-data">
+
+                        <form class="theme-form theme-form-2 mega-form"
+                            action="{{ route('sanphams.update', $sanpham->id) }}" method="POST"
+                            enctype="multipart/form-data">
                             @csrf
-                        
+                            @method('PUT')
                             <div class="mb-4 row align-items-center">
                                 <label class="form-label-title col-sm-3 mb-0">Tên sản phẩm</label>
                                 <div class="col-sm-9">
-                                    <input class="form-control" type="text" name="ten_san_pham" value="{{ old('ten_san_pham') }}">
+                                    <input class="form-control" type="text" name="ten_san_pham"
+                                        value="{{ $sanpham->ten_san_pham }}">
                                     @error('ten_san_pham')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
                             </div>
-                        
+
                             <div class="mb-4 row align-items-center">
                                 <label class="form-label-title col-sm-3 mb-0">Mã sản phẩm</label>
                                 <div class="col-sm-9">
-                                    <input class="form-control" type="text" name="ma_san_pham" value="{{ old('ma_san_pham') }}">
+                                    <input class="form-control" type="text" name="ma_san_pham"
+                                        value="{{ $sanpham->ma_san_pham }}">
                                     @error('ma_san_pham')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
                             </div>
-                        
+
                             <div class="mb-4 row align-items-center">
                                 <label class="form-label-title col-sm-3 mb-0">Khuyến mãi</label>
                                 <div class="col-sm-9">
-                                    <input class="form-control" type="text" name="khuyen_mai" value="{{ old('khuyen_mai') }}">
+                                    <input class="form-control" type="text" name="khuyen_mai"
+                                        value="{{ $sanpham->khuyen_mai }}">
                                     @error('khuyen_mai')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
                             </div>
-                            {{-- <div class="mb-4 row align-items-center">
-                                <label class="form-label-title col-sm-3 mb-0">Ngày nhập</label>
-                                <div class="col-sm-9">
-                                    <input class="form-control" type="date" name="ngay_nhap" value="{{ old('ngay_nhap') }}">
-                                    @error('ngay_nhap')
-                                        <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div> --}}
+
                             <div class="mb-4 row align-items-center">
                                 <label class="col-sm-3 col-form-label form-label-title">Danh mục</label>
                                 <div class="col-sm-9">
                                     <select class="js-example-basic-single w-100" name="danh_muc_id">
-                                        <option disabled selected>Chọn danh mục</option>
+                                        <option disabled>Chọn danh mục</option>
                                         @foreach ($danhMucs as $danhMuc)
-                                        <option value="{{ $danhMuc->id }}">{{ $danhMuc->ten_danh_muc }}</option>
-                                    @endforeach
+                                            <option value="{{ $danhMuc->id }}"
+                                                {{ $sanpham->danh_muc_id == $danhMuc->id ? 'selected' : '' }}>
+                                                {{ $danhMuc->ten_danh_muc }}
+                                            </option>
+                                        @endforeach
                                     </select>
                                     @error('danh_muc_id')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
                             </div>
-                        
+
                             <div class="mb-4 row align-items-center">
-                                <label class="col-sm-3 col-form-label form-label-title">Hình ảnh</label>
+                                <label class="col-sm-3 col-form-label form-label-title">Hình ảnh hiện tại</label>
                                 <div class="col-sm-9">
-                                    <input class="form-control form-choose" name="hinh_anh" type="file" id="formFile" multiple>
+                                    @if ($sanpham->hinh_anh)
+                                        <img src="{{ asset('storage/' . $sanpham->hinh_anh) }}" alt="Hình ảnh sản phẩm"
+                                            style="max-width: 200px; max-height: 200px; margin-bottom: 10px;">
+                                    @else
+                                        <p>Không có hình ảnh hiện tại.</p>
+                                    @endif
+                                </div>
+                            </div>
+
+                            <div class="mb-4 row align-items-center">
+                                <label class="form-label-title col-sm-3 mb-0">Hình ảnh mới</label>
+                                <div class="col-sm-9">
+                                    <input class="form-control form-choose" name="hinh_anh" type="file" id="formFile"
+                                        multiple>
                                     @error('hinh_anh')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
                             </div>
-                        
+
                             <div class="mb-4 row align-items-center">
                                 <label class="form-label-title col-sm-3 mb-0">Trạng thái</label>
                                 <div class="col-sm-9">
                                     <select class="js-example-basic-single w-100" name="trang_thai">
-                                        <option disabled selected>Chọn trạng thái</option>
-                                        <option value="1">Còn hàng</option>
-                                        <option value="0">Hết hàng</option>
+                                        <option disabled>Chọn trạng thái</option>
+                                        <option value="1" {{ $sanpham->trang_thai == 1 ? 'selected' : '' }}>Còn hàng
+                                        </option>
+                                        <option value="0" {{ $sanpham->trang_thai == 0 ? 'selected' : '' }}>Hết hàng
+                                        </option>
                                     </select>
                                     @error('trang_thai')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
                             </div>
-                        
-                            <div class="row">  
-                                <div class="col-12">  
-                                    <div class="row">  
-                                        <label class="form-label-title col-sm-3 mb-0">Mô tả sản phẩm</label>  
-                                        <div class="col-sm-9">  
-                                            <textarea id="editor" name="mo_ta">{{ old('mo_ta') }}</textarea>6
-                                        </div>  
-                                    </div>  
-                                </div>  
+
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="row">
+                                        <label class="form-label-title col-sm-3 mb-0">Mô tả sản phẩm</label>
+                                        <div class="col-sm-9">
+                                            <div id="editor" name="mo_ta">{!! $sanpham->mo_ta !!}</div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <br>
-                        
-                            <div class="mb-4 row align-items-center">  
-                                <div class="col-sm-9 offset-sm-3">  
-                                    <button type="submit" class="btn btn-primary">Thêm sản phẩm</button>  
-                                </div>  
-                            </div>  
+
+                            <div class="mb-4 row align-items-center">
+                                <div class="col-sm-9 offset-sm-3">
+                                    <button type="submit" class="btn btn-primary">Cập nhật sản phẩm</button>
+                                </div>
+                            </div>
                         </form>
-                        
-                        
+
+
                     </div>
                 </div>
 
@@ -215,24 +231,11 @@
 @endsection
 
 @section('js')
-<script>
-    ClassicEditor
-        .create(document.querySelector('#editor'))
-        .then(editor => {
-            document.querySelector('form').addEventListener('submit', () => {
-                document.querySelector('#editor').value = editor.getData();
-            });
-        })
-        .catch(error => {
-            console.error(error);
-        });
-</script>
-
     <!-- Sidebar js -->
     <script src="{{ asset('assets/js/config.js') }}"></script>
 
     <!-- bootstrap tag-input js -->
-    <script src="{{ asset('assets/js/bootstrap-tagsinput.min.js') }}"></scrip>
+    <script src="{{ asset('assets/js/bootstrap-tagsinput.min.js') }}"></script>
     <script src="{{ asset('assets/js/sidebar-menu.js') }}"></script>
 
     <!-- customizer js -->

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('ten_san_pham');
             $table->string('ma_san_pham');
             $table->double('khuyen_mai')->default(0);
-            $table->string('hinh_anh')->default('default.png');
+            $table->string('hinh_anh')->nullable();
             $table->text('mo_ta')->nullable();
             $table->unsignedBigInteger('danh_muc_id');
             $table->boolean('trang_thai')->default(1);
