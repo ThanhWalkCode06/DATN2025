@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('title')
-    Thêm mới biến thể
+    Thêm mới quyền
 @endsection
 
 @section('css')

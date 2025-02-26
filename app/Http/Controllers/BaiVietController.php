@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Validator;
 
 class BaiVietController extends Controller
 {
-    // Hiển thị danh sách bài viết
+
     public function index()
     {
         $baiViets = BaiViet::with('user', 'danhMuc')->orderBy('created_at', 'desc')->get();

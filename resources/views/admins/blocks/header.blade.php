@@ -78,17 +78,21 @@
                 </li>
 
                 <li>
-                    <div class="mode">
+                    <div class="mode" >
                         <i class="ri-moon-line"></i>
                     </div>
                 </li>
                 <li class="profile-nav onhover-dropdown pe-0 me-0">
                     <div class="media profile-media">
                         <img class="user-profile rounded-circle"
-                            src="{{ Storage::url('uploads/users/' . Auth::user()->anh_dai_dien) }}" alt="">
+                            src="{{ Storage::url(Auth::user()->anh_dai_dien) }}" alt="">
                         <div class="user-name-hide media-body">
-                            <span>{{ Auth::user()->name }}</span>
-                            <p class="mb-0 font-roboto">Admin<i class="middle ri-arrow-down-s-line"></i></p>
+                            <span>{{ session('userName') }}</span>
+                            <p class="mb-0 font-roboto">{{ Auth::user()->roles->pluck('name')->first() }}<i class="middle ri-arrow-down-s-line"></i></p>
+
+                            {{-- <span>{{ Auth::user()->name }}</span>
+                            <p class="mb-0 font-roboto">Admin<i class="middle ri-arrow-down-s-line"></i></p> --}}
+
                         </div>
                     </div>
                     <ul class="profile-dropdown onhover-show-div">

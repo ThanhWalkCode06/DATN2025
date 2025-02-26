@@ -17,103 +17,163 @@ class AddPermissionAndRoleSeeder extends Seeder
     {
         $permit = [
             [
-                'name' => 'product-view',
+                'name' => 'sanphams-view',
                 'description' => 'Xem sản phẩm',
                 'guard_name' => 'web',
             ],
             [
-                'name' => 'product-add',
+                'name' => 'sanphams-add',
                 'description' => 'Thêm sản phẩm',
                 'guard_name' => 'web',
             ],
             [
-                'name' => 'product-update',
+                'name' => 'sanphams-update',
                 'description' => 'Sửa sản phẩm',
                 'guard_name' => 'web',
             ],
             [
-                'name' => 'product-delete',
+                'name' => 'sanphams-delete',
                 'description' => 'Xóa sản phẩm',
                 'guard_name' => 'web',
             ],
             [
-                'name' => 'order-view',
+                'name' => 'donhangs-view',
                 'description' => 'Xem đơn hàng',
                 'guard_name' => 'web',
             ],
             [
-                'name' => 'order-add',
+                'name' => 'donhangs-add',
                 'description' => 'Thêm đơn hàng',
                 'guard_name' => 'web',
             ],
             [
-                'name' => 'order-update',
+                'name' => 'donhangs-update',
                 'description' => 'Sửa đơn hàng',
                 'guard_name' => 'web',
             ],
             [
-                'name' => 'order-delete',
+                'name' => 'donhangs-delete',
                 'description' => 'Xóa đơn hàng',
                 'guard_name' => 'web',
             ],
             [
-                'name' => 'article-view',
+                'name' => 'baiviets-view',
                 'description' => 'Xem bài viết',
                 'guard_name' => 'web',
             ],
             [
-                'name' => 'article-add',
+                'name' => 'baiviets-add',
                 'description' => 'Thêm bài viết',
                 'guard_name' => 'web',
             ],
             [
-                'name' => 'article-update',
+                'name' => 'baiviets-update',
                 'description' => 'Sửa bài viết',
                 'guard_name' => 'web',
             ],
             [
-                'name' => 'article-delete',
+                'name' => 'baiviets-delete',
                 'description' => 'Xóa bài viết',
                 'guard_name' => 'web',
             ],
             [
-                'name' => 'voucher-view',
+                'name' => 'phieugiamgias-view',
                 'description' => 'Xem phiếu khuyến mãi',
                 'guard_name' => 'web',
             ],
             [
-                'name' => 'voucher-add',
+                'name' => 'phieugiamgias-add',
                 'description' => 'Thêm phiếu khuyến mãi',
                 'guard_name' => 'web',
             ],
             [
-                'name' => 'voucher-update',
+                'name' => 'phieugiamgias-update',
                 'description' => 'Sửa phiếu khuyến mãi',
                 'guard_name' => 'web',
             ],
             [
-                'name' => 'voucher-delete',
+                'name' => 'phieugiamgias-delete',
                 'description' => 'Xóa phiếu khuyến mãi',
                 'guard_name' => 'web',
             ],
             [
-                'name' => 'account-view',
+                'name' => 'users-view',
                 'description' => 'Xem tài khoản khuyến mãi',
                 'guard_name' => 'web',
             ],
             [
-                'name' => 'account-add',
+                'name' => 'users-add',
                 'description' => 'Thêm tài khoản khuyến mãi',
                 'guard_name' => 'web',
             ],
             [
-                'name' => 'account-update',
+                'name' => 'users-update',
                 'description' => 'Sửa tài khoản khuyến mãi',
                 'guard_name' => 'web',
             ],
             [
-                'name' => 'account-delete',
+                'name' => 'users-delete',
                 'description' => 'Xóa tài khoản khuyến mãi',
+                'guard_name' => 'web',
+            ],
+            [
+                'name' => 'danhmucs-view',
+                'description' => 'Xem Danh mục sản phẩm',
+                'guard_name' => 'web',
+            ],
+            [
+                'name' => 'danhmucs-add',
+                'description' => 'Thêm Danh mục sản phẩm',
+                'guard_name' => 'web',
+            ],
+            [
+                'name' => 'danhmucs-update',
+                'description' => 'Sửa Danh mục sản phẩm',
+                'guard_name' => 'web',
+            ],
+            [
+                'name' => 'danhmucs-delete',
+                'description' => 'Xóa Danh mục sản phẩm',
+                'guard_name' => 'web',
+            ],
+            [
+                'name' => 'bienthes-view',
+                'description' => 'Xem biến thể',
+                'guard_name' => 'web',
+            ],
+            [
+                'name' => 'bienthes-add',
+                'description' => 'Thêm biến thể',
+                'guard_name' => 'web',
+            ],
+            [
+                'name' => 'bienthes-update',
+                'description' => 'Sửa biến thể',
+                'guard_name' => 'web',
+            ],
+            [
+                'name' => 'bienthes-delete',
+                'description' => 'Xóa biến thể',
+                'guard_name' => 'web',
+            ],
+            [
+                'name' => 'thuoctinhs-view',
+                'description' => 'Xem thuộc tính',
+                'guard_name' => 'web',
+            ],
+            [
+                'name' => 'thuoctinhs-add',
+                'description' => 'Thêm thuộc tính',
+                'guard_name' => 'web',
+            ],
+            [
+                'name' => 'thuoctinhs-update',
+                'description' => 'Sửa thuộc tính',
+                'guard_name' => 'web',
+            ],
+            [
+                'name' => 'thuoctinhs-delete',
+                'description' => 'Xóa thuộc tính',
                 'guard_name' => 'web',
             ],
 

@@ -63,7 +63,7 @@
 
                             </div>
                             <h4>Chọn quyền:</h4>
-
+                            <input type="checkbox" id="check-all" class="checkbox_animated checkall"> Chọn tất cả
                             <div class="row mt-4">
                                 @foreach($permissions->chunk(ceil(count($permissions) / 2)) as $chunk)
                                     <div class="col-md-6"> {{-- Chia làm 2 cột --}}
@@ -93,7 +93,28 @@
     </div>
 
 @endsection
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    const checkAll = document.getElementById("check-all");
+    const checkItems = document.querySelectorAll(".checkall");
 
+    checkAll.addEventListener("change", function () {
+        checkItems.forEach(item => {
+            item.checked = checkAll.checked;
+        });
+    });
+
+    checkItems.forEach(item => {
+        item.addEventListener("change", function () {
+            if (!this.checked) {
+                checkAll.checked = false;
+            } else if (document.querySelectorAll(".checkall:checked").length === checkItems.length) {
+                checkAll.checked = true;
+            }
+        });
+    });
+});
+</script>
 @section('js')
     <!-- Sidebar js -->
     <script src="{{ asset('assets/js/config.js') }}"></script>
