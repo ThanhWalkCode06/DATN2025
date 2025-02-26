@@ -12,9 +12,10 @@ use App\Http\Controllers\SanPhamController;
 use App\Http\Controllers\ThongKeController;
 use App\Http\Controllers\ThuocTinhController;
 use App\Http\Controllers\Admins\UserController;
-use App\Http\Controllers\PhieuGiamGiaController;
 
+use App\Http\Controllers\PhieuGiamGiaController;
 use App\Http\Controllers\Admins\SettingController;
+
 use App\Http\Controllers\DanhMucBaiVietController;
 use App\Http\Controllers\DanhMucSanPhamController;
 use App\Http\Controllers\Admins\Auth\AuthController;
@@ -79,8 +80,6 @@ Route::prefix('/admin')->controller(AuthController::class)->group(function () {
 
 
     });
-
-
 
 
 // Route::get('mail', function () {

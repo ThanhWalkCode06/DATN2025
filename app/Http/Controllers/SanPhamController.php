@@ -1,22 +1,21 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\SanPham;
+use App\Models\DanhMucSanPham;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\StoreSanPhamRequest;
 use App\Http\Requests\UpdateSanPhamRequest;
 
 class SanPhamController extends Controller
 {
-    public function __construct()
-    {
-    }
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index()
     {
-        return view('admins.sanphams.index');
+        $sanPhams = SanPham::with(['danhMuc'])->get();
+
+        $danhMucs = DanhMucSanPham::all();
+        return view('admins.sanphams.index', compact('sanPhams', 'danhMucs'));
     }
 
     /**
@@ -24,7 +23,8 @@ class SanPhamController extends Controller
      */
     public function create()
     {
-        return view('admins.sanphams.create');
+        $danhMucs = DanhMucSanPham::all();
+        return view('admins.sanphams.create', compact('danhMucs'));
     }
 
     /**
@@ -32,38 +32,86 @@ class SanPhamController extends Controller
      */
     public function store(StoreSanPhamRequest $request)
     {
-        //
+        if ($request->hasFile('hinh_anh')) {
+            $file = $request->file('hinh_anh');
+            $fileName = time() . '.' . $file->getClientOriginalExtension();
+
+            $filePath = $file->storeAs('uploads/sanphams', $fileName, 'public');
+
+            $hinhAnhPath = $filePath;
+        } else {
+            $hinhAnhPath = null;
+        }
+
+        SanPham::create([
+            'ten_san_pham' => $request->ten_san_pham,
+            'ma_san_pham' => $request->ma_san_pham,
+            'khuyen_mai' => $request->khuyen_mai,
+            'hinh_anh' => $hinhAnhPath,
+            'mo_ta' => $request->mo_ta,
+            'danh_muc_id' => $request->danh_muc_id,
+            'trang_thai' => $request->trang_thai,
+        ]);
+
+        return redirect()->route('sanphams.index')->with('success', 'Sản phẩm đã được thêm thành công.');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(SanPham $sanPham)
+    public function show($id)
     {
-        //
+        $sanPham = SanPham::findOrFail($id);
+        return view('admins.sanphams.show', compact('sanPham'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(SanPham $sanPham)
+    public function edit($id)
     {
-        //
+        $sanpham = SanPham::findOrFail($id);
+        $danhMucs = DanhMucSanPham::all();
+        return view('admins.sanphams.edit', compact('sanpham', 'danhMucs'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateSanPhamRequest $request, SanPham $sanPham)
+    public function update(UpdateSanPhamRequest $request, $id)
     {
-        //
+        $sanPham = SanPham::findOrFail($id);
+        $data = $request->validated();
+
+        if ($request->hasFile('hinh_anh')) {
+            $file = $request->file('hinh_anh');
+            $fileName = time() . '.' . $file->getClientOriginalExtension();
+
+            $filePath = $file->storeAs('uploads/sanphams', $fileName, 'public');
+
+            $data['hinh_anh'] = $filePath;
+        }
+        $sanPham->update($data);
+
+        return redirect()->route('sanphams.index')->with('success', 'Sản phẩm đã được cập nhật thành công.');
     }
+
+
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(SanPham $sanPham)
-    {
-        //
+    public function destroy($id)
+{
+    $sanpham = SanPham::findOrFail($id);
+
+    if ($sanpham->hinh_anh && file_exists(public_path('uploads/' . $sanpham->hinh_anh))) {
+        unlink(public_path('uploads/' . $sanpham->hinh_anh));
     }
+
+    $sanpham->delete();
+
+    return redirect()->route('sanphams.index')->with('success', 'Sản phẩm đã được xóa thành công!');
+}
+
 }

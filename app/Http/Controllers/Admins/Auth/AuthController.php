@@ -31,6 +31,7 @@ class AuthController extends Controller
             'username' => 'required',
             'password' => 'required',
         ]);
+
         if (Auth::attempt($user)) {
             if ($request->remember_token == true) {
                 // dd($request->remember_token);

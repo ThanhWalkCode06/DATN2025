@@ -27,9 +27,6 @@
 <!-- Bootstrap-tag input css -->
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/bootstrap-tagsinput.css') }}">
 
-<!-- App css -->
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css') }}">
-
     <!-- App css -->
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/load.css') }}">
@@ -43,7 +40,6 @@
         <span></span>
         <span></span>
     </div>
-
     <section class="log-in-section background-image-2 section-b-space">
         <div class="container-fluid-lg w-100">
             <div class="row">

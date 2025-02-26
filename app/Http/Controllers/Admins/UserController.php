@@ -20,11 +20,13 @@ class UserController extends Controller
             ->paginate(10)
             ->onEachSide(5);
             return view('admins.taikhoans.index', compact('lists'));
+
         } else {
             $lists = User::where('name', 'like', '%' . $request->key . '%')
                 ->orwhere('email', 'like', '%' . $request->key . '%')
                 ->orderBy('id', 'DESC')->paginate(10);
             return view('admins.taikhoans.index', compact('lists'));
+
         }
     }
 
@@ -93,8 +95,8 @@ class UserController extends Controller
         $itemId = User::query()->findOrFail($id);
         $roles = $roles = Role::where('name','!=','SuperAdmin')->get();;
         return view('admins.taikhoans.edit',compact('itemId','roles'));
-    }
 
+    }
     /**
      * Update the specified resource in storage.
      */

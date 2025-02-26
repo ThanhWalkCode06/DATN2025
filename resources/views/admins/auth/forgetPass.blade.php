@@ -29,6 +29,7 @@
 <!-- App css -->
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css') }}">
 
+<<<<<<< HEAD
     <!-- App css -->
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/load.css') }}">
@@ -43,6 +44,9 @@
         <span></span>
     </div>
 
+=======
+<body>
+>>>>>>> origin/main
     <!-- log in section start -->
     <section class="log-in-section background-image-2 section-b-space">
         <div class="container-fluid-lg w-100">
@@ -82,7 +86,6 @@
                                     </div>
                                 </div>
 
-
                                 <div class="col-12">
                                     <button class="btn btn-animation w-100 justify-content-center"
                                         type="submit">Gửi</button>
@@ -105,6 +108,7 @@
     <div class="bg-overlay"></div>
     <!-- Bg overlay End -->
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     <script>
         window.addEventListener('load', function () {
@@ -120,14 +124,20 @@
     </script>
 =======
 >>>>>>> origin/main
+=======
+>>>>>>> origin/main
 </body>
 
 </html>
 
 @section('js')
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 <script src="{{ asset('assets/js/config.js') }}"></script>
+=======
+    <script src="{{ asset('assets/js/config.js') }}"></script>
+>>>>>>> origin/main
 =======
     <script src="{{ asset('assets/js/config.js') }}"></script>
 >>>>>>> origin/main
