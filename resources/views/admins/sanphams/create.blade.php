@@ -131,7 +131,7 @@
                                     <div class="row">  
                                         <label class="form-label-title col-sm-3 mb-0">Mô tả sản phẩm</label>  
                                         <div class="col-sm-9">  
-                                            <textarea id="editor" name="mo_ta">{{ old('mo_ta') }}</textarea>6
+                                            <textarea id="editor" name="mo_ta">{{ old('mo_ta') }}</textarea>
                                         </div>  
                                     </div>  
                                 </div>  
