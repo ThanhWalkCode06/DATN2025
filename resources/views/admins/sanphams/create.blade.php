@@ -232,7 +232,7 @@
     <script src="{{ asset('assets/js/config.js') }}"></script>
 
     <!-- bootstrap tag-input js -->
-    <script src="{{ asset('assets/js/bootstrap-tagsinput.min.js') }}"></scrip>
+    <script src="{{ asset('assets/js/bootstrap-tagsinput.min.js') }}"></script>
     <script src="{{ asset('assets/js/sidebar-menu.js') }}"></script>
 
     <!-- customizer js -->
@@ -250,3 +250,5 @@
     <script src="{{ asset('assets/js/select2.min.js') }}"></script>
     <script src="{{ asset('assets/js/select2-custom.js') }}"></script>
 @endsection
+
+
