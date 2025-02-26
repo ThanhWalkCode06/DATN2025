@@ -2,65 +2,116 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Models\BaiViet;
-use App\Http\Requests\StoreBaiVietRequest;
-use App\Http\Requests\UpdateBaiVietRequest;
+use App\Models\User;
+use App\Models\DanhMucBaiViet;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class BaiVietController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // Hiển thị danh sách bài viết
     public function index()
     {
-        return view('admins.baiviets.index');
+        $baiViets = BaiViet::with('user', 'danhMuc')->orderBy('created_at', 'desc')->get();
+        return view('admins.baiviets.index', compact('baiViets'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    // Hiển thị form tạo bài viết
     public function create()
     {
-        return view('admins.baiviets.create');
+        $users = User::all(); // Lấy danh sách user
+        $danhMucs = DanhMucBaiViet::all(); // Lấy danh mục bài viết
+        return view('admins.baiviets.create', compact('users', 'danhMucs'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreBaiVietRequest $request)
+    // Xử lý lưu bài viết mới
+    public function store(Request $request)
     {
-        //
+        // Validate dữ liệu
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required|exists:users,id',
+            'tieu_de' => 'required|string|max:255',
+            'danh_muc_id' => 'required|exists:danh_muc_bai_viets,id',
+            'noi_dung' => 'required',
+            'anh_bia' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        // Tạo bài viết mới
+        $baiViet = new BaiViet();
+        $baiViet->user_id = $request->user_id; // Lấy từ dropdown form
+        $baiViet->tieu_de = $request->tieu_de;
+        $baiViet->danh_muc_id = $request->danh_muc_id;
+        $baiViet->noi_dung = $request->noi_dung;
+
+        // Xử lý upload ảnh
+        if ($request->hasFile('anh_bia')) {
+            $file = $request->file('anh_bia');
+            $path = $file->store('images', 'public');
+            $baiViet->anh_bia = $path;
+        }
+
+        $baiViet->save();
+        return redirect()->route('baiviets.index')->with('success', 'Bài viết đã được tạo!');
+    }
+    public function show($id)
+    {
+        $baiViet = BaiViet::with('user', 'danhMuc')->findOrFail($id);
+        return view('admins.baiviets.show', compact('baiViet'));
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(BaiViet $baiViet)
+    // Hiển thị form chỉnh sửa bài viết
+    public function edit($id)
     {
-        return view('admins.baiviets.show');
+        $baiViet = BaiViet::findOrFail($id);
+        $users = User::all();
+        $danhMucs = DanhMucBaiViet::all();
+        return view('admins.baiviets.edit', compact('baiViet', 'users', 'danhMucs'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(BaiViet $baiViet)
+    // Xử lý cập nhật bài viết
+    public function update(Request $request, $id)
     {
-        return view('admins.baiviets.edit');
+        // Validate dữ liệu
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required|exists:users,id',
+            'tieu_de' => 'required|string|max:255',
+            'danh_muc_id' => 'required|exists:danh_muc_bai_viets,id',
+            'noi_dung' => 'required',
+            'anh_bia' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        $baiViet = BaiViet::findOrFail($id);
+        $baiViet->user_id = $request->user_id;
+        $baiViet->tieu_de = $request->tieu_de;
+        $baiViet->danh_muc_id = $request->danh_muc_id;
+        $baiViet->noi_dung = $request->noi_dung;
+
+        // Xử lý upload ảnh nếu có thay đổi
+        if ($request->hasFile('anh_bia')) {
+            $file = $request->file('anh_bia');
+            $path = $file->store('images', 'public');
+            $baiViet->anh_bia = $path;
+        }
+
+        $baiViet->save();
+        return redirect()->route('baiviets.index')->with('success', 'Bài viết đã được cập nhật!');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateBaiVietRequest $request, BaiViet $baiViet)
+    // Xóa bài viết
+    public function destroy($id)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(BaiViet $baiViet)
-    {
-        //
+        $baiViet = BaiViet::findOrFail($id);
+        $baiViet->delete();
+        return redirect()->route('baiviets.index')->with('success', 'Bài viết đã được xóa!');
     }
 }

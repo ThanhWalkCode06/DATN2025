@@ -44,127 +44,61 @@
                                     <th>Mã đơn hàng</th>
                                     <th>Người đặt</th>
                                     <th>Ngày đặt</th>
-                                    <th>Phương thức thanh toán</th>
-                                    <th>Trạng thái giao hàng</th>
+                                    <th>Trạng thái thanh toán</th>
+                                    <th>Trạng thái đơn hàng</th>
                                     <th>Tổng tiền</th>
                                     <th>Hành động</th>
                                 </tr>
                             </thead>
 
                             <tbody>
-                                <tr data-bs-toggle="offcanvas" href="#order-details">
-                                    <td>406-4883635</td>
+                                @foreach ($donHangs as $donHang)
+                                    <tr data-bs-toggle="offcanvas">
+                                        <td>{{ $donHang->ma_don_hang }}</td>
+                                        <td>{{ $donHang->name }}</td>
+                                        <td>{{ $donHang->created_at }}</td>
+                                        <td>
+                                            @if ($donHang->trang_thai_thanh_toan == 0)
+                                                Chưa thanh toán
+                                            @else
+                                                Đã thanh toán
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if ($donHang->trang_thai_don_hang == 0)
+                                                <span class="text-danger">Chưa xác nhận</span>
+                                            @elseif ($donHang->trang_thai_don_hang == 1)
+                                                <span class="text-success">Đã xác nhận</span>
+                                            @elseif ($donHang->trang_thai_don_hang == 2)
+                                                <span class="text-primary">Chờ vận chuyển</span>
+                                            @elseif ($donHang->trang_thai_don_hang == 3)
+                                                <span class="text-primary">Đang giao</span>
+                                            @elseif ($donHang->trang_thai_don_hang == 4)
+                                                <span class="text-success">Đã giao</span>
+                                            @elseif ($donHang->trang_thai_don_hang == 5)
+                                                <span class="text-danger">Trả hàng</span>
+                                            @else
+                                                <span>Trạng thái không hợp lệ</span>
+                                            @endif
+                                        </td>
+                                        <td>{{ $donHang->tong_tien }}đ</td>
+                                        <td>
+                                            <ul>
+                                                <li>
+                                                    <a href="{{ route('donhangs.show', $donHang->id) }}">
+                                                        <i class="ri-eye-line"></i>
+                                                    </a>
+                                                </li>
 
-                                    <td>Nguyễn Văn A</td>
-
-                                    <td>Jul 20, 2022</td>
-
-                                    <td>Paypal</td>
-
-                                    <td class="order-success">
-                                        <span>Đã giao hàng</span>
-                                    </td>
-
-                                    <td>$15</td>
-
-                                    <td>
-                                        <ul>
-                                            <li>
-                                                <a href="{{ route('donhangs.show', 1) }}">
-                                                    <i class="ri-eye-line"></i>
-                                                </a>
-                                            </li>
-
-                                            <li>
-                                                <a href="javascript:void(0)">
-                                                    <i class="ri-pencil-line"></i>
-                                                </a>
-                                            </li>
-
-                                            <li>
-                                                <a class="btn btn-sm btn-solid text-white" href="order-tracking.html">
-                                                    Theo dõi
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </td>
-                                </tr>
-
-                                <tr data-bs-toggle="offcanvas" href="#order-details">
-                                    <td>759-4568734</td>
-
-                                    <td>Nguyễn Văn B</td>
-
-                                    <td>Jul 29, 2022</td>
-
-                                    <td>Stripe</td>
-
-                                    <td class="order-pending">
-                                        <span>Chưa xử lý</span>
-                                    </td>
-
-                                    <td>$15</td>
-
-                                    <td>
-                                        <ul>
-                                            <li>
-                                                <a href="order-detail.html">
-                                                    <i class="ri-eye-line"></i>
-                                                </a>
-                                            </li>
-
-                                            <li>
-                                                <a href="javascript:void(0)">
-                                                    <i class="ri-pencil-line"></i>
-                                                </a>
-                                            </li>
-
-                                            <li>
-                                                <a class="btn btn-sm btn-solid text-white" href="order-tracking.html">
-                                                    Theo dõi
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </td>
-                                </tr>
-
-                                <tr data-bs-toggle="offcanvas" href="#order-details">
-                                    <td>456-1245789</td>
-
-                                    <td>Nguyễn Văn C</td>
-
-                                    <td>Aug 10, 2022</td>
-
-                                    <td>Stripe</td>
-
-                                    <td class="order-cancle">
-                                        <span>Đã hủy</span>
-                                    </td>
-
-                                    <td>$15</td>
-
-                                    <td>
-                                        <ul>
-                                            <li>
-                                                <a href="order-detail.html">
-                                                    <i class="ri-eye-line"></i>
-                                                </a>
-                                            </li>
-
-                                            <li>
-                                                <a href="javascript:void(0)">
-                                                    <i class="ri-pencil-line"></i>
-                                                </a>
-                                            </li>
-
-                                            <li>
-                                                <a class="btn btn-sm btn-solid text-white" href="order-tracking.html">
-                                                    Theo dõi
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </td>
-                                </tr>
+                                                <li>
+                                                    <a href="#">
+                                                        <i class="ri-pencil-line"></i>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>

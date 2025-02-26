@@ -19,7 +19,6 @@ return new class extends Migration
             $table->string('email_nguoi_nhan');
             $table->string('sdt_nguoi_nhan');
             $table->text('dia_chi_nguoi_nhan');
-            $table->date('ngay_dat');
             $table->double('tong_tien')->default(0);
             $table->text('ghi_chu')->nullable();
             $table->unsignedBigInteger('phuong_thuc_thanh_toan_id');

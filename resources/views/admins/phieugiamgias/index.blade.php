@@ -35,7 +35,7 @@
                 <div class="title-header option-title">
                     <h5>Danh sách phiếu giảm giá</h5>
                     <div class="right-options">
-                
+
                     </div>
                 </div>
                 <div>
@@ -54,91 +54,66 @@
                             </thead>
 
                             <tbody>
-                                
-                                <tr>
+                                @foreach($phieuGiamGias as $phieuGiamGia)
+                                    <tr>
+                                        <td>{{ $phieuGiamGia->ten_phieu }}</td>
+                                        <td>{{ $phieuGiamGia->ma_phieu }}</td>
+                                        <td>{{ date('d-m-Y', strtotime($phieuGiamGia->ngay_bat_dau)) }}</td>
+                                        <td>{{ date('d-m-Y', strtotime($phieuGiamGia->ngay_ket_thuc)) }}</td>
+                                        <td class="theme-color">{{ $phieuGiamGia->gia_tri }}%</td>
+                                        <td class="menu-status">
+                                            <span class="success">Success</span>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                <li>
+                                                    <a href="{{ route('phieugiamgias.edit', $phieuGiamGia->id) }}">
+                                                        <i class="ri-pencil-line"></i>
+                                                    </a>
+                                                </li>
 
-                                    <td>80% Off</td>
-                                    <td>8328192</td>
-                                    <td>14-2-2025</td>
-                                    <td>14-2-2025</td>
-                                    <td class="theme-color">45%</td>
-                                    <td class="menu-status">
-                                        <span class="success">Success</span>
-                                    </td>
-                                    <td>
-                                        <ul>
-                                            <li>
-                                                <a href="{{ route('phieugiamgias.edit',1) }}">
-                                                <i class="ri-pencil-line"></i>
-                                                </a>
-                                            </li>
+                                                <li>
+                                                    <a href="javascript:void(0)" data-bs-toggle="modal"
+                                                        data-bs-target="#deleteModal{{ $phieuGiamGia->id }}">
+                                                        <i class="ri-delete-bin-line"></i>
+                                                    </a>
+                                                </li>
+                                            </ul>
 
-                                            <li>
-                                                <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                    data-bs-target="#exampleModalToggle">
-                                                    <i class="ri-delete-bin-line"></i>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </td>
-                                </tr>
+                                            <!-- Modal xác nhận xóa -->
+                                            <div class="modal fade" id="deleteModal{{ $phieuGiamGia->id }}" tabindex="-1"
+                                                aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title">Xác nhận xóa</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                                aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            Bạn có chắc chắn muốn xóa phiếu giảm giá
+                                                            <strong>{{ $phieuGiamGia->ten_phieu }}</strong> không?
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <form
+                                                                action="{{ route('phieugiamgias.destroy', $phieuGiamGia->id) }}"
+                                                                method="POST">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="submit" class="btn btn-danger">Xóa</button>
+                                                                <button type="button" class="btn btn-secondary"
+                                                                    data-bs-dismiss="modal">Hủy</button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
 
-                                <tr>
-
-                                    <td>60% Off</td>
-                                    <td>7218376</td>
-                                    <td>14-2-2025</td>
-                                    <td>14-2-2025</td>
-                                    <td class="theme-color">30%</td>
-                                    <td class="menu-status">
-                                        <span class="success">Success</span>
-                                    </td>
-                                    <td>
-                                        <ul>
-                                            <li>
-                                                <a href="javascript:void(0)">
-                                                    <i class="ri-pencil-line"></i>
-                                                </a>
-                                            </li>
-
-                                            <li>
-                                                <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                    data-bs-target="#exampleModalToggle">
-                                                    <i class="ri-delete-bin-line"></i>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </td>
-                                </tr>
-
-                                <tr>
-
-                                    <td>40% Off</td>
-                                    <td>1872349</td>
-                                    <td>14-2-2025</td>
-                                    <td>14-2-2025</td>
-                                    <td class="theme-color">42%</td>
-                                    <td class="menu-status">
-                                        <span class="success">Success</span>
-                                    </td>
-                                    <td>
-                                        <ul>
-                                            <li>
-                                                <a href="javascript:void(0)">
-                                                    <i class="ri-pencil-line"></i>
-                                                </a>
-                                            </li>
-
-                                            <li>
-                                                <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                    data-bs-target="#exampleModalToggle">
-                                                    <i class="ri-delete-bin-line"></i>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </td>
-                                </tr>
+                                        </td>
+                                    </tr>
+                                @endforeach
                             </tbody>
+
                         </table>
                     </div>
                 </div>

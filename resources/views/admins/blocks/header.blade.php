@@ -3,19 +3,19 @@
         <div class="header-logo-wrapper p-0">
             <div class="logo-wrapper">
                 <a href="index.html">
-                    <img class="img-fluid main-logo" src="{{ asset('assets/images/logo/1.png') }}" alt="logo">
-                    <img class="img-fluid white-logo" src="{{ asset('assets/images/logo/1-white.png') }}" alt="logo">
+                    <img class="img-fluid main-logo" src="{{ Storage::url(Auth::user()->anh_dai_dien) }}" alt="logo">
+                    <img class="img-fluid white-logo" src="{{ Storage::url(Auth::user()->anh_dai_dien) }}" alt="logo">
                 </a>
             </div>
             <div class="toggle-sidebar">
                 <i class="status_toggle middle sidebar-toggle" data-feather="align-center"></i>
                 <a href="index.html">
-                    <img src="{{ asset('assets/images/logo/1.png') }}" class="img-fluid" alt="">
+                    <img src="{{ Storage::url(Auth::user()->anh_dai_dien) }}" class="img-fluid" alt="">
                 </a>
             </div>
         </div>
 
-        <form class="form-inline search-full" action="javascript:void(0)" method="get">
+        {{-- <form class="form-inline search-full" action="javascript:void(0)" method="get">
             <div class="form-group w-100">
                 <div class="Typeahead Typeahead--twitterUsers">
                     <div class="u-posRelative">
@@ -29,7 +29,7 @@
                     <div class="Typeahead-menu"></div>
                 </div>
             </div>
-        </form>
+        </form> --}}
         <div class="nav-right col-6 pull-right right-header p-0">
             <ul class="nav-menus">
                 <li>
@@ -84,40 +84,40 @@
                 </li>
                 <li class="profile-nav onhover-dropdown pe-0 me-0">
                     <div class="media profile-media">
-                        <img class="user-profile rounded-circle" src="{{ asset('assets/images/users/4.jpg') }}"
-                            alt="">
+                        <img class="user-profile rounded-circle"
+                            src="{{ Storage::url('uploads/users/' . Auth::user()->anh_dai_dien) }}" alt="">
                         <div class="user-name-hide media-body">
-                            <span>Emay Walter</span>
+                            <span>{{ Auth::user()->name }}</span>
                             <p class="mb-0 font-roboto">Admin<i class="middle ri-arrow-down-s-line"></i></p>
                         </div>
                     </div>
                     <ul class="profile-dropdown onhover-show-div">
                         <li>
-                            <a href="all-users.html">
+                            <a href="{{ route('setting-infor.private') }}">
                                 <i data-feather="users"></i>
-                                <span>Tài khoản</span>
+                                <span>Thông tin cá nhân</span>
                             </a>
                         </li>
-                        <li>
+                        {{-- <li>
                             <a href="order-list.html">
                                 <i data-feather="archive"></i>
                                 <span>Đơn hàng</span>
                             </a>
-                        </li>
-                        <li>
+                        </li> --}}
+                        {{-- <li>
                             <a href="support-ticket.html">
                                 <i data-feather="phone"></i>
                                 <span>Liên hệ</span>
                             </a>
-                        </li>
+                        </li> --}}
                         <li>
-                            <a href="profile-setting.html">
+                            <a href="{{ route('pass.edit') }}">
                                 <i data-feather="settings"></i>
-                                <span>Cài đặt</span>
+                                <span>Đổi mật khẩu</span>
                             </a>
                         </li>
                         <li>
-                            <a data-bs-toggle="modal" data-bs-target="#staticBackdrop" href="javascript:void(0)">
+                            <a data-bs-toggle="modal" data-bs-target="#staticBackdrop" href="{{ route('logout') }}">
                                 <i data-feather="log-out"></i>
                                 <span>Đăng xuất</span>
                             </a>
