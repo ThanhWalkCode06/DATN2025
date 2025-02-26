@@ -58,7 +58,6 @@
 
     @yield('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/load.css') }}">
-
 </head>
 
 <body >
@@ -126,6 +125,39 @@
         </div>
     </div>
 
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    const icon = document.querySelector(".mode i");
+    const body = document.body;
+
+    // Kiểm tra trạng thái trong localStorage để áp dụng ngay khi trang load
+    if (localStorage.getItem("darkMode") === "enabled") {
+        body.classList.add("dark-only");
+        icon.classList.add("fa-moon-o", "fa-lightbulb-o");
+        setTimeout(() => {
+            const thElements = document.querySelectorAll(".sorting_disabled");
+            const checkbox = document.querySelector(".checkbox_animated");
+            console.log(checkbox); // Kiểm tra lại
+            if (thElements) {
+                // checkbox.style.background-color = "#0da487";
+                thElements.forEach(th => {
+                    th.style.color = "#0da487"; // Áp dụng màu cho từng phần tử
+                });
+            }
+        }, 100);
+    }
+
+    icon.addEventListener("click", function () {
+
+        if (body.classList.contains("dark-only")) {
+            localStorage.removeItem("darkMode");
+        } else {
+            localStorage.setItem("darkMode", "enabled");
+        }
+    });
+});
+</script>
+
     <!-- Bootstrap js -->
     <script src="{{ asset('assets/js/jquery-3.6.0.min.js') }}"></script>
     {{-- <script src="{{ asset('assets/js/bootstrap/bootstrap.bundle.js') }}"></script> --}}
@@ -176,45 +208,11 @@
     <script>
     window.addEventListener('load', function () {
         let loader = document.querySelector('.fullpage-loader');
-    loader.style.opacity = '0';
+        loader.style.opacity = '0';
     setTimeout(() => {
         loader.style.display = 'none';
     }, 500); // Ẩn hẳn sau 0.5 giây
     });
-
-    document.addEventListener("DOMContentLoaded", function () {
-    const icon = document.querySelector(".mode i");
-    const body = document.body;
-
-    // Kiểm tra trạng thái trong localStorage để áp dụng ngay khi trang load
-    if (localStorage.getItem("darkMode") === "enabled") {
-        body.classList.add("dark-only");
-        icon.classList.add("fa-moon-o", "fa-lightbulb-o");
-        setTimeout(() => {
-            const thElements = document.querySelectorAll(".sorting_disabled");
-            const checkbox = document.querySelector(".checkbox_animated");
-            console.log(checkbox); // Kiểm tra lại
-            if (thElements) {
-                // checkbox.style.background-color = "#0da487";
-                thElements.forEach(th => {
-                    th.style.color = "#0da487"; // Áp dụng màu cho từng phần tử
-                });
-            }
-        }, 100);
-    }
-
-    icon.addEventListener("click", function () {
-
-        if (body.classList.contains("dark-only")) {
-            localStorage.removeItem("darkMode");
-        } else {
-            localStorage.setItem("darkMode", "enabled");
-        }
-    });
-});
-
-
-
 
     </script>
 

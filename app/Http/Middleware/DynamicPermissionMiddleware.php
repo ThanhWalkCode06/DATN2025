@@ -101,7 +101,7 @@ class DynamicPermissionMiddleware
         ];
 
         $resource = explode('.', $routeName)[0];
-        // dd($map[$resource],$resource);
+        dd($map[$resource],$resource);
         return $map[$resource] ?? null;
     }
 }
