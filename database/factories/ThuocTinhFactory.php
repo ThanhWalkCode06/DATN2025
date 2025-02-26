@@ -17,7 +17,7 @@ class ThuocTinhFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'ten_thuoc_tinh' => $this->faker->name()
         ];
     }
 }

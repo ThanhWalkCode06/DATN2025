@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admins;
 
 use App\Models\Role;
 use App\Models\User;
+use App\Models\Permission;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Http\Controllers\Controller;
@@ -11,30 +12,20 @@ use App\Http\Requests\Admins\UserRequest;
 
 class UserController extends Controller
 {
-    public function __construct()
-    {
-    }
     public function index(Request $request)
     {
-        if($request->isMethod('get')){
-            $lists = User::whereDoesntHave('roles', function ($query) {
-                $query->where('name', 'SuperAdmin');
-            })
-            ->whereNull('deleted_at')
+        if ($request->isMethod('get')) {
+            $lists = User::whereNull('deleted_at')
             ->orderByDesc('id')
             ->paginate(10)
             ->onEachSide(5);
-            return view('admins.taikhoans.index',compact('lists'));
-        }else{
-            $lists = User::whereDoesntHave('roles', function ($query) {
-                $query->where('name', 'SuperAdmin');
-            })
-            ->where('name','like','%'.$request->key.'%')
-            ->orwhere('email','like','%'.$request->key.'%')
-            ->orderBy('id','DESC')->paginate(10);
-            return view('admins.taikhoans.index',compact('lists'));
+            return view('admins.taikhoans.index', compact('lists'));
+        } else {
+            $lists = User::where('name', 'like', '%' . $request->key . '%')
+                ->orwhere('email', 'like', '%' . $request->key . '%')
+                ->orderBy('id', 'DESC')->paginate(10);
+            return view('admins.taikhoans.index', compact('lists'));
         }
-
     }
 
     /**
@@ -42,7 +33,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        $roles = Role::where('name','!=','SuperAdmin')->get();
+        $roles = Role::where('name', '!=', 'SuperAdmin')->get();
         // dd($roles,User::all());
         // foreach($roles as $item=>$role){
         //     dd($role);
@@ -56,7 +47,7 @@ class UserController extends Controller
     public function store(UserRequest $request)
     {
         $data = $request->validated();
-        // dd($request->hasFile('anh_dai_dien'));
+        // dd($data);
         if ($request->hasFile('anh_dai_dien')) {
             $file = $request->file('anh_dai_dien');
             // dd($file);
@@ -67,7 +58,7 @@ class UserController extends Controller
         }
         $data['gioi_tinh'] = $data['gioi_tinh'] == 'Nam' ? 1 : 0;
         $user = User::create([
-            "name" => $data['name'],
+            "username" => $data['name'],
             "email" => $data['email'],
             "anh_dai_dien" => $data['anh_dai_dien'],
             "ten_nguoi_dung" => $data['ten_nguoi_dung'],
@@ -91,7 +82,7 @@ class UserController extends Controller
     public function show(string $id)
     {
         $user = User::find($id);
-        return view('admins.taikhoans.show',compact('user'));
+        return view('admins.taikhoans.show', compact('user'));
     }
 
     /**
@@ -102,7 +93,6 @@ class UserController extends Controller
         $itemId = User::query()->findOrFail($id);
         $roles = $roles = Role::where('name','!=','SuperAdmin')->get();;
         return view('admins.taikhoans.edit',compact('itemId','roles'));
-
     }
 
     /**
@@ -153,8 +143,8 @@ class UserController extends Controller
         $itemId = User::find($id);
         $deleteSP = $itemId->delete();
         $itemId
-        ->where('id', $id)
-        ->update(['deleted_at' => Carbon::now()]);
+            ->where('id', $id)
+            ->update(['deleted_at' => Carbon::now()]);
         session()->flash('success', 'Xóa thành công tài khoản');
         return redirect()->route('users.index');
     }

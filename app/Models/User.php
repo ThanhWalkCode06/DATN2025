@@ -29,7 +29,7 @@ class User extends Authenticatable
         'so_dien_thoai',
         'trang_thai',
         'email',
-        'name',
+        'username',
 
     ];
 

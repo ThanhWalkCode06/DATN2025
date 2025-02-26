@@ -2,29 +2,32 @@
 @endsection
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/themify.css') }}">
 
-    <!-- Dropzon css -->
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/dropzone.css') }}">
+<!-- Dropzon css -->
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/dropzone.css') }}">
 
-    <!-- Feather icon css -->
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/feather-icon.css') }}">
+<!-- Feather icon css -->
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/feather-icon.css') }}">
 
-    <!-- remixicon css -->
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/remixicon.css') }}">
+<!-- remixicon css -->
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/remixicon.css') }}">
 
-    <!-- Select2 css -->
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/select2.min.css') }}">
+<!-- Select2 css -->
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/select2.min.css') }}">
 
-    <!-- Plugins css -->
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/scrollbar.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/animate.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/chartist.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/date-picker.css') }}">
+<!-- Plugins css -->
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/scrollbar.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/animate.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/chartist.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/date-picker.css') }}">
 
-    <!-- Bootstrap css -->
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/bootstrap.css') }}">
+<!-- Bootstrap css -->
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/bootstrap.css') }}">
 
-    <!-- Bootstrap-tag input css -->
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/bootstrap-tagsinput.css') }}">
+<!-- Bootstrap-tag input css -->
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/bootstrap-tagsinput.css') }}">
+
+<!-- App css -->
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css') }}">
 
     <!-- App css -->
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css') }}">
@@ -40,51 +43,6 @@
         <span></span>
     </div>
 
-    <!-- mobile fix menu start -->
-    <div class="mobile-menu d-md-none d-block mobile-cart">
-        <ul>
-            <li class="active">
-                <a href="index.html">
-                    <i class="iconly-Home icli"></i>
-                    <span>Home</span>
-                </a>
-            </li>
-
-            <li class="mobile-category">
-                <a href="javascript:void(0)">
-                    <i class="iconly-Category icli js-link"></i>
-                    <span>Category</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="search.html" class="search-box">
-                    <i class="iconly-Search icli"></i>
-                    <span>Search</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="wishlist.html" class="notifi-wishlist">
-                    <i class="iconly-Heart icli"></i>
-                    <span>My Wish</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="cart.html">
-                    <i class="iconly-Bag-2 icli fly-cate"></i>
-                    <span>Cart</span>
-                </a>
-            </li>
-        </ul>
-    </div>
-    <!-- mobile fix menu end -->
-
-    <!-- Breadcrumb Section Start -->
-
-    <!-- Breadcrumb Section End -->
-
     <!-- log in section start -->
     <section class="log-in-section background-image-2 section-b-space">
         <div class="container-fluid-lg w-100">
@@ -98,8 +56,8 @@
                 <div class="col-xxl-4 col-xl-5 col-lg-6 col-sm-8 mx-auto">
                     <div class="log-in-box">
                         <div class="log-in-title">
-                            <h3>Welcome To Admin Seven Star</h3>
-                            <h4>Forget your password</h4>
+                            <h3>Seven Stars</h3>
+                            <h4>Quên mật khẩu</h4>
                         </div>
 
                         <div class="input-box">
@@ -107,13 +65,15 @@
                                 @csrf
                                 <div class="col-12">
                                     <div class="form-floating theme-form-floating log-in-form">
-                                        <input name="email" type="text" class="form-control @error('email') is-invalid @enderror" id="email" placeholder="Email Address">
-                                        <label for="email">Email Address</label>
+                                        <input name="email" type="text"
+                                            class="form-control @error('email') is-invalid @enderror" id="email"
+                                            placeholder="Email Address">
+                                        <label for="email">Email</label>
                                     </div>
 
                                 </div>
                                 @error('email')
-                                <p class="text-danger">{{ $message }}</p>
+                                    <p class="text-danger">{{ $message }}</p>
                                 @enderror
                                 <div class="col-12">
                                     <div class="forgot-box">
@@ -122,9 +82,10 @@
                                     </div>
                                 </div>
 
+
                                 <div class="col-12">
-                                    <button class="btn btn-animation w-100 justify-content-center" type="submit">Send
-                                        Link</button>
+                                    <button class="btn btn-animation w-100 justify-content-center"
+                                        type="submit">Gửi</button>
                                 </div>
                             </form>
                         </div>
@@ -140,15 +101,10 @@
     </section>
     <!-- log in section end -->
 
-    <!-- Footer Section Start -->
-
-
-
-    <!-- Tap to top and theme setting button end -->
-
     <!-- Bg overlay Start -->
     <div class="bg-overlay"></div>
     <!-- Bg overlay End -->
+<<<<<<< HEAD
 
     <script>
         window.addEventListener('load', function () {
@@ -162,15 +118,19 @@
             }
         });
     </script>
+=======
+>>>>>>> origin/main
 </body>
 
-
-<!-- Mirrored from themes.pixelstrap.com/fastkart/front-end/login.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 11 Feb 2025 13:59:13 GMT -->
 </html>
 
 @section('js')
+<<<<<<< HEAD
 
 <script src="{{ asset('assets/js/config.js') }}"></script>
+=======
+    <script src="{{ asset('assets/js/config.js') }}"></script>
+>>>>>>> origin/main
 
     <!-- bootstrap tag-input js -->
     <script src="{{ asset('assets/js/bootstrap-tagsinput.min.js') }}"></script>

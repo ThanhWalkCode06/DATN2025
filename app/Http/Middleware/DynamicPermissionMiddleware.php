@@ -21,6 +21,10 @@ class DynamicPermissionMiddleware
         if (!$user) {
             abort(403);
         }
+        // Nếu user là admin, bỏ qua kiểm tra quyền
+        if ($user->hasRole('SuperAdmin')) {
+            return $next($request);
+        }
 
         // Lấy tên route hiện tại
         $routeName = $request->route()->getName();
@@ -31,10 +35,7 @@ class DynamicPermissionMiddleware
         // Chuyển đổi route thành quyền
         $permission = $this->convertRouteToPermission($routeName);
 
-        // Nếu user là admin, bỏ qua kiểm tra quyền
-        if ($user->hasRole('SuperAdmin')) {
-            return $next($request);
-        }
+
 
         // Kiểm tra quyền
         if (!$user->hasPermissionTo($permission)) {
@@ -50,7 +51,7 @@ class DynamicPermissionMiddleware
                 $model = $modelClass::find($resourceId);
                 // dd($model,$resourceId,$resourceName);
                 if (!$model || $model->user_id !== $user->id) {
-                    session()->flash('error','Bạn không có quyền xóa ');
+                    session()->flash('error','Chỉ có người tạo hoặc superAdmin mới có quyền xóa ');
                     return redirect()->back();
                 }
             }
@@ -88,6 +89,7 @@ class DynamicPermissionMiddleware
     private function getModelClassFromRoute($routeName)
     {
         $map = [
+            // 'danhmucsanphams'    => \App\Models\BaiViet::class,
             'baiviets'    => \App\Models\BaiViet::class,
             // 'users'    => \App\Models\User::class,
             // 'phieugiamgias' => \App\Models\PhieuGiamGia::class,

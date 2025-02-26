@@ -1,88 +1,102 @@
 @extends('layouts.admin')
 
-@section('title')
-    Bài viết
-@endsection
+@section('title', 'Chi Tiết Bài Viết')
 
-@section('page-title')
-    Chi tiết bài viết
-@endsection
 @section('css')
-    <!-- remixicon css -->
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/remixicon.css') }}">
-
-    <!-- Data Table css -->
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/datatables.css') }}">
-
     <!-- Themify icon css -->
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/themify.css') }}">
+
+    <!-- Dropzon css -->
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/dropzone.css') }}">
 
     <!-- Feather icon css -->
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/feather-icon.css') }}">
 
+    <!-- remixicon css -->
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/remixicon.css') }}">
+
+    <!-- Select2 css -->
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/select2.min.css') }}">
+
     <!-- Plugins css -->
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/scrollbar.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/animate.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/chartist.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/date-picker.css') }}">
 
     <!-- Bootstrap css -->
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/bootstrap.css') }}">
+
+    <!-- Bootstrap-tag input css -->
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/bootstrap-tagsinput.css') }}">
 
     <!-- App css -->
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css') }}">
 @endsection
 
 @section('content')
-    <div class="col-sm-12">
-        <div class="card card-table">
-            <!-- Table Start -->
-            <div class="card-body">
-                <div class="row gy-4">
-                    <div class="col-md-12">
-                        <div class="mt-3">
-                            <label class="form-label">ID:</label>
-                            <span>01</span>
+    <div class="container mt-4">
+        <div class="card shadow-lg border-0">
+            <div class="card-header bg-primary text-white text-center">
+                <h3 class="mb-0">📖 Chi Tiết Bài Viết</h3>
+            </div>
+            <div class="card-body p-4">
+                <div class="row">
+                    <!-- Cột trái -->
+                    <div class="col-md-8">
+                        <div class="mb-3">
+                            <h5><i class="ri-user-line"></i> Người Viết:</h5>
+                            <p class="text-muted">{{ $baiViet->user->name }} ({{ $baiViet->user->email }})</p>
                         </div>
-                        <div class="mt-3">
-                            <label class="form-label">Tiêu Đề bài viết:</label>
-                            <span>Tin tức mới nhất</span>
+                        <div class="mb-3">
+                            <h5><i class="ri-book-2-line"></i> Tiêu Đề:</h5>
+                            <p class="fw-bold">{{ $baiViet->tieu_de }}</p>
                         </div>
-                        <div class="mt-3">
-                            <label class="form-label">Hình ảnh:</label>
-                            <div>
-                                <img src="https://aothudong.com/upload/product/atd-422/bo-ao-khoac-gio-nam-lot-long-den.jpg"
-                                    alt="Hình ảnh tài khoản" class="img-thumbnail" width="150">
-                            </div>
+                        <div class="mb-3">
+                            <h5><i class="ri-folder-line"></i> Danh Mục:</h5>
+                            <p class="text-dark fw-bold">{{ $baiViet->danhMuc->ten_danh_muc }}</p>
                         </div>
-                        <div class="mt-3">
-                            <label class="form-label">Danh Mục bài viết:</label>
-                            <span>Tin tức mới nhất</span>
+                        <div class="mb-3">
+                            <h5><i class="ri-file-text-line"></i> Nội Dung:</h5>
+                            <p class="text-muted">{!! nl2br(e($baiViet->noi_dung)) !!}</p>
                         </div>
-                        <div class="mt-3">
-                            <label for="description" class="form-label fw-bold">Nội dung:</label>
-                            <textarea id="description" class="form-control" rows="10">Cách làm sạch áo phao lông vũ không cần giặtKhông khí lạnh đã tràn về và nhiệt độ giảm mạnh, đã đến lúc phải mang áo phao trong tủ ra mặc.Áo phao lông vũ rất dễ bị ố và có mùi hôi khi mặc, đặc biệt là vào mùa đông lạnh giá những vấn đề này càng lộ rõ. Nhiều người giặt trong nước hoặc tốn tiền cho đi tiệm giặt khô.Song giặt khô hay giặt nước thường xuyên đều có thể ảnh hưởng đến độ ấm và vẻ ngoài của áo.Vậy chúng ta nên làm gì khi áo khoác ngoài bị bẩn? Có một mẹo rất đơn giản bạn nên áp dụng.</textarea>
-                        </div>
-                        <a href="{{ route('baiviets.index') }}" class="btn btn-secondary">Quay lại</a>
+                    </div>
+
+                    <!-- Cột phải -->
+                    <div class="col-md-4 text-center">
+                        <h5><i class="ri-image-line"></i> Ảnh Bìa:</h5>
+                        <img src="{{ asset('storage/' . $baiViet->anh_bia) }}" class="img-fluid rounded shadow-lg" style="max-width: 100%; height: auto;">
                     </div>
                 </div>
             </div>
+            <div class="card-footer text-end">
+                <a href="{{ route('baiviets.index') }}" class="btn btn-outline-primary">
+                    <i class="ri-arrow-go-back-line"></i> Quay lại
+                </a>
+            </div>
         </div>
     </div>
-</div>
 @endsection
 @section('js')
-    <!-- customizer js -->
-    <script src="{{ asset('assets/js/customizer.js') }}"></script>
-
     <!-- Sidebar js -->
     <script src="{{ asset('assets/js/config.js') }}"></script>
 
-    <!-- Plugins js -->
+    <!-- bootstrap tag-input js -->
+    <script src="{{ asset('assets/js/bootstrap-tagsinput.min.js') }}"></script>
     <script src="{{ asset('assets/js/sidebar-menu.js') }}"></script>
 
-    <!-- Data table js -->
-    <script src="{{ asset('assets/js/jquery.dataTables.js') }}"></script>
-    <script src="{{ asset('assets/js/custom-data-table.js') }}"></script>
+    <!-- customizer js -->
+    <script src="{{ asset('assets/js/customizer.js') }}"></script>
 
-    <!-- all checkbox select js -->
-    <script src="{{ asset('assets/js/checkbox-all-check.js') }}"></script>
+    <!-- Dropzon js -->
+    <script src="{{ asset('assets/js/dropzone/dropzone.js') }}"></script>
+    <script src="{{ asset('assets/js/dropzone/dropzone-script.js') }}"></script>
+
+    <!-- ck editor js -->
+    <script src="{{ asset('assets/js/ckeditor.js') }}"></script>
+    <script src="{{ asset('assets/js/ckeditor-custom.js') }}"></script>
+
+    <!-- select2 js -->
+    <script src="{{ asset('assets/js/select2.min.js') }}"></script>
+    <script src="{{ asset('assets/js/select2-custom.js') }}"></script>
 @endsection

@@ -54,7 +54,7 @@
                                             <label class="form-label-title col-lg-2 col-md-3 mb-0">Tên tài khoản</label>
                                             <div class="col-md-9 col-lg-10">
                                                 <input style="border: 1px solid #ced4da;" class="form-control @error('name') is-invalid @enderror" type="text" name="name"
-                                                value="{{ $itemId->name }}" readonly>
+                                                value="{{ $itemId->username }}" readonly>
                                                 @error('name')
                                             <p class="text-danger">{{ $message }}</p>
                                             @enderror

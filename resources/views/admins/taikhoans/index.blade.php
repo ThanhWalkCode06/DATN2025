@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('title')
-    Biến thể
+    Tài khoản
 @endsection
 
 @section('css')
@@ -91,16 +91,11 @@
 
                                     <td>
                                         <ul>
-                                            <li>
-                                                <a href="{{ route('users.show', $item->id) }}">
-                                                    <i class="ri-eye-line"></i>
-                                                </a>
-                                            </li>
 
 
 
-
-                                            @if ($item->roles->pluck('name')->first() == Auth()->user()->roles->pluck('name')->first())
+                                            @if ($item->roles->pluck('name')->first() == Auth()->user()->roles->pluck('name')->first()
+                                            || $item->roles->pluck('name')->first() == 'SuperAdmin')
 
                                             @else
                                             @can('users-update', $item->id)
@@ -122,6 +117,15 @@
                                                 </form>
                                             </li>
                                             @endcan
+
+                                            @can('users-view', $item->id)
+                                            <li>
+                                                <a href="{{ route('users.show', $item->id) }}">
+                                                    <i class="ri-eye-line"></i>
+                                                </a>
+                                            </li>
+                                            @endcan
+
                                             @endif
 
 
@@ -138,7 +142,7 @@
             </div>
         </div>
     </div>
-    {{-- {{ $lists->onEachSide(5)->links("pagination::bootstrap-5") }} --}}
+    {{ $lists->links("pagination::bootstrap-5") }}
 @endsection
 
 @section('js')

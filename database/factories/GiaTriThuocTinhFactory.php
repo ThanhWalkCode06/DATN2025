@@ -17,7 +17,8 @@ class GiaTriThuocTinhFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'thuoc_tinh_id' => $this->faker->numberBetween(1, 5),
+            'gia_tri' => $this->faker->word()
         ];
     }
 }

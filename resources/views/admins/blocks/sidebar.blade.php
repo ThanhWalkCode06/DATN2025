@@ -43,11 +43,11 @@
                         </a>
                         <ul class="sidebar-submenu">
                             <li>
-                                <a href="{{ route('danhmucs.index') }}">Danh sách</a>
+                                <a href="{{ route('danhmucsanphams.index') }}">Danh sách</a>
                             </li>
 
                             <li>
-                                <a href="{{ route('danhmucs.create') }}">Thêm mới</a>
+                                <a href="{{ route('danhmucsanphams.create') }}">Thêm mới</a>
                             </li>
                         </ul>
                     </li>
@@ -110,35 +110,35 @@
                     @endhaspermission
 
                     @role('SuperAdmin')
-                    <li class="sidebar-list">
-                        <a class="sidebar-link sidebar-title" href="javascript:void(0)">
-                            <i class="ri-user-3-line"></i>
-                            <span>Vai trò</span>
-                        </a>
-                        <ul class="sidebar-submenu">
-                            <li>
-                                <a href="{{ route('roles.index') }}">Danh sách</a>
-                            </li>
-                            <li>
-                                <a href="{{ route('roles.create') }}">Thêm mới</a>
-                            </li>
-                        </ul>
-                    </li>
+                        <li class="sidebar-list">
+                            <a class="sidebar-link sidebar-title" href="javascript:void(0)">
+                                <i class="ri-user-3-line"></i>
+                                <span>Vai trò</span>
+                            </a>
+                            <ul class="sidebar-submenu">
+                                <li>
+                                    <a href="{{ route('roles.index') }}">Danh sách</a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('roles.create') }}">Thêm mới</a>
+                                </li>
+                            </ul>
+                        </li>
 
-                    <li class="sidebar-list">
-                        <a class="sidebar-link sidebar-title" href="javascript:void(0)">
-                            <i class="ri-chat-smile-3-line"></i>
-                            <span>Quyền</span>
-                        </a>
-                        <ul class="sidebar-submenu">
-                            <li>
-                                <a href="{{ route('permissions.index') }}">Danh sách</a>
-                            </li>
-                            <li>
-                                <a href="{{ route('permissions.create') }}">Thêm mới</a>
-                            </li>
-                        </ul>
-                    </li>
+                        <li class="sidebar-list">
+                            <a class="sidebar-link sidebar-title" href="javascript:void(0)">
+                                <i class="ri-chat-smile-3-line"></i>
+                                <span>Quyền</span>
+                            </a>
+                            <ul class="sidebar-submenu">
+                                <li>
+                                    <a href="{{ route('permissions.index') }}">Danh sách</a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('permissions.create') }}">Thêm mới</a>
+                                </li>
+                            </ul>
+                        </li>
                     @endrole
 
                     <li class="sidebar-list">
@@ -150,6 +150,23 @@
 
                     <li class="sidebar-list">
                         <a class="linear-icon-link sidebar-link sidebar-title " href="javascript:void(0)">
+                            <i class="ri-list-check-2"></i>
+                            <span>Danh Mục Bài Viết</span>
+                        </a>
+                        <ul class="sidebar-submenu">
+                            <li>
+                                <a href="{{ route('danhmucbaiviets.index') }}">Danh sách</a>
+                            </li>
+
+                            <li>
+                                <a href="{{ route('danhmucbaiviets.create') }}">Thêm mới</a>
+                            </li>
+                        </ul>
+                    </li>
+
+
+                    <li class="sidebar-list">
+                        <a class="linear-icon-link sidebar-link sidebar-title" href="javascript:void(0)">
                             <i class="ri-book-2-line"></i>
                             <span>Bài viết</span>
                         </a>

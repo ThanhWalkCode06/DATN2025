@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\ThuocTinh;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -13,13 +14,6 @@ class ThuocTinhSeeder extends Seeder
      */
     public function run(): void
     {
-        for ($i=1; $i <=5; $i++) { 
-            DB::table('thuoc_tinhs')->insert([
-              
-                'id'=> "$i",
-                'ten_thuoc_tinh'=>"S",
-               
-            ]);
-        }
+        ThuocTinh::factory()->count(5)->create();
     }
 }

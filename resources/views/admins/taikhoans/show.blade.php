@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('title')
-    Sửa tài khoản
+    Xem tài khoản
 @endsection
 
 @section('css')
@@ -43,12 +43,12 @@
                     <div class="row align-items-center">
                         <div class="col-md-6 text-center">
                             <img src="{{ asset(Storage::url($user->anh_dai_dien)) }}" alt="Hình ảnh tài khoản" class="rounded-circle border shadow-lg" width="180">
-                            <h5 class="mt-3 text-primary h5">{{ $user->name }}</h5>
+                            <h5 class="mt-3 text-primary h5">{{ $user->username }}</h5>
                             <span class="badge bg-danger ">{{ $user->roles->pluck('name')->first() ?? 'Khách hàng' }}</span>
                         </div>
                         <div class="col-md-6">
                             <ul class="list-group list-group-flush">
-                                <li class="list-group-item"><strong>ID:</strong> {{ $user->name }}</li>
+                                <li class="list-group-item"><strong>ID:</strong> {{ $user->id }}</li>
                                 <li class="list-group-item"><strong>Email:</strong>{{ $user->email }}</li>
                                 <li class="list-group-item"><strong>Số điện thoại:</strong> {{ $user->so_dien_thoai }}</li>
                                 <li class="list-group-item"><strong>Ngày sinh:</strong> {{ $user->ngay_sinh }}</li>

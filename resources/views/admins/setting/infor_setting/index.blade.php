@@ -20,7 +20,7 @@
                                     <div class=" mb-4 row align-items-center">
                                         <label class="form-label-title col-sm-2 mb-0">Tên tài khoản</label>
                                         <div class="col-sm-8">
-                                            <input style="border: 1px solid #ced4da;"  class="form-control" type="text" value="{{ $user->name }}" readonly>
+                                            <input style="border: 1px solid #ced4da;"  class="form-control" type="text" value="{{ $user->username }}" readonly>
                                         </div>
                                     </div>
 

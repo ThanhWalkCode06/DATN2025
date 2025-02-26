@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('danh_muc_san_phams', function (Blueprint $table) {
             $table->id();
             $table->string('ten_danh_muc');
-            $table->string('anh_danh_muc')->nullable();
+            $table->string('anh_danh_muc')->default('default.png');
             $table->text('mo_ta')->nullable();
             $table->timestamps();
             $table->softDeletes();
