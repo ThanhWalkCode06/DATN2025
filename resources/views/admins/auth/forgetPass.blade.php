@@ -29,14 +29,31 @@
 <!-- App css -->
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css') }}">
 
+<<<<<<< HEAD
+    <!-- App css -->
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/load.css') }}">
 <body>
+
+    <div class="fullpage-loader">
+        <span></span>
+        <span></span>
+        {{-- <span></span>
+        {{-- <span></span> --}}
+        <span></span>
+        <span></span>
+    </div>
+
+=======
+<body>
+>>>>>>> origin/main
     <!-- log in section start -->
     <section class="log-in-section background-image-2 section-b-space">
         <div class="container-fluid-lg w-100">
             <div class="row">
                 <div class="col-xxl-6 col-xl-5 col-lg-6 d-lg-block d-none ms-auto">
                     <div class="image-contain">
-                        <img src="{{ asset('assets/images/inner-page/log-in.png') }}" class="img-fluid" alt="">
+                        <img src="{{ asset('assets/images/3275432.png') }}" class="img-fluid" alt="">
                     </div>
                 </div>
 
@@ -57,14 +74,17 @@
                                             placeholder="Email Address">
                                         <label for="email">Email</label>
                                     </div>
+
                                 </div>
                                 @error('email')
                                     <p class="text-danger">{{ $message }}</p>
                                 @enderror
-
-                                @error('error')
-                                    <p class="text-danger">{{ $message }}</p>
-                                @enderror
+                                <div class="col-12">
+                                    <div class="forgot-box">
+                                        <label for=""></label>
+                                        <a style="float: right" href="{{ route('login')}}" class="forgot-password">Back home</a>
+                                    </div>
+                                </div>
 
                                 <div class="col-12">
                                     <button class="btn btn-animation w-100 justify-content-center"
@@ -87,11 +107,40 @@
     <!-- Bg overlay Start -->
     <div class="bg-overlay"></div>
     <!-- Bg overlay End -->
+<<<<<<< HEAD
+<<<<<<< HEAD
+
+    <script>
+        window.addEventListener('load', function () {
+            let loader = document.querySelector('.fullpage-loader');
+            console.log(loader)
+            if (loader) { // Kiểm tra loader có tồn tại không
+                loader.style.opacity = '0';
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                }, 500); // Ẩn hẳn sau 0.5 giây
+            }
+        });
+    </script>
+=======
+>>>>>>> origin/main
+=======
+>>>>>>> origin/main
 </body>
 
 </html>
+
 @section('js')
+<<<<<<< HEAD
+<<<<<<< HEAD
+
+<script src="{{ asset('assets/js/config.js') }}"></script>
+=======
     <script src="{{ asset('assets/js/config.js') }}"></script>
+>>>>>>> origin/main
+=======
+    <script src="{{ asset('assets/js/config.js') }}"></script>
+>>>>>>> origin/main
 
     <!-- bootstrap tag-input js -->
     <script src="{{ asset('assets/js/bootstrap-tagsinput.min.js') }}"></script>

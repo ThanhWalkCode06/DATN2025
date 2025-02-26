@@ -1,3 +1,4 @@
+
 @section('js')
 @endsection
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/themify.css') }}">
@@ -26,11 +27,19 @@
 <!-- Bootstrap-tag input css -->
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/bootstrap-tagsinput.css') }}">
 
-<!-- App css -->
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css') }}">
-
+    <!-- App css -->
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/load.css') }}">
 <body>
-    <!-- log in section start -->
+
+    <div class="fullpage-loader">
+        <span></span>
+        <span></span>
+        {{-- <span></span>
+        {{-- <span></span> --}}
+        <span></span>
+        <span></span>
+    </div>
     <section class="log-in-section background-image-2 section-b-space">
         <div class="container-fluid-lg w-100">
             <div class="row">
@@ -117,6 +126,18 @@
 </body>
 
 </html>
+<script>
+    window.addEventListener('load', function () {
+        let loader = document.querySelector('.fullpage-loader');
+        console.log(loader)
+        if (loader) { // Kiểm tra loader có tồn tại không
+            loader.style.opacity = '0';
+            setTimeout(() => {
+                loader.style.display = 'none';
+            }, 500); // Ẩn hẳn sau 0.5 giây
+        }
+    });
+</script>
 @section('js')
     <script src="{{ asset('assets/js/config.js') }}"></script>
 

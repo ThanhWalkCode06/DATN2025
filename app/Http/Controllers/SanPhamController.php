@@ -9,9 +9,7 @@ use App\Http\Requests\UpdateSanPhamRequest;
 
 class SanPhamController extends Controller
 {
-    /**  
-     * Display a listing of the resource.  
-     */
+
     public function index()
     {
         $sanPhams = SanPham::with(['danhMuc'])->get();
@@ -20,17 +18,17 @@ class SanPhamController extends Controller
         return view('admins.sanphams.index', compact('sanPhams', 'danhMucs'));
     }
 
-    /**  
-     * Show the form for creating a new resource.  
+    /**
+     * Show the form for creating a new resource.
      */
     public function create()
     {
-        $danhMucs = DanhMucSanPham::all(); 
+        $danhMucs = DanhMucSanPham::all();
         return view('admins.sanphams.create', compact('danhMucs'));
     }
 
-    /**  
-     * Store a newly created resource in storage.  
+    /**
+     * Store a newly created resource in storage.
      */
     public function store(StoreSanPhamRequest $request)
     {
@@ -40,9 +38,9 @@ class SanPhamController extends Controller
 
             $filePath = $file->storeAs('uploads/sanphams', $fileName, 'public');
 
-            $hinhAnhPath = $filePath; 
+            $hinhAnhPath = $filePath;
         } else {
-            $hinhAnhPath = null;  
+            $hinhAnhPath = null;
         }
 
         SanPham::create([
@@ -58,8 +56,8 @@ class SanPhamController extends Controller
         return redirect()->route('sanphams.index')->with('success', 'Sản phẩm đã được thêm thành công.');
     }
 
-    /**  
-     * Display the specified resource.  
+    /**
+     * Display the specified resource.
      */
     public function show($id)
     {
@@ -67,8 +65,8 @@ class SanPhamController extends Controller
         return view('admins.sanphams.show', compact('sanPham'));
     }
 
-    /**  
-     * Show the form for editing the specified resource.  
+    /**
+     * Show the form for editing the specified resource.
      */
     public function edit($id)
     {
@@ -76,32 +74,32 @@ class SanPhamController extends Controller
         $danhMucs = DanhMucSanPham::all();
         return view('admins.sanphams.edit', compact('sanpham', 'danhMucs'));
     }
-    
-    /**  
-     * Update the specified resource in storage.  
+
+    /**
+     * Update the specified resource in storage.
      */
     public function update(UpdateSanPhamRequest $request, $id)
     {
         $sanPham = SanPham::findOrFail($id);
         $data = $request->validated();
-        
+
         if ($request->hasFile('hinh_anh')) {
             $file = $request->file('hinh_anh');
             $fileName = time() . '.' . $file->getClientOriginalExtension();
-        
+
             $filePath = $file->storeAs('uploads/sanphams', $fileName, 'public');
-        
-            $data['hinh_anh'] = $filePath; 
+
+            $data['hinh_anh'] = $filePath;
         }
         $sanPham->update($data);
-    
+
         return redirect()->route('sanphams.index')->with('success', 'Sản phẩm đã được cập nhật thành công.');
     }
-    
 
 
-    /**  
-     * Remove the specified resource from storage.  
+
+    /**
+     * Remove the specified resource from storage.
      */
     public function destroy($id)
 {

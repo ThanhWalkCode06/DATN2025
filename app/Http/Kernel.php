@@ -61,6 +61,10 @@ class Kernel extends HttpKernel
         'role_or_permission' => RoleOrPermissionMiddleware::class,
 
         'auth' => \App\Http\Middleware\Authenticate::class,
+        'checkStatus' => \App\Http\Middleware\CheckUserStatus::class,
+        'dynamic' => \App\Http\Middleware\DynamicPermissionMiddleware::class,
+        // 'check.permission' => \App\Http\Middleware\CheckPermission::class,
+
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'auth.session' => \Illuminate\Session\Middleware\AuthenticateSession::class,
         'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,

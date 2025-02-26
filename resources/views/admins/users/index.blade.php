@@ -123,7 +123,7 @@
             </div>
         </div>
     </div>
-    {{-- {{ $lists->onEachSide(5)->links("pagination::bootstrap-5") }} --}}
+    {{ $lists->links("pagination::bootstrap-5") }}
 @endsection
 
 @section('js')

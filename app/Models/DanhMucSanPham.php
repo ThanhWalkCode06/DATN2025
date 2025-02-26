@@ -1,22 +1,23 @@
-<?php 
- 
-namespace App\Models;  
+<?php
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;  
-use Illuminate\Database\Eloquent\Model;  
+namespace App\Models;
 
-class DanhMucSanPham extends Model  
-{  
-    use HasFactory;  
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
-    protected $fillable = [  
-        'ten_danh_muc',  
-        'anh_danh_muc',  
-        'mo_ta',  
-    ];  
 
-    public function sanPhams()  
-    {  
-        return $this->hasMany(SanPham::class, 'danh_muc_id', 'id');  
-    }  
+class DanhMucSanPham extends Model
+{
+    use HasFactory;
+
+    protected $fillable = [
+        'ten_danh_muc',
+        'anh_danh_muc',
+        'mo_ta',
+    ];
+
+    public function sanPhams()
+    {
+        return $this->hasMany(SanPham::class, 'danh_muc_id', 'id');
+    }
 }

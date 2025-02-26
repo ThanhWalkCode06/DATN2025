@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('title')
-    Biến thể
+Danh sách quyền
 @endsection
 
 @section('css')

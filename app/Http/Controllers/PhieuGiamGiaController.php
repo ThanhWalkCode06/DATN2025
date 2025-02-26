@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 
 class PhieuGiamGiaController extends Controller
 {
+    public function __construct()
+    {
+    }
     /**
      * Hiển thị danh sách phiếu giảm giá.
      */

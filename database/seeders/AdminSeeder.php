@@ -19,7 +19,6 @@ class AdminSeeder extends Seeder
         $user = User::updateOrCreate(
             [
                 'username' => 'admin',
-                'name' => 'SevenStars',
                 'password' => Hash::make('123456'), // Mật khẩu nên mã hóa
                 'email' => 'thanhnguyen062004@gmail.com',
                 'so_dien_thoai' => '0987654321'

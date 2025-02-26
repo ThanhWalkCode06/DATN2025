@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('title')
-    Vai trò
+    Tài khoản
 @endsection
 
 @section('css')
@@ -34,9 +34,9 @@
         <div class="card card-table">
             <div class="card-body">
                 <div class="title-header option-title">
-                    <h5>Danh sách vai trò </h5>
+                    <h5>Danh sách người dùng </h5>
                     <form class="d-inline-flex">
-                        <a href="{{route('roles.create')}}" class="align-items-center btn btn-theme d-flex">
+                        <a href="{{route('users.create')}}" class="align-items-center btn btn-theme d-flex">
                             <i data-feather="plus-square"></i>Thêm mới
                         </a>
                     </form>
@@ -55,13 +55,16 @@
                                         <span>STT</span>
                                     </div>
                                 </th>
-                                <th>Tên vai trò</th>
+                                <th>Tên tài khoản</th>
+                                <th>email</th>
+                                <th>Ảnh</th>
+                                <th>Trạng thái</th>
                                 <th>Hành động</th>
                             </tr>
                         </thead>
 
                         <tbody>
-                        @if($lists != null)
+                        @if(@$lists)
                             @foreach ( $lists as $key => $item)
                                 <tr class="justify-content-center">
                                     <td>
@@ -74,30 +77,58 @@
                                         </div>
                                     </td>
 
-                                    <td>{{ $item->name }}</td>
+                                    <td>{{ $item->username }}</td>
+
+                                    <td>{{ $item->email }}</td>
+
+                                    <td>
+                                        <img style="width:100px;height:100px" src="{{ Storage::url($item->anh_dai_dien) }}" alt="">
+                                    </td>
+
+                                    <td class="{{ $item->trang_thai == 1 ? 'status-close' : 'status-danger' }}">
+                                        <span>{{ $item->trang_thai == 1 ? 'Hoạt động' : 'Không hoạt động' }}</span>
+                                    </td>
 
                                     <td>
                                         <ul>
-                                            @if($item->name != 'SuperAdmin')
+
+
+
+                                            @if ($item->roles->pluck('name')->first() == Auth()->user()->roles->pluck('name')->first()
+                                            || $item->roles->pluck('name')->first() == 'SuperAdmin')
+
+                                            @else
+                                            @can('users-update', $item->id)
                                             <li>
-                                                <a href="{{ route('roles.edit', $item->id) }}">
+                                                <a href="{{ route('users.edit', $item->id) }}">
                                                     <i class="ri-pencil-line"></i>
                                                 </a>
                                             </li>
-                                            @endif
-
+                                            @endcan
+                                            @can('users-delete', $item->id)
                                             <li>
-                                                @if($item->name != 'SuperAdmin')
                                                 <a href="#" onclick="confirmDelete(event, {{ $item->id }})">
                                                     <i class="ri-delete-bin-line"></i>
                                                 </a>
-                                                @endif
 
-                                                <form id="delete-form-{{ $item->id }}" action="{{ route('roles.destroy', $item->id) }}" method="POST" style="display: none;">
+                                                <form id="delete-form-{{ $item->id }}" action="{{ route('users.destroy', $item->id) }}" method="POST" style="display: none;">
                                                     @csrf
                                                     @method('DELETE')
                                                 </form>
                                             </li>
+                                            @endcan
+
+                                            @can('users-view', $item->id)
+                                            <li>
+                                                <a href="{{ route('users.show', $item->id) }}">
+                                                    <i class="ri-eye-line"></i>
+                                                </a>
+                                            </li>
+                                            @endcan
+
+                                            @endif
+
+
                                         </ul>
                                     </td>
                                 </tr>
@@ -111,7 +142,7 @@
             </div>
         </div>
     </div>
-    {{ $lists->onEachSide(5)->links("pagination::bootstrap-5") }}
+    {{ $lists->links("pagination::bootstrap-5") }}
 @endsection
 
 @section('js')
