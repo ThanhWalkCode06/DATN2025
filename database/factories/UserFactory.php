@@ -28,7 +28,7 @@ class UserFactory extends Factory
             'password' => static::$password ??= Hash::make('password'),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
-            'name' => fake()->name(),
+            'ten_nguoi_dung' => fake()->name(),
             'gioi_tinh' => $this->faker->numberBetween(0, 1),
             'ngay_sinh' => $this->faker->dateTime(),
             'so_dien_thoai' => $this->faker->phoneNumber(),

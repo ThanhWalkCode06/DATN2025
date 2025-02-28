@@ -126,7 +126,7 @@
                                     <h4>Thông tin đơn hàng</h4>
                                     <ul class="order-details">
                                         <li>Mã đơn hàng: {{ $donHang->ma_don_hang }}</li>
-                                        <li>Người đặt: {{ $donHang->name }}</li>
+                                        <li>Người đặt: {{ $donHang->ten_nguoi_dung }}</li>
                                         <li>Ngày đặt hàng: {{ $donHang->created_at }}</li>
                                         <li>Tổng tiền: {{ $donHang->tong_tien }}</li>
                                         <li>Hình thức thanh toán: {{ $donHang->ten_phuong_thuc }}</li>

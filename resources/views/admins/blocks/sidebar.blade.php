@@ -91,22 +91,22 @@
                     </li>
 
                     @haspermission('users-view')
-                    <li class="sidebar-list">
-                        <a class="sidebar-link sidebar-title" href="javascript:void(0)">
-                            <i class="ri-user-3-line"></i>
-                            <span>Tài khoản</span>
-                        </a>
-                        <ul class="sidebar-submenu">
-                            <li>
-                                <a href="{{ route('users.index') }}">Danh sách</a>
-                            </li>
-                            @haspermission('users-add')
-                            <li>
-                                <a href="{{ route('users.create') }}">Thêm mới</a>
-                            </li>
-                            @endhaspermission
-                        </ul>
-                    </li>
+                        <li class="sidebar-list">
+                            <a class="sidebar-link sidebar-title" href="javascript:void(0)">
+                                <i class="ri-user-3-line"></i>
+                                <span>Tài khoản</span>
+                            </a>
+                            <ul class="sidebar-submenu">
+                                <li>
+                                    <a href="{{ route('users.index') }}">Danh sách</a>
+                                </li>
+                                @haspermission('users-add')
+                                    <li>
+                                        <a href="{{ route('users.create') }}">Thêm mới</a>
+                                    </li>
+                                @endhaspermission
+                            </ul>
+                        </li>
                     @endhaspermission
 
                     @role('SuperAdmin')
@@ -215,7 +215,7 @@
                     </li>
 
                     <li class="sidebar-list">
-                        <a class="sidebar-link sidebar-title link-nav" href="{{ route('danhgia') }}">
+                        <a class="sidebar-link sidebar-title link-nav" href="{{ route('danhgias') }}">
                             <i class="ri-star-line"></i>
                             <span>Đánh giá sản phẩm</span>
                         </a>
@@ -229,13 +229,14 @@
                     </li> --}}
 
                     @can('role:SuperAdmin')
-                    <li class="sidebar-list">
-                        <a href="{{ route('configuration.common')}}" class="linear-icon-link sidebar-link sidebar-title link-nav" >
-                            <i class="ri-settings-line"></i>
-                            <span>Cài đặt</span>
-                        </a>
+                        <li class="sidebar-list">
+                            <a href="{{ route('configuration.common') }}"
+                                class="linear-icon-link sidebar-link sidebar-title link-nav">
+                                <i class="ri-settings-line"></i>
+                                <span>Cài đặt</span>
+                            </a>
 
-                    </li>
+                        </li>
                     @endcan
                 </ul>
             </div>
