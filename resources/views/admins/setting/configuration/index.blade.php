@@ -103,10 +103,10 @@ Cấu hình website
                     <label class="form-label">Số điện thoại</label>
                     <input type="text" name="sdt" class="form-control" value="{{ env('sdt','0387660612') }}">
                 </div>
-                <div class="mb-3">
+                {{-- <div class="mb-3">
                     <label class="form-label">Email website</label>
                     <input type="text" name="email" class="form-control" value="{{ env('email','thanhnguyen062004@gmail.com') }}">
-                </div>
+                </div> --}}
                 <button type="submit" class="btn btn-primary">Lưu Cấu Hình Chung</button>
             </form>
         </div>
