@@ -45,8 +45,13 @@ Route::prefix('admin')->middleware(['auth', 'checkStatus'])->group(function () {
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::match(['post', 'get'], '/setting-infor', [SettingController::class, 'index'])->name('setting-infor.private');
     Route::middleware(['role:SuperAdmin'])->group(function () {
+
+        Route::get('permissions/search', [PermissionController::class, 'search'])->name('permission-search');
         Route::resource('permissions', PermissionController::class);
+
+        Route::get('roles/search', [RoleController::class, 'search'])->name('roles-search');
         Route::resource('roles', RoleController::class);
+
         Route::match(['post', 'get'], '/configuration-mail', [SettingController::class, 'mail'])->name('configuration.setting-mail');
         Route::match(['post', 'get'], '/configuration-common', [SettingController::class, 'common'])->name('configuration.common');
     });
@@ -63,12 +68,13 @@ Route::prefix('admin')->middleware(['auth', 'checkStatus'])->group(function () {
     Route::get("/lienhe", [LienHeController::class, "index"])->name('lienhe');
     Route::get("/danhgias", [DanhGiaController::class, "index"])->name('danhgias');
 
-    // Chức năng thì cho vào đây đánh tên route->name phải giống quyền
 
-    Route::middleware('dynamic')->group(function () {
+    // Chức năng thì cho vào đây đánh tên route->name phải giống quyền lối bởi dấu . nếu thêm
+    Route::middleware('dynamic')->group(function(){
         Route::resource('danhmucsanphams', DanhMucSanPhamController::class);
         Route::resource('sanphams', SanPhamController::class);
         Route::resource('bienthes', BienTheController::class);
+        Route::get('users/search', [UserController::class, 'search'])->name('users.search');
         Route::resource('users', UserController::class);
         Route::resource('thuoctinhs', ThuocTinhController::class);
         Route::resource('donhangs', DonHangController::class);
@@ -76,6 +82,7 @@ Route::prefix('admin')->middleware(['auth', 'checkStatus'])->group(function () {
         Route::resource('danhmucbaiviets', DanhMucBaiVietController::class);
         Route::resource('baiviets', BaiVietController::class);
         Route::resource('phieugiamgias', PhieuGiamGiaController::class);
+        Route::get("/danhgia", [DanhGiaController::class, "index"])->name('danhgia');
     });
 });
 

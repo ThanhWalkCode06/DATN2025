@@ -163,25 +163,6 @@
                             </li>
                         </ul>
                     </li>
-
-
-                    <li class="sidebar-list">
-                        <a class="linear-icon-link sidebar-link sidebar-title" href="javascript:void(0)">
-                            <i class="ri-list-check-2"></i>
-                            <span>Danh Mục Bài Viết</span>
-                        </a>
-                        <ul class="sidebar-submenu">
-                            <li>
-                                <a href="{{ route('danhmucbaiviets.index') }}">Danh sách</a>
-                            </li>
-
-                            <li>
-                                <a href="{{ route('danhmucbaiviets.create') }}">Thêm mới</a>
-                            </li>
-                        </ul>
-                    </li>
-
-
                     <li class="sidebar-list">
                         <a class="linear-icon-link sidebar-link sidebar-title" href="javascript:void(0)">
                             <i class="ri-book-2-line"></i>

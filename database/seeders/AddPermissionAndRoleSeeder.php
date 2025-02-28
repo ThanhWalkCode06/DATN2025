@@ -117,23 +117,43 @@ class AddPermissionAndRoleSeeder extends Seeder
                 'guard_name' => 'web',
             ],
             [
-                'name' => 'danhmucs-view',
+                'name' => 'danhmucsanphams-view',
                 'description' => 'Xem Danh mục sản phẩm',
                 'guard_name' => 'web',
             ],
             [
-                'name' => 'danhmucs-add',
+                'name' => 'danhmucsanphams-add',
                 'description' => 'Thêm Danh mục sản phẩm',
                 'guard_name' => 'web',
             ],
             [
-                'name' => 'danhmucs-update',
+                'name' => 'danhmucsanphams-update',
                 'description' => 'Sửa Danh mục sản phẩm',
                 'guard_name' => 'web',
             ],
             [
-                'name' => 'danhmucs-delete',
+                'name' => 'danhmucsanphams-delete',
                 'description' => 'Xóa Danh mục sản phẩm',
+                'guard_name' => 'web',
+            ],
+            [
+                'name' => 'danhmucbaiviets-view',
+                'description' => 'Xem Danh mục bài viết',
+                'guard_name' => 'web',
+            ],
+            [
+                'name' => 'danhmucbaiviets-add',
+                'description' => 'Thêm Danh mục bài viết',
+                'guard_name' => 'web',
+            ],
+            [
+                'name' => 'danhmucbaiviets-update',
+                'description' => 'Sửa Danh mục bài viết',
+                'guard_name' => 'web',
+            ],
+            [
+                'name' => 'danhmucbaiviets-delete',
+                'description' => 'Xóa Danh mục bài viết',
                 'guard_name' => 'web',
             ],
             [
