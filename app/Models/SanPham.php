@@ -20,11 +20,20 @@ class SanPham extends Model
         'created_at',
         'updated_at'
     ];  
-    
-    
- 
+
     public function danhMuc()  
     {  
         return $this->belongsTo(DanhMucSanPham::class, 'danh_muc_id', 'id'); 
     }  
+
+    public function scopeSearch($query, $search)
+    {
+        if (!empty($search)) {
+            return $query->where(function ($q) use ($search) {
+                $q->where('ten_san_pham', 'like', "%$search%")
+                  ->orWhere('ma_san_pham', 'like', "%$search%");
+            });
+        }
+        return $query;
+    }
 }

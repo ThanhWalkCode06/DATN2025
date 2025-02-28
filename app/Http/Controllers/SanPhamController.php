@@ -1,7 +1,9 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\SanPham;
+use Illuminate\Http\Request;
 use App\Models\DanhMucSanPham;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\StoreSanPhamRequest;
@@ -10,13 +12,19 @@ use App\Http\Requests\UpdateSanPhamRequest;
 class SanPhamController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        $sanPhams = SanPham::with(['danhMuc'])->get();
+        $sanPhams = SanPham::with(['danhMuc'])
+            ->search($request->input('search'))
+            // ->orderBy('created_at', 'desc') 
+            ->latest()
+            ->paginate(10);
 
         $danhMucs = DanhMucSanPham::all();
+
         return view('admins.sanphams.index', compact('sanPhams', 'danhMucs'));
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -102,16 +110,15 @@ class SanPhamController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy($id)
-{
-    $sanpham = SanPham::findOrFail($id);
+    {
+        $sanpham = SanPham::findOrFail($id);
 
-    if ($sanpham->hinh_anh && file_exists(public_path('uploads/' . $sanpham->hinh_anh))) {
-        unlink(public_path('uploads/' . $sanpham->hinh_anh));
+        if ($sanpham->hinh_anh && file_exists(public_path('uploads/' . $sanpham->hinh_anh))) {
+            unlink(public_path('uploads/' . $sanpham->hinh_anh));
+        }
+
+        $sanpham->delete();
+
+        return redirect()->route('sanphams.index')->with('success', 'Sản phẩm đã được xóa thành công!');
     }
-
-    $sanpham->delete();
-
-    return redirect()->route('sanphams.index')->with('success', 'Sản phẩm đã được xóa thành công!');
-}
-
 }
