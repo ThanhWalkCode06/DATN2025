@@ -54,6 +54,7 @@
                                     <th>Hình ảnh</th>
                                     <th>Khuyến mãi</th>
                                     <th>Trạng thái</th>
+                                    <th>Biến thể</th>
                                     <th>Hành động</th>
                                 </tr>
                             </thead>
@@ -72,7 +73,10 @@
                                         <td>
                                             <div class="table-image">
                                                 <img src="{{ asset('storage/' . $sanpham->hinh_anh) }}" class="img-thumbnail" alt="Hình ảnh" width="100px">
+
+
                                             </div>
+                                           
                                         </td>
 
                                         <td>{{ $sanpham->khuyen_mai }}</td>
@@ -86,6 +90,70 @@
                                                 <span class="badge bg-danger-subtle text-danger fs-6">Hết hàng</span>  
                                             @endif  
                                         </td>
+
+                                        <td>
+                                            <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#variant_{{ $sanpham->id }}">
+                                                Xem biến thể
+                                            </button>
+                                        
+                                            <!-- Modal hiển thị biến thể sản phẩm -->
+                                            <div id="variant_{{ $sanpham->id }}" class="modal fade fadeInLeft" tabindex="-1" aria-hidden="true">
+                                                <div class="modal-dialog" style="max-width: 800px !important;">
+                                                    <div class="modal-content">
+                                                        <div class="modal-body text-center p-5">
+                                                            <div class="mt-4">
+                                                                <h4 class="mb-3">Thông tin biến thể của sản phẩm</h4>
+                                                                <h5 class="mb-3">'{{ $sanpham->ten_san_pham }}'</h5>
+                                                                <div class="hstack gap-2 justify-content-center">
+                                                                    <table class="table table-bordered">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <td>#</td>
+                                                                                <td>Tên biến thể</td>
+                                                                                <td>Hình ảnh</td>
+                                                                                <td>Giá nhập</td>
+                                                                                <td>Giá bán</td>
+                                                                                <td>Số lượng</td>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            @if($sanpham->bienThes->isNotEmpty())
+                                                                                @foreach($sanpham->bienThes as $key => $bienThe)
+                                                                                    <tr>
+                                                                                        <td>{{ $key + 1 }}</td>
+                                                                                        <td>{{ $bienThe->ten_bien_the }}</td>
+                                                                                        <td>
+                                                                                            @if ($bienThe->anh_bien_the)
+                                                                                            <img src="{{ asset($bienThe->anh_bien_the) }}" class="img-thumbnail" width="80px">
+
+                                                                                            @else
+                                                                                                Không có ảnh
+                                                                                            @endif
+                                                                                        </td>
+                                                                                        
+                                                                                        <td>{{ number_format($bienThe->gia_nhap, 0, ',', '.') }} VNĐ</td>
+                                                                                        <td>{{ number_format($bienThe->gia_ban, 0, ',', '.') }} VNĐ</td>
+                                                                                        <td>{{ $bienThe->so_luong }}</td>
+                                                                                    </tr>
+                                                                                @endforeach
+                                                                            @else
+                                                                                <tr>
+                                                                                    <td colspan="5" class="text-center">Không có biến thể nào</td>
+                                                                                </tr>
+                                                                            @endif
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Đóng</button>
+                                                        </div>
+                                                    </div><!-- /.modal-content -->
+                                                </div><!-- /.modal-dialog -->
+                                            </div><!-- /.modal -->
+                                        </td>
+                                        
 
                                         <td>
                                             <ul>
