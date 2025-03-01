@@ -131,7 +131,7 @@
                                     <div class="row">  
                                         <label class="form-label-title col-sm-3 mb-0">Mô tả sản phẩm</label>  
                                         <div class="col-sm-9">  
-                                            <textarea id="editor" name="mo_ta">{{ old('mo_ta') }}</textarea>6
+                                            <textarea id="editor" name="mo_ta">{{ old('mo_ta') }}</textarea>
                                         </div>  
                                     </div>  
                                 </div>  
@@ -232,7 +232,7 @@
     <script src="{{ asset('assets/js/config.js') }}"></script>
 
     <!-- bootstrap tag-input js -->
-    <script src="{{ asset('assets/js/bootstrap-tagsinput.min.js') }}"></scrip>
+    <script src="{{ asset('assets/js/bootstrap-tagsinput.min.js') }}"></script>
     <script src="{{ asset('assets/js/sidebar-menu.js') }}"></script>
 
     <!-- customizer js -->
@@ -250,3 +250,5 @@
     <script src="{{ asset('assets/js/select2.min.js') }}"></script>
     <script src="{{ asset('assets/js/select2-custom.js') }}"></script>
 @endsection
+
+

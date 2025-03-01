@@ -17,6 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('san_pham_id');
             $table->tinyInteger('so_sao');
             $table->text('nhan_xet')->nullable();
+            $table->boolean('trang_thai')->default(1);
             $table->timestamps();
             $table->softDeletes();
         });

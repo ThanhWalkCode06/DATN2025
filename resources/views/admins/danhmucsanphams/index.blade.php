@@ -77,8 +77,7 @@
                                         <td>
                                             <div class="table-image">
 
-                                                <img src="{{ Storage::url( $danhMuc->anh_danh_muc) }}"
-
+                                                <img src="{{ Storage::url('' . $danhMuc->anh_danh_muc) }}"
                                                     class="img-thumbnail" alt="Hình ảnh" width="100px">
                                             </div>
                                         </td>
