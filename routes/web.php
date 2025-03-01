@@ -73,7 +73,7 @@ Route::prefix('/admin')->controller(AuthController::class)->group(function () {
         Route::resource('danhmucsanphams', DanhMucSanPhamController::class);
         Route::resource('sanphams', SanPhamController::class);
         Route::resource('bienthes', BienTheController::class);
-        Route::get('users/search', [UserController::class, 'search'])->name('users.search');
+        Route::get('users/search', [UserController::class, 'search'])->name('users-search');
         Route::resource('users', UserController::class);
         Route::resource('thuoctinhs', ThuocTinhController::class);
         Route::resource('donhangs', DonHangController::class);
