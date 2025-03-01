@@ -36,6 +36,7 @@ class SanPhamController extends Controller
      */
     public function store(StoreSanPhamRequest $request)
     {
+       
         // Xử lý upload hình ảnh
         $hinhAnhPath = null;
         if ($request->hasFile('hinh_anh')) {
@@ -74,9 +75,10 @@ class SanPhamController extends Controller
                     }
                 }
                 
-        
+             
                 // Lưu biến thể vào database
                 BienThe::create([
+                    
                     'san_pham_id' => $sanPham->id,
                     'ten_bien_the' => $tenBienThe,
                     'gia_nhap' => $request->gia_nhap[$key],
