@@ -55,13 +55,13 @@
                                 @foreach ($donHangs as $donHang)
                                     <tr data-bs-toggle="offcanvas">
                                         <td>{{ $donHang->ma_don_hang }}</td>
-                                        <td>{{ $donHang->name }}</td>
+                                        <td>{{ $donHang->ten_nguoi_dung }}</td>
                                         <td>{{ $donHang->created_at }}</td>
                                         <td>
                                             @if ($donHang->trang_thai_thanh_toan == 0)
-                                                Chưa thanh toán
+                                                <span class="text-danger">Chưa thanh toán</span>
                                             @else
-                                                Đã thanh toán
+                                                <span class="text-success">Đã thanh toán</span>
                                             @endif
                                         </td>
                                         <td>
@@ -91,7 +91,7 @@
                                                 </li>
 
                                                 <li>
-                                                    <a href="#">
+                                                    <a href="{{ route('donhangs.edit', $donHang->id) }}">
                                                         <i class="ri-pencil-line"></i>
                                                     </a>
                                                 </li>

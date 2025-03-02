@@ -85,7 +85,7 @@
                             </div>
 
 
-                            <button  class="btn btn-solid" type="submit">Tạo Vai Trò</button>
+                            <button  class="btn btn-solid" type="submit">Update Vai Trò</button>
                         </form>
 
                     </div>

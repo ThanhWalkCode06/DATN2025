@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+use App\Models\DanhGia;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -26,7 +28,8 @@ class DatabaseSeeder extends Seeder
             ChiTietDonHangSeeder::class,
             DanhMucBaiVietSeeder::class,
             BaiVietSeeder::class,
-            PhieuGiamGiaSeeder::class
+            PhieuGiamGiaSeeder::class,
+            DanhGiaSeeder::class
         ]);
     }
 }

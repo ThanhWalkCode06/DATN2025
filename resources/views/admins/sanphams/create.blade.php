@@ -316,3 +316,5 @@
     <script src="{{ asset('assets/js/select2.min.js') }}"></script>
     <script src="{{ asset('assets/js/select2-custom.js') }}"></script>
 @endsection
+
+
