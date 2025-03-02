@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BienThe;
 use App\Models\SanPham;
+use App\Models\ThuocTinh;
 use Illuminate\Http\Request;
 use App\Models\DanhMucSanPham;
 use Illuminate\Support\Facades\Storage;
@@ -32,7 +34,8 @@ class SanPhamController extends Controller
     public function create()
     {
         $danhMucs = DanhMucSanPham::all();
-        return view('admins.sanphams.create', compact('danhMucs'));
+        $thuocTinhs = ThuocTinh::with('giaTriThuocTinh')->get(); // Lấy cả giá trị thuộc tính
+        return view('admins.sanphams.create', compact('danhMucs', 'thuocTinhs'));
     }
 
     /**
@@ -40,18 +43,16 @@ class SanPhamController extends Controller
      */
     public function store(StoreSanPhamRequest $request)
     {
+        // Xử lý upload hình ảnh
+        $hinhAnhPath = null;
         if ($request->hasFile('hinh_anh')) {
             $file = $request->file('hinh_anh');
             $fileName = time() . '.' . $file->getClientOriginalExtension();
-
-            $filePath = $file->storeAs('uploads/sanphams', $fileName, 'public');
-
-            $hinhAnhPath = $filePath;
-        } else {
-            $hinhAnhPath = null;
+            $hinhAnhPath = $file->storeAs('uploads/sanphams', $fileName, 'public');
         }
 
-        SanPham::create([
+        // Tạo sản phẩm
+        $sanPham = SanPham::create([
             'ten_san_pham' => $request->ten_san_pham,
             'ma_san_pham' => $request->ma_san_pham,
             'khuyen_mai' => $request->khuyen_mai,
@@ -60,6 +61,46 @@ class SanPhamController extends Controller
             'danh_muc_id' => $request->danh_muc_id,
             'trang_thai' => $request->trang_thai,
         ]);
+
+        if ($request->has('ten_bien_the')) {
+            foreach ($request->ten_bien_the as $key => $tenBienThe) {
+                $hinhAnhBienThe = null;
+        
+                // Kiểm tra file ảnh
+                if ($request->hasFile('anh_bien_the')) {
+                    $files = $request->file('anh_bien_the');
+                
+                    if (isset($files[$key]) && $files[$key]->isValid()) {
+                        $file = $files[$key]; 
+                        $fileName = time() . '_' . $file->getClientOriginalName();
+                        
+                        // Chắc chắn lưu đúng thư mục 'uploads/bienthe/'
+                        $file->move(public_path('uploads/sanphams/'), $fileName);
+                
+                        $hinhAnhBienThe = 'uploads/sanphams/' . $fileName;
+                    }
+                }
+                
+        
+                // Lưu biến thể vào database
+                BienThe::create([
+                    'san_pham_id' => $sanPham->id,
+                    'ten_bien_the' => $tenBienThe,
+                    'gia_nhap' => $request->gia_nhap[$key],
+                    'gia_ban' => $request->gia_ban[$key],
+                    'so_luong' => $request->so_luong[$key],
+                    'thuoc_tinh_id' => $request->thuoc_tinh_id[$key] ?? null,
+                    'gia_tri_thuoc_tinh_id' => $request->gia_tri_thuoc_tinh[$key] ?? null,
+                    'anh_bien_the' => $hinhAnhBienThe, // Lưu đường dẫn ảnh vào database
+                ]);
+            }
+        }
+        
+        
+        
+        
+       
+
 
         return redirect()->route('sanphams.index')->with('success', 'Sản phẩm đã được thêm thành công.');
     }

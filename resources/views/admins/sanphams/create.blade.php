@@ -3,7 +3,6 @@
 @section('title')
     Thêm mới sản phẩm
 @endsection
-
 @section('css')
     <!-- Themify icon css -->
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/themify.css') }}">
@@ -35,7 +34,6 @@
     <!-- App css -->
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css') }}">
 @endsection
-
 @section('content')
     <div class="col-12">
         <div class="row">
@@ -46,188 +44,256 @@
                             <h5>Thêm mới sản phẩm</h5>
                         </div>
 
-                        <form class="theme-form theme-form-2 mega-form" action="{{route('sanphams.store')}}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('sanphams.store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
-                        
+
+                            {{-- Tên sản phẩm --}}
                             <div class="mb-4 row align-items-center">
                                 <label class="form-label-title col-sm-3 mb-0">Tên sản phẩm</label>
                                 <div class="col-sm-9">
-                                    <input class="form-control" type="text" name="ten_san_pham" value="{{ old('ten_san_pham') }}">
-                                    @error('ten_san_pham')
-                                        <div class="text-danger">{{ $message }}</div>
-                                    @enderror
+                                    <input type="text" name="ten_san_pham" class="form-control"
+                                        value="{{ old('ten_san_pham') }}">
+                                    @error('ten_san_pham')                    <div class="text-danger">{{ $message }}</div> @enderror
                                 </div>
                             </div>
-                        
+
+                            {{-- Mã sản phẩm --}}
                             <div class="mb-4 row align-items-center">
                                 <label class="form-label-title col-sm-3 mb-0">Mã sản phẩm</label>
                                 <div class="col-sm-9">
-                                    <input class="form-control" type="text" name="ma_san_pham" value="{{ old('ma_san_pham') }}">
-                                    @error('ma_san_pham')
-                                        <div class="text-danger">{{ $message }}</div>
-                                    @enderror
+                                    <input type="text" name="ma_san_pham" class="form-control"
+                                        value="{{ old('ma_san_pham') }}">
+                                    @error('ma_san_pham')    <div class="text-danger">{{ $message }}</div> @enderror
                                 </div>
                             </div>
-                        
+
+                            {{-- Khuyến mãi --}}
                             <div class="mb-4 row align-items-center">
-                                <label class="form-label-title col-sm-3 mb-0">Khuyến mãi</label>
+                                <label class="form-label-title col-sm-3 mb-0">Khuyến mãi (%)</label>
                                 <div class="col-sm-9">
-                                    <input class="form-control" type="text" name="khuyen_mai" value="{{ old('khuyen_mai') }}">
-                                    @error('khuyen_mai')
-                                        <div class="text-danger">{{ $message }}</div>
-                                    @enderror
+                                    <input type="number" name="khuyen_mai" class="form-control"
+                                        value="{{ old('khuyen_mai', 0) }}" min="0">
+                                    @error('khuyen_mai')                           <div class="text-danger">{{ $message }}</div> @enderror
                                 </div>
                             </div>
-                            {{-- <div class="mb-4 row align-items-center">
-                                <label class="form-label-title col-sm-3 mb-0">Ngày nhập</label>
-                                <div class="col-sm-9">
-                                    <input class="form-control" type="date" name="ngay_nhap" value="{{ old('ngay_nhap') }}">
-                                    @error('ngay_nhap')
-                                        <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div> --}}
+
+                            {{-- Danh mục --}}
                             <div class="mb-4 row align-items-center">
                                 <label class="col-sm-3 col-form-label form-label-title">Danh mục</label>
                                 <div class="col-sm-9">
-                                    <select class="js-example-basic-single w-100" name="danh_muc_id">
+                                    <select class="form-control js-example-basic-single w-100" name="danh_muc_id">
                                         <option disabled selected>Chọn danh mục</option>
                                         @foreach ($danhMucs as $danhMuc)
-                                        <option value="{{ $danhMuc->id }}">{{ $danhMuc->ten_danh_muc }}</option>
-                                    @endforeach
+                                            <option value="{{ $danhMuc->id }}">{{ $danhMuc->ten_danh_muc }}</option>
+                                        @endforeach
                                     </select>
-                                    @error('danh_muc_id')
-                                        <div class="text-danger">{{ $message }}</div>
-                                    @enderror
+                                    @error('danh_muc_id') <div class="text-danger">{{ $message }}</div> @enderror
                                 </div>
                             </div>
-                        
+
+                            {{-- Hình ảnh sản phẩm --}}
                             <div class="mb-4 row align-items-center">
                                 <label class="col-sm-3 col-form-label form-label-title">Hình ảnh</label>
                                 <div class="col-sm-9">
-                                    <input class="form-control form-choose" name="hinh_anh" type="file" id="formFile" multiple>
-                                    @error('hinh_anh')
-                                        <div class="text-danger">{{ $message }}</div>
-                                    @enderror
+                                    <input type="file" name="hinh_anh" class="form-control">
+                                    @error('hinh_anh')                        <div class="text-danger">{{ $message }}</div> @enderror
                                 </div>
                             </div>
-                        
+
+                            {{-- Trạng thái --}}
                             <div class="mb-4 row align-items-center">
-                                <label class="form-label-title col-sm-3 mb-0">Trạng thái</label>
+                                <label class="col-sm-3 col-form-label form-label-title">Trạng thái</label>
                                 <div class="col-sm-9">
-                                    <select class="js-example-basic-single w-100" name="trang_thai">
-                                        <option disabled selected>Chọn trạng thái</option>
+                                    <select name="trang_thai" class="form-control">
                                         <option value="1">Còn hàng</option>
                                         <option value="0">Hết hàng</option>
                                     </select>
-                                    @error('trang_thai')
-                                        <div class="text-danger">{{ $message }}</div>
-                                    @enderror
                                 </div>
                             </div>
-                        
-                            <div class="row">  
-                                <div class="col-12">  
-                                    <div class="row">  
-                                        <label class="form-label-title col-sm-3 mb-0">Mô tả sản phẩm</label>  
-                                        <div class="col-sm-9">  
-                                            <textarea id="editor" name="mo_ta">{{ old('mo_ta') }}</textarea>
-                                        </div>  
-                                    </div>  
-                                </div>  
+
+                            {{-- Mô tả sản phẩm --}}
+                            <div class="mb-4 row">
+                                <label class="col-sm-3 col-form-label form-label-title">Mô tả</label>
+                                <div class="col-sm-9">
+                                    <textarea id="editor" name="mo_ta">{{ old('mo_ta') }}</textarea>
+                                </div>
                             </div>
-                            <br>
-                        
-                            <div class="mb-4 row align-items-center">  
-                                <div class="col-sm-9 offset-sm-3">  
-                                    <button type="submit" class="btn btn-primary">Thêm sản phẩm</button>  
-                                </div>  
-                            </div>  
+
+                            <div class="mb-4">
+                                <label class="form-label-title">Biến thể sản phẩm</label>
+                                <div id="bienTheContainer">
+                                    <div class="row align-items-center mb-2">
+                                        <div class="col-sm-3">
+                                            <input type="text" name="ten_bien_the[]" class="form-control"
+                                                placeholder="Tên biến thể">
+                                        </div>
+                                        <div class="thuocTinhContainer">
+                                            <button type="button" class="btn btn-primary addAttribute">Thêm thuộc
+                                                tính</button>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="anh_bien_the" class="form-label">Ảnh biến thể</label>
+                                            <input type="file" class="form-control" name="anh_bien_the[]"
+                                                accept="image/*">
+                                        </div>
+
+                                        <div class="col-sm-2">
+                                            <input type="number" name="gia_nhap[]" class="form-control"
+                                                placeholder="Giá nhập">
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <input type="number" name="gia_ban[]" class="form-control"
+                                                placeholder="Giá bán">
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <input type="number" name="so_luong[]" class="form-control"
+                                                placeholder="Số lượng">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <button type="button" class="btn btn-danger removeVariant">Xóa</button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <button type="button" class="btn btn-primary" id="addVariant">Thêm biến thể</button>
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col-sm-9 offset-sm-3">
+                                    <button type="submit" class="btn btn-primary">Thêm sản phẩm</button>
+                                </div>
+                            </div>
                         </form>
-                        
-                        
                     </div>
                 </div>
-
-                {{-- <div class="card">
-                    <div class="card-body">
-                        <div class="card-header-2">
-                            <h5>Mô tả</h5>
-                        </div>
-
-                        <form class="theme-form theme-form-2 mega-form">
-                            
-                        </form>
-                    </div>
-                </div> --}}
-
-                {{-- <div class="card">
-                    <div class="card-body">
-                        <div class="card-header-2">
-                            <h5>Hình ảnh</h5>
-                        </div>
-
-                        <form class="theme-form theme-form-2 mega-form">
-                            
-                        </form>
-                    </div>
-                </div> --}}
-
-                {{-- <div class="card">
-                    <div class="card-body">
-                        <div class="card-header-2">
-                            <h5>Biến thể sản phẩm</h5>
-                        </div>
-
-                        <form class="theme-form theme-form-2 mega-form">
-                            <div class="mb-4 row align-items-center">
-                                <label class="form-label-title col-sm-3 mb-0">Option
-                                    Name</label>
-                                <div class="col-sm-9">
-                                    <select class="js-example-basic-single w-100" name="state">
-                                        <option>Color</option>
-                                        <option>Size</option>
-                                        <option>Material</option>
-                                        <option>Style</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="row align-items-center">
-                                <label class="col-sm-3 col-form-label form-label-title">Option
-                                    Value</label>
-                                <div class="col-sm-9">
-                                    <div class="bs-example">
-                                        <input type="text" class="form-control" placeholder="Type tag & hit enter"
-                                            id="#inputTag" data-role="tagsinput">
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-
-
-                    </div>
-                </div> --}}
-
             </div>
         </div>
     </div>
 @endsection
-
-@section('js')
 <script>
-    ClassicEditor
-        .create(document.querySelector('#editor'))
-        .then(editor => {
-            document.querySelector('form').addEventListener('submit', () => {
-                document.querySelector('#editor').value = editor.getData();
-            });
-        })
-        .catch(error => {
-            console.error(error);
-        });
-</script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let thuocTinhs = @json($thuocTinhs);
 
+        // Thêm biến thể mới
+        document.getElementById("addVariant").addEventListener("click", function () {
+            let container = document.createElement("div");
+            container.classList.add("bienThe");
+
+            container.innerHTML = `
+                <div class="row align-items-center mb-2">
+                    <div class="col-sm-3">
+                        <input type="text" name="ten_bien_the[]" class="form-control" placeholder="Tên biến thể">
+                    </div>
+                    <div class="thuocTinhContainer">
+                    <button type="button" class="btn btn-primary addAttribute">Thêm thuộc tính</button>
+                </div>
+                  <div class="mb-3">
+                                            <label for="anh_bien_the" class="form-label">Ảnh biến thể</label>
+                                            <input type="file" class="form-control" name="anh_bien_the[]" accept="image/*">
+                                        </div>
+                    <div class="col-sm-2">
+                        <input type="number" name="gia_nhap[]" class="form-control" placeholder="Giá nhập">
+                    </div>
+                    <div class="col-sm-2">
+                        <input type="number" name="gia_ban[]" class="form-control" placeholder="Giá bán">
+                    </div>
+                    <div class="col-sm-2">
+                        <input type="number" name="so_luong[]" class="form-control" placeholder="Số lượng">
+                    </div>
+                    <div class="col-sm-3">
+                        <button type="button" class="btn btn-danger removeVariant">Xóa</button>
+                    </div>
+                </div>
+
+            `;
+
+            document.getElementById("bienTheContainer").appendChild(container);
+        });
+
+        // Xóa biến thể
+        document.addEventListener("click", function (event) {
+            if (event.target.classList.contains("removeVariant")) {
+                event.target.closest(".bienThe").remove();
+            }
+        });
+
+        // Thêm thuộc tính cho biến thể
+        document.addEventListener("click", function (event) {
+            if (event.target.classList.contains("addAttribute")) {
+                let thuocTinhHTML = `
+                    <div class="row align-items-center mb-2">
+                        <div class="col-sm-5">
+                            <select name="thuoc_tinh_id[]" class="form-control selectAttribute">
+                                <option disabled selected>Chọn thuộc tính</option>
+                                ${thuocTinhs.map(thuocTinh =>
+                    `<option value="${thuocTinh.id}">${thuocTinh.ten_thuoc_tinh}</option>`
+                ).join('')}
+                            </select>
+                        </div>
+                        <div class="col-sm-5">
+                            <select name="gia_tri_thuoc_tinh[]" class="form-control selectValue">
+                                <option disabled selected>Chọn giá trị</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-2">
+                            <button type="button" class="btn btn-danger removeAttribute">Xóa</button>
+                        </div>
+                    </div>`;
+
+                event.target.closest(".thuocTinhContainer").insertAdjacentHTML("beforeend", thuocTinhHTML);
+            }
+        });
+
+        document.addEventListener('change', function (event) {
+            if (event.target.classList.contains('variant-image')) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        const preview = event.target.closest('.col-sm-3').querySelector('.previewImage');
+                        preview.src = e.target.result;
+                        preview.style.display = 'block';
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
+        });
+
+        // Xóa thuộc tính
+        document.addEventListener("click", function (event) {
+            if (event.target.classList.contains("removeAttribute")) {
+                event.target.closest(".row").remove();
+            }
+        });
+
+
+        // Load giá trị thuộc tính khi chọn thuộc tính
+        document.addEventListener("change", function (event) {
+            if (event.target.classList.contains("selectAttribute")) {
+                let thuocTinhId = event.target.value;
+                let valueSelect = event.target.closest(".row").querySelector(".selectValue");
+
+                // Xóa các giá trị cũ
+                valueSelect.innerHTML = '<option disabled selected>Chọn giá trị</option>';
+
+                // Tìm thuộc tính được chọn và hiển thị giá trị tương ứng
+                let selectedAttribute = thuocTinhs.find(t => t.id == thuocTinhId);
+                if (selectedAttribute && Array.isArray(selectedAttribute.gia_tri_thuoc_tinh)) {
+                    selectedAttribute.gia_tri_thuoc_tinh.forEach(value => {
+                        let option = document.createElement("option");
+                        option.value = value.id;
+                        option.textContent = value.gia_tri;
+                        valueSelect.appendChild(option);
+                    });
+                } else {
+                    console.error("Không tìm thấy giá trị thuộc tính");
+                }
+            }
+        });
+    });
+</script>
+@section('js')
     <!-- Sidebar js -->
     <script src="{{ asset('assets/js/config.js') }}"></script>
 
