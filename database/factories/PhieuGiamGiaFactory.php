@@ -21,7 +21,8 @@ class PhieuGiamGiaFactory extends Factory
             'ten_phieu' => $this->faker->word(),
             'ngay_bat_dau' => $this->faker->date(),
             'ngay_ket_thuc' => $this->faker->date(),
-            'gia_tri' => $this->faker->numberBetween(1, 99)
+            'gia_tri' => $this->faker->numberBetween(1, 99),
+            'mo_ta' => $this->faker->paragraph()
         ];
     }
 }

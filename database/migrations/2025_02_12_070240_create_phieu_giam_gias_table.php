@@ -18,6 +18,7 @@ return new class extends Migration
             $table->date('ngay_bat_dau');
             $table->date('ngay_ket_thuc');
             $table->double('gia_tri')->default(0);
+            $table->text('mo_ta')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
