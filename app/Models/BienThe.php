@@ -19,4 +19,10 @@ class BienThe extends Model
         'gia_ban',
         'so_luong'
     ];
+    public function thuocTinhs()
+{
+    return $this->belongsToMany(ThuocTinh::class, 'bien_the_thuoc_tinh', 'bien_the_id', 'thuoc_tinh_id')
+                ->withPivot('gia_tri_thuoc_tinh_id')
+                ->withTimestamps();
+}
 }
