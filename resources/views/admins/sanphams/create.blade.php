@@ -3,7 +3,37 @@
 @section('title')
     Thêm mới sản phẩm
 @endsection
+@section('css')
+    <!-- Themify icon css -->
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/themify.css') }}">
 
+    <!-- Dropzon css -->
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/dropzone.css') }}">
+
+    <!-- Feather icon css -->
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/feather-icon.css') }}">
+
+    <!-- remixicon css -->
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/remixicon.css') }}">
+
+    <!-- Select2 css -->
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/select2.min.css') }}">
+
+    <!-- Plugins css -->
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/scrollbar.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/animate.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/chartist.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/date-picker.css') }}">
+
+    <!-- Bootstrap css -->
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/bootstrap.css') }}">
+
+    <!-- Bootstrap-tag input css -->
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/bootstrap-tagsinput.css') }}">
+
+    <!-- App css -->
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css') }}">
+@endsection
 @section('content')
     <div class="col-12">
         <div class="row">
@@ -51,13 +81,13 @@
                             <div class="mb-4 row align-items-center">
                                 <label class="col-sm-3 col-form-label form-label-title">Danh mục</label>
                                 <div class="col-sm-9">
-                                    <select name="danh_muc_id" class="js-example-basic-single w-100">
+                                    <select class="form-control js-example-basic-single w-100" name="danh_muc_id">
                                         <option disabled selected>Chọn danh mục</option>
                                         @foreach ($danhMucs as $danhMuc)
                                             <option value="{{ $danhMuc->id }}">{{ $danhMuc->ten_danh_muc }}</option>
                                         @endforeach
                                     </select>
-                                    @error('danh_muc_id')                 <div class="text-danger">{{ $message }}</div> @enderror
+                                    @error('danh_muc_id') <div class="text-danger">{{ $message }}</div> @enderror
                                 </div>
                             </div>
 
@@ -175,7 +205,7 @@
                         <button type="button" class="btn btn-danger removeVariant">Xóa</button>
                     </div>
                 </div>
-                
+
             `;
 
             document.getElementById("bienTheContainer").appendChild(container);
@@ -263,3 +293,26 @@
         });
     });
 </script>
+@section('js')
+    <!-- Sidebar js -->
+    <script src="{{ asset('assets/js/config.js') }}"></script>
+
+    <!-- bootstrap tag-input js -->
+    <script src="{{ asset('assets/js/bootstrap-tagsinput.min.js') }}"></script>
+    <script src="{{ asset('assets/js/sidebar-menu.js') }}"></script>
+
+    <!-- customizer js -->
+    <script src="{{ asset('assets/js/customizer.js') }}"></script>
+
+    <!-- Dropzon js -->
+    <script src="{{ asset('assets/js/dropzone/dropzone.js') }}"></script>
+    <script src="{{ asset('assets/js/dropzone/dropzone-script.js') }}"></script>
+
+    <!-- ck editor js -->
+    <script src="{{ asset('assets/js/ckeditor.js') }}"></script>
+    <script src="{{ asset('assets/js/ckeditor-custom.js') }}"></script>
+
+    <!-- select2 js -->
+    <script src="{{ asset('assets/js/select2.min.js') }}"></script>
+    <script src="{{ asset('assets/js/select2-custom.js') }}"></script>
+@endsection
