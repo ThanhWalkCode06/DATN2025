@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('title')
-    Biến thể
+Danh sách quyền
 @endsection
 
 @section('css')
@@ -40,9 +40,20 @@
                             <i data-feather="plus-square"></i>Thêm mới
                         </a>
                     </form>
+
                 </div>
 
                 <div class="table-responsive table-product">
+                    <form class="d-inline-flex col-4" method="get" action="{{ route('permission-search') }}">
+                        <div style="margin-right: 10px" class=" col-7 ">
+                            <input class="form-control col-1" type="text" placeholder="Tìm kiếm" name="key" value="{{ request('key') }}">
+
+                        </div>
+                            <button type="submit" class="btn btn-theme mr-1"><i data-feather="search"></i></button>
+                    </form>
+                    @if(session('error-key'))
+                        <p class="text-danger">{{ session('error-key') }}</p>
+                    @endif
                     <table class="table all-package theme-table" id="table_id">
                         <thead>
                             <tr>
@@ -62,7 +73,8 @@
                         </thead>
 
                         <tbody>
-                        @if($lists != null)
+
+                            @if($lists->isNotEmpty())
                             @foreach ( $lists as $key => $item)
                                 <tr class="justify-content-center">
                                     <td>
@@ -101,16 +113,25 @@
                                     </td>
                                 </tr>
                             @endforeach
-                        @endif
+                            </table>
+                            {{ $lists->onEachSide(5)->appends(request()->query())->links("pagination::bootstrap-5") }}
+
+                            @endif
 
 
                         </tbody>
-                    </table>
+
+
+                    @if($lists->isEmpty())
+                        </table>
+                        <p style="font-size: 2rem" class="text-center text-muted">Danh sách trống</p>
+                        <center><img style="width: 200px; height: 200px" src="{{ asset('assets/images/inner-page/not-found.png') }}" alt=""></center>
+                    @endif
                 </div>
             </div>
         </div>
     </div>
-    {{ $lists->onEachSide(5)->links("pagination::bootstrap-5") }}
+
 @endsection
 
 @section('js')

@@ -12,7 +12,13 @@ class BaiViet extends Model
 
     protected $table = 'bai_viets';
 
-    protected $fillable = ['user_id', 'tieu_de', 'danh_muc_id', 'noi_dung', 'anh_bia'];
+    protected $fillable = [
+        'user_id',
+        'tieu_de',
+        'danh_muc_id',
+        'noi_dung',
+        'anh_bia'
+    ];
 
     public function user()
     {

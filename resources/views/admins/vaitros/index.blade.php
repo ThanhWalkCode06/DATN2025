@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('title')
-    Biến thể
+    Vai trò
 @endsection
 
 @section('css')
@@ -43,6 +43,16 @@
                 </div>
 
                 <div class="table-responsive table-product">
+                    <form class="d-inline-flex col-4" method="get" action="{{ route('roles-search') }}">
+
+                        <div style="margin-right: 10px" class=" col-7 ">
+                            <input class="form-control col-1" type="text" placeholder="Tìm kiếm" name="key" value="{{ request('key') }}">
+                        </div>
+                            <button type="submit" class="btn btn-theme mr-1"><i data-feather="search"></i></button>
+                    </form>
+                    @if(session('error-key'))
+                        <p class="text-danger">{{ session('error-key') }}</p>
+                    @endif
                     <table class="table all-package theme-table" id="table_id">
                         <thead>
                             <tr>
@@ -61,7 +71,7 @@
                         </thead>
 
                         <tbody>
-                        @if($lists != null)
+                        @if($lists->isNotEmpty())
                             @foreach ( $lists as $key => $item)
                                 <tr class="justify-content-center">
                                     <td>
@@ -78,16 +88,20 @@
 
                                     <td>
                                         <ul>
+                                            @if($item->name != 'SuperAdmin')
                                             <li>
                                                 <a href="{{ route('roles.edit', $item->id) }}">
                                                     <i class="ri-pencil-line"></i>
                                                 </a>
                                             </li>
+                                            @endif
 
                                             <li>
+                                                @if($item->name != 'SuperAdmin')
                                                 <a href="#" onclick="confirmDelete(event, {{ $item->id }})">
                                                     <i class="ri-delete-bin-line"></i>
                                                 </a>
+                                                @endif
 
                                                 <form id="delete-form-{{ $item->id }}" action="{{ route('roles.destroy', $item->id) }}" method="POST" style="display: none;">
                                                     @csrf
@@ -103,6 +117,10 @@
 
                         </tbody>
                     </table>
+                    @if($lists->isEmpty())
+                        <p style="font-size: 2rem" class="text-center text-muted">Danh sách trống</p>
+                        <center><img style="width: 200px; height: 200px" src="{{ asset('assets/images/inner-page/not-found.png') }}" alt=""></center>
+                    @endif
                 </div>
             </div>
         </div>

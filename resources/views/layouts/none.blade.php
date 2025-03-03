@@ -28,9 +28,18 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css') }}">
 
     @yield('css')
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/load.css') }}">
 </head>
 
 <body>
+    <div class="fullpage-loader">
+        <span></span>
+        <span></span>
+        {{-- <span></span>
+        {{-- <span></span> --}}
+        <span></span>
+        <span></span>
+    </div>
     <div style="padding-top: 50px" class="container col-8">
         <div class="page-wrapper compact-wrapper" id="pageWrapper">
 
@@ -43,6 +52,15 @@
             <!-- Page Body End -->
         </div>
     </div>
+    <script>
+        window.addEventListener('load', function () {
+            let loader = document.querySelector('.fullpage-loader');
+        loader.style.opacity = '0';
+        setTimeout(() => {
+            loader.style.display = 'none';
+        }, 500); // Ẩn hẳn sau 0.5 giây
+        });
+        </script>
     <script src="{{ asset('assets/js/jquery-3.6.0.min.js') }}"></script>
 
     <!-- Bootstrap js -->

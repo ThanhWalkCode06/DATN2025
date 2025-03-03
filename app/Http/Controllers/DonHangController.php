@@ -9,12 +9,13 @@ use App\Models\ChiTietDonHang;
 
 class DonHangController extends Controller
 {
+    public function __construct() {}
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $donHangs = DonHang::select('don_hangs.*', 'users.name', 'phuong_thuc_thanh_toans.ten_phuong_thuc')
+        $donHangs = DonHang::select('don_hangs.*', 'users.ten_nguoi_dung', 'phuong_thuc_thanh_toans.ten_phuong_thuc')
             ->join('users', 'users.id', '=', 'user_id')
             ->join('phuong_thuc_thanh_toans', 'phuong_thuc_thanh_toans.id', '=', 'phuong_thuc_thanh_toan_id')
             ->get();
@@ -43,7 +44,7 @@ class DonHangController extends Controller
      */
     public function show(DonHang $donhang)
     {
-        $donHang = DonHang::select('don_hangs.*', 'users.name', 'phuong_thuc_thanh_toans.ten_phuong_thuc')
+        $donHang = DonHang::select('don_hangs.*', 'users.ten_nguoi_dung', 'phuong_thuc_thanh_toans.ten_phuong_thuc')
             ->join('users', 'users.id', '=', 'user_id')
             ->join('phuong_thuc_thanh_toans', 'phuong_thuc_thanh_toans.id', '=', 'phuong_thuc_thanh_toan_id')
             ->find($donhang->id);
@@ -61,7 +62,11 @@ class DonHangController extends Controller
      */
     public function edit(DonHang $donhang)
     {
-        //
+        $donHang = DonHang::select('don_hangs.*', 'users.ten_nguoi_dung', 'phuong_thuc_thanh_toans.ten_phuong_thuc')
+            ->join('users', 'users.id', '=', 'user_id')
+            ->join('phuong_thuc_thanh_toans', 'phuong_thuc_thanh_toans.id', '=', 'phuong_thuc_thanh_toan_id')
+            ->find($donhang->id);
+        return view('admins.donhangs.edit', compact('donHang'));
     }
 
     /**

@@ -47,7 +47,7 @@
                             <h5>Thêm danh mục</h5>
                         </div>
 
-                        <form action="{{ route('danhmucs.store') }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('danhmucsanphams.store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
 
                             <div class="theme-form theme-form-2 mega-form">
@@ -55,8 +55,8 @@
                                     <label class="form-label-title col-sm-3 mb-0">Tên danh mục</label>
                                     <div class="col-sm-9">
                                         <input class="form-control @error('ten_danh_muc') is-invalid @enderror"
-                                               type="text" name="ten_danh_muc" value="{{ old('ten_danh_muc') }}"
-                                               placeholder="Tên danh mục">
+                                            type="text" name="ten_danh_muc" value="{{ old('ten_danh_muc') }}"
+                                            placeholder="Tên danh mục">
                                         @error('ten_danh_muc')
                                             <div class="text-danger">{{ $message }}</div>
                                         @enderror
@@ -66,7 +66,8 @@
                                 <div class="mb-4 row align-items-center">
                                     <label class="col-sm-3 col-form-label form-label-title">Ảnh danh mục</label>
                                     <div class="col-sm-9">
-                                        <input type="file" name="anh_danh_muc" class="form-control @error('anh_danh_muc') is-invalid @enderror">
+                                        <input type="file" name="anh_danh_muc"
+                                            class="form-control @error('anh_danh_muc') is-invalid @enderror">
                                         @error('anh_danh_muc')
                                             <div class="text-danger">{{ $message }}</div>
                                         @enderror

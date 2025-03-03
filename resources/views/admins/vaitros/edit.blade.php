@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('title')
-    Thêm mới vai trò
+    Sửa vai trò
 @endsection
 
 @section('css')
@@ -38,7 +38,7 @@
 
 @section('content')
     <div class="col-12">
-        <a style="float: left" href="{{ route('roles.index') }}" class="btn ms-auto theme-bg-color text-white col-1">Trở lại</a>
+        <a style="float: left" href="{{ route('roles.index') }}" class="btn btn-secondary col-1">Trở lại</a>
         <div class="row">
             <div class="col-12">
                 <div class="card">
@@ -64,6 +64,7 @@
 
                             </div>
                             <h4>Chọn quyền:</h4>
+                            <input type="checkbox" id="check-all" class="checkbox_animated checkall"> Chọn tất cả
                             <div class="row mt-4">
                                 @foreach($permissions->chunk(ceil(count($permissions) / 2)) as $chunk)
                                     <div class="col-md-6"> {{-- Chia làm 2 cột --}}
@@ -84,7 +85,7 @@
                             </div>
 
 
-                            <button  class="btn btn-solid" type="submit">Tạo Vai Trò</button>
+                            <button  class="btn btn-solid" type="submit">Update Vai Trò</button>
                         </form>
 
                     </div>
@@ -94,7 +95,28 @@
     </div>
 
 @endsection
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    const checkAll = document.getElementById("check-all");
+    const checkItems = document.querySelectorAll(".checkall");
 
+    checkAll.addEventListener("change", function () {
+        checkItems.forEach(item => {
+            item.checked = checkAll.checked;
+        });
+    });
+
+    // checkItems.forEach(item => {
+    //     item.addEventListener("change", function () {
+    //         if (!this.checked) {
+    //             checkAll.checked = false;
+    //         } else if (document.querySelectorAll(".checkall:checked").length === checkItems.length) {
+    //             checkAll.checked = true;
+    //         }
+    //     });
+    // });
+});
+</script>
 @section('js')
     <!-- Sidebar js -->
     <script src="{{ asset('assets/js/config.js') }}"></script>

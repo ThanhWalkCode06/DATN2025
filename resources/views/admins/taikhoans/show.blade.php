@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('title')
-    Chi tiết tài khoản
+    Xem tài khoản
 @endsection
 
 @section('css')
@@ -42,23 +42,33 @@
                 <div class="card-body p-5">
                     <div class="row align-items-center">
                         <div class="col-md-6 text-center">
-                            <img src="https://file.hstatic.net/200000828357/article/toc-son-tung-2_53560601c8d549788070077fb8549f09.jpg" alt="Hình ảnh tài khoản" class="rounded-circle border shadow-lg" width="180">
-                            <h5 class="mt-3 text-primary h5">Nguyễn Văn A</h5>
-                            <span class="badge bg-danger ">Admin</span>
+                            <img src="{{ asset(Storage::url($user->anh_dai_dien)) }}" alt="Hình ảnh tài khoản" class="rounded-circle border shadow-lg" width="180">
+                            <h5 class="mt-3 text-primary h5">{{ $user->username }}</h5>
+                            <span class="badge bg-danger ">{{ $user->roles->pluck('name')->first() ?? 'Khách hàng' }}</span>
                         </div>
                         <div class="col-md-6">
                             <ul class="list-group list-group-flush">
-                                <li class="list-group-item"><strong>ID:</strong> 01</li>
-                                <li class="list-group-item"><strong>Email:</strong>abcxyz@gmail.com</li>
-                                <li class="list-group-item"><strong>Số điện thoại:</strong> 0971415610</li>
-                                <li class="list-group-item"><strong>Ngày sinh:</strong> 24-08-2003</li>
-                                <li class="list-group-item"><strong>Địa chỉ:</strong> Cầu Giấy, Hà Nội, Việt Nam</li>
-                                <li class="list-group-item"><strong>Giới tính:</strong> Nam</li>
+                                <li class="list-group-item"><strong>ID:</strong> {{ $user->id }}</li>
+                                <li class="list-group-item"><strong>Email:</strong>{{ $user->email }}</li>
+                                <li class="list-group-item"><strong>Số điện thoại:</strong> {{ $user->so_dien_thoai }}</li>
+                                <li class="list-group-item"><strong>Ngày sinh:</strong> {{ $user->ngay_sinh }}</li>
+                                <li class="list-group-item"><strong>Địa chỉ:</strong> {{ $user->dia_chi }}</li>
+                                <li class="list-group-item"><strong>Trạng thái:</strong>
+                                    @if ($user->trang_thai == 1)
+                                    <div style="float: right; margin-right: 30%" class="status-close">
+                                        <span >Hoạt động</span>
+                                    </div>
+                                    @else
+                                        <div style="float: right; margin-right: 30%" class="status-danger">
+                                            <span>Không hoạt động</span>
+                                        </div>
+                                    @endif
+                                </li>
                             </ul>
                         </div>
                     </div>
                     <div class="text-center mt-4">
-                        <a href="{{ route('taikhoans.index') }}" class="btn btn-outline-primary px-4">Quay lại</a>
+                        <a href="{{ route('users.index') }}" class="btn btn-outline-primary px-4">Quay lại</a>
                     </div>
                 </div>
             </div>

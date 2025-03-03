@@ -46,7 +46,8 @@
                             <h5>Cập Nhập Bài Viết</h5>
                         </div>
 
-                        <form action="{{ route('admins.baiviets.update', $baiViet->id) }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('baiviets.update', $baiViet->id) }}" method="POST"
+                            enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
 
@@ -57,7 +58,8 @@
                                     <select class="form-control" name="user_id" required>
                                         <option value="" disabled>Chọn người viết</option>
                                         @foreach ($users as $user)
-                                            <option value="{{ $user->id }}" {{ $baiViet->user_id == $user->id ? 'selected' : '' }}>
+                                            <option value="{{ $user->id }}"
+                                                {{ $baiViet->user_id == $user->id ? 'selected' : '' }}>
                                                 {{ $user->name }} ({{ $user->email }})
                                             </option>
                                         @endforeach
@@ -87,7 +89,8 @@
                                     <select class="form-control" name="danh_muc_id" required>
                                         <option value="" disabled>Chọn danh mục</option>
                                         @foreach ($danhMucs as $danhMuc)
-                                            <option value="{{ $danhMuc->id }}" {{ $baiViet->danh_muc_id == $danhMuc->id ? 'selected' : '' }}>
+                                            <option value="{{ $danhMuc->id }}"
+                                                {{ $baiViet->danh_muc_id == $danhMuc->id ? 'selected' : '' }}>
                                                 {{ $danhMuc->ten_danh_muc }}
                                             </option>
                                         @endforeach
@@ -115,7 +118,8 @@
                                 <div class="col-sm-9">
                                     <input class="form-control" type="file" name="anh_bia" accept="image/*">
                                     <div class="mt-2">
-                                        <img src="{{ asset('storage/' . $baiViet->anh_bia) }}" alt="Ảnh bài viết" width="150">
+                                        <img src="{{ asset('storage/' . $baiViet->anh_bia) }}" alt="Ảnh bài viết"
+                                            width="150">
                                     </div>
                                     @error('anh_bia')
                                         <small class="text-danger">{{ $message }}</small>
@@ -125,7 +129,7 @@
 
                             <!-- Nút Submit -->
                             <div class="mt-5 d-flex justify-content-between">
-                                <a href="{{ route('admins.baiviets.index') }}" class="btn btn-secondary">Quay lại</a>
+                                <a href="{{ route('baiviets.index') }}" class="btn btn-secondary">Quay lại</a>
                                 <button class="btn btn-primary" type="submit">Cập nhật</button>
                             </div>
                         </form>

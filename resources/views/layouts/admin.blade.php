@@ -55,11 +55,28 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css') }}">
 
 
-    @yield('css')
 
+    @yield('css')
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/load.css') }}">
+    <style>
+        .form-control {
+        border: 1px solid #ccc !important;
+    }
+        select{
+            border: 1px solid #ccc !important;
+        }
+    </style>
 </head>
 
-<body>
+<body >
+    <div class="fullpage-loader">
+        <span></span>
+        <span></span>
+        {{-- <span></span>
+        {{-- <span></span> --}}
+        <span></span>
+        <span></span>
+    </div>
     <!-- tap on top start -->
     <div class="tap-top">
         <span class="lnr lnr-chevron-up"></span>
@@ -116,8 +133,42 @@
         </div>
     </div>
 
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    const icon = document.querySelector(".mode i");
+    const body = document.body;
+
+    // Kiểm tra trạng thái trong localStorage để áp dụng ngay khi trang load
+    if (localStorage.getItem("darkMode") === "enabled") {
+        body.classList.add("dark-only");
+        icon.classList.add("fa-moon-o", "fa-lightbulb-o");
+        setTimeout(() => {
+            const thElements = document.querySelectorAll(".sorting_disabled");
+            const checkbox = document.querySelector(".checkbox_animated");
+            console.log(checkbox); // Kiểm tra lại
+            if (thElements) {
+                // checkbox.style.background-color = "#0da487";
+                thElements.forEach(th => {
+                    th.style.color = "#0da487"; // Áp dụng màu cho từng phần tử
+                });
+            }
+        }, 100);
+    }
+
+    icon.addEventListener("click", function () {
+
+        if (body.classList.contains("dark-only")) {
+            localStorage.removeItem("darkMode");
+        } else {
+            localStorage.setItem("darkMode", "enabled");
+        }
+    });
+});
+</script>
+
     <!-- Bootstrap js -->
     <script src="{{ asset('assets/js/jquery-3.6.0.min.js') }}"></script>
+    {{-- <script src="{{ asset('assets/js/bootstrap/bootstrap.bundle.js') }}"></script> --}}
     <script src="{{ asset('assets/js/bootstrap/bootstrap.bundle.min.js') }}"></script>
 
     <!-- feather icon js -->
@@ -161,7 +212,17 @@
     <!-- ratio js -->
     <script src="{{ asset('assets/js/ratio.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src=""></script>
+
+    <script>
+    window.addEventListener('load', function () {
+        let loader = document.querySelector('.fullpage-loader');
+        loader.style.opacity = '0';
+    setTimeout(() => {
+        loader.style.display = 'none';
+    }, 500); // Ẩn hẳn sau 0.5 giây
+    });
+
+    </script>
 
 @if (session('success'))
 <script>$(window).ready(function(){
@@ -172,6 +233,8 @@
         type: "primary",
         delay: 5000
     });
+
+
 })</script>
 @endif
 

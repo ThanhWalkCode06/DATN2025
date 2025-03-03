@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('title')
-    Thêm mới biến thể
+    Thêm mới quyền
 @endsection
 
 @section('css')
@@ -38,7 +38,7 @@
 
 @section('content')
     <div class="col-12">
-        <a style="float: left" href="{{ route('permissions.index') }}" class="btn ms-auto theme-bg-color text-white col-1">Trở lại</a>
+        <a style="float: left" href="{{ route('permissions.index') }}" class="btn btn-secondary col-1">Trở lại</a>
         <div class="row">
             <div class="col-xxl-8 col-lg-10 m-auto">
                 <div class="card">
@@ -59,7 +59,7 @@
                                 </thead>
                                 <tbody id="permissions-container">
                                     @if(old('name'))
-                                    <p class="text-danger">Vui lòng đặt theo cú pháp: <b>tên bộ phận_chức năng</b></p>
+                                    <p class="text-danger">Vui lòng đặt theo cú pháp: <b>Tên Route(Nếu là router resource thì thêm s và thêm '-')</b></p>
                                     @foreach(old('name') as $index => $oldName)
                                     <tr>
                                         <td>
@@ -93,10 +93,9 @@
                                         <td>
                                             <input style="border: 1px solid #ced4da;" class="form-control " type="text" placeholder="Tên quyền"
                                             name="name[]" >
-
                                         </td>
-                                        <p class="text-danger">Vui lòng đặt theo cú pháp: <b>tên bộ phận_chức năng</b></p>
-                                        <span class="text-danger">VD: order_view</span>
+                                        <p class="text-danger">Vui lòng đặt theo cú pháp: <b>Tên Route(Nếu là router resource thì thêm s và thêm '-')</b></p>
+                                        <span class="text-danger">VD: resource: orders_view, route đơn: danhgia</span>
                                         <td>
                                             <input style="border: 1px solid #ced4da;" class="form-control" type="text" placeholder="Mô tả quyền" name="description[]" value="{{ old('description.0')}}" >
                                         </td>

@@ -10,7 +10,7 @@
 @extends('layouts.admin')
 
 @section('title')
-    Danh mục sản phẩm
+    Bài viết
 @endsection
 
 @section('css')
@@ -41,7 +41,7 @@
         <div class="card card-table">
             <div class="card-body">
                 <div class="title-header option-title">
-                    <h5>Quản lý danh mục bài viết</h5>
+                    <h5>Quản lý bài viết</h5>
                     <a href="{{ route('baiviets.create') }}" class="btn btn-primary">Thêm mới</a>
                 </div>
                 <div class="table-responsive category-table">
@@ -66,7 +66,8 @@
                                         <td>{{ $baiViet->tieu_de }}</td>
                                         <td>{{ $baiViet->danhMuc->ten_danh_muc}}</td>
                                         <td>
-                                            <img src="{{ asset('storage/' . $baiViet->anh_bia) }}" alt="Ảnh bài viết" width="100" >
+                                            <img src="{{ asset('storage/' . $baiViet->anh_bia) }}" alt="Ảnh bài viết"
+                                                width="100">
                                         </td>
                                         <td>
                                             <ul>
@@ -81,8 +82,7 @@
                                                     </a>
                                                 </li>
                                                 <li>
-                                                    <form
-                                                        action="{{ route('baiviets.destroy', $baiViet->id) }}"
+                                                    <form action="{{ route('baiviets.destroy', $baiViet->id) }}"
                                                         method="POST"
                                                         onsubmit="return confirm('Bạn có chắc chắn muốn xóa?');">
                                                         @csrf

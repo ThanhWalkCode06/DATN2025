@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Validator;
 
 class BaiVietController extends Controller
 {
-    // Hiển thị danh sách bài viết
+
     public function index()
     {
         $baiViets = BaiViet::with('user', 'danhMuc')->orderBy('created_at', 'desc')->get();
@@ -57,7 +57,7 @@ class BaiVietController extends Controller
         }
 
         $baiViet->save();
-        return redirect()->route('admins.baiviets.index')->with('success', 'Bài viết đã được tạo!');
+        return redirect()->route('baiviets.index')->with('success', 'Bài viết đã được tạo!');
     }
     public function show($id)
     {
@@ -104,7 +104,7 @@ class BaiVietController extends Controller
         }
 
         $baiViet->save();
-        return redirect()->route('admins.baiviets.index')->with('success', 'Bài viết đã được cập nhật!');
+        return redirect()->route('baiviets.index')->with('success', 'Bài viết đã được cập nhật!');
     }
 
     // Xóa bài viết
@@ -112,6 +112,6 @@ class BaiVietController extends Controller
     {
         $baiViet = BaiViet::findOrFail($id);
         $baiViet->delete();
-        return redirect()->route('admins.baiviets.index')->with('success', 'Bài viết đã được xóa!');
+        return redirect()->route('baiviets.index')->with('success', 'Bài viết đã được xóa!');
     }
 }
