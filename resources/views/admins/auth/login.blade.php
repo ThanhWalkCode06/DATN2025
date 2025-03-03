@@ -64,7 +64,8 @@
                                     <div class="form-floating theme-form-floating log-in-form">
                                         <input name="username" type="text"
                                             class="form-control @error('password') is-invalid @enderror" id="email"
-                                            placeholder="Username Address" value="{{ old('username') }}">
+                                            placeholder="Username Address" autocomplete="off"
+                                            value="{{ old('username') }}">
                                         <label for="email">Tên tài khoản</label>
                                     </div>
                                     @error('username')
