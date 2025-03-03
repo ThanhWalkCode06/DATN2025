@@ -184,6 +184,7 @@
         </div>
     </div>
 @endsection
+
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         let thuocTinhs = @json($thuocTinhs);
@@ -306,9 +307,8 @@
                 }
             }
         });
-    });
 </script>
-@section('js')
+
     <!-- Sidebar js -->
     <script src="{{ asset('assets/js/config.js') }}"></script>
 
