@@ -215,19 +215,6 @@
 @endsection
 
 @section('js')
-<script>
-    ClassicEditor
-        .create(document.querySelector('#editor'))
-        .then(editor => {
-            document.querySelector('form').addEventListener('submit', () => {
-                document.querySelector('#editor').value = editor.getData();
-            });
-        })
-        .catch(error => {
-            console.error(error);
-        });
-</script>
-
     <!-- Sidebar js -->
     <script src="{{ asset('assets/js/config.js') }}"></script>
 

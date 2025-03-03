@@ -36,9 +36,11 @@
                 <div class="media static-top-widget">
                     <div class="media-body p-0">
                         <span class="m-0">Số lượng đơn hàng</span>
-                        <h4 class="mb-0 counter">9856
+                        <h4 class="mb-0 counter">
+                            {{ $tongDonHang }}
                             <span class="badge badge-light-danger grow">
-                                <i data-feather="trending-down"></i>8.5%</span>
+                                <i data-feather="trending-down"></i>8.5%
+                            </span>
                         </h4>
                     </div>
                     <div class="align-self-center text-center">
@@ -55,9 +57,11 @@
                 <div class="media static-top-widget">
                     <div class="media-body p-0">
                         <span class="m-0">Số lượng sản phẩm</span>
-                        <h4 class="mb-0 counter">893
-                            <a href="add-new-product.html" class="badge badge-light-secondary grow">
-                                ADD NEW</a>
+                        <h4 class="mb-0 counter">
+                            {{ $tongSanPhamConHang }}
+                            <a href="" class="badge badge-light-secondary grow">
+                                ADD NEW
+                            </a>
                         </h4>
                     </div>
 
@@ -75,11 +79,14 @@
                 <div class="media static-top-widget">
                     <div class="media-body p-0">
                         <span class="m-0">Tổng số lượng khách hàng</span>
-                        <h4 class="mb-0 counter">4.6k
+                        <h4 class="mb-0 counter">
+                            {{ $tongKhachHangHoatDong }}
                             <span class="badge badge-light-success grow">
-                                <i data-feather="trending-down"></i>8.5%</span>
+                                <i data-feather="trending-down"></i>8.5%
+                            </span>
                         </h4>
                     </div>
+                    
 
                     <div class="align-self-center text-center">
                         <i class="ri-user-add-line"></i>
@@ -145,7 +152,7 @@
                                             </div>
                                             <div class="product-name">
                                                 <h5>Aata Buscuit</h5>
-                                                <h6>26-08-2022</h6>
+                                                {{-- <h6>26-08-2022</h6> --}}
                                             </div>
                                         </div>
                                     </td>
@@ -173,89 +180,7 @@
                                     </td>
                                 </tr>
 
-                                <tr>
-                                    <td>
-                                        <div class="best-product-box">
-                                            <div class="product-image">
-                                                <img src="assets/images/product/2.png" class="img-fluid" alt="Product">
-                                            </div>
-                                            <div class="product-name">
-                                                <h5>Aata Buscuit</h5>
-                                                <h6>26-08-2022</h6>
-                                            </div>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="product-detail-box">
-                                            <h6>Price</h6>
-                                            <h5>$29.00</h5>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="product-detail-box">
-                                            <h6>Orders</h6>
-                                            <h5>62</h5>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="product-detail-box">
-                                            <h6>Stock</h6>
-                                            <h5>510</h5>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="product-detail-box">
-                                            <h6>Amount</h6>
-                                            <h5>$1,798</h5>
-                                        </div>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>
-                                        <div class="best-product-box">
-                                            <div class="product-image">
-                                                <img src="assets/images/product/3.png" class="img-fluid" alt="Product">
-                                            </div>
-                                            <div class="product-name">
-                                                <h5>Aata Buscuit</h5>
-                                                <h6>26-08-2022</h6>
-                                            </div>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="product-detail-box">
-                                            <h6>Price</h6>
-                                            <h5>$29.00</h5>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="product-detail-box">
-                                            <h6>Orders</h6>
-                                            <h5>62</h5>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="product-detail-box">
-                                            <h6>Stock</h6>
-                                            <h5>510</h5>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="product-detail-box">
-                                            <h6>Amount</h6>
-                                            <h5>$1,798</h5>
-                                        </div>
-                                    </td>
-                                </tr>
+                             
                             </tbody>
                         </table>
                     </div>
@@ -292,168 +217,45 @@
             <div class="card-body p-0">
                 <div>
                     <div class="table-responsive">
-                        <table class="best-selling-table table border-0">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Mã đơn hàng</th>
+                                    <th>Khách hàng</th>
+                                    <th>Tổng tiền</th>
+                                    <th>Trạng thái</th>
+                                    <th>Ngày đặt</th>
+                                </tr>
+                            </thead>
                             <tbody>
+                                @foreach ($donHangs as $donHang)
                                 <tr>
+                                    <td>{{ $donHang->ma_don_hang }}</td>
+                                    <td>{{ $donHang->ten_nguoi_nhan }}</td>
+                                    <td>{{ number_format($donHang->tong_tien, 0, ',', '.') }} VNĐ</td>
                                     <td>
-                                        <div class="best-product-box">
-                                            <div class="product-name">
-                                                <h5>Aata Buscuit</h5>
-                                                <h6>#64548</h6>
-                                            </div>
-                                        </div>
+                                        @if ($donHang->trang_thai_don_hang == 0)
+                                                <span class="text-danger">Chưa xác nhận</span>
+                                            @elseif ($donHang->trang_thai_don_hang == 1)
+                                                <span class="text-success">Đã xác nhận</span>
+                                            @elseif ($donHang->trang_thai_don_hang == 2)
+                                                <span class="text-primary">Chờ vận chuyển</span>
+                                            @elseif ($donHang->trang_thai_don_hang == 3)
+                                                <span class="text-primary">Đang giao</span>
+                                            @elseif ($donHang->trang_thai_don_hang == 4)
+                                                <span class="text-success">Đã giao</span>
+                                            @elseif ($donHang->trang_thai_don_hang == 5)
+                                                <span class="text-danger">Trả hàng</span>
+                                            @else
+                                                <span>Trạng thái không hợp lệ</span>
+                                            @endif
                                     </td>
-
-                                    <td>
-                                        <div class="product-detail-box">
-                                            <h6>Ngày đặt</h6>
-                                            <h5>5/1/22</h5>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="product-detail-box">
-                                            <h6>Tổng tiền</h6>
-                                            <h5>$250.00</h5>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="product-detail-box">
-                                            <h6>Trạng thái đơn hàng</h6>
-                                            <h5>Completed</h5>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="product-detail-box">
-                                            <h6>Trạng thái thanh toán</h6>
-                                            <h5 class="text-danger">Unpaid</h5>
-                                        </div>
-                                    </td>
+                                    <td>{{ date('d/m/Y H:i', strtotime($donHang->created_at)) }}</td>
                                 </tr>
-
-                                <tr>
-                                    <td>
-                                        <div class="best-product-box">
-                                            <div class="product-name">
-                                                <h5>Aata Buscuit</h5>
-                                                <h6>26-08-2022</h6>
-                                            </div>
-                                        </div>
-                                    </td>
-
-
-                                    <td>
-                                        <div class="product-detail-box">
-                                            <h6>Date Placed</h6>
-                                            <h5>5/1/22</h5>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="product-detail-box">
-                                            <h6>Price</h6>
-                                            <h5>$250.00</h5>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="product-detail-box">
-                                            <h6>Order Status</h6>
-                                            <h5>Completed</h5>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="product-detail-box">
-                                            <h6>Payment</h6>
-                                            <h5 class="theme-color">Paid</h5>
-                                        </div>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>
-                                        <div class="best-product-box">
-                                            <div class="product-name">
-                                                <h5>Aata Buscuit</h5>
-                                                <h6>26-08-2022</h6>
-                                            </div>
-                                        </div>
-                                    </td>
-
-
-                                    <td>
-                                        <div class="product-detail-box">
-                                            <h6>Date Placed</h6>
-                                            <h5>5/1/22</h5>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="product-detail-box">
-                                            <h6>Price</h6>
-                                            <h5>$250.00</h5>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="product-detail-box">
-                                            <h6>Order Status</h6>
-                                            <h5>Completed</h5>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="product-detail-box">
-                                            <h6>Payment</h6>
-                                            <h5 class="theme-color">Paid</h5>
-                                        </div>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>
-                                        <div class="best-product-box">
-                                            <div class="product-name">
-                                                <h5>Aata Buscuit</h5>
-                                                <h6>26-08-2022</h6>
-                                            </div>
-                                        </div>
-                                    </td>
-
-
-                                    <td>
-                                        <div class="product-detail-box">
-                                            <h6>Date Placed</h6>
-                                            <h5>5/1/22</h5>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="product-detail-box">
-                                            <h6>Price</h6>
-                                            <h5>$250.00</h5>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="product-detail-box">
-                                            <h6>Order Status</h6>
-                                            <h5>Completed</h5>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="product-detail-box">
-                                            <h6>Payment</h6>
-                                            <h5 class="theme-color">Paid</h5>
-                                        </div>
-                                    </td>
-                                </tr>
+                                @endforeach
                             </tbody>
                         </table>
+                        
                     </div>
                 </div>
             </div>
