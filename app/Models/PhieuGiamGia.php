@@ -15,6 +15,7 @@ class PhieuGiamGia extends Model
         'ten_phieu',
         'ngay_bat_dau',
         'ngay_ket_thuc',
-        'gia_tri'
+        'gia_tri',
+        'mo_ta'
     ];
 }

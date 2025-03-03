@@ -44,7 +44,7 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users');
         });
 
-        Schema::table('chi_tiet_phieu_giam_gias', function (Blueprint $table) {
+        Schema::table('phieu_giam_gia_tai_khoans', function (Blueprint $table) {
             $table->foreign('phieu_giam_gia_id')->references('id')->on('phieu_giam_gias');
             $table->foreign('user_id')->references('id')->on('users');
         });
@@ -117,9 +117,9 @@ return new class extends Migration
             $table->dropForeign('san_pham_yeu_thichs_user_id_foreign');
         });
 
-        Schema::table('chi_tiet_phieu_giam_gias', function (Blueprint $table) {
-            $table->dropForeign('chi_tiet_phieu_giam_gias_phieu_giam_gia_id_foreign');
-            $table->dropForeign('chi_tiet_phieu_giam_gias_user_id_foreign');
+        Schema::table('phieu_giam_gia_tai_khoans', function (Blueprint $table) {
+            $table->dropForeign('phieu_giam_gia_tai_khoans_phieu_giam_gia_id_foreign');
+            $table->dropForeign('phieu_giam_gia_tai_khoans_user_id_foreign');
         });
 
         Schema::table('danh_gias', function (Blueprint $table) {

@@ -1,4 +1,3 @@
-
 @section('js')
 @endsection
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/themify.css') }}">
@@ -27,11 +26,13 @@
 <!-- Bootstrap-tag input css -->
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/bootstrap-tagsinput.css') }}">
 
-    <!-- App css -->
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/load.css') }}">
-<body>
+<!-- App css -->
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/load.css') }}">
 
+<title>Đăng nhập</title>
+
+<body>
     <div class="fullpage-loader">
         <span></span>
         <span></span>
@@ -63,7 +64,8 @@
                                     <div class="form-floating theme-form-floating log-in-form">
                                         <input name="username" type="text"
                                             class="form-control @error('password') is-invalid @enderror" id="email"
-                                            placeholder="Username Address" value="{{ old('username') }}">
+                                            placeholder="Username Address" autocomplete="off"
+                                            value="{{ old('username') }}">
                                         <label for="email">Tên tài khoản</label>
                                     </div>
                                     @error('username')
@@ -127,7 +129,7 @@
 
 </html>
 <script>
-    window.addEventListener('load', function () {
+    window.addEventListener('load', function() {
         let loader = document.querySelector('.fullpage-loader');
         console.log(loader)
         if (loader) { // Kiểm tra loader có tồn tại không

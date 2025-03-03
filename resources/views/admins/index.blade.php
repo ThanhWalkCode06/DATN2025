@@ -144,45 +144,48 @@
                     w-image
                     w-image table border-0">
                             <tbody>
+                                @foreach($sanPhamBanChay as $sp)
                                 <tr>
                                     <td>
                                         <div class="best-product-box">
                                             <div class="product-image">
-                                                <img src="assets/images/product/1.png" class="img-fluid" alt="Product">
+                                                {{-- <img src="{{ asset('assets/images/product/default.png') }}" class="img-fluid" alt="Product"> --}}
                                             </div>
                                             <div class="product-name">
-                                                <h5>Aata Buscuit</h5>
-                                                {{-- <h6>26-08-2022</h6> --}}
+                                                <h5>{{ $sp->ten_san_pham }}</h5>
                                             </div>
                                         </div>
                                     </td>
-
+                
                                     <td>
                                         <div class="product-detail-box">
                                             <h6>Giá</h6>
-                                            <h5>$29.00</h5>
+                                            <h5>{{ number_format($sp->gia_ban, 0, ',', '.') }} VNĐ</h5>
                                         </div>
                                     </td>
-
+                
                                     <td>
                                         <div class="product-detail-box">
                                             <h6>Lượt mua</h6>
-                                            <h5>62</h5>
+                                            <h5>{{ $sp->tong_da_ban }}</h5>
                                         </div>
                                     </td>
-
-
+                
                                     <td>
                                         <div class="product-detail-box">
                                             <h6>Tổng</h6>
-                                            <h5>$1,798</h5>
+                                            <h5>{{ number_format($sp->gia_ban * $sp->tong_da_ban, 0, ',', '.') }} VNĐ</h5>
                                         </div>
                                     </td>
                                 </tr>
+                            @endforeach
 
                              
                             </tbody>
                         </table>
+                        <div class="d-flex justify-content-center mt-3">
+                            {{-- {{ $sanPhamBanChay->links('pagination::bootstrap-5') }} --}}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -205,10 +208,9 @@
                         <button class="btn p-0 dropdown-toggle" type="button" id="dropdownMenuButton2"
                             data-bs-toggle="dropdown" data-bs-auto-close="true">Ngày đặt</button>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
-                            <li><a class="dropdown-item" href="#">Ngày đặt</a></li>
-                            <li><a class="dropdown-item" href="#">Tổng tiền</a></li>
-                            <li><a class="dropdown-item" href="#">Trạng thái đơn hàng</a></li>
-                            <li><a class="dropdown-item" href="#">Trạng thái thanh toán</a></li>
+                            <li><a class="dropdown-item" href="{{ route('index', ['sort' => 'ngay_dat']) }}">Ngày đặt</a></li>
+                            <li><a class="dropdown-item" href="{{ route('index', ['sort' => 'tong_tien']) }}">Tổng tiền</a></li>
+                            <li><a class="dropdown-item" href="{{ route('index', ['trang_thai' => 'chua_xac_nhan']) }}">Trạng thái đơn hàng</a></li>
                         </ul>
                     </div>
                 </div>
@@ -255,7 +257,9 @@
                                 @endforeach
                             </tbody>
                         </table>
-                        
+                        <div class="d-flex justify-content-center mt-3">
+                            {{ $donHangs->links('pagination::bootstrap-5') }}
+                        </div>
                     </div>
                 </div>
             </div>
