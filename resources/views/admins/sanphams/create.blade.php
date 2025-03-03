@@ -187,14 +187,14 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-                let thuocTinhs = @json($thuocTinhs);
+        let thuocTinhs = @json($thuocTinhs);
 
-                // Thêm biến thể mới
-                document.getElementById("addVariant").addEventListener("click", function() {
-                    let container = document.createElement("div");
-                    container.classList.add("bienThe");
+        // Thêm biến thể mới
+        document.getElementById("addVariant").addEventListener("click", function() {
+            let container = document.createElement("div");
+            container.classList.add("bienThe");
 
-                    container.innerHTML = `
+            container.innerHTML = `
                 <div class="row align-items-center mb-2">
                     <div class="col-sm-3">
                         <input type="text" name="ten_bien_the[]" class="form-control" placeholder="Tên biến thể">
@@ -222,20 +222,20 @@
 
             `;
 
-                    document.getElementById("bienTheContainer").appendChild(container);
-                });
+            document.getElementById("bienTheContainer").appendChild(container);
+        });
 
-                // Xóa biến thể
-                document.addEventListener("click", function(event) {
-                    if (event.target.classList.contains("removeVariant")) {
-                        event.target.closest(".bienThe").remove();
-                    }
-                });
+        // Xóa biến thể
+        document.addEventListener("click", function(event) {
+            if (event.target.classList.contains("removeVariant")) {
+                event.target.closest(".bienThe").remove();
+            }
+        });
 
-                // Thêm thuộc tính cho biến thể
-                document.addEventListener("click", function(event) {
-                    if (event.target.classList.contains("addAttribute")) {
-                        let thuocTinhHTML = `
+        // Thêm thuộc tính cho biến thể
+        document.addEventListener("click", function(event) {
+            if (event.target.classList.contains("addAttribute")) {
+                let thuocTinhHTML = `
                     <div class="row align-items-center mb-2">
                         <div class="col-sm-5">
                             <select name="thuoc_tinh_id[]" class="form-control selectAttribute">
@@ -255,60 +255,60 @@
                         </div>
                     </div>`;
 
-                        event.target.closest(".thuocTinhContainer").insertAdjacentHTML("beforeend",
-                            thuocTinhHTML);
-                    }
-                });
+                event.target.closest(".thuocTinhContainer").insertAdjacentHTML("beforeend",
+                    thuocTinhHTML);
+            }
+        });
 
-                document.addEventListener('change', function(event) {
-                    if (event.target.classList.contains('variant-image')) {
-                        const file = event.target.files[0];
-                        if (file) {
-                            const reader = new FileReader();
-                            reader.onload = function(e) {
-                                const preview = event.target.closest('.col-sm-3').querySelector(
-                                    '.previewImage');
-                                preview.src = e.target.result;
-                                preview.style.display = 'block';
-                            };
-                            reader.readAsDataURL(file);
-                        }
-                    }
-                });
+        document.addEventListener('change', function(event) {
+            if (event.target.classList.contains('variant-image')) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const preview = event.target.closest('.col-sm-3').querySelector(
+                            '.previewImage');
+                        preview.src = e.target.result;
+                        preview.style.display = 'block';
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
+        });
 
-                // Xóa thuộc tính
-                document.addEventListener("click", function(event) {
-                    if (event.target.classList.contains("removeAttribute")) {
-                        event.target.closest(".row").remove();
-                    }
-                });
+        // Xóa thuộc tính
+        document.addEventListener("click", function(event) {
+            if (event.target.classList.contains("removeAttribute")) {
+                event.target.closest(".row").remove();
+            }
+        });
 
 
-                // Load giá trị thuộc tính khi chọn thuộc tính
-                document.addEventListener("change", function(event) {
-                    if (event.target.classList.contains("selectAttribute")) {
-                        let thuocTinhId = event.target.value;
-                        let valueSelect = event.target.closest(".row").querySelector(".selectValue");
+        // Load giá trị thuộc tính khi chọn thuộc tính
+        document.addEventListener("change", function(event) {
+            if (event.target.classList.contains("selectAttribute")) {
+                let thuocTinhId = event.target.value;
+                let valueSelect = event.target.closest(".row").querySelector(".selectValue");
 
-                        // Xóa các giá trị cũ
-                        valueSelect.innerHTML = '<option disabled selected>Chọn giá trị</option>';
+                // Xóa các giá trị cũ
+                valueSelect.innerHTML = '<option disabled selected>Chọn giá trị</option>';
 
-                        // Tìm thuộc tính được chọn và hiển thị giá trị tương ứng
-                        let selectedAttribute = thuocTinhs.find(t => t.id == thuocTinhId);
-                        if (selectedAttribute && Array.isArray(selectedAttribute.gia_tri_thuoc_tinh)) {
-                            selectedAttribute.gia_tri_thuoc_tinh.forEach(value => {
-                                let option = document.createElement("option");
-                                option.value = value.id;
-                                option.textContent = value.gia_tri;
-                                valueSelect.appendChild(option);
-                            });
-                        } else {
-                            console.error("Không tìm thấy giá trị thuộc tính");
-                        }
-                    }
-                });
+                // Tìm thuộc tính được chọn và hiển thị giá trị tương ứng
+                let selectedAttribute = thuocTinhs.find(t => t.id == thuocTinhId);
+                if (selectedAttribute && Array.isArray(selectedAttribute.gia_tri_thuoc_tinh)) {
+                    selectedAttribute.gia_tri_thuoc_tinh.forEach(value => {
+                        let option = document.createElement("option");
+                        option.value = value.id;
+                        option.textContent = value.gia_tri;
+                        valueSelect.appendChild(option);
+                    });
+                } else {
+                    console.error("Không tìm thấy giá trị thuộc tính");
+                }
+            }
+        });
+    });
 </script>
-
 @section('js')
     <!-- Sidebar js -->
     <script src="{{ asset('assets/js/config.js') }}"></script>
