@@ -45,22 +45,30 @@
                         <div class="title-header option-title">
                             <h5>Thêm danh mục bài viết</h5>
                         </div>
+
                         <form action="{{ route('danhmucbaiviets.store') }}" method="POST">
                             @csrf
                             <div class="mb-3">
                                 <label class="form-label">Tên danh mục</label>
-                                <input type="text" class="form-control" name="ten_danh_muc" value="{{ old('ten_danh_muc') }}" required>
+                                <input type="text" class="form-control @error('ten_danh_muc') is-invalid @enderror"
+                                       name="ten_danh_muc" value="{{ old('ten_danh_muc') }}">
+                                @error('ten_danh_muc')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
                             </div>
+
                             <div class="mb-3">
                                 <label class="form-label">Mô tả</label>
-                                <textarea class="form-control" name="mo_ta">{{ old('mo_ta') }}</textarea>
+                                <textarea class="form-control @error('mo_ta') is-invalid @enderror" name="mo_ta">{{ old('mo_ta') }}</textarea>
+                                @error('mo_ta')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
                             </div>
+
                             <div class="mt-5 d-flex justify-content-between">
                                 <a href="{{ route('danhmucbaiviets.index') }}" class="btn btn-secondary">Quay lại</a>
                                 <button class="btn btn-primary" type="submit">Thêm mới</button>
                             </div>
-                        </form>
-
                         </form>
                     </div>
                 </div>

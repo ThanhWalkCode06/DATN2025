@@ -62,7 +62,7 @@
                                 @foreach ($baiViets as $index => $baiViet)
                                     <tr>
                                         <td>{{ $index + 1 }}</td>
-                                        <td>{{ $baiViet->user->name }}</td>
+                                        <td>{{ $baiViet->user->ten_nguoi_dung }}</td>
                                         <td>{{ $baiViet->tieu_de }}</td>
                                         <td>{{ $baiViet->danhMuc->ten_danh_muc}}</td>
                                         <td>
