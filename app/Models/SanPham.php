@@ -12,9 +12,13 @@ class SanPham extends Model
     protected $fillable = [
         'ten_san_pham',
         'ma_san_pham',
-        'khuyen_mai',
+        // 'khuyen_mai',
+        'gia_cu',
+        'gia_moi',
         'hinh_anh',
         'mo_ta',
+        'chat_lieu',
+        'form',
         'danh_muc_id',
         'trang_thai',
         'created_at',
@@ -28,6 +32,10 @@ class SanPham extends Model
     public function bienThes()
     {
         return $this->hasMany(BienThe::class, 'san_pham_id');
+    }
+    public function anhSP()
+    {
+        return $this->hasMany(AnhSanPham::class, 'san_pham_id',);
     }
 
     public function scopeSearch($query, $search)

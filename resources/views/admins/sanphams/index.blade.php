@@ -73,7 +73,6 @@
                                     <th>Mã sản phẩm</th>
                                     <th>Danh mục</th>
                                     <th>Hình ảnh</th>
-                                    <th>Khuyến mãi</th>
                                     <th>Trạng thái</th>
                                     <th>Biến thể</th>
                                     <th>Hành động</th>
@@ -93,14 +92,11 @@
 
                                         <td>
                                             <div class="table-image">
-                                                <img src="{{ asset('storage/' . $sanpham->hinh_anh) }}"
+                                                <img src="{{ Storage::url($sanpham->hinh_anh) }}"
                                                     class="img-thumbnail" alt="Hình ảnh" width="100px">
                                             </div>
-                                           
+
                                         </td>
-
-                                        <td>{{ $sanpham->khuyen_mai }}</td>
-
                                         {{-- <td class="">{{ $sanpham->ngay_nhap->format('d/m/Y') }}</td> --}}
 
                                         <td>
@@ -115,7 +111,7 @@
                                             <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#variant_{{ $sanpham->id }}">
                                                 Xem biến thể
                                             </button>
-                                        
+
                                             <!-- Modal hiển thị biến thể sản phẩm -->
                                             <div id="variant_{{ $sanpham->id }}" class="modal fade fadeInLeft" tabindex="-1" aria-hidden="true">
                                                 <div class="modal-dialog" style="max-width: 800px !important;">
@@ -150,7 +146,7 @@
                                                                                                 Không có ảnh
                                                                                             @endif
                                                                                         </td>
-                                                                                        
+
                                                                                         <td>{{ number_format($bienThe->gia_nhap, 0, ',', '.') }} VNĐ</td>
                                                                                         <td>{{ number_format($bienThe->gia_ban, 0, ',', '.') }} VNĐ</td>
                                                                                         <td>{{ $bienThe->so_luong }}</td>
@@ -173,7 +169,7 @@
                                                 </div><!-- /.modal-dialog -->
                                             </div><!-- /.modal -->
                                         </td>
-                                        
+
 
                                         <td>
                                             <ul>
