@@ -47,7 +47,7 @@ class ThongKeController extends Controller
     )
     ->groupBy('san_phams.id', 'san_phams.ten_san_pham', 'bien_thes.gia_ban')
     ->orderByDesc('tong_da_ban')
-    ->paginate(5);
+    ->paginate(3);
     // dd($sanPhamBanChay);
 
 
