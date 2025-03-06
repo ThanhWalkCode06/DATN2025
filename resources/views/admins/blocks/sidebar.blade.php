@@ -36,30 +36,6 @@
                         </a>
                     </li>
 
-                    <li class="sidebar-list">
-                        <a class="linear-icon-link sidebar-link sidebar-title" href="javascript:void(0)">
-                            <i class="ri-store-3-line"></i>
-                            <span>Quản lý sản phẩm</span>
-                        </a>
-                        <ul class="sidebar-submenu">
-                            <li>
-                                <a href="{{ route('sanphams.index') }}">Sản phẩm</a>
-                            </li>
-
-                            <li>
-                                <a href="{{ route('danhmucsanphams.index') }}">Danh mục</a>
-                            </li>
-
-                            <li>
-                                <a href="{{ route('thuoctinhs.index') }}">Thuộc tính</a>
-                            </li>
-
-                            <li>
-                                <a href="{{ route('danhgias.index') }}">Đánh giá</a>
-                            </li>
-                        </ul>
-                    </li>
-
                     @haspermission('users-view')
                         <li class="sidebar-list">
                             <a class="sidebar-link sidebar-title" href="javascript:void(0)">
@@ -84,10 +60,27 @@
                     @endhaspermission
 
                     <li class="sidebar-list">
-                        <a class="sidebar-link sidebar-title link-nav" href="{{ route('donhangs.index') }}">
-                            <i class="ri-archive-line"></i>
-                            <span>Đơn hàng</span>
+                        <a class="linear-icon-link sidebar-link sidebar-title" href="javascript:void(0)">
+                            <i class="ri-store-3-line"></i>
+                            <span>Quản lý sản phẩm</span>
                         </a>
+                        <ul class="sidebar-submenu">
+                            <li>
+                                <a href="{{ route('sanphams.index') }}">Sản phẩm</a>
+                            </li>
+
+                            <li>
+                                <a href="{{ route('danhmucsanphams.index') }}">Danh mục</a>
+                            </li>
+
+                            <li>
+                                <a href="{{ route('thuoctinhs.index') }}">Thuộc tính</a>
+                            </li>
+
+                            <li>
+                                <a href="{{ route('danhgias.index') }}">Đánh giá</a>
+                            </li>
+                        </ul>
                     </li>
 
                     <li class="sidebar-list">
@@ -104,6 +97,13 @@
                                 <a href="{{ route('danhmucbaiviets.index') }}">Danh mục bài viết</a>
                             </li>
                         </ul>
+                    </li>
+
+                    <li class="sidebar-list">
+                        <a class="sidebar-link sidebar-title link-nav" href="{{ route('donhangs.index') }}">
+                            <i class="ri-archive-line"></i>
+                            <span>Đơn hàng</span>
+                        </a>
                     </li>
 
                     <li class="sidebar-list">
