@@ -68,10 +68,14 @@
                                 <div class="col-sm-9">
                                     <div id="giaTriContainer">
                                         @foreach($giaTriThuocTinhs as $key => $giaTri)
+                                        <input type="hidden" name="gia_tri_id[{{ $key }}]" value="{{ $giaTri->id }}">
                                             <div class="input-group mb-2">
                                                 <input type="text" name="gia_tri[]" class="form-control"
                                                     value="{{ old('gia_tri.' . $key, $giaTri->gia_tri) }}"
                                                     placeholder="Giá trị thuộc tính">
+                                                    @error('gia_tri')
+    <div class="text-danger">{{ $message }}</div>
+@enderror
                                                 <button type="button" class="btn btn-danger removeGiaTri">Xóa</button>
                                                 @error("gia_tri.$key")
                                                     <p class="text-danger">{{ $message }}</p>
