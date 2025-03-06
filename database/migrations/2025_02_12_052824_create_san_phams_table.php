@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('ten_san_pham');
             $table->string('ma_san_pham');
-            // $table->decimal('gia_cu');
-            // $table->decimal('gia_moi');
+            $table->double('gia_cu');
+            $table->double('gia_moi');
             $table->double('khuyen_mai')->default(0);
             $table->string('hinh_anh')->default('default.png');
             $table->text('mo_ta')->nullable();

@@ -73,7 +73,6 @@
                                     <th>Mã sản phẩm</th>
                                     <th>Danh mục</th>
                                     <th>Hình ảnh</th>
-                                    <th>Khuyến mãi</th>
                                     <th>Trạng thái</th>
                                     <th>Biến thể</th>
                                     <th>Hành động</th>
@@ -93,14 +92,10 @@
 
                                         <td>
                                             <div class="table-image">
-                                                <img src="{{ Storage::url($sanpham->hinh_anh) }}" class="img-thumbnail"
-                                                    alt="Hình ảnh" width="100px">
+                                                <img src="{{ Storage::url($sanpham->hinh_anh) }}"
+                                                    class="img-thumbnail" alt="Hình ảnh" width="100px">
                                             </div>
-
                                         </td>
-
-                                        <td>{{ $sanpham->khuyen_mai }}</td>
-
                                         {{-- <td class="">{{ $sanpham->ngay_nhap->format('d/m/Y') }}</td> --}}
 
                                         <td>
@@ -155,10 +150,8 @@
                                                                                             @endif
                                                                                         </td>
 
-                                                                                        <td>{{ number_format($bienThe->gia_nhap, 0, ',', '.') }}
-                                                                                            VNĐ</td>
-                                                                                        <td>{{ number_format($bienThe->gia_ban, 0, ',', '.') }}
-                                                                                            VNĐ</td>
+                                                                                        <td>{{ number_format($bienThe->gia_nhap, 0, ',', '.') }} VNĐ</td>
+                                                                                        <td>{{ number_format($bienThe->gia_ban, 0, ',', '.') }} VNĐ</td>
                                                                                         <td>{{ $bienThe->so_luong }}</td>
                                                                                     </tr>
                                                                                 @endforeach
