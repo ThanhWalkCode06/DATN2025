@@ -23,6 +23,7 @@ class PhieuGiamGiaFactory extends Factory
             'ngay_ket_thuc' => $this->faker->date(),
             'gia_tri' => $this->faker->numberBetween(1, 99),
             'mo_ta' => $this->faker->paragraph()
+            'trang_thai' => $this->faker->numberBetween(0, 1),
         ];
     }
 }
