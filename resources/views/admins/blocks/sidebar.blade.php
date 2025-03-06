@@ -200,7 +200,7 @@
                     </li>
 
                     <li class="sidebar-list">
-                        <a class="sidebar-link sidebar-title link-nav" href="{{ route('danhgias') }}">
+                        <a class="sidebar-link sidebar-title link-nav" href="{{ route('danhgias.index') }}">
                             <i class="ri-star-line"></i>
                             <span>Đánh giá sản phẩm</span>
                         </a>
