@@ -41,8 +41,8 @@ class PhieuGiamGiaController extends Controller
         ]);
 
         PhieuGiamGia::create($request->all());
-
         return redirect()->route('phieugiamgias.index')->with('success', 'Thêm phiếu giảm giá thành công!');
+
     }
 
     /**

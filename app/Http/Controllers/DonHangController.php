@@ -9,15 +9,13 @@ use App\Models\ChiTietDonHang;
 
 class DonHangController extends Controller
 {
-    public function __construct()
-    {
-    }
+    public function __construct() {}
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $donHangs = DonHang::select('don_hangs.*', 'users.username', 'phuong_thuc_thanh_toans.ten_phuong_thuc')
+        $donHangs = DonHang::select('don_hangs.*', 'users.ten_nguoi_dung', 'phuong_thuc_thanh_toans.ten_phuong_thuc')
             ->join('users', 'users.id', '=', 'user_id')
             ->join('phuong_thuc_thanh_toans', 'phuong_thuc_thanh_toans.id', '=', 'phuong_thuc_thanh_toan_id')
             ->get();
@@ -46,7 +44,7 @@ class DonHangController extends Controller
      */
     public function show(DonHang $donhang)
     {
-        $donHang = DonHang::select('don_hangs.*', 'users.username', 'phuong_thuc_thanh_toans.ten_phuong_thuc')
+        $donHang = DonHang::select('don_hangs.*', 'users.ten_nguoi_dung', 'phuong_thuc_thanh_toans.ten_phuong_thuc')
             ->join('users', 'users.id', '=', 'user_id')
             ->join('phuong_thuc_thanh_toans', 'phuong_thuc_thanh_toans.id', '=', 'phuong_thuc_thanh_toan_id')
             ->find($donhang->id);
@@ -64,15 +62,40 @@ class DonHangController extends Controller
      */
     public function edit(DonHang $donhang)
     {
-        //
+        $donHang = DonHang::select('don_hangs.*', 'users.ten_nguoi_dung', 'phuong_thuc_thanh_toans.ten_phuong_thuc')
+            ->join('users', 'users.id', '=', 'user_id')
+            ->join('phuong_thuc_thanh_toans', 'phuong_thuc_thanh_toans.id', '=', 'phuong_thuc_thanh_toan_id')
+            ->find($donhang->id);
+        return view('admins.donhangs.edit', compact('donHang'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateDonHangRequest $request, DonHang $donHang)
+    public function update(UpdateDonHangRequest $request, DonHang $donhang)
     {
-        //
+        if ($request->doi_trang_thai) {
+            $data = [
+                'trang_thai_don_hang' => $request->trang_thai
+            ];
+            DonHang::where("id", $donhang->id)->update($data);
+        }
+
+        if ($request->xac_nhan_thanh_toan) {
+            $data = [
+                'trang_thai_thanh_toan' => 1
+            ];
+            DonHang::where("id", $donhang->id)->update($data);
+        }
+
+        if ($request->huy_don_hang) {
+            $data = [
+                'trang_thai_don_hang' => -1
+            ];
+            DonHang::where("id", $donhang->id)->update($data);
+        }
+
+        return redirect()->route('donhangs.edit', $donhang->id)->with('success', 'Cập nhật thành công');
     }
 
     /**

@@ -60,20 +60,32 @@
                                 </div>
                             </div>
 
-                            <!-- Giá trị thuộc tính -->
-                            <div class="mb-4 row align-items-start">
-                                <label class="form-label-title col-sm-3 mb-0">Giá trị thuộc tính</label>
-                                <div class="col-sm-9">
-                                    <div id="giaTriContainer">
-                                        <div class="input-group mb-2">
-                                            <input type="text" name="gia_tri[]" class="form-control" placeholder="Giá trị thuộc tính">
-                                           
-                                            <button type="button" class="btn btn-danger removeGiaTri">Xóa</button>
-                                        </div>
-                                    </div>
-                                    <button type="button" id="addGiaTri" class="btn btn-primary mt-2">Thêm giá trị</button>
-                                </div>
-                            </div>
+                           <!-- Giá trị thuộc tính -->
+<div class="mb-4 row align-items-start">
+    <label class="form-label-title col-sm-3 mb-0">Giá trị thuộc tính</label>
+    <div class="col-sm-9">
+        <div id="giaTriContainer">
+            @if(old('gia_tri'))
+                @foreach(old('gia_tri') as $key => $giaTri)
+                    <div class="input-group mb-2">
+                        <input type="text" name="gia_tri[]" class="form-control" value="{{ $giaTri }}" placeholder="Giá trị thuộc tính">
+                        <button type="button" class="btn btn-danger removeGiaTri">Xóa</button>
+                        @error("gia_tri.$key")
+                            <p class="text-danger">{{ $message }}</p>
+                        @enderror
+                    </div>
+                @endforeach
+            @else
+                <div class="input-group mb-2">
+                    <input type="text" name="gia_tri[]" class="form-control" placeholder="Giá trị thuộc tính">
+                    <button type="button" class="btn btn-danger removeGiaTri">Xóa</button>
+                </div>
+            @endif
+        </div>
+        <button type="button" id="addGiaTri" class="btn btn-primary mt-2">Thêm giá trị</button>
+    </div>
+</div>
+
                             
                             <button class="btn ms-auto theme-bg-color text-white" type="submit">Thêm mới</button>
                         </form>
@@ -111,25 +123,56 @@
     <script src="{{ asset('assets/js/select2.min.js') }}"></script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const giaTriContainer = document.getElementById('giaTriContainer');
-            const addGiaTriButton = document.getElementById('addGiaTri');
+       document.addEventListener('DOMContentLoaded', function() {
+    const giaTriContainer = document.getElementById('giaTriContainer');
+    const addGiaTriButton = document.getElementById('addGiaTri');
 
-            addGiaTriButton.addEventListener('click', function() {
-                const newInputGroup = document.createElement('div');
-                newInputGroup.classList.add('input-group', 'mb-2');
-                newInputGroup.innerHTML = `
-                    <input type="text" name="gia_tri[]" class="form-control" placeholder="Giá trị thuộc tính">
-                    <button type="button" class="btn btn-danger removeGiaTri">Xóa</button>
-                `;
-                giaTriContainer.appendChild(newInputGroup);
-            });
+    addGiaTriButton.addEventListener('click', function() {
+        const newInputGroup = document.createElement('div');
+        newInputGroup.classList.add('input-group', 'mb-2');
+        newInputGroup.innerHTML = `
+            <input type="text" name="gia_tri[]" class="form-control" placeholder="Giá trị thuộc tính">
+            <button type="button" class="btn btn-danger removeGiaTri">Xóa</button>
+            <p class="text-danger error-message" style="display: none;"></p>
+        `;
+        giaTriContainer.appendChild(newInputGroup);
+    });
 
-            giaTriContainer.addEventListener('click', function(event) {
-                if (event.target.classList.contains('removeGiaTri')) {
-                    event.target.closest('.input-group').remove();
-                }
-            });
+    giaTriContainer.addEventListener('click', function(event) {
+        if (event.target.classList.contains('removeGiaTri')) {
+            event.target.closest('.input-group').remove();
+        }
+    });
+
+    document.querySelector('form').addEventListener('submit', function(event) {
+        let isValid = true;
+        const inputs = document.querySelectorAll('input[name="gia_tri[]"]');
+        const values = [...inputs].map(input => input.value.trim()).filter(val => val !== "");
+
+        // Xóa thông báo lỗi cũ
+        document.querySelectorAll('.error-message').forEach(el => el.style.display = 'none');
+
+        // Kiểm tra trùng lặp
+        const seen = new Set();
+        inputs.forEach((input, index) => {
+            const value = input.value.trim();
+            const errorMessage = input.parentElement.querySelector('.error-message');
+
+            if (value !== "" && seen.has(value)) {
+                errorMessage.textContent = "Giá trị thuộc tính không được trùng nhau.";
+                errorMessage.style.display = 'block';
+                isValid = false;
+            } else {
+                seen.add(value);
+            }
         });
+
+        if (!isValid) {
+            event.preventDefault();
+        }
+    });
+});
+
+
     </script>
 @endsection

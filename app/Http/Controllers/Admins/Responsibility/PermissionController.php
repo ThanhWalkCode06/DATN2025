@@ -10,31 +10,42 @@ use Carbon\Exceptions\Exception;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admins\Responsibility\PermissionRequest;
 
+use function PHPUnit\Framework\isEmpty;
+
 class PermissionController extends Controller
 {
-    public function __construct(){
-    }
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
-        if($request->isMethod('get')){
+        // dd($request->key);
             $lists = Permission::whereNull('deleted_at')
-            ->orderByDesc('id')
-            ->paginate(10)
-            ->onEachSide(5);
-            return view('admins.permission.index',compact('lists'));
-        }else{
-            $lists = Permission::where('name','like','%'.$request->key.'%')
-            ->orwhere('description','like','%'.$request->key.'%')
-            ->orderBy('id','DESC')->paginate(10);
-            return view('admins.permission.index',compact('lists'));
-        }
-
+                ->orderBy('id', 'DESC')
+                ->paginate(10);
+        return view('admins.permission.index', compact('lists'));
     }
 
+    public function search(Request $request)
+    {
+        $key = trim($request->key);
+        if (empty($key)) {
+            // Nếu key trống, lấy tất cả dữ liệu
+            return redirect()->route('permissions.index');
+        }
 
+        // Tìm kiếm
+        $lists = Permission::where('name', 'like', "%$key%")
+            ->orWhere('description', 'like', "%$key%")
+            ->orderBy('id', 'DESC')
+            ->paginate(10)
+            ->appends(['key' => $key]);
+        if ($lists->isEmpty()) {
+            return view('admins.permission.index', compact('lists'));
+        }
+
+        return view('admins.permission.index', compact('lists'));
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -50,24 +61,20 @@ class PermissionController extends Controller
      */
     public function store(PermissionRequest $request)
     {
-        try{
-            $names = $request->name; // Danh sách quyền cần xử lý
-
-            // Tìm các quyền đã bị xóa mềm
             $deletedPermissions = Permission::withTrashed()
-                ->whereIn('name', $names)
+                ->whereIn('name', $request->name)
                 ->whereNotNull('deleted_at')
                 ->get()
                 ->keyBy('name'); // Tạo key để tra cứu nhanh
-            foreach ($names as $index => $name) {
+            foreach ($request->name as $index => $name) {
 
                 if (isset($deletedPermissions[$name])) {
+                    // dd(1);
                     $deletedPermissions[$name]->restore();
                     if($request->description[$index]){
                         $deletedPermissions[$name]->update(['description' => $request->description[$index]]);
                     }
                 } else {
-                    // Kiểm tra description có tồn tại không trước khi tạo mới
                     Permission::create([
                         'name' => $name,
                         'description' => $request->description[$index] ?? null,
@@ -78,10 +85,6 @@ class PermissionController extends Controller
         session()->flash('success', 'Tạo thành công quyền');
         return redirect()->route('permissions.index');
 
-        }catch(Exception $e){
-            session()->flash('error', 'Lỗi tạo quyền'.$e);
-            return redirect()->back();
-        }
 
     }
 
@@ -115,7 +118,7 @@ class PermissionController extends Controller
                 ->get()
                 ->keyBy('name');
         $data = $request->validate([
-            'name' => ['required','regex:/^[^-]*-[^-]*$/', Rule::unique('permissions', 'name')->WhereNull('deleted_at')->ignore($id)],
+            'name' => ['required', Rule::unique('permissions', 'name')->WhereNull('deleted_at')->ignore($id)],
             'description' => ['required'],
         ],[
             'name.required' => 'Tên quyền không được để trống',
@@ -123,7 +126,8 @@ class PermissionController extends Controller
             'name.regex' => 'Tên phải chứa dấu gạch (-).',
             'description.required' => 'Mô tả quyền không được để trống',
         ]);
-        if($deletedPermissions){
+        if(!$deletedPermissions->isEmpty()){
+            // dd($deletedPermissions->isEmpty() ? 'true' : 'flash');
             $deletedPermissions[$request->name]->restore();
             if($request->description){
                 $deletedPermissions[$request->name]->update(['description' => $request->description]);

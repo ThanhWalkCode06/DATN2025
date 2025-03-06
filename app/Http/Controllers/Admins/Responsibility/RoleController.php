@@ -25,15 +25,24 @@ class RoleController extends Controller
             ->orderByDesc('id')
             ->paginate(10)
             ->onEachSide(5);
-            return view('admins.vaitros.index',compact('lists'));
-        }else{
-            $lists = Role::where('name','like','%'.$request->key.'%')
-            ->orderBy('id','DESC')->paginate(10);
-            return view('admins.vaitros.index',compact('lists'));
+
         }
 
+        return view('admins.vaitros.index',compact('lists'));
     }
+    public function search(Request $request)
+    {
+        $key = trim($request->key);
+        if (empty($key)) {
+            return redirect()->route('roles.index');
+        }
 
+        $lists = Role::where('name', 'like', "%$key%")
+            ->orderBy('id', 'DESC')
+            ->paginate(10)
+            ->appends(['key' => $key]);
+        return view('admins.vaitros.index', compact('lists'));
+    }
 
 
     /**

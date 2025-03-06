@@ -39,18 +39,23 @@ Route::prefix('/admin')->controller(AuthController::class)->group(function () {
     Route::get('/pass/edit', 'editPass')->name('pass.edit');
     Route::post('/pass/update', 'updatePass')->name('pass.update');
 });
-    Route::prefix('admin')->middleware(['auth','checkStatus'])->group(function(){
-    Route::get('/logout',[AuthController::class, 'logout'])->name('logout');
+Route::prefix('admin')->middleware(['auth', 'checkStatus'])->group(function () {
+    Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::match(['post', 'get'], '/setting-infor', [SettingController::class, 'index'])->name('setting-infor.private');
     Route::middleware(['role:SuperAdmin'])->group(function () {
+
+        Route::get('permissions/search', [PermissionController::class, 'search'])->name('permission-search');
         Route::resource('permissions', PermissionController::class);
+
+        Route::get('roles/search', [RoleController::class, 'search'])->name('roles-search');
         Route::resource('roles', RoleController::class);
-        Route::match(['post', 'get'],'/configuration-mail',[SettingController::class,'mail'])->name('configuration.setting-mail');
-        Route::match(['post', 'get'],'/configuration-common',[SettingController::class,'common'])->name('configuration.common');
+
+        Route::match(['post', 'get'], '/configuration-mail', [SettingController::class, 'mail'])->name('configuration.setting-mail');
+        Route::match(['post', 'get'], '/configuration-common', [SettingController::class, 'common'])->name('configuration.common');
     });
-    Route::get('/checkrole',function(){
+    Route::get('/checkrole', function () {
         $permissions = App\Models\Role::findByName('admin')->getPermissionNames();
         dd($permissions, Auth::user()->roles);
     });
@@ -61,14 +66,15 @@ Route::prefix('/admin')->controller(AuthController::class)->group(function () {
 
     Route::get("/", [ThongKeController::class, "index"])->name('index');
     Route::get("/lienhe", [LienHeController::class, "index"])->name('lienhe');
-    Route::get("/danhgia", [DanhGiaController::class, "index"])->name('danhgia');
+    Route::get("/danhgias", [DanhGiaController::class, "index"])->name('danhgias');
 
-    // Chức năng thì cho vào đây đánh tên route->name phải giống quyền
 
+    // Chức năng thì cho vào đây đánh tên route->name phải giống quyền lối bởi dấu . nếu thêm
     Route::middleware('dynamic')->group(function(){
         Route::resource('danhmucsanphams', DanhMucSanPhamController::class);
         Route::resource('sanphams', SanPhamController::class);
         Route::resource('bienthes', BienTheController::class);
+        Route::get('users/search', [UserController::class, 'search'])->name('users-search');
         Route::resource('users', UserController::class);
         Route::resource('thuoctinhs', ThuocTinhController::class);
         Route::resource('donhangs', DonHangController::class);
@@ -76,10 +82,9 @@ Route::prefix('/admin')->controller(AuthController::class)->group(function () {
         Route::resource('danhmucbaiviets', DanhMucBaiVietController::class);
         Route::resource('baiviets', BaiVietController::class);
         Route::resource('phieugiamgias', PhieuGiamGiaController::class);
+        Route::get("/danhgia", [DanhGiaController::class, "index"])->name('danhgia');
     });
-
-
-    });
+});
 
 
 // Route::get('mail', function () {

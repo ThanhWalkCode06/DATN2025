@@ -41,333 +41,45 @@
                         <table class="user-table ticket-table review-table theme-table table" id="table_id">
                             <thead>
                                 <tr>
-                                    <th>STT</th>
                                     <th>Tên khách hàng</th>
                                     <th>Tên sản phẩm</th>
                                     <th>Đánh giá</th>
                                     <th>Nhận xét</th>
-                                    <th>Ẩn/hiện</th>
+                                    <th>Trạng thái</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>01</td>
-                                    <td>Maureen Biologist</td>
-                                    <td>Outwear & Coats</td>
-                                    <td>
-                                        <ul class="rating">
-                                            <li>
-                                                <i class="fas fa-star theme-color"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fas fa-star theme-color"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fas fa-star"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fas fa-star"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fas fa-star"></i>
-                                            </li>
-                                        </ul>
-                                    </td>
-                                    <td>The Product is No Longer Needed</td>
-                                    <td class="td-check">
-                                        <i class="ri-checkbox-circle-line"></i>
-                                    </td>
-                                </tr>
+                                @foreach ($danhGias as $danhGia)
+                                    <tr>
+                                        <td>{{ $danhGia->ten_nguoi_dung }}</td>
+                                        <td>{{ $danhGia->ten_san_pham }}</td>
+                                        <td>
+                                            <ul class="rating">
+                                                @for ($i = 0; $i < $danhGia->so_sao; $i++)
+                                                    <li>
+                                                        <i class="fas fa-star theme-color"></i>
+                                                    </li>
+                                                @endfor
+                                                @for ($i = 0; $i < 5 - $danhGia->so_sao; $i++)
+                                                    <li>
+                                                        <i class="fas fa-star"></i>
+                                                    </li>
+                                                @endfor
+                                            </ul>
+                                        </td>
+                                        <td class="text-wrap">{{ $danhGia->nhan_xet }}</td>
 
-                                <tr>
-                                    <td>02</td>
-                                    <td>Caroline Harris</td>
-                                    <td>Slim Fit Plastic Coat</td>
-                                    <td>
-                                        <ul class="rating">
-                                            <li>
-                                                <i class="fas fa-star theme-color"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fas fa-star theme-color"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fas fa-star theme-color"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fas fa-star theme-color"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fas fa-star theme-color"></i>
-                                            </li>
-                                        </ul>
-                                    </td>
-                                    <td>The Product is No Longer Needed</td>
-                                    <td class="td-check">
-                                        <i class="ri-checkbox-circle-line"></i>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>03</td>
-                                    <td>Lucy Morile</td>
-                                    <td>Men's Sweatshirt</td>
-                                    <td>
-                                        <ul class="rating">
-                                            <li>
-                                                <i class="fas fa-star theme-color"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fas fa-star"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fas fa-star"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fas fa-star"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fas fa-star"></i>
-                                            </li>
-                                        </ul>
-                                    </td>
-                                    <td>The Product is No Longer Needed</td>
-                                    <td class="td-check">
-                                        <i class="ri-checkbox-circle-line"></i>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>04</td>
-                                    <td>Jennifer Straight</td>
-                                    <td>Men's Hoodie t-shirt</td>
-                                    <td>
-                                        <ul class="rating">
-                                            <li>
-                                                <i class="fas fa-star theme-color"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fas fa-star theme-color"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fas fa-star theme-color"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fas fa-star theme-color"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fas fa-star"></i>
-                                            </li>
-                                        </ul>
-                                    </td>
-                                    <td>The Product is No Longer Needed</td>
-                                    <td class="td-cross">
-                                        <i class="ri-close-circle-line"></i>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>05</td>
-                                    <td>Kevin Millett</td>
-                                    <td>Outwear & Coats</td>
-                                    <td>
-                                        <ul class="rating">
-                                            <li>
-                                                <i class="fas fa-star theme-color"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fas fa-star theme-color"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fas fa-star theme-color"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fas fa-star"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fas fa-star"></i>
-                                            </li>
-                                        </ul>
-                                    </td>
-                                    <td>The Product is No Longer Needed</td>
-                                    <td class="td-check">
-                                        <i class="ri-checkbox-circle-line"></i>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>06</td>
-                                    <td>czxc</td>
-                                    <td>Slim Fit Plastic Coat</td>
-                                    <td>
-                                        <ul class="rating">
-                                            <li>
-                                                <i class="fas fa-star theme-color"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fas fa-star theme-color"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fas fa-star"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fas fa-star"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fas fa-star"></i>
-                                            </li>
-                                        </ul>
-                                    </td>
-                                    <td>The Product is No Longer Needed</td>
-                                    <td class="td-cross">
-                                        <i class="ri-close-circle-line"></i>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>07</td>
-                                    <td>Kevin Millett</td>
-                                    <td>Men's Sweatshirt</td>
-                                    <td>
-                                        <ul class="rating">
-                                            <li>
-                                                <i class="fas fa-star theme-color"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fas fa-star theme-color"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fas fa-star theme-color"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fas fa-star theme-color"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fas fa-star theme-color"></i>
-                                            </li>
-                                        </ul>
-                                    </td>
-                                    <td>The Product is No Longer Needed</td>
-                                    <td class="td-cross">
-                                        <i class="ri-close-circle-line"></i>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>08</td>
-                                    <td>Dillon Bradshaw</td>
-                                    <td>Men's Hoodie t-shirt</td>
-                                    <td>
-                                        <ul class="rating">
-                                            <li>
-                                                <i class="fas fa-star theme-color"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fas fa-star theme-color"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fas fa-star theme-color"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fas fa-star theme-color"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fas fa-star theme-color"></i>
-                                            </li>
-                                        </ul>
-                                    </td>
-                                    <td>The Product is No Longer Needed</td>
-                                    <td class="td-check">
-                                        <i class="ri-checkbox-circle-line"></i>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>09</td>
-                                    <td>Lorna Bonner</td>
-                                    <td>Outwear & Coats</td>
-                                    <td>
-                                        <ul class="rating">
-                                            <li>
-                                                <i class="fas fa-star theme-color"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fas fa-star theme-color"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fas fa-star theme-color"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fas fa-star theme-color"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fas fa-star theme-color"></i>
-                                            </li>
-                                        </ul>
-                                    </td>
-                                    <td>The Product is No Longer Needed</td>
-                                    <td class="td-cross">
-                                        <i class="ri-close-circle-line"></i>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>10</td>
-                                    <td>Richard Johnson</td>
-                                    <td>Slim Fit Plastic Coat </td>
-                                    <td>
-                                        <ul class="rating">
-                                            <li>
-                                                <i class="fas fa-star theme-color"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fas fa-star"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fas fa-star"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fas fa-star"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fas fa-star"></i>
-                                            </li>
-                                        </ul>
-                                    </td>
-                                    <td>The Product is No Longer Needed</td>
-                                    <td class="td-check">
-                                        <i class="ri-checkbox-circle-line"></i>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>11</td>
-                                    <td>Lorraine McDowell</td>
-                                    <td>Men's Sweatshirt</td>
-                                    <td>
-                                        <ul class="rating">
-                                            <li>
-                                                <i class="fas fa-star theme-color"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fas fa-star theme-color"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fas fa-star theme-color"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fas fa-star"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fas fa-star"></i>
-                                            </li>
-                                        </ul>
-                                    </td>
-                                    <td>The Product is No Longer Needed</td>
-                                    <td class="td-check">
-                                        <i class="ri-checkbox-circle-line"></i>
-                                    </td>
-                                </tr>
+                                        @if ($danhGia->trang_thai == 1)
+                                            <td class="td-check">
+                                                <i class="ri-checkbox-circle-line"></i>
+                                            </td>
+                                        @else
+                                            <td class="td-cross">
+                                                <i class="ri-close-circle-line"></i>
+                                            </td>
+                                        @endif
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>

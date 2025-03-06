@@ -14,22 +14,30 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
-        if ($request->isMethod('get')) {
-            $lists = User::whereNull('deleted_at')
-            ->orderByDesc('id')
-            ->paginate(10)
-            ->onEachSide(5);
-            return view('admins.taikhoans.index', compact('lists'));
+        $lists = User::whereNull('deleted_at')
+        ->orderByDesc('id')
+        ->paginate(10)
+        ->onEachSide(5);
 
-        } else {
-            $lists = User::where('name', 'like', '%' . $request->key . '%')
-                ->orwhere('email', 'like', '%' . $request->key . '%')
-                ->orderBy('id', 'DESC')->paginate(10);
-            return view('admins.taikhoans.index', compact('lists'));
 
-        }
+        return view('admins.taikhoans.index', compact('lists'));
     }
 
+
+    public function search(Request $request)
+    {
+        $key = trim($request->key);
+        if (empty($key)) {
+            return redirect()->route('users.index');
+        }
+
+        $lists = User::where('username', 'like', '%' . $request->key . '%')
+        ->orwhere('email', 'like', '%' . $request->key . '%')
+        ->orderBy('id', 'DESC')
+        ->paginate(10)
+        ->appends(['key' => $key]);
+        return view('admins.taikhoans.index', compact('lists'));
+    }
     /**
      * Show the form for creating a new resource.
      */

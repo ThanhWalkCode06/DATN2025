@@ -41,6 +41,7 @@ class ThuocTinhController extends Controller
     {
         try {
             DB::beginTransaction(); // Bắt đầu transaction để đảm bảo dữ liệu đồng bộ
+
     
             // Lưu thuộc tính
             $thuocTinhId = DB::table('thuoc_tinhs')->insertGetId([
@@ -48,24 +49,31 @@ class ThuocTinhController extends Controller
                 'created_at' => now(),
                 'updated_at' => null
             ]);
-    
-            // Lưu giá trị thuộc tính (nếu có)
-            if ($request->has('gia_tri')) {
-                $giaTriThuocTinhs = [];
-                foreach ($request->input('gia_tri') as $giaTri) {
-                    if (!empty($giaTri)) {
-                        $giaTriThuocTinhs[] = [
-                            'thuoc_tinh_id' => $thuocTinhId,
-                            'gia_tri' => $giaTri,
-                            'created_at' => now(),
-                            'updated_at' => null
-                        ];
-                    }
+     // Kiểm tra và lưu giá trị thuộc tính
+     if ($request->has('gia_tri')) {
+        $giaTriThuocTinhs = [];
+        foreach ($request->input('gia_tri') as $giaTri) {
+            if (!empty($giaTri)) { // Bỏ qua giá trị rỗng
+                $exists = DB::table('gia_tri_thuoc_tinhs')
+                    ->where('gia_tri', $giaTri)
+                    ->exists();
+                if ($exists) {
+                    return redirect()->back()->withErrors(['gia_tri' => 'Giá trị thuộc tính "' . $giaTri . '" đã tồn tại.'])->withInput();
                 }
-                if (!empty($giaTriThuocTinhs)) {
-                    DB::table('gia_tri_thuoc_tinhs')->insert($giaTriThuocTinhs);
-                }
+
+                $giaTriThuocTinhs[] = [
+                    'thuoc_tinh_id' => $thuocTinhId,
+                    'gia_tri' => $giaTri,
+                    'created_at' => now(),
+                    'updated_at' => null
+                ];
             }
+        }
+
+        if (!empty($giaTriThuocTinhs)) {
+            DB::table('gia_tri_thuoc_tinhs')->insert($giaTriThuocTinhs);
+        }
+    }
     
             DB::commit(); // Lưu thay đổi nếu không có lỗi
             return redirect()->route('thuoctinhs.index')->with('success', 'Thêm thành công!');
@@ -112,18 +120,20 @@ public function update(UpdateThuocTinhRequest $request, $id)
         'updated_at' => now()
     ]);
 
-    // Cập nhật giá trị thuộc tính
+    // Xóa tất cả giá trị cũ
     DB::table('gia_tri_thuoc_tinhs')->where('thuoc_tinh_id', $id)->delete();
 
+    // Chèn lại giá trị mới nếu có
     if ($request->has('gia_tri')) {
-        $giaTriArray = array_filter($request->gia_tri);
-        foreach ($giaTriArray as $giaTri) {
-            DB::table('gia_tri_thuoc_tinhs')->insert([
-                'thuoc_tinh_id' => $id,
-                'gia_tri' => $giaTri,
-                'created_at' => now(),
-                'updated_at' => now()
-            ]);
+        foreach ($request->gia_tri as $giaTri) {
+            if (!empty($giaTri)) {
+                DB::table('gia_tri_thuoc_tinhs')->insert([
+                    'thuoc_tinh_id' => $id,
+                    'gia_tri' => $giaTri,
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ]);
+            }
         }
     }
 

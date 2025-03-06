@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreThuocTinhRequest extends FormRequest
@@ -23,7 +24,16 @@ class StoreThuocTinhRequest extends FormRequest
     {
         return [
             'ten_thuoc_tinh' => 'required|max:255|unique:thuoc_tinhs,ten_thuoc_tinh,' .$this->thuoctinh,
-         
+           
+            'gia_tri' => 'nullable|array', // Không bắt buộc nhập
+            'gia_tri.*' => ['distinct', function ($attribute, $value, $fail) {
+                if (!empty($value)) { // Chỉ kiểm tra nếu có giá trị
+                    $exists = DB::table('gia_tri_thuoc_tinhs')->where('gia_tri', $value)->exists();
+                    if ($exists) {
+                        $fail('Giá trị thuộc tính "' . $value . '" đã tồn tại.');
+                    }
+                }
+            }],
          
         ];
     }
@@ -33,7 +43,7 @@ class StoreThuocTinhRequest extends FormRequest
             'ten_thuoc_tinh.required' => 'Tên thuộc tính bắt buộc điền.',
             'ten_thuoc_tinh.max'      => 'Tên thuộc tính quá dài',
             'ten_thuoc_tinh.unique'      => 'Tên thuộc tính không được trùng',
-           
+           'gia_tri.*.distinct'      => 'Giá trị thuộc tính không được trùng nhau.',
         ];
     }
 }

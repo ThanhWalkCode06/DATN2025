@@ -30,7 +30,7 @@ class DanhMucSanPhamController extends Controller
 
         $anhDanhMuc = null;
         if ($request->hasFile('anh_danh_muc')) {
-            $anhDanhMuc = $request->file('anh_danh_muc')->store('danhmuc_images', 'public');
+            $anhDanhMuc = $request->file('anh_danh_muc')->store('danhmucsanphams', 'public');
         }
 
         DanhMucSanPham::create([

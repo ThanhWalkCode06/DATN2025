@@ -3,10 +3,13 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use App\Models\Permission;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
+
+use function PHPUnit\Framework\isEmpty;
 
 class DynamicPermissionMiddleware
 {
@@ -29,16 +32,19 @@ class DynamicPermissionMiddleware
         // Lấy tên route hiện tại
         $routeName = $request->route()->getName();
         if (!$routeName) {
+            // dd('what');
             return $next($request); // Bỏ qua nếu route không có tên
         }
-
+        // dd('hi');
         // Chuyển đổi route thành quyền
         $permission = $this->convertRouteToPermission($routeName);
 
 
+        $permission = Permission::where('name', $permission)->first();
 
-        // Kiểm tra quyền
-        if (!$user->hasPermissionTo($permission)) {
+        if (!$permission) {
+            return $next($request);
+        }else if( $permission && !$user->hasPermissionTo($permission)){
             abort(403);
         }
 
@@ -64,6 +70,7 @@ class DynamicPermissionMiddleware
     {
         $map = [
             'index'   => 'view',
+            'search'   => 'view',
             'create'  => 'add',
             'store'   => 'add',
             'show'    => 'view',
@@ -101,7 +108,7 @@ class DynamicPermissionMiddleware
         ];
 
         $resource = explode('.', $routeName)[0];
-        dd($map[$resource],$resource);
+        // dd($map[$resource],$resource);
         return $map[$resource] ?? null;
     }
 }

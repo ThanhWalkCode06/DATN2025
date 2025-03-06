@@ -21,8 +21,6 @@ class SanPham extends Model
         'updated_at'
     ];
 
-
-
     public function danhMuc()
     {
         return $this->belongsTo(DanhMucSanPham::class, 'danh_muc_id', 'id');
@@ -30,5 +28,16 @@ class SanPham extends Model
     public function bienThes()
     {
         return $this->hasMany(BienThe::class, 'san_pham_id');
+    }
+
+    public function scopeSearch($query, $search)
+    {
+        if (!empty($search)) {
+            return $query->where(function ($q) use ($search) {
+                $q->where('ten_san_pham', 'like', "%$search%")
+                  ->orWhere('ma_san_pham', 'like', "%$search%");
+            });
+        }
+        return $query;
     }
 }
