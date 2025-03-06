@@ -70,7 +70,7 @@ Route::prefix('admin')->middleware(['auth', 'checkStatus'])->group(function () {
 
 
     // Chức năng thì cho vào đây đánh tên route->name phải giống quyền lối bởi dấu . nếu thêm
-    Route::middleware('dynamic')->group(function(){
+    Route::middleware('dynamic')->group(function () {
         Route::resource('danhmucsanphams', DanhMucSanPhamController::class);
         Route::resource('sanphams', SanPhamController::class);
         Route::resource('bienthes', BienTheController::class);
@@ -82,7 +82,7 @@ Route::prefix('admin')->middleware(['auth', 'checkStatus'])->group(function () {
         Route::resource('danhmucbaiviets', DanhMucBaiVietController::class);
         Route::resource('baiviets', BaiVietController::class);
         Route::resource('phieugiamgias', PhieuGiamGiaController::class);
-        Route::get("/danhgia", [DanhGiaController::class, "index"])->name('danhgia');
+        Route::resource("danhgias", DanhGiaController::class);
     });
 });
 
@@ -90,3 +90,18 @@ Route::prefix('admin')->middleware(['auth', 'checkStatus'])->group(function () {
 // Route::get('mail', function () {
 //     return view('admins.auth.mailForgetPass');
 // });
+
+Route::get('/', function () {
+    return view('clients.index');
+})->name('home');
+
+Route::get('/sanpham', [App\Http\Controllers\Clients\SanPhamController::class, 'index'])->name('sanphams.index');
+Route::get('/sanpham/{id}', [App\Http\Controllers\Clients\SanPhamController::class, 'show'])->name('sanphams.show');
+Route::get('/sanphamyeuthich', [App\Http\Controllers\Clients\SanPhamController::class, 'sanPhamYeuThich'])->name('sanphams.sanphamyeuthich');
+
+Route::get('/baiviet', [App\Http\Controllers\Clients\BaiVietController::class, 'index'])->name('baiviets.index');
+Route::get('/baiviet/{id}', [App\Http\Controllers\Clients\BaiVietController::class, 'show'])->name('baiviets.show');
+
+Route::get('/giohang', [App\Http\Controllers\Clients\ThanhToanController::class, 'gioHang'])->name('thanhtoans.giohang');
+Route::get('/thanhtoan', [App\Http\Controllers\Clients\ThanhToanController::class, 'thanhToan'])->name('thanhtoans.thanhtoan');
+Route::get('/dathangthanhcong', [App\Http\Controllers\Clients\ThanhToanController::class, 'datHangThanhCong'])->name('thanhtoans.dathangthanhcong');
