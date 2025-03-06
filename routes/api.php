@@ -18,5 +18,5 @@ use App\Http\Controllers\ThongKeController;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::get('/api/doanh-thu-thang', [ThongKeController::class, 'doanhThuTheoThang']);
+// Route::get('/api/get-loi-nhuan-theo-thang', [ThongKeController::class, 'getLoiNhuanTheoThang']);
 
