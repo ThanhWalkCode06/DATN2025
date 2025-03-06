@@ -47,22 +47,41 @@
                                             <p>Mã đơn hàng : <span>{{ $donHang->ma_don_hang }}</span></p>
                                             <p>Người đặt : <span>{{ $donHang->ten_nguoi_dung }}</span></p>
                                             <p>Ngày đặt : <span>{{ $donHang->created_at }}</span></p>
+                                            <p>Phương thức thanh toán : <span>{{ $donHang->ten_phuong_thuc }}</span></p>
+                                            <p>
+                                                Trạng thái đơn hàng :
+                                                @if ($donHang->trang_thai_don_hang == -1)
+                                                    <span class="text-danger">Đã hủy</span>
+                                                @elseif ($donHang->trang_thai_don_hang == 0)
+                                                    <span class="text-danger">Chưa xác nhận</span>
+                                                @elseif ($donHang->trang_thai_don_hang == 1)
+                                                    <span class="text-success">Đã xác nhận</span>
+                                                @elseif ($donHang->trang_thai_don_hang == 2)
+                                                    <span class="text-primary">Chờ vận chuyển</span>
+                                                @elseif ($donHang->trang_thai_don_hang == 3)
+                                                    <span class="text-primary">Đang giao</span>
+                                                @elseif ($donHang->trang_thai_don_hang == 4)
+                                                    <span class="text-success">Đã giao</span>
+                                                @elseif ($donHang->trang_thai_don_hang == 5)
+                                                    <span class="text-danger">Trả hàng</span>
+                                                @else
+                                                    <span>Trạng thái không hợp lệ</span>
+                                                @endif
+                                            </p>
+                                            <p>
+                                                Trạng thái thanh toán :
+                                                @if ($donHang->trang_thai_thanh_toan == 0)
+                                                    <span class="text-danger">Chưa thanh toán</span>
+                                                @else
+                                                    <span class="text-success">Đã thanh toán</span>
+                                                @endif
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
                             <ol class="progtrckr">
-                                {{-- @if ($donHang->trang_thai_thanh_toan == 1)
-                                    <li class="progtrckr-done">
-                                        <h5>Thanh toán</h5>
-                                    </li>
-                                @else
-                                    <li class="progtrckr-todo">
-                                        <h5>Thanh toán</h5>
-                                    </li>
-                                @endif --}}
-
                                 @if ($donHang->trang_thai_don_hang >= 1)
                                     <li class="progtrckr-done">
                                     @else
@@ -97,10 +116,38 @@
                             </ol>
                         </div>
                     </div>
-                    <div class="card-footer text-end border-0 pb-0 d-flex justify-content-end">
-                        <button class="btn btn-primary me-3">Submit</button>
-                        <button class="btn btn-outline">Cancel</button>
-                    </div>
+                    <form action="{{ route('donhangs.update', $donHang->id) }}" method="post">
+                        @csrf
+                        @method('PUT')
+                        <div class="card-footer text-end border-0 pb-0 d-flex justify-content-end">
+                            @if ($donHang->trang_thai_don_hang != -1 && $donHang->trang_thai_don_hang != 5)
+                                <select class="form-control me-3" name="trang_thai">
+                                    <option @if ($donHang->trang_thai_don_hang == 0) selected @endif
+                                        @if ($donHang->trang_thai_don_hang > 0) disabled @endif value="0">Chưa xác nhận
+                                    </option>
+                                    <option @if ($donHang->trang_thai_don_hang == 1) selected @endif
+                                        @if ($donHang->trang_thai_don_hang > 1) disabled @endif value="1">Xác nhận</option>
+                                    <option @if ($donHang->trang_thai_don_hang == 2) selected @endif
+                                        @if ($donHang->trang_thai_don_hang > 2) disabled @endif value="2">Chờ vận chuyển
+                                    </option>
+                                    <option @if ($donHang->trang_thai_don_hang == 3) selected @endif
+                                        @if ($donHang->trang_thai_don_hang > 3) disabled @endif value="3">Đang giao</option>
+                                    <option @if ($donHang->trang_thai_don_hang == 4) selected @endif
+                                        @if ($donHang->trang_thai_don_hang > 4) disabled @endif value="4">Đã giao</option>
+                                    <option @if ($donHang->trang_thai_don_hang == 5) selected @endif
+                                        @if ($donHang->trang_thai_don_hang != 4) disabled @endif value="5">Trả hàng</option>
+                                </select>
+                                <input class="btn btn-primary me-3" type="submit" name="doi_trang_thai"
+                                    value="Đổi trạng thái">
+                                @if ($donHang->trang_thai_thanh_toan == 0)
+                                    <input class="btn btn-primary me-3" type="submit" name="xac_nhan_thanh_toan"
+                                        value="Xác nhận thanh toán">
+                                @endif
+                                <input class="btn btn-danger me-3" type="submit" name="huy_don_hang" value="Hủy đơn hàng">
+                            @endif
+                            <a href="{{ route('donhangs.index') }}" class="btn btn-outline">Quay lại</a>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

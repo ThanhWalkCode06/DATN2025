@@ -54,10 +54,7 @@ class PhieuGiamGiaController extends Controller
 
         // Lưu dữ liệu vào database
         PhieuGiamGia::create($request->all());
-
-        // PhieuGiamGia::create($request->all());
-
-        return redirect()->route('phieugiamgias.index')->with('success', 'Thêm mã giảm giá thành công!');
+        return redirect()->route('phieugiamgias.index')->with('success', 'Thêm phiếu giảm giá thành công!');
     }
 
 
