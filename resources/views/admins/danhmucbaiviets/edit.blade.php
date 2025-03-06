@@ -45,24 +45,37 @@
                         <div class="title-header option-title">
                             <h5>Chỉnh sửa danh mục bài viết</h5>
                         </div>
-                        <form action="{{ route('danhmucbaiviets.update', $danhMucBaiViet->id) }}" method="POST" enctype="multipart/form-data">
+
+                        <form action="{{ route('danhmucbaiviets.update', $danhMucBaiViet->id) }}" method="POST">
                             @csrf
                             @method('PUT')
+
+
                             <div class="mb-3">
                                 <label class="form-label">Tên danh mục</label>
-                                <input type="text" class="form-control" name="ten_danh_muc" value="{{ $danhMucBaiViet->ten_danh_muc }}" required>
+                                <input type="text" class="form-control" name="ten_danh_muc"
+                                    value="{{ old('ten_danh_muc', $danhMucBaiViet->ten_danh_muc) }}" required>
+                                @error('ten_danh_muc')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
                             </div>
+
+
                             <div class="mb-3">
                                 <label class="form-label">Mô tả</label>
-                                <textarea class="form-control" name="mo_ta">{{ $danhMucBaiViet->mo_ta }}</textarea>
+                                <textarea class="form-control" name="mo_ta">{{ old('mo_ta', $danhMucBaiViet->mo_ta) }}</textarea>
+                                @error('mo_ta')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
                             </div>
+
+
                             <div class="mt-5 d-flex justify-content-between">
                                 <a href="{{ route('danhmucbaiviets.index') }}" class="btn btn-secondary">Quay lại</a>
                                 <button class="btn btn-primary" type="submit">Cập nhật</button>
                             </div>
                         </form>
 
-                        </form>
                     </div>
                 </div>
             </div>

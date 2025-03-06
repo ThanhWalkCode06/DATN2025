@@ -42,7 +42,21 @@
             <div class="card-body">
                 <div class="title-header option-title">
                     <h5>Quản lý bài viết</h5>
-                    <a href="{{ route('baiviets.create') }}" class="btn btn-primary">Thêm mới</a>
+                    <div class="right-options">
+                        <ul>
+                            <li>
+                                <a href="{{ route('baiviets.create') }}" class="btn btn-primary">Thêm mới</a>
+                            </li>
+                        </ul>
+                        <br>
+                        <form action="{{ route('baiviets.index') }}" method="GET">
+                            <div class="input-group mb-3">
+                                <input type="text" name="search" class="form-control" placeholder="Tìm kiếm theo tiêu đề, tài khoản hoặc danh mục..."
+                                       value="{{ request('search') }}">
+                                <button class="btn btn-primary" type="submit">Tìm kiếm</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
                 <div class="table-responsive category-table">
                     <div>
@@ -62,7 +76,7 @@
                                 @foreach ($baiViets as $index => $baiViet)
                                     <tr>
                                         <td>{{ $index + 1 }}</td>
-                                        <td>{{ $baiViet->user->name }}</td>
+                                        <td>{{ $baiViet->user->ten_nguoi_dung }}</td>
                                         <td>{{ $baiViet->tieu_de }}</td>
                                         <td>{{ $baiViet->danhMuc->ten_danh_muc}}</td>
                                         <td>
@@ -98,6 +112,9 @@
                                 @endforeach
                             </tbody>
                         </table>
+                        <div class="d-flex justify-content-center mt-3">
+                            {{ $baiViets->links('pagination::bootstrap-5') }}
+                        </div>
                     </div>
                 </div>
             </div>
