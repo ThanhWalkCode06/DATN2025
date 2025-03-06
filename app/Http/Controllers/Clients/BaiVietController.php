@@ -7,12 +7,12 @@ use Illuminate\Http\Request;
 
 class BaiVietController extends Controller
 {
-    public function index()
+    public function danhSach()
     {
         return view('clients.baiviets.index');
     }
 
-    public function show()
+    public function chiTiet()
     {
         return view('clients.baiviets.show');
     }

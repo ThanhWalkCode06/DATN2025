@@ -17,13 +17,13 @@
                 <div class="accordion-body pt-0">
                     <div class="recent-post-box">
                         <div class="recent-box">
-                            <a href="{{ route('baiviets.show', 1) }}" class="recent-image">
+                            <a href="{{ route('baiviets.chitiet', 1) }}" class="recent-image">
                                 <img src="../assets/images/inner-page/blog/1.jpg" class="img-fluid blur-up lazyload"
                                     alt="">
                             </a>
 
                             <div class="recent-detail">
-                                <a href="{{ route('baiviets.show', 1) }}">
+                                <a href="{{ route('baiviets.chitiet', 1) }}">
                                     <h5 class="recent-name">Green onion knife and salad placed</h5>
                                 </a>
                                 <h6>25 Jan, 2022 <i data-feather="thumbs-up"></i></h6>
@@ -31,13 +31,13 @@
                         </div>
 
                         <div class="recent-box">
-                            <a href="{{ route('baiviets.show', 1) }}" class="recent-image">
+                            <a href="{{ route('baiviets.chitiet', 1) }}" class="recent-image">
                                 <img src="../assets/images/inner-page/blog/2.jpg" class="img-fluid blur-up lazyload"
                                     alt="">
                             </a>
 
                             <div class="recent-detail">
-                                <a href="{{ route('baiviets.show', 1) }}">
+                                <a href="{{ route('baiviets.chitiet', 1) }}">
                                     <h5 class="recent-name">Health and skin for your organic</h5>
                                 </a>
                                 <h6>25 Jan, 2022 <i data-feather="thumbs-up"></i></h6>
@@ -45,13 +45,13 @@
                         </div>
 
                         <div class="recent-box">
-                            <a href="{{ route('baiviets.show', 1) }}" class="recent-image">
+                            <a href="{{ route('baiviets.chitiet', 1) }}" class="recent-image">
                                 <img src="../assets/images/inner-page/blog/3.jpg" class="img-fluid blur-up lazyload"
                                     alt="">
                             </a>
 
                             <div class="recent-detail">
-                                <a href="{{ route('baiviets.show', 1) }}">
+                                <a href="{{ route('baiviets.chitiet', 1) }}">
                                     <h5 class="recent-name">Organics mix masala fresh & soft</h5>
                                 </a>
                                 <h6>25 Jan, 2022 <i data-feather="thumbs-up"></i></h6>
@@ -59,13 +59,13 @@
                         </div>
 
                         <div class="recent-box">
-                            <a href="{{ route('baiviets.show', 1) }}" class="recent-image">
+                            <a href="{{ route('baiviets.chitiet', 1) }}" class="recent-image">
                                 <img src="../assets/images/inner-page/blog/4.jpg" class="img-fluid blur-up lazyload"
                                     alt="">
                             </a>
 
                             <div class="recent-detail">
-                                <a href="{{ route('baiviets.show', 1) }}">
+                                <a href="{{ route('baiviets.chitiet', 1) }}">
                                     <h5 class="recent-name">Fresh organics brand and picnic</h5>
                                 </a>
                                 <h6>25 Jan, 2022 <i data-feather="thumbs-up"></i></h6>

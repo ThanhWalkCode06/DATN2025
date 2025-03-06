@@ -42,7 +42,7 @@
                     <div class="product-box-3 h-100">
                         <div class="product-header">
                             <div class="product-image">
-                                <a href="{{ route('sanphams.show', 1) }}">
+                                <a href="{{ route('sanphams.chitiet', 1) }}">
                                     <img src="{{ asset('assets/client/images/cake/product/6.png') }}"
                                         class="img-fluid blur-up lazyload" alt="">
                                 </a>
@@ -97,7 +97,7 @@
                     <div class="product-box-3 h-100">
                         <div class="product-header">
                             <div class="product-image">
-                                <a href="{{ route('sanphams.show', 1) }}">
+                                <a href="{{ route('sanphams.chitiet', 1) }}">
                                     <img src="{{ asset('assets/client/images/cake/product/6.png') }}"
                                         class="img-fluid blur-up lazyload" alt="">
                                 </a>
@@ -152,7 +152,7 @@
                     <div class="product-box-3 h-100">
                         <div class="product-header">
                             <div class="product-image">
-                                <a href="{{ route('sanphams.show', 1) }}">
+                                <a href="{{ route('sanphams.chitiet', 1) }}">
                                     <img src="{{ asset('assets/client/images/cake/product/6.png') }}"
                                         class="img-fluid blur-up lazyload" alt="">
                                 </a>
@@ -207,7 +207,7 @@
                     <div class="product-box-3 h-100">
                         <div class="product-header">
                             <div class="product-image">
-                                <a href="{{ route('sanphams.show', 1) }}">
+                                <a href="{{ route('sanphams.chitiet', 1) }}">
                                     <img src="{{ asset('assets/client/images/cake/product/6.png') }}"
                                         class="img-fluid blur-up lazyload" alt="">
                                 </a>
@@ -262,7 +262,7 @@
                     <div class="product-box-3 h-100">
                         <div class="product-header">
                             <div class="product-image">
-                                <a href="{{ route('sanphams.show', 1) }}">
+                                <a href="{{ route('sanphams.chitiet', 1) }}">
                                     <img src="{{ asset('assets/client/images/cake/product/6.png') }}"
                                         class="img-fluid blur-up lazyload" alt="">
                                 </a>
@@ -317,7 +317,7 @@
                     <div class="product-box-3 h-100">
                         <div class="product-header">
                             <div class="product-image">
-                                <a href="{{ route('sanphams.show', 1) }}">
+                                <a href="{{ route('sanphams.chitiet', 1) }}">
                                     <img src="{{ asset('assets/client/images/cake/product/6.png') }}"
                                         class="img-fluid blur-up lazyload" alt="">
                                 </a>
@@ -372,7 +372,7 @@
                     <div class="product-box-3 h-100">
                         <div class="product-header">
                             <div class="product-image">
-                                <a href="{{ route('sanphams.show', 1) }}">
+                                <a href="{{ route('sanphams.chitiet', 1) }}">
                                     <img src="{{ asset('assets/client/images/cake/product/6.png') }}"
                                         class="img-fluid blur-up lazyload" alt="">
                                 </a>
@@ -427,7 +427,7 @@
                     <div class="product-box-3 h-100">
                         <div class="product-header">
                             <div class="product-image">
-                                <a href="{{ route('sanphams.show', 1) }}">
+                                <a href="{{ route('sanphams.chitiet', 1) }}">
                                     <img src="{{ asset('assets/client/images/cake/product/6.png') }}"
                                         class="img-fluid blur-up lazyload" alt="">
                                 </a>
@@ -482,7 +482,7 @@
                     <div class="product-box-3 h-100">
                         <div class="product-header">
                             <div class="product-image">
-                                <a href="{{ route('sanphams.show', 1) }}">
+                                <a href="{{ route('sanphams.chitiet', 1) }}">
                                     <img src="{{ asset('assets/client/images/cake/product/6.png') }}"
                                         class="img-fluid blur-up lazyload" alt="">
                                 </a>
@@ -537,7 +537,7 @@
                     <div class="product-box-3 h-100">
                         <div class="product-header">
                             <div class="product-image">
-                                <a href="{{ route('sanphams.show', 1) }}">
+                                <a href="{{ route('sanphams.chitiet', 1) }}">
                                     <img src="{{ asset('assets/client/images/cake/product/6.png') }}"
                                         class="img-fluid blur-up lazyload" alt="">
                                 </a>
@@ -592,7 +592,7 @@
                     <div class="product-box-3 h-100">
                         <div class="product-header">
                             <div class="product-image">
-                                <a href="{{ route('sanphams.show', 1) }}">
+                                <a href="{{ route('sanphams.chitiet', 1) }}">
                                     <img src="{{ asset('assets/client/images/cake/product/6.png') }}"
                                         class="img-fluid blur-up lazyload" alt="">
                                 </a>
@@ -647,7 +647,7 @@
                     <div class="product-box-3 h-100">
                         <div class="product-header">
                             <div class="product-image">
-                                <a href="{{ route('sanphams.show', 1) }}">
+                                <a href="{{ route('sanphams.chitiet', 1) }}">
                                     <img src="{{ asset('assets/client/images/cake/product/6.png') }}"
                                         class="img-fluid blur-up lazyload" alt="">
                                 </a>

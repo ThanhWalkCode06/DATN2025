@@ -7,12 +7,12 @@ use Illuminate\Http\Request;
 
 class SanPhamController extends Controller
 {
-    public function index()
+    public function danhSach()
     {
         return view('clients.sanphams.index');
     }
 
-    public function show()
+    public function chiTiet()
     {
         return view('clients.sanphams.show');
     }

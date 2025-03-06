@@ -629,7 +629,7 @@
                                         </li>
 
                                         <li class="nav-item dropdown">
-                                            <a class="nav-link" href="{{ route('sanphams.index') }}">Sản phẩm</a>
+                                            <a class="nav-link" href="{{ route('sanphams.danhsach') }}">Sản phẩm</a>
 
                                             <ul class="dropdown-menu">
                                                 <li>
@@ -664,7 +664,7 @@
                                         </li>
 
                                         <li class="nav-item dropdown">
-                                            <a class="nav-link" href="{{ route('baiviets.index') }}">Bài viết</a>
+                                            <a class="nav-link" href="{{ route('baiviets.danhsach') }}">Bài viết</a>
                                             <ul class="dropdown-menu">
                                                 <li>
                                                     <a class="dropdown-item" href="blog-detail.html">Blog
