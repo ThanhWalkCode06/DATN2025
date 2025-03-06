@@ -117,9 +117,6 @@ class ThongKeController extends Controller
         ->whereYear('chi_tiet_don_hangs.created_at', date('Y')) 
         ->select(DB::raw('SUM((bien_thes.gia_ban - bien_thes.gia_nhap) * chi_tiet_don_hangs.so_luong) as tong_loi_nhuan'))
         ->value('tong_loi_nhuan');
-        
-
-
 
         // Lợi nhuận theo tháng
         // $loiNhuanTheoThang = DB::table('chi_tiet_don_hangs')

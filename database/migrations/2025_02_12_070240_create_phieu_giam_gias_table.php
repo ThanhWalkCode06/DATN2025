@@ -19,6 +19,7 @@ return new class extends Migration
             $table->date('ngay_ket_thuc');
             $table->double('gia_tri')->default(0);
             $table->text('mo_ta')->nullable();
+            $table->boolean('trang_thai')->default(1);
             $table->timestamps();
             $table->softDeletes();
         });

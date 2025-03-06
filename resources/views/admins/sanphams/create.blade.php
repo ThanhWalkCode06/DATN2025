@@ -236,7 +236,7 @@
         document.addEventListener("click", function(event) {
             if (event.target.classList.contains("addAttribute")) {
                 let thuocTinhHTML = `
-                    <div class="row align-items-center mb-2">
+                    <div class="row align-items-center mt-3">
                         <div class="col-sm-5">
                             <select name="thuoc_tinh_id[]" class="form-control selectAttribute">
                                 <option disabled selected>Chọn thuộc tính</option>
@@ -307,8 +307,9 @@
                 }
             }
         });
+    });
 </script>
-
+@section('js')
     <!-- Sidebar js -->
     <script src="{{ asset('assets/js/config.js') }}"></script>
 
