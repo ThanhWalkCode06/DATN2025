@@ -149,7 +149,7 @@ tr{
                                     </div>
                                     <input type="hidden" name="album_anh" id="album_anh">
 
-                                    <div class="dropzone custom-dropzone" id="multiFileUpload">
+                                    <div class="dropzone custom-dropzone" id="multiFileUpload" class="dropzone">
                                         <div class="dropzone-wrapper">
                                             <div class="dz-message needsclick">
                                                 <div style="margin-top: 10%;">
@@ -418,46 +418,32 @@ tr{
         }
     });
 </script>
-
 <script>
     window.onload = function () {
     Dropzone.autoDiscover = false;
 
-    if (Dropzone.instances.length > 0) {
-        Dropzone.instances.forEach(instance => instance.destroy());
-    }
-
     let uploadedFiles = [];
 
     let myDropzone = new Dropzone("#multiFileUpload", {
-        url: "#", // Không upload ngay
-        autoProcessQueue: false,
+        url: "/upload-album", // Laravel route xử lý upload
+        method: "post",
+        headers: {
+            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content")
+        },
+        autoProcessQueue: true, // Tự động upload khi chọn file
         uploadMultiple: true,
         parallelUploads: 6,
-        maxFiles: 6, // Chặn chọn trên 6 ảnh
+        maxFiles: 6,
         maxFilesize: 5, // Giới hạn 5MB
         acceptedFiles: 'image/*',
         addRemoveLinks: true,
-        dictMaxFilesExceeded: "Chỉ được phép tải lên tối đa 6 ảnh.",
-        paramName: "album_anh[]",
+        paramName: "album_anh", // Laravel nhận dạng file
 
         init: function () {
             let myDropzone = this;
 
-            myDropzone.on("addedfile", function (file) {
-                if (myDropzone.files.length > 6) {
-                    myDropzone.removeFile(file);
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'Giới hạn ảnh!',
-                        text: 'Bạn chỉ được chọn tối đa 6 ảnh.',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK'
-                    });
-
-                }
-
-                uploadedFiles.push(file.name);
+            myDropzone.on("success", function (file, response) {
+                uploadedFiles.push(response.file_path); // Lưu đường dẫn file sau upload
                 document.getElementById("album_anh").value = uploadedFiles.join(",");
             });
 
@@ -470,12 +456,11 @@ tr{
                 e.preventDefault();
                 e.stopPropagation();
 
-                // if (uploadedFiles.length === 0) {
-                //     alert("Vui lòng tải lên ít nhất một ảnh.");
-                //     return;
-                // }
+                if (uploadedFiles.length === 0) {
+                    alert("Vui lòng tải lên ít nhất một ảnh.");
+                    return;
+                }
 
-                document.getElementById("album_anh").value = uploadedFiles.join(",");
                 this.submit();
             });
         }

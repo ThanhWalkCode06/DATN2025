@@ -56,6 +56,7 @@ class SanPhamController extends Controller
      */
     public function store(StoreSanPhamRequest $request)
     {
+       
         // Xử lý upload hình ảnh
         // dd($request->all());
         $thuocTinhId = array_keys($request->input('attribute_values', []));
@@ -176,7 +177,6 @@ class SanPhamController extends Controller
                         $hinhAnhBienThe = 'uploads/sanphams/' . $fileName;
                     }
                 }
-
                 // Lặp qua từng thuộc tính của biến thể
                 foreach ($request->attribute_values as $thuocTinhId => $giaTriArray) {
                     foreach ($giaTriArray as $giaTri) {
