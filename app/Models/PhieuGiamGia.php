@@ -16,6 +16,7 @@ class PhieuGiamGia extends Model
         'ngay_bat_dau',
         'ngay_ket_thuc',
         'gia_tri',
+        'trang_thai',
         'mo_ta'
     ];
 }
