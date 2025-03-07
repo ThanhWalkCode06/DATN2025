@@ -16,7 +16,7 @@ class DanhGiaController extends Controller
             ->join('users', 'users.id', '=', 'user_id')
             ->join('san_phams', 'san_phams.id', '=', 'san_pham_id')
             ->get();
-        return view('admins.danhgia', compact('danhGias'));
+        return view('admins.danhgias.index', compact('danhGias'));
     }
 
     /**
@@ -38,9 +38,14 @@ class DanhGiaController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(DanhGia $danhgia)
     {
-        //
+        $danhGia = DanhGia::select('danh_gias.*', 'users.ten_nguoi_dung', 'san_phams.ten_san_pham')
+            ->join('users', 'users.id', '=', 'user_id')
+            ->join('san_phams', 'san_phams.id', '=', 'san_pham_id')
+            ->find($danhgia->id);
+
+        return view('admins.danhgias.show', compact('danhGia'));
     }
 
     /**
@@ -54,9 +59,23 @@ class DanhGiaController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, DanhGia $danhgia)
     {
-        //
+        if ($request->an_danh_gia) {
+            $data = [
+                'trang_thai' => 0
+            ];
+            DanhGia::where("id", $danhgia->id)->update($data);
+        }
+
+        if ($request->hien_danh_gia) {
+            $data = [
+                'trang_thai' => 1
+            ];
+            DanhGia::where("id", $danhgia->id)->update($data);
+        }
+
+        return redirect()->route('danhgias.show', $danhgia->id)->with('success', 'Cập nhật thành công');
     }
 
     /**

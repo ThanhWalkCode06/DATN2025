@@ -47,14 +47,14 @@
                                     </div>
 
                                     <div class="row">
-                                        <div class="mb-4 row align-items-center">
-                                            <label class="form-label-title col-lg-2 col-md-3 mb-0">ID</label>
-                                            <div class="col-md-9 col-lg-10">
-                                                <input class="form-control" type="text">
+                                        <div class="col-6">
+                                            <div class="mb-4 row align-items-center">
+                                                <label class="form-label-title col-lg-2 col-md-3 mb-0">ID</label>
+                                                <div class="col-md-9 col-lg-10">
+                                                    <input class="form-control" type="text">
+                                                </div>
                                             </div>
-                                        </div>
 
-                                        <div class="row">
                                             <div class="mb-4 row align-items-center">
                                                 <label class="form-label-title col-lg-2 col-md-3 mb-0">Họ và tên</label>
                                                 <div class="col-md-9 col-lg-10">
@@ -86,7 +86,8 @@
                                                     <input class="form-control" type="date">
                                                 </div>
                                             </div>
-
+                                        </div>
+                                        <div class="col-6">
                                             <div class="mb-4 row align-items-center">
                                                 <label class="col-lg-2 col-md-3 col-form-label form-label-title">Địa chỉ
                                                 </label>
@@ -151,21 +152,22 @@
                                                 </div>
                                             </div>
 
-
                                         </div>
-                                </form>
-                                <div class="mt-5 d-flex justify-content-between">
-                                    <a href="{{ route('users.index') }}" class="btn btn-secondary">Quay lại</a>
-                                    <button class="btn btn-primary" type="submit">Thêm mới</button>
-                                </div>
+                                    </div>
+
+                            </form>
+                            <div class="mt-5 d-flex justify-content-between">
+                                <a href="{{ route('users.index') }}" class="btn btn-secondary">Quay lại</a>
+                                <button class="btn btn-primary" type="submit">Thêm mới</button>
                             </div>
-
-
                         </div>
+
+
                     </div>
                 </div>
             </div>
         </div>
+    </div>
     </div>
 @endsection
 

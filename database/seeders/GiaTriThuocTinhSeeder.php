@@ -14,6 +14,6 @@ class GiaTriThuocTinhSeeder extends Seeder
      */
     public function run(): void
     {
-        GiaTriThuocTinh::factory()->count(10)->create();
+        GiaTriThuocTinh::factory()->count(5)->create();
     }
 }

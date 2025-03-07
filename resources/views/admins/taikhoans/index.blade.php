@@ -114,7 +114,7 @@
                                                 </a>
                                             </li>
                                             @endcan
-                                            @can('users-delete', $item->id)
+                                            {{-- @can('users-delete', $item->id)
                                             <li>
                                                 <a href="#" onclick="confirmDelete(event, {{ $item->id }})">
                                                     <i class="ri-delete-bin-line"></i>
@@ -125,7 +125,7 @@
                                                     @method('DELETE')
                                                 </form>
                                             </li>
-                                            @endcan
+                                            @endcan --}}
 
                                             @can('users-view', $item->id)
                                             <li>
