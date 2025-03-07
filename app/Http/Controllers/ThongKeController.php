@@ -118,28 +118,26 @@ class ThongKeController extends Controller
         ->select(DB::raw('SUM((bien_thes.gia_ban - bien_thes.gia_nhap) * chi_tiet_don_hangs.so_luong) as tong_loi_nhuan'))
         ->value('tong_loi_nhuan');
 
-        // Lợi nhuận theo tháng
-        // $loiNhuanTheoThang = DB::table('chi_tiet_don_hangs')
-        // ->join('bien_thes', 'bien_thes.id', '=', 'chi_tiet_don_hangs.bien_the_id')
-        // ->select(
-        //     DB::raw('MONTH(chi_tiet_don_hangs.created_at) as thang'),
-        //     DB::raw('SUM((bien_thes.gia_ban - bien_thes.gia_nhap) * chi_tiet_don_hangs.so_luong) as tong_loi_nhuan')
-        // )
-        // ->whereYear('chi_tiet_don_hangs.created_at', now()->year) // Lọc theo năm hiện tại
-        // ->groupBy('thang')
-        // ->orderBy('thang')
-        // ->get();
+        
 
-     // Chuyển đổi dữ liệu thành dạng mảng cho biểu đồ
-    //   $dataLoiNhuan = array_fill(0, 12, 0); // Mặc định có 12 tháng với giá trị 0
-    //    foreach ($loiNhuanTheoThang as $item) {
-    //     $dataLoiNhuan[$item->thang - 1] = (int) $item->tong_loi_nhuan; // Trừ 1 để đúng chỉ mục mảng (0-11)
-    //    }
-    
-    
-        return view('admins.index', compact('tongDonHang', 'tongKhachHangHoatDong', 'tongSanPhamConHang', 'donHangs', 'topBanChay', 'topDoanhThu', 'topLoiNhuan', 'tongLoiNhuanNam'));
+        $loiNhuanTheoThang = DB::table('chi_tiet_don_hangs')
+        ->join('bien_thes', 'bien_thes.id', '=', 'chi_tiet_don_hangs.bien_the_id')
+        ->select(DB::raw('MONTH(chi_tiet_don_hangs.created_at) as thang, 
+                     SUM((bien_thes.gia_ban - bien_thes.gia_nhap) * chi_tiet_don_hangs.so_luong) as loi_nhuan'))
+        ->whereYear('chi_tiet_don_hangs.created_at', date('Y')) // Chỉ lấy dữ liệu năm hiện tại
+        ->groupBy(DB::raw('MONTH(chi_tiet_don_hangs.created_at)'))
+        ->orderBy('thang')
+        ->pluck('loi_nhuan', 'thang')
+        ->toArray();
+
+       // Tạo mảng 12 tháng mặc định bằng 0
+        $dataChart = array_fill(0, 12, 0);
+        foreach ($loiNhuanTheoThang as $thang => $loiNhuan) {
+        $dataChart[$thang - 1] = $loiNhuan; // Gán dữ liệu vào đúng tháng
+        }
+
+        return view('admins.index', compact('tongDonHang', 'tongKhachHangHoatDong', 'tongSanPhamConHang', 'donHangs', 'topBanChay', 'topDoanhThu', 'topLoiNhuan', 'tongLoiNhuanNam','dataChart'));
     }
-    
     
 
 }
