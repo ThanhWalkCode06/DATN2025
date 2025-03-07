@@ -17,9 +17,9 @@
                     <div class="media-body p-0">
                         <span class="m-0">Tổng lợi nhuận</span>
                         <h4 class="mb-0 counter">
-                            {{ number_format($tongLoiNhuanNam, 0, ',', '.') }} VNĐ
+                            {{ number_format($tongLoiNhuanNam, 0, ',', '.') }} 
                             <span class="badge badge-light-primary grow">
-                                <i data-feather="trending-up"></i>
+                                <i data-feather="dollar-sign"></i>
                             </span>
                         </h4>
                     </div>
@@ -404,7 +404,13 @@
 
 @section('js')
     <!-- Sidebar jquery -->
-
+    <script>
+        var dataChart = {!! json_encode(array_values($dataChart)) !!};
+    </script>
+    
+    <!-- Load file JS sau khi có dữ liệu -->
+    <script src="{{ asset('assets/js/chart/apex-chart/chart-custom1.js') }}"></script>
+    
     <script src="{{ asset('assets/js/sidebar-menu.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 @endsection
