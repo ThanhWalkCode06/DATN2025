@@ -95,7 +95,6 @@
                                                 <img src="{{ Storage::url($sanpham->hinh_anh) }}"
                                                     class="img-thumbnail" alt="Hình ảnh" width="100px">
                                             </div>
-
                                         </td>
                                         {{-- <td class="">{{ $sanpham->ngay_nhap->format('d/m/Y') }}</td> --}}
 
@@ -108,12 +107,14 @@
                                         </td>
 
                                         <td>
-                                            <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#variant_{{ $sanpham->id }}">
+                                            <button class="btn btn-info btn-sm" data-bs-toggle="modal"
+                                                data-bs-target="#variant_{{ $sanpham->id }}">
                                                 Xem biến thể
                                             </button>
 
                                             <!-- Modal hiển thị biến thể sản phẩm -->
-                                            <div id="variant_{{ $sanpham->id }}" class="modal fade fadeInLeft" tabindex="-1" aria-hidden="true">
+                                            <div id="variant_{{ $sanpham->id }}" class="modal fade fadeInLeft"
+                                                tabindex="-1" aria-hidden="true">
                                                 <div class="modal-dialog" style="max-width: 800px !important;">
                                                     <div class="modal-content">
                                                         <div class="modal-body text-center p-5">
@@ -134,17 +135,22 @@
                                                                         </thead>
                                                                         <tbody>
 
+
                                                                             @if($sanpham->bienThes->isNotEmpty())
                                                                             @php
                                                                                 // dd($sanpham->bienThes);
                                                                             @endphp
                                                                                 @foreach($sanpham->bienThes as $key => $bienThe)
+
                                                                                     <tr>
                                                                                         <td>{{ $key + 1 }}</td>
-                                                                                        <td>{{ $bienThe->ten_bien_the }}</td>
+                                                                                        <td>{{ $bienThe->ten_bien_the }}
+                                                                                        </td>
                                                                                         <td>
                                                                                             @if ($bienThe->anh_bien_the)
+
                                                                                             <img src="{{ Storage::url($bienThe->anh_bien_the) }}" class="img-thumbnail" width="80px">
+
 
                                                                                             @else
                                                                                                 Không có ảnh
@@ -158,7 +164,8 @@
                                                                                 @endforeach
                                                                             @else
                                                                                 <tr>
-                                                                                    <td colspan="5" class="text-center">Không có biến thể nào</td>
+                                                                                    <td colspan="5" class="text-center">
+                                                                                        Không có biến thể nào</td>
                                                                                 </tr>
                                                                             @endif
                                                                         </tbody>
@@ -167,7 +174,8 @@
                                                             </div>
                                                         </div>
                                                         <div class="modal-footer">
-                                                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Đóng</button>
+                                                            <button type="button" class="btn btn-light"
+                                                                data-bs-dismiss="modal">Đóng</button>
                                                         </div>
                                                     </div><!-- /.modal-content -->
                                                 </div><!-- /.modal-dialog -->

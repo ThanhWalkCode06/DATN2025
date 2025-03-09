@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\GiaTriThuocTinhController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LienHeController;
@@ -80,6 +81,7 @@ Route::prefix('admin')->middleware(['auth', 'checkStatus'])->group(function () {
         Route::get('users/search', [UserController::class, 'search'])->name('users-search');
         Route::resource('users', UserController::class);
         Route::resource('thuoctinhs', ThuocTinhController::class);
+        Route::resource('giatrithuoctinh',GiaTriThuocTinhController::class);
         Route::resource('donhangs', DonHangController::class);
         Route::resource('baiviets', BaiVietController::class);
         Route::resource('danhmucbaiviets', DanhMucBaiVietController::class);

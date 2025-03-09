@@ -68,7 +68,7 @@
                         </ul>
                     </li>
 
-                    <li class="sidebar-list">
+                    {{-- <li class="sidebar-list">
                         <a class="linear-icon-link sidebar-link sidebar-title" href="javascript:void(0)">
                             <i class="ri-list-settings-line"></i>
                             <span>Biến thể</span>
@@ -84,10 +84,14 @@
                             <li>
                                 <a href="{{ route('thuoctinhs.index') }}">Thuộc tính</a>
                             </li>
-                            {{-- <li>
-                                <a href="{{ route('giatrithuoctinhs.index') }}">Giá trị thuộc tính</a>
-                            </li> --}}
                         </ul>
+                    </li> --}}
+
+                    <li class="sidebar-list">
+                        <a class="sidebar-link sidebar-title link-nav" href="{{ route('thuoctinhs.index') }}">
+                            <i class="ri-list-settings-line"></i>
+                            <span>Thuộc tính</span>
+                        </a>
                     </li>
 
                     @haspermission('users-view')

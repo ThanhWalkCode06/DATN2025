@@ -42,7 +42,7 @@
                 </div>
 
                 <div class="table-responsive category-table">
-                    @if (session('success'))
+                    {{-- @if (session('success'))
                         <div class="alert alert-success alert-dismissible fade show" role="alert">
                             <strong> {{ session('success') }} </strong>
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -53,7 +53,7 @@
                             <strong> {{ session('error') }} </strong>
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
-                    @endif
+                    @endif --}}
                     <div>
                         <table class="table all-package theme-table" id="table_id">
                             <thead>
@@ -76,7 +76,6 @@
 
                                         <td>
                                             <div class="table-image">
-
                                                 <img src="{{ Storage::url('' . $danhMuc->anh_danh_muc) }}"
                                                     class="img-thumbnail" alt="Hình ảnh" width="100px">
                                             </div>

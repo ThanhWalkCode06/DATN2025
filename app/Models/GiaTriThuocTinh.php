@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class GiaTriThuocTinh extends Model
 {
-    use HasFactory;
-
+    use HasFactory,SoftDeletes;
+    protected $dates = ['deleted_at'];
     protected $fillable = [
         'thuoc_tinh_id',
         'gia_tri'
@@ -18,4 +19,5 @@ class GiaTriThuocTinh extends Model
     {
         return $this->belongsTo(ThuocTinh::class, 'thuoc_tinh_id');
     }
+
 }

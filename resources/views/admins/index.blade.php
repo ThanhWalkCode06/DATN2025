@@ -16,10 +16,12 @@
             <div class="custome-1-bg b-r-4 card-body">
                 <div class="media align-items-center static-top-widget">
                     <div class="media-body p-0">
-                        <span class="m-0">Tổng doanh thu</span>
-                        <h4 class="mb-0 counter">$6659
+                        <span class="m-0">Tổng lợi nhuận</span>
+                        <h4 class="mb-0 counter">
+                            {{ number_format($tongLoiNhuanNam, 0, ',', '.') }} VNĐ
                             <span class="badge badge-light-primary grow">
-                                <i data-feather="trending-up"></i>8.5%</span>
+                                <i data-feather="trending-up"></i>
+                            </span>
                         </h4>
                     </div>
                     <div class="align-self-center text-center">
@@ -36,9 +38,11 @@
                 <div class="media static-top-widget">
                     <div class="media-body p-0">
                         <span class="m-0">Số lượng đơn hàng</span>
-                        <h4 class="mb-0 counter">9856
+                        <h4 class="mb-0 counter">
+                            {{ $tongDonHang }}
                             <span class="badge badge-light-danger grow">
-                                <i data-feather="trending-down"></i>8.5%</span>
+                                <i data-feather="trending-down"></i>8.5%
+                            </span>
                         </h4>
                     </div>
                     <div class="align-self-center text-center">
@@ -55,9 +59,11 @@
                 <div class="media static-top-widget">
                     <div class="media-body p-0">
                         <span class="m-0">Số lượng sản phẩm</span>
-                        <h4 class="mb-0 counter">893
-                            <a href="add-new-product.html" class="badge badge-light-secondary grow">
-                                ADD NEW</a>
+                        <h4 class="mb-0 counter">
+                            {{ $tongSanPhamConHang }}
+                            <a href="" class="badge badge-light-secondary grow">
+                                ADD NEW
+                            </a>
                         </h4>
                     </div>
 
@@ -75,11 +81,14 @@
                 <div class="media static-top-widget">
                     <div class="media-body p-0">
                         <span class="m-0">Tổng số lượng khách hàng</span>
-                        <h4 class="mb-0 counter">4.6k
+                        <h4 class="mb-0 counter">
+                            {{ $tongKhachHangHoatDong }}
                             <span class="badge badge-light-success grow">
-                                <i data-feather="trending-down"></i>8.5%</span>
+                                <i data-feather="trending-down"></i>8.5%
+                            </span>
                         </h4>
                     </div>
+                    
 
                     <div class="align-self-center text-center">
                         <i class="ri-user-add-line"></i>
@@ -92,170 +101,183 @@
 
 
     <!-- Earning chart star-->
-    <div class="col-xl-6">
+    <div class="col-xl-12">
         <div class="card o-hidden card-hover">
-            <div class="card-header border-0 pb-1">
-                <div class="card-header-title">
-                    <h4>Doanh thu hàng tháng</h4>
-                </div>
+            <div class="card-header-title">
+                <h4>Doanh thu hàng tháng</h4>
             </div>
             <div class="card-body p-0">
                 <div id="report-chart"></div>
             </div>
+            
         </div>
     </div>
     <!-- Earning chart  end-->
 
 
     <!-- Best Selling Product Start -->
-    <div class="col-xl-6 col-md-12">
+    
+    <div class="col-xl-12">
         <div class="card o-hidden card-hover">
-            <div class="card-header card-header-top card-header--2 px-0 pt-0">
-                <div class="card-header-title">
-                    <h4>Sản phẩm bán chạy</h4>
+            <div class=" card-header-top card-header--2 px-0 pt-0">
+    <div class="row">
+        <form method="GET" action="{{ route('index') }}" class="mb-3">
+            <div class="d-flex align-items-center">
+                <span class="fw-bold" >Lọc theo:</span> 
+                <div class="dropdown">
+                    <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton2"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        {{ request('filter') == 'thang' ? 'Tháng này' : (request('filter') == 'nam' ? 'Năm nay' : 'Hôm nay') }}
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
+                        <li><a class="dropdown-item" href="{{ route('index', ['filter' => 'ngay']) }}">Hôm nay</a></li>
+                        <li><a class="dropdown-item" href="{{ route('index', ['filter' => 'thang']) }}">Tháng </a></li>
+                        <li><a class="dropdown-item" href="{{ route('index', ['filter' => 'nam']) }}">Năm </a></li>
+                    </ul>
                 </div>
-
-                <div class="best-selling-box d-sm-flex d-none">
-                    <span>Sắp xếp:</span>
-                    <div class="dropdown">
-                        <button class="btn p-0 dropdown-toggle" type="button" id="dropdownMenuButton1"
-                            data-bs-toggle="dropdown" data-bs-auto-close="true">Giá</button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                            <li><a class="dropdown-item" href="#">Giá</a></li>
-                            <li><a class="dropdown-item" href="#">Lượt mua</a></li>
-                            <li><a class="dropdown-item" href="#">Tổng</a></li>
-                        </ul>
+            </div>
+        </form>
+        
+        
+        
+        
+        
+        <!-- Top 5 Sản phẩm bán chạy -->
+        <div class="col-xl-4 col-md-12">
+            <div class="card o-hidden card-hover">
+                <div class="card-header card-header-top card-header--2 px-0 pt-0">
+                    <div class="card-header-title text-center w-100">
+                        <h4>Top 5 Sản phẩm bán chạy</h4>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="best-selling-table w-image table border-0">
+                            <tbody>
+                                @if($topBanChay->isEmpty())
+                                    <tr>
+                                        <td colspan="4" class="text-center text-muted">
+                                            <span class="text-danger">Không có sản phẩm trong thời gian này.</span>
+                                        </td>
+                                    </tr>
+                                @else
+                                    @foreach($topBanChay as $sp)
+                                    <tr>
+                                        <td>
+                                            <div class="best-product-box">
+                                                <div class="product-image">
+                                                    <img src="{{ asset($sp->hinh_anh ? 'storage/' . $sp->hinh_anh : 'assets/images/product/default.png') }}" class="img-fluid" alt="{{ $sp->ten_san_pham }}">
+                                                </div>
+                                                <div class="product-name">
+                                                    <h5>{{ $sp->ten_san_pham }}</h5>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="product-detail-box">
+                                                <h6>Lượt mua</h6>
+                                                <h5>{{ $sp->tong_da_ban }}</h5>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                @endif
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
-
-            <div class="card-body p-0">
-                <div>
+        </div>
+    
+        <!-- Top 5 Sản phẩm doanh thu cao nhất -->
+        <div class="col-xl-4 col-md-12">
+            <div class="card o-hidden card-hover">
+                <div class="card-header card-header-top card-header--2 px-0 pt-0">
+                    <div class="card-header-title text-center w-100">
+                        <h4>Top 5 Sản phẩm doanh thu cao</h4>
+                    </div>
+                </div>
+                
+                <div class="card-body p-0">
                     <div class="table-responsive">
-                        <table
-                            class="best-selling-table w-image
-                    w-image
-                    w-image table border-0">
+                        <table class="best-selling-table w-image table border-0">
                             <tbody>
-                                <tr>
-                                    <td>
-                                        <div class="best-product-box">
-                                            <div class="product-image">
-                                                <img src="assets/images/product/1.png" class="img-fluid" alt="Product">
+                                @if($topDoanhThu->isEmpty())
+                                    <tr>
+                                        <td colspan="4" class="text-center text-muted">
+                                            <span class="text-danger">Không có sản phẩm trong thời gian này.</span>
+                                        </td>
+                                    </tr>
+                                @else
+                                    @foreach($topDoanhThu as $sp)
+                                    <tr>
+                                        <td>
+                                            <div class="best-product-box">
+                                                <div class="product-image">
+                                                    <img src="{{ asset($sp->hinh_anh ? 'storage/' . $sp->hinh_anh : 'assets/images/product/default.png') }}" class="img-fluid" alt="{{ $sp->ten_san_pham }}">
+                                                </div>
+                                                <div class="product-name">
+                                                    <h5>{{ $sp->ten_san_pham }}</h5>
+                                                </div>
                                             </div>
-                                            <div class="product-name">
-                                                <h5>Aata Buscuit</h5>
-                                                <h6>26-08-2022</h6>
+                                        </td>
+                                        <td>
+                                            <div class="product-detail-box">
+                                                <h6>Doanh thu</h6>
+                                                <h5>{{ number_format($sp->tong_doanh_thu, 0, ',', '.') }} VNĐ</h5>
                                             </div>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="product-detail-box">
-                                            <h6>Giá</h6>
-                                            <h5>$29.00</h5>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="product-detail-box">
-                                            <h6>Lượt mua</h6>
-                                            <h5>62</h5>
-                                        </div>
-                                    </td>
-
-
-                                    <td>
-                                        <div class="product-detail-box">
-                                            <h6>Tổng</h6>
-                                            <h5>$1,798</h5>
-                                        </div>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>
-                                        <div class="best-product-box">
-                                            <div class="product-image">
-                                                <img src="assets/images/product/2.png" class="img-fluid" alt="Product">
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                @endif
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <!-- Top 5 Sản phẩm lợi nhuận cao nhất -->
+        <div class="col-xl-4 col-md-12">
+            <div class="card o-hidden card-hover">
+                <div class="card-header card-header-top card-header--2 px-0 pt-0">
+                    <div class="card-header-title text-center w-100">
+                        <h4>Top 5 Sản phẩm lợi nhuận cao</h4>
+                    </div>
+                </div>
+                
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="best-selling-table w-image table border-0">
+                            <tbody>
+                                @if($topLoiNhuan->isEmpty())
+                                    <tr>
+                                        <td colspan="4" class="text-center text-muted">
+                                            <span class="text-danger">Không có sản phẩm trong thời gian này.</span>
+                                        </td>
+                                    </tr>
+                                @else
+                                    @foreach($topLoiNhuan as $sp)
+                                    <tr>
+                                        <td>
+                                            <div class="best-product-box">
+                                                <div class="product-image">
+                                                    <img src="{{ asset($sp->hinh_anh ? 'storage/' . $sp->hinh_anh : 'assets/images/product/default.png') }}" class="img-fluid" alt="{{ $sp->ten_san_pham }}">
+                                                </div>
+                                                <div class="product-name">
+                                                    <h5>{{ $sp->ten_san_pham }}</h5>
+                                                </div>
                                             </div>
-                                            <div class="product-name">
-                                                <h5>Aata Buscuit</h5>
-                                                <h6>26-08-2022</h6>
+                                        </td>
+                                        <td>
+                                            <div class="product-detail-box">
+                                                <h6>Lợi nhuận</h6>
+                                                <h5>{{ number_format($sp->tong_loi_nhuan, 0, ',', '.') }} VNĐ</h5>
                                             </div>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="product-detail-box">
-                                            <h6>Price</h6>
-                                            <h5>$29.00</h5>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="product-detail-box">
-                                            <h6>Orders</h6>
-                                            <h5>62</h5>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="product-detail-box">
-                                            <h6>Stock</h6>
-                                            <h5>510</h5>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="product-detail-box">
-                                            <h6>Amount</h6>
-                                            <h5>$1,798</h5>
-                                        </div>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>
-                                        <div class="best-product-box">
-                                            <div class="product-image">
-                                                <img src="assets/images/product/3.png" class="img-fluid" alt="Product">
-                                            </div>
-                                            <div class="product-name">
-                                                <h5>Aata Buscuit</h5>
-                                                <h6>26-08-2022</h6>
-                                            </div>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="product-detail-box">
-                                            <h6>Price</h6>
-                                            <h5>$29.00</h5>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="product-detail-box">
-                                            <h6>Orders</h6>
-                                            <h5>62</h5>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="product-detail-box">
-                                            <h6>Stock</h6>
-                                            <h5>510</h5>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="product-detail-box">
-                                            <h6>Amount</h6>
-                                            <h5>$1,798</h5>
-                                        </div>
-                                    </td>
-                                </tr>
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                @endif
                             </tbody>
                         </table>
                     </div>
@@ -263,6 +285,11 @@
             </div>
         </div>
     </div>
+   </div>
+   </div>
+   </div>
+
+    
     <!-- Best Selling Product End -->
 
 
@@ -275,185 +302,87 @@
                 </div>
 
                 <div class="best-selling-box d-sm-flex d-none">
-                    <span>Sắp xếp:</span>
+                    <span>Lọc theo:</span>
                     <div class="dropdown">
                         <button class="btn p-0 dropdown-toggle" type="button" id="dropdownMenuButton2"
                             data-bs-toggle="dropdown" data-bs-auto-close="true">Ngày đặt</button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
-                            <li><a class="dropdown-item" href="#">Ngày đặt</a></li>
-                            <li><a class="dropdown-item" href="#">Tổng tiền</a></li>
-                            <li><a class="dropdown-item" href="#">Trạng thái đơn hàng</a></li>
-                            <li><a class="dropdown-item" href="#">Trạng thái thanh toán</a></li>
-                        </ul>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
+                                <li><a class="dropdown-item" href="{{ route('index', ['filter' => 'hom_nay']) }}">Hôm nay</a></li>
+                                <li><a class="dropdown-item" href="{{ route('index', ['sort' => 'ngay_dat']) }}">Ngày đặt</a></li>
+                                <li><a class="dropdown-item" href="{{ route('index', ['trang_thai' => 'chua_xac_nhan']) }}">Chưa xác nhận</a></li>
+                                <li><a class="dropdown-item" href="{{ route('index', ['trang_thai' => 'tra_hang']) }}">Trả hàng</a></li>
+                                <li><a class="dropdown-item" href="{{ route('index', ['sort' => 'tong_tien']) }}">Tổng tiền</a></li>
+                            </ul>
+                            
                     </div>
                 </div>
+
+                
             </div>
 
             <div class="card-body p-0">
                 <div>
                     <div class="table-responsive">
-                        <table class="best-selling-table table border-0">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Mã đơn hàng</th>
+                                    <th>Khách hàng</th>
+                                    <th>Tổng tiền</th>
+                                    <th>Trạng thái</th>
+                                    <th>Ngày đặt</th>
+                                    <th>Hành động</th>
+                                </tr>
+                            </thead>
                             <tbody>
+                                @if($donHangs->isEmpty())
                                 <tr>
-                                    <td>
-                                        <div class="best-product-box">
-                                            <div class="product-name">
-                                                <h5>Aata Buscuit</h5>
-                                                <h6>#64548</h6>
-                                            </div>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="product-detail-box">
-                                            <h6>Ngày đặt</h6>
-                                            <h5>5/1/22</h5>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="product-detail-box">
-                                            <h6>Tổng tiền</h6>
-                                            <h5>$250.00</h5>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="product-detail-box">
-                                            <h6>Trạng thái đơn hàng</h6>
-                                            <h5>Completed</h5>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="product-detail-box">
-                                            <h6>Trạng thái thanh toán</h6>
-                                            <h5 class="text-danger">Unpaid</h5>
-                                        </div>
+                                    <td colspan="6" class="text-center text-muted ">
+                                        <span class="text-danger">Không có đơn hàng nào.</span>
                                     </td>
                                 </tr>
-
-                                <tr>
-                                    <td>
-                                        <div class="best-product-box">
-                                            <div class="product-name">
-                                                <h5>Aata Buscuit</h5>
-                                                <h6>26-08-2022</h6>
-                                            </div>
-                                        </div>
-                                    </td>
-
-
-                                    <td>
-                                        <div class="product-detail-box">
-                                            <h6>Date Placed</h6>
-                                            <h5>5/1/22</h5>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="product-detail-box">
-                                            <h6>Price</h6>
-                                            <h5>$250.00</h5>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="product-detail-box">
-                                            <h6>Order Status</h6>
-                                            <h5>Completed</h5>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="product-detail-box">
-                                            <h6>Payment</h6>
-                                            <h5 class="theme-color">Paid</h5>
-                                        </div>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>
-                                        <div class="best-product-box">
-                                            <div class="product-name">
-                                                <h5>Aata Buscuit</h5>
-                                                <h6>26-08-2022</h6>
-                                            </div>
-                                        </div>
-                                    </td>
-
-
-                                    <td>
-                                        <div class="product-detail-box">
-                                            <h6>Date Placed</h6>
-                                            <h5>5/1/22</h5>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="product-detail-box">
-                                            <h6>Price</h6>
-                                            <h5>$250.00</h5>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="product-detail-box">
-                                            <h6>Order Status</h6>
-                                            <h5>Completed</h5>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="product-detail-box">
-                                            <h6>Payment</h6>
-                                            <h5 class="theme-color">Paid</h5>
-                                        </div>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>
-                                        <div class="best-product-box">
-                                            <div class="product-name">
-                                                <h5>Aata Buscuit</h5>
-                                                <h6>26-08-2022</h6>
-                                            </div>
-                                        </div>
-                                    </td>
-
-
-                                    <td>
-                                        <div class="product-detail-box">
-                                            <h6>Date Placed</h6>
-                                            <h5>5/1/22</h5>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="product-detail-box">
-                                            <h6>Price</h6>
-                                            <h5>$250.00</h5>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="product-detail-box">
-                                            <h6>Order Status</h6>
-                                            <h5>Completed</h5>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="product-detail-box">
-                                            <h6>Payment</h6>
-                                            <h5 class="theme-color">Paid</h5>
-                                        </div>
-                                    </td>
-                                </tr>
+                                @else
+                                    @foreach ($donHangs as $donHang)
+                                    <tr>
+                                        <td>{{ $donHang->ma_don_hang }}</td>
+                                        <td>{{ $donHang->ten_nguoi_nhan }}</td>
+                                        <td>{{ number_format($donHang->tong_tien, 0, ',', '.') }} VNĐ</td>
+                                        <td>
+                                            @if ($donHang->trang_thai_don_hang == 0)
+                                                <span class="text-danger">Chưa xác nhận</span>
+                                            @elseif ($donHang->trang_thai_don_hang == 1)
+                                                <span class="text-success">Đã xác nhận</span>
+                                            @elseif ($donHang->trang_thai_don_hang == 2)
+                                                <span class="text-primary">Chờ vận chuyển</span>
+                                            @elseif ($donHang->trang_thai_don_hang == 3)
+                                                <span class="text-primary">Đang giao</span>
+                                            @elseif ($donHang->trang_thai_don_hang == 4)
+                                                <span class="text-success">Đã giao</span>
+                                            @elseif ($donHang->trang_thai_don_hang == 5)
+                                                <span class="text-danger">Trả hàng</span>
+                                            @else
+                                                <span>Trạng thái không hợp lệ</span>
+                                            @endif
+                                        </td>
+                                        <td>{{ date('d/m/Y H:i', strtotime($donHang->created_at)) }}</td>
+                                        <td class="d-flex justify-content-center align-items-center">
+                                            <a href="{{ route('donhangs.show', $donHang->id) }}">
+                                                <i class="ri-eye-line"></i>
+                                            </a>
+                                        </td>
+                                        
+                                        
+                                        
+                                        
+                                    </tr>
+                                    @endforeach
+                                @endif
                             </tbody>
+                            
                         </table>
+                        <div class="d-flex justify-content-center mt-3">
+                            {{ $donHangs->links('pagination::bootstrap-5') }}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -464,5 +393,9 @@
 
 @section('js')
     <!-- Sidebar jquery -->
+    
     <script src="{{ asset('assets/js/sidebar-menu.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+
 @endsection

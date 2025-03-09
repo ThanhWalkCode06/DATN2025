@@ -72,9 +72,30 @@ class DonHangController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateDonHangRequest $request, DonHang $donHang)
+    public function update(UpdateDonHangRequest $request, DonHang $donhang)
     {
-        //
+        if ($request->doi_trang_thai) {
+            $data = [
+                'trang_thai_don_hang' => $request->trang_thai
+            ];
+            DonHang::where("id", $donhang->id)->update($data);
+        }
+
+        if ($request->xac_nhan_thanh_toan) {
+            $data = [
+                'trang_thai_thanh_toan' => 1
+            ];
+            DonHang::where("id", $donhang->id)->update($data);
+        }
+
+        if ($request->huy_don_hang) {
+            $data = [
+                'trang_thai_don_hang' => -1
+            ];
+            DonHang::where("id", $donhang->id)->update($data);
+        }
+
+        return redirect()->route('donhangs.edit', $donhang->id)->with('success', 'Cập nhật thành công');
     }
 
     /**

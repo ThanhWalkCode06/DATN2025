@@ -178,6 +178,7 @@ tr{
 
                                         <input type="file" name="album_anh[]" id="album_anh" class="form-control" multiple>
                                         <div class="image-preview" id="imagePreview"></div>
+
                                     </div>
                                     <div class="mb-4">
                                         <label class="form-label-title">Trạng thái</label>
@@ -442,7 +443,6 @@ tr{
         }
     });
 </script>
-
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         let fileList = []; // Danh sách file
@@ -510,6 +510,7 @@ tr{
             let dataTransfer = new DataTransfer();
             fileList.forEach(file => dataTransfer.items.add(file));
             fileInput.files = dataTransfer.files; // Cập nhật lại input file
+
         }
     });
 </script>

@@ -65,7 +65,9 @@
                                             @endif
                                         </td>
                                         <td>
-                                            @if ($donHang->trang_thai_don_hang == 0)
+                                            @if ($donHang->trang_thai_don_hang == -1)
+                                                <span class="text-danger">Đã hủy</span>
+                                            @elseif ($donHang->trang_thai_don_hang == 0)
                                                 <span class="text-danger">Chưa xác nhận</span>
                                             @elseif ($donHang->trang_thai_don_hang == 1)
                                                 <span class="text-success">Đã xác nhận</span>

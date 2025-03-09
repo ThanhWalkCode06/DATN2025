@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('chi_tiet_phieu_giam_gias', function (Blueprint $table) {
+        Schema::create('phieu_giam_gia_tai_khoans', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('phieu_giam_gia_id');
             $table->unsignedBigInteger('user_id');
-            $table->text('mo_ta')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -26,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('chi_tiet_phieu_giam_gias');
+        Schema::dropIfExists('phieu_giam_gia_tai_khoans');
     }
 };

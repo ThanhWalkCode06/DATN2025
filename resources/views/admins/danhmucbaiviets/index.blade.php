@@ -35,7 +35,22 @@
             <div class="card-body">
                     <div class="title-header option-title">
                         <h5>Quản lý danh mục</h5>
-                        <a href="{{ route('danhmucbaiviets.create') }}" class="btn btn-primary">Thêm mới</a>
+                        <div class="right-options">
+                            <ul>
+                                <li>
+                                    <a href="{{ route('danhmucbaiviets.create') }}" class="btn btn-primary">Thêm mới</a>
+                                </li>
+                            </ul>
+                            <br>
+                            <form action="{{ route('danhmucbaiviets.index') }}" method="GET">
+                                <div class="input-group mb-3">
+                                    <input type="text" name="search" class="form-control" placeholder="Tìm kiếm danh mục..."
+                                           value="{{ request('search') }}">
+                                    <button class="btn btn-primary" type="submit">Tìm kiếm</button>
+                                </div>
+                            </form>
+
+                        </div>
                     </div>
                 <div class="table-responsive category-table">
                     <div>
@@ -77,6 +92,9 @@
                                 @endforeach
                             </tbody>
                         </table>
+                        <div class="d-flex justify-content-center mt-3">
+                            {{ $danhMucBaiViets->links('pagination::bootstrap-5') }}
+                        </div>
                     </div>
                 </div>
             </div>

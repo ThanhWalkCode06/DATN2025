@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class BienThe extends Model
 {
     use HasFactory;
-
+    
     protected $fillable = [
         'san_pham_id',
         'thuoc_tinh_id',
