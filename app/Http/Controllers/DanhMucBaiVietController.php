@@ -10,11 +10,20 @@ class DanhMucBaiVietController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        $danhMucBaiViets = DanhMucBaiViet::latest()->paginate(10);
-        return view('admins.danhmucbaiviets.index', compact('danhMucBaiViets'));
+    public function index(Request $request)
+{
+    $query = DanhMucBaiViet::query(); // Tạo query builder
+
+    // Nếu có từ khóa tìm kiếm
+    if ($request->has('search') && $request->search != '') {
+        $query->where('ten_danh_muc', 'like', '%' . $request->search . '%');
     }
+
+    $danhMucBaiViets = $query->latest()->paginate(10)->appends(['search' => $request->search]); // Giữ từ khóa khi phân trang
+
+    return view('admins.danhmucbaiviets.index', compact('danhMucBaiViets'));
+}
+
 
     /**
      * Show the form for creating a new resource.
@@ -28,15 +37,23 @@ class DanhMucBaiVietController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
-        $request->validate([
-            'ten_danh_muc' => 'required|string|max:255',
-            'mo_ta' => 'nullable|string',
-        ]);
+{
+    $request->validate([
+        'ten_danh_muc' => 'required|string|max:255|unique:danh_muc_bai_viets,ten_danh_muc',
+        'mo_ta' => 'required|string',
+    ], [
+        'ten_danh_muc.required' => 'Tên danh mục là bắt buộc.',
+        'ten_danh_muc.unique' => 'Tên danh mục đã tồn tại. Vui lòng nhập tên khác.',
+        'mo_ta.required' => 'Mô tả không được để trống.',
+    ]);
 
-        DanhMucBaiViet::create($request->all());
-        return redirect()->route('danhmucbaiviets.index')->with('success', 'Danh mục đã được tạo.');
-    }
+    DanhMucBaiViet::create([
+        'ten_danh_muc' => $request->ten_danh_muc,
+        'mo_ta' => $request->mo_ta,
+    ]);
+
+    return redirect()->route('danhmucbaiviets.index')->with('success', 'Danh mục đã được tạo.');
+}
 
     /**
      * Display the specified resource.
@@ -59,15 +76,25 @@ class DanhMucBaiVietController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
-    {
-        $request->validate([
-            'ten_danh_muc' => 'required|string|max:255',
-            'mo_ta' => 'nullable|string',
-        ]);
-        $danhMucBaiViet = DanhMucBaiViet::FindorFail($id);
-        $danhMucBaiViet->update($request->all());
-        return redirect()->route('danhmucbaiviets.index')->with('success', 'Danh mục đã được cập nhật.');
-    }
+{
+    $request->validate([
+        'ten_danh_muc' => 'required|string|max:255|unique:danh_muc_bai_viets,ten_danh_muc,' . $id,
+        'mo_ta' => 'required|string',
+    ], [
+        'ten_danh_muc.required' => 'Tên danh mục là bắt buộc.',
+        'ten_danh_muc.unique' => 'Tên danh mục đã tồn tại, vui lòng chọn tên khác.',
+        'mo_ta.required' => 'Mô tả không được để trống.',
+    ]);
+
+    $danhMucBaiViet = DanhMucBaiViet::findOrFail($id);
+    $danhMucBaiViet->update([
+        'ten_danh_muc' => $request->ten_danh_muc,
+        'mo_ta' => $request->mo_ta,
+    ]);
+
+    return redirect()->route('danhmucbaiviets.index')->with('success', 'Danh mục đã được cập nhật.');
+}
+
 
     /**
      * Remove the specified resource from storage.

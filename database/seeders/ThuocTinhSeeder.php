@@ -14,6 +14,11 @@ class ThuocTinhSeeder extends Seeder
      */
     public function run(): void
     {
-        ThuocTinh::factory()->count(5)->create();
+        $name = ['Size','Color'];
+        foreach ($name as $key => $value) {
+            ThuocTinh::create([
+                'ten_thuoc_tinh' => $value,
+            ]);
+        }
     }
 }

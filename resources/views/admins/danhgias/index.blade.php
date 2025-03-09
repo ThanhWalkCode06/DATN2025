@@ -46,6 +46,7 @@
                                     <th>Đánh giá</th>
                                     <th>Nhận xét</th>
                                     <th>Trạng thái</th>
+                                    <th>Hành động</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -78,6 +79,12 @@
                                                 <i class="ri-close-circle-line"></i>
                                             </td>
                                         @endif
+
+                                        <td>
+                                            <a href="{{ route('danhgias.show', $danhGia->id) }}">
+                                                <i class="ri-eye-line"></i>
+                                            </a>
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>

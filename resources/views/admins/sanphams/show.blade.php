@@ -32,7 +32,7 @@
 <div class="col-sm-12">
     <div class="card">
         <div class="card-body">
-            
+
             <div class="bg-inner cart-section order-details-table">
                 <div class="row g-4">
                     <div class="col-xl-8">
@@ -40,49 +40,49 @@
                             <table class="table cart-table table-borderless">
                                 <thead>
                                     <tr>
-                                        <th colspan="2">Tên sản phẩm: {{$sanPham->ten_san_pham}}</th>
+                                        <th colspan="2">Tên sản phẩm: {{$bienThe->ten_san_pham}}</th>
                                         <th class="text-end" colspan="2">
-                                           
+
                                         </th>
                                     </tr>
                                 </thead>
-                              
+
                                 <tbody>
-                                  
+
                                     <tr class="table-order">
                                         <td>
-                                           
+
                                             <a href="javascript:void(0)">
-                                                <img src="{{ asset('storage/' . $sanPham->hinh_anh) }}" class="img-fluid blur-up lazyload" alt="">
+                                                <img src="{{ asset('storage/' . $bienThe->hinh_anh) }}" class="img-fluid blur-up lazyload" alt="">
                                             </a>
                                         </td>
-                                      
+
                                         <td>
                                             <p>Mã sản phẩm</p>
-                                            <h5>{{ $sanPham->ma_san_pham }}</h5>
+                                            <h5>{{ $bienThe->ma_san_pham }}</h5>
                                         </td>
                                         <td>
                                             <p>Khuyến mãi</p>
-                                            <h5>{{ $sanPham->khuyen_mai }}</h5>
+                                            <h5>{{ $bienThe->khuyen_mai }}</h5>
                                         </td>
-                                        <td>  
-                                            @if ($sanPham->trang_thai == 1)  
-                                                <span class="badge bg-success-subtle text-success fs-6">Còn hàng</span>  
-                                            @else  
-                                                <span class="badge bg-danger-subtle text-danger fs-6">Hết hàng</span>  
-                                            @endif  
+                                        <td>
+                                            @if ($bienThe->trang_thai == 1)
+                                                <span class="badge bg-success-subtle text-success fs-6">Còn hàng</span>
+                                            @else
+                                                <span class="badge bg-danger-subtle text-danger fs-6">Hết hàng</span>
+                                            @endif
                                         </td>
                                     </tr>
-                                    
+
                                 </tbody>
-                             
+
 
                                 <tfoot>
                                     <tr>
-                                       
+
                                         <td>
                                             <p>Mô tả sản phẩm </p>
-                                            <p>{!! $sanPham->mo_ta !!}</p>
+                                            <p>{!! $bienThe->mo_ta !!}</p>
 
                                         </td>
                                     </tr>
