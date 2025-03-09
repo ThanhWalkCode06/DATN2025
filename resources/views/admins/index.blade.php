@@ -104,7 +104,7 @@
     <div class="col-xl-12">
         <div class="card o-hidden card-hover">
             <div class="card-header-title">
-                <h4>Doanh thu hàng tháng</h4>
+                <h4>Lợi nhuận hàng tháng</h4>
             </div>
             <div class="card-body p-0">
                 <div id="report-chart"></div>
