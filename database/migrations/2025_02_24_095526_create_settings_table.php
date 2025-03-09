@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('name_website')->nullable();
             $table->string('location')->nullable();
             $table->string('email_owner')->nullable();
+            $table->string('logo')->default('logo.png');
             $table->timestamps();
         });
     }

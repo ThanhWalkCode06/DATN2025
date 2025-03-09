@@ -107,8 +107,6 @@
     <!-- Bg overlay Start -->
     <div class="bg-overlay"></div>
     <!-- Bg overlay End -->
-<<<<<<< HEAD
-<<<<<<< HEAD
 
     <script>
         window.addEventListener('load', function () {
@@ -122,25 +120,18 @@
             }
         });
     </script>
-=======
->>>>>>> origin/main
-=======
->>>>>>> origin/main
 </body>
 
 </html>
 
 @section('js')
-<<<<<<< HEAD
-<<<<<<< HEAD
-
 <script src="{{ asset('assets/js/config.js') }}"></script>
-=======
+
     <script src="{{ asset('assets/js/config.js') }}"></script>
->>>>>>> origin/main
-=======
+
+
     <script src="{{ asset('assets/js/config.js') }}"></script>
->>>>>>> origin/main
+
 
     <!-- bootstrap tag-input js -->
     <script src="{{ asset('assets/js/bootstrap-tagsinput.min.js') }}"></script>

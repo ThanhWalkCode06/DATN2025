@@ -12,7 +12,7 @@ class ThuocTinh extends Model
     protected $fillable = [
         'ten_thuoc_tinh'
     ];
-    public function giaTriThuocTinh()
+    public function giaTriThuocTinhs()
     {
         return $this->hasMany(GiaTriThuocTinh::class, 'thuoc_tinh_id');
     }

@@ -13,4 +13,9 @@ class GiaTriThuocTinh extends Model
         'thuoc_tinh_id',
         'gia_tri'
     ];
+
+    public function thuocTinh()
+    {
+        return $this->belongsTo(ThuocTinh::class, 'thuoc_tinh_id');
+    }
 }

@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Admins;
 
 use App\Models\User;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use Psy\Exception\Exception;
 use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Storage;
 
 class SettingController extends Controller
 {
@@ -17,15 +19,44 @@ class SettingController extends Controller
         if($request->isMethod('get')){
             return view('admins.setting.configuration.index');
         }else if($request->isMethod('post')){
-            $data = $request->except('_token');
-            // dd($data);
-            foreach ($data as $key => $value) {
-                $this->updateEnv($key, $value);
-            }
-            Artisan::call('config:clear');
-            session()->flash('success', 'Cấu hình đã được cập nhật!');
-            return redirect()->back();
+
+        $data = $request->validate([
+            'logo' => 'required|image',
+        ],
+        [
+            'logo.required' => 'Logo không được bỏ trống',
+            'logo.image' => 'Logo phải là một hình ảnh',
+            'logo.mimes' => 'Logo phải có đuôi.jpg,.png,.gif',
+            'logo.max' => 'Kích thước logo phải nhỏ hơn 2MB',
+            // 'logo.dimensions' => 'Logo phải có kích thước 1920x1080 pixels', // Có thể thêm điều kiện kích thước ảnh này
+
+        ]);
+        $setting = Setting::first(); // Lấy setting hiện tại
+        if (!$setting) {
+            $setting = new Setting();
         }
+        // dd(Storage::exists("public/".$setting->logo),"app/public/".$setting->logo);
+        if ($request->hasFile('logo')) {
+            if($setting->logo && Storage::exists("public/".$setting->logo)) {
+                Storage::delete("public/".$setting->logo);
+            }
+            $logoPath = $request->file('logo')->store('logos', 'public'); // Lưu vào storage/public/logos
+            $setting->logo = $logoPath;
+        }
+
+        $setting->save();
+
+        return back()->with('success', 'Cập nhật logo thành công!');
+    }
+        //     $data = $request->except('_token');
+        //     // dd($data);
+        //     foreach ($data as $key => $value) {
+        //         $this->updateEnv($key, $value);
+        //     }
+        //     Artisan::call('config:clear');
+        //     session()->flash('success', 'Cấu hình đã được cập nhật!');
+        //     return redirect()->back();
+        // }
     }
     public function mail(Request $request){
         if($request->isMethod('post')){
@@ -113,4 +144,20 @@ class SettingController extends Controller
         return redirect()->route('setting-infor.private');
     }
 }
+
+//     public function uploadLogo(Request $request){
+//         $setting = Setting::first(); // Lấy setting hiện tại
+//         if (!$setting) {
+//             $setting = new Setting();
+//         }
+
+//         if ($request->hasFile('logo')) {
+//             $logoPath = $request->file('logo')->store('logos', 'public'); // Lưu vào storage/public/logos
+//             $setting->logo = 'storage/' . $logoPath;
+//         }
+
+//         $setting->save();
+
+//         return back()->with('success', 'Cập nhật logo thành công!');
+//     }
 }

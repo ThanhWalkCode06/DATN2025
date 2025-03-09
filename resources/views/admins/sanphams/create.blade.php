@@ -4,6 +4,8 @@
     Thêm mới sản phẩm
 @endsection
 @section('css')
+<meta name="csrf-token" content="{{ csrf_token() }}">
+
     <!-- Themify icon css -->
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/themify.css') }}">
 
@@ -75,6 +77,32 @@ tr{
 .card{
     padding: 50px !important;
 }
+.image-wrapper {
+        display: inline-block;
+        position: relative;
+        margin: 5px;
+    }
+
+    .image-wrapper img {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+    }
+
+    .remove-btn {
+        position: absolute;
+        top: 2px;
+        right: 2px;
+        background: red;
+        color: white;
+        border: none;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        cursor: pointer;
+    }
 </style>
 @endsection
 @section('content')
@@ -95,6 +123,7 @@ tr{
                             <div class="row">
                                 <!-- Cột trái -->
                                 <div class="col-md-6">
+                                    <input type="hidden" name="san_pham_id" id="san_pham_id" value="">
                                     <div class="mb-4">
                                         <label class="form-label-title">Tên sản phẩm</label>
                                         <input type="text" name="ten_san_pham" class="form-control" value="{{ old('ten_san_pham') }}">
@@ -146,20 +175,10 @@ tr{
 
                                     <div class="mb-4">
                                         <label class="col-sm-3 col-form-label form-label-title">Album ảnh</label>
-                                    </div>
-                                    <input type="hidden" name="album_anh" id="album_anh">
 
-                                    <div class="dropzone custom-dropzone" id="multiFileUpload">
-                                        <div class="dropzone-wrapper">
-                                            <div class="dz-message needsclick">
-                                                <div style="margin-top: 10%;">
-                                                    <i style="font-size: 50px" class="icon-cloud-up"></i>
-                                                    <h6 style="text-align: center;">Drop files here or click to upload.</h6>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <input type="file" name="album_anh[]" id="album_anh" class="form-control" multiple>
+                                        <div class="image-preview" id="imagePreview"></div>
                                     </div>
-
                                     <div class="mb-4">
                                         <label class="form-label-title">Trạng thái</label>
                                         <select name="trang_thai" class="form-control">
@@ -186,7 +205,7 @@ tr{
                                             @php
                                                 $selectedValues = old("attribute_values.$tt->id", []);
                                             @endphp
-                                            @foreach ($tt->giaTriThuocTinh as $value)
+                                            @foreach ($tt->giaTriThuocTinhs as $value)
                                                 <option value="{{ $value->gia_tri }}" {{ in_array($value->gia_tri, $selectedValues) ? 'selected' : '' }}>
                                                     {{ $value->gia_tri }}
                                                 </option>
@@ -256,6 +275,10 @@ tr{
 
                             <button type="submit" class="btn btn-primary">Lưu Sản Phẩm</button>
                         </form>
+                        {{-- <form id="uploadForm" action="{{ route('upload.album') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <div id="multiFileUpload" class="dropzone"></div>
+                        </form> --}}
                     </div>
                 </div>
             </div>
@@ -302,12 +325,13 @@ tr{
         let index = key.split(".")[1] || 0; // Lấy index nếu có
         $(`input[name="anh_bien_the[]"]`).eq(index).after(`<p class="text-danger">${window.oldErrors[key][0]}</p>`);
     }
-});
+    });
     window.oldGiaNhap = @json(old('gia_nhap', []));
     window.oldGiaBan = @json(old('gia_ban', []));
     window.oldSoLuong = @json(old('so_luong', []));
 
 </script>
+
 <script>
     $(document).ready(function () {
         $(".select2").select2();
@@ -420,67 +444,73 @@ tr{
 </script>
 
 <script>
-    window.onload = function () {
-    Dropzone.autoDiscover = false;
+    document.addEventListener("DOMContentLoaded", function () {
+        let fileList = []; // Danh sách file
+        const MAX_FILES = 6;
+        const fileInput = document.getElementById("album_anh");
+        const previewContainer = document.getElementById("imagePreview");
 
-    if (Dropzone.instances.length > 0) {
-        Dropzone.instances.forEach(instance => instance.destroy());
-    }
+        fileInput.addEventListener("change", function (event) {
+            let newFiles = Array.from(event.target.files);
 
-    let uploadedFiles = [];
+            // Kiểm tra nếu tổng số file vượt quá giới hạn
+            if (fileList.length + newFiles.length > MAX_FILES) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Quá số lượng!",
+                    text: "Bạn chỉ có thể chọn tối đa 6 ảnh.",
+                    confirmButtonColor: "#007bff"
+                });
+                fileInput.value = "";
+                return;
+            }
 
-    let myDropzone = new Dropzone("#multiFileUpload", {
-        url: "#", // Không upload ngay
-        autoProcessQueue: false,
-        uploadMultiple: true,
-        parallelUploads: 6,
-        maxFiles: 6, // Chặn chọn trên 6 ảnh
-        maxFilesize: 5, // Giới hạn 5MB
-        acceptedFiles: 'image/*',
-        addRemoveLinks: true,
-        dictMaxFilesExceeded: "Chỉ được phép tải lên tối đa 6 ảnh.",
-        paramName: "album_anh[]",
-
-        init: function () {
-            let myDropzone = this;
-
-            myDropzone.on("addedfile", function (file) {
-                if (myDropzone.files.length > 6) {
-                    myDropzone.removeFile(file);
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'Giới hạn ảnh!',
-                        text: 'Bạn chỉ được chọn tối đa 6 ảnh.',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK'
-                    });
-
+            // Lọc và thêm file vào danh sách
+            newFiles.forEach((file) => {
+                if (fileList.length < MAX_FILES) {
+                    fileList.push(file);
+                    previewImage(file);
                 }
-
-                uploadedFiles.push(file.name);
-                document.getElementById("album_anh").value = uploadedFiles.join(",");
             });
 
-            myDropzone.on("removedfile", function (file) {
-                uploadedFiles = uploadedFiles.filter(f => f !== file.name);
-                document.getElementById("album_anh").value = uploadedFiles.join(",");
-            });
+            updateInputFiles(); // Cập nhật input file
+        });
 
-            document.getElementById("mainForm").addEventListener("submit", function (e) {
-                e.preventDefault();
-                e.stopPropagation();
+        function previewImage(file) {
+            let reader = new FileReader();
+            reader.onload = function (e) {
+                let imgWrapper = document.createElement("div");
+                imgWrapper.classList.add("image-wrapper");
+                imgWrapper.setAttribute("data-name", file.name);
 
-                // if (uploadedFiles.length === 0) {
-                //     alert("Vui lòng tải lên ít nhất một ảnh.");
-                //     return;
-                // }
+                let img = document.createElement("img");
+                img.src = e.target.result;
 
-                document.getElementById("album_anh").value = uploadedFiles.join(",");
-                this.submit();
-            });
+                let removeBtn = document.createElement("button");
+                removeBtn.innerHTML = "&times;";
+                removeBtn.classList.add("remove-btn");
+                removeBtn.addEventListener("click", function () {
+                    removeFile(file.name);
+                    imgWrapper.remove();
+                });
+
+                imgWrapper.appendChild(img);
+                imgWrapper.appendChild(removeBtn);
+                previewContainer.appendChild(imgWrapper);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function removeFile(fileName) {
+            fileList = fileList.filter(file => file.name !== fileName);
+            updateInputFiles(); // Cập nhật input file
+        }
+
+        function updateInputFiles() {
+            let dataTransfer = new DataTransfer();
+            fileList.forEach(file => dataTransfer.items.add(file));
+            fileInput.files = dataTransfer.files; // Cập nhật lại input file
         }
     });
-};
-
 </script>
 

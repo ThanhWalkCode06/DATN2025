@@ -133,14 +133,18 @@
                                                                             </tr>
                                                                         </thead>
                                                                         <tbody>
+
                                                                             @if($sanpham->bienThes->isNotEmpty())
+                                                                            @php
+                                                                                // dd($sanpham->bienThes);
+                                                                            @endphp
                                                                                 @foreach($sanpham->bienThes as $key => $bienThe)
                                                                                     <tr>
                                                                                         <td>{{ $key + 1 }}</td>
                                                                                         <td>{{ $bienThe->ten_bien_the }}</td>
                                                                                         <td>
                                                                                             @if ($bienThe->anh_bien_the)
-                                                                                            <img src="{{ asset($bienThe->anh_bien_the) }}" class="img-thumbnail" width="80px">
+                                                                                            <img src="{{ Storage::url($bienThe->anh_bien_the) }}" class="img-thumbnail" width="80px">
 
                                                                                             @else
                                                                                                 Không có ảnh
@@ -221,14 +225,17 @@
                                 </tbody>
                             @endforeach
                         </table>
-                        <div class="d-flex justify-content-center mt-3">
-                            {{ $sanPhams->links('pagination::bootstrap-5') }}
-                        </div>
+
                     </div>
+
                 </div>
             </div>
+
         </div>
+            {{ $sanPhams->links('pagination::bootstrap-5') }}
+
     </div>
+
 @endsection
 
 @section('js')
