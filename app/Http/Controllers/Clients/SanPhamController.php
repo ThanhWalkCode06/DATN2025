@@ -9,12 +9,12 @@ class SanPhamController extends Controller
 {
     public function danhSach()
     {
-        return view('clients.sanphams.index');
+        return view('clients.sanphams.danhsach');
     }
 
     public function chiTiet()
     {
-        return view('clients.sanphams.show');
+        return view('clients.sanphams.chitiet');
     }
 
     public function sanPhamYeuThich()

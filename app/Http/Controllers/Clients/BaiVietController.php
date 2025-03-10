@@ -9,11 +9,11 @@ class BaiVietController extends Controller
 {
     public function danhSach()
     {
-        return view('clients.baiviets.index');
+        return view('clients.baiviets.danhsach');
     }
 
     public function chiTiet()
     {
-        return view('clients.baiviets.show');
+        return view('clients.baiviets.chitiet');
     }
 }
