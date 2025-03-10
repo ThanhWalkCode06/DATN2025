@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admins\Responsibility;
 
 use App\Models\Role;
+use App\Models\User;
 use App\Models\Permission;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -140,8 +141,14 @@ class RoleController extends Controller
      */
     public function destroy(string $id)
     {
-        // $itemId = DB::table('nhan_viens')->find($id);
         $itemId = Role::find($id);
+        $user = User::all();
+        foreach($user as $item){
+            if($item->hasRole($itemId->name)){
+                session()->flash('error', 'Vai trò đã có người dùng không thể xóa');
+                return redirect()->back();
+            }
+        }
         $deleteSP = $itemId->delete();
         $itemId
         ->where('id', $id)

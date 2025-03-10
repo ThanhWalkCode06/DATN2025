@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('settings', function (Blueprint $table) {
             $table->id();
             $table->string('mail_mailer')->default('smtp');
-            $table->string('mail_host')->nullable();
+            $table->string('mail_host')->default('smtp.gmail.com');
             $table->integer('mail_port')->default(587);
             $table->string('mail_username')->nullable();
             $table->text('mail_password')->nullable();

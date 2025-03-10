@@ -332,7 +332,10 @@ tr{
 
 <script>
     $(document).ready(function () {
-    $(".select2").select2();
+    $(".select2").select2({
+        placeholder: "Chọn một giá trị",
+        allowClear: true
+    });
 
     let existingVariants = {}; // Lưu trữ biến thể đã có trước khi chỉnh sửa
 

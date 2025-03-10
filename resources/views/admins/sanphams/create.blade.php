@@ -209,7 +209,7 @@ tr{
                                             @foreach ($tt->giaTriThuocTinhs as $value)
                                                 <option value="{{ $value->gia_tri }}" {{ in_array($value->gia_tri, $selectedValues) ? 'selected' : '' }}>
                                                     {{ $value->gia_tri }}
-                                                </option>                                                                                                                                      
+                                                </option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -335,7 +335,10 @@ tr{
 
 <script>
     $(document).ready(function () {
-        $(".select2").select2();
+        $(".select2").select2({
+            placeholder: "Chọn một giá trị",
+            allowClear: true
+        });
 
         var deletedVariants = JSON.parse($("#deletedVariants").val() || "[]");
 

@@ -113,7 +113,7 @@
                                 </tbody>
                             </table>
 
-                            <button type="button" id="add-permission" class="btn text-white theme-bg-color">Add Value</button>
+                            <button type="button" id="add-permission" class="btn text-white theme-bg-color">Thêm giá trị</button>
                             <button type="submit" class="btn ms-auto theme-bg-color text-white">Thêm mới</button>
                         </form>
 
