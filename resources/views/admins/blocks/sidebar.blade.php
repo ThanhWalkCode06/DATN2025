@@ -127,7 +127,6 @@
                                 <i class="ri-settings-line"></i>
                                 <span>Cài đặt</span>
                             </a>
-
                         </li>
                     @endcan
                 </ul>
