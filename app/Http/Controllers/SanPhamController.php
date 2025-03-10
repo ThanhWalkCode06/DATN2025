@@ -3,18 +3,21 @@
 namespace App\Http\Controllers;
 
 
-use App\Http\Controllers\HelperCommon\Helper;
 use App\Models\BienThe;
 use App\Models\SanPham;
 use App\Models\ThuocTinh;
 use App\Models\AnhSanPham;
 use Illuminate\Http\Request;
 use App\Models\DanhMucSanPham;
+use Illuminate\Support\Carbon;
 use App\Models\GiaTriThuocTinh;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\StoreSanPhamRequest;
 use App\Http\Requests\UpdateSanPhamRequest;
+use App\Http\Controllers\HelperCommon\Helper;
+use App\Models\ChiTietDonHang;
+use App\Models\DonHang;
 
 class SanPhamController extends Controller
 {
@@ -122,7 +125,7 @@ class SanPhamController extends Controller
                     if (isset($files) && $files->isValid()) {
                         $file = $files;
                         $fileName = time() . '_' . $file->getClientOriginalName();
-                        $file->move(public_path('uploads/sanphams/'), $fileName);
+                        $file->storeAs("public/uploads/sanphams/", $fileName);
                         $hinhAnhBienThe = 'uploads/sanphams/' . $fileName;
                     }
                 }
@@ -169,7 +172,7 @@ class SanPhamController extends Controller
                         if (isset($files[$key]) && $files[$key]->isValid()) {
                             $file = $files[$key];
                             $fileName = time() . '_' . $file->getClientOriginalName();
-                            $file->move(public_path('uploads/sanphams/'), $fileName);
+                            $file->storeAs("public/uploads/sanphams/", $fileName);
                             $hinhAnhBienThe = 'uploads/sanphams/' . $fileName;
                         }
                     }
@@ -419,13 +422,21 @@ class SanPhamController extends Controller
     public function destroy($id)
     {
         $sanpham = SanPham::findOrFail($id);
+        $bienThe = BienThe::findOrFail($id);
+        $donHangs = ChiTietDonHang::all();
 
+        foreach($donHangs as $item ){
+            if($item->bien_the_id == $bienThe->id){
+                return redirect()->back()->with('error', 'Sản phẩm không thể xóa do đã có đơn hàng!');
+            }
+        }
         if ($sanpham->hinh_anh && file_exists(public_path('uploads/' . $sanpham->hinh_anh))) {
             unlink(public_path('uploads/' . $sanpham->hinh_anh));
         }
-
         $sanpham->delete();
-
+        $sanpham
+        ->where('id', $id)
+        ->update(['deleted_at' => Carbon::now()]);
         return redirect()->route('sanphams.index')->with('success', 'Sản phẩm đã được xóa thành công!');
     }
 }

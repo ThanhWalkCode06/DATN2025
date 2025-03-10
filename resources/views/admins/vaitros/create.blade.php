@@ -73,7 +73,7 @@
                                                 @foreach($perms as $perm)
                                                     <li>
                                                         <input class="checkbox_animated checkall" type="checkbox" name="permissions[]" value="{{ $perm->name }}" id="perm_{{ $perm->id }}">
-                                                        <label for="perm_{{ $perm->id }}">{{ ucfirst(str_replace('-', ' ', $perm->name)) }}</label>
+                                                        <label for="perm_{{ $perm->id }}">{{ ucfirst(str_replace('-', ' ', $perm->description)) }}</label>
                                                     </li>
                                                 @endforeach
                                             </ul>

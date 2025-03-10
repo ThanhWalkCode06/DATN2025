@@ -209,7 +209,7 @@ tr{
                                             @foreach ($tt->giaTriThuocTinhs as $value)
                                                 <option value="{{ $value->gia_tri }}" {{ in_array($value->gia_tri, $selectedValues) ? 'selected' : '' }}>
                                                     {{ $value->gia_tri }}
-                                                </option>
+                                                </option>                                                                                                                                      
                                             @endforeach
                                         </select>
                                     </div>
