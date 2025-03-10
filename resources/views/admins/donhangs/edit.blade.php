@@ -138,12 +138,15 @@
                                         @if ($donHang->trang_thai_don_hang != 4) disabled @endif value="5">Trả hàng</option>
                                 </select>
                                 <input class="btn btn-primary me-3" type="submit" name="doi_trang_thai"
-                                    value="Đổi trạng thái">
+                                    value="Đổi trạng thái" onclick="return confirm('Xác nhận đổi trạng thái?');">
                                 @if ($donHang->trang_thai_thanh_toan == 0)
                                     <input class="btn btn-primary me-3" type="submit" name="xac_nhan_thanh_toan"
-                                        value="Xác nhận thanh toán">
+                                        value="Xác nhận thanh toán" onclick="return confirm('Xác nhận thanh toán?');">
                                 @endif
-                                <input class="btn btn-danger me-3" type="submit" name="huy_don_hang" value="Hủy đơn hàng">
+                                @if ($donHang->trang_thai_thanh_toan == 0 && $donHang->trang_thai_don_hang <= 3)
+                                    <input class="btn btn-danger me-3" type="submit" name="huy_don_hang"
+                                        value="Hủy đơn hàng" onclick="return confirm('Xác nhận hủy đơn hàng?');">
+                                @endif
                             @endif
                             <a href="{{ route('donhangs.index') }}" class="btn btn-outline">Quay lại</a>
                         </div>
