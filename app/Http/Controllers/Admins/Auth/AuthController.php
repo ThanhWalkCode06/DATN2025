@@ -30,7 +30,12 @@ class AuthController extends Controller
         $user = $request->validate([
             'username' => 'required',
             'password' => 'required',
-        ]);
+        ],
+        [
+        'username.required' => 'Vui lòng nhập tên đăng nhập',
+        'password.required' => 'Vui lòng nhập mật khẩu',
+
+    ]);
 
         if (Auth::attempt($user)) {
             if ($request->remember_token == true) {
@@ -77,7 +82,12 @@ class AuthController extends Controller
         $email = $request->email;
         $request->validate([
             'email' => 'required|email|exists:users,email',
-        ]);
+        ],
+    [
+        'email.required' => 'Vui lòng nhập email',
+        'email.email' => 'Vui lòng nhập đúng định dạng email',
+        'email.exists' => 'Email này không tồn tại trong hệ thống',
+    ]);
         if ($user) {
             // // Tạo token
             $token = Str::random(60);
@@ -107,6 +117,10 @@ class AuthController extends Controller
         $request->validate([
             'password' => 'required',
             'confirm_password' => 'required|same:password',
+        ],[
+            'password.required' => 'Mật khẩu không được để trống',
+            'confirm_password.required' => 'Xác nhận mật khẩu không được để trống',
+            'confirm_password.same' => 'Xác nhận mật khẩu không trùng với mật khẩu mới',
         ]);
         $user = DB::table('password_reset_tokens')->where('token', $token)->first();
         // dd($user);
@@ -133,13 +147,18 @@ class AuthController extends Controller
             $request->validate([
                 'password' => 'required',
                 'confirm_password' => 'required|same:password',
-            ]);
+            ],
+        [
+            'password.required' => 'Mật khẩu không được để trống',
+            'confirm_password.required' => 'Xác nhận mật khẩu không được để trống',
+            'confirm_password.same' => 'Xác nhận mật khẩu không trùng với mật khẩu mới',
+        ]);
             $pass = bcrypt($request->password);
             // dd($pass, $user->id);
             DB::table('users')->where('id', $user->id)->update(['password' => $pass]);
             $this->logout($request);
 
-            return redirect()->route('login')->withErrors(['error' => 'You could login with new password!']);
+            return redirect()->route('login')->withErrors(['error' => 'Bạn đã có thể đăng nhập với mật khẩu mới!']);
         } else {
             abort(403);
         }

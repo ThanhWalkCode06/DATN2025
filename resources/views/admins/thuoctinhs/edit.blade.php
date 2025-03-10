@@ -46,42 +46,50 @@
                             <h5>Sửa thuộc tính</h5>
                         </div>
                         <form class="theme-form theme-form-2 mega-form"
-                        action="{{ route('thuoctinhs.update', $thuocTinh->id) }}" method="POST">
-                      @csrf
-                      @method('PUT')
+                            action="{{ route('thuoctinhs.update', $thuocTinh->id) }}" method="POST">
+                            @csrf
+                            @method('PUT')
 
-                      <!-- Tên thuộc tính -->
-                      <div class="mb-4 row align-items-center">
-                          <label class="form-label-title col-sm-3 mb-0" for="ten_thuoc_tinh">Tên thuộc tính</label>
-                          <div class="col-sm-9">
-                              <input class="form-control" type="text"
-                                     name="ten_thuoc_tinh" value="{{ $thuocTinh->ten_thuoc_tinh }}" id="ten_thuoc_tinh">
-                              @error('ten_thuoc_tinh')
-                                  <p class="text-danger">{{ $message }}</p>
-                              @enderror
-                          </div>
-                      </div>
+                            <!-- Tên thuộc tính -->
+                            <div class="mb-4 row align-items-center">
+                                <label class="form-label-title col-sm-3 mb-0" for="ten_thuoc_tinh">Tên thuộc tính</label>
+                                <div class="col-sm-9">
+                                    <input class="form-control" type="text" name="ten_thuoc_tinh"
+                                        value="{{ $thuocTinh->ten_thuoc_tinh }}" id="ten_thuoc_tinh">
+                                    @error('ten_thuoc_tinh')
+                                        <p class="text-danger">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            </div>
 
-                      <!-- Giá trị thuộc tính -->
-                      <div class="mb-4 row align-items-start">
-                          <label class="form-label-title col-sm-3 mb-0">Giá trị thuộc tính</label>
-                          <div class="col-sm-9">
-                              <div id="giaTriContainer">
-                                  @foreach($giaTriThuocTinhs as $giaTri)
-                                      <div class="input-group mb-2">
-                                          <input type="text" name="gia_tri[]" class="form-control"
-                                                 value="{{ $giaTri->gia_tri }}" placeholder="Giá trị thuộc tính">
-                                          <button type="button" class="btn btn-danger removeGiaTri">Xóa</button>
-                                      </div>
-                                  @endforeach
-                              </div>
-                              <button type="button" id="addGiaTri" class="btn btn-primary mt-2">Thêm giá trị</button>
-                          </div>
-                      </div>
+                            <!-- Giá trị thuộc tính -->
+                            <div class="mb-4 row align-items-start">
+                                <label class="form-label-title col-sm-3 mb-0">Giá trị thuộc tính</label>
+                                <div class="col-sm-9">
+                                    <div id="giaTriContainer">
+                                        @foreach($giaTriThuocTinhs as $key => $giaTri)
+                                        <input type="hidden" name="gia_tri_id[{{ $key }}]" value="{{ $giaTri->id }}">
+                                            <div class="input-group mb-2">
+                                                <input type="text" name="gia_tri[]" class="form-control"
+                                                    value="{{ old('gia_tri.' . $key, $giaTri->gia_tri) }}"
+                                                    placeholder="Giá trị thuộc tính">
+                                                    @error('gia_tri')
+    <div class="text-danger">{{ $message }}</div>
+@enderror
+                                                <button type="button" class="btn btn-danger removeGiaTri">Xóa</button>
+                                                @error("gia_tri.$key")
+                                                    <p class="text-danger">{{ $message }}</p>
+                                                @enderror
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                    <button type="button" id="addGiaTri" class="btn btn-primary mt-2">Thêm giá trị</button>
+                                </div>
+                            </div>
 
-                      <button type="submit" class="btn ms-auto theme-bg-color text-white">Cập nhật</button>
-                  </form>
-                        
+                            <button type="submit" class="btn ms-auto theme-bg-color text-white">Cập nhật</button>
+                        </form>
+
 
                     </div>
                 </div>
@@ -114,25 +122,55 @@
     <script src="{{ asset('assets/js/select2.min.js') }}"></script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const giaTriContainer = document.getElementById('giaTriContainer');
             const addGiaTriButton = document.getElementById('addGiaTri');
 
-            addGiaTriButton.addEventListener('click', function() {
+            addGiaTriButton.addEventListener('click', function () {
                 const newInputGroup = document.createElement('div');
                 newInputGroup.classList.add('input-group', 'mb-2');
                 newInputGroup.innerHTML = `
-                    <input type="text" name="gia_tri[]" class="form-control" placeholder="Giá trị thuộc tính">
-                    <button type="button" class="btn btn-danger removeGiaTri">Xóa</button>
-                `;
+                <input type="text" name="gia_tri[]" class="form-control" placeholder="Giá trị thuộc tính">
+                <button type="button" class="btn btn-danger removeGiaTri">Xóa</button>
+                <p class="text-danger error-message" style="display: none;"></p>
+            `;
                 giaTriContainer.appendChild(newInputGroup);
             });
 
-            giaTriContainer.addEventListener('click', function(event) {
+            giaTriContainer.addEventListener('click', function (event) {
                 if (event.target.classList.contains('removeGiaTri')) {
                     event.target.closest('.input-group').remove();
                 }
             });
+
+            document.querySelector('form').addEventListener('submit', function (event) {
+                let isValid = true;
+                const inputs = document.querySelectorAll('input[name="gia_tri[]"]');
+                const values = [...inputs].map(input => input.value.trim()).filter(val => val !== "");
+
+                // Xóa thông báo lỗi cũ
+                document.querySelectorAll('.error-message').forEach(el => el.style.display = 'none');
+
+                // Kiểm tra trùng lặp
+                const seen = new Set();
+                inputs.forEach((input, index) => {
+                    const value = input.value.trim();
+                    const errorMessage = input.parentElement.querySelector('.error-message');
+
+                    if (value !== "" && seen.has(value)) {
+                        errorMessage.textContent = "Giá trị thuộc tính không được trùng nhau.";
+                        errorMessage.style.display = 'block';
+                        isValid = false;
+                    } else {
+                        seen.add(value);
+                    }
+                });
+
+                if (!isValid) {
+                    event.preventDefault();
+                }
+            });
         });
+
     </script>
 @endsection
