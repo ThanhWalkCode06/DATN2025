@@ -125,7 +125,7 @@ class SanPhamController extends Controller
                     if (isset($files) && $files->isValid()) {
                         $file = $files;
                         $fileName = time() . '_' . $file->getClientOriginalName();
-                        $file->move(public_path('uploads/sanphams/'), $fileName);
+                        $file->storeAs("public/uploads/sanphams/", $fileName);
                         $hinhAnhBienThe = 'uploads/sanphams/' . $fileName;
                     }
                 }
@@ -172,7 +172,7 @@ class SanPhamController extends Controller
                         if (isset($files[$key]) && $files[$key]->isValid()) {
                             $file = $files[$key];
                             $fileName = time() . '_' . $file->getClientOriginalName();
-                            $file->move(public_path('uploads/sanphams/'), $fileName);
+                            $file->storeAs("public/uploads/sanphams/", $fileName);
                             $hinhAnhBienThe = 'uploads/sanphams/' . $fileName;
                         }
                     }
@@ -424,7 +424,7 @@ class SanPhamController extends Controller
         $sanpham = SanPham::findOrFail($id);
         $bienThe = BienThe::findOrFail($id);
         $donHangs = ChiTietDonHang::all();
-        
+
         foreach($donHangs as $item ){
             if($item->bien_the_id == $bienThe->id){
                 return redirect()->back()->with('error', 'Sản phẩm không thể xóa do đã có đơn hàng!');
