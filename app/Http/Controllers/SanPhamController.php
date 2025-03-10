@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\StoreSanPhamRequest;
 use App\Http\Requests\UpdateSanPhamRequest;
 use App\Http\Controllers\HelperCommon\Helper;
+use App\Models\ChiTietDonHang;
+use App\Models\DonHang;
 
 class SanPhamController extends Controller
 {
@@ -420,7 +422,14 @@ class SanPhamController extends Controller
     public function destroy($id)
     {
         $sanpham = SanPham::findOrFail($id);
-
+        $bienThe = BienThe::findOrFail($id);
+        $donHangs = ChiTietDonHang::all();
+        
+        foreach($donHangs as $item ){
+            if($item->bien_the_id == $bienThe->id){
+                return redirect()->back()->with('error', 'Sản phẩm không thể xóa do đã có đơn hàng!');
+            }
+        }
         if ($sanpham->hinh_anh && file_exists(public_path('uploads/' . $sanpham->hinh_anh))) {
             unlink(public_path('uploads/' . $sanpham->hinh_anh));
         }
