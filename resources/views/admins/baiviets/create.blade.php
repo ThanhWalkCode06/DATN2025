@@ -150,11 +150,4 @@
     <script src="{{ asset('assets/js/select2-custom.js') }}"></script>
 
     <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
-<script>
-    ClassicEditor
-        .create(document.querySelector('#noi_dung'))
-        .catch(error => {
-            console.error(error);
-        });
-</script>
 @endsection

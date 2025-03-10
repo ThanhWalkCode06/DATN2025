@@ -11,7 +11,7 @@ class DanhMucSanPhamController extends Controller
 {
     public function index()
     {
-        $danhMucs = DanhMucSanPham::all();
+        $danhMucs = DanhMucSanPham::orderBy('created_at', 'desc')->get();
         return view('admins.danhmucsanphams.index', compact('danhMucs'));
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Validation\Rule;
 use App\Models\PhieuGiamGia;
 use Illuminate\Http\Request;
 
@@ -34,13 +35,22 @@ class PhieuGiamGiaController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'ten_phieu' => 'required|string|max:255|unique:phieu_giam_gias,ten_phieu',
-            'ma_phieu' => 'required|string|max:50|unique:phieu_giam_gias,ma_phieu',
+            'ten_phieu' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('phieu_giam_gias', 'ten_phieu')->whereNull('deleted_at'),
+            ],
+            'ma_phieu' => [
+                'required',
+                'string',
+                'max:50',
+                Rule::unique('phieu_giam_gias', 'ma_phieu')->whereNull('deleted_at'),
+            ],
             'ngay_bat_dau' => 'required|date|after_or_equal:today',
             'ngay_ket_thuc' => 'required|date|after:ngay_bat_dau',
             'gia_tri' => 'required|numeric|min:1|max:99.99',
-            'trang_thai' => 'required|in:0,1', // Đảm bảo giá trị hợp lệ
-
+            'trang_thai' => 'required|in:0,1',
         ], [
             'ten_phieu.unique' => 'Tên phiếu giảm giá đã tồn tại.',
             'ma_phieu.unique' => 'Mã giảm giá đã tồn tại.',
@@ -48,16 +58,25 @@ class PhieuGiamGiaController extends Controller
             'ngay_ket_thuc.after' => 'Ngày kết thúc phải sau ngày bắt đầu.',
             'gia_tri.min' => 'Giá trị giảm giá phải lớn hơn 0.',
             'gia_tri.max' => 'Giá trị giảm giá phải dưới 100.',
-            'trang_thai' => $request->trang_thai ?? 0 // Mặc định nếu không chọn thì là 0
-
         ]);
 
-        // Lưu dữ liệu vào database
+        // Kiểm tra nếu có bản ghi bị xóa mềm
+        $phieuGiamGia = PhieuGiamGia::withTrashed()
+            ->where('ma_phieu', $request->ma_phieu)
+            ->first();
+
+        if ($phieuGiamGia) {
+            $phieuGiamGia->restore(); // Khôi phục bản ghi bị xóa mềm
+            $phieuGiamGia->update($request->all()); // Cập nhật lại dữ liệu
+            return redirect()->route('phieugiamgias.index')->with('success', 'Phiếu giảm giá đã được khôi phục!');
+        }
+
+        // Nếu không có bản ghi nào, tạo mới
         PhieuGiamGia::create($request->all());
+
         return redirect()->route('phieugiamgias.index')->with('success', 'Thêm phiếu giảm giá thành công!');
     }
-
-
+  
     /**
      * Hiển thị chi tiết phiếu giảm giá.
      */
@@ -75,7 +94,6 @@ class PhieuGiamGiaController extends Controller
         return view('admins.phieugiamgias.edit', compact('phieuGiamGia'));
     }
 
-
     /**
      * Cập nhật phiếu giảm giá.
      */
@@ -84,26 +102,28 @@ class PhieuGiamGiaController extends Controller
         $phieuGiamGia = PhieuGiamGia::findOrFail($id);
 
         // Kiểm tra dữ liệu đầu vào
-        $request->validate([
-            'ten_phieu' => 'required|string|max:255',
-            'ma_phieu' => 'required|string|max:50',
-            'ngay_bat_dau' => 'required|date',
-            'ngay_ket_thuc' => 'required|date|after_or_equal:ngay_bat_dau',
-            'gia_tri' => 'required|numeric|min:0',
-        ]);
+        $request->validate(
+            [
+                'ten_phieu' => 'required|string|max:255',
+                'ma_phieu' => 'required|string|max:50',
+                'ngay_bat_dau' => 'required|date|after_or_equal:today',
+                'ngay_ket_thuc' => 'required|date|after:ngay_bat_dau',
+                'gia_tri' => 'required|numeric|min:1|max:99.99',
+                'trang_thai' => 'required|in:0,1',
+            ],
+            [
+                'ngay_bat_dau.after_or_equal' => 'Ngày bắt đầu không được trước hôm nay.',
+                'ngay_ket_thuc.after' => 'Ngày kết thúc phải sau ngày bắt đầu.',
+                'gia_tri.min' => 'Giá trị giảm giá phải lớn hơn 0.',
+                'gia_tri.max' => 'Giá trị giảm giá phải nhỏ hơn 100.',
+            ]
+        );
 
         // Cập nhật dữ liệu
-        $phieuGiamGia->update([
-            'ten_phieu' => $request->ten_phieu,
-            'ma_phieu' => $request->ma_phieu,
-            'ngay_bat_dau' => $request->ngay_bat_dau,
-            'ngay_ket_thuc' => $request->ngay_ket_thuc,
-            'gia_tri' => $request->gia_tri,
-        ]);
+        $phieuGiamGia->update($request->all());
 
-        return redirect()->route('phieugiamgias.index')->with('success', 'Cập nhật thành công');
+        return redirect()->route('phieugiamgias.index')->with('success', 'Cập nhật mã giảm giá thành công');
     }
-
 
     /**
      * Xóa phiếu giảm giá.

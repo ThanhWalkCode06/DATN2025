@@ -220,8 +220,8 @@ var options = {
 
 var options = {
     series: [{
-        name: 'series1',
-        data: [60, 70, 54, 51, 42, 109]
+        name: 'Lợi nhuận',
+        data: dataChart // Lấy dữ liệu từ biến JavaScript
     }],
     chart: {
         height: 320,
@@ -331,8 +331,8 @@ var options = {
     yaxis: {
         labels: {
             formatter: function (value) {
-                return "$" + value;
-            }
+                return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
+            }            
         },
         crosshairs: {
             show: true,
@@ -348,7 +348,7 @@ var options = {
         },
     },
     xaxis: {
-        categories: ["Jan", "Feb", "Mar", "April", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec",],
+        categories: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
         range: undefined,
         axisBorder: {
             low: 0,
