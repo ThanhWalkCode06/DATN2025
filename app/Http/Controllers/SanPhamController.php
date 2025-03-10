@@ -3,18 +3,19 @@
 namespace App\Http\Controllers;
 
 
-use App\Http\Controllers\HelperCommon\Helper;
 use App\Models\BienThe;
 use App\Models\SanPham;
 use App\Models\ThuocTinh;
 use App\Models\AnhSanPham;
 use Illuminate\Http\Request;
 use App\Models\DanhMucSanPham;
+use Illuminate\Support\Carbon;
 use App\Models\GiaTriThuocTinh;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\StoreSanPhamRequest;
 use App\Http\Requests\UpdateSanPhamRequest;
+use App\Http\Controllers\HelperCommon\Helper;
 
 class SanPhamController extends Controller
 {
@@ -423,9 +424,10 @@ class SanPhamController extends Controller
         if ($sanpham->hinh_anh && file_exists(public_path('uploads/' . $sanpham->hinh_anh))) {
             unlink(public_path('uploads/' . $sanpham->hinh_anh));
         }
-
         $sanpham->delete();
-
+        $sanpham
+        ->where('id', $id)
+        ->update(['deleted_at' => Carbon::now()]);
         return redirect()->route('sanphams.index')->with('success', 'Sản phẩm đã được xóa thành công!');
     }
 }

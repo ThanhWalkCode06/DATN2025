@@ -53,7 +53,7 @@ class DynamicPermissionMiddleware
             $modelClass = $this->getModelClassFromRoute($routeName);
             if ($modelClass) {
                 $resourceName = Str::singular(explode('.', $routeName)[0]);
-                $resourceId = $request->route('user');
+                $resourceId = $request->route($resourceName);
                 $model = $modelClass::find($resourceId);
                 // dd($model,$resourceId,$resourceName);
                 if (!$model || $model->user_id !== $user->id) {

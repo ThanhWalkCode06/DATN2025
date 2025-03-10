@@ -72,7 +72,7 @@ Route::prefix('admin')->middleware(['auth', 'checkStatus'])->group(function () {
     Route::post('/sanphams/upload/{sanPhamId}', [Helper::class, 'uploadAlbum'])->name('upload.album');
 
 
-    // Chức năng thì cho vào đây đánh tên route->name phải giống quyền lối bởi dấu . nếu thêm
+    // Chức năng thì cho vào đây đánh tên route->name phải giống quyền lối bởi dấu . nếu là route resource
     Route::middleware('dynamic')->group(function () {
         Route::resource('danhmucsanphams', DanhMucSanPhamController::class);
         Route::resource('sanphams', SanPhamController::class);
