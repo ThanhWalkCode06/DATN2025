@@ -76,7 +76,7 @@ class PhieuGiamGiaController extends Controller
 
         return redirect()->route('phieugiamgias.index')->with('success', 'Thêm phiếu giảm giá thành công!');
     }
-
+  
     /**
      * Hiển thị chi tiết phiếu giảm giá.
      */
