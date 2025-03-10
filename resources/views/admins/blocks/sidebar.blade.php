@@ -121,14 +121,14 @@
                     </li> --}}
 
                     @can('role:SuperAdmin')
-                        {{-- <li class="sidebar-list">
+                        <li class="sidebar-list">
                             <a href="{{ route('configuration.common') }}"
                                 class="linear-icon-link sidebar-link sidebar-title link-nav">
                                 <i class="ri-settings-line"></i>
                                 <span>Cài đặt</span>
                             </a>
 
-                        </li> --}}
+                        </li> 
                     @endcan
                 </ul>
             </div>
