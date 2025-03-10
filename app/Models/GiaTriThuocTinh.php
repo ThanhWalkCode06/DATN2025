@@ -8,8 +8,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class GiaTriThuocTinh extends Model
 {
-    use HasFactory;
-    use SoftDeletes;
-    protected $fillable = ['thuoc_tinh_id', 'gia_tri', 'created_at', 'updated_at', 'deleted_at'];
+    use HasFactory,SoftDeletes;
     protected $dates = ['deleted_at'];
+    protected $fillable = [
+        'thuoc_tinh_id',
+        'gia_tri'
+    ];
+
+    public function thuocTinh()
+    {
+        return $this->belongsTo(ThuocTinh::class, 'thuoc_tinh_id');
+    }
+
 }

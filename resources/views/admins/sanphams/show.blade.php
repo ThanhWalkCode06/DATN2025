@@ -62,8 +62,12 @@
                                             <h5>{{ $bienThe->ma_san_pham }}</h5>
                                         </td>
                                         <td>
-                                            <p>Khuyến mãi</p>
-                                            <h5>{{ $bienThe->khuyen_mai }}</h5>
+                                            <p>Giá cũ</p>
+                                            <h5>{{ $bienThe->gia_cu }}</h5>
+                                        </td>
+                                        <td>
+                                            <p>Giá mới</p>
+                                            <h5>{{ $bienThe->gia_moi }}</h5>
                                         </td>
                                         <td>
                                             @if ($bienThe->trang_thai == 1)

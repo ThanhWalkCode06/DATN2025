@@ -11,12 +11,14 @@ class ThuocTinh extends Model
     use HasFactory;
     use SoftDeletes;
 
-    
-    protected $dates = ['deleted_at']; // Định nghĩa cột deleted_at cho soft delete
-    protected $fillable = ['ten_thuoc_tinh', 'created_at', 'updated_at', 'deleted_at'];
-    public function giaTriThuocTinh()
+    protected $fillable = [
+        'ten_thuoc_tinh','deleted_at'
+    ];
+    protected $dates = ['deleted_at'];
+    public function giaTriThuocTinhs()
+
     {
         return $this->hasMany(GiaTriThuocTinh::class, 'thuoc_tinh_id');
-        
+
     }
 }
