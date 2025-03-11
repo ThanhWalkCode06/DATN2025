@@ -202,10 +202,11 @@ tr{
                                 @foreach ($thuocTinhs as $tt)
                                     <div class="mb-2">
                                         <label>{{ $tt->ten_thuoc_tinh }}</label>
-                                        <select name="attribute_values[{{ $tt->id }}][]" class="form-control select2" multiple>
+                                        <select name="attribute_values[{{ $tt->id }}][]" class="form-control select2" multiple data-placeholder="{{ $tt->ten_thuoc_tinh == 'Size' ? 'Chọn Size' : ($tt->ten_thuoc_tinh == 'Color' ? 'Chọn Color' : 'Chọn ' . $tt->ten_thuoc_tinh) }}">
                                             @php
                                                 $selectedValues = old("attribute_values.$tt->id", []);
                                             @endphp
+                                            <option value=""></option> <!-- Tạo option rỗng để Select2 nhận diện placeholder -->
                                             @foreach ($tt->giaTriThuocTinhs as $value)
                                                 <option value="{{ $value->gia_tri }}" {{ in_array($value->gia_tri, $selectedValues) ? 'selected' : '' }}>
                                                     {{ $value->gia_tri }}
@@ -317,7 +318,21 @@ tr{
 <script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
-
+<script>
+    $(document).ready(function() {
+        $('.select2').select2({
+            placeholder: function() {
+                return $(this).attr('data-placeholder'); 
+            },
+            language: {
+                noResults: function() {
+                    return "Không tìm thấy kết quả";
+                }
+            },
+            allowClear: true
+        });
+    });
+</script>
 <script>
     window.oldErrors = @json($errors->toArray());
     console.log(window.oldErrors);
