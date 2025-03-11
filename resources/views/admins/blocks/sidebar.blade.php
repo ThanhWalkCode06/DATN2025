@@ -1,24 +1,17 @@
 <div class="sidebar-wrapper">
     <div id="sidebarEffect"></div>
     <div>
-        <div style="padding-top: 0px" class="logo-wrapper logo-wrapper-center">
-            <a href="{{ route('index') }}" data-bs-original-title="" title="">
-                <img style="width:150px; height: 80px" class="img-fluid for-white" src="{{  Storage::url($globalSetting->logo ?? 'storage/logo.webp')  }}" alt="logo">
+        <div class="logo-wrapper logo-wrapper-center">
+            <a href="{{ route('index') }}" class="d-flex justify-content-center">
+                <img class="img-fluid for-white object-fit-contain"
+                    src="{{ Storage::url($globalSetting->logo ?? 'images/logo.png') }}" alt="logo">
             </a>
             <div class="back-btn">
                 <i class="fa fa-angle-left"></i>
             </div>
-            <div class="toggle-sidebar">
+            {{-- <div class="toggle-sidebar">
                 <i class="ri-apps-line status_toggle middle sidebar-toggle"></i>
-            </div>
-        </div>
-        <div class="logo-icon-wrapper">
-            <a href="{{ route('index') }}">
-                <img class="img-fluid main-logo main-white" src="{{ asset('assets/images/logo/logo.png') }}"
-                    alt="logo">
-                <img class="img-fluid main-logo main-dark" src="{{ asset('assets/images/logo/logo-white.png') }}"
-                    alt="logo">
-            </a>
+            </div> --}}
         </div>
         <nav class="sidebar-main">
             <div class="left-arrow" id="left-arrow">
@@ -26,8 +19,14 @@
             </div>
 
             <div id="sidebar-menu">
-                <ul class="sidebar-links" id="simple-bar">
+                <ul class="sidebar-links d-block" id="simple-bar">
                     <li class="back-btn"></li>
+
+                    <li class="sidebar-list invisible">
+                        <a class="sidebar-link sidebar-title link-nav" href="{{ route('index') }}">
+                            <i class="ri-home-line"></i>
+                        </a>
+                    </li>
 
                     <li class="sidebar-list">
                         <a class="sidebar-link sidebar-title link-nav" href="{{ route('index') }}">
