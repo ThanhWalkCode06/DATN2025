@@ -37,7 +37,7 @@ class SettingController extends Controller
         }
         // dd(Storage::exists("public/".$setting->logo),"app/public/".$setting->logo);
         if ($request->hasFile('logo')) {
-            if($setting->logo && Storage::exists("public/".$setting->logo)) {
+            if($setting->logo && Storage::exists("public/".$setting->logo) && $setting->logo != '') {
                 Storage::delete("public/".$setting->logo);
             }
             $logoPath = $request->file('logo')->store('logos', 'public'); // Lưu vào storage/public/logos

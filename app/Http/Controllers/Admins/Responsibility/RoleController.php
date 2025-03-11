@@ -87,9 +87,28 @@ class RoleController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Permission $permission)
+    public function show(string $id)
     {
-        //
+        $item = Role::find($id);
+        $permissionsByAction = [
+            'Xem' => [],
+            'Thêm' => [],
+            'Sửa' => [],
+            'Xóa' => []
+        ];
+        // dd($item->permissions);
+        foreach($item->permissions as $permission){
+            $i = explode(" ", $permission->description,2);
+            $action = $i[0] ?? '';
+            $description = $i[1] ?? '';
+
+            if (isset($permissionsByAction[$action])) {
+                $permissionsByAction[$action][] = $description;
+            }
+        }
+        $maxRows = max(array_map('count', $permissionsByAction));
+        // dd($maxRows);
+        return view('admins.vaitros.show',compact('item','maxRows','permissionsByAction'));
     }
 
     /**
