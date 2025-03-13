@@ -73,7 +73,7 @@
                                                 </td>
                                                 <td>
                                                     <p>Giá</p>
-                                                    <h5>{{ $chiTietDonHang->gia_ban }}đ</h5>
+                                                    <h5>{{ number_format($chiTietDonHang->gia_ban, 0, '', '.') }}đ</h5>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -112,7 +112,8 @@
                                                 <h4 class="theme-color fw-bold">Tổng tiền :</h4>
                                             </td>
                                             <td>
-                                                <h4 class="theme-color fw-bold">{{ $donHang->tong_tien }}đ</h4>
+                                                <h4 class="theme-color fw-bold">
+                                                    {{ number_format($donHang->tong_tien, 0, '', '.') }}đ</h4>
                                             </td>
                                         </tr>
                                     </tfoot>
