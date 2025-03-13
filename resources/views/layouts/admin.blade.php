@@ -122,12 +122,12 @@
         <div class="modal-dialog  modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-body">
-                    <h5 class="modal-title" id="staticBackdropLabel">Logging Out</h5>
-                    <p>Are you sure you want to log out?</p>
+                    <h5 class="modal-title" id="staticBackdropLabel">Đăng xuất</h5>
+                    <p>Bạn có chắc chắn muốn đăng xuất tài khoản?</p>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     <div class="button-box">
-                        <button type="button" class="btn btn--no" data-bs-dismiss="modal">No</button>
-                        <a href="{{ route('logout') }}"><button type="button" class="btn  btn--yes btn-primary">Yes</button></a>
+                        <button type="button" class="btn btn--no" data-bs-dismiss="modal">Không</button>
+                        <a href="{{ route('logout') }}"><button type="button" class="btn  btn--yes btn-primary">Có</button></a>
                     </div>
                 </div>
             </div>

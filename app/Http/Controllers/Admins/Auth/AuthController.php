@@ -55,7 +55,7 @@ class AuthController extends Controller
             return  redirect()->route('index');
         }
         return redirect()->back()->withErrors([
-            'error' => 'Username or password incorrect'
+            'error' => 'Tài khoản mật khẩu không đúng'
         ]);
     }
 

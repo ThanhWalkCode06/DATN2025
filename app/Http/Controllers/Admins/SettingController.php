@@ -21,14 +21,17 @@ class SettingController extends Controller
         }else if($request->isMethod('post')){
 
         $data = $request->validate([
-            'logo' => 'required|image',
+            'logo' => 'image',
+            'location' => 'required',
+            'name_website' => 'required',
         ],
         [
             'logo.required' => 'Logo không được bỏ trống',
+            'location.required' => 'Logo không được bỏ trống',
+            'name_website.required' => 'Logo không được bỏ trống',
             'logo.image' => 'Logo phải là một hình ảnh',
             'logo.mimes' => 'Logo phải có đuôi.jpg,.png,.gif',
             'logo.max' => 'Kích thước logo phải nhỏ hơn 2MB',
-            // 'logo.dimensions' => 'Logo phải có kích thước 1920x1080 pixels', // Có thể thêm điều kiện kích thước ảnh này
 
         ]);
         $setting = Setting::first(); // Lấy setting hiện tại
@@ -44,9 +47,9 @@ class SettingController extends Controller
             $setting->logo = $logoPath;
         }
 
-        $setting->save();
+        $setting->updateOrcreate($data);
 
-        return back()->with('success', 'Cập nhật logo thành công!');
+        return back()->with('success', 'Cập nhật thành công!');
     }
         //     $data = $request->except('_token');
         //     // dd($data);

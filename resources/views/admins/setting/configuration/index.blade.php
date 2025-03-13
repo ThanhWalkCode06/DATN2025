@@ -59,7 +59,7 @@ Cấu hình website
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Host</label>
-                    <input type="text" name="MAIL_HOST" class="form-control" value="{{ env('MAIL_HOST') }}">
+                    <input type="text" name="MAIL_HOST" class="form-control" value="{{ env('MAIL_HOST', 'smtp.gmail.com') }}">
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Port</label>
@@ -97,18 +97,20 @@ Cấu hình website
         <div id="generalSettings" class="tab-pane fade">
             <form action="{{ route('configuration.common') }}" method="POST" enctype="multipart/form-data">
                 @csrf
-                {{-- <div class="mb-3">
+                <div class="mb-3">
                     <label class="form-label">Tên Website</label>
-                    <input type="text" name="APP_NAME" class="form-control" value="{{ env('APP_NAME', 'Laravel') }}">
+                    <input type="text" name="name_website" class="form-control" value="{{ $globalSetting->name_website ?? 'Seven Star' }}">
+                    @error('name_website')
+                        <p class="text-danger">{{ $message }}</p>
+                    @enderror
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Địa chỉ </label>
-                    <input type="text" name="dia_chi" class="form-control" value="{{ env('dia_chi','Hà Nội') }}">
+                    <input type="text" name="location" class="form-control" value="{{ $globalSetting->location ?? 'Hà Nội' }}">
+                    @error('location')
+                        <p class="text-danger">{{ $message }}</p>
+                    @enderror
                 </div>
-                <div class="mb-3">
-                    <label class="form-label">Số điện thoại</label>
-                    <input type="text" name="sdt" class="form-control" value="{{ env('sdt','0387660612') }}">
-                </div> --}}
                 <div class="mb-3">
                     <label class="form-label">Logo</label>
                     <input type="file" name="logo" class="form-control" >
@@ -116,7 +118,7 @@ Cấu hình website
                         <p class="text-danger">{{ $message }}</p>
                     @enderror
                 </div>
-                <img style="width:150px; height: 100px" class="img-fluid for-white" src="{{  Storage::url($globalSetting->logo ?? 'storage/logo.webp')  }}" alt="logo">
+                <img style="width:150px; height: 100px" class="img-fluid for-white" src="{{  Storage::url($globalSetting->logo ?? 'images/logo.png')  }}" alt="logo">
                 <button type="submit" class="btn btn-primary">Lưu Cấu Hình Chung</button>
             </form>
         </div>
