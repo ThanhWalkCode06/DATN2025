@@ -685,7 +685,7 @@
                                         </li>
 
                                         <li class="nav-item dropdown">
-                                            <a class="nav-link" href="javascript:void(0)">Hướng dẫn</a>
+                                            <a class="nav-link" href="{{ route('huongdans.danhsach') }}">Hướng dẫn</a>
                                             <ul class="dropdown-menu">
                                                 <li>
                                                     <a class="dropdown-item" href="blog-detail.html">Blog
