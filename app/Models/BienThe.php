@@ -19,10 +19,18 @@ class BienThe extends Model
         'gia_ban',
         'so_luong'
     ];
+
+    public function sanPham()
+    {
+        return $this->belongsTo(SanPham::class, 'san_pham_id');
+    }
+
     public function thuocTinhs()
-{
-    return $this->belongsToMany(ThuocTinh::class, 'bien_the_thuoc_tinh', 'bien_the_id', 'thuoc_tinh_id')
-                ->withPivot('gia_tri_thuoc_tinh_id')
-                ->withTimestamps();
-}
+    {
+        return $this->hasMany(ThuocTinh::class,'id', 'thuoc_tinh_id');
+    }
+    public function giaTriThuocTinhs()
+    {
+        return $this->hasMany(GiaTriThuocTinh::class, 'id', 'gia_tri_thuoc_tinh_id');
+    }
 }

@@ -1,9 +1,9 @@
 <div class="sidebar-wrapper">
     <div id="sidebarEffect"></div>
     <div>
-        <div class="logo-wrapper logo-wrapper-center">
+        <div style="padding-top: 0px" class="logo-wrapper logo-wrapper-center">
             <a href="{{ route('index') }}" data-bs-original-title="" title="">
-                <img class="img-fluid for-white" src="{{ asset('assets/images/logo/full-white.png') }}" alt="logo">
+                <img style="width:150px; height: 80px" class="img-fluid for-white" src="{{  Storage::url($globalSetting->logo ?? 'storage/logo.webp')  }}" alt="logo">
             </a>
             <div class="back-btn">
                 <i class="fa fa-angle-left"></i>
@@ -121,14 +121,13 @@
                     </li> --}}
 
                     @can('role:SuperAdmin')
-                        {{-- <li class="sidebar-list">
+                        <li class="sidebar-list">
                             <a href="{{ route('configuration.common') }}"
                                 class="linear-icon-link sidebar-link sidebar-title link-nav">
                                 <i class="ri-settings-line"></i>
                                 <span>Cài đặt</span>
                             </a>
-
-                        </li> --}}
+                        </li>
                     @endcan
                 </ul>
             </div>

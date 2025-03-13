@@ -39,10 +39,10 @@ Cấu hình website
 
     <ul class="nav nav-tabs" id="settingsTabs">
         <li class="nav-item">
-            <a class="nav-link active" data-bs-toggle="tab" href="#emailSettings">Cấu Hình Email</a>
+            <a class="nav-link active" data-bs-toggle="tab" href="#emailSettings" onclick="saveTab('#emailSettings')">Cấu Hình Email</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" data-bs-toggle="tab" href="#generalSettings">Cấu Hình Chung</a>
+            <a class="nav-link" data-bs-toggle="tab" href="#generalSettings" onclick="saveTab('#generalSettings')">Cấu Hình Chung</a>
         </li>
     </ul>
 
@@ -51,6 +51,8 @@ Cấu hình website
         <div id="emailSettings" class="tab-pane fade show active">
             <form action="{{ route('configuration.setting-mail') }}" method="POST">
                 @csrf
+            <div class="row">
+                <div class="col-6">
                 <div class="mb-3">
                     <label class="form-label">Mailer</label>
                     <input type="text" name="MAIL_MAILER" class="form-control" value="{{ env('MAIL_MAILER', 'smtp') }}">
@@ -67,6 +69,8 @@ Cấu hình website
                     <label class="form-label">Username</label>
                     <input type="text" name="MAIL_USERNAME" class="form-control" value="{{ env('MAIL_USERNAME') }}">
                 </div>
+            </div>
+            <div class="col-6">
                 <div class="mb-3">
                     <label class="form-label">Password</label>
                     <input type="password" name="MAIL_PASSWORD" class="form-control" value="{{ env('MAIL_PASSWORD') }}">
@@ -83,15 +87,17 @@ Cấu hình website
                     <label class="form-label">From Name</label>
                     <input type="text" name="MAIL_FROM_NAME" class="form-control" value="{{ env('MAIL_FROM_NAME') }}">
                 </div>
+            </div>
+            </div>
                 <button type="submit" class="btn btn-primary">Lưu Cấu Hình Email</button>
             </form>
         </div>
 
         <!-- Cấu hình Chung -->
         <div id="generalSettings" class="tab-pane fade">
-            <form action="{{ route('configuration.common') }}" method="POST">
+            <form action="{{ route('configuration.common') }}" method="POST" enctype="multipart/form-data">
                 @csrf
-                <div class="mb-3">
+                {{-- <div class="mb-3">
                     <label class="form-label">Tên Website</label>
                     <input type="text" name="APP_NAME" class="form-control" value="{{ env('APP_NAME', 'Laravel') }}">
                 </div>
@@ -102,16 +108,39 @@ Cấu hình website
                 <div class="mb-3">
                     <label class="form-label">Số điện thoại</label>
                     <input type="text" name="sdt" class="form-control" value="{{ env('sdt','0387660612') }}">
-                </div>
-                {{-- <div class="mb-3">
-                    <label class="form-label">Email website</label>
-                    <input type="text" name="email" class="form-control" value="{{ env('email','thanhnguyen062004@gmail.com') }}">
                 </div> --}}
+                <div class="mb-3">
+                    <label class="form-label">Logo</label>
+                    <input type="file" name="logo" class="form-control" >
+                    @error('logo')
+                        <p class="text-danger">{{ $message }}</p>
+                    @enderror
+                </div>
+                <img style="width:150px; height: 100px" class="img-fluid for-white" src="{{  Storage::url($globalSetting->logo ?? 'storage/logo.webp')  }}" alt="logo">
                 <button type="submit" class="btn btn-primary">Lưu Cấu Hình Chung</button>
             </form>
         </div>
     </div>
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let activeTab = localStorage.getItem("activeTab") || "#emailSettings"; // Mặc định là tab đầu tiên
+        let currentTab = document.querySelector(`[href="${activeTab}"]`);
+
+        if (currentTab) {
+            document.querySelectorAll(".nav-link").forEach(tab => tab.classList.remove("active"));
+            document.querySelectorAll(".tab-pane").forEach(tab => tab.classList.remove("show", "active"));
+
+            currentTab.classList.add("active");
+            document.querySelector(activeTab).classList.add("show", "active");
+        }
+    });
+
+    function saveTab(tabId) {
+        localStorage.setItem("activeTab", tabId);
+    }
+</script>
+
 @endsection
 
 @section('js')

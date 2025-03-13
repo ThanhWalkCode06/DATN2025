@@ -59,7 +59,7 @@ class StoreSanPhamRequest extends FormRequest
             $gia_ban = $this->input('gia_ban', []);
 
             foreach ($gia_nhap as $index => $value) {
-                if (isset($gia_ban[$index]) && $value >= $gia_ban[$index]) {
+                if (isset($gia_nhap[$index]) && $value >= $gia_ban[$index]) {
                     $validator->errors()->add("gia_nhap.$index", "Giá nhập phải nhỏ hơn giá bán.");
                 }
             }
@@ -87,14 +87,16 @@ class StoreSanPhamRequest extends FormRequest
 
             'gia_nhap.*.required' => 'Bắt buộc phải nhập',
             'gia_nhap.*.numeric' => 'Bắt buộc phải nhập số',
-            'gia_nhap.*.min' => 'Bắt buộc nhỏ hơn giá bạn',
+            'gia_nhap.*.min' => 'Bắt buộc lớn hơn 0',
+            'gia_moi.lt' =>'Giá mới phải ít hơn giá cũ',
 
             'gia_ban.*.required' => 'Bắt buộc phải nhập',
             'gia_ban.*.numeric' => 'Bắt buộc phải nhập số',
-            'gia_ban.*.min' => 'Bắt buộc nhỏ hơn giá bạn',
+            'gia_ban.*.min' => 'Bắt buộc lớn hơn 0',
 
 
             'so_luong.*.required' => 'Bắt buộc phải nhập',
+            'so_luong.*.min' => 'Bắt buộc lớn hơn hoặc bằng 0',
             'anh_bien_the.*.required' => 'Bắt buộc phải nhập',
             'anh_bien_the.required' => 'Bắt buộc phải nhập',
             'hinh_anh.required' => 'Bắt buộc phải nhập',

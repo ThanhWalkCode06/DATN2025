@@ -22,6 +22,7 @@ use App\Http\Controllers\DanhMucSanPhamController;
 use App\Http\Controllers\Admins\Auth\AuthController;
 use App\Http\Controllers\Admins\Responsibility\RoleController;
 use App\Http\Controllers\Admins\Responsibility\PermissionController;
+use App\Http\Controllers\HelperCommon\Helper;
 
 // Login Admin Controller
 Route::prefix('/admin')->controller(AuthController::class)->group(function () {
@@ -68,12 +69,14 @@ Route::prefix('admin')->middleware(['auth', 'checkStatus'])->group(function () {
     Route::get("/", [ThongKeController::class, "index"])->name('index');
     Route::get("/lienhe", [LienHeController::class, "index"])->name('lienhe');
     Route::get("/danhgias", [DanhGiaController::class, "index"])->name('danhgias');
+    Route::post('/sanphams/upload/{sanPhamId}', [Helper::class, 'uploadAlbum'])->name('upload.album');
 
 
-    // Chức năng thì cho vào đây đánh tên route->name phải giống quyền lối bởi dấu . nếu thêm
+    // Chức năng thì cho vào đây đánh tên route->name phải giống quyền lối bởi dấu . nếu là route resource
     Route::middleware('dynamic')->group(function () {
         Route::resource('danhmucsanphams', DanhMucSanPhamController::class);
         Route::resource('sanphams', SanPhamController::class);
+
         Route::resource('bienthes', BienTheController::class);
         Route::get('users/search', [UserController::class, 'search'])->name('users-search');
         Route::resource('users', UserController::class);
@@ -107,3 +110,9 @@ Route::get('/baiviet/{id}', [App\Http\Controllers\Clients\BaiVietController::cla
 Route::get('/giohang', [App\Http\Controllers\Clients\ThanhToanController::class, 'gioHang'])->name('thanhtoans.giohang');
 Route::get('/thanhtoan', [App\Http\Controllers\Clients\ThanhToanController::class, 'thanhToan'])->name('thanhtoans.thanhtoan');
 Route::get('/dathangthanhcong', [App\Http\Controllers\Clients\ThanhToanController::class, 'datHangThanhCong'])->name('thanhtoans.dathangthanhcong');
+
+Route::get('/users/{username}', [App\Http\Controllers\Clients\UserController::class, 'chiTiet'])->name('users.chitiet');
+
+Route::get('/gioithieu', [App\Http\Controllers\Clients\GioiThieuController::class, 'home'])->name('gioithieu.home');
+
+Route::get('/lienhe', [App\Http\Controllers\Clients\LienHeController::class, 'home'])->name('lienhe.home');

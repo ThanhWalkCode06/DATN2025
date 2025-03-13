@@ -183,6 +183,11 @@
                                             <li class="product-box-contain">
                                                 <a href="forgot.html">Quên mật khẩu</a>
                                             </li>
+
+                                            <li class="product-box-contain">
+                                                <a href="{{ route('users.chitiet', 'nguyenvana') }}">Chi tiết tài
+                                                    khoản</a>
+                                            </li>
                                         </ul>
                                     </div>
                                 </li>
@@ -680,8 +685,7 @@
                                         </li>
 
                                         <li class="nav-item dropdown">
-                                            <a class="nav-link dropdown-toggle" href="javascript:void(0)"
-                                                data-bs-toggle="dropdown">Hướng dẫn</a>
+                                            <a class="nav-link" href="javascript:void(0)">Hướng dẫn</a>
                                             <ul class="dropdown-menu">
                                                 <li>
                                                     <a class="dropdown-item" href="blog-detail.html">Blog
@@ -697,8 +701,7 @@
                                         </li>
 
                                         <li class="nav-item dropdown">
-                                            <a class="nav-link dropdown-toggle" href="javascript:void(0)"
-                                                data-bs-toggle="dropdown">Giới thiệu</a>
+                                            <a class="nav-link" href="{{ route('gioithieu.home') }}">Giới thiệu</a>
                                             <ul class="dropdown-menu">
                                                 <li>
                                                     <a class="dropdown-item" href="seller-become.html">Become a
@@ -728,8 +731,7 @@
                                         </li>
 
                                         <li class="nav-item dropdown">
-                                            <a class="nav-link dropdown-toggle" href="javascript:void(0)"
-                                                data-bs-toggle="dropdown">Liên hệ</a>
+                                            <a class="nav-link" href="{{ route('lienhe.home') }}">Liên hệ</a>
                                             <ul class="dropdown-menu">
                                                 <li>
                                                     <a class="dropdown-item" href="seller-become.html">Become a

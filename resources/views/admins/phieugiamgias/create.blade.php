@@ -46,18 +46,17 @@ Thêm mới sản phẩm
                                     <div class="mb-4 row align-items-center">
                                         <label class="form-label-title col-lg-2 col-md-3 mb-0">Tên phiếu giảm giá</label>
                                         <div class="col-md-9 col-lg-10">
-                                            <input class="form-control @error('ten_phieu')  @enderror" type="text" name="ten_phieu" value="{{ old('ten_phieu') }}" required>
+                                            <input class="form-control @error('ten_phieu') is-invalid @enderror" type="text" name="ten_phieu" value="{{ old('ten_phieu') }}">
                                             @error('ten_phieu')
                                             <div class="text-danger">{{ $message }}</div>
                                             @enderror
                                         </div>
                                     </div>
-
                                     <!-- Mã Giảm giá -->
                                     <div class="mb-4 row align-items-center">
                                         <label class="col-lg-2 col-md-3 col-form-label form-label-title">Mã Giảm giá</label>
                                         <div class="col-md-9 col-lg-10">
-                                            <input class="form-control @error('ma_phieu')  @enderror" type="text" name="ma_phieu" value="{{ old('ma_phieu') }}" required>
+                                            <input class="form-control @error('ma_phieu')  @enderror" type="text" name="ma_phieu" value="{{ old('ma_phieu') }}">
                                             @error('ma_phieu')
                                             <div class="text-danger">{{ $message }}</div>
                                             @enderror
@@ -68,7 +67,7 @@ Thêm mới sản phẩm
                                     <div class="mb-4 row align-items-center">
                                         <label class="col-lg-2 col-md-3 col-form-label form-label-title">Ngày bắt đầu</label>
                                         <div class="col-md-9 col-lg-10">
-                                            <input class="form-control @error('ngay_bat_dau')  @enderror" type="date" name="ngay_bat_dau" value="{{ old('ngay_bat_dau') }}" required>
+                                            <input class="form-control @error('ngay_bat_dau')  @enderror" type="date" name="ngay_bat_dau" value="{{ old('ngay_bat_dau') }}">
                                             @error('ngay_bat_dau')
                                             <div class="text-danger">{{ $message }}</div>
                                             @enderror
@@ -79,7 +78,7 @@ Thêm mới sản phẩm
                                     <div class="mb-4 row align-items-center">
                                         <label class="col-lg-2 col-md-3 col-form-label form-label-title">Ngày kết thúc</label>
                                         <div class="col-md-9 col-lg-10">
-                                            <input class="form-control @error('ngay_ket_thuc')  @enderror" type="date" name="ngay_ket_thuc" value="{{ old('ngay_ket_thuc') }}" required>
+                                            <input class="form-control @error('ngay_ket_thuc')  @enderror" type="date" name="ngay_ket_thuc" value="{{ old('ngay_ket_thuc') }}">
                                             @error('ngay_ket_thuc')
                                             <div class="text-danger">{{ $message }}</div>
                                             @enderror
@@ -90,7 +89,7 @@ Thêm mới sản phẩm
                                     <div class="mb-4 row align-items-center">
                                         <label class="col-lg-2 col-md-3 col-form-label form-label-title">Giá trị giảm giá</label>
                                         <div class="col-md-9 col-lg-10">
-                                            <input class="form-control @error('gia_tri')  @enderror" type="number" name="gia_tri" step="0.01" value="{{ old('gia_tri') }}" required>
+                                            <input class="form-control @error('gia_tri')  @enderror" type="number" name="gia_tri" step="0.01" value="{{ old('gia_tri') }}">
                                             @error('gia_tri')
                                             <div class="text-danger">{{ $message }}</div>
                                             @enderror
@@ -112,11 +111,13 @@ Thêm mới sản phẩm
                                         </div>
                                     </div>
 
-                                    <div class="mt-4">
+                                    <div class="mt-4 d-flex gap-3">
+                                        <a href="{{ route('phieugiamgias.index') }}" class="btn btn-light">Quay lại</a>
                                         <button type="submit" class="btn btn-solid">Thêm Mã Giảm Giá</button>
                                     </div>
                                 </div>
                             </form>
+
 
                         </div>
                     </div>
@@ -130,6 +131,62 @@ Thêm mới sản phẩm
 
 
 @section('js')
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        document.querySelector("form").addEventListener("submit", function(event) {
+            let isValid = true;
+            let fields = [{
+                    name: "ten_phieu",
+                    message: "Vui lòng nhập tên phiếu giảm giá."
+                },
+                {
+                    name: "ma_phieu",
+                    message: "Vui lòng nhập mã giảm giá."
+                },
+                {
+                    name: "ngay_bat_dau",
+                    message: "Vui lòng chọn ngày bắt đầu."
+                },
+                {
+                    name: "ngay_ket_thuc",
+                    message: "Vui lòng chọn ngày kết thúc."
+                },
+                {
+                    name: "gia_tri",
+                    message: "Vui lòng nhập giá trị giảm giá."
+                }
+            ];
+
+            fields.forEach(field => {
+                let input = document.querySelector(`[name="${field.name}"]`);
+                let errorDiv = input.nextElementSibling;
+
+                // Xóa thông báo lỗi cũ nếu có
+                if (errorDiv && errorDiv.classList.contains("text-danger")) {
+                    errorDiv.remove();
+                }
+
+                // Kiểm tra nếu bỏ trống
+                if (!input.value.trim()) {
+                    isValid = false;
+                    let errorMessage = document.createElement("div");
+                    errorMessage.classList.add("text-danger");
+                    errorMessage.innerText = field.message;
+                    input.parentElement.appendChild(errorMessage);
+                    input.classList.add("border", "border-danger"); // Thêm viền đỏ để báo lỗi
+
+                }
+            });
+
+            if (!isValid) {
+                event.preventDefault(); // Ngăn form gửi nếu có lỗi
+            }
+        });
+    });
+</script>
+
+
 <!-- customizer js -->
 <script src="{{ asset('assets/js/customizer.js') }}"></script>
 
@@ -146,4 +203,5 @@ Thêm mới sản phẩm
 <!-- select2 js -->
 <script src="{{ asset('assets/js/select2.min.js') }}"></script>
 <script src="{{ asset('assets/js/select2-custom.js') }}"></script>
+
 @endsection
