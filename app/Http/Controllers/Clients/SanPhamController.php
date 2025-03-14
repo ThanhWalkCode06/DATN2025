@@ -2,19 +2,22 @@
 
 namespace App\Http\Controllers\Clients;
 
-use App\Http\Controllers\Controller;
+use App\Models\SanPham;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class SanPhamController extends Controller
 {
     public function danhSach()
     {
-        return view('clients.sanphams.danhsach');
+        $sanPhams = SanPham::paginate(10);
+    return view('clients.sanphams.danhsach', compact('sanPhams'));
     }
 
-    public function chiTiet()
+    public function chiTiet($id)
     {
-        return view('clients.sanphams.chitiet');
+        $sanPhams = SanPham::with('bienThes')->findOrFail($id);
+        return view('clients.sanphams.chitiet', compact('sanPhams'));
     }
 
     public function sanPhamYeuThich()

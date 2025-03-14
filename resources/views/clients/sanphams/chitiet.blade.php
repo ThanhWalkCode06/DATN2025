@@ -159,7 +159,7 @@
                         <div class="col-xl-6 wow fadeInUp">
                             <div class="right-box-contain">
                                 <h6 class="offer-top">30% Off</h6>
-                                <h2 class="name">Full Sleeve T Shirts for Men</h2>
+                                <h2 class="name"></h2>
                                 <div class="price-rating">
                                     <h3 class="theme-color price">$49.50 <del class="text-content">$58.46</del> <span
                                             class="offer theme-color">(8% off)</span></h3>
