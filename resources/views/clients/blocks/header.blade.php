@@ -686,48 +686,11 @@
 
                                         <li class="nav-item dropdown">
                                             <a class="nav-link" href="{{ route('huongdans.danhsach') }}">Hướng dẫn</a>
-                                            <ul class="dropdown-menu">
-                                                <li>
-                                                    <a class="dropdown-item" href="blog-detail.html">Blog
-                                                        Detail</a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item" href="blog-grid.html">Blog Grid</a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item" href="blog-list.html">Blog List</a>
-                                                </li>
-                                            </ul>
                                         </li>
 
                                         <li class="nav-item dropdown">
                                             <a class="nav-link" href="{{ route('gioithieu.home') }}">Giới thiệu</a>
-                                            <ul class="dropdown-menu">
-                                                <li>
-                                                    <a class="dropdown-item" href="seller-become.html">Become a
-                                                        Seller</a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item" href="seller-dashboard.html">Seller
-                                                        Dashboard</a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item" href="seller-detail.html">Seller
-                                                        Detail</a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item" href="seller-detail-2.html">Seller
-                                                        Detail 2</a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item" href="seller-grid.html">Seller
-                                                        Grid</a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item" href="seller-grid-2.html">Seller Grid
-                                                        2</a>
-                                                </li>
-                                            </ul>
+
                                         </li>
 
                                         <li class="nav-item dropdown">
