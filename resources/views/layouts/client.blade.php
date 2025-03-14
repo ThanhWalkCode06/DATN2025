@@ -28,7 +28,7 @@
     <link rel="stylesheet" href="{{ asset('assets/client/css/animate.min.css') }}">
 
     <!-- Iconly css -->
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/client/css/bulk-style.css') }}">
+    {{-- <link rel="stylesheet" type="text/css" href="{{ asset('assets/client/css/bulk-style.css') }}"> --}}
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/client/css/vendors/animate.css') }}">
 
     <!-- Template css -->
