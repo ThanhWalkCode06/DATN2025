@@ -14,8 +14,10 @@
                         </div>
                         <style>
                             .custom-icon {
-                                font-size: 28px; /* Điều chỉnh kích thước icon */
-                                color:  #babac4; /* Màu xám nhạt giống icon cũ */
+                                font-size: 28px;
+                                /* Điều chỉnh kích thước icon */
+                                color: #babac4;
+                                /* Màu xám nhạt giống icon cũ */
                             }
                         </style>
 
@@ -62,13 +64,15 @@
                     <div class="footer-logo">
                         <div class="theme-logo">
                             <a href="index.html">
-                                <img src="../assets/client/images/logo/1.png" class="blur-up lazyload" alt="">
+                                <img src="{{ Storage::url('images/logo-green.png') }}" class="blur-up lazyload"
+                                    alt="">
                             </a>
                         </div>
 
                         <div class="footer-logo-contain">
-                            <p>Chúng tôi chuyên cung cấp quần áo thể thao chất lượng cao, giúp bạn tự tin và thoải mái trong mọi hoạt động.</p>
-                        
+                            <p>Chúng tôi chuyên cung cấp quần áo thể thao chất lượng cao, giúp bạn tự tin và thoải mái
+                                trong mọi hoạt động.</p>
+
                             <ul class="address">
                                 <li>
                                     <i data-feather="home"></i>
@@ -80,14 +84,14 @@
                                 </li>
                             </ul>
                         </div>
-                        
+
                     </div>
                 </div>
                 <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
                     <div class="footer-title">
                         <h4>Danh mục</h4>
                     </div>
-                
+
                     <div class="footer-contain">
                         <ul>
                             <li>
@@ -111,13 +115,13 @@
                         </ul>
                     </div>
                 </div>
-                
+
 
                 <div class="col-xl col-lg-2 col-sm-3">
                     <div class="footer-title">
                         <h4>Liên kết hữu ích</h4>
                     </div>
-                
+
                     <div class="footer-contain">
                         <ul>
                             <li>
@@ -138,13 +142,13 @@
                         </ul>
                     </div>
                 </div>
-                
+
 
                 <div class="col-xl-2 col-sm-3">
                     <div class="footer-title">
                         <h4>Trung tâm hỗ trợ</h4>
                     </div>
-                
+
                     <div class="footer-contain">
                         <ul>
                             <li>
@@ -168,12 +172,12 @@
                         </ul>
                     </div>
                 </div>
-                
+
                 <div class="col-xl-3 col-lg-4 col-sm-6">
                     <div class="footer-title">
                         <h4>Liên hệ với chúng tôi</h4>
                     </div>
-                
+
                     <div class="footer-contact">
                         <ul>
                             <li>
@@ -185,7 +189,7 @@
                                     </div>
                                 </div>
                             </li>
-                
+
                             <li>
                                 <div class="footer-number">
                                     <i data-feather="mail"></i>
@@ -195,7 +199,7 @@
                                     </div>
                                 </div>
                             </li>
-                
+
                             {{-- <li class="social-app mb-0">
                                 <h5 class="mb-2 text-content">Tải ứng dụng :</h5>
                                 <ul>
@@ -216,13 +220,13 @@
                         </ul>
                     </div>
                 </div>
-                
+
             </div>
         </div>
 
         <div class="sub-footer section-small-space">
             <div class="reserve">
-                <h6 class="text-content">©2025  Seven Stars. </h6>
+                <h6 class="text-content">©2025 Seven Stars. </h6>
             </div>
 
             <div class="payment">
