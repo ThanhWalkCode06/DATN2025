@@ -9,11 +9,14 @@ class DanhGia extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'user_id',
-        'san_pham_id',
-        'so_sao',
-        'nhan_xet',
-        'trang_thai'
-    ];
+    protected $table = 'danh_gias';
+
+    protected $fillable = ['user_id', 'san_pham_id', 'so_sao', 'nhan_xet', 'trang_thai'];
+
+    public function sanPham()
+    {
+        return $this->belongsTo(SanPham::class, 'san_pham_id');
+    }
+
+   
 }

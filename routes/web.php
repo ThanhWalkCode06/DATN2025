@@ -119,3 +119,4 @@ Route::get('/users/{username}', [App\Http\Controllers\Clients\UserController::cl
 Route::get('/gioithieu', [App\Http\Controllers\Clients\GioiThieuController::class, 'home'])->name('gioithieu.home');
 
 Route::get('/lienhe', [App\Http\Controllers\Clients\LienHeController::class, 'home'])->name('lienhe.home');
+Route::get('/danh-muc', [SanPhamController::class, 'danhMuc'])->name('danh-muc');

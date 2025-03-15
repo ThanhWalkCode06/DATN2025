@@ -1,4 +1,5 @@
 <header class="pb-md-4 pb-0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <div class="header-top">
         <div class="container-fluid-lg">
             <div class="row">
@@ -636,7 +637,7 @@
                                         <li class="nav-item dropdown">
                                             <a class="nav-link" href="{{ route('sanphams.danhsach') }}">Sản phẩm</a>
 
-                                            <ul class="dropdown-menu">
+                                            {{-- <ul class="dropdown-menu">
                                                 <li>
                                                     <a class="dropdown-item" href="shop-category-slider.html">Shop
                                                         Category Slider</a>
@@ -665,7 +666,7 @@
                                                     <a class="dropdown-item" href="shop-top-filter.html">Shop Top
                                                         Filter</a>
                                                 </li>
-                                            </ul>
+                                            </ul> --}}
                                         </li>
 
                                         <li class="nav-item dropdown">
