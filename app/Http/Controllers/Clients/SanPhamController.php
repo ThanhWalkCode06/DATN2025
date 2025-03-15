@@ -10,16 +10,18 @@ class SanPhamController extends Controller
 {
     public function danhSach()
     {
-        $sanPhams = SanPham::paginate(10);
+        $sanPhams = SanPham::all();
     return view('clients.sanphams.danhsach', compact('sanPhams'));
     }
-
-    public function chiTiet($id)
-    {
-        $sanPhams = SanPham::with('bienThes')->findOrFail($id);
-        return view('clients.sanphams.chitiet', compact('sanPhams'));
-    }
-
+    public function chiTiet($id)  
+    {  
+        $sanPhams = SanPham::with(['bienThes', 'anhSP'])->findOrFail($id);  
+        
+        return view('clients.sanphams.chitiet', [  
+            'sanPhams' => $sanPhams,  
+            'bienThes' => $sanPhams->bienThes,  
+        ]);  
+    }  
     public function sanPhamYeuThich()
     {
         return view('clients.sanphams.sanphamyeuthich');

@@ -312,7 +312,7 @@
                             <input type="hidden" name="deleted_variants" id="deletedVariants"
                                 value="{{ old('deleted_variants', '[]') }}">
 
-
+                            <br>
                             <button type="submit" class="btn btn-primary">Lưu Sản Phẩm</button>
                         </form>
                         {{-- <form id="uploadForm" action="{{ route('upload.album') }}" method="POST" enctype="multipart/form-data">
