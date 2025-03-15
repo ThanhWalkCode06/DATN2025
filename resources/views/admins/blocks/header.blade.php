@@ -3,14 +3,14 @@
         <div class="header-logo-wrapper p-0">
             <div class="logo-wrapper">
                 <a href="index.html">
-                    <img class="img-fluid main-logo" src="{{ Storage::url(Auth::user()->anh_dai_dien) }}" alt="logo">
-                    <img class="img-fluid white-logo" src="{{ Storage::url(Auth::user()->anh_dai_dien) }}" alt="logo">
+                    <img class="img-fluid main-logo" src="{{ Storage::url('images/logo.png') }}" alt="logo">
+                    <img class="img-fluid white-logo" src="{{ Storage::url('images/logo.png') }}" alt="logo">
                 </a>
             </div>
             <div class="toggle-sidebar">
                 <i class="status_toggle middle sidebar-toggle" data-feather="align-center"></i>
                 <a href="index.html">
-                    <img src="{{ Storage::url(Auth::user()->anh_dai_dien) }}" class="img-fluid" alt="">
+                    <img src="{{ Storage::url('images/logo.png') }}" class="img-fluid" alt="">
                 </a>
             </div>
         </div>
