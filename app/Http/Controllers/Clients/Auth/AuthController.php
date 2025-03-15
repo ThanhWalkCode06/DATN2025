@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admins\Auth;
+namespace App\Http\Controllers\Clients\Auth;
 
 use App\Models\User;
 use Illuminate\Support\Str;
@@ -19,13 +19,13 @@ class AuthController extends Controller
      */
     public function showLogin()
     {
-        return view('admins.auth.login');
+        if(Auth::user()){
+            return redirect()->back();
+        }
+        return view('clients.auth.login');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function login(Request $request)
+    public function storeLogin(Request $request)
     {
         $user = $request->validate([
             'username' => 'required',
@@ -38,32 +38,51 @@ class AuthController extends Controller
     ]);
 
         if (Auth::attempt($user)) {
-            $userAd = Auth::user();
-            if($userAd->roles->isNotEmpty()){
-                if ($request->remember_token == true) {
-                    // dd($request->remember_token);
-                    $currentUser = Auth::user();
-                    $currentUser->remember_token = $request->remember_token;
-                    $currentUser->save();
+            if ($request->remember_token == true) {
+                // dd($request->remember_token);
+                $currentUser = Auth::user();
+                $currentUser->remember_token = $request->remember_token;
+                $currentUser->save();
 
-                    setcookie('remember_token', $request->remember_token, time() + (86400 * 30), "/"); // 30 ngày
-                    setcookie('username', $request->username, time() + (86400 * 30), "/");
-                }
-                $userName = Auth::user()->username;
-                // dd($userName);
-                // $roles = Auth::user()->getRoleNames()->first();
-                // dd($roles);
-                session(['userName' => $userName]);
-                return  redirect()->route('index');
-            }else{
-                return redirect()->back()->withErrors([
-                    'error' => 'Bạn không có quyền truy cập trang'
-                ]);
+                setcookie('remember_token', $request->remember_token, time() + (86400 * 30), "/"); // 30 ngày
+                setcookie('username', $request->username, time() + (86400 * 30), "/");
             }
+            $userName = Auth::user()->username;
+            // dd($userName);
+            // $roles = Auth::user()->getRoleNames()->first();
+            // dd($roles);
+            session(['userName' => $userName]);
+            return  redirect()->route('home');
         }
         return redirect()->back()->withErrors([
             'error' => 'Tài khoản mật khẩu không đúng'
         ]);
+    }
+
+    public function showRegister(){
+        return view('clients.auth.register');
+    }
+
+    public function storeRegister(Request $request)
+    {
+        $data = $request->validate([
+            'username' => 'required|unique:users,username',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|min:6',
+        ],
+        [
+        'username.required' => 'Vui lòng nhập tên đăng nhập',
+        'password.required' => 'Vui lòng nhập mật khẩu',
+        'password.required' => 'Vui lòng nhập mật khẩu dài ít nhất 6 kí tự',
+        'email.required' => 'Vui lòng nhập email',
+        'email.email' => 'Vui lòng nhập đúng định dạng email',
+        'email.unique' => 'Email đã tồn tại',
+        'username.unique' => 'Email đã tồn tại',
+
+    ]);
+
+        $user = User::create($data);
+        return redirect()->route('login.client')->with('success', 'Đăng ký thành công!');
     }
 
     /**
@@ -75,11 +94,11 @@ class AuthController extends Controller
         Cookie::queue(Cookie::forget('remember_token'));
         Cookie::queue(Cookie::forget('name'));
         $request->session()->forget('userName');
-        return redirect()->route('login');
+        return redirect()->route('home');
     }
     public function showForgetPass()
     {
-        return view('admins.auth.forgetPass');
+        return view('clients.auth.forgetPass');
     }
 
     public function sendLinkForgetPass(Request $request)
@@ -103,8 +122,8 @@ class AuthController extends Controller
                 ['email' => $email],
                 ['token' => $token, 'created_at' => now()]
             );
-            Mail::to($email)->send(new ResetPass($token,'admin'));
-            return redirect()->route('login')->withErrors(['error' => 'Bạn đã có thể vào gmail để lấy đường link lấy lại mật khẩu!']);
+            Mail::to($email)->send(new ResetPass($token,''));
+            return redirect()->route('login.client')->with(['success' => 'Bạn đã có thể vào gmail để lấy đường link lấy lại mật khẩu!']);
         }
         return redirect()->back()->withErrors([
             'error' => 'Thông tin người dùng không đúng'
@@ -116,7 +135,7 @@ class AuthController extends Controller
     public function showResetPass(string $token)
     {
 
-        return view('admins.auth.reset_passToken', compact('token'));
+        return view('clients.auth.reset_passToken', compact('token'));
     }
 
     public function storeResetPass(Request $request, $token)
@@ -134,14 +153,13 @@ class AuthController extends Controller
         $email = $user->email;
         $pass = bcrypt($request->password);
         DB::table('users')->where('email', $email)->update(['password' => $pass]);
-
-        return redirect()->route('login')->withErrors(['error' => 'Chào mừng bạn trở lại, hãy đăng nhập thôi nào.']);
+        return redirect()->route('login.client')->with(['success' => 'Đổi mật khẩu thành công.']);
     }
 
     public function editPass()
     {
         if (Auth::user()) {
-            return view('admins.auth.editPass');
+            return view('clients.auth.editPass');
         } else {
             abort(403);
         }

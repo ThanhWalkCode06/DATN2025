@@ -167,7 +167,7 @@
                                                         <tr>
                                                             <td class="pad">
                                                                 <div align="center" class="alignment"><a
-                                                                        href="{{ route('showResetPass',$token)}}"
+                                                                        href="{{ $url }}"
                                                                         style="color:#d6f8f2;text-decoration:none;"
                                                                         target="_blank"><!--[if mso]>
                                                                 <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word"  href="www.example.com"  style="height:42px;width:87px;v-text-anchor:middle;" arcsize="58%" fillcolor="#37474f">

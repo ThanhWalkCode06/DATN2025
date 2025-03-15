@@ -53,23 +53,23 @@ Cấu hình website
                 @csrf
             <div class="row">
                 <div class="col-6">
-                <div class="mb-3">
-                    <label class="form-label">Mailer</label>
-                    <input type="text" name="MAIL_MAILER" class="form-control" value="{{ env('MAIL_MAILER', 'smtp') }}">
+                    <div class="mb-3">
+                        <label class="form-label">Mailer</label>
+                        <input type="text" name="MAIL_MAILER" class="form-control" value="{{ env('MAIL_MAILER', 'smtp') }}">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Host</label>
+                        <input type="text" name="MAIL_HOST" class="form-control" value="{{ env('MAIL_HOST', 'smtp.gmail.com') }}">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Port</label>
+                        <input type="text" name="MAIL_PORT" class="form-control" value="{{ env('MAIL_PORT', '587') }}">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Username</label>
+                        <input type="text" name="MAIL_USERNAME" class="form-control" value="{{ env('MAIL_USERNAME') }}">
+                    </div>
                 </div>
-                <div class="mb-3">
-                    <label class="form-label">Host</label>
-                    <input type="text" name="MAIL_HOST" class="form-control" value="{{ env('MAIL_HOST', 'smtp.gmail.com') }}">
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Port</label>
-                    <input type="text" name="MAIL_PORT" class="form-control" value="{{ env('MAIL_PORT', '587') }}">
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Username</label>
-                    <input type="text" name="MAIL_USERNAME" class="form-control" value="{{ env('MAIL_USERNAME') }}">
-                </div>
-            </div>
             <div class="col-6">
                 <div class="mb-3">
                     <label class="form-label">Password</label>
@@ -97,29 +97,49 @@ Cấu hình website
         <div id="generalSettings" class="tab-pane fade">
             <form action="{{ route('configuration.common') }}" method="POST" enctype="multipart/form-data">
                 @csrf
-                <div class="mb-3">
-                    <label class="form-label">Tên Website</label>
-                    <input type="text" name="name_website" class="form-control" value="{{ $globalSetting->name_website ?? 'Seven Star' }}">
-                    @error('name_website')
-                        <p class="text-danger">{{ $message }}</p>
-                    @enderror
+                <div class="row">
+                    <div class="col-6">
+                    <div class="mb-3">
+                        <label class="form-label">Tên Website</label>
+                        <input type="text" name="name_website" class="form-control" value="{{ $globalSetting->name_website ?? 'Seven Star' }}">
+                        @error('name_website')
+                            <p class="text-danger">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Địa chỉ </label>
+                        <input type="text" name="location" class="form-control" value="{{ $globalSetting->location ?? 'Hà Nội' }}">
+                        @error('location')
+                            <p class="text-danger">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Địa chỉ email </label>
+                        <input type="text" name="email_owner" class="form-control" value="{{ $globalSetting->email_owner ?? 'thanhchillchill@gmail.com' }}">
+                        @error('email_owner')
+                            <p class="text-danger">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    </div>
+                    <div class="col-6">
+                    <div class="mb-3">
+                        <label class="form-label">Số điện thoại </label>
+                        <input type="number" name="phone" class="form-control" value="{{ $globalSetting->phone ?? '0387660612' }}">
+                        @error('phone')
+                            <p class="text-danger">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Logo</label>
+                        <input type="file" name="logo" class="form-control" >
+                        @error('logo')
+                            <p class="text-danger">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    <img style="width:150px; height: 100px" class="img-fluid for-white" src="{{  Storage::url($globalSetting->logo ?? 'images/logo.png')  }}" alt="logo">
+
                 </div>
-                <div class="mb-3">
-                    <label class="form-label">Địa chỉ </label>
-                    <input type="text" name="location" class="form-control" value="{{ $globalSetting->location ?? 'Hà Nội' }}">
-                    @error('location')
-                        <p class="text-danger">{{ $message }}</p>
-                    @enderror
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Logo</label>
-                    <input type="file" name="logo" class="form-control" >
-                    @error('logo')
-                        <p class="text-danger">{{ $message }}</p>
-                    @enderror
-                </div>
-                <img style="width:150px; height: 100px" class="img-fluid for-white" src="{{  Storage::url($globalSetting->logo ?? 'images/logo.png')  }}" alt="logo">
-                <button type="submit" class="btn btn-primary">Lưu Cấu Hình Chung</button>
+                <center><button type="submit" class="btn btn-primary">Lưu Cấu Hình Chung</button></center>
             </form>
         </div>
     </div>

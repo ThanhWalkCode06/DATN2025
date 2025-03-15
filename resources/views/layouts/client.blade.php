@@ -8,10 +8,11 @@
     <meta name="description" content="Fastkart">
     <meta name="keywords" content="Fastkart">
     <meta name="author" content="Fastkart">
-    <link rel="icon" href="../assets/client/images/favicon/1.png" type="image/x-icon">
+    <link rel="icon" href="{{ asset('assets/client/images/favicon/1.png') }}" type="image/x-icon">
     <title>@yield('title')</title>
 
     <!-- Google font -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="preconnect" href="https://fonts.gstatic.com/">
     <link href="https://fonts.googleapis.com/css2?family=Russo+One&amp;display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Pacifico&amp;display=swap" rel="stylesheet">
@@ -20,6 +21,7 @@
         rel="stylesheet">
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap">
+
 
     <!-- Bootstrap css -->
     <link id="rtl-link" rel="stylesheet" type="text/css" href="{{ asset('assets/client/css/vendors/bootstrap.css') }}">
@@ -35,6 +37,34 @@
     <link id="color-link" rel="stylesheet" type="text/css" href="{{ asset('assets/client/css/style.css') }}">
 
     @yield('css')
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/iconly@1.0.0/css/iconly.min.css">
+
+    <style>
+        .swal-custom-popup {
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .swal-custom-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #e74c3c;
+        }
+
+        .swal-custom-confirm {
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 6px;
+        }
+
+        .swal-custom-cancel {
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 6px;
+        }
+    </style>
+
+
 </head>
 
 <body class="bg-effect">
@@ -128,8 +158,49 @@
 
     <!-- Theme Setting JS -->
     <script src="{{ asset('assets/client/js/theme-setting.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     @yield('js')
-</body>
+    @if(session('success'))
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            Swal.fire({
+                title: "Thành công!",
+                text: "{{ session('success') }}",
+                icon: "success",
+                confirmButtonText: "OK"
+            });
+        });
+    </script>
+    @endif
 
+</body>
+<script>
+    function Logout(ev) {
+        ev.preventDefault(); // Ngăn chặn hành vi mặc định của thẻ <a>
+
+        Swal.fire({
+            title: "Bạn có chắc chắn muốn đăng xuất?",
+            // text: "Hãy chắc chắn rằng bạn đã lưu tất cả công việc trước khi đăng xuất.",
+            iconHtml: '<i class="fas fa-sign-out-alt" style="color:#e74c3c"></i>',
+            showCancelButton: true,
+            confirmButtonColor: "#e74c3c",  // Màu đỏ nổi bật
+            cancelButtonColor: "#0e947a",  // Màu xanh nhẹ
+            confirmButtonText: "Đăng xuất ngay",
+            cancelButtonText: "Ở lại",
+            background: "#f4f6f7", // Màu nền nhẹ nhàng
+            color: "#333",  // Màu chữ
+            customClass: {
+                popup: "swal-custom-popup",
+                title: "swal-custom-title",
+                confirmButton: "swal-custom-confirm",
+                cancelButton: "swal-custom-cancel"
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = "{{ route('logout.client') }}"; // Điều hướng đến route logout
+            }
+        });
+    }
+    </script>
 </html>

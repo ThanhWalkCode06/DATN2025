@@ -23,7 +23,8 @@ return new class extends Migration
             $table->string('mail_from_name')->nullable();
             $table->string('name_website')->nullable();
             $table->string('location')->nullable();
-            $table->string('email_owner')->nullable();
+            $table->string('email_owner')->default('thanhchillchill@gmail.com');
+            $table->string('phone')->default('0387660612');
             $table->string('logo')->default('images/logo.png');
             $table->timestamps();
         });

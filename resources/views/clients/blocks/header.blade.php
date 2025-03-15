@@ -5,7 +5,8 @@
                 <div class="col-xxl-3 d-xxl-block d-none">
                     <div class="top-left-header">
                         <i class="iconly-Location icli text-white"></i>
-                        <span class="text-white">1418 Riverwood Drive, CA 96052, US</span>
+                        <i class="iconly-Light-Location"></i>
+                        <span class="text-white">{{ $globalSetting->location ?? 'Hà Nội' }}</span>
                     </div>
                 </div>
 
@@ -14,19 +15,15 @@
                         <div class="notification-slider">
                             <div>
                                 <div class="timer-notification">
-                                    <h6><strong class="me-1">Welcome to Fastkart!</strong>Wrap new offers/gift
-                                        every single day on Weekends.<strong class="ms-1">New Coupon Code: Fast024
-                                        </strong>
-
+                                    <h6><strong class="me-1">Chào mừng tới {{ $globalSetting->name_website ?? 'Seven Star' }}</strong>
                                     </h6>
                                 </div>
                             </div>
 
                             <div>
                                 <div class="timer-notification">
-                                    <h6>Something you love is now on sale!
-                                        <a href="shop-left-sidebar.html" class="text-white">Buy Now
-                                            !</a>
+                                    <h6>Mua hàng ngay thôi nào!
+                                        <a href="{{ route('sanphams.danhsach') }}" class="text-white">Mua ngay!</a>
                                     </h6>
                                 </div>
                             </div>
@@ -49,7 +46,7 @@
                             </span>
                         </button>
                         <a href="{{ route('home') }}" class="web-logo nav-logo">
-                            <img src="../assets/client/images/logo/1.png" class="img-fluid blur-up lazyload"
+                            <img style="width: 100px" src="{{ Storage::url($globalSetting->logo ?? 'images/logo.png') }}" class="img-fluid blur-up lazyload"
                                 alt="">
                         </a>
 
@@ -168,28 +165,38 @@
                                             <h5>My Account</h5>
                                         </div>
                                     </div>
-
                                     <div class="onhover-div onhover-div-login">
                                         <ul class="user-box-name">
+                                            @if (!Auth::user())
                                             <li class="product-box-contain">
                                                 <i></i>
-                                                <a href="login.html">Đăng nhập</a>
+                                                <a href="{{ route('login.client') }}">Đăng nhập</a>
                                             </li>
-
+                                            @else
+                                            <p>Xin chào <strong style="color: #0da487">{{ Auth::user()->username }}</strong></p>
                                             <li class="product-box-contain">
+                                                <a href="{{ route('users.chitiet', 'nguyenvana') }}">Chi tiết tài
+                                                    khoản</a>
+                                            </li>
+                                            <li class="product-box-contain">
+                                                <i></i>
+                                                <a onclick="Logout(event)" href="#">Đăng xuất</a>
+
+                                            </li>
+                                            @endif
+
+                                            {{-- <li class="product-box-contain">
                                                 <a href="sign-up.html">Đăng kí</a>
                                             </li>
 
                                             <li class="product-box-contain">
                                                 <a href="forgot.html">Quên mật khẩu</a>
-                                            </li>
+                                            </li> --}}
 
-                                            <li class="product-box-contain">
-                                                <a href="{{ route('users.chitiet', 'nguyenvana') }}">Chi tiết tài
-                                                    khoản</a>
-                                            </li>
+
                                         </ul>
                                     </div>
+
                                 </li>
                             </ul>
                         </div>

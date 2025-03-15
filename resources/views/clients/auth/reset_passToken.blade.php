@@ -103,7 +103,7 @@
                         </div>
 
                         <div class="input-box">
-                            <form class="row g-4" method="post" action="{{ route('storeResetPass.store',$token) }}">
+                            <form class="row g-4" method="post" action="{{ route('storeResetPass.store.client',$token) }}">
                                 @csrf
                                 <div class="col-12">
                                     <div class="form-floating theme-form-floating log-in-form">
