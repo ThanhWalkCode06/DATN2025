@@ -69,9 +69,9 @@
         }
 
         /* .select2-container {
-            border: 1px solid #ccc !important;
-            width: 300px !important;
-        } */
+                            border: 1px solid #ccc !important;
+                            width: 300px !important;
+                        } */
         .selection .select2-selection {
             border-radius: 5px !important;
             width: 100%;
@@ -222,7 +222,6 @@
                                 </div>
                             </div>
 
-                            <h4>Thêm Thuộc Tính</h4>
                             <div class="mb-3">
                                 @foreach ($thuocTinhs as $tt)
                                     <div class="mb-2">
@@ -248,7 +247,7 @@
                             {{-- @dump(old('anh_bien_the.0')) --}}
 
                             {{-- Danh sách biến thể --}}
-                            <label class="mt-3"><strong>Danh sách biến thể:</strong></label>
+                            <h4>Danh sách biến thể:</h4>
                             <table style="width: 107%" class="table table-bordered">
                                 <thead>
                                     <tr>

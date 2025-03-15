@@ -10,6 +10,8 @@
     <meta name="author" content="Fastkart">
     <link rel="icon" href="../assets/client/images/favicon/1.png" type="image/x-icon">
     <title>@yield('title')</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/iconly@latest/css/iconly.css">
 
     <!-- Google font -->
     <link rel="preconnect" href="https://fonts.gstatic.com/">
@@ -28,7 +30,7 @@
     <link rel="stylesheet" href="{{ asset('assets/client/css/animate.min.css') }}">
 
     <!-- Iconly css -->
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/client/css/bulk-style.css') }}">
+    {{-- <link rel="stylesheet" type="text/css" href="{{ asset('assets/client/css/bulk-style.css') }}"> --}}
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/client/css/vendors/animate.css') }}">
 
     <!-- Template css -->
