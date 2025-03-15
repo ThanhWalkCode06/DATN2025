@@ -121,4 +121,6 @@ Route::get('/gioithieu', [App\Http\Controllers\Clients\GioiThieuController::clas
 
 Route::get('/lienhe', [App\Http\Controllers\Clients\LienHeController::class, 'home'])->name('lienhe.home');
 
+Route::get('/danh-muc', [SanPhamController::class, 'danhMuc'])->name('danh-muc');
+
 Route::get('/gioi-thieu', [DanhGiaController::class, 'showDanhGias'])->name('gioithieu');

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class SanPham extends Model
 {
-    use HasFactory,SoftDeletes;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'ten_san_pham',
@@ -44,9 +44,32 @@ class SanPham extends Model
         if (!empty($search)) {
             return $query->where(function ($q) use ($search) {
                 $q->where('ten_san_pham', 'like', "%$search%")
-                  ->orWhere('ma_san_pham', 'like', "%$search%");
+                    ->orWhere('ma_san_pham', 'like', "%$search%");
             });
         }
         return $query;
+    }
+
+    public function danhGias()
+    {
+        return $this->hasMany(DanhGia::class, 'san_pham_id');
+    }
+
+    public function tinhDiemTrungBinh()
+    {
+        return $this->danhGias->avg('so_sao') ?? 0; // Tính điểm trung bình đánh giá
+    }
+
+    public function soLuongDanhGia()
+    {
+        return $this->danhGias->count(); // Đếm số lượt đánh giá
+    }
+
+    public function phanTramGiamGia()
+    {
+        if ($this->gia_cu > 0) {
+            return round((($this->gia_cu - $this->gia_moi) / $this->gia_cu) * 100, 0);
+        }
+        return 0;
     }
 }

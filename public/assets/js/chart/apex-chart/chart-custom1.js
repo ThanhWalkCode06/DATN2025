@@ -220,7 +220,7 @@ var options = {
 
 var options = {
     series: [{
-        name: 'Lợi nhuận',
+        name: 'Doanh thu',
         data: dataChart // Lấy dữ liệu từ biến JavaScript
     }],
     chart: {

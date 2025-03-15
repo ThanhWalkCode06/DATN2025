@@ -11,7 +11,7 @@ class DanhGia extends Model
     use HasFactory, SoftDeletes;
 
     protected $table = 'danh_gias'; // Định danh bảng
-
+  
     protected $fillable = [
         'user_id',
         'san_pham_id',
