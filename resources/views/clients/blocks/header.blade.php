@@ -1,33 +1,36 @@
 <header class="pb-md-4 pb-0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <div class="header-top">
         <div class="container-fluid-lg">
-            <div class="row">
-                <div class="col-xxl-3 d-xxl-block d-none">
-                    <div class="top-left-header">
-                        <i class="iconly-Location icli text-white"></i>
-                        <span class="text-white">1418 Riverwood Drive, CA 96052, US</span>
+
+            <div class="row align-items-center">
+
+
+                <!-- Địa chỉ -->
+                <div class="col-xxl-3 col-lg-3 d-lg-block d-none">
+                    <div class="top-left-header d-flex align-items-center">
+                        <i class="fas fa-map-marker-alt text-white me-2"></i>
+                        <span class="text-white">1418 Riverwood Drive, CA 96052, Mỹ</span>
                     </div>
                 </div>
 
-                <div class="col-xxl-6 col-lg-9 d-lg-block d-none">
+                <!-- Thông báo ưu đãi -->
+                <div class="col-xxl-7 col-lg-7 col-md-9">
                     <div class="header-offer">
                         <div class="notification-slider">
                             <div>
                                 <div class="timer-notification">
-                                    <h6><strong class="me-1">Welcome to Fastkart!</strong>Wrap new offers/gift
-                                        every single day on Weekends.<strong class="ms-1">New Coupon Code: Fast024
-                                        </strong>
-
+                                    <h6>
+                                        <strong class="me-1">Chào mừng đến với Seven Stars!</strong>
+                                        Nhận ưu đãi/quà tặng mới mỗi ngày vào cuối tuần.
+                                        <strong class="ms-1">Mã giảm giá mới: Fast024</strong>
                                     </h6>
                                 </div>
                             </div>
-
                             <div>
                                 <div class="timer-notification">
-                                    <h6>Something you love is now on sale!
-                                        <a href="shop-left-sidebar.html" class="text-white">Buy Now
-                                            !</a>
+                                    <h6>
+                                        Món hàng yêu thích của bạn đang giảm giá!
+                                        <a href="shop-left-sidebar.html" class="text-white">Mua ngay!</a>
                                     </h6>
                                 </div>
                             </div>
@@ -35,6 +38,7 @@
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 
@@ -49,10 +53,15 @@
                                 <i class="fa-solid fa-bars"></i>
                             </span>
                         </button>
-                        <a href="{{ route('home') }}" class="web-logo nav-logo">
-                            <img src="../assets/client/images/logo/1.png" class="img-fluid blur-up lazyload"
-                                alt="">
-                        </a>
+
+                        <!-- Logo -->
+                        <div
+                            class="col-xxl-2 col-lg-2 col-md-3 d-md-block d-none d-flex align-items-center justify-content-center">
+                            <a href="{{ route('home') }}" class="web-logo nav-logo">
+                                <img src="{{ Storage::url('images/logo-green.png') }}" class="img-fluid"
+                                    alt="Logo Website" style="max-width: 150px;">
+                            </a>
+                        </div>
 
                         <div class="middle-box">
                             <div class="search-box">
@@ -687,48 +696,11 @@
 
                                         <li class="nav-item dropdown">
                                             <a class="nav-link" href="{{ route('huongdans.danhsach') }}">Hướng dẫn</a>
-                                            <ul class="dropdown-menu">
-                                                <li>
-                                                    <a class="dropdown-item" href="blog-detail.html">Blog
-                                                        Detail</a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item" href="blog-grid.html">Blog Grid</a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item" href="blog-list.html">Blog List</a>
-                                                </li>
-                                            </ul>
                                         </li>
 
                                         <li class="nav-item dropdown">
                                             <a class="nav-link" href="{{ route('gioithieu.home') }}">Giới thiệu</a>
-                                            <ul class="dropdown-menu">
-                                                <li>
-                                                    <a class="dropdown-item" href="seller-become.html">Become a
-                                                        Seller</a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item" href="seller-dashboard.html">Seller
-                                                        Dashboard</a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item" href="seller-detail.html">Seller
-                                                        Detail</a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item" href="seller-detail-2.html">Seller
-                                                        Detail 2</a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item" href="seller-grid.html">Seller
-                                                        Grid</a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item" href="seller-grid-2.html">Seller Grid
-                                                        2</a>
-                                                </li>
-                                            </ul>
+
                                         </li>
 
                                         <li class="nav-item dropdown">
@@ -769,7 +741,7 @@
                     <div class="header-nav-right">
                         <button class="btn deal-button" data-bs-toggle="modal" data-bs-target="#deal-box">
                             <i data-feather="zap"></i>
-                            <span>Deal Today</span>
+                            <span>Giao dịch hôm nay</span>
                         </button>
                     </div>
                 </div>

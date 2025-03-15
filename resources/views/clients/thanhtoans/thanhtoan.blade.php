@@ -50,7 +50,7 @@
                                     </div>
                                     <div class="checkout-box">
                                         <div class="checkout-title">
-                                            <h4>Delivery Address</h4>
+                                            <h4>Địa chỉ nhận hàng</h4>
                                         </div>
 
                                         <div class="checkout-detail">
@@ -140,87 +140,6 @@
 
                                 <li>
                                     <div class="checkout-icon">
-                                        <lord-icon target=".nav-item" src="https://cdn.lordicon.com/oaflahpk.json"
-                                            trigger="loop-on-hover" colors="primary:#0baf9a" class="lord-icon">
-                                        </lord-icon>
-                                    </div>
-                                    <div class="checkout-box">
-                                        <div class="checkout-title">
-                                            <h4>Delivery Option</h4>
-                                        </div>
-
-                                        <div class="checkout-detail">
-                                            <div class="row g-4">
-                                                <div class="col-xxl-6">
-                                                    <div class="delivery-option">
-                                                        <div class="delivery-category">
-                                                            <div class="shipment-detail">
-                                                                <div class="form-check custom-form-check hide-check-box">
-                                                                    <input class="form-check-input" type="radio"
-                                                                        name="standard" id="standard" checked>
-                                                                    <label class="form-check-label" for="standard">Standard
-                                                                        Delivery Option</label>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-xxl-6">
-                                                    <div class="delivery-option">
-                                                        <div class="delivery-category">
-                                                            <div class="shipment-detail">
-                                                                <div
-                                                                    class="form-check mb-0 custom-form-check show-box-checked">
-                                                                    <input class="form-check-input" type="radio"
-                                                                        name="standard" id="future">
-                                                                    <label class="form-check-label" for="future">Future
-                                                                        Delivery Option</label>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-12 future-box">
-                                                    <div class="future-option">
-                                                        <div class="row g-md-0 gy-4">
-                                                            <div class="col-md-6">
-                                                                <div class="delivery-items">
-                                                                    <div>
-                                                                        <h5 class="items text-content"><span>3
-                                                                                Items</span>@
-                                                                            $693.48</h5>
-                                                                        <h5 class="charge text-content">Delivery Charge
-                                                                            $34.67
-                                                                            <button type="button" class="btn p-0"
-                                                                                data-bs-toggle="tooltip"
-                                                                                data-bs-placement="top"
-                                                                                title="Extra Charge">
-                                                                                <i
-                                                                                    class="fa-solid fa-circle-exclamation"></i>
-                                                                            </button>
-                                                                        </h5>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="col-md-6">
-                                                                <form class="form-floating theme-form-floating date-box">
-                                                                    <input type="date" class="form-control">
-                                                                    <label>Select Date</label>
-                                                                </form>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-
-                                <li>
-                                    <div class="checkout-icon">
                                         <lord-icon target=".nav-item" src="https://cdn.lordicon.com/qmcsqnle.json"
                                             trigger="loop-on-hover" colors="primary:#0baf9a,secondary:#0baf9a"
                                             class="lord-icon">
@@ -228,7 +147,7 @@
                                     </div>
                                     <div class="checkout-box">
                                         <div class="checkout-title">
-                                            <h4>Payment Option</h4>
+                                            <h4>Hình thức thanh toán</h4>
                                         </div>
 
                                         <div class="checkout-detail">
@@ -242,17 +161,15 @@
                                                                 <label class="form-check-label" for="cash"><input
                                                                         class="form-check-input mt-0" type="radio"
                                                                         name="flexRadioDefault" id="cash" checked>
-                                                                    Cash
-                                                                    On Delivery</label>
+                                                                    COD</label>
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div id="flush-collapseFour" class="accordion-collapse collapse show"
                                                         data-bs-parent="#accordionFlushExample">
                                                         <div class="accordion-body">
-                                                            <p class="cod-review">Pay digitally with SMS Pay
-                                                                Link. Cash may not be accepted in COVID restricted
-                                                                areas. <a href="javascript:void(0)">Know more.</a>
+                                                            <p class="cod-review">
+                                                                Thanh toán khi nhận hàng
                                                             </p>
                                                         </div>
                                                     </div>
@@ -266,7 +183,7 @@
                                                                 <label class="form-check-label" for="credit"><input
                                                                         class="form-check-input mt-0" type="radio"
                                                                         name="flexRadioDefault" id="credit">
-                                                                    Credit or Debit Card</label>
+                                                                    Thẻ tín dụng</label>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -340,15 +257,15 @@
                                                             <div class="custom-form-check form-check mb-0">
                                                                 <label class="form-check-label" for="banking"><input
                                                                         class="form-check-input mt-0" type="radio"
-                                                                        name="flexRadioDefault" id="banking">Net
-                                                                    Banking</label>
+                                                                        name="flexRadioDefault"
+                                                                        id="banking">E-Banking</label>
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div id="flush-collapseTwo" class="accordion-collapse collapse"
                                                         data-bs-parent="#accordionFlushExample">
                                                         <div class="accordion-body">
-                                                            <h5 class="text-uppercase mb-4">Select Your Bank
+                                                            <h5 class="text-uppercase mb-4">Chọn ngân hàng
                                                             </h5>
                                                             <div class="row g-2">
                                                                 <div class="col-md-6">
@@ -429,7 +346,7 @@
                                                                                 <option value="other">Others Bank
                                                                                 </option>
                                                                             </select>
-                                                                            <label>Select Other Bank</label>
+                                                                            <label>Ngân hàng khác</label>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -445,15 +362,15 @@
                                                             <div class="custom-form-check form-check mb-0">
                                                                 <label class="form-check-label" for="wallet"><input
                                                                         class="form-check-input mt-0" type="radio"
-                                                                        name="flexRadioDefault" id="wallet">My
-                                                                    Wallet</label>
+                                                                        name="flexRadioDefault" id="wallet">
+                                                                    Ví điện tử</label>
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div id="flush-collapseThree" class="accordion-collapse collapse"
                                                         data-bs-parent="#accordionFlushExample">
                                                         <div class="accordion-body">
-                                                            <h5 class="text-uppercase mb-4">Select Your Wallet
+                                                            <h5 class="text-uppercase mb-4">Chọn ví
                                                             </h5>
                                                             <div class="row">
                                                                 <div class="col-md-6">
@@ -532,103 +449,48 @@
                     <div class="right-side-summery-box">
                         <div class="summery-box-2">
                             <div class="summery-header">
-                                <h3>Order Summery</h3>
+                                <h3>Chi tiết đơn hàng</h3>
                             </div>
 
                             <ul class="summery-contain">
-                                <li>
-                                    <img src="../assets/images/vegetable/product/1.png"
-                                        class="img-fluid blur-up lazyloaded checkout-image" alt="">
-                                    <h4>Bell pepper <span>X 1</span></h4>
-                                    <h4 class="price">$32.34</h4>
-                                </li>
-
-                                <li>
-                                    <img src="../assets/images/vegetable/product/2.png"
-                                        class="img-fluid blur-up lazyloaded checkout-image" alt="">
-                                    <h4>Eggplant <span>X 3</span></h4>
-                                    <h4 class="price">$12.23</h4>
-                                </li>
-
-                                <li>
-                                    <img src="../assets/images/vegetable/product/3.png"
-                                        class="img-fluid blur-up lazyloaded checkout-image" alt="">
-                                    <h4>Onion <span>X 2</span></h4>
-                                    <h4 class="price">$18.27</h4>
-                                </li>
-
-                                <li>
-                                    <img src="../assets/images/vegetable/product/4.png"
-                                        class="img-fluid blur-up lazyloaded checkout-image" alt="">
-                                    <h4>Potato <span>X 1</span></h4>
-                                    <h4 class="price">$26.90</h4>
-                                </li>
-
-                                <li>
-                                    <img src="../assets/images/vegetable/product/5.png"
-                                        class="img-fluid blur-up lazyloaded checkout-image" alt="">
-                                    <h4>Baby Chili <span>X 1</span></h4>
-                                    <h4 class="price">$19.28</h4>
-                                </li>
-
-                                <li>
-                                    <img src="../assets/images/vegetable/product/6.png"
-                                        class="img-fluid blur-up lazyloaded checkout-image" alt="">
-                                    <h4>Broccoli <span>X 2</span></h4>
-                                    <h4 class="price">$29.69</h4>
-                                </li>
+                                @foreach ($chiTietGioHangs as $chiTietGioHang)
+                                    <li>
+                                        <img src="{{ Storage::url($chiTietGioHang->hinh_anh) }}"
+                                            class="img-fluid blur-up lazyloaded checkout-image" alt="">
+                                        <h4>{{ $chiTietGioHang->ten_san_pham }} x
+                                            <span class="so-luong">{{ $chiTietGioHang->so_luong }}</span>
+                                        </h4>
+                                        <h4 hidden><span class="gia-moi">{{ $chiTietGioHang->gia_moi }}</span>đ</h4>
+                                        <h4 class="price"><span class="tong"></span>đ</h4>
+                                    </li>
+                                @endforeach
                             </ul>
 
                             <ul class="summery-total">
                                 <li>
-                                    <h4>Subtotal</h4>
-                                    <h4 class="price">$111.81</h4>
+                                    <h4>Tổng sản phẩm</h4>
+                                    <h4 class="price"><span id="tong-san-pham"></span>đ</h4>
                                 </li>
 
                                 <li>
-                                    <h4>Shipping</h4>
-                                    <h4 class="price">$8.90</h4>
+                                    <h4>Phí vận chuyển</h4>
+                                    <h4 class="price"><span id="phi-van-chuyen">1000</span>đ</h4>
                                 </li>
 
                                 <li>
-                                    <h4>Tax</h4>
-                                    <h4 class="price">$29.498</h4>
-                                </li>
-
-                                <li>
-                                    <h4>Coupon/Code</h4>
-                                    <h4 class="price">$-23.10</h4>
+                                    <h4>Giảm giá</h4>
+                                    <h4 class="price">- <span id="giam-gia">0</span>đ</h4>
                                 </li>
 
                                 <li class="list-total">
-                                    <h4>Total (USD)</h4>
-                                    <h4 class="price">$19.28</h4>
+                                    <h4>Tổng tiền</h4>
+                                    <h4 class="price"><span id="tong-tien"></span>đ</h4>
                                 </li>
                             </ul>
                         </div>
 
-                        <div class="checkout-offer">
-                            <div class="offer-title">
-                                <div class="offer-icon">
-                                    <img src="https://themes.pixelstrap.com/fastkart/assets/images/inner-page/offer.svg"
-                                        class="img-fluid" alt="">
-                                </div>
-                                <div class="offer-name">
-                                    <h6>Available Offers</h6>
-                                </div>
-                            </div>
-
-                            <ul class="offer-detail">
-                                <li>
-                                    <p>Combo: BB Royal Almond/Badam Californian, Extra Bold 100 gm...</p>
-                                </li>
-                                <li>
-                                    <p>combo: Royal Cashew Californian, Extra Bold 100 gm + BB Royal Honey 500 gm</p>
-                                </li>
-                            </ul>
-                        </div>
-
-                        <a href="{{ route('thanhtoans.dathangthanhcong') }}" class="btn theme-bg-color text-white btn-md w-100 mt-4 fw-bold">Đặt hàng</a>
+                        <a href="{{ route('thanhtoans.dathangthanhcong') }}"
+                            class="btn theme-bg-color text-white btn-md w-100 mt-4 fw-bold">Đặt hàng</a>
                     </div>
                 </div>
             </div>
@@ -694,4 +556,29 @@
 @endsection
 
 @section('js')
+    <script>
+        function showTong() {
+            giaMois = document.getElementsByClassName("gia-moi")
+            soLuongs = document.getElementsByClassName("so-luong")
+            tongs = document.getElementsByClassName("tong")
+            tongSanPham = document.getElementById("tong-san-pham")
+            giamGia = document.getElementById("giam-gia")
+            phiVanChuyen = document.getElementById("phi-van-chuyen")
+            tongTien = document.getElementById("tong-tien")
+
+            sum = 0
+            for (let i = 0; i < giaMois.length; i++) {
+                tongs[i].innerHTML = Number(giaMois[i].innerHTML) * Number(soLuongs[i].innerHTML)
+                sum += Number(tongs[i].innerHTML)
+                console.log(i);
+                console.log(sum);
+
+            }
+
+            tongSanPham.innerHTML = sum
+            tongTien.innerHTML = Number(tongSanPham.innerHTML) - Number(giamGia.innerHTML) + Number(phiVanChuyen.innerHTML)
+        }
+
+        showTong()
+    </script>
 @endsection

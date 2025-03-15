@@ -6,45 +6,48 @@
                     <div class="service-contain">
                         <div class="service-box">
                             <div class="service-image">
-                                <img src="https://themes.pixelstrap.com/fastkart/assets/svg/product.svg"
-                                    class="blur-up lazyload" alt="">
+                                <i class="fa-solid fa-shirt custom-icon"></i> <!-- Icon áo -->
+                            </div>
+                            <div class="service-detail">
+                                <h5>Mẫu "hot trend" mỗi ngày</h5>
+                            </div>
+                        </div>
+                        <style>
+                            .custom-icon {
+                                font-size: 28px;
+                                /* Điều chỉnh kích thước icon */
+                                color: #babac4;
+                                /* Màu xám nhạt giống icon cũ */
+                            }
+                        </style>
+
+                        <div class="service-box">
+                            <div class="service-image">
+                                <i class="fa-solid fa-truck custom-icon"></i>
                             </div>
 
                             <div class="service-detail">
-                                <h5>Every Fresh Products</h5>
+                                <h5>Miễn phí giao hàng cho đơn hàng trên 1.000.000 VNĐ</h5>
                             </div>
                         </div>
 
                         <div class="service-box">
                             <div class="service-image">
-                                <img src="https://themes.pixelstrap.com/fastkart/assets/svg/delivery.svg"
-                                    class="blur-up lazyload" alt="">
+                                <i class="fa-solid fa-percent custom-icon"></i>
                             </div>
 
                             <div class="service-detail">
-                                <h5>Free Delivery For Order Over $50</h5>
+                                <h5>Giảm giá mỗi ngày</h5>
                             </div>
                         </div>
 
                         <div class="service-box">
                             <div class="service-image">
-                                <img src="https://themes.pixelstrap.com/fastkart/assets/svg/discount.svg"
-                                    class="blur-up lazyload" alt="">
+                                <i class="fa-solid fa-money-check-dollar custom-icon"></i>
                             </div>
 
                             <div class="service-detail">
-                                <h5>Daily Mega Discounts</h5>
-                            </div>
-                        </div>
-
-                        <div class="service-box">
-                            <div class="service-image">
-                                <img src="https://themes.pixelstrap.com/fastkart/assets/svg/market.svg"
-                                    class="blur-up lazyload" alt="">
-                            </div>
-
-                            <div class="service-detail">
-                                <h5>Best Price On The Market</h5>
+                                <h5>Giá tốt nhất trên thị trường</h5>
                             </div>
                         </div>
                     </div>
@@ -58,18 +61,19 @@
                     <div class="footer-logo">
                         <div class="theme-logo">
                             <a href="index.html">
-                                <img src="../assets/client/images/logo/1.png" class="blur-up lazyload" alt="">
+                                <img src="{{ Storage::url('images/logo-green.png') }}" class="blur-up lazyload"
+                                    alt="">
                             </a>
                         </div>
 
                         <div class="footer-logo-contain">
-                            <p>We are a friendly bar serving a variety of cocktails, wines and beers. Our bar is a
-                                perfect place for a couple.</p>
+                            <p>Chúng tôi chuyên cung cấp quần áo thể thao chất lượng cao, giúp bạn tự tin và thoải mái
+                                trong mọi hoạt động.</p>
 
                             <ul class="address">
                                 <li>
                                     <i data-feather="home"></i>
-                                    <a href="javascript:void(0)">1418 Riverwood Drive, CA 96052, US</a>
+                                    <a href="javascript:void(0)">1418 Riverwood Drive, CA 96052, Mỹ</a>
                                 </li>
                                 <li>
                                     <i data-feather="mail"></i>
@@ -77,88 +81,90 @@
                                 </li>
                             </ul>
                         </div>
+
                     </div>
                 </div>
-
                 <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
                     <div class="footer-title">
-                        <h4>Categories</h4>
+                        <h4>Danh mục</h4>
                     </div>
 
                     <div class="footer-contain">
                         <ul>
                             <li>
-                                <a href="shop-left-sidebar.html" class="text-content">Vegetables & Fruit</a>
+                                <a href="shop-left-sidebar.html" class="text-content">Áo thể thao</a>
                             </li>
                             <li>
-                                <a href="shop-left-sidebar.html" class="text-content">Beverages</a>
+                                <a href="shop-left-sidebar.html" class="text-content">Quần thể thao</a>
                             </li>
                             <li>
-                                <a href="shop-left-sidebar.html" class="text-content">Meats & Seafood</a>
+                                <a href="shop-left-sidebar.html" class="text-content">Giày thể thao</a>
                             </li>
                             <li>
-                                <a href="shop-left-sidebar.html" class="text-content">Frozen Foods</a>
+                                <a href="shop-left-sidebar.html" class="text-content">Phụ kiện thể thao</a>
                             </li>
                             <li>
-                                <a href="shop-left-sidebar.html" class="text-content">Biscuits & Snacks</a>
+                                <a href="shop-left-sidebar.html" class="text-content">Đồ tập gym</a>
                             </li>
                             <li>
-                                <a href="shop-left-sidebar.html" class="text-content">Grocery & Staples</a>
+                                <a href="shop-left-sidebar.html" class="text-content">Bộ đồ thể thao</a>
                             </li>
                         </ul>
                     </div>
                 </div>
+
 
                 <div class="col-xl col-lg-2 col-sm-3">
                     <div class="footer-title">
-                        <h4>Useful Links</h4>
+                        <h4>Liên kết hữu ích</h4>
                     </div>
 
                     <div class="footer-contain">
                         <ul>
                             <li>
-                                <a href="index.html" class="text-content">Home</a>
+                                <a href="index.html" class="text-content">Trang chủ</a>
                             </li>
                             <li>
-                                <a href="shop-left-sidebar.html" class="text-content">Shop</a>
+                                <a href="shop-left-sidebar.html" class="text-content">Cửa hàng</a>
                             </li>
                             <li>
-                                <a href="about-us.html" class="text-content">About Us</a>
+                                <a href="about-us.html" class="text-content">Về chúng tôi</a>
                             </li>
                             <li>
-                                <a href="blog-list.html" class="text-content">Blog</a>
+                                <a href="blog-list.html" class="text-content">Tin tức</a>
                             </li>
                             <li>
-                                <a href="contact-us.html" class="text-content">Contact Us</a>
+                                <a href="contact-us.html" class="text-content">Liên hệ</a>
                             </li>
                         </ul>
                     </div>
                 </div>
 
+
                 <div class="col-xl-2 col-sm-3">
                     <div class="footer-title">
-                        <h4>Help Center</h4>
+                        <h4>Trung tâm hỗ trợ</h4>
                     </div>
 
                     <div class="footer-contain">
                         <ul>
                             <li>
-                                <a href="order-success.html" class="text-content">Your Order</a>
+                                <a href="order-success.html" class="text-content">Đơn hàng của bạn</a>
                             </li>
                             <li>
-                                <a href="user-dashboard.html" class="text-content">Your Account</a>
+                                <a href="user-dashboard.html" class="text-content">Tài khoản của bạn</a>
                             </li>
                             <li>
-                                <a href="order-tracking.html" class="text-content">Track Order</a>
+                                <a href="order-tracking.html" class="text-content">Theo dõi đơn hàng</a>
                             </li>
                             <li>
-                                <a href="wishlist.html" class="text-content">Your Wishlist</a>
+                                <a href="wishlist.html" class="text-content">Danh sách yêu thích</a>
                             </li>
                             <li>
-                                <a href="search.html" class="text-content">Search</a>
+                                <a href="search.html" class="text-content">Tìm kiếm</a>
                             </li>
                             <li>
-                                <a href="faq.html" class="text-content">FAQ</a>
+                                <a href="faq.html" class="text-content">Câu hỏi thường gặp</a>
                             </li>
                         </ul>
                     </div>
@@ -166,7 +172,7 @@
 
                 <div class="col-xl-3 col-lg-4 col-sm-6">
                     <div class="footer-title">
-                        <h4>Contact Us</h4>
+                        <h4>Liên hệ với chúng tôi</h4>
                     </div>
 
                     <div class="footer-contact">
@@ -185,38 +191,39 @@
                                 <div class="footer-number">
                                     <i data-feather="mail"></i>
                                     <div class="contact-number">
-                                        <h6 class="text-content">Email Address :</h6>
+                                        <h6 class="text-content">Địa chỉ Email :</h6>
                                         <h5>fastkart@hotmail.com</h5>
                                     </div>
                                 </div>
                             </li>
 
-                            <li class="social-app mb-0">
-                                <h5 class="mb-2 text-content">Download App :</h5>
+                            {{-- <li class="social-app mb-0">
+                                <h5 class="mb-2 text-content">Tải ứng dụng :</h5>
                                 <ul>
                                     <li class="mb-0">
                                         <a href="https://play.google.com/store/apps" target="_blank">
                                             <img src="https://themes.pixelstrap.com/fastkart/assets/client/images/playstore.svg"
-                                                class="blur-up lazyload" alt="">
+                                                class="blur-up lazyload" alt="Google Play">
                                         </a>
                                     </li>
                                     <li class="mb-0">
                                         <a href="https://www.apple.com/in/app-store/" target="_blank">
                                             <img src="https://themes.pixelstrap.com/fastkart/assets/client/images/appstore.svg"
-                                                class="blur-up lazyload" alt="">
+                                                class="blur-up lazyload" alt="App Store">
                                         </a>
                                     </li>
                                 </ul>
-                            </li>
+                            </li> --}}
                         </ul>
                     </div>
                 </div>
+
             </div>
         </div>
 
         <div class="sub-footer section-small-space">
             <div class="reserve">
-                <h6 class="text-content">©2022 Fastkart All rights reserved</h6>
+                <h6 class="text-content">©2025 Seven Stars. </h6>
             </div>
 
             <div class="payment">
@@ -224,7 +231,7 @@
             </div>
 
             <div class="social-link">
-                <h6 class="text-content">Stay connected :</h6>
+                <h6 class="text-content">Kết nối với chúng tôi:</h6>
                 <ul>
                     <li>
                         <a href="https://www.facebook.com/" target="_blank">

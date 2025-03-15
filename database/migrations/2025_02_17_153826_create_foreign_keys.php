@@ -54,12 +54,8 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users');
         });
 
-        Schema::table('gio_hangs', function (Blueprint $table) {
-            $table->foreign('user_id')->references('id')->on('users');
-        });
-
         Schema::table('chi_tiet_gio_hangs', function (Blueprint $table) {
-            $table->foreign('gio_hang_id')->references('id')->on('gio_hangs');
+            $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('bien_the_id')->references('id')->on('bien_thes');
         });
 
@@ -127,12 +123,8 @@ return new class extends Migration
             $table->dropForeign('danh_gias_user_id_foreign');
         });
 
-        Schema::table('gio_hangs', function (Blueprint $table) {
-            $table->dropForeign('gio_hangs_user_id_foreign');
-        });
-
         Schema::table('chi_tiet_gio_hangs', function (Blueprint $table) {
-            $table->dropForeign('chi_tiet_gio_hangs_gio_hang_id_foreign');
+            $table->dropForeign('chi_tiet_gio_hangs_user_id_foreign');
             $table->dropForeign('chi_tiet_gio_hangs_bien_the_id_foreign');
         });
 
