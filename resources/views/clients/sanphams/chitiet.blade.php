@@ -157,11 +157,13 @@
                         </div>
 
                         <div class="col-xl-6 wow fadeInUp">
+                            <h2>Frequently bought together</h2>
+                            <br>
                             <div class="right-box-contain">
                                 <h6 class="offer-top">30% Off</h6>
                                 <h2 class="name"></h2>
                                 <div class="price-rating">
-                                    <h3 class="theme-color price">$49.50 <del class="text-content">$58.46</del> <span
+                                    <h3 class="theme-color price">Giá mới: <?= number_format($sanPhams->gia_moi, 0, ',', '.') ?>₫ <br><del class="text-content">Giá cũ:  <?= number_format($sanPhams->gia_cu, 0, ',', '.') ?>₫</del> <span
                                             class="offer theme-color">(8% off)</span></h3>
                                     <div class="product-rating custom-rate">
                                         <ul class="rating">
@@ -186,14 +188,12 @@
                                 </div>
 
                                 <div class="product-contain">
-                                    <p class="w-100">I find great comfort in awkwardness. I have never been cool, but I
-                                        have felt cool. I have been in the cool spot, but I was not really cool; I was
-                                        just trying to be hip or cool.</p>
+                                    <p class="w-100">{{$sanPhams->mo_ta}}</p>
                                 </div>
 
                                 <div class="product-package">
                                     <div class="product-title">
-                                        <h4>Color </h4>
+                                        <h4>Màu sắc </h4>
                                     </div>
 
                                     <ul class="color circle select-package">
@@ -316,7 +316,7 @@
                                     </div>
 
                                     <button onclick="location.href = 'cart.html';"
-                                        class="btn btn-md bg-dark cart-button text-white w-100">Add To Cart</button>
+                                        class="btn btn-md bg-dark cart-button text-white w-100">Thêm vào giỏ hàng</button>
                                 </div>
 
                                 <div class="buy-box">
@@ -473,7 +473,7 @@
                 <div class="col-12">
                     <div class="related-product">
                         <div class="product-title-2">
-                            <h4>Frequently bought together</h4>
+                          
                         </div>
 
                         <div class="related-box">
