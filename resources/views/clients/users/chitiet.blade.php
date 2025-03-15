@@ -1559,7 +1559,7 @@
                                                                 </td>
                                                             </tr>
                                                             <tr>
-                                                                <td>Password :</td>
+                                                                <td>Mật khẩu :</td>
                                                                 <td>
                                                                     <a href="javascript:void(0)">●●●●●●
                                                                         <span data-bs-toggle="modal"

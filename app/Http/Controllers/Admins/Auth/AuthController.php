@@ -19,7 +19,11 @@ class AuthController extends Controller
      */
     public function showLogin()
     {
-        return view('admins.auth.login');
+        if(!Auth::user()){
+            return view('admins.auth.login');
+        }else{
+            return redirect()->route('index');
+        }
     }
 
     /**
