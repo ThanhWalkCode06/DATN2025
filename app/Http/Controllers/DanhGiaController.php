@@ -85,4 +85,13 @@ class DanhGiaController extends Controller
     {
         //
     }
+
+    public function showDanhGias()
+    {
+        // Lấy danh sách đánh giá có trạng thái = 1 (được duyệt)
+        $danhGias = DanhGia::with(['user', 'sanPham'])->where('trang_thai', 1)->get();
+
+        // Truyền dữ liệu sang view 'clients.gioithieu'
+        return view('clients.gioithieu', compact('danhGias'));
+    }
 }
