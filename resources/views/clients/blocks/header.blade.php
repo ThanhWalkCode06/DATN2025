@@ -1,41 +1,53 @@
 <header class="pb-md-4 pb-0">
+
     <div class="header-top">
-        <div class="container-fluid-lg">
-            <div class="row">
-                <div class="col-xxl-3 d-xxl-block d-none">
-                    <div class="top-left-header">
-                        <i class="iconly-Location icli text-white"></i>
-                        <span class="text-white">1418 Riverwood Drive, CA 96052, US</span>
+    <div class="container-fluid-lg">
+       
+       <div class="row align-items-center">
+    <!-- Logo -->
+    <div class="col-xxl-2 col-lg-2 col-md-3 d-md-block d-none d-flex align-items-center justify-content-center">
+        <a href="{{ route('home') }}" class="web-logo nav-logo">
+            <img src="{{ Storage::url('images/logo.png') }}" class="img-fluid" alt="Logo Website" style="max-width: 150px;">
+        </a>
+    </div>
+
+    <!-- Địa chỉ -->
+    <div class="col-xxl-3 col-lg-3 d-lg-block d-none">
+        <div class="top-left-header d-flex align-items-center">
+            <i class="fas fa-map-marker-alt text-white me-2"></i>
+            <span class="text-white">1418 Riverwood Drive, CA 96052, Mỹ</span>
+        </div>
+    </div>
+
+    <!-- Thông báo ưu đãi -->
+    <div class="col-xxl-7 col-lg-7 col-md-9">
+        <div class="header-offer">
+            <div class="notification-slider">
+                <div>
+                    <div class="timer-notification">
+                        <h6>
+                            <strong class="me-1">Chào mừng đến với Seven Stars!</strong>
+                            Nhận ưu đãi/quà tặng mới mỗi ngày vào cuối tuần.
+                            <strong class="ms-1">Mã giảm giá mới: Fast024</strong>
+                        </h6>
                     </div>
                 </div>
-
-                <div class="col-xxl-6 col-lg-9 d-lg-block d-none">
-                    <div class="header-offer">
-                        <div class="notification-slider">
-                            <div>
-                                <div class="timer-notification">
-                                    <h6><strong class="me-1">Welcome to Fastkart!</strong>Wrap new offers/gift
-                                        every single day on Weekends.<strong class="ms-1">New Coupon Code: Fast024
-                                        </strong>
-
-                                    </h6>
-                                </div>
-                            </div>
-
-                            <div>
-                                <div class="timer-notification">
-                                    <h6>Something you love is now on sale!
-                                        <a href="shop-left-sidebar.html" class="text-white">Buy Now
-                                            !</a>
-                                    </h6>
-                                </div>
-                            </div>
-                        </div>
+                <div>
+                    <div class="timer-notification">
+                        <h6>
+                            Món hàng yêu thích của bạn đang giảm giá!
+                            <a href="shop-left-sidebar.html" class="text-white">Mua ngay!</a>
+                        </h6>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
+
+    </div>
+</div>
+
 
     <div class="top-nav top-header sticky-header">
         <div class="container-fluid-lg">
@@ -48,10 +60,8 @@
                                 <i class="fa-solid fa-bars"></i>
                             </span>
                         </button>
-                        <a href="{{ route('home') }}" class="web-logo nav-logo">
-                            <img src="../assets/client/images/logo/1.png" class="img-fluid blur-up lazyload"
-                                alt="">
-                        </a>
+                      
+                        
 
                         <div class="middle-box">
                             <div class="search-box">
@@ -768,7 +778,7 @@
                     <div class="header-nav-right">
                         <button class="btn deal-button" data-bs-toggle="modal" data-bs-target="#deal-box">
                             <i data-feather="zap"></i>
-                            <span>Deal Today</span>
+                            <span>Giao dịch hôm nay</span>
                         </button>
                     </div>
                 </div>

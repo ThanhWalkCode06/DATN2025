@@ -170,7 +170,7 @@ class ThuocTinhController extends Controller
 
     // Lấy danh sách giá trị cũ (bao gồm giá trị đã xóa mềm)
     $giaTriCu = GiaTriThuocTinh::withTrashed()->where('thuoc_tinh_id', $id)->get()->keyBy('gia_tri');
-    dd($giaTriCu); 
+    
     // Danh sách giá trị mới từ request (loại bỏ giá trị rỗng)
     $giaTriMoi = array_filter($request->gia_tri ?? []);
 
@@ -191,10 +191,10 @@ class ThuocTinhController extends Controller
                 $giaTriId = isset($giaTriCu[$giaTri]) ? $giaTriCu[$giaTri]->id : 0;
 
                 $checkTonTai = GiaTriThuocTinh::withTrashed()
-                    ->where('gia_tri', $giaTri)
-                    ->where('thuoc_tinh_id', $id)
-                    ->where('id', '!=', $giaTriId) // Bỏ qua chính nó nếu đang cập nhật
-                    ->exists();
+                ->where('gia_tri', $giaTri)
+                ->where('thuoc_tinh_id', $id)
+                ->exists();
+            
 
                 if ($checkTonTai) {
                     return redirect()->back()->with('error', "Giá trị thuộc tính \"$giaTri\" đã tồn tại.");
