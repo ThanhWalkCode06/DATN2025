@@ -44,6 +44,7 @@
                                     <th>Mã đơn hàng</th>
                                     <th>Người đặt</th>
                                     <th>Ngày đặt</th>
+                                    <th>Hình thức thanh toán</th>
                                     <th>Trạng thái thanh toán</th>
                                     <th>Trạng thái đơn hàng</th>
                                     <th>Tổng tiền</th>
@@ -57,6 +58,7 @@
                                         <td>{{ $donHang->ma_don_hang }}</td>
                                         <td>{{ $donHang->ten_nguoi_dung }}</td>
                                         <td>{{ $donHang->created_at }}</td>
+                                        <td>{{ $donHang->ten_phuong_thuc }}</td>
                                         <td>
                                             @if ($donHang->trang_thai_thanh_toan == 0)
                                                 <span class="text-danger">Chưa thanh toán</span>
@@ -83,7 +85,7 @@
                                                 <span>Trạng thái không hợp lệ</span>
                                             @endif
                                         </td>
-                                        <td>{{ $donHang->tong_tien }}đ</td>
+                                        <td>{{ number_format($donHang->tong_tien, 0, '', '.') }}đ</td>
                                         <td>
                                             <ul>
                                                 <li>

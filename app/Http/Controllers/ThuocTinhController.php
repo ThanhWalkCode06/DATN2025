@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BienThe;
 use App\Models\ThuocTinh;
 use App\Models\GiaTriThuocTinh;
 use Illuminate\Support\Facades\DB;
@@ -155,74 +156,117 @@ class ThuocTinhController extends Controller
      * Cập nhật thuộc tính và giá trị thuộc tính
      */
     public function update(UpdateThuocTinhRequest $request, $id)
-    {
-       
-    
-        $thuocTinh = ThuocTinh::find($id);
-        if (!$thuocTinh) {
-            return redirect()->route('thuoctinhs.index')->with('error', 'Thuộc tính không tồn tại');
-        }
-
-        // Cập nhật tên thuộc tính
-        $thuocTinh->update([
-            'ten_thuoc_tinh' => $request->input('ten_thuoc_tinh'),
-            'updated_at' => now()
-        ]);
-
-        // Lấy danh sách giá trị cũ từ database
-        $giaTriCu = GiaTriThuocTinh::where('thuoc_tinh_id', $id)->get()->keyBy('gia_tri');
-
-        // Danh sách giá trị mới từ request
-        $giaTriMoi = $request->gia_tri ?? [];
-
-        foreach ($giaTriMoi as $giaTri) {
-            if (!empty($giaTri)) {
-                if ($giaTriCu->has($giaTri)) {
-                    // Nếu giá trị bị xoá mềm, khôi phục nó
-                    if ($giaTriCu[$giaTri]->deleted_at !== null) {
-                        $giaTriCu[$giaTri]->update([
-                            'deleted_at' => null,
-                            'updated_at' => now()
-                        ]);
-                    }
-                } else {
-                    // Nếu giá trị chưa tồn tại, thêm mới
-                    GiaTriThuocTinh::create([
-                        'thuoc_tinh_id' => $id,
-                        'gia_tri' => $giaTri,
-                        'created_at' => now(),
-                        'updated_at' => now()
-                    ]);
-                }
-            }
-        }
-
-        // Thêm đoạn này để xoá mềm những giá trị không còn trong danh sách mới
-        GiaTriThuocTinh::where('thuoc_tinh_id', $id)
-            ->whereNotIn('gia_tri', $giaTriMoi)
-            ->update(['deleted_at' => now()]);
-
-        return redirect()->route('thuoctinhs.index')->with('success', 'Cập nhật thành công');
+{
+    $thuocTinh = ThuocTinh::find($id);
+    if (!$thuocTinh) {
+        return redirect()->route('thuoctinhs.index')->with('error', 'Thuộc tính không tồn tại');
     }
 
+    // Cập nhật tên thuộc tính
+    $thuocTinh->update([
+        'ten_thuoc_tinh' => $request->input('ten_thuoc_tinh'),
+        'updated_at' => now()
+    ]);
 
+    // Lấy danh sách giá trị cũ (bao gồm giá trị đã xóa mềm)
+    $giaTriCu = GiaTriThuocTinh::withTrashed()->where('thuoc_tinh_id', $id)->get()->keyBy('gia_tri');
+    dd($giaTriCu); 
+    // Danh sách giá trị mới từ request (loại bỏ giá trị rỗng)
+    $giaTriMoi = array_filter($request->gia_tri ?? []);
+
+    // Kiểm tra giá trị trùng lặp trong danh sách mới
+    if (count($giaTriMoi) !== count(array_unique($giaTriMoi))) {
+        return redirect()->back()->with('error', 'Không được nhập giá trị trùng lặp.');
+    }
+
+    foreach ($giaTriMoi as $giaTri) {
+        if (!empty($giaTri)) {
+            if ($giaTriCu->has($giaTri)) {
+                // Nếu giá trị đã tồn tại nhưng bị xóa mềm -> khôi phục
+                if ($giaTriCu[$giaTri]->deleted_at !== null && $giaTriCu[$giaTri]->thuoc_tinh_id == $id) {
+                    $giaTriCu[$giaTri]->restore();
+                }
+            } else {
+                // Kiểm tra giá trị đã tồn tại chưa
+                $giaTriId = isset($giaTriCu[$giaTri]) ? $giaTriCu[$giaTri]->id : 0;
+
+                $checkTonTai = GiaTriThuocTinh::withTrashed()
+                    ->where('gia_tri', $giaTri)
+                    ->where('thuoc_tinh_id', $id)
+                    ->where('id', '!=', $giaTriId) // Bỏ qua chính nó nếu đang cập nhật
+                    ->exists();
+
+                if ($checkTonTai) {
+                    return redirect()->back()->with('error', "Giá trị thuộc tính \"$giaTri\" đã tồn tại.");
+                }
+
+                // Nếu giá trị chưa tồn tại, thêm mới
+                GiaTriThuocTinh::create([
+                    'thuoc_tinh_id' => $id,
+                    'gia_tri' => $giaTri,
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ]);
+            }
+        }
+    }
+
+    // Tìm các giá trị cần xóa mềm
+    $giaTriDeXoa = GiaTriThuocTinh::withTrashed()
+        ->where('thuoc_tinh_id', $id)
+        ->whereNotIn('gia_tri', $giaTriMoi)
+        ->pluck('id');
+
+    // Kiểm tra giá trị có đang được sử dụng trong bảng bien_thes không
+    if ($giaTriDeXoa->isNotEmpty()) {
+        $giaTriDangSuDung = DB::table('bien_thes')
+            ->whereIn('gia_tri_thuoc_tinh_id', $giaTriDeXoa)
+            ->pluck('gia_tri_thuoc_tinh_id')
+            ->toArray();
+    } else {
+        $giaTriDangSuDung = [];
+    }
+
+    // Nếu có giá trị đang sử dụng, không xóa mềm và báo lỗi
+    if (!empty($giaTriDangSuDung)) {
+        return redirect()->route('thuoctinhs.index')->with('error', 'Không thể xóa các giá trị đang được sử dụng.');
+    }
+
+    // Nếu không có giá trị nào bị sử dụng, tiến hành xóa mềm
+    GiaTriThuocTinh::whereIn('id', $giaTriDeXoa)->delete();
+
+    return redirect()->route('thuoctinhs.index')->with('success', 'Cập nhật thành công');
+}
+
+
+    
     /**
      * Remove the specified resource from storage.
      */
     public function destroy($id)
     {
         $thuocTinh = ThuocTinh::find($id);
-
+    
         if (!$thuocTinh) {
             return redirect()->route('thuoctinhs.index')->with('error', 'Thuộc tính không tồn tại');
         }
-
+    
+        // Kiểm tra xem thuộc tính có liên kết với bảng biến thể không
+        $bienTheLienKet = BienThe::whereHas('thuocTinhs', function ($query) use ($id) {
+            $query->where('thuoc_tinh_id', $id);
+        })->exists();
+    
+        if ($bienTheLienKet) {
+            return redirect()->route('thuoctinhs.index')->with('error', 'Thuộc tính này đang được sử dụng không thể xoá.');
+        }
+    
         // Xóa mềm các giá trị thuộc tính
         GiaTriThuocTinh::where('thuoc_tinh_id', $id)->update(['deleted_at' => now()]);
-
+    
         // Xóa mềm thuộc tính
         $thuocTinh->delete();
-
+    
         return redirect()->route('thuoctinhs.index')->with('success', 'Xoá thành công');
     }
+    
 }
