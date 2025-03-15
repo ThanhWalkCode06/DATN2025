@@ -24,6 +24,7 @@ use App\Http\Controllers\Admins\Responsibility\RoleController;
 use App\Http\Controllers\Admins\Responsibility\PermissionController;
 use App\Http\Controllers\HelperCommon\Helper;
 
+
 // Login Admin Controller
 Route::prefix('/admin')->controller(AuthController::class)->group(function () {
     Route::get('/login', 'showLogin')->name('login');
@@ -119,3 +120,5 @@ Route::get('/users/{username}', [App\Http\Controllers\Clients\UserController::cl
 Route::get('/gioithieu', [App\Http\Controllers\Clients\GioiThieuController::class, 'home'])->name('gioithieu.home');
 
 Route::get('/lienhe', [App\Http\Controllers\Clients\LienHeController::class, 'home'])->name('lienhe.home');
+
+
