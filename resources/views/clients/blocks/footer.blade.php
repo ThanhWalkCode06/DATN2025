@@ -23,8 +23,7 @@
 
                         <div class="service-box">
                             <div class="service-image">
-                                <img src="https://themes.pixelstrap.com/fastkart/assets/svg/delivery.svg"
-                                    class="blur-up lazyload" alt="">
+                                <i class="fa-solid fa-truck custom-icon"></i>
                             </div>
 
                             <div class="service-detail">
@@ -34,19 +33,17 @@
 
                         <div class="service-box">
                             <div class="service-image">
-                                <img src="https://themes.pixelstrap.com/fastkart/assets/svg/discount.svg"
-                                    class="blur-up lazyload" alt="">
+                                <i class="fa-solid fa-percent custom-icon"></i>
                             </div>
 
                             <div class="service-detail">
-                                <h5>Giảm giá lớn mỗi ngày</h5>
+                                <h5>Giảm giá mỗi ngày</h5>
                             </div>
                         </div>
 
                         <div class="service-box">
                             <div class="service-image">
-                                <img src="https://themes.pixelstrap.com/fastkart/assets/svg/market.svg"
-                                    class="blur-up lazyload" alt="">
+                                <i class="fa-solid fa-money-check-dollar custom-icon"></i>
                             </div>
 
                             <div class="service-detail">
