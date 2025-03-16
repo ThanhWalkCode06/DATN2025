@@ -73,11 +73,12 @@
                             <ul class="address">
                                 <li>
                                     <i data-feather="home"></i>
-                                    <a href="javascript:void(0)">1418 Riverwood Drive, CA 96052, Mỹ</a>
+                                    <a href="https://www.google.com/maps/place/Tr%C6%B0%E1%BB%9Dng+Cao+%C4%91%E1%BA%B3ng+FPT+Polytechnic/@21.0381348,105.7446869,17z/data=!3m1!4b1!4m6!3m5!1s0x313455e940879933:0xcf10b34e9f1a03df!8m2!3d21.0381298!4d105.7472618!16s%2Fg%2F11krd97y__?entry=ttu&g_ep=EgoyMDI1MDMxMi4wIKXMDSoASAFQAw%3D%3D">
+                                       Tòa nhà FPT Polytechnic.</a>
                                 </li>
                                 <li>
                                     <i data-feather="mail"></i>
-                                    <a href="javascript:void(0)">support@fastkart.com</a>
+                                    <a href="javascript:void(0)">starsseven.2025@gmail.com</a>
                                 </li>
                             </ul>
                         </div>
@@ -182,7 +183,7 @@
                                     <i data-feather="phone"></i>
                                     <div class="contact-number">
                                         <h6 class="text-content">Hotline 24/7 :</h6>
-                                        <h5>+91 888 104 2340</h5>
+                                        <h5>0987654321</h5>
                                     </div>
                                 </div>
                             </li>
@@ -192,7 +193,7 @@
                                     <i data-feather="mail"></i>
                                     <div class="contact-number">
                                         <h6 class="text-content">Địa chỉ Email :</h6>
-                                        <h5>fastkart@hotmail.com</h5>
+                                        <h5>starsseven.2025@gmail.com</h5>
                                     </div>
                                 </div>
                             </li>
