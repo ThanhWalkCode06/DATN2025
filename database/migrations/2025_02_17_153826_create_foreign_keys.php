@@ -11,15 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('vai_tro_tai_khoans', function (Blueprint $table) {
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('vai_tro_id')->references('id')->on('vai_tros');
-        });
+        // Schema::table('vai_tro_tai_khoans', function (Blueprint $table) {
+        //     $table->foreign('user_id')->references('id')->on('users');
+        //     $table->foreign('vai_tro_id')->references('id')->on('vai_tros');
+        // });
 
-        Schema::table('quyen_vai_tros', function (Blueprint $table) {
-            $table->foreign('quyen_id')->references('id')->on('quyens');
-            $table->foreign('vai_tro_id')->references('id')->on('vai_tros');
-        });
+        // Schema::table('quyen_vai_tros', function (Blueprint $table) {
+        //     $table->foreign('quyen_id')->references('id')->on('quyens');
+        //     $table->foreign('vai_tro_id')->references('id')->on('vai_tros');
+        // });
 
         Schema::table('san_phams', function (Blueprint $table) {
             $table->foreign('danh_muc_id')->references('id')->on('danh_muc_san_phams');
@@ -54,12 +54,8 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users');
         });
 
-        Schema::table('gio_hangs', function (Blueprint $table) {
-            $table->foreign('user_id')->references('id')->on('users');
-        });
-
         Schema::table('chi_tiet_gio_hangs', function (Blueprint $table) {
-            $table->foreign('gio_hang_id')->references('id')->on('gio_hangs');
+            $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('bien_the_id')->references('id')->on('bien_thes');
         });
 
@@ -127,12 +123,8 @@ return new class extends Migration
             $table->dropForeign('danh_gias_user_id_foreign');
         });
 
-        Schema::table('gio_hangs', function (Blueprint $table) {
-            $table->dropForeign('gio_hangs_user_id_foreign');
-        });
-
         Schema::table('chi_tiet_gio_hangs', function (Blueprint $table) {
-            $table->dropForeign('chi_tiet_gio_hangs_gio_hang_id_foreign');
+            $table->dropForeign('chi_tiet_gio_hangs_user_id_foreign');
             $table->dropForeign('chi_tiet_gio_hangs_bien_the_id_foreign');
         });
 

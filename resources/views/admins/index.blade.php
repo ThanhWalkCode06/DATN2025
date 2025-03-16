@@ -15,13 +15,14 @@
             <div class="custome-1-bg b-r-4 card-body">
                 <div class="media align-items-center static-top-widget">
                     <div class="media-body p-0">
-                        <span class="m-0">Tổng lợi nhuận</span>
-                        <h4 class="mb-0 counter">
-                            {{ number_format($tongLoiNhuanNam, 0, ',', '.') }} 
-                            <span class="badge badge-light-primary grow">
-                                <i data-feather="dollar-sign"></i>
-                            </span>
-                        </h4>
+                        <span class="m-0">Tổng doanh thu</span>
+                          <h4 class="mb-0 counter">
+                          {{ number_format($tongDoanhThu, 0, ',', '.') }} 
+                        <span class="badge badge-light-primary grow">
+                    <i data-feather="dollar-sign"></i>
+                 </span>
+                  </h4>
+
                     </div>
                     <div class="align-self-center text-center">
                         <i class="ri-database-2-line"></i>
@@ -103,7 +104,7 @@
     <div class="col-xl-12">
         <div class="card o-hidden card-hover">
             <div class="card-header-title">
-                <h4>Lợi nhuận hàng tháng</h4>
+                <h4>Doanh thu hàng tháng</h4>
             </div>
             <div class="card-body p-0">
                 <div id="report-chart"></div>
@@ -308,19 +309,19 @@
         <div class="card o-hidden card-hover">
             <div class="card-header card-header-top card-header--2 px-0 pt-0">
                 <div class="card-header-title">
-                    <h4>Đơn hàng gần đây</h4>
+                    <h4>Đơn hàng</h4>
                 </div>
 
                 <div class="best-selling-box d-sm-flex d-none">
                     <span>Lọc theo:</span>
                     <div class="dropdown">
                         <button class="btn p-0 dropdown-toggle" type="button" id="dropdownMenuButton2"
-                            data-bs-toggle="dropdown" data-bs-auto-close="true">Ngày đặt</button>
+                            data-bs-toggle="dropdown" data-bs-auto-close="true">Trạng thái</button>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
-                            <li><a class="dropdown-item" href="{{ route('index', ['filter' => 'hom_nay']) }}">Hôm nay</a>
-                            </li>
-                            <li><a class="dropdown-item" href="{{ route('index', ['sort' => 'ngay_dat']) }}">Ngày đặt</a>
-                            </li>
+                            {{-- <li><a class="dropdown-item" href="{{ route('index', ['filter' => 'hom_nay']) }}">Hôm nay</a>
+                            </li> --}}
+                            {{-- <li><a class="dropdown-item" href="{{ route('index', ['filter' => 'thang_nay']) }}">Tháng này</a>
+                            </li>  --}}
                             <li><a class="dropdown-item"
                                     href="{{ route('index', ['trang_thai' => 'chua_xac_nhan']) }}">Chưa xác nhận</a></li>
                             <li><a class="dropdown-item" href="{{ route('index', ['trang_thai' => 'tra_hang']) }}">Trả

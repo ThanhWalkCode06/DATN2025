@@ -14,15 +14,16 @@
                         </div>
                         <style>
                             .custom-icon {
-                                font-size: 28px; /* Điều chỉnh kích thước icon */
-                                color:  #babac4; /* Màu xám nhạt giống icon cũ */
+                                font-size: 28px;
+                                /* Điều chỉnh kích thước icon */
+                                color: #babac4;
+                                /* Màu xám nhạt giống icon cũ */
                             }
                         </style>
 
                         <div class="service-box">
                             <div class="service-image">
-                                <img src="https://themes.pixelstrap.com/fastkart/assets/svg/delivery.svg"
-                                    class="blur-up lazyload" alt="">
+                                <i class="fa-solid fa-truck custom-icon"></i>
                             </div>
 
                             <div class="service-detail">
@@ -32,19 +33,17 @@
 
                         <div class="service-box">
                             <div class="service-image">
-                                <img src="https://themes.pixelstrap.com/fastkart/assets/svg/discount.svg"
-                                    class="blur-up lazyload" alt="">
+                                <i class="fa-solid fa-percent custom-icon"></i>
                             </div>
 
                             <div class="service-detail">
-                                <h5>Nhiều mã giảm giá</h5>
+                                <h5>Giảm giá mỗi ngày</h5>
                             </div>
                         </div>
 
                         <div class="service-box">
                             <div class="service-image">
-                                <img src="https://themes.pixelstrap.com/fastkart/assets/svg/market.svg"
-                                    class="blur-up lazyload" alt="">
+                                <i class="fa-solid fa-money-check-dollar custom-icon"></i>
                             </div>
 
                             <div class="service-detail">
@@ -62,12 +61,12 @@
                     <div class="footer-logo">
                         <div class="theme-logo">
                             <a href="{{ route('home') }}">
-                                <img style="width: 100px; height: 100px" src="{{ Storage::url($globalSetting->logo ?? '/images/logo.png') }}" class="blur-up lazyload" alt="">
-                            </a>
+                                <img style="width: 200px; height: 100px" src="{{ Storage::url($globalSetting->logo ?? '/images/logo.png') }}" class="blur-up lazyload" alt="">
                         </div>
 
                         <div class="footer-logo-contain">
-
+                            <p>Chúng tôi chuyên cung cấp quần áo thể thao chất lượng cao, giúp bạn tự tin và thoải mái
+                                trong mọi hoạt động.</p>
                             <ul class="address">
                                 <li>
                                     <i data-feather="home"></i>
@@ -198,7 +197,7 @@
 
         <div class="sub-footer section-small-space">
             <div class="reserve">
-                <h6 class="text-content">© {{ $globalSetting->name_website }}</h6>
+                <h6 class="text-content">©2025 {{ $globalSetting->name_website }}</h6>
             </div>
 
             <div class="payment">

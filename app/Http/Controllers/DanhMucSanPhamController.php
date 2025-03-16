@@ -25,7 +25,7 @@ class DanhMucSanPhamController extends Controller
     $request->validate([
         'ten_danh_muc' => 'required|string|max:255|unique:danh_muc_san_phams,ten_danh_muc',
         'anh_danh_muc' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        'mo_ta' => 'nullable|string',
+        // 'mo_ta' => 'nullable|string',
     ], [
         'ten_danh_muc.required' => 'Tên danh mục không được để trống.',
         'ten_danh_muc.unique' => 'Tên danh mục đã tồn tại.',
@@ -43,7 +43,7 @@ class DanhMucSanPhamController extends Controller
     DanhMucSanPham::create([
         'ten_danh_muc' => $request->ten_danh_muc,
         'anh_danh_muc' => $anhDanhMuc,
-        'mo_ta' => $request->mo_ta,
+        // 'mo_ta' => $request->mo_ta,
     ]);
 
     return redirect()->route('danhmucsanphams.index')->with('success', 'Danh mục đã được thêm.');
