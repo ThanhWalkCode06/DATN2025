@@ -20,4 +20,8 @@ class DanhMucBaiViet extends Pivot
     public $timestamp = false;
 
     protected $date = ['delete_at'];
+    public function baiViets()
+    {
+        return $this->hasMany(BaiViet::class, 'danh_muc_id');
+    }
 }
