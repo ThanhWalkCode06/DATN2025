@@ -183,7 +183,7 @@ class AuthController extends Controller
             DB::table('users')->where('id', $user->id)->update(['password' => $pass]);
             $this->logout($request);
 
-            return redirect()->route('login')->withErrors(['error' => 'Bạn đã có thể đăng nhập với mật khẩu mới!']);
+            return redirect()->route('login.client')->with(['success' => 'Bạn đã có thể đăng nhập với mật khẩu mới!']);
         } else {
             abort(403);
         }

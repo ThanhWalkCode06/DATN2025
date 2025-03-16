@@ -6,14 +6,18 @@
                     <div class="service-contain">
                         <div class="service-box">
                             <div class="service-image">
-                                <img src="https://themes.pixelstrap.com/fastkart/assets/svg/product.svg"
-                                    class="blur-up lazyload" alt="">
+                                <i class="fa-solid fa-shirt custom-icon"></i> <!-- Icon áo -->
                             </div>
-
                             <div class="service-detail">
-                                <h5>Sản phẩm đạt chuẩn</h5>
+                                <h5>Mẫu "hot trend" mỗi ngày</h5>
                             </div>
                         </div>
+                        <style>
+                            .custom-icon {
+                                font-size: 28px; /* Điều chỉnh kích thước icon */
+                                color:  #babac4; /* Màu xám nhạt giống icon cũ */
+                            }
+                        </style>
 
                         <div class="service-box">
                             <div class="service-image">
@@ -58,7 +62,7 @@
                     <div class="footer-logo">
                         <div class="theme-logo">
                             <a href="{{ route('home') }}">
-                                <img src="{{ Storage::url($globalSetting->logo ?? '/image/logo.png') }}" class="blur-up lazyload" alt="">
+                                <img style="width: 100px; height: 100px" src="{{ Storage::url($globalSetting->logo ?? '/images/logo.png') }}" class="blur-up lazyload" alt="">
                             </a>
                         </div>
 
@@ -68,12 +72,10 @@
                                 <li>
                                     <i data-feather="home"></i>
                                     <a href="javascript:void(0)">{{ $globalSetting->location ?? "Hà Nội" }}</a>
-                                </li>
-                            </ul>
                         </div>
+
                     </div>
                 </div>
-
                 <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
                     <div class="footer-title">
                         <h4>Danh mục sản phẩm</h4>
@@ -82,12 +84,27 @@
                     <div class="footer-contain">
                         <ul>
                             <li>
-                                <a href="shop-left-sidebar.html" class="text-content">Vegetables & Fruit</a>
+                                <a href="shop-left-sidebar.html" class="text-content">Áo thể thao</a>
                             </li>
-
+                            <li>
+                                <a href="shop-left-sidebar.html" class="text-content">Quần thể thao</a>
+                            </li>
+                            <li>
+                                <a href="shop-left-sidebar.html" class="text-content">Giày thể thao</a>
+                            </li>
+                            <li>
+                                <a href="shop-left-sidebar.html" class="text-content">Phụ kiện thể thao</a>
+                            </li>
+                            <li>
+                                <a href="shop-left-sidebar.html" class="text-content">Đồ tập gym</a>
+                            </li>
+                            <li>
+                                <a href="shop-left-sidebar.html" class="text-content">Bộ đồ thể thao</a>
+                            </li>
                         </ul>
                     </div>
                 </div>
+
 
                 <div class="col-xl col-lg-2 col-sm-3">
                     <div class="footer-title">
@@ -97,23 +114,24 @@
                     <div class="footer-contain">
                         <ul>
                             <li>
-                                <a href="index.html" class="text-content">Home</a>
+                                <a href="index.html" class="text-content">Trang chủ</a>
                             </li>
                             <li>
-                                <a href="shop-left-sidebar.html" class="text-content">Shop</a>
+                                <a href="shop-left-sidebar.html" class="text-content">Cửa hàng</a>
                             </li>
                             <li>
-                                <a href="about-us.html" class="text-content">About Us</a>
+                                <a href="about-us.html" class="text-content">Về chúng tôi</a>
                             </li>
                             <li>
-                                <a href="blog-list.html" class="text-content">Blog</a>
+                                <a href="blog-list.html" class="text-content">Tin tức</a>
                             </li>
                             <li>
-                                <a href="contact-us.html" class="text-content">Contact Us</a>
+                                <a href="contact-us.html" class="text-content">Liên hệ</a>
                             </li>
                         </ul>
                     </div>
                 </div>
+
 
                 <div class="col-xl-2 col-sm-3">
                     <div class="footer-title">
@@ -123,22 +141,22 @@
                     <div class="footer-contain">
                         <ul>
                             <li>
-                                <a href="order-success.html" class="text-content">Your Order</a>
+                                <a href="order-success.html" class="text-content">Đơn hàng của bạn</a>
                             </li>
                             <li>
-                                <a href="user-dashboard.html" class="text-content">Your Account</a>
+                                <a href="user-dashboard.html" class="text-content">Tài khoản của bạn</a>
                             </li>
                             <li>
-                                <a href="order-tracking.html" class="text-content">Track Order</a>
+                                <a href="order-tracking.html" class="text-content">Theo dõi đơn hàng</a>
                             </li>
                             <li>
-                                <a href="wishlist.html" class="text-content">Your Wishlist</a>
+                                <a href="wishlist.html" class="text-content">Danh sách yêu thích</a>
                             </li>
                             <li>
-                                <a href="search.html" class="text-content">Search</a>
+                                <a href="search.html" class="text-content">Tìm kiếm</a>
                             </li>
                             <li>
-                                <a href="faq.html" class="text-content">FAQ</a>
+                                <a href="faq.html" class="text-content">Câu hỏi thường gặp</a>
                             </li>
                         </ul>
                     </div>
@@ -174,6 +192,7 @@
                         </ul>
                     </div>
                 </div>
+
             </div>
         </div>
 
@@ -187,7 +206,7 @@
             </div>
 
             <div class="social-link">
-                <h6 class="text-content">Liên hệ qua mạng xã hội :</h6>
+                <h6 class="text-content">Kết nối với chúng tôi:</h6>
                 <ul>
                     <li>
                         <a href="https://www.facebook.com/" target="_blank">

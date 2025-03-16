@@ -1,11 +1,11 @@
 <header class="pb-md-4 pb-0">
+
     <div class="header-top">
         <div class="container-fluid-lg">
             <div class="row">
                 <div class="col-xxl-3 d-xxl-block d-none">
                     <div class="top-left-header">
-                        <i class="iconly-Location icli text-white"></i>
-                        <i class="iconly-Light-Location"></i>
+                        <i class="fas fa-map-marker-alt text-white me-2"></i>
                         <span class="text-white">{{ $globalSetting->location ?? 'Hà Nội' }}</span>
                     </div>
                 </div>
@@ -28,11 +28,17 @@
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
+
+    </div>
+</div>
+
 
     <div class="top-nav top-header sticky-header">
         <div class="container-fluid-lg">
@@ -175,7 +181,7 @@
                                             @else
                                             <p>Xin chào <strong style="color: #0da487">{{ Auth::user()->username }}</strong></p>
                                             <li class="product-box-contain">
-                                                <a href="{{ route('users.chitiet', 'nguyenvana') }}">Chi tiết tài
+                                                <a href="{{ route('users.chitiet') }}">Chi tiết tài
                                                     khoản</a>
                                             </li>
                                             <li class="product-box-contain">
@@ -636,7 +642,7 @@
                                 </div>
                                 <div class="offcanvas-body">
                                     <ul class="navbar-nav">
-                                        <li class="nav-item dropdown">
+                                        <li class="nav-item">
                                             <a class="nav-link" href="{{ route('home') }}">Trang chủ</a>
                                         </li>
 
@@ -775,7 +781,7 @@
                     <div class="header-nav-right">
                         <button class="btn deal-button" data-bs-toggle="modal" data-bs-target="#deal-box">
                             <i data-feather="zap"></i>
-                            <span>Deal Today</span>
+                            <span>Giao dịch hôm nay</span>
                         </button>
                     </div>
                 </div>
