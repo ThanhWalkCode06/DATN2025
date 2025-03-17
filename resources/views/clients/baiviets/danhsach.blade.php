@@ -30,7 +30,7 @@
                                         <h3 class="">{{ $baiViet->tieu_de }}</h3>
                                     </a>
 
-                                    <p class="text-muted">{{ Str::limit($baiViet->noi_dung, 150) }}</p>
+                                    <p class="text-muted">{!! Str::limit(strip_tags($baiViet->noi_dung), 150) !!}</p>
 
                                     <button onclick="location.href = '{{ route('baiviets.chitiet', $baiViet->id) }}';"
                                         class="blog-button">Read
