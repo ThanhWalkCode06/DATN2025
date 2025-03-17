@@ -141,6 +141,7 @@ Route::get('/thanhtoan', [App\Http\Controllers\Clients\ThanhToanController::clas
 Route::get('/dathangthanhcong', [App\Http\Controllers\Clients\ThanhToanController::class, 'datHangThanhCong'])->name('thanhtoans.dathangthanhcong');
 
 Route::get('/users', [App\Http\Controllers\Clients\UserController::class, 'chiTiet'])->name('users.chitiet');
+Route::put('/users/update-infor/{id}', [App\Http\Controllers\Clients\UserController::class, 'updateInfor'])->name('users.update');
 
 Route::get('/gioithieu', [App\Http\Controllers\Clients\GioiThieuController::class, 'home'])->name('gioithieu.home');
 
@@ -149,3 +150,8 @@ Route::get('/lienhe', [App\Http\Controllers\Clients\LienHeController::class, 'ho
 Route::get('/danh-muc', [SanPhamController::class, 'danhMuc'])->name('danh-muc');
 
 Route::get('/gioi-thieu', [DanhGiaController::class, 'showDanhGias'])->name('gioithieu');
+
+Route::get('/order-tracking', function(){
+    return view('clients.users.ordertracking');
+})->name('gioithieu');
+

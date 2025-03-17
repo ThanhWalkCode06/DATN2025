@@ -268,108 +268,131 @@
 <!-- Add address modal box end -->
 
 <!-- Edit Profile Start -->
-<div class="modal fade theme-modal" id="editProfile" tabindex="-1">
-    <div class="modal-dialog modal-lg modal-dialog-centered modal-fullscreen-sm-down">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel2">Chỉnh sửa thông tin</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="row g-4">
-                    <div class="col-xxl-12">
-                        <form>
-                            <div class="form-floating theme-form-floating">
-                                <input type="text" class="form-control" id="pname" value="{{ $user->ten_nguoi_dung ?? '' }}">
-                                <label for="pname">Họ và tên</label>
-                            </div>
-                        </form>
-                    </div>
+@if (isset($user))
+<form id="myForm" action="{{ route('users.update',$user->id) }}" method="post" enctype="multipart/form-data">
+    @csrf
+    @method('PUT')
+    <div class="modal fade theme-modal" id="editProfile" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-fullscreen-sm-down">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel2">Chỉnh sửa thông tin</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-4">
+                        <div class="col-xxl-12">
 
-                    <div class="col-xxl-6">
-                        <form>
-                            <div class="form-floating theme-form-floating">
-                                <input type="email" class="form-control" id="email1"
-                                    value="{{ $user->email ?? ''}}">
-                                <label for="email1">Địa chỉ email</label>
-                            </div>
-                        </form>
-                    </div>
+                                <div class="form-floating theme-form-floating">
+                                    <input type="text" class="form-control @error('ten_nguoi_dung') is-invalid @enderror" name="ten_nguoi_dung"
+                                    id="pname" value="{{ $user->ten_nguoi_dung ?? '' }}">
+                                    <label for="pname">Họ và tên</label>
+                                </div>
+                                @error('ten_nguoi_dung')
+                                    <p class="text-danger">{{ $message }}</p>
+                                @enderror
 
-                    <div class="col-xxl-6">
-                        <form>
-                            <div class="form-floating theme-form-floating">
-                                <input class="form-control" type="tel" value="{{ $user->so_dien_thoai ?? ''}}" name="mobile"
-                                    id="mobile" maxlength="10"
-                                    oninput="javascript: if (this.value.length > this.maxLength) this.value =
-                                        this.value.slice(0, this.maxLength);">
-                                <label for="mobile">Số điện thoại</label>
-                            </div>
-                        </form>
-                    </div>
+                        </div>
 
-                    <div class="col-12">
-                        <form>
-                            <div class="form-floating theme-form-floating">
-                                <input type="text" class="form-control" id="address1"
-                                    value="{{ $user->dia_chi ?? ''}}">
-                                <label for="address1">Địa chỉ</label>
-                            </div>
-                        </form>
-                    </div>
+                        <div class="col-xxl-6">
 
-                    {{-- <div class="col-12">
-                        <form>
-                            <div class="form-floating theme-form-floating">
-                                <input type="text" class="form-control" id="address2" value="CA 94080">
-                                <label for="address2">Add Address 2</label>
-                            </div>
-                        </form>
-                    </div> --}}
-                    @if (isset($user))
-                    <div class="col-xxl-4">
-                        <form>
-                            <div class="form-floating theme-form-floating">
-                                <select class="form-select" id="floatingSelect">
-                                    <option selected>Chọn Giới tính</option>
-                                    <option {{ ($user->gioi_tinh == 1 ? 'selected' : '') }} value="1">Nam</option>
-                                    <option {{ ($user->gioi_tinh == 0 ? 'selected' : '') }} value="0">Nữ</option>
-                                </select>
-                                <label for="floatingSelect">Giới tính</label>
-                            </div>
-                        </form>
-                    </div>
-                    @endif
+                                <div class="form-floating theme-form-floating">
+                                    <input type="email" class="form-control @error('email') is-invalid @enderror" id="email1" name="email"
+                                        value="{{ $user->email ?? ''}}">
+                                    <label for="email1">Địa chỉ email</label>
+                                </div>
+                                @error('email')
+                                <p class="text-danger">{{ $message }}</p>
+                                @enderror
+                        </div>
 
-                    <div class="col-xxl-4">
-                        <form>
-                            <div class="form-floating theme-form-floating">
-                                <input type="date" class="form-control" id="address3" value="94080">
-                                <label for="address3">Ngày sinh</label>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="col-xxl-4">
-                        <form>
-                            <div class="form-floating theme-form-floating">
-                                <input type="file" class="form-control" id="address3" value="94080">
-                                <label for="address3">Ảnh đại diện</label>
-                            </div>
-                        </form>
+                        <div class="col-xxl-6">
+
+                                <div class="form-floating theme-form-floating">
+                                    <input class="form-control @error('so_dien_thoai') is-invalid @enderror" type="tel" value="{{ $user->so_dien_thoai ?? ''}}"
+                                     name="so_dien_thoai" id="mobile" maxlength="10"
+                                        oninput="javascript: if (this.value.length > this.maxLength) this.value =
+                                            this.value.slice(0, this.maxLength);">
+                                    <label for="mobile">Số điện thoại</label>
+                                </div>
+                                @error('so_dien_thoai')
+                                <p class="text-danger">{{ $message }}</p>
+                                @enderror
+                        </div>
+
+                        <div class="col-12">
+
+                                <div class="form-floating theme-form-floating">
+                                    <input type="text" class="form-control @error('dia_chi') is-invalid @enderror" id="address1"
+                                        name="dia_chi" value="{{ $user->dia_chi ?? ''}}">
+                                    <label for="address1">Địa chỉ</label>
+                                </div>
+                                @error('dia_chi')
+                                <p class="text-danger">{{ $message }}</p>
+                                @enderror
+
+                        </div>
+
+                        {{-- <div class="col-12">
+
+                                <div class="form-floating theme-form-floating">
+                                    <input type="text" class="form-control" id="address2" value="CA 94080">
+                                    <label for="address2">Add Address 2</label>
+                                </div>
+
+                        </div> --}}
+                        @if (isset($user))
+                        <div class="col-xxl-4">
+
+                                <div class="form-floating theme-form-floating">
+                                    <select class="form-select" id="floatingSelect" name="gioi_tinh">
+                                        <option selected>Chọn Giới tính</option>
+                                        <option {{ ($user->gioi_tinh == 1 ? 'selected' : '') }} value="1">Nam</option>
+                                        <option {{ ($user->gioi_tinh == 0 ? 'selected' : '') }} value="0">Nữ</option>
+                                    </select>
+                                    <label for="floatingSelect">Giới tính</label>
+                                </div>
+
+                        </div>
+                        @endif
+
+                        <div class="col-xxl-4">
+                                <div class="form-floating theme-form-floating">
+                                    <input type="date" class="form-control @error('ngay_sinh') is-invalid @enderror" id="address3"
+                                    value="{{ $user->ngay_sinh }}" name="ngay_sinh">
+                                    <label for="address3">Ngày sinh</label>
+                                </div>
+                                @error('ngay_sinh')
+                                <p class="text-danger">{{ $message }}</p>
+                                @enderror
+                        </div>
+                        <div class="col-xxl-4">
+                                <div class="form-floating theme-form-floating">
+                                    <input type="file" class="form-control @error('anh_dai_dien') is-invalid @enderror"
+                                    id="address3" name="anh_dai_dien">
+                                    <label for="address3">Ảnh đại diện</label>
+                                </div>
+                                @error('anh_dai_dien')
+                                <p class="text-danger">{{ $message }}</p>
+                                @enderror
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-animation btn-md fw-bold"
-                    data-bs-dismiss="modal">Đóng</button>
-                <button type="button" data-bs-dismiss="modal"
-                    class="btn theme-bg-color btn-md fw-bold text-light">Lưu thay đổi</button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-animation btn-md fw-bold"
+                        data-bs-dismiss="modal">Đóng</button>
+                    <button type="submit" class="btn theme-bg-color btn-md fw-bold text-light">Lưu thay đổi</button>
+
+                </div>
             </div>
         </div>
     </div>
-</div>
+</form>
+
+@endif
+
 <!-- Edit Profile End -->
 
 <!-- Edit Card Start -->
@@ -474,4 +497,57 @@
         </div>
     </div>
 </div>
-<!-- Remove Profile Modal End -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+$(document).ready(function() {
+    $("#myForm").submit(function(e) {
+        e.preventDefault(); // Ngăn reload trang
+
+        let formData = new FormData(this);
+        formData.append("_method", "PUT"); // Laravel yêu cầu thêm _method=PUT khi gửi bằng POST
+
+        $.ajax({
+            url: $(this).attr("action"),
+            type: "POST", // Laravel không hỗ trợ AJAX PUT, phải dùng POST
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                $(".text-danger").remove(); // Xóa lỗi cũ
+                $("#editProfile").modal("hide"); // Đóng modal
+                location.reload(); // Tải lại trang để thấy cập nhật mới
+            },
+            error: function(xhr) {
+                $(".text-danger").remove(); // Xóa lỗi cũ
+
+                let errors = xhr.responseJSON.errors;
+                if (errors) {
+                    $.each(errors, function(field, messages) {
+                        let input = $(`[name="${field}"]`);
+                        let errorHtml = `<p class="text-danger">${messages[0]}</p>`;
+
+                        input.after(errorHtml); // Hiển thị lỗi dưới input
+                    });
+                }
+            }
+        });
+    });
+});
+
+</script>
+
+@if(session('success'))
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        setTimeout(function () {
+        Swal.fire({
+            title: "Thành công!",
+            text: "{{ session('success') }}",
+            icon: "success",
+            confirmButtonText: "OK"
+        });
+    }, 2000); // Hiển thị sau 2 giây (2000ms)
+    });
+</script>
+@endif

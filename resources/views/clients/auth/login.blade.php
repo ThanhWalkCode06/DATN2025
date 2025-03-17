@@ -54,7 +54,7 @@
                         </div>
 
                         <div class="input-box">
-                            <form id="myForm" class="row g-4" action="{{ route('login.store.client') }}" method="POST">
+                            <form  class="row g-4" action="{{ route('login.store.client') }}" method="POST">
                                 @csrf
                                 <div class="col-12">
                                     <div class="form-floating theme-form-floating log-in-form">
@@ -121,32 +121,4 @@
 
 @endsection
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-// $(document).ready(function() {
-//     $("#loginForm").submit(function(e) {
-//         e.preventDefault(); // Ngăn form tải lại trang
-//         $(".text-danger").text(''); // Xóa lỗi cũ
-
-//         $.ajax({
-//             url: "/login/store", // Route của Laravel xử lý form
-//             type: "POST",
-//             data: $(this).serialize(),
-//             dataType: "json",
-//             success: function(response) {
-//                 if (response.status === "success") {
-//                     alert(response.message); // Thông báo thành công
-//                 }
-//             },
-//             error: function(xhr) {
-//                 if (xhr.status === 422) {
-//                     let errors = xhr.responseJSON.errors;
-//                     $.each(errors, function(key, value) {
-//                         $("#error-" + key).text(value[0]); // Hiển thị lỗi dưới mỗi input
-//                     });
-//                 }
-//             }
-//         });
-//     });
-// });
-</script>
 
