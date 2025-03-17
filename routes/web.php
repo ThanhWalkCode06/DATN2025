@@ -22,6 +22,7 @@ use App\Http\Controllers\DanhMucSanPhamController;
 use App\Http\Controllers\Admins\Auth\AuthController;
 use App\Http\Controllers\Admins\Responsibility\RoleController;
 use App\Http\Controllers\Admins\Responsibility\PermissionController;
+use App\Http\Controllers\Clients\Auth\AuthController as AuthAuthController;
 use App\Http\Controllers\HelperCommon\Helper;
 
 // Login Admin Controller
@@ -101,9 +102,33 @@ Route::get('/', function () {
     return view('clients.index');
 })->name('home');
 
+Route::controller(App\Http\Controllers\Clients\Auth\AuthController::class)->group( function() {
+    Route::get('/login', 'showLogin')->name('login.client');
+    Route::post('/login/store', 'storeLogin')->name('login.store.client');
+
+    Route::get('/register', 'showRegister')->name('register.client');
+    Route::post('/register/restore', 'storeRegister')->name('register.store.client');
+
+    Route::get('/forgetPass', 'showForgetPass')->name('pass.forget.client');
+    Route::post('/forgetPass/restore', 'sendLinkForgetPass')->name('pass.sendLinkForgetPass.client');
+
+    Route::get('/getTokenOfPass/{token}', 'showResetPass')->name('showResetPass.client');
+    Route::post('/getTokenOfPass/{token}/restore', 'storeResetPass')->name('storeResetPass.store.client');
+
+    Route::get('/pass/edit', 'editPass')->name('pass.edit.client');
+    Route::post('/pass/update', 'updatePass')->name('pass.update.client');
+
+    Route::get('/logout', 'logout')->name('logout.client');
+});
+
+
+
 Route::get('/sanpham', [App\Http\Controllers\Clients\SanPhamController::class, 'danhSach'])->name('sanphams.danhsach');
 Route::get('/sanpham/{id}', [App\Http\Controllers\Clients\SanPhamController::class, 'chiTiet'])->name('sanphams.chitiet');
+
 Route::get('/sanphamyeuthich', [App\Http\Controllers\Clients\SanPhamController::class, 'sanPhamYeuThich'])->name('sanphams.sanphamyeuthich');
+Route::delete('/xoa-yeu-thich/{id}', [App\Http\Controllers\Clients\SanPhamController::class, 'xoaYeuThich']);
+
 
 Route::get('/baiviet', [App\Http\Controllers\Clients\BaiVietController::class, 'danhSach'])->name('baiviets.danhsach');
 Route::get('/baiviet/{id}', [App\Http\Controllers\Clients\BaiVietController::class, 'chiTiet'])->name('baiviets.chitiet');
@@ -115,7 +140,7 @@ Route::get('/giohang', [App\Http\Controllers\Clients\ThanhToanController::class,
 Route::get('/thanhtoan', [App\Http\Controllers\Clients\ThanhToanController::class, 'thanhToan'])->name('thanhtoans.thanhtoan');
 Route::get('/dathangthanhcong', [App\Http\Controllers\Clients\ThanhToanController::class, 'datHangThanhCong'])->name('thanhtoans.dathangthanhcong');
 
-Route::get('/users/{username}', [App\Http\Controllers\Clients\UserController::class, 'chiTiet'])->name('users.chitiet');
+Route::get('/users', [App\Http\Controllers\Clients\UserController::class, 'chiTiet'])->name('users.chitiet');
 
 Route::get('/gioithieu', [App\Http\Controllers\Clients\GioiThieuController::class, 'home'])->name('gioithieu.home');
 

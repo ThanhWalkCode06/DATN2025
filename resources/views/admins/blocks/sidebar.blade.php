@@ -3,7 +3,7 @@
     <div>
         <div class="logo-wrapper logo-wrapper-center">
             <a href="{{ route('index') }}" class="d-flex justify-content-center">
-                <img class="img-fluid for-white object-fit-contain"
+                <img style="height: 100px" class="img-fluid for-white object-fit-contain"
                     src="{{ Storage::url($globalSetting->logo ?? 'images/logo.png') }}" alt="logo">
             </a>
             <div class="back-btn">

@@ -22,4 +22,8 @@ class DonHang extends Model
         'trang_thai_don_hang',
         'trang_thai_thanh_toan'
     ];
+
+    public function user(){
+        return $this->belongsTo(SanPhamYeuThich::class, 'user_id');
+    }
 }

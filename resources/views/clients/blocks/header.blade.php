@@ -1,46 +1,44 @@
 <header class="pb-md-4 pb-0">
+
     <div class="header-top">
         <div class="container-fluid-lg">
-
-            <div class="row align-items-center">
-
-
-                <!-- Địa chỉ -->
-                <div class="col-xxl-3 col-lg-3 d-lg-block d-none">
-                    <div class="top-left-header d-flex align-items-center">
+            <div class="row">
+                <div class="col-xxl-3 d-xxl-block d-none">
+                    <div class="top-left-header">
                         <i class="fas fa-map-marker-alt text-white me-2"></i>
-                        <span class="text-white">1418 Riverwood Drive, CA 96052, Mỹ</span>
+                        <span class="text-white">{{ $globalSetting->location ?? 'Hà Nội' }}</span>
                     </div>
                 </div>
 
-                <!-- Thông báo ưu đãi -->
-                <div class="col-xxl-7 col-lg-7 col-md-9">
+                <div class="col-xxl-6 col-lg-9 d-lg-block d-none">
                     <div class="header-offer">
                         <div class="notification-slider">
                             <div>
                                 <div class="timer-notification">
-                                    <h6>
-                                        <strong class="me-1">Chào mừng đến với Seven Stars!</strong>
-                                        Nhận ưu đãi/quà tặng mới mỗi ngày vào cuối tuần.
-                                        <strong class="ms-1">Mã giảm giá mới: Fast024</strong>
+                                    <h6><strong class="me-1">Chào mừng tới {{ $globalSetting->name_website ?? 'Seven Star' }}</strong>
                                     </h6>
                                 </div>
                             </div>
+
                             <div>
                                 <div class="timer-notification">
-                                    <h6>
-                                        Món hàng yêu thích của bạn đang giảm giá!
-                                        <a href="shop-left-sidebar.html" class="text-white">Mua ngay!</a>
+                                    <h6>Mua hàng ngay thôi nào!
+                                        <a href="{{ route('sanphams.danhsach') }}" class="text-white">Mua ngay!</a>
                                     </h6>
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
+</div>
+
+    </div>
+</div>
+
 
     <div class="top-nav top-header sticky-header">
         <div class="container-fluid-lg">
@@ -53,15 +51,10 @@
                                 <i class="fa-solid fa-bars"></i>
                             </span>
                         </button>
-
-                        <!-- Logo -->
-                        <div
-                            class="col-xxl-2 col-lg-2 col-md-3 d-md-block d-none d-flex align-items-center justify-content-center">
-                            <a href="{{ route('home') }}" class="web-logo nav-logo">
-                                <img src="{{ Storage::url('images/logo-green.png') }}" class="img-fluid"
-                                    alt="Logo Website" style="max-width: 150px;">
-                            </a>
-                        </div>
+                        <a href="{{ route('home') }}" class="web-logo nav-logo">
+                            <img style="width: 100px" src="{{ Storage::url($globalSetting->logo ?? 'images/logo.png') }}" class="img-fluid blur-up lazyload"
+                                alt="">
+                        </a>
 
                         <div class="middle-box">
                             <div class="search-box">
@@ -178,28 +171,38 @@
                                             <h5>My Account</h5>
                                         </div>
                                     </div>
-
                                     <div class="onhover-div onhover-div-login">
                                         <ul class="user-box-name">
+                                            @if (!Auth::user())
                                             <li class="product-box-contain">
                                                 <i></i>
-                                                <a href="login.html">Đăng nhập</a>
+                                                <a href="{{ route('login.client') }}">Đăng nhập</a>
                                             </li>
-
+                                            @else
+                                            <p>Xin chào <strong style="color: #0da487">{{ Auth::user()->username }}</strong></p>
                                             <li class="product-box-contain">
+                                                <a href="{{ route('users.chitiet') }}">Chi tiết tài
+                                                    khoản</a>
+                                            </li>
+                                            <li class="product-box-contain">
+                                                <i></i>
+                                                <a onclick="Logout(event)" href="#">Đăng xuất</a>
+
+                                            </li>
+                                            @endif
+
+                                            {{-- <li class="product-box-contain">
                                                 <a href="sign-up.html">Đăng kí</a>
                                             </li>
 
                                             <li class="product-box-contain">
                                                 <a href="forgot.html">Quên mật khẩu</a>
-                                            </li>
+                                            </li> --}}
 
-                                            <li class="product-box-contain">
-                                                <a href="{{ route('users.chitiet', 'nguyenvana') }}">Chi tiết tài
-                                                    khoản</a>
-                                            </li>
+
                                         </ul>
                                     </div>
+
                                 </li>
                             </ul>
                         </div>
@@ -639,14 +642,14 @@
                                 </div>
                                 <div class="offcanvas-body">
                                     <ul class="navbar-nav">
-                                        <li class="nav-item dropdown">
+                                        <li class="nav-item">
                                             <a class="nav-link" href="{{ route('home') }}">Trang chủ</a>
                                         </li>
 
                                         <li class="nav-item dropdown">
                                             <a class="nav-link" href="{{ route('sanphams.danhsach') }}">Sản phẩm</a>
 
-                                            {{-- <ul class="dropdown-menu">
+                                            <ul class="dropdown-menu">
                                                 <li>
                                                     <a class="dropdown-item" href="shop-category-slider.html">Shop
                                                         Category Slider</a>
@@ -675,7 +678,7 @@
                                                     <a class="dropdown-item" href="shop-top-filter.html">Shop Top
                                                         Filter</a>
                                                 </li>
-                                            </ul> --}}
+                                            </ul>
                                         </li>
 
                                         <li class="nav-item dropdown">
@@ -696,11 +699,48 @@
 
                                         <li class="nav-item dropdown">
                                             <a class="nav-link" href="{{ route('huongdans.danhsach') }}">Hướng dẫn</a>
+                                            <ul class="dropdown-menu">
+                                                <li>
+                                                    <a class="dropdown-item" href="blog-detail.html">Blog
+                                                        Detail</a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item" href="blog-grid.html">Blog Grid</a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item" href="blog-list.html">Blog List</a>
+                                                </li>
+                                            </ul>
                                         </li>
 
                                         <li class="nav-item dropdown">
                                             <a class="nav-link" href="{{ route('gioithieu.home') }}">Giới thiệu</a>
-
+                                            <ul class="dropdown-menu">
+                                                <li>
+                                                    <a class="dropdown-item" href="seller-become.html">Become a
+                                                        Seller</a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item" href="seller-dashboard.html">Seller
+                                                        Dashboard</a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item" href="seller-detail.html">Seller
+                                                        Detail</a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item" href="seller-detail-2.html">Seller
+                                                        Detail 2</a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item" href="seller-grid.html">Seller
+                                                        Grid</a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item" href="seller-grid-2.html">Seller Grid
+                                                        2</a>
+                                                </li>
+                                            </ul>
                                         </li>
 
                                         <li class="nav-item dropdown">

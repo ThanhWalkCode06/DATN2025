@@ -99,7 +99,7 @@
                     <div class="log-in-box">
                         <div class="log-in-title">
                             <h3>Welcome To Admin Seven Star</h3>
-                            <h4>Change password</h4>
+                            <h4>Đổi mật khẩu</h4>
                         </div>
 
                         <div class="input-box">

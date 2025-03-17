@@ -11,15 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('vai_tro_tai_khoans', function (Blueprint $table) {
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('vai_tro_id')->references('id')->on('vai_tros');
-        });
+        // Schema::table('vai_tro_tai_khoans', function (Blueprint $table) {
+        //     $table->foreign('user_id')->references('id')->on('users');
+        //     $table->foreign('vai_tro_id')->references('id')->on('vai_tros');
+        // });
 
-        Schema::table('quyen_vai_tros', function (Blueprint $table) {
-            $table->foreign('quyen_id')->references('id')->on('quyens');
-            $table->foreign('vai_tro_id')->references('id')->on('vai_tros');
-        });
+        // Schema::table('quyen_vai_tros', function (Blueprint $table) {
+        //     $table->foreign('quyen_id')->references('id')->on('quyens');
+        //     $table->foreign('vai_tro_id')->references('id')->on('vai_tros');
+        // });
 
         Schema::table('san_phams', function (Blueprint $table) {
             $table->foreign('danh_muc_id')->references('id')->on('danh_muc_san_phams');

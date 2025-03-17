@@ -21,7 +21,7 @@ return new class extends Migration
             $table->boolean('gioi_tinh')->nullable();
             $table->string('anh_dai_dien')->nullable();
             $table->date('ngay_sinh')->nullable();
-            $table->string('so_dien_thoai')->unique();
+            $table->string('so_dien_thoai')->unique()->nullable();
             $table->string('dia_chi')->nullable();
             $table->boolean('trang_thai')->default(1);
             $table->rememberToken();

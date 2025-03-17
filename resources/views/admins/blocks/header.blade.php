@@ -3,14 +3,16 @@
         <div class="header-logo-wrapper p-0">
             <div class="logo-wrapper">
                 <a href="index.html">
-                    <img class="img-fluid main-logo" src="{{ Storage::url('images/logo.png') }}" alt="logo">
-                    <img class="img-fluid white-logo" src="{{ Storage::url('images/logo.png') }}" alt="logo">
+                    <img class="img-fluid main-logo" src="{{ Storage::url(Auth::user()->anh_dai_dien) ?? 'images/logo.jpg' }}" alt="logo">
+                    <img class="img-fluid white-logo" src="{{ Storage::url(Auth::user()->anh_dai_dien) ?? 'images/logo.jpg' }}" alt="logo">
+
                 </a>
             </div>
             <div class="toggle-sidebar">
                 <i class="status_toggle middle sidebar-toggle" data-feather="align-center"></i>
                 <a href="index.html">
-                    <img src="{{ Storage::url('images/logo.png') }}" class="img-fluid" alt="">
+                    <img src="{{ Storage::url(Auth::user()->anh_dai_dien) ?? 'images/logo.jpg' }}" class="img-fluid" alt="">
+
                 </a>
             </div>
         </div>
@@ -84,7 +86,7 @@
                 </li>
                 <li class="profile-nav onhover-dropdown pe-0 me-0">
                     <div class="media profile-media">
-                        <img class="user-profile rounded-circle" src="{{ Storage::url(Auth::user()->anh_dai_dien) }}"
+                        <img class="user-profile rounded-circle" src="{{ Storage::url(Auth::user()->anh_dai_dien ?? 'images/logo.jpg')  }}"
                             alt="">
                         <div class="user-name-hide media-body">
                             <span>{{ Auth::user()->ten_nguoi_dung }}</span>
