@@ -37,6 +37,7 @@
     <section class="wishlist-section section-b-space">
         <div class="container-fluid-lg">
             <div class="row g-sm-3 g-2">
+                @if (isset($user))
                 @foreach ($user->sanPhamYeuThichs as $item)
                 <div class="col-xxl-2 col-lg-3 col-md-4 col-6 product-box-contain">
                     <div class="product-box-3 h-100">
@@ -90,6 +91,7 @@
                     </div>
                 </div>
                 @endforeach
+                @endif
 
 
 
