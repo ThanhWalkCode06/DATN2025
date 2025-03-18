@@ -536,7 +536,7 @@ $(document).ready(function() {
 });
 
 </script>
-
+{{--
 @if(session('success'))
 <script>
     document.addEventListener("DOMContentLoaded", function() {
@@ -550,4 +550,4 @@ $(document).ready(function() {
     }, 2000); // Hiển thị sau 2 giây (2000ms)
     });
 </script>
-@endif
+@endif --}}

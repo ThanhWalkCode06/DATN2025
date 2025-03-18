@@ -62,11 +62,11 @@ Theo dõi đơn hàng
                         <nav>
                             <ol class="breadcrumb mb-0">
                                 <li class="breadcrumb-item">
-                                    <a href="index.html">
+                                    <a href="{{ route('users.chitiet') }}">
                                         <i class="fa-solid fa-house"></i>
                                     </a>
                                 </li>
-                                <li class="breadcrumb-item active">Theo dõi đơn hàng</li>
+                                <li class="breadcrumb-item active">Xem đơn hàng khác</li>
                             </ol>
                         </nav>
                     </div>
@@ -84,6 +84,22 @@ Theo dõi đơn hàng
                     <div class="order-image">
                         <img src="{{ asset('assets/images/box.png') }}" class="img-fluid blur-up lazyload" alt="">
                     </div>
+                    <div style="display: flex">
+                        @php $trangThai = $donHang->first()->trang_thai_don_hang; @endphp
+
+                        @if ($trangThai == 4 || $trangThai == 0)
+                            <form id="order-form-{{ $donHang->first()->id }}" action="{{ route('order.updateTrangThai', $donHang->first()->id) }}" method="POST" onsubmit="return false;">
+                                @csrf
+                                <input type="hidden" name="trang_thai" value="{{ $trangThai == 4 ? 5 : -1 }}">
+                                <button style="border: none" type="button" class=" {{ $trangThai == 4 ? 'btn-success' : 'btn-danger' }} btn-sm confirm-btn"
+                                    data-id="{{ $donHang->first()->id }}"
+                                    data-action="{{ $trangThai == 4 ? 'Trả hàng' : 'Hủy đơn' }}">
+                                    {{ $trangThai == 4 ? 'Trả hàng' : 'Hủy đơn' }}
+                                </button>
+                            </form>
+                        @endif
+                    </div>
+
                 </div>
 
                 <div class="col-xxl-9 col-xl-8 col-lg-6">
@@ -96,50 +112,24 @@ Theo dõi đơn hàng
 
                                 <div class="order-details-name">
                                     <h5 class="text-content">Mã đơn hàng</h5>
-                                    <h2 class="theme-color">MH4285UY</h2>
+                                    <h2 class="theme-color">{{ $donHang->first()->ma_don_hang }}</h2>
                                 </div>
                             </div>
                         </div>
 
-                        {{-- <div class="col-xl-4 col-sm-6">
-                            <div class="order-details-contain">
-                                <div class="order-tracking-icon">
-                                    <i data-feather="truck" class="text-content"></i>
-                                </div>
 
-                                <div class="order-details-name">
-                                    <h5 class="text-content">Service</h5>
-                                    <img src="../assets/images/inner-page/brand-name.svg"
-                                        class="img-fluid blur-up lazyload" alt="">
-                                </div>
-                            </div>
-                        </div> --}}
-
-                        {{-- <div class="col-xl-4 col-sm-6">
-                            <div class="order-details-contain">
-                                <div class="order-tracking-icon">
-                                    <i class="text-content" data-feather="info"></i>
-                                </div>
-
-                                <div class="order-details-name">
-                                    <h5 class="text-content">Package Info</h5>
-                                    <h4>Letter</h4>
-                                </div>
-                            </div>
-                        </div> --}}
-
-                        {{-- <div class="col-xl-4 col-sm-6">
+                        <div class="col-xl-4 col-sm-6">
                             <div class="order-details-contain">
                                 <div class="order-tracking-icon">
                                     <i class="text-content" data-feather="crosshair"></i>
                                 </div>
 
                                 <div class="order-details-name">
-                                    <h5 class="text-content">From</h5>
-                                    <h4>STR. Smardan 9, Bucuresti, romania.</h4>
+                                    <h5 class="text-content">Tổng tiền</h5>
+                                    <h4 style="color: #0da487; font-weight: bold">{{ number_format($donHang->first()->tong_tien,0,'','.') }} đ</h4>
                                 </div>
                             </div>
-                        </div> --}}
+                        </div>
 
                         <div class="col-xl-4 col-sm-6">
                             <div class="order-details-contain">
@@ -149,7 +139,41 @@ Theo dõi đơn hàng
 
                                 <div class="order-details-name">
                                     <h5 class="text-content">Địa chỉ nhận</h5>
-                                    <h4>Flokagata 24, 105 Reykjavik, Iceland</h4>
+                                    <h4 style="color: #0da487; font-weight: bold">{{ $donHang->first()->dia_chi_nguoi_nhan }}</h4>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-4 col-sm-6">
+                            <div class="order-details-contain">
+                                <div class="order-tracking-icon">
+                                    <i class="text-content" data-feather="info"></i>
+                                </div>
+
+                                <div class="order-details-name">
+                                    <h5 class="text-content">Trạng thái thanh toán</h5>
+                                    <h4 style="color: {{ $donHang->first()->trang_thai_thanh_toan == 1 ? '#0da487' : 'red' }}; font-weight: bold " >{{ $donHang->first()->trang_thai_thanh_toan == 1
+                                    ? 'Đã thanh toán' : 'Chưa thanh toán' }}</h4>
+                                </div>
+                            </div>
+                        </div>
+
+                        @php
+                        $statusText = match($donHang->first()->trang_thai_don_hang) {
+                            -1 => 'Hủy Đơn',        // Trạng thái 0 -> Ẩn đơn hàng
+                             5 => 'Hoàn Trả Hàng',  // Trạng thái 1 -> Hoàn trả hàng
+                            default => ''
+                        };
+                        @endphp
+                        <div class="col-xl-4 col-sm-6">
+                            <div class="order-details-contain">
+                                <div class="order-tracking-icon">
+                                    <i data-feather="truck" class=""></i>
+                                </div>
+
+                                <div class="order-details-name">
+                                    <h5 class="text-content">Trạng thái</h5>
+                                    <h4 style="color: red; font-weight: bold">{{ $statusText }}</h4>
                                 </div>
                             </div>
                         </div>
@@ -162,26 +186,29 @@ Theo dõi đơn hàng
 
                                 <div class="order-details-name">
                                     <h5 class="text-content">Thời gian đặt</h5>
-                                    <h4>7 Frb, 05:05pm</h4>
+                                    <h4 style="color: #0da487; font-weight: bold">{{ $donHang->first()->created_at }}</h4>
                                 </div>
                             </div>
                         </div>
 
+                        @php
+                        $statusChart = $donHang->first()->trang_thai_don_hang;
+                        @endphp
                         <div class="col-12 overflow-hidden">
                             <ol class="progtrckr">
-                                <li class="progtrckr-done">
+                                <li class="progtrckr-{{ $statusChart >= 0 ? 'done' : 'todo' }}">
                                     <h5>Chưa xác nhận</h5>
                                 </li>
-                                <li class="progtrckr-done">
+                                <li class="progtrckr-{{ $statusChart >= 1 ? 'done' : 'todo' }}">
                                     <h5>Đã xác nhận</h5>
                                 </li>
-                                <li class="progtrckr-done">
+                                <li class="progtrckr-{{ $statusChart >= 2 ? 'done' : 'todo' }}">
                                     <h5>Chờ vận chuyển</h5>
                                 </li>
-                                <li class="progtrckr-todo">
+                                <li class="progtrckr-{{ $statusChart >= 3 ? 'done' : 'todo' }}">
                                     <h5>Đang giao</h5>
                                 </li>
-                                <li class="progtrckr-todo">
+                                <li class="progtrckr-{{ $statusChart >= 4 ? 'done' : 'todo' }}">
                                     <h5>Đã giao</h5>
                                 </li>
                                 {{-- <li class="progtrckr-todo">
@@ -210,6 +237,7 @@ Theo dõi đơn hàng
                         <table class="table order-tab-table">
                             <thead>
                                 <tr>
+                                    <th>STT</th>
                                     <th>Ảnh</th>
                                     <th>Tên sản phẩm</th>
                                     <th>Giá sản phẩm</th>
@@ -217,15 +245,25 @@ Theo dõi đơn hàng
                                 </tr>
                             </thead>
                             <tbody>
+                                @foreach ($bienThesList as $index => $item)
                                 <tr>
-                                    <td>Order Placed</td>
-                                    <td>26 Sep 2021</td>
-                                    <td>12:00 AM</td>
-                                    <td>California</td>
+                                    <td style="line-height: 126px">{{ $index++ }}</td>
+                                    <td>
+                                        <img style="width: 100px; height: 100px" src="{{ Storage::url($item['anh_bien_the']) }}" alt="">
+                                    </td>
+                                    <td style="line-height: 126px">
+                                        <a href="{{ route('sanphams.chitiet',$item['id_san_pham']) }}">
+                                        {{ $item['ten_bien_the'] }}
+                                        </a>
+                                    </td>
+                                    <td style="color: #0da487;line-height: 126px">{{ number_format($item['gia_ban'],0,'','.') }} đ</td>
+                                    <td style="line-height: 126px">{{ $item['so_luong'] }}</td>
                                 </tr>
+                                @endforeach
 
                             </tbody>
                         </table>
+                        {{ $bienThesPaginated->links('pagination::bootstrap-5') }}
                     </div>
                 </div>
             </div>
@@ -418,3 +456,27 @@ Theo dõi đơn hàng
 @section('js')
 
 @endsection
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".confirm-btn").forEach(button => {
+            button.addEventListener("click", function () {
+                let orderId = this.dataset.id;
+                let actionText = this.dataset.action;
+                Swal.fire({
+                    title: `Bạn có chắc muốn ${actionText.toLowerCase()} không?`,
+                    text: "Hành động này không thể hoàn tác!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Có, tiếp tục!",
+                    cancelButtonText: "Hủy"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        document.getElementById('order-form-' + orderId).submit();
+                    }
+                });
+            });
+        });
+    });
+</script>

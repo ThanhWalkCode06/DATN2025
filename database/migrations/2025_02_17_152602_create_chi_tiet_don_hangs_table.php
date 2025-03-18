@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('don_hang_id');
             $table->unsignedBigInteger('bien_the_id');
+            $table->unsignedBigInteger('san_pham_id')->nullable();
             $table->integer('so_luong')->default(0);
             $table->timestamps();
             $table->softDeletes();

@@ -80,15 +80,15 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('vai_tro_tai_khoans', function (Blueprint $table) {
-            $table->dropForeign('vai_tro_tai_khoans_user_id_foreign');
-            $table->dropForeign('vai_tro_tai_khoans_vai_tro_id_foreign');
-        });
+        // Schema::table('vai_tro_tai_khoans', function (Blueprint $table) {
+        //     $table->dropForeign('vai_tro_tai_khoans_user_id_foreign');
+        //     $table->dropForeign('vai_tro_tai_khoans_vai_tro_id_foreign');
+        // });
 
-        Schema::table('quyen_vai_tros', function (Blueprint $table) {
-            $table->dropForeign('quyen_vai_tros_quyen_id_foreign');
-            $table->dropForeign('quyen_vai_tros_vai_tro_id_foreign');
-        });
+        // Schema::table('quyen_vai_tros', function (Blueprint $table) {
+        //     $table->dropForeign('quyen_vai_tros_quyen_id_foreign');
+        //     $table->dropForeign('quyen_vai_tros_vai_tro_id_foreign');
+        // });
 
         Schema::table('san_phams', function (Blueprint $table) {
             $table->dropForeign('san_phams_danh_muc_id_foreign');

@@ -636,320 +636,37 @@
                                                 5 => 'Trả hàng',
                                             ];
                                         @endphp
-                                        @foreach ($user->donHangs as $item)
+                                        @foreach ($donHangsPaginate as $item)
                                             <div class="order-box dashboard-bg-box">
-                                                <div class="order-container">
-                                                    <div class="order-icon">
-                                                        <i data-feather="box"></i>
+                                                <a href="{{ route('order-tracking.client',$item->id) }}">
+                                                    <div class="order-container">
+                                                        <div class="order-icon">
+                                                            <i data-feather="box"></i>
+                                                        </div>
+
+                                                        <div class="order-detail">
+                                                            {{-- {{ dd($item->trang_thai) }} --}}
+                                                            <h4>Đơn Hàng <span class="{{ in_array($item->trang_thai_don_hang, [-1, 0, 5]) ? '' : 'success-bg' }}">{{ $orderStatus[$item->trang_thai_don_hang] }}</span></h4>
+                                                            <h6 class="text-content mt-3">Mã đơn hàng: {{  $item->ma_don_hang }}
+                                                            <h6 class="text-content mt-3">Trạng thái thanh toán:
+                                                                <span style="float: right; padding-top: 0px; padding-bottom: 0px; padding-left: 5px; padding-right: 0px " class="{{ $item->trang_thai_thanh_toan == 0 ? 'btn bg-danger-subtle text-danger' : 'btn bg-success-subtle text-success' }}">
+                                                                    {{ $item->trang_thai_thanh_toan == 0 ? 'Chưa thanh toán' : 'Đã thanh toán' }}</span>
+                                                            </h6>
+                                                            <h6 class="text-content mt-3">Địa chỉ nhận: {{  $item->dia_chi_nguoi_nhan }}
+                                                            </h6>
+                                                            <h6 class="text-content mt-3">Tổng tiền: <strong style="font-weight: bold" class="text-success">
+                                                                {{  number_format($item->tong_tien,0,'.','.') }} đ</strong>
+                                                            </h6>
+                                                        </div>
                                                     </div>
-
-                                                    <div class="order-detail">
-                                                        {{-- {{ dd($item->trang_thai) }} --}}
-                                                        <h4>Đơn Hàng <span class="{{ in_array($item->trang_thai_don_hang, [-1, 0, 5]) ? '' : 'success-bg' }}">{{ $orderStatus[$item->trang_thai_don_hang] }}</span></h4>
-                                                        <h6 class="text-content mt-3">Mã đơn hàng: {{  $item->ma_don_hang }}
-                                                        <h6 class="text-content mt-3">Trạng thái thanh toán:
-                                                            <span style="float: right; padding-top: 0px; padding-bottom: 0px; padding-left: 5px; padding-right: 0px " class="{{ $item->trang_thai_thanh_toan == 0 ? 'btn bg-danger-subtle text-danger' : 'btn bg-success-subtle text-success' }}">
-                                                                {{ $item->trang_thai_thanh_toan == 0 ? 'Chưa thanh toán' : 'Đã thanh toán' }}</span>
-                                                        </h6>
-                                                        <h6 class="text-content mt-3">Địa chỉ nhận: {{  $item->dia_chi_nguoi_nhan }}
-                                                        </h6>
-                                                        <h6 class="text-content mt-3">Tổng tiền: <strong style="font-weight: bold" class="text-success">
-                                                            {{  number_format($item->tong_tien,0,'.','.') }} đ</strong>
-                                                        </h6>
-                                                    </div>
-                                                </div>
-
-                                                {{-- <div class="product-order-detail">
-                                                    <a href="product-left-thumbnail.html" class="order-image">
-                                                        <img src="../assets/images/vegetable/product/1.png"
-                                                            class="blur-up lazyload" alt="">
-                                                    </a>
-
-                                                    <div class="order-wrap">
-                                                        <a href="product-left-thumbnail.html">
-                                                            <h3>{{ $item->ten_nguoi_nhan }}</h3>
-                                                        </a>
-                                                        <p class="text-content">Phô mai Cheddar, Dolcelatte, Gouda. Mì
-                                                            Macaroni với phô mai, phô mai sợi, phô mai Feta, Halloumi, phô
-                                                            mai Cottage, Jarlsberg, phô mai tam giác.</p>
-                                                        <ul class="product-size">
-                                                            <li>
-                                                                <div class="size-box">
-                                                                    <h6 class="text-content">Giá: </h6>
-                                                                    <h5>$20.68</h5>
-                                                                </div>
-                                                            </li>
-
-                                                            <li>
-                                                                <div class="size-box">
-                                                                    <h6 class="text-content">Đánh Giá: </h6>
-                                                                    <div class="product-rating ms-2">
-                                                                        <ul class="rating">
-                                                                            <li>
-                                                                                <i data-feather="star" class="fill"></i>
-                                                                            </li>
-                                                                            <li>
-                                                                                <i data-feather="star" class="fill"></i>
-                                                                            </li>
-                                                                            <li>
-                                                                                <i data-feather="star" class="fill"></i>
-                                                                            </li>
-                                                                            <li>
-                                                                                <i data-feather="star" class="fill"></i>
-                                                                            </li>
-                                                                            <li>
-                                                                                <i data-feather="star"></i>
-                                                                            </li>
-                                                                        </ul>
-                                                                    </div>
-                                                                </div>
-                                                            </li>
-
-                                                            <li>
-                                                                <div class="size-box">
-                                                                    <h6 class="text-content">Người Bán: </h6>
-                                                                    <h5>Fresho</h5>
-                                                                </div>
-                                                            </li>
-
-                                                            <li>
-                                                                <div class="size-box">
-                                                                    <h6 class="text-content">Số Lượng: </h6>
-                                                                    <h5>250 G</h5>
-                                                                </div>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div> --}}
+                                                </a>
                                             </div>
                                         @endforeach
 
-
-                                        {{-- <div class="order-box dashboard-bg-box">
-                                            <div class="order-container">
-                                                <div class="order-icon">
-                                                    <i data-feather="box"></i>
-                                                </div>
-
-                                                <div class="order-detail">
-                                                    <h4>Đã Giao Hàng <span class="success-bg">Thành Công</span></h4>
-                                                    <h6 class="text-content">Phô mai nướng, nụ cười phô mai, phô mai Cottage, Caerphilly. Ai cũng yêu thích phô mai Cottage, phô mai cỡ lớn.</h6>
-                                                </div>
-                                            </div>
-
-                                            <div class="product-order-detail">
-                                                <a href="product-left-thumbnail.html" class="order-image">
-                                                    <img src="../assets/images/vegetable/product/2.png" alt=""
-                                                        class="blur-up lazyload">
-                                                </a>
-
-                                                <div class="order-wrap">
-                                                    <a href="product-left-thumbnail.html">
-                                                        <h3>Cà Phê Lạnh Pha Sẵn 50 g</h3>
-                                                    </a>
-                                                    <p class="text-content">Phô mai Pecorino, Paneer, Port-Salut. Khi phô mai xuất hiện, ai cũng vui vẻ. Phô mai Red Leicester, Mascarpone, Blue Castello, phô mai súp lơ.</p>
-                                                    <ul class="product-size">
-                                                        <li>
-                                                            <div class="size-box">
-                                                                <h6 class="text-content">Giá: </h6>
-                                                                <h5>$20.68</h5>
-                                                            </div>
-                                                        </li>
-
-                                                        <li>
-                                                            <div class="size-box">
-                                                                <h6 class="text-content">Đánh Giá: </h6>
-                                                                <div class="product-rating ms-2">
-                                                                    <ul class="rating">
-                                                                        <li>
-                                                                            <i data-feather="star" class="fill"></i>
-                                                                        </li>
-                                                                        <li>
-                                                                            <i data-feather="star" class="fill"></i>
-                                                                        </li>
-                                                                        <li>
-                                                                            <i data-feather="star" class="fill"></i>
-                                                                        </li>
-                                                                        <li>
-                                                                            <i data-feather="star" class="fill"></i>
-                                                                        </li>
-                                                                        <li>
-                                                                            <i data-feather="star"></i>
-                                                                        </li>
-                                                                    </ul>
-                                                                </div>
-                                                            </div>
-                                                        </li>
-
-                                                        <li>
-                                                            <div class="size-box">
-                                                                <h6 class="text-content">Người Bán: </h6>
-                                                                <h5>Fresho</h5>
-                                                            </div>
-                                                        </li>
-
-                                                        <li>
-                                                            <div class="size-box">
-                                                                <h6 class="text-content">Số Lượng: </h6>
-                                                                <h5>250 G</h5>
-                                                            </div>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div> --}}
-
-
-                                        {{-- <div class="order-box dashboard-bg-box">
-                                            <div class="order-container">
-                                                <div class="order-icon">
-                                                    <i data-feather="box"></i>
-                                                </div>
-
-                                                <div class="order-detail">
-                                                    <h4>Đang Giao Hàng <span>Chờ Xử Lý</span></h4>
-                                                    <h6 class="text-content">Nụ cười phô mai, Boursin, bánh cheesecake, phô mai Blue Castello, phô mai kem, Lancashire, phô mai tan chảy.</h6>
-                                                </div>
-                                            </div>
-
-                                            <div class="product-order-detail">
-                                                <a href="product-left-thumbnail.html" class="order-image">
-                                                    <img src="../assets/images/vegetable/product/3.png" alt=""
-                                                        class="blur-up lazyload">
-                                                </a>
-
-                                                <div class="order-wrap">
-                                                    <a href="product-left-thumbnail.html">
-                                                        <h3>Bánh Quy Bơ Đậu Phộng Cao Cấp 600 g</h3>
-                                                    </a>
-                                                    <p class="text-content">Phô mai bò Bavarian Bergkase, Mascarpone, Paneer, Squirty Cheese, Fromage Frais, lát phô mai. Khi phô mai xuất hiện, ai cũng vui vẻ.</p>
-                                                    <ul class="product-size">
-                                                        <li>
-                                                            <div class="size-box">
-                                                                <h6 class="text-content">Giá: </h6>
-                                                                <h5>$20.68</h5>
-                                                            </div>
-                                                        </li>
-
-                                                        <li>
-                                                            <div class="size-box">
-                                                                <h6 class="text-content">Đánh Giá: </h6>
-                                                                <div class="product-rating ms-2">
-                                                                    <ul class="rating">
-                                                                        <li>
-                                                                            <i data-feather="star" class="fill"></i>
-                                                                        </li>
-                                                                        <li>
-                                                                            <i data-feather="star" class="fill"></i>
-                                                                        </li>
-                                                                        <li>
-                                                                            <i data-feather="star" class="fill"></i>
-                                                                        </li>
-                                                                        <li>
-                                                                            <i data-feather="star" class="fill"></i>
-                                                                        </li>
-                                                                        <li>
-                                                                            <i data-feather="star"></i>
-                                                                        </li>
-                                                                    </ul>
-                                                                </div>
-                                                            </div>
-                                                        </li>
-
-                                                        <li>
-                                                            <div class="size-box">
-                                                                <h6 class="text-content">Người Bán: </h6>
-                                                                <h5>Fresho</h5>
-                                                            </div>
-                                                        </li>
-
-                                                        <li>
-                                                            <div class="size-box">
-                                                                <h6 class="text-content">Số Lượng: </h6>
-                                                                <h5>250 G</h5>
-                                                            </div>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="order-box dashboard-bg-box">
-                                            <div class="order-container">
-                                                <div class="order-icon">
-                                                    <i data-feather="box"></i>
-                                                </div>
-
-                                                <div class="order-detail">
-                                                    <h4>Đã Giao Hàng <span class="success-bg">Thành Công</span></h4>
-                                                    <h6 class="text-content">Caerphilly, Port-Salut, Parmesan, Pecorino, Croque Monsieur, Dolcelatte, phô mai tan chảy, phô mai & rượu.</h6>
-                                                </div>
-                                            </div>
-
-                                            <div class="product-order-detail">
-                                                <a href="product-left-thumbnail.html" class="order-image">
-                                                    <img src="../assets/images/vegetable/product/4.png"
-                                                        class="blur-up lazyload" alt="">
-                                                </a>
-
-                                                <div class="order-wrap">
-                                                    <a href="product-left-thumbnail.html">
-                                                        <h3>Gói Combo SnackAmor gồm Thanh Jowar và Khoai Tây Jowar</h3>
-                                                    </a>
-                                                    <p class="text-content">Phô mai lớn, phô mai kem, Pepper Jack, lát phô mai, Danish Fontina. Ai cũng yêu thích phô mai nướng, Bavarian Bergkase.</p>
-                                                    <ul class="product-size">
-                                                        <li>
-                                                            <div class="size-box">
-                                                                <h6 class="text-content">Giá: </h6>
-                                                                <h5>$20.68</h5>
-                                                            </div>
-                                                        </li>
-
-                                                        <li>
-                                                            <div class="size-box">
-                                                                <h6 class="text-content">Đánh Giá: </h6>
-                                                                <div class="product-rating ms-2">
-                                                                    <ul class="rating">
-                                                                        <li>
-                                                                            <i data-feather="star" class="fill"></i>
-                                                                        </li>
-                                                                        <li>
-                                                                            <i data-feather="star" class="fill"></i>
-                                                                        </li>
-                                                                        <li>
-                                                                            <i data-feather="star" class="fill"></i>
-                                                                        </li>
-                                                                        <li>
-                                                                            <i data-feather="star" class="fill"></i>
-                                                                        </li>
-                                                                        <li>
-                                                                            <i data-feather="star"></i>
-                                                                        </li>
-                                                                    </ul>
-                                                                </div>
-                                                            </div>
-                                                        </li>
-
-                                                        <li>
-                                                            <div class="size-box">
-                                                                <h6 class="text-content">Người Bán: </h6>
-                                                                <h5>Fresho</h5>
-                                                            </div>
-                                                        </li>
-
-                                                        <li>
-                                                            <div class="size-box">
-                                                                <h6 class="text-content">Số Lượng: </h6>
-                                                                <h5>250 G</h5>
-                                                            </div>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div> --}}
-
                                     </div>
+
                                 </div>
+                                {{ $donHangsPaginate->links('pagination::bootstrap-5') }}
                             </div>
 
                             <div class="tab-pane fade" id="pills-address" role="tabpanel">
