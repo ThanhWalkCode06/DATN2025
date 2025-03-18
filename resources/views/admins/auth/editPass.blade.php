@@ -2,33 +2,34 @@
 @endsection
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/themify.css') }}">
 
-    <!-- Dropzon css -->
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/dropzone.css') }}">
+<!-- Dropzon css -->
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/dropzone.css') }}">
 
-    <!-- Feather icon css -->
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/feather-icon.css') }}">
+<!-- Feather icon css -->
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/feather-icon.css') }}">
 
-    <!-- remixicon css -->
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/remixicon.css') }}">
+<!-- remixicon css -->
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/remixicon.css') }}">
 
-    <!-- Select2 css -->
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/select2.min.css') }}">
+<!-- Select2 css -->
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/select2.min.css') }}">
 
-    <!-- Plugins css -->
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/scrollbar.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/animate.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/chartist.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/date-picker.css') }}">
+<!-- Plugins css -->
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/scrollbar.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/animate.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/chartist.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/date-picker.css') }}">
 
-    <!-- Bootstrap css -->
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/bootstrap.css') }}">
+<!-- Bootstrap css -->
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/bootstrap.css') }}">
 
-    <!-- Bootstrap-tag input css -->
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/bootstrap-tagsinput.css') }}">
+<!-- Bootstrap-tag input css -->
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/bootstrap-tagsinput.css') }}">
 
-    <!-- App css -->
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/load.css') }}">
+<!-- App css -->
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/load.css') }}">
+
 <body>
 
     <div class="fullpage-loader">
@@ -98,7 +99,7 @@
                 <div class="col-xxl-4 col-xl-5 col-lg-6 col-sm-8 mx-auto">
                     <div class="log-in-box">
                         <div class="log-in-title">
-                            <h3>Welcome To Admin Seven Star</h3>
+                            <h3>Welcome To Admin Seven Stars</h3>
                             <h4>Change password</h4>
                         </div>
 
@@ -107,29 +108,33 @@
                                 @csrf
                                 <div class="col-12">
                                     <div class="form-floating theme-form-floating log-in-form">
-                                        <input type="password" class="form-control @error('password') is-invalid @enderror" id="pasword" placeholder="Password" name="password">
+                                        <input type="password"
+                                            class="form-control @error('password') is-invalid @enderror" id="pasword"
+                                            placeholder="Password" name="password">
                                         <label for="email">Password</label>
                                     </div>
-                                @error('password')
-                                <p class="text-danger">{{ $message }}</p>
-                                @enderror
+                                    @error('password')
+                                        <p class="text-danger">{{ $message }}</p>
+                                    @enderror
                                 </div>
 
                                 <div class="col-12">
                                     <div class="form-floating theme-form-floating log-in-form">
-                                        <input type="password" class="form-control @error('confirm_password') is-invalid @enderror" id="password"
-                                            placeholder="Nhập lạiPassword" name="confirm_password">
+                                        <input type="password"
+                                            class="form-control @error('confirm_password') is-invalid @enderror"
+                                            id="password" placeholder="Nhập lạiPassword" name="confirm_password">
                                         <label for="confirm_password">Verify Password</label>
                                     </div>
-                                @error('confirm_password')
-                                <p class="text-danger">{{ $message }}</p>
-                                @enderror
+                                    @error('confirm_password')
+                                        <p class="text-danger">{{ $message }}</p>
+                                    @enderror
                                 </div>
 
 
 
                                 <div class="col-12">
-                                    <button class="btn btn-animation w-100 justify-content-center" type="submit">Đổi mật khẩu</button>
+                                    <button class="btn btn-animation w-100 justify-content-center" type="submit">Đổi
+                                        mật khẩu</button>
                                 </div>
                             </form>
                         </div>
@@ -159,7 +164,7 @@
 </body>
 
 <script>
-    window.addEventListener('load', function () {
+    window.addEventListener('load', function() {
         let loader = document.querySelector('.fullpage-loader');
         console.log(loader)
         if (loader) { // Kiểm tra loader có tồn tại không
@@ -171,20 +176,23 @@
     });
 </script>
 <!-- Mirrored from themes.pixelstrap.com/fastkart/front-end/login.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 11 Feb 2025 13:59:13 GMT -->
+
 </html>
-<script>$(window).ready(function(){
-    $.notify({
-        title: "Thực hiện thao tác thành công!",
-        message: "{{ session('success') }}"
-    }, {
-        type: "primary",
-        delay: 5000
-    });
+<script>
+    $(window).ready(function() {
+        $.notify({
+            title: "Thực hiện thao tác thành công!",
+            message: "{{ session('success') }}"
+        }, {
+            type: "primary",
+            delay: 5000
+        });
 
 
-})</script>
+    })
+</script>
 @section('js')
-<script src="{{ asset('assets/js/config.js') }}"></script>
+    <script src="{{ asset('assets/js/config.js') }}"></script>
 
     <!-- bootstrap tag-input js -->
     <script src="{{ asset('assets/js/bootstrap-tagsinput.min.js') }}"></script>

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('quyens', function (Blueprint $table) {
             $table->id();
             $table->string('ten_quyen');
-            $table->string('slug');
+            $table->string('quyen_slug');
             $table->timestamps();
             $table->softDeletes();
         });
