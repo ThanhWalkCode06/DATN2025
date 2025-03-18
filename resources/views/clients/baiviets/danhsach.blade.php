@@ -23,7 +23,7 @@
                                         {{ \Carbon\Carbon::parse($baiViet->created_at)->format('d M, Y') }}
                                         &nbsp; | &nbsp;
                                         <i class="fa-regular fa-user me-1"></i>
-                                        {{ $baiViet->tac_gia ?? 'Admin' }}
+                                        {{ $baiViet->user->ten_nguoi_dung  }}
                                     </div>
 
                                     <a href="{{ route('baiviets.chitiet', $baiViet->id) }}">

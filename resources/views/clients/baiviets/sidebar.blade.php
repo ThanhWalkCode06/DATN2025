@@ -1,17 +1,63 @@
+<style>
+    .left-search-box {
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    position: relative;
+    width: 100%;
+}
+
+.search-box {
+    display: flex;
+    position: relative;
+    align-items: center;
+    width: 100%;
+}
+
+.search-input {
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    outline: none;
+    font-size: 14px;
+}
+
+.search-button {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    color: #555;
+}
+
+.search-button:hover {
+    color: #333;
+}
+
+
+</style>
 <div class="col-xxl-3 col-xl-4 col-lg-5">
     <div class="left-sidebar-box wow fadeInUp">
         <div class="accordion left-accordion-box" id="accordionExample">
 
             <div class="left-search-box">
-                <div class="search-box">
+                <div class="">
                     <form action="{{ route('baiviets.danhsach') }}" method="GET">
-                        <input type="text" class="form-control" name="search" id="searchInput"
-                            placeholder="Nhập tiêu đề bài viết..." value="{{ request('search') }}"
-                            onkeyup="handleSearch()">
-                        <button type="submit" style="display: none;"></button>
+                        <input type="text" class="form-control search-input" name="search" id="searchInput"
+                            placeholder="Nhập tiêu đề bài viết..." value="{{ request('search') }}">
+                        <button type="submit" class="search-button">
+                            <i class="fa fa-search"></i>
+                        </button>
                     </form>
                 </div>
             </div>
+
+
 
             <div class="accordion-item">
                 <h2 class="accordion-header">
