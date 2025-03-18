@@ -26,6 +26,7 @@ return new class extends Migration
             $table->string('email_owner')->default('thanhchillchill@gmail.com');
             $table->string('phone')->default('0387660612');
             $table->string('logo')->default('images/logo.png');
+            $table->string('client_logo')->default('images/logo-green.png');
             $table->timestamps();
         });
     }
