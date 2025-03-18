@@ -78,12 +78,12 @@
                                                 </div>
 
                                                 <div class="contact-detail-contain">
-                                                    <p>thanhnguyen062004@gmail.com</p>
+                                                    <p>starsseven.2025@gmail.com</p>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <div class="col-xxl-6 col-lg-12 col-sm-6">
+                                        {{-- <div class="col-xxl-6 col-lg-12 col-sm-6">
                                             <div class="contact-detail-box">
                                                 <div class="contact-icon">
                                                     <i class="fa-solid fa-location-dot"></i>
@@ -111,7 +111,7 @@
                                                     <p>Visitación de la Encina 22</p>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> --}}
                                     </div>
                                 </div>
                             </div>
