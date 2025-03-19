@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('title')
-    Thêm mới sản phẩm
+    Sửa sản phẩm    
 @endsection
 @section('css')
     <!-- Themify icon css -->
@@ -119,7 +119,7 @@ tr{
                 <div style="padding: 100px;" class="card">
                     <div class="card-body">
                         <div class="card-header-2">
-                            <h5>Thêm mới sản phẩm</h5>
+                            <h5>Sửa sản phẩm</h5>
                         </div>
 
                         <form id="mainForm" action="{{ route('sanphams.update',$sanpham->id) }}" method="POST" enctype="multipart/form-data">
@@ -208,7 +208,8 @@ tr{
                             @foreach ($thuocTinhs as $tt)
                                 <div class="mb-2">
                                     <label>{{ $tt->ten_thuoc_tinh }}</label>
-                                    <select name="attribute_values[{{ $tt->id }}][]" class="form-control select2" multiple>
+                                    <select name="attribute_values[{{ $tt->id }}][]" class="form-control select2" multiple
+                                        data-placeholder="{{ $tt->ten_thuoc_tinh == 'Size' ? 'Chọn Size' : ($tt->ten_thuoc_tinh == 'Color' ? 'Chọn Color' : 'Chọn ' . $tt->ten_thuoc_tinh) }}">
                                         @php
                                             // Nếu có biến thể, lấy từ biến thể, nếu không lấy từ checkedTT
                                             $selectedValues = isset($bienThe)
@@ -288,7 +289,7 @@ tr{
                             </table>
                             {{-- <input type="hidden" name="deleted_variants" id="deletedVariants" value="{{ old('deleted_variants', '[]') }}"> --}}
 
-
+                            <br>
                             <button type="submit" class="btn btn-primary">Lưu Sản Phẩm</button>
                         </form>
                     </div>
@@ -329,7 +330,21 @@ tr{
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 
-
+<script>
+    $(document).ready(function() {
+        $('.select2').select2({
+            placeholder: function() {
+                return $(this).attr('data-placeholder');
+            },
+            language: {
+                noResults: function() {
+                    return "Không tìm thấy kết quả";
+                }
+            },
+            allowClear: true
+        });
+    });
+</script>
 <script>
     $(document).ready(function () {
     $(".select2").select2({
