@@ -87,30 +87,24 @@
                     <div class="footer-title">
                         <h4>Danh mục sản phẩm</h4>
                     </div>
-
+                
                     <div class="footer-contain">
                         <ul>
-                            <li>
-                                <a href="shop-left-sidebar.html" class="text-content">Áo thể thao</a>
-                            </li>
-                            <li>
-                                <a href="shop-left-sidebar.html" class="text-content">Quần thể thao</a>
-                            </li>
-                            <li>
-                                <a href="shop-left-sidebar.html" class="text-content">Giày thể thao</a>
-                            </li>
-                            <li>
-                                <a href="shop-left-sidebar.html" class="text-content">Phụ kiện thể thao</a>
-                            </li>
-                            <li>
-                                <a href="shop-left-sidebar.html" class="text-content">Đồ tập gym</a>
-                            </li>
-                            <li>
-                                <a href="shop-left-sidebar.html" class="text-content">Bộ đồ thể thao</a>
-                            </li>
+                            @if(isset($danhMucs) && $danhMucs->count() > 0)
+                                @foreach ($danhMucs as $danhMuc)
+                                    <li>
+                                        <a href="{{ route('clientsanpham.danhsach', ['danh_muc_id' => $danhMuc->id]) }}" class="text-content">
+                                            {{ $danhMuc->ten_danh_muc }}
+                                        </a>
+                                    </li>
+                                @endforeach
+                            @else
+                                <li>Không có danh mục nào.</li>
+                            @endif
                         </ul>
                     </div>
                 </div>
+                
 
 
                 <div class="col-xl col-lg-2 col-sm-3">
