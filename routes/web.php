@@ -27,6 +27,7 @@ use App\Http\Controllers\Admins\Responsibility\RoleController;
 use App\Http\Controllers\Admins\Responsibility\PermissionController;
 use App\Http\Controllers\Clients\Auth\AuthController as AuthAuthController;
 
+
 // Login Admin Controller
 Route::prefix('/admin')->controller(AuthController::class)->group(function () {
     Route::get('/login', 'showLogin')->name('login');

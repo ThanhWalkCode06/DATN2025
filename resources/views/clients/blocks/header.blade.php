@@ -305,18 +305,6 @@
 
                                         <li class="nav-item dropdown">
                                             <a class="nav-link" href="{{ route('baiviets.danhsach') }}">Bài viết</a>
-                                            <ul class="dropdown-menu">
-                                                <li>
-                                                    <a class="dropdown-item" href="blog-detail.html">Blog
-                                                        Detail</a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item" href="blog-grid.html">Blog Grid</a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item" href="blog-list.html">Blog List</a>
-                                                </li>
-                                            </ul>
                                         </li>
 
                                         <li class="nav-item dropdown">
