@@ -175,23 +175,23 @@
                                     <div class="onhover-div onhover-div-login">
                                         <ul class="user-box-name">
                                             @if (!Auth::user())
-                                                <li class="product-box-contain">
-                                                    <i></i>
-                                                    <a href="{{ route('login.client') }}">Đăng nhập</a>
-                                                </li>
+                                            <li class="product-box-contain">
+                                                <i></i>
+                                                <a href="{{ route('login.client') }}">Đăng nhập</a>
+                                            </li>
                                             @else
-                                                <p>Xin chào <strong
-                                                        style="color: #0da487">{{ Auth::user()->username }}</strong>
-                                                </p>
-                                                <li class="product-box-contain">
-                                                    <a href="{{ route('users.chitiet') }}">Chi tiết tài
-                                                        khoản</a>
-                                                </li>
-                                                <li class="product-box-contain">
-                                                    <i></i>
-                                                    <a onclick="Logout(event)" href="#">Đăng xuất</a>
+                                            <p>Xin chào <strong
+                                                    style="color: #0da487">{{ Auth::user()->username }}</strong>
+                                            </p>
+                                            <li class="product-box-contain">
+                                                <a href="{{ route('users.chitiet') }}">Chi tiết tài
+                                                    khoản</a>
+                                            </li>
+                                            <li class="product-box-contain">
+                                                <i></i>
+                                                <a onclick="Logout(event)" href="#">Đăng xuất</a>
 
-                                                </li>
+                                            </li>
                                             @endif
 
                                             {{-- <li class="product-box-contain">
@@ -701,50 +701,11 @@
                                         </li>
 
                                         <li class="nav-item dropdown">
-                                            <a class="nav-link" href="{{ route('huongdans.danhsach') }}">Hướng
-                                                dẫn</a>
-                                            <ul class="dropdown-menu">
-                                                <li>
-                                                    <a class="dropdown-item" href="blog-detail.html">Blog
-                                                        Detail</a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item" href="blog-grid.html">Blog Grid</a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item" href="blog-list.html">Blog List</a>
-                                                </li>
-                                            </ul>
+                                            <a class="nav-link" href="{{ route('huongdans.danhsach') }}">Hướng dẫn</a>
                                         </li>
 
                                         <li class="nav-item dropdown">
                                             <a class="nav-link" href="{{ route('gioithieu.home') }}">Giới thiệu</a>
-                                            <ul class="dropdown-menu">
-                                                <li>
-                                                    <a class="dropdown-item" href="seller-become.html">Become a
-                                                        Seller</a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item" href="seller-dashboard.html">Seller
-                                                        Dashboard</a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item" href="seller-detail.html">Seller
-                                                        Detail</a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item" href="seller-detail-2.html">Seller
-                                                        Detail 2</a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item" href="seller-grid.html">Seller
-                                                        Grid</a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item" href="seller-grid-2.html">Seller Grid
-                                                        2</a>
-                                                </li>
-                                            </ul>
                                         </li>
 
                                         <li class="nav-item dropdown">
