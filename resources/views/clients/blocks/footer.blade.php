@@ -181,8 +181,7 @@
                                     <i data-feather="phone"></i>
                                     <div class="contact-number">
                                         <h6 class="text-content">Hotline 24/7 :</h6>
-                                        <h5>0987654321</h5>
-
+                                        <h5>{{ $globalSetting->phone ?? 'Chưa cập nhật' }}</h5>
                                     </div>
                                 </div>
                             </li>
@@ -191,9 +190,8 @@
                                 <div class="footer-number">
                                     <i data-feather="mail"></i>
                                     <div class="contact-number">
-                                        <h6 class="text-content">Địa chỉ Email :</h6>
-                                        <h5>starsseven.2025@gmail.com</h5>
-
+                                        <h6 class="text-content">Địa chỉ email :</h6>
+                                        <h5>{{ $globalSetting->email ?? 'Chưa cập nhật' }}</h5>
                                     </div>
                                 </div>
                             </li>
@@ -207,7 +205,7 @@
 
         <div class="sub-footer section-small-space">
             <div class="reserve">
-                <h6 class="text-content">©2025 {{ $globalSetting->name_website }}</h6>
+                <h6 class="text-content">©2025 {{ $globalSetting->name_website ?? 'Tên website chưa cập nhật' }}</h6>
             </div>
 
             <div class="payment">
