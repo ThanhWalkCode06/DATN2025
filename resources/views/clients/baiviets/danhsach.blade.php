@@ -33,8 +33,8 @@
                                     <p class="text-muted">{!! Str::limit(strip_tags($baiViet->noi_dung), 150) !!}</p>
 
                                     <button onclick="location.href = '{{ route('baiviets.chitiet', $baiViet->id) }}';"
-                                        class="blog-button">Read
-                                        More <i class="fa-solid fa-right-long"></i></button>
+                                        class="blog-button">Chi
+                                        Tiết <i class="fa-solid fa-right-long"></i></button>
                                 </div>
                             </div>
                         </div>
