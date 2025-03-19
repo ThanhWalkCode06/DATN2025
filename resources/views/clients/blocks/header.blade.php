@@ -18,7 +18,8 @@
                         <div class="notification-slider">
                             <div>
                                 <div class="timer-notification">
-                                    <h6><strong class="me-1">Chào mừng tới {{ $globalSetting->name_website ?? 'Seven Star' }}</strong>
+                                    <h6><strong class="me-1">Chào mừng tới
+                                            {{ $globalSetting->name_website ?? 'Seven Stars' }}</strong>
                                     </h6>
                                 </div>
                             </div>
@@ -37,10 +38,10 @@
             </div>
         </div>
     </div>
-</div>
+    </div>
 
     </div>
-</div>
+    </div>
 
 
     <div class="top-nav top-header sticky-header">
@@ -55,8 +56,8 @@
                             </span>
                         </button>
                         <a href="{{ route('home') }}" class="web-logo nav-logo">
-                            <img style="width: 100px" src="{{ Storage::url($globalSetting->logo ?? 'images/logo.png') }}" class="img-fluid blur-up lazyload"
-                                alt="">
+                            <img src="{{ Storage::url($globalSetting->client_logo ?? 'images/logo-green.png') }}"
+                                class="img-fluid blur-up lazyload" alt="">
                         </a>
 
                         <div class="middle-box">
@@ -177,21 +178,23 @@
                                     <div class="onhover-div onhover-div-login">
                                         <ul class="user-box-name">
                                             @if (!Auth::user())
-                                            <li class="product-box-contain">
-                                                <i></i>
-                                                <a href="{{ route('login.client') }}">Đăng nhập</a>
-                                            </li>
+                                                <li class="product-box-contain">
+                                                    <i></i>
+                                                    <a href="{{ route('login.client') }}">Đăng nhập</a>
+                                                </li>
                                             @else
-                                            <p>Xin chào <strong style="color: #0da487">{{ Auth::user()->username }}</strong></p>
-                                            <li class="product-box-contain">
-                                                <a href="{{ route('users.chitiet') }}">Chi tiết tài
-                                                    khoản</a>
-                                            </li>
-                                            <li class="product-box-contain">
-                                                <i></i>
-                                                <a onclick="Logout(event)" href="#">Đăng xuất</a>
+                                                <p>Xin chào <strong
+                                                        style="color: #0da487">{{ Auth::user()->username }}</strong>
+                                                </p>
+                                                <li class="product-box-contain">
+                                                    <a href="{{ route('users.chitiet') }}">Chi tiết tài
+                                                        khoản</a>
+                                                </li>
+                                                <li class="product-box-contain">
+                                                    <i></i>
+                                                    <a onclick="Logout(event)" href="#">Đăng xuất</a>
 
-                                            </li>
+                                                </li>
                                             @endif
 
                                             {{-- <li class="product-box-contain">
@@ -317,7 +320,8 @@
                                         </li>
 
                                         <li class="nav-item dropdown">
-                                            <a class="nav-link" href="{{ route('huongdans.danhsach') }}">Hướng dẫn</a>
+                                            <a class="nav-link" href="{{ route('huongdans.danhsach') }}">Hướng
+                                                dẫn</a>
                                             <ul class="dropdown-menu">
                                                 <li>
                                                     <a class="dropdown-item" href="blog-detail.html">Blog
