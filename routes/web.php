@@ -129,6 +129,7 @@ Route::get('/sanpham/{id}', [App\Http\Controllers\Clients\SanPhamController::cla
 
 Route::get('/sanphamyeuthich', [App\Http\Controllers\Clients\SanPhamController::class, 'sanPhamYeuThich'])->name('sanphams.sanphamyeuthich');
 Route::delete('/xoa-yeu-thich/{id}', [App\Http\Controllers\Clients\SanPhamController::class, 'xoaYeuThich']);
+Route::post('/them-yeu-thich/{id}', [App\Http\Controllers\Clients\SanPhamController::class, 'addsanPhamYeuThich'])->name('add.wishlist');
 
 
 Route::get('/baiviet', [App\Http\Controllers\Clients\BaiVietController::class, 'danhSach'])->name('baiviets.danhsach');

@@ -64,12 +64,26 @@ class SanPhamController extends Controller
     public function addsanPhamYeuThich(string $id)
     {
         $user = Auth::user();
+        $tam =
+        `<li data-bs-toggle="tooltip" data-bs-placement="top" title="Wishlist">
+            <a href="#" class="notifi-wishlist">
+                <i data-feather="heart"></i>
+            </a>
+            <form action="{{ route('add.wishlist',1) }}" method="POST" class="wishlist-form">
+                @csrf
+            </form>
+        </li>`;
         if($user){
-            $user->sanPhamYeuThichs()->attach($id);
+            if(!$user->sanPhamYeuThichs()->where('san_pham_id', $id)->exists()){
+                $user->sanPhamYeuThichs()->attach($id);
+                return response()->json(['message' => 'Thêm thành công vào danh sách yêu thích!'], 200);
+            }else{
+                return response()->json(['success' => false, 'message' => 'Sản phẩm đã tồn tại trong danh sách!'], 500);
+            }
         }else{
-            return redirect()->back()->with(['error' => 'Vui lòng đăng nhập để sử dụng tính năng']);
+            return response()->json(['success' => false, 'message' => 'Bạn chưa đăng nhập!'], 401);
         }
-        return view('clients.sanphams.sanphamyeuthich',compact('user'));
+
     }
 
     public function xoaYeuThich($id)
