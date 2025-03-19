@@ -33,7 +33,7 @@ Giới thiệu
 @endsection
 
 @section('content')
-<!-- Seven Star Sportswear Section Start -->
+<!-- Seven Stars Sportswear Section Start -->
 <section class="sportswear-section section-lg-space">
     <div class="container-fluid-lg">
         <div class="row gx-xl-5 gy-xl-0 g-3 ratio_148_1">
@@ -43,8 +43,8 @@ Giới thiệu
                     <div class="col-6">
                         <div class="sports-image">
                             <div>
-                                <img src="https://media3.coolmate.me/cdn-cgi/image/quality=80,format=auto/uploads/April2024/24CMAW.AT011.1_91.jpg" class="bg-img blur-up lazyload"
-                                    alt="Sportswear Collection">
+                                <img src="https://media3.coolmate.me/cdn-cgi/image/quality=80,format=auto/uploads/April2024/24CMAW.AT011.1_91.jpg"
+                                    class="bg-img blur-up lazyload" alt="Sportswear Collection">
                             </div>
                         </div>
                     </div>
@@ -52,8 +52,8 @@ Giới thiệu
                     <div class="col-6">
                         <div class="sports-image">
                             <div>
-                                <img src="https://donex.vn/upload/image/product/36950104_1.jpg" class="bg-img blur-up lazyload"
-                                    alt="Latest Sportswear">
+                                <img src="https://donex.vn/upload/image/product/36950104_1.jpg"
+                                    class="bg-img blur-up lazyload" alt="Latest Sportswear">
                             </div>
                         </div>
                     </div>
@@ -65,15 +65,18 @@ Giới thiệu
                 <div class="sportswear-contain p-center-left">
                     <div>
                         <div class="review-title">
-                            <h4>About Seven Star</h4>
+                            <h4>About Seven Stars</h4>
                             <h2>Elevate Your Performance with Our Sportswear</h2>
                         </div>
 
                         <div class="product-info">
                             <p class="text-content">
-                                Seven Star is your ultimate destination for premium sportswear. Whether you're hitting the gym,
-                                running on the track, or engaging in your favorite sport, our high-performance apparel keeps you
-                                comfortable and stylish. Designed for athletes, by athletes, our collection ensures flexibility,
+                                Seven Stars is your ultimate destination for premium sportswear. Whether you're hitting
+                                the gym,
+                                running on the track, or engaging in your favorite sport, our high-performance apparel
+                                keeps you
+                                comfortable and stylish. Designed for athletes, by athletes, our collection ensures
+                                flexibility,
                                 durability, and breathability to enhance your every move.
                             </p>
 
@@ -81,7 +84,8 @@ Giới thiệu
                                 <li>
                                     <div class="highlight-box">
                                         <div class="highlight-icon">
-                                            <img src="assets/icons/fast-delivery.svg" class="blur-up lazyload" alt="">
+                                            <img src="assets/icons/fast-delivery.svg" class="blur-up lazyload"
+                                                alt="">
                                         </div>
 
                                         <div class="highlight-detail">
@@ -93,7 +97,8 @@ Giới thiệu
                                 <li>
                                     <div class="highlight-box">
                                         <div class="highlight-icon">
-                                            <img src="assets/icons/premium-quality.svg" class="blur-up lazyload" alt="">
+                                            <img src="assets/icons/premium-quality.svg" class="blur-up lazyload"
+                                                alt="">
                                         </div>
 
                                         <div class="highlight-detail">
@@ -105,7 +110,8 @@ Giới thiệu
                                 <li>
                                     <div class="highlight-box">
                                         <div class="highlight-icon">
-                                            <img src="assets/icons/sports-performance.svg" class="blur-up lazyload" alt="">
+                                            <img src="assets/icons/sports-performance.svg" class="blur-up lazyload"
+                                                alt="">
                                         </div>
 
                                         <div class="highlight-detail">
@@ -117,7 +123,8 @@ Giới thiệu
                                 <li>
                                     <div class="highlight-box">
                                         <div class="highlight-icon">
-                                            <img src="assets/icons/trendy-style.svg" class="blur-up lazyload" alt="">
+                                            <img src="assets/icons/trendy-style.svg" class="blur-up lazyload"
+                                                alt="">
                                         </div>
 
                                         <div class="highlight-detail">
@@ -133,7 +140,7 @@ Giới thiệu
         </div>
     </div>
 </section>
-<!-- Seven Star Sportswear Section End -->
+<!-- Seven Stars Sportswear Section End -->
 
 <!-- Client Section Start -->
 <section class="client-section section-lg-space">
@@ -142,18 +149,20 @@ Giới thiệu
             <div class="col-12">
                 <div class="about-us-title text-center">
                     <h4>Về Chúng Tôi</h4>
-                    <h2 class="center">Seven Star - Niềm Tin Của Khách Hàng</h2>
+                    <h2 class="center">Seven Stars - Niềm Tin Của Khách Hàng</h2>
                 </div>
 
                 <div class="slider-3_1 product-wrapper">
                     <div>
                         <div class="clint-contain">
                             <div class="client-icon">
-                                <img src="../assets/images/icons/experience.svg" class="blur-up lazyload" alt="">
+                                <img src="../assets/images/icons/experience.svg" class="blur-up lazyload"
+                                    alt="">
                             </div>
                             <h2>10+</h2>
                             <h4>Năm Kinh Nghiệm</h4>
-                            <p>Seven Star tự hào với hơn 10 năm hoạt động trong ngành thời trang thể thao, mang đến những sản phẩm chất lượng cao cho khách hàng.</p>
+                            <p>Seven Stars tự hào với hơn 10 năm hoạt động trong ngành thời trang thể thao, mang đến
+                                những sản phẩm chất lượng cao cho khách hàng.</p>
                         </div>
                     </div>
 
@@ -164,18 +173,21 @@ Giới thiệu
                             </div>
                             <h2>100K+</h2>
                             <h4>Sản Phẩm Đã Bán</h4>
-                            <p>Chúng tôi đã cung cấp hơn 100,000 sản phẩm đến tay khách hàng, khẳng định chất lượng và sự tin cậy trong ngành thời trang thể thao.</p>
+                            <p>Chúng tôi đã cung cấp hơn 100,000 sản phẩm đến tay khách hàng, khẳng định chất lượng và
+                                sự tin cậy trong ngành thời trang thể thao.</p>
                         </div>
                     </div>
 
                     <div>
                         <div class="clint-contain">
                             <div class="client-icon">
-                                <img src="../assets/images/icons/happy-customers.svg" class="blur-up lazyload" alt="">
+                                <img src="../assets/images/icons/happy-customers.svg" class="blur-up lazyload"
+                                    alt="">
                             </div>
                             <h2>95%</h2>
                             <h4>Khách Hàng Hài Lòng</h4>
-                            <p>Với chất lượng sản phẩm và dịch vụ tận tâm, 95% khách hàng của chúng tôi đều hài lòng và quay lại mua sắm lần sau.</p>
+                            <p>Với chất lượng sản phẩm và dịch vụ tận tâm, 95% khách hàng của chúng tôi đều hài lòng và
+                                quay lại mua sắm lần sau.</p>
                         </div>
                     </div>
                 </div>
@@ -189,7 +201,7 @@ Giới thiệu
     <div class="container-fluid-lg">
         <div class="about-us-title text-center">
             <h4 class="text-content">Đội ngũ sáng tạo</h4>
-            <h2 class="center">Seven Star</h2>
+            <h2 class="center">Seven Stars</h2>
         </div>
         <div class="row">
             <div class="col-12">
@@ -199,12 +211,13 @@ Giới thiệu
                     <div>
                         <div class="team-box">
                             <div class="team-image">
-                                <img src="../assets/images/team/bach.jpg" class="img-fluid blur-up lazyload" alt="Lê Minh Bách">
+                                <img src="../assets/images/team/bach.jpg" class="img-fluid blur-up lazyload"
+                                    alt="Lê Minh Bách">
                             </div>
                             <div class="team-name">
                                 <h3>Lê Minh Bách</h3>
                                 <h5>CEO & Founder</h5>
-                                <p>Leading Seven Star towards innovation in sports fashion.</p>
+                                <p>Leading Seven Stars towards innovation in sports fashion.</p>
                             </div>
                         </div>
                     </div>
@@ -213,10 +226,11 @@ Giới thiệu
                     <div>
                         <div class="team-box">
                             <div class="team-image">
-                                <img src="../assets/images/team/duc.jpg" class="img-fluid blur-up lazyload" alt="Trần Văn Đức">
+                                <img src="../assets/images/team/duc.jpg" class="img-fluid blur-up lazyload"
+                                    alt="Nguyễn Văn Đức">
                             </div>
                             <div class="team-name">
-                                <h3>Trần Văn Đức</h3>
+                                <h3>Nguyễn Văn Đức</h3>
                                 <h5>Head of Design</h5>
                                 <p>Creating stylish and functional sportswear.</p>
                             </div>
@@ -227,12 +241,13 @@ Giới thiệu
                     <div>
                         <div class="team-box">
                             <div class="team-image">
-                                <img src="../assets/images/team/liem.jpg" class="img-fluid blur-up lazyload" alt="Nguyễn Văn Liêm">
+                                <img src="../assets/images/team/liem.jpg" class="img-fluid blur-up lazyload"
+                                    alt="Nguyễn Văn Liêm">
                             </div>
                             <div class="team-name">
                                 <h3>Nguyễn Văn Liêm</h3>
                                 <h5>Marketing Director</h5>
-                                <p>Spreading the Seven Star brand worldwide.</p>
+                                <p>Spreading the Seven Stars brand worldwide.</p>
                             </div>
                         </div>
                     </div>
@@ -241,7 +256,8 @@ Giới thiệu
                     <div>
                         <div class="team-box">
                             <div class="team-image">
-                                <img src="../assets/images/team/binh.jpg" class="img-fluid blur-up lazyload" alt="Phan Xuân Bình">
+                                <img src="../assets/images/team/binh.jpg" class="img-fluid blur-up lazyload"
+                                    alt="Phan Xuân Bình">
                             </div>
                             <div class="team-name">
                                 <h3>Phan Xuân Bình</h3>
@@ -255,10 +271,11 @@ Giới thiệu
                     <div>
                         <div class="team-box">
                             <div class="team-image">
-                                <img src="../assets/images/team/nhat.jpg" class="img-fluid blur-up lazyload" alt="Nguyễn Minh Nhật">
+                                <img src="../assets/images/team/nhat.jpg" class="img-fluid blur-up lazyload"
+                                    alt=" Minh Nhật">
                             </div>
                             <div class="team-name">
-                                <h3>Nguyễn Minh Nhật</h3>
+                                <h3> Minh Nhật</h3>
                                 <h5>Lead Developer</h5>
                                 <p>Building the best online shopping experience.</p>
                             </div>
@@ -269,7 +286,8 @@ Giới thiệu
                     <div>
                         <div class="team-box">
                             <div class="team-image">
-                                <img src="../assets/images/team/thanh.jpg" class="img-fluid blur-up lazyload" alt="Lê Văn Thanh">
+                                <img src="../assets/images/team/thanh.jpg" class="img-fluid blur-up lazyload"
+                                    alt="Lê Văn Thanh">
                             </div>
                             <div class="team-name">
                                 <h3>Lê Văn Thanh</h3>
@@ -283,10 +301,11 @@ Giới thiệu
                     <div>
                         <div class="team-box">
                             <div class="team-image">
-                                <img src="../assets/images/team/phuc.jpg" class="img-fluid blur-up lazyload" alt="Nguyễn Thọ Phúc">
+                                <img src="../assets/images/team/phuc.jpg" class="img-fluid blur-up lazyload"
+                                    alt="Nguyễn Thọ Phúc">
                             </div>
                             <div class="team-name">
-                                <h3>New Member</h3>
+                                <h3>Nguyễn Thọ Phúc</h3>
                                 <h5>Position</h5>
                                 <p>Expanding our team for better services.</p>
                             </div>
@@ -311,7 +330,7 @@ Giới thiệu
             <div class="col-12">
                 <div class="slider-4-half product-wrapper">
                     @forelse($danhGias as $danhGia)
-                    @if($danhGia->so_sao == 5)
+                    @if ($danhGia->so_sao == 5)
                     <div>
                         <div class="reviewer-box">
                             <i class="fa-solid fa-quote-right"></i>
@@ -319,7 +338,8 @@ Giới thiệu
                                 <ul class="rating">
                                     @for ($i = 1; $i <= 5; $i++)
                                         <li>
-                                        <i data-feather="star" class="{{ $i <= $danhGia->so_sao ? 'fill' : '' }}"></i>
+                                        <i data-feather="star"
+                                            class="{{ $i <= $danhGia->so_sao ? 'fill' : '' }}"></i>
                                         </li>
                                         @endfor
                                 </ul>
@@ -331,11 +351,12 @@ Giới thiệu
 
                             <div class="reviewer-profile">
                                 <div class="reviewer-image">
-                                    <img src="{{ asset($danhGia->user->anh_dai_dien ?? 'default-avatar.jpg') }}" alt="Ảnh đại diện">
+                                    <img src="{{ asset($danhGia->user->anh_dai_dien ?? 'default-avatar.jpg') }}"
+                                        alt="Ảnh đại diện">
                                 </div>
 
                                 <div class="reviewer-name">
-                                    <h4>{{ $danhGia->ten_nguoi_dung}}</h4>
+                                    <h4>{{ $danhGia->ten_nguoi_dung }}</h4>
                                 </div>
                             </div>
                         </div>
@@ -362,19 +383,21 @@ Giới thiệu
         <div class="row">
             <div class="col-12">
                 <div class="slider-5 ratio_87">
-                    @if(isset($baiViets) && $baiViets->count() > 0)
-                    @foreach($baiViets as $baiViet)
+                    @if (isset($baiViets) && $baiViets->count() > 0)
+                    @foreach ($baiViets as $baiViet)
                     <div>
                         <div class="blog-box">
                             <div class="blog-box-image">
                                 <div class="blog-image">
                                     <a href="{{ route('baiviets.chitiet', $baiViet->id) }}" class="rounded-3">
-                                        <img src="{{ asset($baiViet->anh_bia) }}" class="bg-img blur-up lazyload" alt="{{ $baiViet->tieu_de }}">
+                                        <img src="{{ asset($baiViet->anh_bia) }}"
+                                            class="bg-img blur-up lazyload" alt="{{ $baiViet->tieu_de }}">
                                     </a>
                                 </div>
                             </div>
 
-                            <a href="{{ route('baiviets.chitiet', $baiViet->id) }}" class="blog-detail d-block">
+                            <a href="{{ route('baiviets.chitiet', $baiViet->id) }}"
+                                class="blog-detail d-block">
                                 <h6>{{ $baiViet->danhMuc->ten_danh_muc ?? 'Chưa có danh mục' }}</h6>
                                 <h5>{{ $baiViet->tieu_de }}</h5>
                             </a>

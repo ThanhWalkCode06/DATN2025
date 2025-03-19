@@ -217,12 +217,16 @@ class SanPhamController extends Controller
      * Display the specified resource.
      */
     public function show($id)
-    {
-        $bienThe = DB::table('san_phams')->where('id',$id)->first();
-        // dd($bienThe->ten_san_pham);
-        // dd($sanPham);
-        return view('admins.sanphams.show', compact('bienThe'));
-    }
+{
+    $sanPham = SanPham::with(['danhMuc', 'bienThes'])->findOrFail($id);
+
+    return view('admins.sanphams.show', compact('sanPham'));
+}
+    
+    
+
+    
+
 
     /**
      * Show the form for editing the specified resource.
