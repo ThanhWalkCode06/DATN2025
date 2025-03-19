@@ -156,7 +156,7 @@
                                 </form>
                                 <div class="mt-5 d-flex justify-content-between">
                                     <a href="{{ route('users.index') }}" class="btn btn-secondary">Quay lại</a>
-                                    <button class="btn btn-primary" type="submit">Sửa</button>
+                                    <button class="btn btn-primary" type="submit">Cập nhật</button>
                                 </div>
                             </div>
 

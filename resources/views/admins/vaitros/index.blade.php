@@ -88,6 +88,11 @@
 
                                     <td>
                                         <ul>
+                                            <li>
+                                                <a href="{{ route('roles.show', $item->id) }}">
+                                                    <i class="ri-eye-line"></i>
+                                                </a>
+                                            </li>
                                             @if($item->name != 'SuperAdmin')
                                             <li>
                                                 <a href="{{ route('roles.edit', $item->id) }}">

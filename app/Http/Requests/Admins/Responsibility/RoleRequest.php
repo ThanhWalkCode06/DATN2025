@@ -25,7 +25,7 @@ class RoleRequest extends FormRequest
         return [
             'name' => [
                 'required',
-                Rule::unique('roles', 'name')->ignore($this->route('roles'))
+                Rule::unique('roles', 'name')->whereNull('deleted_at')->ignore($this->route('roles'))
             ],
 
         ];

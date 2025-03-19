@@ -27,7 +27,7 @@
                             </div>
 
                             <div class="service-detail">
-                                <h5>Miễn phí giao hàng cho đơn hàng trên 1.000.000 VNĐ</h5>
+                                <h5>Giao hàng nhanh chóng</h5>
                             </div>
                         </div>
 
@@ -60,33 +60,32 @@
                 <div class="col-xl-3 col-lg-4 col-sm-6">
                     <div class="footer-logo">
                         <div class="theme-logo">
-                            <a href="index.html">
-                                <img src="{{ Storage::url('images/logo-green.png') }}" class="blur-up lazyload"
-                                    alt="">
-                            </a>
+                            <a href="{{ route('home') }}">
+                                <img style="width: 200px; height: 100px" src="{{ Storage::url($globalSetting->logo ?? '/images/logo.png') }}" class="blur-up lazyload" alt="">
                         </div>
 
                         <div class="footer-logo-contain">
                             <p>Chúng tôi chuyên cung cấp quần áo thể thao chất lượng cao, giúp bạn tự tin và thoải mái
                                 trong mọi hoạt động.</p>
-
                             <ul class="address">
                                 <li>
                                     <i data-feather="home"></i>
-                                    <a href="javascript:void(0)">1418 Riverwood Drive, CA 96052, Mỹ</a>
+                                    <a href="https://www.google.com/maps/place/Tr%C6%B0%E1%BB%9Dng+Cao+%C4%91%E1%BA%B3ng+FPT+Polytechnic/@21.0381348,105.7446869,17z/data=!3m1!4b1!4m6!3m5!1s0x313455e940879933:0xcf10b34e9f1a03df!8m2!3d21.0381298!4d105.7472618!16s%2Fg%2F11krd97y__?entry=ttu&g_ep=EgoyMDI1MDMxMi4wIKXMDSoASAFQAw%3D%3D">
+                                    Tòa nhà FPT Polytechnic.</a>
                                 </li>
                                 <li>
                                     <i data-feather="mail"></i>
-                                    <a href="javascript:void(0)">support@fastkart.com</a>
+                                    <a href="javascript:void(0)">starsseven.2025@gmail.com</a>
                                 </li>
                             </ul>
+
                         </div>
 
                     </div>
                 </div>
                 <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
                     <div class="footer-title">
-                        <h4>Danh mục</h4>
+                        <h4>Danh mục sản phẩm</h4>
                     </div>
 
                     <div class="footer-contain">
@@ -116,7 +115,7 @@
 
                 <div class="col-xl col-lg-2 col-sm-3">
                     <div class="footer-title">
-                        <h4>Liên kết hữu ích</h4>
+                        <h4>Chính sách</h4>
                     </div>
 
                     <div class="footer-contain">
@@ -143,7 +142,7 @@
 
                 <div class="col-xl-2 col-sm-3">
                     <div class="footer-title">
-                        <h4>Trung tâm hỗ trợ</h4>
+                        <h4>Hỗ trợ</h4>
                     </div>
 
                     <div class="footer-contain">
@@ -182,7 +181,8 @@
                                     <i data-feather="phone"></i>
                                     <div class="contact-number">
                                         <h6 class="text-content">Hotline 24/7 :</h6>
-                                        <h5>+91 888 104 2340</h5>
+                                        <h5>0987654321</h5>
+
                                     </div>
                                 </div>
                             </li>
@@ -192,28 +192,12 @@
                                     <i data-feather="mail"></i>
                                     <div class="contact-number">
                                         <h6 class="text-content">Địa chỉ Email :</h6>
-                                        <h5>fastkart@hotmail.com</h5>
+                                        <h5>starsseven.2025@gmail.com</h5>
+
                                     </div>
                                 </div>
                             </li>
 
-                            {{-- <li class="social-app mb-0">
-                                <h5 class="mb-2 text-content">Tải ứng dụng :</h5>
-                                <ul>
-                                    <li class="mb-0">
-                                        <a href="https://play.google.com/store/apps" target="_blank">
-                                            <img src="https://themes.pixelstrap.com/fastkart/assets/client/images/playstore.svg"
-                                                class="blur-up lazyload" alt="Google Play">
-                                        </a>
-                                    </li>
-                                    <li class="mb-0">
-                                        <a href="https://www.apple.com/in/app-store/" target="_blank">
-                                            <img src="https://themes.pixelstrap.com/fastkart/assets/client/images/appstore.svg"
-                                                class="blur-up lazyload" alt="App Store">
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li> --}}
                         </ul>
                     </div>
                 </div>
@@ -223,7 +207,7 @@
 
         <div class="sub-footer section-small-space">
             <div class="reserve">
-                <h6 class="text-content">©2025 Seven Stars. </h6>
+                <h6 class="text-content">©2025 {{ $globalSetting->name_website }}</h6>
             </div>
 
             <div class="payment">
@@ -238,21 +222,7 @@
                             <i class="fa-brands fa-facebook-f"></i>
                         </a>
                     </li>
-                    <li>
-                        <a href="https://twitter.com/" target="_blank">
-                            <i class="fa-brands fa-twitter"></i>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="https://www.instagram.com/" target="_blank">
-                            <i class="fa-brands fa-instagram"></i>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="https://in.pinterest.com/" target="_blank">
-                            <i class="fa-brands fa-pinterest-p"></i>
-                        </a>
-                    </li>
+
                 </ul>
             </div>
         </div>

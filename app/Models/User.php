@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -33,6 +34,14 @@ class User extends Authenticatable
 
 
     ];
+
+    public function sanPhamYeuThichs(){
+        return $this->belongsToMany(SanPham::class,'san_pham_yeu_thichs', 'user_id', 'san_pham_id');
+    }
+
+    public function donHangs(){
+        return $this->hasMany(DonHang::class, 'user_id');
+    }
 
     /**
      * The attributes that should be hidden for serialization.

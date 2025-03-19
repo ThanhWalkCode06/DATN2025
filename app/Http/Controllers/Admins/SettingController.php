@@ -21,14 +21,21 @@ class SettingController extends Controller
         }else if($request->isMethod('post')){
 
         $data = $request->validate([
-            'logo' => 'required|image',
+            'logo' => 'image',
+            'location' => 'required',
+            'name_website' => 'required',
+            'email_owner' => 'required',
+            'phone' => 'required',
         ],
         [
             'logo.required' => 'Logo không được bỏ trống',
+            'location.required' => 'Logo không được bỏ trống',
+            'name_website.required' => 'Logo không được bỏ trống',
+            'phone.required' => 'Logo không được bỏ trống',
             'logo.image' => 'Logo phải là một hình ảnh',
             'logo.mimes' => 'Logo phải có đuôi.jpg,.png,.gif',
             'logo.max' => 'Kích thước logo phải nhỏ hơn 2MB',
-            // 'logo.dimensions' => 'Logo phải có kích thước 1920x1080 pixels', // Có thể thêm điều kiện kích thước ảnh này
+            'email_owner.required' => 'Vui lòng nhập mail chủ sở hữu',
 
         ]);
         $setting = Setting::first(); // Lấy setting hiện tại
@@ -37,16 +44,16 @@ class SettingController extends Controller
         }
         // dd(Storage::exists("public/".$setting->logo),"app/public/".$setting->logo);
         if ($request->hasFile('logo')) {
-            if($setting->logo && Storage::exists("public/".$setting->logo)) {
+            if($setting->logo && Storage::exists("public/".$setting->logo) ) {
                 Storage::delete("public/".$setting->logo);
             }
             $logoPath = $request->file('logo')->store('logos', 'public'); // Lưu vào storage/public/logos
-            $setting->logo = $logoPath;
+            $data['logo'] = $logoPath;
         }
-
+        $setting->fill($data);
         $setting->save();
 
-        return back()->with('success', 'Cập nhật logo thành công!');
+        return back()->with('success', 'Cập nhật thành công!');
     }
         //     $data = $request->except('_token');
         //     // dd($data);

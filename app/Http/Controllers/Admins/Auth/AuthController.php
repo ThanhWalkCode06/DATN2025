@@ -19,7 +19,11 @@ class AuthController extends Controller
      */
     public function showLogin()
     {
-        return view('admins.auth.login');
+        if(!Auth::user()){
+            return view('admins.auth.login');
+        }else{
+            return redirect()->route('index');
+        }
     }
 
     /**
@@ -38,24 +42,31 @@ class AuthController extends Controller
     ]);
 
         if (Auth::attempt($user)) {
-            if ($request->remember_token == true) {
-                // dd($request->remember_token);
-                $currentUser = Auth::user();
-                $currentUser->remember_token = $request->remember_token;
-                $currentUser->save();
+            $userAd = Auth::user();
+            if($userAd->roles->isNotEmpty()){
+                if ($request->remember_token == true) {
+                    // dd($request->remember_token);
+                    $currentUser = Auth::user();
+                    $currentUser->remember_token = $request->remember_token;
+                    $currentUser->save();
 
-                setcookie('remember_token', $request->remember_token, time() + (86400 * 30), "/"); // 30 ngày
-                setcookie('username', $request->username, time() + (86400 * 30), "/");
+                    setcookie('remember_token', $request->remember_token, time() + (86400 * 30), "/"); // 30 ngày
+                    setcookie('username', $request->username, time() + (86400 * 30), "/");
+                }
+                $userName = Auth::user()->username;
+                // dd($userName);
+                // $roles = Auth::user()->getRoleNames()->first();
+                // dd($roles);
+                session(['userName' => $userName]);
+                return  redirect()->route('index');
+            }else{
+                return redirect()->back()->withErrors([
+                    'error' => 'Bạn không có quyền truy cập trang'
+                ]);
             }
-            $userName = Auth::user()->username;
-            // dd($userName);
-            // $roles = Auth::user()->getRoleNames()->first();
-            // dd($roles);
-            session(['userName' => $userName]);
-            return  redirect()->route('index');
         }
         return redirect()->back()->withErrors([
-            'error' => 'Username or password incorrect'
+            'error' => 'Tài khoản mật khẩu không đúng'
         ]);
     }
 
@@ -96,7 +107,7 @@ class AuthController extends Controller
                 ['email' => $email],
                 ['token' => $token, 'created_at' => now()]
             );
-            Mail::to($email)->send(new ResetPass($token));
+            Mail::to($email)->send(new ResetPass($token,'admin'));
             return redirect()->route('login')->withErrors(['error' => 'Bạn đã có thể vào gmail để lấy đường link lấy lại mật khẩu!']);
         }
         return redirect()->back()->withErrors([

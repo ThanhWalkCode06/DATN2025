@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\GiaTriThuocTinhController;
+use App\Models\SanPham;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LienHeController;
@@ -11,18 +11,21 @@ use App\Http\Controllers\DanhGiaController;
 use App\Http\Controllers\DonHangController;
 use App\Http\Controllers\SanPhamController;
 use App\Http\Controllers\ThongKeController;
+use App\Http\Controllers\HelperCommon\Helper;
 use App\Http\Controllers\ThuocTinhController;
+
 use App\Http\Controllers\Admins\UserController;
-
 use App\Http\Controllers\PhieuGiamGiaController;
-use App\Http\Controllers\Admins\SettingController;
 
+use App\Http\Controllers\Admins\SettingController;
 use App\Http\Controllers\DanhMucBaiVietController;
 use App\Http\Controllers\DanhMucSanPhamController;
+use App\Http\Controllers\GiaTriThuocTinhController;
 use App\Http\Controllers\Admins\Auth\AuthController;
+use App\Http\Controllers\ClientDanhMucSanPhamController;
 use App\Http\Controllers\Admins\Responsibility\RoleController;
 use App\Http\Controllers\Admins\Responsibility\PermissionController;
-use App\Http\Controllers\HelperCommon\Helper;
+use App\Http\Controllers\Clients\Auth\AuthController as AuthAuthController;
 
 
 // Login Admin Controller
@@ -99,12 +102,37 @@ Route::prefix('admin')->middleware(['auth', 'checkStatus'])->group(function () {
 // });
 
 Route::get('/', function () {
-    return view('clients.index');
+    $sanPhams = SanPham::orderBy('gia_moi', 'asc')->take(8)->get();
+    return view('clients.index', compact('sanPhams'));
 })->name('home');
+
+Route::controller(App\Http\Controllers\Clients\Auth\AuthController::class)->group( function() {
+    Route::get('/login', 'showLogin')->name('login.client');
+    Route::post('/login/store', 'storeLogin')->name('login.store.client');
+
+    Route::get('/register', 'showRegister')->name('register.client');
+    Route::post('/register/restore', 'storeRegister')->name('register.store.client');
+
+    Route::get('/forgetPass', 'showForgetPass')->name('pass.forget.client');
+    Route::post('/forgetPass/restore', 'sendLinkForgetPass')->name('pass.sendLinkForgetPass.client');
+
+    Route::get('/getTokenOfPass/{token}', 'showResetPass')->name('showResetPass.client');
+    Route::post('/getTokenOfPass/{token}/restore', 'storeResetPass')->name('storeResetPass.store.client');
+
+    Route::get('/pass/edit', 'editPass')->name('pass.edit.client');
+    Route::post('/pass/update', 'updatePass')->name('pass.update.client');
+
+    Route::get('/logout', 'logout')->name('logout.client');
+});
+
+
 
 Route::get('/sanpham', [App\Http\Controllers\Clients\SanPhamController::class, 'danhSach'])->name('sanphams.danhsach');
 Route::get('/sanpham/{id}', [App\Http\Controllers\Clients\SanPhamController::class, 'chiTiet'])->name('sanphams.chitiet');
+
 Route::get('/sanphamyeuthich', [App\Http\Controllers\Clients\SanPhamController::class, 'sanPhamYeuThich'])->name('sanphams.sanphamyeuthich');
+Route::delete('/xoa-yeu-thich/{id}', [App\Http\Controllers\Clients\SanPhamController::class, 'xoaYeuThich']);
+
 
 Route::get('/baiviet', [App\Http\Controllers\Clients\BaiVietController::class, 'danhSach'])->name('baiviets.danhsach');
 Route::get('/baiviet/{id}', [App\Http\Controllers\Clients\BaiVietController::class, 'chiTiet'])->name('baiviets.chitiet');
@@ -116,8 +144,16 @@ Route::get('/giohang', [App\Http\Controllers\Clients\ThanhToanController::class,
 Route::get('/thanhtoan', [App\Http\Controllers\Clients\ThanhToanController::class, 'thanhToan'])->name('thanhtoans.thanhtoan');
 Route::get('/dathangthanhcong', [App\Http\Controllers\Clients\ThanhToanController::class, 'datHangThanhCong'])->name('thanhtoans.dathangthanhcong');
 
-Route::get('/users/{username}', [App\Http\Controllers\Clients\UserController::class, 'chiTiet'])->name('users.chitiet');
+Route::get('/users', [App\Http\Controllers\Clients\UserController::class, 'chiTiet'])->name('users.chitiet');
 
 Route::get('/gioithieu', [App\Http\Controllers\Clients\GioiThieuController::class, 'home'])->name('gioithieu.home');
 
 Route::get('/lienhe', [App\Http\Controllers\Clients\LienHeController::class, 'home'])->name('lienhe.home');
+
+Route::get('/danh-muc', [SanPhamController::class, 'danhMuc'])->name('danh-muc');
+
+Route::get('/gioi-thieu', [DanhGiaController::class, 'showDanhGias'])->name('gioithieu');
+
+Route::get('clientdanhmucsanpham', [ClientDanhMucSanPhamController::class, 'index'])->name('danhsach');
+Route::get('/clientsanpham', [ClientDanhMucSanPhamController::class, 'danhSachSanPham'])->name('clientsanpham.danhsach');
+

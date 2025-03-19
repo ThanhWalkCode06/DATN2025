@@ -13,12 +13,18 @@ class ResetPass extends Mailable
 {
     use Queueable, SerializesModels;
     public $token;
+    public $url;
     /**
      * Create a new message instance.
      */
-    public function __construct($token)
+    public function __construct($token, $type)
     {
         $this->token = $token;
+        if ($type === 'admin') {
+            $this->url = route('showResetPass', ['token' => $token]);
+        } else {
+            $this->url = route('showResetPass.client', ['token' => $token]);
+        }
     }
 
     /**
@@ -27,7 +33,7 @@ class ResetPass extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Reset Password Website Seven Star',
+            subject: 'Reset Password Website Seven Stars',
         );
     }
 
@@ -54,8 +60,8 @@ class ResetPass extends Mailable
     public function build()
     {
         return $this->subject('Reset Your Password')
-                    ->with([
-                        'token' => $this->token,
-                    ]);
+            ->with([
+                'token' => $this->token,
+            ]);
     }
 }
