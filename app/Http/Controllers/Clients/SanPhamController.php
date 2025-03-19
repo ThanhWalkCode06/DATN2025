@@ -5,30 +5,14 @@ namespace App\Http\Controllers\Clients;
 use Illuminate\Support\Facades\Auth;
 use App\Models\SanPham;
 use Illuminate\Http\Request;
-<<<<<<< HEAD
-=======
 use App\Models\DanhMucSanPham;
 use Illuminate\Support\Facades\DB;
->>>>>>> 1158e7fdfc038b1e1a02aa83b5b2744491307223
 use App\Http\Controllers\Controller;
+
 class SanPhamController extends Controller
 {
     public function danhSach(Request $request)
     {
-<<<<<<< HEAD
-        $sanPhams = SanPham::all();
-    return view('clients.sanphams.danhsach', compact('sanPhams'));
-    }
-    public function chiTiet($id)  
-    {  
-        $sanPhams = SanPham::with(['bienThes', 'anhSP'])->findOrFail($id);  
-        
-        return view('clients.sanphams.chitiet', [  
-            'sanPhams' => $sanPhams,  
-            'bienThes' => $sanPhams->bienThes,  
-        ]);  
-    }  
-=======
         $query = SanPham::with(['danhMuc', 'danhGias', 'bienThes'])
             ->where('san_phams.trang_thai', 1);
 
@@ -72,22 +56,21 @@ class SanPhamController extends Controller
         return view('clients.sanphams.chitiet');
     }
 
->>>>>>> 1158e7fdfc038b1e1a02aa83b5b2744491307223
     public function sanPhamYeuThich()
     {
         $user = Auth::user();
-        return view('clients.sanphams.sanphamyeuthich',compact('user'));
+        return view('clients.sanphams.sanphamyeuthich', compact('user'));
     }
 
     public function addsanPhamYeuThich(string $id)
     {
         $user = Auth::user();
-        if($user){
+        if ($user) {
             $user->sanPhamYeuThichs()->attach($id);
-        }else{
+        } else {
             return redirect()->back()->with(['error' => 'Vui lòng đăng nhập để sử dụng tính năng']);
         }
-        return view('clients.sanphams.sanphamyeuthich',compact('user'));
+        return view('clients.sanphams.sanphamyeuthich', compact('user'));
     }
 
     public function xoaYeuThich($id)
