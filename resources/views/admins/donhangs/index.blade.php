@@ -109,6 +109,7 @@
                 </div>
             </div>
         </div>
+        {{ $donHangs->links('pagination::bootstrap-5') }}
     </div>
 @endsection
 
