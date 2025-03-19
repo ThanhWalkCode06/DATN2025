@@ -39,129 +39,55 @@
             <div class="row">
                 <div class="col-xxl-9 col-xl-8 col-lg-7 wow fadeInUp">
                     <div class="row g-4">
-                        <div class="col-xl-6 wow fadeInUp">
-                            <div class="product-left-box">
-                                <div class="row g-sm-4 g-2">
-                                    <div class="col-12">
-                                        <div class="product-main no-arrow">
-                                            <div>
-                                                <div class="slider-image">
-                                                    <img src="{{ asset('assets/client/images/fashion/product/23.jpg') }}"
-                                                        id="img-1"
-                                                        data-zoom-image="{{ asset('assets/client/images/fashion/product/23.jpg') }}"
-                                                        class="
-                                                        img-fluid image_zoom_cls-0 blur-up lazyload"
-                                                        alt="">
-                                                </div>
-                                            </div>
-
-                                            <div>
-                                                <div class="slider-image">
-                                                    <img src="{{ asset('assets/client/images/fashion/product/24.jpg') }}"
-                                                        data-zoom-image="{{ asset('assets/client/images/fashion/product/24.jpg') }}"
-                                                        class="
-                                                        img-fluid image_zoom_cls-0 blur-up lazyload"
-                                                        alt="">
-                                                </div>
-                                            </div>
-
-                                            <div>
-                                                <div class="slider-image">
-                                                    <img src="{{ asset('assets/client/images/fashion/product/25.jpg') }}"
-                                                        data-zoom-image="{{ asset('assets/client/images/fashion/product/25.jpg') }}"
-                                                        class="
-                                                        img-fluid image_zoom_cls-0 blur-up lazyload"
-                                                        alt="">
-                                                </div>
-                                            </div>
-
-                                            <div>
-                                                <div class="slider-image">
-                                                    <img src="{{ asset('assets/client/images/fashion/product/26.jpg') }}"
-                                                        data-zoom-image="{{ asset('assets/client/images/fashion/product/26.jpg') }}"
-                                                        class="
-                                                        img-fluid image_zoom_cls-0 blur-up lazyload"
-                                                        alt="">
-                                                </div>
-                                            </div>
-
-                                            <div>
-                                                <div class="slider-image">
-                                                    <img src="{{ asset('assets/client/images/fashion/product/23.jpg') }}"
-                                                        data-zoom-image="{{ asset('assets/client/images/fashion/product/23.jpg') }}"
-                                                        class="
-                                                        img-fluid image_zoom_cls-0 blur-up lazyload"
-                                                        alt="">
-                                                </div>
-                                            </div>
-
-                                            <div>
-                                                <div class="slider-image">
-                                                    <img src="{{ asset('assets/client/images/fashion/product/24.jpg') }}"
-                                                        data-zoom-image="{{ asset('assets/client/images/fashion/product/24.jpg') }}"
-                                                        class="
-                                                        img-fluid image_zoom_cls-0 blur-up lazyload"
-                                                        alt="">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-12">
-                                        <div class="left-slider-image left-slider no-arrow slick-top">
-                                            <div>
-                                                <div class="sidebar-image">
-                                                    <img src="{{ asset('assets/client/images/fashion/product/23.jpg') }}"
-                                                        class="img-fluid blur-up lazyload" alt="">
-                                                </div>
-                                            </div>
-
-                                            <div>
-                                                <div class="sidebar-image">
-                                                    <img src="{{ asset('assets/client/images/fashion/product/24.jpg') }}"
-                                                        class="img-fluid blur-up lazyload" alt="">
-                                                </div>
-                                            </div>
-
-                                            <div>
-                                                <div class="sidebar-image">
-                                                    <img src="{{ asset('assets/client/images/fashion/product/25.jpg') }}"
-                                                        class="img-fluid blur-up lazyload" alt="">
-                                                </div>
-                                            </div>
-
-                                            <div>
-                                                <div class="sidebar-image">
-                                                    <img src="{{ asset('assets/client/images/fashion/product/26.jpg') }}"
-                                                        class="img-fluid blur-up lazyload" alt="">
-                                                </div>
-                                            </div>
-
-                                            <div>
-                                                <div class="sidebar-image">
-                                                    <img src="{{ asset('assets/client/images/fashion/product/23.jpg') }}"
-                                                        class="img-fluid blur-up lazyload" alt="">
-                                                </div>
-                                            </div>
-
-                                            <div>
-                                                <div class="sidebar-image">
-                                                    <img src="{{ asset('assets/client/images/fashion/product/24.jpg') }}"
-                                                        class="img-fluid blur-up lazyload" alt="">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <div class="col-xl-6 wow fadeInUp">  
+                            <div class="product-left-box">  
+                                <div class="row g-sm-4 g-2">  
+                                    <div class="col-12">  
+                                        <div class="product-main no-arrow">  
+                                            <div>  
+                                                <div class="slider-image">  
+                                                    <!-- Hiển thị hình ảnh của sản phẩm chính -->  
+                                                    <img src="{{ asset('storage/' . $sanPhams->hinh_anh) }}" id="main-image"  
+                                                         data-zoom-image="{{ asset('storage/' . $sanPhams->hinh_anh) }}"  
+                                                         class="img-fluid image_zoom_cls-0 blur-up lazyload"  
+                                                         alt="{{ $sanPhams->ten_san_pham }}">  
+                                                </div>  
+                                            </div>  
+                                        </div>  
+                                    </div>  
+                        
+                                    <div class="col-12">  
+                                        <div class="left-slider-image left-slider no-arrow slick-top">  
+                                            @if ($sanPhams->bienThes->isNotEmpty())  
+                                                @foreach ($sanPhams->bienThes as $bienThe)  
+                                                    <div>  
+                                                        <div class="sidebar-image"   
+                                                             onclick="showImage('{{ asset('storage/' . $bienThe->anh_bien_the) }}')">  
+                                                            <!-- Hiển thị hình ảnh của biến thể -->  
+                                                            <img src="{{ asset('storage/' . $bienThe->anh_bien_the) }}"  
+                                                                 class="img-fluid blur-up lazyload"   
+                                                                 alt="{{ $bienThe->ten_bien_the }}">  
+                                                        </div>  
+                                                    </div>  
+                                                @endforeach  
+                                            @endif  
+                                        </div>  
+                                    </div>  
+                                </div>  
+                            </div>  
+                        </div>  
 
                         <div class="col-xl-6 wow fadeInUp">
+                            <h2>Frequently bought together</h2>
+                            <br>
                             <div class="right-box-contain">
                                 <h6 class="offer-top">30% Off</h6>
-                                <h2 class="name">Full Sleeve T Shirts for Men</h2>
+                                <h2 class="name"></h2>
                                 <div class="price-rating">
-                                    <h3 class="theme-color price">$49.50 <del class="text-content">$58.46</del> <span
+                                    <h3 class="theme-color price">Giá mới:
+                                        <?= number_format($sanPhams->gia_moi, 0, ',', '.') ?>₫ <br><del
+                                            class="text-content">Giá cũ:
+                                            <?= number_format($sanPhams->gia_cu, 0, ',', '.') ?>₫</del> <span
                                             class="offer theme-color">(8% off)</span></h3>
                                     <div class="product-rating custom-rate">
                                         <ul class="rating">
@@ -186,14 +112,12 @@
                                 </div>
 
                                 <div class="product-contain">
-                                    <p class="w-100">I find great comfort in awkwardness. I have never been cool, but I
-                                        have felt cool. I have been in the cool spot, but I was not really cool; I was
-                                        just trying to be hip or cool.</p>
+                                    <p class="w-100">{{ $sanPhams->mo_ta }}</p>
                                 </div>
 
                                 <div class="product-package">
                                     <div class="product-title">
-                                        <h4>Color </h4>
+                                        <h4>Màu sắc </h4>
                                     </div>
 
                                     <ul class="color circle select-package">
@@ -205,15 +129,13 @@
                                             </label>
                                         </li>
                                         <li class="form-check">
-                                            <input class="form-check-input" type="radio" name="color"
-                                                id="medium">
+                                            <input class="form-check-input" type="radio" name="color" id="medium">
                                             <label class="form-check-label" for="medium">
                                                 <span style="background-color: rgb(37, 152, 137);"></span>
                                             </label>
                                         </li>
                                         <li class="form-check">
-                                            <input class="form-check-input" type="radio" name="color"
-                                                id="large">
+                                            <input class="form-check-input" type="radio" name="color" id="large">
                                             <label class="form-check-label" for="large">
                                                 <span style="background-color: rgb(214, 214, 214);"></span>
                                             </label>
@@ -233,15 +155,13 @@
                                             </label>
                                         </li>
                                         <li class="form-check">
-                                            <input class="form-check-input" type="radio" name="size"
-                                                id="medium">
+                                            <input class="form-check-input" type="radio" name="size" id="medium">
                                             <label class="form-check-label" for="medium">
                                                 <span>M</span>
                                             </label>
                                         </li>
                                         <li class="form-check">
-                                            <input class="form-check-input" type="radio" name="size"
-                                                id="large">
+                                            <input class="form-check-input" type="radio" name="size" id="large">
                                             <label class="form-check-label" for="large">
                                                 <span>L</span>
                                             </label>
@@ -316,7 +236,7 @@
                                     </div>
 
                                     <button onclick="location.href = 'cart.html';"
-                                        class="btn btn-md bg-dark cart-button text-white w-100">Add To Cart</button>
+                                        class="btn btn-md bg-dark cart-button text-white w-100">Thêm vào giỏ hàng</button>
                                 </div>
 
                                 <div class="buy-box">
@@ -473,7 +393,7 @@
                 <div class="col-12">
                     <div class="related-product">
                         <div class="product-title-2">
-                            <h4>Frequently bought together</h4>
+
                         </div>
 
                         <div class="related-box">
@@ -1813,4 +1733,15 @@
 @endsection
 
 @section('js')
+<script>  
+    function showImage(imageUrl) {  
+        // Cập nhật nguồn hình ảnh chính  
+        const mainImage = document.getElementById('main-image');  
+        mainImage.src = imageUrl;  
+        mainImage.setAttribute('data-zoom-image', imageUrl);  
+
+        // Hiển thị ảnh bên trên  
+        mainImage.style.display = "block"; // Đảm bảo ảnh chính hiện ra  
+    }  
+</script>   
 @endsection

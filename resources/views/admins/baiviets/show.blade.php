@@ -58,8 +58,9 @@
                         </div>
                         <div class="mb-3">
                             <h5><i class="ri-file-text-line"></i> Nội Dung:</h5>
-                            <p class="text-muted">{!! nl2br(e($baiViet->noi_dung)) !!}</p>
+                            <div class="text-muted">{!! $baiViet->noi_dung !!}</div>
                         </div>
+
                     </div>
 
                     <!-- Cột phải -->
