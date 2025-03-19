@@ -44,11 +44,12 @@ class SettingController extends Controller
         }
         // dd(Storage::exists("public/".$setting->logo),"app/public/".$setting->logo);
         if ($request->hasFile('logo')) {
-            if($setting->logo && Storage::exists("public/".$setting->logo) ) {
-                Storage::delete("public/".$setting->logo);
+            if($setting->logo && Storage::exists($setting->logo) ) {
+                Storage::delete($setting->logo);
             }
-            $logoPath = $request->file('logo')->store('logos', 'public'); // Lưu vào storage/public/logos
-            $data['logo'] = $logoPath;
+            $fileName = time() . '_' . $request->file('logo')->getClientOriginalName();
+            $request->file('logo')->storeAs("public/logos/", $fileName);
+            $data['logo'] = "public/logos/".$fileName;;
         }
         $setting->fill($data);
         $setting->save();
@@ -135,15 +136,16 @@ class SettingController extends Controller
             'so_dien_thoai.digits' => 'Vui lòng nhập số điện thoại có 10 số',
             'so_dien_thoai.unique' => 'Số điện thoại đã tồn tại',
         ]);
-            // dd($data);
+        // dd($data);
         if($request->hasFile('anh_dai_dien')){
             if(Auth::user()->anh_dai_dien && file_exists(storage_path("app/public/".Auth::user()->anh_dai_dien))){
-                // dd('in');
-                unlink(storage_path('app/public/'.Auth::user()->anh_dai_dien)); // Xóa ảnh c�� nếu có
+                unlink(storage_path('app/public/'.Auth::user()->anh_dai_dien));
             }
-            // dd('out');
-            $data['anh_dai_dien'] = $request->anh_dai_dien->store('uploads/user/img','public');
+            $fileName = time() . '_' . $request->file('anh_dai_dien')->getClientOriginalName();
+            $request->file('anh_dai_dien')->storeAs("public/uploads/user/", $fileName);
+            $data['anh_dai_dien'] = 'uploads/user/' . $fileName;;
         }
+
         // dd($request->hasFile($request->anh_dai_dien));
         User::where('id',Auth::user()->id)->update($data);
         session()->flash('success', 'Sửa thông tin thành công!');

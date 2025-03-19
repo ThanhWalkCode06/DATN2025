@@ -96,7 +96,9 @@
                             <div class="mb-4 row">
                                 <label class="col-sm-3 col-form-label form-label-title">Nội Dung</label>
                                 <div class="col-sm-9">
-                                    <textarea id="noi_dung" class="form-control" name="noi_dung">{{ old('noi_dung', $baiViet->noi_dung ?? '') }}</textarea>
+                                    <textarea id="noi_dung" class="form-control" name="noi_dung">
+                                        {!! old('noi_dung', isset($baiViet) ? $baiViet->noi_dung : '') !!}
+                                    </textarea>
                                     @error('noi_dung')
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
@@ -150,4 +152,19 @@
     <script src="{{ asset('assets/js/select2-custom.js') }}"></script>
 
     <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
+    <script>
+        ClassicEditor
+            .create(document.querySelector('#noi_dung'), {
+                enterMode: 'BR', // Khi nhấn Enter sẽ xuống dòng thay vì thêm <p>
+                shiftEnterMode: 'P', // Nhấn Shift+Enter mới bọc trong <p>
+            })
+            .then(editor => {
+                editor.model.document.on('change:data', () => {
+                    document.querySelector('textarea[name="noi_dung"]').value = editor.getData();
+                });
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    </script>
 @endsection
