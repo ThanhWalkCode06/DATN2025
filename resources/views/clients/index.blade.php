@@ -12,6 +12,8 @@
 @endsection
 
 @section('content')
+
+
     <!-- Home Section Start -->
     <section class="home-section pt-2">
         <div class="container-fluid-lg">
@@ -24,17 +26,15 @@
                         </div>
                         <div class="home-detail p-center-left w-75">
                             <div>
-                                <h6>Exclusive offer <span>30% Off</span></h6>
-                                <h1 class="text-uppercase">Stay home & delivered your <span class="daily">Daily
-                                        Needs</span></h1>
-                                <p class="w-75 d-none d-sm-block">Vegetables contain many vitamins and minerals that
-                                    are
-                                    good for your health.</p>
+                                <h6>Ưu đãi đặc biệt <span>Giảm 30%</span></h6>
+                                <h1 class="text-uppercase">Ở nhà & nhận ngay <span class="daily">Trang phục thể thao</span></h1>
+                                <p class="w-75 d-none d-sm-block">Những bộ quần áo thể thao thoải mái, phong cách giúp bạn tự tin vận động mỗi ngày.</p>
                                 <button onclick="location.href = 'shop-left-sidebar.html';"
-                                    class="btn btn-animation mt-xxl-4 mt-2 home-button mend-auto">Shop Now <i
+                                    class="btn btn-animation mt-xxl-4 mt-2 home-button mend-auto">Mua ngay <i
                                         class="fa-solid fa-right-long icon"></i></button>
                             </div>
                         </div>
+
                     </div>
                 </div>
 
@@ -46,13 +46,12 @@
                                     alt="">
                                 <div class="home-detail p-center-left home-p-sm w-75">
                                     <div>
-                                        <h2 class="mt-0 text-danger">45% <span class="discount text-title">OFF</span>
-                                        </h2>
-                                        <h3 class="theme-color">Nut Collection</h3>
-                                        <p class="w-75">We deliver organic vegetables & fruits</p>
-                                        <a href="shop-left-sidebar.html" class="shop-button">Shop Now <i
-                                                class="fa-solid fa-right-long"></i></a>
+                                        <h2 class="mt-0 text-danger">45% <span class="discount text-title">GIẢM</span></h2>
+                                        <h3 class="theme-color">Bộ Sưu Tập Thể Thao</h3>
+                                        <p class="w-75">Chúng tôi mang đến những bộ trang phục thể thao chất lượng, thoải mái và phong cách.</p>
+                                        <a href="shop-left-sidebar.html" class="shop-button">Mua ngay <i class="fa-solid fa-right-long"></i></a>
                                     </div>
+
                                 </div>
                             </div>
                         </div>
@@ -63,12 +62,12 @@
                                     alt="">
                                 <div class="home-detail p-center-left home-p-sm w-75">
                                     <div>
-                                        <h3 class="mt-0 theme-color fw-bold">Healthy Food</h3>
-                                        <h4 class="text-danger">Organic Market</h4>
-                                        <p class="organic">Start your daily shopping with some Organic food</p>
-                                        <a href="shop-left-sidebar.html" class="shop-button">Shop Now <i
-                                                class="fa-solid fa-right-long"></i></a>
+                                        <h3 class="mt-0 theme-color fw-bold">Thời Trang Thể Thao</h3>
+                                        <h4 class="text-danger">Bộ Sưu Tập Mới</h4>
+                                        <p class="organic">Bắt đầu ngày mới với những bộ trang phục thể thao năng động và thoải mái.</p>
+                                        <a href="shop-left-sidebar.html" class="shop-button">Mua ngay <i class="fa-solid fa-right-long"></i></a>
                                     </div>
+
                                 </div>
                             </div>
                         </div>
@@ -87,15 +86,15 @@
                     <div class="banner-contain hover-effect">
                         <img src="../assets/client/images/vegetable/banner/4.jpg" class="bg-img blur-up lazyload"
                             alt="">
-                        <div class="banner-details">
-                            <div class="banner-box">
-                                <h6 class="text-danger">5% OFF</h6>
-                                <h5>Hot Deals on New Items</h5>
-                                <h6 class="text-content">Daily Essentials Eggs & Dairy</h6>
+                            <div class="banner-details">
+                                <div class="banner-box">
+                                    <h6 class="text-danger">5% GIẢM</h6>
+                                    <h5>Ưu Đãi Hot Cho Sản Phẩm Mới</h5>
+                                    <h6 class="text-content">Trang Phục Thể Thao Mới Nhất</h6>
+                                </div>
+                                <a href="shop-left-sidebar.html" class="banner-button text-white">Mua Ngay <i class="fa-solid fa-right-long ms-2"></i></a>
                             </div>
-                            <a href="shop-left-sidebar.html" class="banner-button text-white">Shop Now <i
-                                    class="fa-solid fa-right-long ms-2"></i></a>
-                        </div>
+
                     </div>
                 </div>
 
@@ -103,15 +102,15 @@
                     <div class="banner-contain hover-effect">
                         <img src="../assets/client/images/vegetable/banner/5.jpg" class="bg-img blur-up lazyload"
                             alt="">
-                        <div class="banner-details">
-                            <div class="banner-box">
-                                <h6 class="text-danger">5% OFF</h6>
-                                <h5>Buy More & Save More</h5>
-                                <h6 class="text-content">Fresh Vegetables</h6>
+                            <div class="banner-details">
+                                <div class="banner-box">
+                                    <h6 class="text-danger">5% GIẢM</h6>
+                                    <h5>Mua Nhiều Giảm Nhiều</h5>
+                                    <h6 class="text-content">Trang Phục Thể Thao Cao Cấp</h6>
+                                </div>
+                                <a href="shop-left-sidebar.html" class="banner-button text-white">Mua Ngay <i class="fa-solid fa-right-long ms-2"></i></a>
                             </div>
-                            <a href="shop-left-sidebar.html" class="banner-button text-white">Shop Now <i
-                                    class="fa-solid fa-right-long ms-2"></i></a>
-                        </div>
+
                     </div>
                 </div>
 
@@ -119,15 +118,15 @@
                     <div class="banner-contain hover-effect">
                         <img src="../assets/client/images/vegetable/banner/6.jpg" class="bg-img blur-up lazyload"
                             alt="">
-                        <div class="banner-details">
-                            <div class="banner-box">
-                                <h6 class="text-danger">5% OFF</h6>
-                                <h5>Organic Meat Prepared</h5>
-                                <h6 class="text-content">Delivered to Your Home</h6>
+                            <div class="banner-details">
+                                <div class="banner-box">
+                                    <h6 class="text-danger">5% GIẢM</h6>
+                                    <h5>Trang Phục Thể Thao Chất Lượng</h5>
+                                    <h6 class="text-content">Giao Hàng Tận Nơi</h6>
+                                </div>
+                                <a href="shop-left-sidebar.html" class="banner-button text-white">Mua Ngay <i class="fa-solid fa-right-long ms-2"></i></a>
                             </div>
-                            <a href="shop-left-sidebar.html" class="banner-button text-white">Shop Now <i
-                                    class="fa-solid fa-right-long ms-2"></i></a>
-                        </div>
+
                     </div>
                 </div>
 
@@ -135,15 +134,15 @@
                     <div class="banner-contain hover-effect">
                         <img src="../assets/client/images/vegetable/banner/7.jpg" class="bg-img blur-up lazyload"
                             alt="">
-                        <div class="banner-details">
-                            <div class="banner-box">
-                                <h6 class="text-danger">5% OFF</h6>
-                                <h5>Buy More & Save More</h5>
-                                <h6 class="text-content">Nuts & Snacks</h6>
+                            <div class="banner-details">
+                                <div class="banner-box">
+                                    <h6 class="text-danger">5% GIẢM</h6>
+                                    <h5>Mua Nhiều - Tiết Kiệm Hơn</h5>
+                                    <h6 class="text-content">Quần Áo Thể Thao Chất Lượng Cao</h6>
+                                </div>
+                                <a href="shop-left-sidebar.html" class="banner-button text-white">Mua Ngay <i class="fa-solid fa-right-long ms-2"></i></a>
                             </div>
-                            <a href="shop-left-sidebar.html" class="banner-button text-white">Shop Now <i
-                                    class="fa-solid fa-right-long ms-2"></i></a>
-                        </div>
+
                     </div>
                 </div>
             </div>
@@ -158,95 +157,50 @@
                 <div class="col-xxl-3 col-xl-4 d-none d-xl-block">
                     <div class="p-sticky">
                         <div class="category-menu">
-                            <h3>Category</h3>
+                            <h3>Danh Mục</h3>
                             <ul>
                                 <li>
                                     <div class="category-list">
-                                        <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/vegetable.svg"
+                                        <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/tshirt.svg"
                                             class="blur-up lazyload" alt="">
                                         <h5>
-                                            <a href="shop-left-sidebar.html">Vegetables & Fruit</a>
+                                            <a href="shop-left-sidebar.html">Áo Thể Thao</a>
                                         </h5>
                                     </div>
                                 </li>
                                 <li>
                                     <div class="category-list">
-                                        <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/cup.svg"
+                                        <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/pants.svg"
                                             class="blur-up lazyload" alt="">
                                         <h5>
-                                            <a href="shop-left-sidebar.html">Beverages</a>
+                                            <a href="shop-left-sidebar.html">Quần Thể Thao</a>
                                         </h5>
                                     </div>
                                 </li>
                                 <li>
                                     <div class="category-list">
-                                        <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/meats.svg"
+                                        <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/shoes.svg"
                                             class="blur-up lazyload" alt="">
                                         <h5>
-                                            <a href="shop-left-sidebar.html">Meats & Seafood</a>
+                                            <a href="shop-left-sidebar.html">Giày Thể Thao</a>
                                         </h5>
                                     </div>
                                 </li>
                                 <li>
                                     <div class="category-list">
-                                        <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/breakfast.svg"
+                                        <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/jacket.svg"
                                             class="blur-up lazyload" alt="">
                                         <h5>
-                                            <a href="shop-left-sidebar.html">Breakfast & Dairy</a>
+                                            <a href="shop-left-sidebar.html">Áo Khoác Thể Thao</a>
                                         </h5>
                                     </div>
                                 </li>
                                 <li>
                                     <div class="category-list">
-                                        <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/frozen.svg"
+                                        <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/accessories.svg"
                                             class="blur-up lazyload" alt="">
                                         <h5>
-                                            <a href="shop-left-sidebar.html">Frozen Foods</a>
-                                        </h5>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="category-list">
-                                        <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/biscuit.svg"
-                                            class="blur-up lazyload" alt="">
-                                        <h5>
-                                            <a href="shop-left-sidebar.html">Biscuits & Snacks</a>
-                                        </h5>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="category-list">
-                                        <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/grocery.svg"
-                                            class="blur-up lazyload" alt="">
-                                        <h5>
-                                            <a href="shop-left-sidebar.html">Grocery & Staples</a>
-                                        </h5>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="category-list">
-                                        <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/drink.svg"
-                                            class="blur-up lazyload" alt="">
-                                        <h5>
-                                            <a href="shop-left-sidebar.html">Wines & Alcohol Drinks</a>
-                                        </h5>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="category-list">
-                                        <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/milk.svg"
-                                            class="blur-up lazyload" alt="">
-                                        <h5>
-                                            <a href="shop-left-sidebar.html">Milk & Dairies</a>
-                                        </h5>
-                                    </div>
-                                </li>
-                                <li class="pb-30">
-                                    <div class="category-list">
-                                        <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/pet.svg"
-                                            class="blur-up lazyload" alt="">
-                                        <h5>
-                                            <a href="shop-left-sidebar.html">Pet Foods</a>
+                                            <a href="shop-left-sidebar.html">Phụ Kiện Thể Thao</a>
                                         </h5>
                                     </div>
                                 </li>
@@ -256,26 +210,27 @@
                                 <li>
                                     <div class="category-list">
                                         <h5 class="ms-0 text-title">
-                                            <a href="shop-left-sidebar.html">Value of the Day</a>
+                                            <a href="shop-left-sidebar.html">Ưu Đãi Trong Ngày</a>
                                         </h5>
                                     </div>
                                 </li>
                                 <li>
                                     <div class="category-list">
                                         <h5 class="ms-0 text-title">
-                                            <a href="shop-left-sidebar.html">Top 50 Offers</a>
+                                            <a href="shop-left-sidebar.html">Top 50 Khuyến Mãi</a>
                                         </h5>
                                     </div>
                                 </li>
                                 <li class="mb-0">
                                     <div class="category-list">
                                         <h5 class="ms-0 text-title">
-                                            <a href="shop-left-sidebar.html">New Arrivals</a>
+                                            <a href="shop-left-sidebar.html">Sản Phẩm Mới</a>
                                         </h5>
                                     </div>
                                 </li>
                             </ul>
                         </div>
+
 
                         <div class="ratio_156 section-t-space">
                             <div class="home-contain hover-effect">
@@ -283,30 +238,30 @@
                                     alt="">
                                 <div class="home-detail p-top-left home-p-medium">
                                     <div>
-                                        <h6 class="text-yellow home-banner">Seafood</h6>
-                                        <h3 class="text-uppercase fw-normal"><span
-                                                class="theme-color fw-bold">Freshes</span> Products</h3>
-                                        <h3 class="fw-light">every hour</h3>
+                                        <h6 class="text-yellow home-banner">Thể Thao</h6>
+                                        <h3 class="text-uppercase fw-normal"><span class="theme-color fw-bold">Sản Phẩm</span> Mới Nhất</h3>
+                                        <h3 class="fw-light">Cập Nhật Liên Tục</h3>
                                         <button onclick="location.href = 'shop-left-sidebar.html';"
-                                            class="btn btn-animation btn-md mend-auto">Shop Now <i
+                                            class="btn btn-animation btn-md mend-auto">Mua Ngay <i
                                                 class="fa-solid fa-arrow-right icon"></i></button>
                                     </div>
+
                                 </div>
                             </div>
                         </div>
 
                         <div class="ratio_medium section-t-space">
                             <div class="home-contain hover-effect">
-                                <img src="../assets/client/images/vegetable/banner/11.jpg"
+                                <img src="../assets/client/images/sports/banner/11.jpg"
                                     class="img-fluid blur-up lazyload" alt="">
                                 <div class="home-detail p-top-left home-p-medium">
                                     <div>
-                                        <h4 class="text-yellow text-exo home-banner">Organic</h4>
-                                        <h2 class="text-uppercase fw-normal mb-0 text-russo theme-color">fresh</h2>
-                                        <h2 class="text-uppercase fw-normal text-title">Vegetables</h2>
-                                        <p class="mb-3">Super Offer to 50% Off</p>
+                                        <h4 class="text-yellow text-exo home-banner">Thể Thao</h4>
+                                        <h2 class="text-uppercase fw-normal mb-0 text-russo theme-color">Thời Trang</h2>
+                                        <h2 class="text-uppercase fw-normal text-title">Năng Động</h2>
+                                        <p class="mb-3">Ưu Đãi Lên Đến 50%</p>
                                         <button onclick="location.href = 'shop-left-sidebar.html';"
-                                            class="btn btn-animation btn-md mend-auto">Shop Now <i
+                                            class="btn btn-animation btn-md mend-auto">Mua Ngay <i
                                                 class="fa-solid fa-arrow-right icon"></i></button>
                                     </div>
                                 </div>
@@ -315,23 +270,23 @@
 
                         <div class="section-t-space">
                             <div class="category-menu">
-                                <h3>Trending Products</h3>
+                                <h3>Sản Phẩm Bán Chạy</h3>
 
                                 <ul class="product-list border-0 p-0 d-block">
                                     <li>
                                         <div class="offer-product">
                                             <a href="product-left-thumbnail.html" class="offer-image">
-                                                <img src="../assets/client/images/vegetable/product/23.png"
+                                                <img src="../assets/client/images/sports/product/1.png"
                                                     class="blur-up lazyload" alt="">
                                             </a>
 
                                             <div class="offer-detail">
                                                 <div>
                                                     <a href="product-left-thumbnail.html" class="text-title">
-                                                        <h6 class="name">Meatigo Premium Goat Curry</h6>
+                                                        <h6 class="name">Áo Thể Thao Nam Cao Cấp</h6>
                                                     </a>
-                                                    <span>450 G</span>
-                                                    <h6 class="price theme-color">$ 70.00</h6>
+                                                    <span>Kích thước: M, L, XL</span>
+                                                    <h6 class="price theme-color">₫ 350.000</h6>
                                                 </div>
                                             </div>
                                         </div>
@@ -340,17 +295,17 @@
                                     <li>
                                         <div class="offer-product">
                                             <a href="product-left-thumbnail.html" class="offer-image">
-                                                <img src="../assets/client/images/vegetable/product/24.png"
+                                                <img src="../assets/client/images/sports/product/2.png"
                                                     class="blur-up lazyload" alt="">
                                             </a>
 
                                             <div class="offer-detail">
                                                 <div>
                                                     <a href="product-left-thumbnail.html" class="text-title">
-                                                        <h6 class="name">Dates Medjoul Premium Imported</h6>
+                                                        <h6 class="name">Quần Short Tập Gym</h6>
                                                     </a>
-                                                    <span>450 G</span>
-                                                    <h6 class="price theme-color">$ 40.00</h6>
+                                                    <span>Kích thước: M, L, XL</span>
+                                                    <h6 class="price theme-color">₫ 250.000</h6>
                                                 </div>
                                             </div>
                                         </div>
@@ -359,17 +314,17 @@
                                     <li>
                                         <div class="offer-product">
                                             <a href="product-left-thumbnail.html" class="offer-image">
-                                                <img src="../assets/client/images/vegetable/product/25.png"
+                                                <img src="../assets/client/images/sports/product/3.png"
                                                     class="blur-up lazyload" alt="">
                                             </a>
 
                                             <div class="offer-detail">
                                                 <div>
                                                     <a href="product-left-thumbnail.html" class="text-title">
-                                                        <h6 class="name">Good Life Walnut Kernels</h6>
+                                                        <h6 class="name">Giày Chạy Bộ Chuyên Nghiệp</h6>
                                                     </a>
-                                                    <span>200 G</span>
-                                                    <h6 class="price theme-color">$ 52.00</h6>
+                                                    <span>Kích thước: 39 - 44</span>
+                                                    <h6 class="price theme-color">₫ 990.000</h6>
                                                 </div>
                                             </div>
                                         </div>
@@ -378,17 +333,17 @@
                                     <li class="mb-0">
                                         <div class="offer-product">
                                             <a href="product-left-thumbnail.html" class="offer-image">
-                                                <img src="../assets/client/images/vegetable/product/26.png"
+                                                <img src="../assets/client/images/sports/product/4.png"
                                                     class="blur-up lazyload" alt="">
                                             </a>
 
                                             <div class="offer-detail">
                                                 <div>
                                                     <a href="product-left-thumbnail.html" class="text-title">
-                                                        <h6 class="name">Apple Red Premium Imported</h6>
+                                                        <h6 class="name">Balo Thể Thao Chống Nước</h6>
                                                     </a>
-                                                    <span>1 KG</span>
-                                                    <h6 class="price theme-color">$ 80.00</h6>
+                                                    <span>Dung tích: 25L</span>
+                                                    <h6 class="price theme-color">₫ 450.000</h6>
                                                 </div>
                                             </div>
                                         </div>
@@ -399,48 +354,47 @@
 
                         <div class="section-t-space">
                             <div class="category-menu">
-                                <h3>Customer Comment</h3>
+                                <h3>Khách Hàng Đánh Giá</h3>
 
                                 <div class="review-box">
                                     <div class="review-contain">
-                                        <h5 class="w-75">We Care About Our Customer Experience</h5>
-                                        <p>In publishing and graphic design, Lorem ipsum is a placeholder text commonly
-                                            used to demonstrate the visual form of a document or a typeface without
-                                            relying on meaningful content.</p>
+                                        <h5 class="w-75">Chúng Tôi Luôn Quan Tâm Đến Trải Nghiệm Của Bạn</h5>
+                                        <p>"Sản phẩm chất lượng, vải thoáng mát, phù hợp cho các hoạt động thể thao. Giao hàng nhanh, đóng gói cẩn thận. Sẽ tiếp tục ủng hộ!"</p>
                                     </div>
 
                                     <div class="review-profile">
                                         <div class="review-image">
-                                            <img src="../assets/client/images/vegetable/review/1.jpg"
+                                            <img src="../assets/client/images/sports/review/1.jpg"
                                                 class="img-fluid blur-up lazyload" alt="">
                                         </div>
                                         <div class="review-detail">
-                                            <h5>Tina Mcdonnale</h5>
-                                            <h6>Sale Manager</h6>
+                                            <h5>Nguyễn Văn An</h5>
+                                            <h6>Khách Hàng Thân Thiết</h6>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
 
                 <div class="col-xxl-9 col-xl-8">
                     <div class="title title-flex">
                         <div>
-                            <h2>Top Save Today</h2>
+                            <h2>Ưu Đãi Hôm Nay</h2>
                             <span class="title-leaf">
                                 <svg class="icon-width">
                                     <use xlink:href="https://themes.pixelstrap.com/fastkart/assets/svg/leaf.svg#leaf">
                                     </use>
                                 </svg>
                             </span>
-                            <p>Don't miss this opportunity at a special discount just for this week.</p>
+                            <p>Đừng bỏ lỡ cơ hội này với mức giảm giá đặc biệt chỉ trong tuần này.</p>
                         </div>
                         <div class="timing-box">
                             <div class="timing">
                                 <i data-feather="clock"></i>
-                                <h6 class="name">Expires in :</h6>
+                                <h6 class="name">Kết thúc trong:</h6>
                                 <div class="time" id="clockdiv-1" data-hours="1" data-minutes="2" data-seconds="3">
                                     <ul>
                                         <li>
@@ -476,6 +430,7 @@
                             </div>
                         </div>
                     </div>
+<<<<<<< HEAD
 
                     <div class="section-b-space">
                         <div class="product-border border-row overflow-hidden">
@@ -1586,15 +1541,158 @@
                         </div>
                     </div>
 
+{{-- =======
+
+
+                  <!-- Thêm CSS của Swiper (nếu cần dùng slider) -->
+                  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+
+                  <div class="section-b-space">
+                      <div class="product-border border-row overflow-hidden">
+                          <div class="swiper product-slider">
+                              <div class="swiper-wrapper">
+                                  @foreach ($sanPhams->take(4) as $sanPham)
+                                  <div class="swiper-slide">
+                                      <div class="product-box">
+                                          <div class="product-image">
+                                            <a href="">
+                                                <img src="{{ asset('storage/' . $sanPham->hinh_anh) }}" class="img-fluid" alt="{{ $sanPham->ten_san_pham }}">
+                                            </a>
+
+                                              <ul class="product-option">
+                                                  <li title="Xem nhanh">
+                                                      <a href="#" data-bs-toggle="modal" data-bs-target="#view">
+                                                          <i data-feather="eye"></i>
+                                                      </a>
+                                                  </li>
+                                                  <li title="So sánh">
+                                                      <a href="compare.html">
+                                                          <i data-feather="refresh-cw"></i>
+                                                      </a>
+                                                  </li>
+                                                  <li title="Yêu thích">
+                                                      <a href="wishlist.html">
+                                                          <i data-feather="heart"></i>
+                                                      </a>
+                                                  </li>
+                                              </ul>
+                                          </div>
+                                          <div class="product-detail">
+                                              <a href="">
+                                                  <h6 class="name">{{ $sanPham->ten_san_pham }}</h6>
+                                              </a>
+                                              <h5 class="sold">
+                                                  <span class="theme-color price">{{ number_format($sanPham->gia_moi, 0, ',', '.') }}đ</span>
+                                                  <del>{{ number_format($sanPham->gia_cu, 0, ',', '.') }}đ</del>
+                                              </h5>
+                                              <div class="product-rating">
+                                                  <ul class="rating">
+                                                      @for ($i = 1; $i <= 5; $i++)
+                                                      <li>
+                                                          <i data-feather="star" class="{{ $i <= $sanPham->diem_danh_gia ? 'fill' : '' }}"></i>
+                                                      </li>
+                                                      @endfor
+                                                  </ul>
+                                                  <h6 class="theme-color">{{ $sanPham->trang_thai == 1 ? 'Còn Hàng' : 'Hết Hàng' }}</h6>
+                                              </div>
+                                              <div class="add-to-cart-box">
+                                                  <button class="btn btn-add-cart">Thêm vào giỏ</button>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+                                  @endforeach
+                              </div>
+                          </div>
+                      </div>
+
+                      <div class="product-border border-row overflow-hidden mt-4">
+                          <div class="swiper product-slider">
+                              <div class="swiper-wrapper">
+                                  @foreach ($sanPhams->skip(4)->take(4) as $sanPham)
+                                  <div class="swiper-slide">
+                                      <div class="product-box">
+                                          <div class="product-image">
+                                            <a href="">
+                                                <img src="{{ asset('storage/' . $sanPham->hinh_anh) }}" class="img-fluid" alt="{{ $sanPham->ten_san_pham }}">
+                                            </a>
+
+                                              <ul class="product-option">
+                                                  <li title="Xem nhanh">
+                                                      <a href="#" data-bs-toggle="modal" data-bs-target="#view">
+                                                          <i data-feather="eye"></i>
+                                                      </a>
+                                                  </li>
+                                                  <li title="So sánh">
+                                                      <a href="compare.html">
+                                                          <i data-feather="refresh-cw"></i>
+                                                      </a>
+                                                  </li>
+                                                  <li title="Yêu thích">
+                                                      <a href="wishlist.html">
+                                                          <i data-feather="heart"></i>
+                                                      </a>
+                                                  </li>
+                                              </ul>
+                                          </div>
+                                          <div class="product-detail">
+                                              <a href="">
+                                                  <h6 class="name">{{ $sanPham->ten_san_pham }}</h6>
+                                              </a>
+                                              <h5 class="sold">
+                                                  <span class="theme-color price">{{ number_format($sanPham->gia_moi, 0, ',', '.') }}đ</span>
+                                                  <del>{{ number_format($sanPham->gia_cu, 0, ',', '.') }}đ</del>
+                                              </h5>
+                                              <div class="product-rating">
+                                                  <ul class="rating">
+                                                      @for ($i = 1; $i <= 5; $i++)
+                                                      <li>
+                                                          <i data-feather="star" class="{{ $i <= $sanPham->diem_danh_gia ? 'fill' : '' }}"></i>
+                                                      </li>
+                                                      @endfor
+                                                  </ul>
+                                                  <h6 class="theme-color">{{ $sanPham->trang_thai == 1 ? 'Còn Hàng' : 'Hết Hàng' }}</h6>
+
+                                              </div>
+                                              <div class="add-to-cart-box">
+                                                  <button class="btn btn-add-cart">Thêm vào giỏ</button>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+                                  @endforeach
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+
+
+<!-- Thêm Swiper JS -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+<script>
+    var swiper = new Swiper(".product-slider", {
+        slidesPerView: 4,
+        spaceBetween: 10,
+        loop: false,
+        breakpoints: {
+            0: { slidesPerView: 2 },
+            768: { slidesPerView: 3 },
+            1200: { slidesPerView: 4 }
+        }
+    });
+</script>
+
+
+>>>>>>> ea9acc1692e6751cbb5bc03f9208f787549b60c6 --}}
                     <div class="title">
-                        <h2>Bowse by Categories</h2>
+                        <h2>Duyệt theo danh mục</h2>
                         <span class="title-leaf">
                             <svg class="icon-width">
                                 <use xlink:href="https://themes.pixelstrap.com/fastkart/assets/svg/leaf.svg#leaf">
                                 </use>
                             </svg>
                         </span>
-                        <p>Top Categories Of The Week</p>
+                        <p>Danh mục hàng đầu trong tuần</p>
                     </div>
 
                     <div class="category-slider-2 product-wrapper no-arrow">
@@ -1603,7 +1701,7 @@
                                 <div>
                                     <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/vegetable.svg"
                                         class="blur-up lazyload" alt="">
-                                    <h5>Vegetables & Fruit</h5>
+                                    <h5>Áo thể thao</h5>
                                 </div>
                             </a>
                         </div>
@@ -1613,7 +1711,7 @@
                                 <div>
                                     <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/cup.svg"
                                         class="blur-up lazyload" alt="">
-                                    <h5>Beverages</h5>
+                                    <h5>Quần thể thao</h5>
                                 </div>
                             </a>
                         </div>
@@ -1623,7 +1721,7 @@
                                 <div>
                                     <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/meats.svg"
                                         class="blur-up lazyload" alt="">
-                                    <h5>Meats & Seafood</h5>
+                                    <h5>Giày thể thao</h5>
                                 </div>
                             </a>
                         </div>
@@ -1633,7 +1731,7 @@
                                 <div>
                                     <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/breakfast.svg"
                                         class="blur-up lazyload" alt="">
-                                    <h5>Breakfast</h5>
+                                    <h5>Phụ kiện thể thao</h5>
                                 </div>
                             </a>
                         </div>
@@ -1643,7 +1741,7 @@
                                 <div>
                                     <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/frozen.svg"
                                         class="blur-up lazyload" alt="">
-                                    <h5>Frozen Foods</h5>
+                                    <h5>Đồ tập gym</h5>
                                 </div>
                             </a>
                         </div>
@@ -1653,7 +1751,7 @@
                                 <div>
                                     <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/milk.svg"
                                         class="blur-up lazyload" alt="">
-                                    <h5>Milk & Dairies</h5>
+                                    <h5>Áo khoác thể thao</h5>
                                 </div>
                             </a>
                         </div>
@@ -1663,24 +1761,23 @@
                                 <div>
                                     <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/pet.svg"
                                         class="blur-up lazyload" alt="">
-                                    <h5>Pet Food</h5>
+                                    <h5>Đồ thể thao trẻ em</h5>
                                 </div>
                             </a>
                         </div>
                     </div>
-
                     <div class="section-t-space section-b-space">
                         <div class="row g-md-4 g-3">
                             <div class="col-md-6">
                                 <div class="banner-contain hover-effect">
-                                    <img src="../assets/client/images/vegetable/banner/9.jpg"
+                                    <img src="../assets/client/images/sports/banner/1.jpg"
                                         class="bg-img blur-up lazyload" alt="">
                                     <div class="banner-details p-center-left p-4">
                                         <div>
-                                            <h3 class="text-exo">50% offer</h3>
-                                            <h4 class="text-russo fw-normal theme-color mb-2">Testy Mushrooms</h4>
+                                            <h3 class="text-exo">Giảm giá 50%</h3>
+                                            <h4 class="text-russo fw-normal theme-color mb-2">Áo thể thao cao cấp</h4>
                                             <button onclick="location.href = 'shop-left-sidebar.html';"
-                                                class="btn btn-animation btn-sm mend-auto">Shop Now <i
+                                                class="btn btn-animation btn-sm mend-auto">Mua ngay <i
                                                     class="fa-solid fa-arrow-right icon"></i></button>
                                         </div>
                                     </div>
@@ -1688,14 +1785,14 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="banner-contain hover-effect">
-                                    <img src="../assets/client/images/vegetable/banner/10.jpg"
+                                    <img src="../assets/client/images/sports/banner/2.jpg"
                                         class="bg-img blur-up lazyload" alt="">
                                     <div class="banner-details p-center-left p-4">
                                         <div>
-                                            <h3 class="text-exo">50% offer</h3>
-                                            <h4 class="text-russo fw-normal theme-color mb-2">Fresh MEAT</h4>
+                                            <h3 class="text-exo">Giảm giá 50%</h3>
+                                            <h4 class="text-russo fw-normal theme-color mb-2">Giày chạy bộ chuyên nghiệp</h4>
                                             <button onclick="location.href = 'shop-left-sidebar.html';"
-                                                class="btn btn-animation btn-sm mend-auto">Shop Now <i
+                                                class="btn btn-animation btn-sm mend-auto">Mua ngay <i
                                                     class="fa-solid fa-arrow-right icon"></i></button>
                                         </div>
                                     </div>
@@ -1704,16 +1801,18 @@
                         </div>
                     </div>
 
+
                     <div class="title d-block">
-                        <h2>Food Cupboard</h2>
+                        <h2>Tủ đồ thể thao</h2>
                         <span class="title-leaf">
                             <svg class="icon-width">
                                 <use xlink:href="https://themes.pixelstrap.com/fastkart/assets/svg/leaf.svg#leaf">
                                 </use>
                             </svg>
                         </span>
-                        <p>A virtual assistant collects the products from your list</p>
+                        <p>Một trợ lý ảo sẽ giúp bạn chọn những sản phẩm phù hợp</p>
                     </div>
+
 
                     <div class="product-border overflow-hidden wow fadeInUp">
                         <div class="product-box-slider no-arrow">
@@ -2273,16 +2372,16 @@
 
                     <div class="section-t-space">
                         <div class="banner-contain">
-                            <img src="../assets/client/images/vegetable/banner/15.jpg" class="bg-img blur-up lazyload"
-                                alt="">
+                            <img src="../assets/client/images/vegetable/banner/15.jpg" class="bg-img blur-up lazyload" alt="">
                             <div class="banner-details p-center p-4 text-white text-center">
                                 <div>
-                                    <h3 class="lh-base fw-bold offer-text">Get $3 Cashback! Min Order of $30</h3>
-                                    <h6 class="coupon-code">Use Code : GROCERY1920</h6>
+                                    <h3 class="lh-base fw-bold offer-text">Nhận ngay $3 hoàn tiền! Đơn hàng tối thiểu $30</h3>
+                                    <h6 class="coupon-code">Sử dụng mã: SPORTS1920</h6>
                                 </div>
                             </div>
                         </div>
                     </div>
+
 
                     <div class="section-t-space section-b-space">
                         <div class="row g-md-4 g-3">

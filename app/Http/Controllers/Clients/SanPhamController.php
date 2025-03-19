@@ -44,7 +44,6 @@ class SanPhamController extends Controller
                 $query->where('san_phams.trang_thai', 1);
             }
         ])->get();
-
         return view('clients.sanphams.danhsach', compact('sanPhams', 'danhMucs'));
     }
 

@@ -1,263 +1,125 @@
-<div class="left-sidebar-box wow fadeInUp">
-    <div class="left-search-box">
-        <div class="search-box">
-            <input type="search" class="form-control" id="exampleFormControlInput1" placeholder="Search....">
-        </div>
-    </div>
+<style>
+    .left-search-box {
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    position: relative;
+    width: 100%;
+}
 
-    <div class="accordion left-accordion-box" id="accordionPanelsStayOpenExample">
-        <div class="accordion-item">
-            <h2 class="accordion-header" id="panelsStayOpen-headingOne">
-                <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#panelsStayOpen-collapseOne">
-                    Recent Post
-                </button>
-            </h2>
-            <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show">
-                <div class="accordion-body pt-0">
-                    <div class="recent-post-box">
-                        <div class="recent-box">
-                            <a href="{{ route('baiviets.chitiet', 1) }}" class="recent-image">
-                                <img src="../assets/images/inner-page/blog/1.jpg" class="img-fluid blur-up lazyload"
-                                    alt="">
-                            </a>
+.search-box {
+    display: flex;
+    position: relative;
+    align-items: center;
+    width: 100%;
+}
 
-                            <div class="recent-detail">
-                                <a href="{{ route('baiviets.chitiet', 1) }}">
-                                    <h5 class="recent-name">Green onion knife and salad placed</h5>
-                                </a>
-                                <h6>25 Jan, 2022 <i data-feather="thumbs-up"></i></h6>
-                            </div>
-                        </div>
+.search-input {
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    outline: none;
+    font-size: 14px;
+}
 
-                        <div class="recent-box">
-                            <a href="{{ route('baiviets.chitiet', 1) }}" class="recent-image">
-                                <img src="../assets/images/inner-page/blog/2.jpg" class="img-fluid blur-up lazyload"
-                                    alt="">
-                            </a>
+.search-button {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    color: #555;
+}
 
-                            <div class="recent-detail">
-                                <a href="{{ route('baiviets.chitiet', 1) }}">
-                                    <h5 class="recent-name">Health and skin for your organic</h5>
-                                </a>
-                                <h6>25 Jan, 2022 <i data-feather="thumbs-up"></i></h6>
-                            </div>
-                        </div>
+.search-button:hover {
+    color: #333;
+}
 
-                        <div class="recent-box">
-                            <a href="{{ route('baiviets.chitiet', 1) }}" class="recent-image">
-                                <img src="../assets/images/inner-page/blog/3.jpg" class="img-fluid blur-up lazyload"
-                                    alt="">
-                            </a>
 
-                            <div class="recent-detail">
-                                <a href="{{ route('baiviets.chitiet', 1) }}">
-                                    <h5 class="recent-name">Organics mix masala fresh & soft</h5>
-                                </a>
-                                <h6>25 Jan, 2022 <i data-feather="thumbs-up"></i></h6>
-                            </div>
-                        </div>
+</style>
+<div class="col-xxl-3 col-xl-4 col-lg-5">
+    <div class="left-sidebar-box wow fadeInUp">
+        <div class="accordion left-accordion-box" id="accordionExample">
 
-                        <div class="recent-box">
-                            <a href="{{ route('baiviets.chitiet', 1) }}" class="recent-image">
-                                <img src="../assets/images/inner-page/blog/4.jpg" class="img-fluid blur-up lazyload"
-                                    alt="">
-                            </a>
-
-                            <div class="recent-detail">
-                                <a href="{{ route('baiviets.chitiet', 1) }}">
-                                    <h5 class="recent-name">Fresh organics brand and picnic</h5>
-                                </a>
-                                <h6>25 Jan, 2022 <i data-feather="thumbs-up"></i></h6>
-                            </div>
-                        </div>
-                    </div>
+            <div class="left-search-box">
+                <div class="">
+                    <form action="{{ route('baiviets.danhsach') }}" method="GET">
+                        <input type="text" class="form-control search-input" name="search" id="searchInput"
+                            placeholder="Nhập tiêu đề bài viết..." value="{{ request('search') }}">
+                        <button type="submit" class="search-button">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </form>
                 </div>
             </div>
-        </div>
 
-        <div class="accordion-item">
-            <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#panelsStayOpen-collapseTwo">Category</button>
-            </h2>
-            <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse collapse show">
-                <div class="accordion-body p-0">
-                    <div class="category-list-box">
-                        <ul>
-                            <li>
-                                <a href="blog-list.html">
-                                    <div class="category-name">
-                                        <h5>Latest Recipes</h5>
-                                        <span>10</span>
-                                    </div>
-                                </a>
-                            </li>
 
-                            <li>
-                                <a href="blog-list.html">
-                                    <div class="category-name">
-                                        <h5>Diet Food</h5>
-                                        <span>6</span>
-                                    </div>
-                                </a>
-                            </li>
 
-                            <li>
-                                <a href="blog-list.html">
-                                    <div class="category-name">
-                                        <h5>Low calorie Items</h5>
-                                        <span>8</span>
-                                    </div>
-                                </a>
-                            </li>
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#categoryList">
+                        Danh Mục Bài Viết
+                    </button>
+                </h2>
+                <div id="categoryList" class="accordion-collapse collapse show">
+                    <div class="accordion-body pt-0">
+                        <ul class="list-unstyled">
+                            @foreach ($danhMucBaiViets as $danhMuc)
+                                <li class="d-flex justify-content-between align-items-center py-2">
+                                    <a href="{{ route('baiviets.danhsach', ['danh_muc' => $danhMuc->id]) }}"
+                                        class="text-secondary text-decoration-none fw-bold">
+                                        {{ $danhMuc->ten_danh_muc }}
+                                    </a>
+                                    <span class="badge rounded-circle bg-success text-white px-2 py-1">
+                                        {{ $danhMuc->baiViets->count() }}
+                                    </span>
+                                </li>
+                            @endforeach
 
-                            <li>
-                                <a href="blog-list.html">
-                                    <div class="category-name">
-                                        <h5>Cooking Method</h5>
-                                        <span>9</span>
-                                    </div>
-                                </a>
-                            </li>
-
-                            <li>
-                                <a href="blog-list.html">
-                                    <div class="category-name">
-                                        <h5>Dairy Free</h5>
-                                        <span>12</span>
-                                    </div>
-                                </a>
-                            </li>
-
-                            <li>
-                                <a href="blog-list.html">
-                                    <div class="category-name">
-                                        <h5>Vegetarian Food</h5>
-                                        <span>10</span>
-                                    </div>
-                                </a>
-                            </li>
                         </ul>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="accordion-item">
-            <h2 class="accordion-header" id="panelsStayOpen-headingThree">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#panelsStayOpen-collapseThree">Product Tags</button>
-            </h2>
-            <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse collapse show">
-                <div class="accordion-body pt-0">
-                    <div class="product-tags-box">
-                        <ul>
 
-                            <li>
-                                <a href="javascript:void(0)">Fruit Cutting</a>
-                            </li>
-
-                            <li>
-                                <a href="javascript:void(0)">Meat</a>
-                            </li>
-
-                            <li>
-                                <a href="javascript:void(0)">organic</a>
-                            </li>
-
-                            <li>
-                                <a href="javascript:void(0)">cake</a>
-                            </li>
-
-                            <li>
-                                <a href="javascript:void(0)">pick fruit</a>
-                            </li>
-
-                            <li>
-                                <a href="javascript:void(0)">backery</a>
-                            </li>
-
-                            <li>
-                                <a href="javascript:void(0)">organix food</a>
-                            </li>
-
-                            <li>
-                                <a href="javascript:void(0)">Most Expensive Fruit</a>
-                            </li>
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#recentPosts">
+                        Bài Viết Gần Đây
+                    </button>
+                </h2>
+                <div id="recentPosts" class="accordion-collapse collapse show">
+                    <div class="accordion-body pt-0">
+                        <ul class="list-group">
+                            @foreach ($baiVietGanDay as $bv)
+                                <li class="list-group-item d-flex align-items-center">
+                                    <a href="{{ route('baiviets.chitiet', $bv->id) }}" class="recent-image">
+                                        <img src="{{ asset('uploads/' . $bv->hinh_anh) }}" class="img-fluid rounded"
+                                            alt="{{ $bv->tieu_de }}"
+                                            style="width: 60px; height: 60px; object-fit: cover;">
+                                    </a>
+                                    <div class="ms-3">
+                                        <a href="{{ route('baiviets.chitiet', $bv->id) }}">
+                                            <h6 class="mb-1">{{ $bv->tieu_de }}</h6>
+                                        </a>
+                                        <small class="text-muted">{{ $bv->created_at->format('d M, Y') }}
+                                            <i class="fas fa-thumbs-up ms-1"></i>
+                                        </small>
+                                    </div>
+                                </li>
+                            @endforeach
                         </ul>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="accordion-item">
-            <h2 class="accordion-header" id="panelsStayOpen-headingFour">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#panelsStayOpen-collapseFour">Trending Products</button>
-            </h2>
-            <div id="panelsStayOpen-collapseFour" class="accordion-collapse collapse collapse show">
-                <div class="accordion-body">
-                    <ul class="product-list product-list-2 border-0 p-0">
-                        <li>
-                            <div class="offer-product">
-                                <a href="shop-left-sidebar.html" class="offer-image">
-                                    <img src="../assets/images/vegetable/product/23.png" class="blur-up lazyload"
-                                        alt="">
-                                </a>
 
-                                <div class="offer-detail">
-                                    <div>
-                                        <a href="shop-left-sidebar.html">
-                                            <h6 class="name">Meatigo Premium Goat Curry</h6>
-                                        </a>
-                                        <span>450 G</span>
-                                        <h6 class="price theme-color">$ 70.00</h6>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-
-                        <li>
-                            <div class="offer-product">
-                                <a href="shop-left-sidebar.html" class="offer-image">
-                                    <img src="../assets/images/vegetable/product/24.png" class="blur-up lazyload"
-                                        alt="">
-                                </a>
-
-                                <div class="offer-detail">
-                                    <div>
-                                        <a href="shop-left-sidebar.html">
-                                            <h6 class="name">Dates Medjoul Premium Imported</h6>
-                                        </a>
-                                        <span>450 G</span>
-                                        <h6 class="price theme-color">$ 40.00</h6>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-
-                        <li class="mb-0">
-                            <div class="offer-product">
-                                <a href="shop-left-sidebar.html" class="offer-image">
-                                    <img src="../assets/images/vegetable/product/26.png" class="blur-up lazyload"
-                                        alt="">
-                                </a>
-
-                                <div class="offer-detail">
-                                    <div>
-                                        <a href="shop-left-sidebar.html">
-                                            <h6 class="name">Apple Red Premium Imported</h6>
-                                        </a>
-                                        <span>1 KG</span>
-                                        <h6 class="price theme-color">$ 80.00</h6>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
         </div>
     </div>
 </div>

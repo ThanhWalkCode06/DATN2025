@@ -27,10 +27,11 @@ class SettingSeeder extends Seeder
                 'mail_encryption' => '',
                 'mail_from_address' => '',
                 'mail_from_name' => '',
-                'name_website' => 'Seven Star',
+                'name_website' => 'Seven Stars',
                 'location' => 'Trịnh Văn Bô, Hà Nội',
                 'email_owner' => 'thanhchillchill@gmail.com',
                 'logo' => 'images/logo.png',
+                'client_logo' => 'images/logo-green.png',
             ]
         );
     }

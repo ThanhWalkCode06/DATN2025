@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\UpdateBaiVietRequest;
+use App\Models\SanPham;
 
 class BaiVietController extends Controller
 {
@@ -94,6 +95,7 @@ class BaiVietController extends Controller
         return view('admins.baiviets.show', compact('baiViet'));
     }
 
+
     // Hiển thị form chỉnh sửa bài viết
     public function edit($id)
     {
@@ -107,29 +109,29 @@ class BaiVietController extends Controller
     public function update(UpdateBaiVietRequest $request, $id)
     {
         $baiViet = BaiViet::findOrFail($id);
-    
+
         $baiViet->user_id = $request->user_id;
         $baiViet->tieu_de = $request->tieu_de;
         $baiViet->danh_muc_id = $request->danh_muc_id;
         $baiViet->noi_dung = $request->noi_dung;
-    
+
         // Xử lý upload ảnh nếu có thay đổi
         if ($request->hasFile('anh_bia')) {
             $file = $request->file('anh_bia');
             $path = $file->store('images', 'public');
-            
+
             // Xóa ảnh cũ nếu có
             if ($baiViet->anh_bia) {
                 Storage::disk('public')->delete($baiViet->anh_bia);
             }
-    
+
             $baiViet->anh_bia = $path;
         }
-    
+
         $baiViet->save();
         return redirect()->route('baiviets.index')->with('success', 'Bài viết đã được cập nhật.');
     }
-    
+
 
 
 

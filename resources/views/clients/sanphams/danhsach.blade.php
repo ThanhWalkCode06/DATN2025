@@ -13,15 +13,15 @@
     }
 
     .category-list-box:hover {
-        background-color: #17a589; 
+        background-color: #17a589;
         transform: scale(1.05);
-        cursor: pointer; 
+        cursor: pointer;
     }
 
     /* Làm chữ trắng khi hover */
     .category-list-box:hover .name {
         font-weight: bold;
-        color: white; 
+        color: white;
     }
 </style>
 @endsection
@@ -199,7 +199,7 @@
                                 <h3><i class="fa-solid fa-arrow-left"></i> Back</h3>
                             </div>
 
-    
+
                             <div class="accordion custom-accordion" id="accordionExample">
                                 <div class="accordion-item">
                                     <h2 class="accordion-header" id="panelsStayOpen-headingOne">
@@ -212,13 +212,13 @@
                                         <div class="accordion-body">
 
 
-                                            
-                                            
+
+
                                             @if (isset($danhMucs) && count($danhMucs) > 0)
                                                 <form method="GET" action="{{ route('sanphams.danhsach') }}">
                                                     <ul class="category-list custom-padding custom-height" id="category-list">
                                                         @foreach ($danhMucs as $danhMuc)
-                                                            @if ($danhMuc->san_phams_count > 0) 
+                                                            @if ($danhMuc->san_phams_count > 0)
                                                                 <li>
                                                                     <div class="form-check ps-0 m-0 category-list-box">
                                                                         <input class="checkbox_animated d-none" type="radio"
@@ -226,7 +226,7 @@
                                                                             id="danhmuc-{{ $danhMuc->id }}"
                                                                             onchange="this.form.submit()"
                                                                             {{ request('danh_muc_id') == $danhMuc->id ? 'checked' : '' }}>
-                                            
+
                                                                         <label class="form-check-label" for="danhmuc-{{ $danhMuc->id }}">
                                                                             <span class="name">{{ $danhMuc->ten_danh_muc }}
                                                                                 ({{ $danhMuc->san_phams_count }})</span>
@@ -238,7 +238,7 @@
                                                     </ul>
                                                 </form>
                                             @endif
-                                            
+
 
 
 
@@ -285,7 +285,7 @@
                                                                         id="so_sao-{{ $i }}"
                                                                         onchange="this.form.submit()"
                                                                         {{ request('so_sao') == $i ? 'checked' : '' }}>
-                                                    
+
                                                                     <label class="form-check-label" for="so_sao-{{ $i }}" style="cursor: pointer;">
                                                                         <ul class="rating">
                                                                             @for ($j = 1; $j <= 5; $j++)
@@ -303,11 +303,11 @@
                                                         @endforeach
                                                     </ul>
                                                 </form>
-                                                
-                                                
-                                                
-                                                
-                                                
+
+
+
+
+
                                             </ul>
                                         </div>
                                     </div>
@@ -450,26 +450,52 @@
 
                     <div
                         class="row g-sm-4 g-3 row-cols-xxl-4 row-cols-xl-3 row-cols-lg-2 row-cols-md-3 row-cols-2 product-list-section">
-                        @foreach ($sanPhams as $sanPham)
-                            <div>
-                                <div class="product-box-3 h-100 wow fadeInUp">
-                                    <div class="product-header">
-                                        @if ($sanPham->gia_cu > $sanPham->gia_moi)
-                                            <span class="badge bg-danger">-{{ $sanPham->phanTramGiamGia() }}%</span>
-                                        @endif
-                                        <div class="product-image text-center" style="max-width: 250px;">
-                                            <a href="{{ route('sanphams.chitiet', $sanPham->id) }}">
-                                                <img src="{{ Storage::url($sanPham->hinh_anh) }}"
-                                                    class="img-fluid rounded shadow-sm"
-                                                    alt="{{ $sanPham->ten_san_pham }}">
 
-                                            </a>
-                                            <ul class="product-option">
-                                                <li data-bs-toggle="tooltip" data-bs-placement="top" title="View">
-                                                    <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                        data-bs-target="#view">
-                                                        <i data-feather="eye"></i>
-                                                    </a>
+                        @foreach ($sanPhams as $item =>$sanpham)
+                        <div>
+                            <div class="product-box-3 h-100 wow fadeInUp">
+                                <div class="product-header">
+                                    <div class="product-image">
+                                        <a href="{{ route('sanphams.chitiet', $sanpham->id) }}">
+                                            <img src="../assets/images/cake/product/2.png"
+                                                class="img-fluid blur-up lazyload" alt="">
+                                        </a>
+
+                                        <ul class="product-option">
+                                            <li data-bs-toggle="tooltip" data-bs-placement="top" title="View">
+                                                <a href="javascript:void(0)" data-bs-toggle="modal"
+                                                    data-bs-target="#view">
+                                                    <i data-feather="eye"></i>
+                                                </a>
+                                            </li>
+
+                                            <li data-bs-toggle="tooltip" data-bs-placement="top" title="Compare">
+                                                <a href="compare.html">
+                                                    <i data-feather="refresh-cw"></i>
+                                                </a>
+                                            </li>
+
+                                            <li data-bs-toggle="tooltip" data-bs-placement="top" title="Wishlist">
+                                                <a href="wishlist.html" class="notifi-wishlist">
+                                                    <i data-feather="heart"></i>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="product-footer">
+                                    <div class="product-detail">
+                                        <span class="span-name">Vegetable</span>
+                                        <a href="{{ route('sanphams.chitiet',  $sanpham->id) }}">
+                                            <h5 class="name">Fresh Bread and Pastry Flour 200 g</h5>
+                                        </a>
+                                        <p class="text-content mt-1 mb-2 product-content">Cheesy feet cheesy grin brie.
+                                            Mascarpone cheese and wine hard cheese the big cheese everyone loves smelly
+                                            cheese macaroni cheese croque monsieur.</p>
+                                        <div class="product-rating mt-2">
+                                            <ul class="rating">
+                                                <li>
+                                                    <i data-feather="star" class="fill"></i>
                                                 </li>
                                                 <li data-bs-toggle="tooltip" data-bs-placement="top" title="Compare">
                                                     <a href="compare.html">
@@ -484,7 +510,7 @@
                                             </ul>
                                         </div>
                                     </div>
-                                    <div class="product-footer">
+                                    {{-- <div class="product-footer">
                                         <div class="product-detail">
                                             <span
                                                 class="span-name">{{ $sanPham->danhMuc->ten_danh_muc ?? 'Không có danh mục' }}</span>
@@ -521,17 +547,14 @@
                                                 </button>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> --}}
                                 </div>
                             </div>
                         @endforeach
 
-
-
-
                     </div>
-    
-                    
+
+
 
                     <nav class="custom-pagination">
                         <ul class="pagination justify-content-center">
