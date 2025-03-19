@@ -77,19 +77,11 @@
                                             <td class="quantity">
                                                 <h4 class="table-title text-content">Số lượng</h4>
                                                 <div class="quantity-price">
-                                                    <div class="cart_qty">
+                                                    <div>
                                                         <div class="input-group">
-                                                            <button type="button" class="btn qty-left-minus"
-                                                                data-type="minus" data-field="" onclick="showTong()">
-                                                                <i class="fa fa-minus ms-0"></i>
-                                                            </button>
-                                                            <input class="form-control input-number qty-input so-luong"
-                                                                type="text" name="quantity"
-                                                                value="{{ $chiTietGioHang->so_luong }}">
-                                                            <button type="button" class="btn qty-right-plus"
-                                                                data-type="plus" data-field="">
-                                                                <i class="fa fa-plus ms-0"></i>
-                                                            </button>
+                                                            <input class="form-control input-number so-luong" type="number"
+                                                                name="quantity" value="{{ $chiTietGioHang->so_luong }}"
+                                                                onchange="showTong()">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -150,7 +142,7 @@
                         <ul class="summery-total">
                             <li class="list-total border-top-0">
                                 <h4>Tổng tiền</h4>
-                                <h4 class="price theme-color" id="tong-tien">$132.58</h4>
+                                <h4 class="price theme-color"><span id="tong-tien"></span>đ</h4>
                             </li>
                         </ul>
 

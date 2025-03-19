@@ -92,8 +92,8 @@
 
                                         <td>
                                             <div class="table-image">
-                                                <img src="{{ Storage::url($sanpham->hinh_anh) }}"
-                                                    class="img-thumbnail" alt="Hình ảnh" width="100px">
+                                                <img src="{{ Storage::url($sanpham->hinh_anh) }}" class="img-thumbnail"
+                                                    alt="Hình ảnh" width="100px">
                                             </div>
                                         </td>
                                         {{-- <td class="">{{ $sanpham->ngay_nhap->format('d/m/Y') }}</td> --}}
@@ -136,29 +136,29 @@
                                                                         <tbody>
 
 
-                                                                            @if($sanpham->bienThes->isNotEmpty())
-                                                                            @php
-                                                                                // dd($sanpham->bienThes);
-                                                                            @endphp
-                                                                                @foreach($sanpham->bienThes as $key => $bienThe)
-
+                                                                            @if ($sanpham->bienThes->isNotEmpty())
+                                                                                @php
+                                                                                    // dd($sanpham->bienThes);
+                                                                                @endphp
+                                                                                @foreach ($sanpham->bienThes as $key => $bienThe)
                                                                                     <tr>
                                                                                         <td>{{ $key + 1 }}</td>
                                                                                         <td>{{ $bienThe->ten_bien_the }}
                                                                                         </td>
                                                                                         <td>
                                                                                             @if ($bienThe->anh_bien_the)
-
-                                                                                            <img src="{{ Storage::url($bienThe->anh_bien_the) }}" class="img-thumbnail" width="80px">
-
-
+                                                                                                <img src="{{ Storage::url($bienThe->anh_bien_the) }}"
+                                                                                                    class="img-thumbnail"
+                                                                                                    width="80px">
                                                                                             @else
                                                                                                 Không có ảnh
                                                                                             @endif
                                                                                         </td>
 
-                                                                                        <td>{{ number_format($bienThe->gia_nhap, 0, ',', '.') }} VNĐ</td>
-                                                                                        <td>{{ number_format($bienThe->gia_ban, 0, ',', '.') }} VNĐ</td>
+                                                                                        <td>{{ number_format($bienThe->gia_nhap, 0, ',', '.') }}
+                                                                                            VNĐ</td>
+                                                                                        <td>{{ number_format($bienThe->gia_ban, 0, ',', '.') }}
+                                                                                            VNĐ</td>
                                                                                         <td>{{ $bienThe->so_luong }}</td>
                                                                                     </tr>
                                                                                 @endforeach
@@ -181,7 +181,6 @@
                                                 </div><!-- /.modal-dialog -->
                                             </div><!-- /.modal -->
                                         </td>
-
 
                                         <td>
                                             <ul>
@@ -226,24 +225,17 @@
                                                 </li>
                                             </ul>
                                         </td>
-
                                     </tr>
-
-
                                 </tbody>
                             @endforeach
                         </table>
-
                     </div>
-
                 </div>
             </div>
-
         </div>
-            {{ $sanPhams->links('pagination::bootstrap-5') }}
+        {{ $sanPhams->links('pagination::bootstrap-5') }}
 
     </div>
-
 @endsection
 
 @section('js')

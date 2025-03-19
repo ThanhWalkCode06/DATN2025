@@ -71,7 +71,7 @@
                             <div class="order-contain">
                                 <h3 class="theme-color">Đặt hàng thành công</h3>
                                 <h5 class="text-content">Đơn hàng của bạn đang được xử lý</h5>
-                                <h6>Mã đơn hàng: 1708031724431131</h6>
+                                <h6>Mã đơn hàng: {{ $donHang->ma_don_hang }}</h6>
                             </div>
                         </div>
                     </div>
@@ -92,116 +92,44 @@
                         <div class="table-responsive">
                             <table class="table mb-0">
                                 <tbody>
-                                    <tr>
-                                        <td class="product-detail">
-                                            <div class="product border-0">
-                                                <a href="product.left-sidebar.html" class="product-image">
-                                                    <img src="{{ asset('assets/client/images/vegetable/product/1.png') }}"
-                                                        class="img-fluid blur-up lazyload" alt="">
-                                                </a>
-                                                <div class="product-detail">
-                                                    <ul>
-                                                        <li class="name">
-                                                            <a href="product-left-thumbnail.html">Bell pepper</a>
-                                                        </li>
+                                    @foreach ($chiTietDonHangs as $chiTietDonHang)
+                                        <tr>
+                                            <td class="product-detail">
+                                                <div class="product border-0">
+                                                    <a href="{{ route('sanphams.chitiet', 1) }}" class="product-image">
+                                                        <img src="{{ Storage::url($chiTietDonHang->hinh_anh) }}"
+                                                            class="img-fluid blur-up lazyload" alt="">
+                                                    </a>
+                                                    <div class="product-detail">
+                                                        <ul>
+                                                            <li class="name">
+                                                                <a
+                                                                    href="product-left-thumbnail.html">{{ $chiTietDonHang->ten_san_pham }}</a>
+                                                            </li>
 
-                                                        <li class="text-content">Sold By: Fresho</li>
-
-                                                        <li class="text-content">Quantity - 500 g</li>
-                                                    </ul>
+                                                            <li class="text-content">{{ $chiTietDonHang->ten_bien_the }}
+                                                            </li>
+                                                        </ul>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </td>
+                                            </td>
 
-                                        <td class="price">
-                                            <h4 class="table-title text-content">Price</h4>
-                                            <h6 class="theme-color">$20.68</h6>
-                                        </td>
+                                            <td class="price">
+                                                <h4 class="table-title text-content">Giá</h4>
+                                                <h6 class="theme-color">{{ $chiTietDonHang->gia_moi }}đ</h6>
+                                            </td>
 
-                                        <td class="quantity">
-                                            <h4 class="table-title text-content">Qty</h4>
-                                            <h4 class="text-title">01</h4>
-                                        </td>
+                                            <td class="quantity">
+                                                <h4 class="table-title text-content">Số lượng</h4>
+                                                <h4 class="text-title">{{ $chiTietDonHang->so_luong }}</h4>
+                                            </td>
 
-                                        <td class="subtotal">
-                                            <h4 class="table-title text-content">Total</h4>
-                                            <h5>$35.10</h5>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td class="product-detail">
-                                            <div class="product border-0">
-                                                <a href="product.left-sidebar.html" class="product-image">
-                                                    <img src="{{ asset('assets/client/images/vegetable/product/2.png') }}"
-                                                        class="img-fluid blur-up lazyload" alt="">
-                                                </a>
-                                                <div class="product-detail">
-                                                    <ul>
-                                                        <li class="name">
-                                                            <a href="product-left-thumbnail.html">Eggplant</a>
-                                                        </li>
-
-                                                        <li class="text-content">Sold By: Nesto</li>
-
-                                                        <li class="text-content">Quantity - 250 g</li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </td>
-
-                                        <td class="price">
-                                            <h4 class="table-title text-content">Price</h4>
-                                            <h6 class="theme-color">$15.14</h6>
-                                        </td>
-
-                                        <td class="quantity">
-                                            <h4 class="table-title text-content">Qty</h4>
-                                            <h4 class="text-title">01</h4>
-                                        </td>
-
-                                        <td class="subtotal">
-                                            <h4 class="table-title text-content">Total</h4>
-                                            <h5>$52.95</h5>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td class="product-detail">
-                                            <div class="product border-0">
-                                                <a href="product.left-sidebar.html" class="product-image">
-                                                    <img src="{{ asset('assets/client/images/vegetable/product/3.png') }}"
-                                                        class="img-fluid blur-up lazyload" alt="">
-                                                </a>
-                                                <div class="product-detail">
-                                                    <ul>
-                                                        <li class="name">
-                                                            <a href="product-left-thumbnail.html">Onion</a>
-                                                        </li>
-
-                                                        <li class="text-content">Sold By: Basket</li>
-
-                                                        <li class="text-content">Quantity - 750 g</li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </td>
-
-                                        <td class="price">
-                                            <h4 class="table-title text-content">Price</h4>
-                                            <h6 class="theme-color">$29.22</h6>
-                                        </td>
-
-                                        <td class="quantity">
-                                            <h4 class="table-title text-content">Qty</h4>
-                                            <h4 class="text-title">01</h4>
-                                        </td>
-
-                                        <td class="subtotal">
-                                            <h4 class="table-title text-content">Total</h4>
-                                            <h5>$67.36</h5>
-                                        </td>
-                                    </tr>
+                                            <td class="subtotal">
+                                                <h4 class="table-title text-content">Tổng</h4>
+                                                <h5>{{ $chiTietDonHang->gia_moi * $chiTietDonHang->so_luong }}</h5>
+                                            </td>
+                                        </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
@@ -214,30 +142,22 @@
                             <div class="summery-box">
                                 <div class="summery-header">
                                     <h3>Chi tiết đơn hàng</h3>
-                                    <h5 class="ms-auto theme-color">(3 sản phẩm)</h5>
+                                    <h5 class="ms-auto theme-color">({{ sizeof($chiTietDonHangs) }} sản phẩm)</h5>
                                 </div>
 
                                 <ul class="summery-contain">
-                                    <li>
-                                        <h4>Vegetables Total</h4>
-                                        <h4 class="price">$32.34</h4>
-                                    </li>
-
-                                    <li>
-                                        <h4>Vegetables Saving</h4>
-                                        <h4 class="price theme-color">$12.23</h4>
-                                    </li>
-
-                                    <li>
-                                        <h4>Coupon Discount</h4>
-                                        <h4 class="price text-danger">$6.27</h4>
-                                    </li>
+                                    @foreach ($chiTietDonHangs as $chiTietDonHang)
+                                        <li>
+                                            <h4>{{ $chiTietDonHang->ten_san_pham }}</h4>
+                                            <h4 class="price">{{ $chiTietDonHang->gia_moi }}đ</h4>
+                                        </li>
+                                    @endforeach
                                 </ul>
 
                                 <ul class="summery-total">
                                     <li class="list-total">
                                         <h4>Tổng:</h4>
-                                        <h4 class="price">$19.28</h4>
+                                        <h4 class="price">{{ $donHang->tong_tien }}đ</h4>
                                     </li>
                                 </ul>
                             </div>
@@ -251,8 +171,7 @@
 
                                 <ul class="summery-contain pb-0 border-bottom-0">
                                     <li class="d-block">
-                                        <h4>8424 James Lane South</h4>
-                                        <h4 class="mt-2">San Francisco, CA 94080</h4>
+                                        <h4>{{ $donHang->dia_chi_nguoi_nhan }}</h4>
                                     </li>
 
                                     <li class="pb-0">
@@ -279,8 +198,7 @@
 
                                 <ul class="summery-contain pb-0 border-bottom-0">
                                     <li class="d-block pt-0">
-                                        <p class="text-content">Pay on Delivery (Cash/Card). Cash on delivery (COD)
-                                            available. Card/Net banking acceptance subject to device availability.</p>
+                                        <h4>{{ $donHang->ten_phuong_thuc }}</h4>
                                     </li>
                                 </ul>
                             </div>
