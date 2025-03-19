@@ -26,7 +26,8 @@ use App\Http\Controllers\ClientDanhMucSanPhamController;
 use App\Http\Controllers\Admins\Responsibility\RoleController;
 use App\Http\Controllers\Admins\Responsibility\PermissionController;
 use App\Http\Controllers\Clients\Auth\AuthController as AuthAuthController;
-
+use App\Http\Controllers\Clients\UserController as ClientsUserController;
+use App\Http\Controllers\HelperCommon\Helper;
 
 // Login Admin Controller
 Route::prefix('/admin')->controller(AuthController::class)->group(function () {
@@ -145,6 +146,9 @@ Route::get('/thanhtoan', [App\Http\Controllers\Clients\ThanhToanController::clas
 Route::get('/dathangthanhcong', [App\Http\Controllers\Clients\ThanhToanController::class, 'datHangThanhCong'])->name('thanhtoans.dathangthanhcong');
 
 Route::get('/users', [App\Http\Controllers\Clients\UserController::class, 'chiTiet'])->name('users.chitiet');
+Route::put('/users/update-infor/{id}', [App\Http\Controllers\Clients\UserController::class, 'updateInfor'])->name('users.update');
+Route::get('/order-tracking/{id}', [App\Http\Controllers\Clients\UserController::class,'orderTracking'])->name('order-tracking.client');
+Route::post('/order/updateTrangThai/{id}', [App\Http\Controllers\Clients\UserController::class, 'updateTrangThai'])->name('order.updateTrangThai');
 
 Route::get('/gioithieu', [App\Http\Controllers\Clients\GioiThieuController::class, 'home'])->name('gioithieu.home');
 
