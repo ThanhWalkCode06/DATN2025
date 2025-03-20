@@ -13,15 +13,15 @@
     }
 
     .category-list-box:hover {
-        background-color: #17a589; 
+        background-color: #17a589;
         transform: scale(1.05);
-        cursor: pointer; 
+        cursor: pointer;
     }
 
     /* Làm chữ trắng khi hover */
     .category-list-box:hover .name {
         font-weight: bold;
-        color: white; 
+        color: white;
     }
 </style>
 @endsection
@@ -199,7 +199,7 @@
                                 <h3><i class="fa-solid fa-arrow-left"></i> Back</h3>
                             </div>
 
-    
+
                             <div class="accordion custom-accordion" id="accordionExample">
                                 <div class="accordion-item">
                                     <h2 class="accordion-header" id="panelsStayOpen-headingOne">
@@ -212,13 +212,13 @@
                                         <div class="accordion-body">
 
 
-                                            
-                                            
+
+
                                             @if (isset($danhMucs) && count($danhMucs) > 0)
                                                 <form method="GET" action="{{ route('sanphams.danhsach') }}">
                                                     <ul class="category-list custom-padding custom-height" id="category-list">
                                                         @foreach ($danhMucs as $danhMuc)
-                                                            @if ($danhMuc->san_phams_count > 0) 
+                                                            @if ($danhMuc->san_phams_count > 0)
                                                                 <li>
                                                                     <div class="form-check ps-0 m-0 category-list-box">
                                                                         <input class="checkbox_animated d-none" type="radio"
@@ -226,7 +226,7 @@
                                                                             id="danhmuc-{{ $danhMuc->id }}"
                                                                             onchange="this.form.submit()"
                                                                             {{ request('danh_muc_id') == $danhMuc->id ? 'checked' : '' }}>
-                                            
+
                                                                         <label class="form-check-label" for="danhmuc-{{ $danhMuc->id }}">
                                                                             <span class="name">{{ $danhMuc->ten_danh_muc }}
                                                                                 ({{ $danhMuc->san_phams_count }})</span>
@@ -238,7 +238,7 @@
                                                     </ul>
                                                 </form>
                                             @endif
-                                            
+
 
 
 
@@ -285,7 +285,7 @@
                                                                         id="so_sao-{{ $i }}"
                                                                         onchange="this.form.submit()"
                                                                         {{ request('so_sao') == $i ? 'checked' : '' }}>
-                                                    
+
                                                                     <label class="form-check-label" for="so_sao-{{ $i }}" style="cursor: pointer;">
                                                                         <ul class="rating">
                                                                             @for ($j = 1; $j <= 5; $j++)
@@ -303,11 +303,11 @@
                                                         @endforeach
                                                     </ul>
                                                 </form>
-                                                
-                                                
-                                                
-                                                
-                                                
+
+
+
+
+
                                             </ul>
                                         </div>
                                     </div>
@@ -525,10 +525,10 @@
                                 </div>
                             </div>
                         @endforeach
-                        
+
                     </div>
-    
-                    
+
+
 
                     <nav class="custom-pagination">
                         <ul class="pagination justify-content-center">
