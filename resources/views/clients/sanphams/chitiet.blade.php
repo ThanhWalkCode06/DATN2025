@@ -39,43 +39,60 @@
             <div class="row">
                 <div class="col-xxl-9 col-xl-8 col-lg-7 wow fadeInUp">
                     <div class="row g-4">
-                        <div class="col-xl-6 wow fadeInUp">  
-                            <div class="product-left-box">  
-                                <div class="row g-sm-4 g-2">  
+                        <div class="col-xl-6 wow fadeInUp">
+                            <div class="product-left-box">
+                                <div class="row g-sm-4 g-2">
                                     <div class="col-12">  
                                         <div class="product-main no-arrow">  
                                             <div>  
                                                 <div class="slider-image">  
-                                                    <!-- Hiển thị hình ảnh của sản phẩm chính -->  
-                                                    <img src="{{ asset('storage/' . $sanPhams->hinh_anh) }}" id="main-image"  
-                                                         data-zoom-image="{{ asset('storage/' . $sanPhams->hinh_anh) }}"  
-                                                         class="img-fluid image_zoom_cls-0 blur-up lazyload"  
-                                                         alt="{{ $sanPhams->ten_san_pham }}">  
+                                                    <!-- Hiển thị hình ảnh chính của sản phẩm -->  
+                                                    <img src="{{ asset('storage/' . $sanPhams->hinh_anh) }}"  
+                                                        id="img-1"  
+                                                        data-zoom-image="{{ asset('storage/' . $sanPhams->hinh_anh) }}"  
+                                                        class="img-fluid image_zoom_cls-0 blur-up lazyload"  
+                                                        alt="">  
                                                 </div>  
                                             </div>  
+                                    
+                                            <!-- Hiển thị các hình ảnh phụ -->  
+                                            @foreach($anhSPs as $anhSP)  
+                                                <div>  
+                                                    <div class="slider-image">  
+                                                        <img src="{{ asset('storage/' . $anhSP->link_anh_san_pham) }}"  
+                                                            data-zoom-image="{{ asset('storage/' . $anhSP->link_anh_san_pham) }}"  
+                                                            class="img-fluid image_zoom_cls-0 blur-up lazyload"  
+                                                            alt="">  
+                                                    </div>  
+                                                </div>  
+                                            @endforeach  
                                         </div>  
                                     </div>  
-                        
+                                    
                                     <div class="col-12">  
                                         <div class="left-slider-image left-slider no-arrow slick-top">  
-                                            @if ($sanPhams->bienThes->isNotEmpty())  
-                                                @foreach ($sanPhams->bienThes as $bienThe)  
-                                                    <div>  
-                                                        <div class="sidebar-image"   
-                                                             onclick="showImage('{{ asset('storage/' . $bienThe->anh_bien_the) }}')">  
-                                                            <!-- Hiển thị hình ảnh của biến thể -->  
-                                                            <img src="{{ asset('storage/' . $bienThe->anh_bien_the) }}"  
-                                                                 class="img-fluid blur-up lazyload"   
-                                                                 alt="{{ $bienThe->ten_bien_the }}">  
-                                                        </div>  
+                                            <!-- Hiển thị hình ảnh chính của sản phẩm trong sidebar -->  
+                                            <div>  
+                                                <div class="sidebar-image">  
+                                                    <img src="{{ asset('storage/' . $sanPhams->hinh_anh) }}"  
+                                                        class="img-fluid blur-up lazyload" alt="">  
+                                                </div>  
+                                            </div>  
+                                    
+                                            <!-- Hiển thị các hình ảnh phụ trong sidebar -->  
+                                            @foreach($anhSPs as $anhSP)  
+                                                <div>  
+                                                    <div class="sidebar-image">  
+                                                        <img src="{{ asset('storage/' . $anhSP->link_anh_san_pham) }}"  
+                                                            class="img-fluid blur-up lazyload" alt="">  
                                                     </div>  
-                                                @endforeach  
-                                            @endif  
+                                                </div>  
+                                            @endforeach  
                                         </div>  
                                     </div>  
-                                </div>  
-                            </div>  
-                        </div>  
+                                </div>
+                            </div>
+                        </div> 
 
                         <div class="col-xl-6 wow fadeInUp">
                             <h2>Frequently bought together</h2>
@@ -112,7 +129,7 @@
                                 </div>
 
                                 <div class="product-contain">
-                                    <p class="w-100">{{ $sanPhams->mo_ta }}</p>
+                                    <p class="w-100"></p>
                                 </div>
 
                                 <div class="product-package">
@@ -242,25 +259,23 @@
                                 <div class="buy-box">
                                     <a href="wishlist.html">
                                         <i data-feather="heart"></i>
-                                        <span>Add To Wishlist</span>
+                                        <span>
+                                            Thêm vào danh sách yêu thích</span>
                                     </a>
 
-                                    <a href="compare.html">
+                                    {{-- <a href="compare.html">
                                         <i data-feather="shuffle"></i>
                                         <span>Add To Compare</span>
-                                    </a>
+                                    </a> --}}
                                 </div>
 
                                 <div class="pickup-box">
                                     <div class="product-title">
-                                        <h4>Store Information</h4>
+                                        <h4>Mô tả</h4>
                                     </div>
 
                                     <div class="pickup-detail">
-                                        <h4 class="text-content w-100">I would like the people that buy my clothes to
-                                            understand that for me it's one small piece of art. I love the 2000s because
-                                            everyone started to love haute couture. The only way to do something in
-                                            depth is to work hard.</h4>
+                                        <h4 class="text-content w-100">{!! $sanPhams->mo_ta !!}</h4>
                                     </div>
 
                                     <div class="product-info">
@@ -274,7 +289,7 @@
 
                                 <div class="payment-option">
                                     <div class="product-title">
-                                        <h4>Guaranteed Safe Checkout</h4>
+                                        <h4>Phương thức thanh toán</h4>
                                     </div>
                                     <ul>
                                         <li>
@@ -1734,14 +1749,45 @@
 
 @section('js')
 <script>  
-    function showImage(imageUrl) {  
-        // Cập nhật nguồn hình ảnh chính  
-        const mainImage = document.getElementById('main-image');  
-        mainImage.src = imageUrl;  
-        mainImage.setAttribute('data-zoom-image', imageUrl);  
+    $(document).ready(function() {  
+        // Khởi tạo tính năng zoom cho ảnh chính  
+        const mainImage = $('#img-1');  
+        if (mainImage.length) {  
+            mainImage.elevateZoom({  
+                zoomType: "inner",  
+                cursor: "crosshair",  
+                scrollZoom: true,  
+                responsive: true,  
+                zoomWindowWidth: 400,  
+                zoomWindowHeight: 400,  
+            });  
+        }  
 
-        // Hiển thị ảnh bên trên  
-        mainImage.style.display = "block"; // Đảm bảo ảnh chính hiện ra  
-    }  
-</script>   
+        // Khởi tạo tính năng zoom cho các ảnh phụ khi di chuyển chuột  
+        $('.slider-image img').not('#img-1').each(function() {  
+            $(this).hover(function() {  
+                $(this).elevateZoom({  
+                    zoomType: "inner",  
+                    cursor: "crosshair",  
+                    scrollZoom: true,  
+                    responsive: true,  
+                    zoomWindowWidth: 400,  
+                    zoomWindowHeight: 400,  
+                });  
+            }, function() {  
+                // Khi chuột rời đi, hủy zoom để giải phóng bộ nhớ  
+                $.fn.elevateZoom.destroy();  
+            });  
+        });  
+        $(document).on('mousewheel DOMMouseScroll', function(e) {  
+            var zoomWindow = $('.zoomWindow');  
+            if (zoomWindow.is(':visible')) {  
+                e.preventDefault(); // Ngăn chặn sự kiện mặc định  
+                var delta = (e.originalEvent.wheelDelta || -e.originalEvent.detail);  
+                window.scrollBy(0, delta > 0 ? -30 : 30); // Cuộn lên hoặc cuộn xuống  
+            }  
+        }); 
+    });  
+</script>  
+   
 @endsection

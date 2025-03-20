@@ -21,7 +21,7 @@
                 <div class="col-xl-8 ratio_65">
                     <div class="home-contain h-100">
                         <div class="h-100">
-                            <img src="../assets/client/images/vegetable/banner/1.jpg" class="bg-img blur-up lazyload"
+                            <img src="../assets/client/images/fashion/banner/7.jpg" class="bg-img blur-up lazyload"
                                 alt="">
                         </div>
                         <div class="home-detail p-center-left w-75">
@@ -79,7 +79,7 @@
     <!-- Home Section End -->
 
     <!-- Banner Section Start -->
-    <section class="banner-section ratio_60 wow fadeInUp">
+    {{-- <section class="banner-section ratio_60 wow fadeInUp">
         <div class="container-fluid-lg">
             <div class="banner-slider">
                 <div>
@@ -147,7 +147,7 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> --}}
     <!-- Banner Section End -->
 
     <!-- Product Section Start -->
@@ -156,7 +156,7 @@
             <div class="row g-sm-4 g-3">
                 <div class="col-xxl-3 col-xl-4 d-none d-xl-block">
                     <div class="p-sticky">
-                        <div class="category-menu">
+                        {{-- <div class="category-menu">
                             <h3>Danh Mục</h3>
                             <ul>
                                 <li>
@@ -206,30 +206,7 @@
                                 </li>
                             </ul>
 
-                            <ul class="value-list">
-                                <li>
-                                    <div class="category-list">
-                                        <h5 class="ms-0 text-title">
-                                            <a href="shop-left-sidebar.html">Ưu Đãi Trong Ngày</a>
-                                        </h5>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="category-list">
-                                        <h5 class="ms-0 text-title">
-                                            <a href="shop-left-sidebar.html">Top 50 Khuyến Mãi</a>
-                                        </h5>
-                                    </div>
-                                </li>
-                                <li class="mb-0">
-                                    <div class="category-list">
-                                        <h5 class="ms-0 text-title">
-                                            <a href="shop-left-sidebar.html">Sản Phẩm Mới</a>
-                                        </h5>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
+                        </div> --}}
 
 
                         <div class="ratio_156 section-t-space">
@@ -268,7 +245,7 @@
                             </div>
                         </div>
 
-                        <div class="section-t-space">
+                        {{-- <div class="section-t-space">
                             <div class="category-menu">
                                 <h3>Sản Phẩm Bán Chạy</h3>
 
@@ -350,7 +327,7 @@
                                     </li>
                                 </ul>
                             </div>
-                        </div>
+                        </div> --}}
 
                         <div class="section-t-space">
                             <div class="category-menu">
@@ -430,7 +407,6 @@
                             </div>
                         </div>
                     </div>
-<<<<<<< HEAD
 
                     <div class="section-b-space">
                         <div class="product-border border-row overflow-hidden">
@@ -997,7 +973,7 @@
                                                 </div>
                                                 <div class="product-image">
                                                     <a href="product-left-thumbnail.html">
-                                                        <img src="../assets/client/images/vegetable/product/7.png"
+                                                        <img src="../assets/client/images/vegetable/product/1.png"
                                                             class="img-fluid blur-up lazyload" alt="">
                                                     </a>
                                                     <ul class="product-option">
@@ -1699,14 +1675,32 @@
                         <div>
                             <a href="shop-left-sidebar.html" class="category-box category-dark">
                                 <div>
-                                    <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/vegetable.svg"
-                                        class="blur-up lazyload" alt="">
+                                    {{-- <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/vegetable.svg"
+                                        class="blur-up lazyload" alt=""> --}}
+                                    <h5>Áo thể thao</h5>
+                                </div>
+                            </a>
+                        </div>
+                        <div>
+                            <a href="shop-left-sidebar.html" class="category-box category-dark">
+                                <div>
+                                    {{-- <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/vegetable.svg"
+                                        class="blur-up lazyload" alt=""> --}}
+                                    <h5>Áo thể thao</h5>
+                                </div>
+                            </a>
+                        </div>
+                        <div>
+                            <a href="shop-left-sidebar.html" class="category-box category-dark">
+                                <div>
+                                    {{-- <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/vegetable.svg"
+                                        class="blur-up lazyload" alt=""> --}}
                                     <h5>Áo thể thao</h5>
                                 </div>
                             </a>
                         </div>
 
-                        <div>
+                        {{-- <div>
                             <a href="shop-left-sidebar.html" class="category-box category-dark">
                                 <div>
                                     <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/cup.svg"
@@ -1764,13 +1758,13 @@
                                     <h5>Đồ thể thao trẻ em</h5>
                                 </div>
                             </a>
-                        </div>
+                        </div> --}}
                     </div>
-                    <div class="section-t-space section-b-space">
+                    {{-- <div class="section-t-space section-b-space">
                         <div class="row g-md-4 g-3">
                             <div class="col-md-6">
                                 <div class="banner-contain hover-effect">
-                                    <img src="../assets/client/images/sports/banner/1.jpg"
+                                    <img src="../assets/client/images/fashion/banner/1.jpg"
                                         class="bg-img blur-up lazyload" alt="">
                                     <div class="banner-details p-center-left p-4">
                                         <div>
@@ -1799,10 +1793,10 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
 
 
-                    <div class="title d-block">
+                    {{-- <div class="title d-block">
                         <h2>Tủ đồ thể thao</h2>
                         <span class="title-leaf">
                             <svg class="icon-width">
@@ -1811,10 +1805,10 @@
                             </svg>
                         </span>
                         <p>Một trợ lý ảo sẽ giúp bạn chọn những sản phẩm phù hợp</p>
-                    </div>
+                    </div> --}}
 
 
-                    <div class="product-border overflow-hidden wow fadeInUp">
+                    {{-- <div class="product-border overflow-hidden wow fadeInUp">
                         <div class="product-box-slider no-arrow">
                             <div>
                                 <div class="row m-0">
@@ -2368,9 +2362,9 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
 
-                    <div class="section-t-space">
+                    {{-- <div class="section-t-space">
                         <div class="banner-contain">
                             <img src="../assets/client/images/vegetable/banner/15.jpg" class="bg-img blur-up lazyload" alt="">
                             <div class="banner-details p-center p-4 text-white text-center">
@@ -2380,10 +2374,10 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
 
 
-                    <div class="section-t-space section-b-space">
+                    {{-- <div class="section-t-space section-b-space">
                         <div class="row g-md-4 g-3">
                             <div class="col-xxl-8 col-xl-12 col-md-7">
                                 <div class="banner-contain hover-effect">
@@ -2418,7 +2412,7 @@
                                 </a>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
 
                     <div class="title d-block">
                         <div>
@@ -2675,7 +2669,7 @@
                         </div>
                     </div>
 
-                    <div class="section-t-space">
+                    {{-- <div class="section-t-space">
                         <div class="banner-contain hover-effect">
                             <img src="../assets/client/images/vegetable/banner/14.jpg" class="bg-img blur-up lazyload"
                                 alt="">
@@ -2690,10 +2684,10 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
 
                     <div class="title section-t-space">
-                        <h2>Featured Blog</h2>
+                        <h2>Bài viết</h2>
                         <span class="title-leaf">
                             <svg class="icon-width">
                                 <use xlink:href="https://themes.pixelstrap.com/fastkart/assets/svg/leaf.svg#leaf">
@@ -2775,7 +2769,7 @@
     <!-- Product Section End -->
 
     <!-- Newsletter Section Start -->
-    <section class="newsletter-section section-b-space">
+    {{-- <section class="newsletter-section section-b-space">
         <div class="container-fluid-lg">
             <div class="newsletter-box newsletter-box-2">
                 <div class="newsletter-contain py-5">
@@ -2801,57 +2795,10 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> --}}
     <!-- Newsletter Section End -->
 @endsection
 
 @section('js')
-<script>
-$(document).ready(function () {
-    $(".notifi-wishlist").on("click", function (e) {
-        e.preventDefault(); // Ngăn chặn load lại trang
-
-        var button = $(this); // Lưu nút đang bấm
-        var form = button.closest("li").find(".wishlist-form"); // Tìm form gần nhất
-        var formData = form.serialize(); // Lấy dữ liệu form
-
-        $.ajax({
-            url: form.attr("action"),
-            type: "POST",
-            data: formData,
-            success: function (response) {
-                $.notify({
-                    icon: "fa fa-check",
-                    title: "Thành công!",
-                    message: response.message || "Sản phẩm đã được thêm vào danh sách yêu thích.",
-                }, {
-                    element: "body",
-                    type: "success",
-                    placement: { from: "top", align: "right" },
-                    delay: 3000,
-                    animate: { enter: "animated fadeInDown", exit: "animated fadeOutUp" },
-                });
-
-                // Đổi màu icon thành đỏ (đã yêu thích)
-                button.find("i").css("color", "red");
-            },
-            error: function (xhr) {
-                $.notify({
-                    icon: "fa fa-times",
-                    title: "Lỗi!",
-                    message: xhr.responseJSON?.message || "Có lỗi xảy ra, vui lòng thử lại.",
-                }, {
-                    element: "body",
-                    type: "danger",
-                    placement: { from: "top", align: "right" },
-                    delay: 3000,
-                    animate: { enter: "animated fadeInDown", exit: "animated fadeOutUp" },
-                });
-            }
-        });
-    });
-});
-
-</script>
 @endsection
 

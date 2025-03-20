@@ -86,7 +86,7 @@
     <!-- Header Start -->
     @include('clients.blocks.header')
     <!-- Header End -->
-   
+
 
     @yield('breadcrumb')
 
@@ -219,4 +219,51 @@
         });
     }
     </script>
+    <script>
+        $(document).ready(function () {
+            $(".notifi-wishlist").on("click", function (e) {
+                e.preventDefault(); // Ngăn chặn load lại trang
+
+                var button = $(this); // Lưu nút đang bấm
+                var form = button.closest("li").find(".wishlist-form"); // Tìm form gần nhất
+                var formData = form.serialize(); // Lấy dữ liệu form
+
+                $.ajax({
+                    url: form.attr("action"),
+                    type: "POST",
+                    data: formData,
+                    success: function (response) {
+                        $.notify({
+                            icon: "fa fa-check",
+                            title: "Thành công!",
+                            message: response.message || "Sản phẩm đã được thêm vào danh sách yêu thích.",
+                        }, {
+                            element: "body",
+                            type: "success",
+                            placement: { from: "top", align: "right" },
+                            delay: 3000,
+                            animate: { enter: "animated fadeInDown", exit: "animated fadeOutUp" },
+                        });
+
+                        // Đổi màu icon thành đỏ (đã yêu thích)
+                        button.find("i").css("color", "red");
+                    },
+                    error: function (xhr) {
+                        $.notify({
+                            icon: "fa fa-times",
+                            title: "Lỗi!",
+                            message: xhr.responseJSON?.message || "Có lỗi xảy ra, vui lòng thử lại.",
+                        }, {
+                            element: "body",
+                            type: "danger",
+                            placement: { from: "top", align: "right" },
+                            delay: 3000,
+                            animate: { enter: "animated fadeInDown", exit: "animated fadeOutUp" },
+                        });
+                    }
+                });
+            });
+        });
+
+        </script>
 </html>

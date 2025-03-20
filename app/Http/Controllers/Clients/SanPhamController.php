@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\DanhMucSanPham;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+
 class SanPhamController extends Controller
 {
     public function danhSach(Request $request)
@@ -36,7 +37,7 @@ class SanPhamController extends Controller
             }
         }
 
-        $sanPhams = $query->paginate(12);
+        $sanPhams = $query->paginate(50);
 
 
         $danhMucs = DanhMucSanPham::withCount([
@@ -49,7 +50,7 @@ class SanPhamController extends Controller
 
 
 
-    public function chiTiet()
+    public function chiTiet($id)
     {
         return view('clients.sanphams.chitiet');
     }
@@ -102,6 +103,10 @@ class SanPhamController extends Controller
         } catch (\Exception $e) {
             \Log::error('Lỗi xóa sản phẩm yêu thích: ' . $e->getMessage());
             return response()->json(['success' => false, 'message' => 'Lỗi server!'], 500);
-        }
+
+    }
+
+
+
     }
 }

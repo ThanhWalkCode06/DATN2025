@@ -106,7 +106,7 @@ Route::get('/', function () {
     return view('clients.index', compact('sanPhams'));
 })->name('home');
 
-Route::controller(App\Http\Controllers\Clients\Auth\AuthController::class)->group( function() {
+Route::controller(App\Http\Controllers\Clients\Auth\AuthController::class)->group(function () {
     Route::get('/login', 'showLogin')->name('login.client');
     Route::post('/login/store', 'storeLogin')->name('login.store.client');
 
@@ -147,7 +147,7 @@ Route::get('/dathangthanhcong', [App\Http\Controllers\Clients\ThanhToanControlle
 
 Route::get('/users', [App\Http\Controllers\Clients\UserController::class, 'chiTiet'])->name('users.chitiet');
 Route::put('/users/update-infor/{id}', [App\Http\Controllers\Clients\UserController::class, 'updateInfor'])->name('users.update');
-Route::get('/order-tracking/{id}', [App\Http\Controllers\Clients\UserController::class,'orderTracking'])->name('order-tracking.client');
+Route::get('/order-tracking/{id}', [App\Http\Controllers\Clients\UserController::class, 'orderTracking'])->name('order-tracking.client');
 Route::post('/order/updateTrangThai/{id}', [App\Http\Controllers\Clients\UserController::class, 'updateTrangThai'])->name('order.updateTrangThai');
 
 Route::get('/gioithieu', [App\Http\Controllers\Clients\GioiThieuController::class, 'home'])->name('gioithieu.home');
@@ -160,4 +160,3 @@ Route::get('/gioi-thieu', [DanhGiaController::class, 'showDanhGias'])->name('gio
 
 Route::get('clientdanhmucsanpham', [ClientDanhMucSanPhamController::class, 'index'])->name('danhsach');
 Route::get('/clientsanpham', [ClientDanhMucSanPhamController::class, 'danhSachSanPham'])->name('clientsanpham.danhsach');
-
