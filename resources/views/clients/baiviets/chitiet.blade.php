@@ -60,12 +60,12 @@
                 <div class="col-xxl-9 col-xl-8 col-lg-7 order-lg-2">
                     <div class="ratio_50 position-relative">
                         <div class="blog-detail-image rounded-3 overflow-hidden position-relative">
-                            <img src="{{ asset('storage/' . $baiViet->hinh_anh) }}"
+                            <img src="{{ asset('storage/' . $baiViet->anh_bia) }}"
                                  class="bg-img blur-up lazyload w-100 h-100 object-fit-cover"
                                  alt="{{ $baiViet->tieu_de }}">
 
                             <div class="position-absolute top-0 start-0 w-100 h-100"
-                                 style="background: linear-gradient(to bottom, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 1));">
+                                 style="background: linear-gradient(to bottom, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.6));">
                             </div>
 
                             <div class="blog-image-contain">
