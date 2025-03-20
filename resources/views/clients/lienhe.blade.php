@@ -21,7 +21,6 @@
                                         <i class="fa-solid fa-house"></i>
                                     </a>
                                 </li>
-
                                 <li class="breadcrumb-item active">Liên hệ</li>
                             </ol>
                         </nav>
@@ -61,7 +60,6 @@
                                                 <div class="contact-detail-title">
                                                     <h4>Điện thoại</h4>
                                                 </div>
-
                                                 <div class="contact-detail-contain">
                                                     <p>0987654321</p>
                                                 </div>
@@ -76,42 +74,11 @@
                                                 <div class="contact-detail-title">
                                                     <h4>Email</h4>
                                                 </div>
-
                                                 <div class="contact-detail-contain">
                                                     <p>starsseven.2025@gmail.com</p>
                                                 </div>
                                             </div>
-                                        </div>
-
-                                        {{-- <div class="col-xxl-6 col-lg-12 col-sm-6">
-                                            <div class="contact-detail-box">
-                                                <div class="contact-icon">
-                                                    <i class="fa-solid fa-location-dot"></i>
-                                                </div>
-                                                <div class="contact-detail-title">
-                                                    <h4>Văn phòng London</h4>
-                                                </div>
-
-                                                <div class="contact-detail-contain">
-                                                    <p>Cruce Casa de Postas 29</p>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-xxl-6 col-lg-12 col-sm-6">
-                                            <div class="contact-detail-box">
-                                                <div class="contact-icon">
-                                                    <i class="fa-solid fa-building"></i>
-                                                </div>
-                                                <div class="contact-detail-title">
-                                                    <h4>Văn phòng Bournemouth</h4>
-                                                </div>
-
-                                                <div class="contact-detail-contain">
-                                                    <p>Visitación de la Encina 22</p>
-                                                </div>
-                                            </div>
-                                        </div> --}}
+                                        </div>                                    
                                     </div>
                                 </div>
                             </div>
@@ -124,62 +91,62 @@
                         <h2>Liên hệ</h2>
                     </div>
                     <div class="right-sidebar-box">
-                        <div class="row">
-                            <div class="col-xxl-6 col-lg-12 col-sm-6">
-                                <div class="mb-md-4 mb-3 custom-form">
-                                    <label for="exampleFormControlInput" class="form-label">Họ</label>
-                                    <div class="custom-input">
-                                        <input type="text" class="form-control" id="exampleFormControlInput"
-                                            placeholder="Nhập họ">
-                                        <i class="fa-solid fa-user"></i>
+                        <!-- Form gửi liên hệ -->
+                        <form action="{{ route('send.contact') }}" method="POST">
+                            @csrf
+                            <div class="row">
+                                <div class="col-xxl-6 col-lg-12 col-sm-6">
+                                    <div class="mb-md-4 mb-3 custom-form">
+                                        <label for="first_name" class="form-label">Họ</label>
+                                        <div class="custom-input">
+                                            <input type="text" class="form-control" id="first_name" name="first_name" placeholder="Nhập họ" required>
+                                            <i class="fa-solid fa-user"></i>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div class="col-xxl-6 col-lg-12 col-sm-6">
-                                <div class="mb-md-4 mb-3 custom-form">
-                                    <label for="exampleFormControlInput1" class="form-label">Tên</label>
-                                    <div class="custom-input">
-                                        <input type="text" class="form-control" id="exampleFormControlInput1"
-                                            placeholder="Nhập tên">
-                                        <i class="fa-solid fa-user"></i>
+                                <div class="col-xxl-6 col-lg-12 col-sm-6">
+                                    <div class="mb-md-4 mb-3 custom-form">
+                                        <label for="last_name" class="form-label">Tên</label>
+                                        <div class="custom-input">
+                                            <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Nhập tên" required>
+                                            <i class="fa-solid fa-user"></i>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div class="col-xxl-6 col-lg-12 col-sm-6">
-                                <div class="mb-md-4 mb-3 custom-form">
-                                    <label for="exampleFormControlInput2" class="form-label">Địa chỉ Email</label>
-                                    <div class="custom-input">
-                                        <input type="email" class="form-control" id="exampleFormControlInput2"
-                                            placeholder="Nhập email">
-                                        <i class="fa-solid fa-envelope"></i>
+                                <div class="col-xxl-6 col-lg-12 col-sm-6">
+                                    <div class="mb-md-4 mb-3 custom-form">
+                                        <label for="email" class="form-label">Địa chỉ Email</label>
+                                        <div class="custom-input">
+                                            <input type="email" class="form-control" id="email" name="email" placeholder="Nhập email" required>
+                                            <i class="fa-solid fa-envelope"></i>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div class="col-xxl-6 col-lg-12 col-sm-6">
-                                <div class="mb-md-4 mb-3 custom-form">
-                                    <label for="exampleFormControlInput3" class="form-label">Số điện thoại</label>
-                                    <div class="custom-input">
-                                        <input type="tel" class="form-control" id="exampleFormControlInput3"
-                                            placeholder="Nhập số điện thoại" maxlength="10">
-                                        <i class="fa-solid fa-mobile-screen-button"></i>
+                                <div class="col-xxl-6 col-lg-12 col-sm-6">
+                                    <div class="mb-md-4 mb-3 custom-form">
+                                        <label for="phone" class="form-label">Số điện thoại</label>
+                                        <div class="custom-input">
+                                            <input type="tel" class="form-control" id="phone" name="phone" placeholder="Nhập số điện thoại" maxlength="10" required>
+                                            <i class="fa-solid fa-mobile-screen-button"></i>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div class="col-12">
-                                <div class="mb-md-4 mb-3 custom-form">
-                                    <label for="exampleFormControlTextarea" class="form-label">Tin nhắn</label>
-                                    <div class="custom-textarea">
-                                        <textarea class="form-control" id="exampleFormControlTextarea" placeholder="Nhập tin nhắn của bạn" rows="6"></textarea>
-                                        <i class="fa-solid fa-message"></i>
+                                <div class="col-12">
+                                    <div class="mb-md-4 mb-3 custom-form">
+                                        <label for="message" class="form-label">Tin nhắn</label>
+                                        <div class="custom-textarea">
+                                            <textarea class="form-control" id="message" name="message" placeholder="Nhập tin nhắn của bạn" rows="6" required></textarea>
+                                            <i class="fa-solid fa-message"></i>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <button class="btn btn-animation btn-md fw-bold ms-auto">Gửi tin nhắn</button>
+                            <button type="submit" class="btn btn-animation btn-md fw-bold ms-auto">Gửi tin nhắn</button>
+                        </form>
                     </div>
                 </div>
             </div>
