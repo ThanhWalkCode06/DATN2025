@@ -62,11 +62,11 @@ class DonHangController extends Controller
      */
     public function edit(DonHang $donhang)
     {
-        $donHang = DonHang::select('don_hangs.*', 'users.ten_nguoi_dung', 'phuong_thuc_thanh_toans.ten_phuong_thuc')
-            ->join('users', 'users.id', '=', 'user_id')
-            ->join('phuong_thuc_thanh_toans', 'phuong_thuc_thanh_toans.id', '=', 'phuong_thuc_thanh_toan_id')
-            ->find($donhang->id);
-        return view('admins.donhangs.edit', compact('donHang'));
+        // $donHang = DonHang::select('don_hangs.*', 'users.ten_nguoi_dung', 'phuong_thuc_thanh_toans.ten_phuong_thuc')
+        //     ->join('users', 'users.id', '=', 'user_id')
+        //     ->join('phuong_thuc_thanh_toans', 'phuong_thuc_thanh_toans.id', '=', 'phuong_thuc_thanh_toan_id')
+        //     ->find($donhang->id);
+        // return view('admins.donhangs.edit', compact('donHang'));
     }
 
     /**
@@ -95,7 +95,7 @@ class DonHangController extends Controller
             DonHang::where("id", $donhang->id)->update($data);
         }
 
-        return redirect()->route('donhangs.edit', $donhang->id)->with('success', 'Cập nhật thành công');
+        return redirect()->route('donhangs.show', $donhang->id)->with('success', 'Cập nhật thành công');
     }
 
     /**
