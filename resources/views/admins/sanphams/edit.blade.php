@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('title')
-    Sửa sản phẩm    
+    Sửa sản phẩm
 @endsection
 @section('css')
     <!-- Themify icon css -->
@@ -108,7 +108,9 @@ tr{
     border-radius: 50%;
     cursor: pointer;
 }
-
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
+            border: none;
+        }
 </style>
 @endsection
 @section('content')

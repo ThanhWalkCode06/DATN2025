@@ -26,6 +26,7 @@ use App\Http\Controllers\Admins\Auth\AuthController;
 use App\Http\Controllers\ClientDanhMucSanPhamController;
 use App\Http\Controllers\Admins\Responsibility\RoleController;
 use App\Http\Controllers\Admins\Responsibility\PermissionController;
+use App\Http\Controllers\Clients\IndexClientController;
 use App\Http\Controllers\Clients\UserController as ClientsUserController;
 use App\Http\Controllers\Clients\Auth\AuthController as AuthAuthController;
 
@@ -102,10 +103,7 @@ Route::prefix('admin')->middleware(['auth', 'checkStatus'])->group(function () {
 //     return view('admins.auth.mailForgetPass');
 // });
 
-Route::get('/', function () {
-    $sanPhams = SanPham::orderBy('gia_moi', 'asc')->take(8)->get();
-    return view('clients.index', compact('sanPhams'));
-})->name('home');
+Route::get('/', [IndexClientController::class,'index'])->name('home');
 
 Route::controller(App\Http\Controllers\Clients\Auth\AuthController::class)->group(function () {
     Route::get('/login', 'showLogin')->name('login.client');

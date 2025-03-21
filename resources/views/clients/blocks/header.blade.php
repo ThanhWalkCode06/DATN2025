@@ -56,7 +56,7 @@
                             </span>
                         </button>
                         <a href="{{ route('home') }}" class="web-logo nav-logo">
-                            <img src="{{ Storage::url($globalSetting->client_logo ?? 'images/logo-green.png') }}"
+                            <img src="{{ Storage::url($globalSetting->client_logo ?? "images/logo-green.png") }}"
                                 class="img-fluid blur-up lazyload" alt="">
                         </a>
 

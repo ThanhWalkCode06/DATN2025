@@ -111,6 +111,9 @@
             border-radius: 50%;
             cursor: pointer;
         }
+        .select2-container--default .select2-selection--multiple .select2-selection__choice {
+            border: none;
+        }
     </style>
 @endsection
 @section('content')
@@ -232,7 +235,6 @@
                                             @php
                                                 $selectedValues = old("attribute_values.$tt->id", []);
                                             @endphp
-                                            <option value=""></option>
                                             <!-- Tạo option rỗng để Select2 nhận diện placeholder -->
                                             @foreach ($tt->giaTriThuocTinhs as $value)
                                                 <option value="{{ $value->gia_tri }}"
