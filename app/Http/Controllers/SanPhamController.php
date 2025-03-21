@@ -43,7 +43,7 @@ class SanPhamController extends Controller
     }
 
     public function sanPhamTopDanhGia()
-{  
+{
     $sanPhams = SanPham::select('san_phams.*')
         ->join('danh_gias', 'san_phams.id', '=', 'danh_gias.san_pham_id')
         ->selectRaw('AVG(danh_gias.so_sao) as avg_rating')
@@ -51,7 +51,7 @@ class SanPhamController extends Controller
         ->orderByDesc('avg_rating')
         ->limit(4)
         ->get();
-      
+
     return view('clients.index', compact('sanPhams'));
 }
     /**
@@ -233,10 +233,10 @@ class SanPhamController extends Controller
 
     return view('admins.sanphams.show', compact('sanPham'));
 }
-    
-    
 
-    
+
+
+
 
 
     /**
