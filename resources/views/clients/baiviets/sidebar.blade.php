@@ -96,9 +96,9 @@
                             @foreach ($baiVietGanDay as $bv)
                                 <li class="list-group-item d-flex align-items-center">
                                     <a href="{{ route('baiviets.chitiet', $bv->id) }}" class="recent-image">
-                                        <img src="{{ asset('uploads/' . $bv->hinh_anh) }}" class="img-fluid rounded"
+                                        <img src="{{ asset('storage/' . $bv->anh_bia) }}" class="img-fluid rounded"
                                             alt="{{ $bv->tieu_de }}"
-                                            style="width: 60px; height: 60px; object-fit: cover;">
+                                            style="width: 100px; height: 70px; object-fit: cover;">
                                     </a>
                                     <div class="ms-3">
                                         <a href="{{ route('baiviets.chitiet', $bv->id) }}">
