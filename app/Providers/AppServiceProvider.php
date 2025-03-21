@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Setting;
+use App\Models\DanhMucSanPham;
 use App\Models\ClientDanhMucSanPham;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -27,6 +28,10 @@ class AppServiceProvider extends ServiceProvider
         });
         View::composer('layouts.client', function ($view) {
             $view->with('categories', ClientDanhMucSanPham::all());
+        });
+
+        View::composer('*', function ($view) {
+            $view->with('danhMucs', ClientDanhMucSanPham::all());
         });
     }
 }

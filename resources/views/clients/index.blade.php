@@ -5,6 +5,7 @@
 @endsection
 
 @section('css')
+
 @endsection
 
 @section('breadcrumb')
@@ -443,16 +444,14 @@
 
                                                         {{-- <li data-bs-toggle="tooltip" data-bs-placement="top"
                                                             title="Wishlist"> --}}
-                                                        <li data-bs-toggle="tooltip" data-bs-placement="top"
-                                                            title="Wishlist">
-                                                            <a href="#" class="notifi-wishlist">
-                                                                <i data-feather="heart"></i>
-                                                            </a>
-                                                            <form action="{{ route('add.wishlist', 1) }}" method="POST"
-                                                                class="wishlist-form">
-                                                                @csrf
-                                                            </form>
-                                                        </li>
+                                                            <li data-bs-toggle="tooltip" data-bs-placement="top" title="Wishlist">
+                                                                <a href="#" class="notifi-wishlist">
+                                                                    <i data-feather="heart"></i>
+                                                                </a>
+                                                                <form action="{{ route('add.wishlist',1) }}" method="POST" class="wishlist-form">
+                                                                    @csrf
+                                                                </form>
+                                                            </li>
                                                         {{-- </li> --}}
                                                     </ul>
                                                 </div>
@@ -1524,7 +1523,7 @@
                         </div>
                     </div>
 
-                    {{-- =======
+                    {{-- 
 
 
                   <!-- Thêm CSS của Swiper (nếu cần dùng slider) -->
@@ -1666,7 +1665,7 @@
 </script>
 
 
->>>>>>> ea9acc1692e6751cbb5bc03f9208f787549b60c6 --}}
+ --}}
                     <div class="title">
                         <h2>Duyệt theo danh mục</h2>
                         <span class="title-leaf">
@@ -1813,8 +1812,6 @@
                         </span>
                         <p>Một trợ lý ảo sẽ giúp bạn chọn những sản phẩm phù hợp</p>
                     </div> --}}
-
-
                     {{-- <div class="product-border overflow-hidden wow fadeInUp">
                         <div class="product-box-slider no-arrow">
                             <div>
@@ -2382,8 +2379,6 @@
                             </div>
                         </div>
                     </div> --}}
-
-
                     {{-- <div class="section-t-space section-b-space">
                         <div class="row g-md-4 g-3">
                             <div class="col-xxl-8 col-xl-12 col-md-7">
@@ -2808,3 +2803,4 @@
 
 @section('js')
 @endsection
+

@@ -17,20 +17,20 @@ class ClientDanhMucSanPhamController extends Controller
     public function danhSachSanPham(Request $request)
     {
         $danh_muc_id = $request->query('danh_muc_id');
-        
+
         // Lấy danh sách danh mục kèm số lượng sản phẩm
         $danhMucs = DanhMucSanPham::withCount('sanPhams')->get();
-    
+
         // Lấy danh sách sản phẩm theo danh mục
         if ($danh_muc_id) {
             $sanPhams = SanPham::where('danh_muc_id', $danh_muc_id)->get();
         } else {
             $sanPhams = SanPham::all();
         }
-    
+
         return view('clients.sanphams.danhsach', compact('sanPhams', 'danhMucs'));
     }
-    
+
     public function sanPhamTrangchu()
 {
     // Lấy danh sách danh mục
@@ -47,7 +47,7 @@ class ClientDanhMucSanPhamController extends Controller
 }
 
 
-    
+
 
     /**
      * Show the form for creating a new resource.

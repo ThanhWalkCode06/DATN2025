@@ -525,10 +525,7 @@
                                 </div>
                             </div>
                         @endforeach
-
                     </div>
-
-
 
                     <nav class="custom-pagination">
                         <ul class="pagination justify-content-center">
