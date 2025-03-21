@@ -12,8 +12,6 @@
 @endsection
 
 @section('content')
-
-
     <!-- Home Section Start -->
     <section class="home-section pt-2">
         <div class="container-fluid-lg">
@@ -21,14 +19,17 @@
                 <div class="col-xl-8 ratio_65">
                     <div class="home-contain h-100">
                         <div class="h-100">
-                            <img src="../assets/client/images/fashion/banner/7.jpg" class="bg-img blur-up lazyload"
+                            <img src="{{ asset('assets/client/images/banner/1.png') }}" class="bg-img blur-up lazyload"
                                 alt="">
                         </div>
                         <div class="home-detail p-center-left w-75">
                             <div>
                                 <h6>Ưu đãi đặc biệt <span>Giảm 30%</span></h6>
-                                <h1 class="text-uppercase">Ở nhà & nhận ngay <span class="daily">Trang phục thể thao</span></h1>
-                                <p class="w-75 d-none d-sm-block">Những bộ quần áo thể thao thoải mái, phong cách giúp bạn tự tin vận động mỗi ngày.</p>
+                                <h1 class="text-uppercase">Ở nhà & nhận ngay <span class="daily">Trang phục <br> thể
+                                        thao</span>
+                                </h1>
+                                <p class="w-75 d-none d-sm-block">Những bộ quần áo thể thao thoải mái, phong cách giúp bạn
+                                    tự tin vận động mỗi ngày.</p>
                                 <button onclick="location.href = 'shop-left-sidebar.html';"
                                     class="btn btn-animation mt-xxl-4 mt-2 home-button mend-auto">Mua ngay <i
                                         class="fa-solid fa-right-long icon"></i></button>
@@ -42,14 +43,16 @@
                     <div class="row g-4">
                         <div class="col-xl-12 col-md-6">
                             <div class="home-contain">
-                                <img src="../assets/client/images/vegetable/banner/2.jpg" class="bg-img blur-up lazyload"
+                                <img src="{{ asset('assets/client/images/banner/2.png') }}" class="bg-img blur-up lazyload"
                                     alt="">
                                 <div class="home-detail p-center-left home-p-sm w-75">
                                     <div>
                                         <h2 class="mt-0 text-danger">45% <span class="discount text-title">GIẢM</span></h2>
                                         <h3 class="theme-color">Bộ Sưu Tập Thể Thao</h3>
-                                        <p class="w-75">Chúng tôi mang đến những bộ trang phục thể thao chất lượng, thoải mái và phong cách.</p>
-                                        <a href="shop-left-sidebar.html" class="shop-button">Mua ngay <i class="fa-solid fa-right-long"></i></a>
+                                        <p class="w-75">Chúng tôi mang đến những bộ trang phục thể thao chất lượng, thoải
+                                            mái và phong cách.</p>
+                                        <a href="shop-left-sidebar.html" class="shop-button">Mua ngay <i
+                                                class="fa-solid fa-right-long"></i></a>
                                     </div>
 
                                 </div>
@@ -58,14 +61,16 @@
 
                         <div class="col-xl-12 col-md-6">
                             <div class="home-contain">
-                                <img src="../assets/client/images/vegetable/banner/3.jpg" class="bg-img blur-up lazyload"
+                                <img src="{{ asset('assets/client/images/banner/3.png') }}" class="bg-img blur-up lazyload"
                                     alt="">
                                 <div class="home-detail p-center-left home-p-sm w-75">
                                     <div>
                                         <h3 class="mt-0 theme-color fw-bold">Thời Trang Thể Thao</h3>
                                         <h4 class="text-danger">Bộ Sưu Tập Mới</h4>
-                                        <p class="organic">Bắt đầu ngày mới với những bộ trang phục thể thao năng động và thoải mái.</p>
-                                        <a href="shop-left-sidebar.html" class="shop-button">Mua ngay <i class="fa-solid fa-right-long"></i></a>
+                                        <p class="organic">Bắt đầu ngày mới với những bộ trang phục thể thao năng động và
+                                            thoải mái.</p>
+                                        <a href="shop-left-sidebar.html" class="shop-button">Mua ngay <i
+                                                class="fa-solid fa-right-long"></i></a>
                                     </div>
 
                                 </div>
@@ -153,7 +158,7 @@
     <!-- Product Section Start -->
     <section class="product-section">
         <div class="container-fluid-lg">
-            <div class="row g-sm-4 g-3">
+            <div class="row g-sm-4 g-3 mt-4">
                 <div class="col-xxl-3 col-xl-4 d-none d-xl-block">
                     <div class="p-sticky">
                         {{-- <div class="category-menu">
@@ -211,26 +216,26 @@
 
                         <div class="ratio_156 section-t-space">
                             <div class="home-contain hover-effect">
-                                <img src="../assets/client/images/vegetable/banner/8.jpg" class="bg-img blur-up lazyload"
+                                <img src="{{ asset('assets/client/images/banner/4.png') }}" class="bg-img blur-up lazyload"
                                     alt="">
                                 <div class="home-detail p-top-left home-p-medium">
                                     <div>
                                         <h6 class="text-yellow home-banner">Thể Thao</h6>
-                                        <h3 class="text-uppercase fw-normal"><span class="theme-color fw-bold">Sản Phẩm</span> Mới Nhất</h3>
+                                        <h3 class="text-uppercase fw-normal"><span class="theme-color fw-bold">Sản
+                                                Phẩm</span> Mới Nhất</h3>
                                         <h3 class="fw-light">Cập Nhật Liên Tục</h3>
                                         <button onclick="location.href = 'shop-left-sidebar.html';"
                                             class="btn btn-animation btn-md mend-auto">Mua Ngay <i
                                                 class="fa-solid fa-arrow-right icon"></i></button>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
 
                         <div class="ratio_medium section-t-space">
                             <div class="home-contain hover-effect">
-                                <img src="../assets/client/images/sports/banner/11.jpg"
-                                    class="img-fluid blur-up lazyload" alt="">
+                                <img src="../assets/client/images/sports/banner/11.jpg" class="img-fluid blur-up lazyload"
+                                    alt="">
                                 <div class="home-detail p-top-left home-p-medium">
                                     <div>
                                         <h4 class="text-yellow text-exo home-banner">Thể Thao</h4>
@@ -336,7 +341,8 @@
                                 <div class="review-box">
                                     <div class="review-contain">
                                         <h5 class="w-75">Chúng Tôi Luôn Quan Tâm Đến Trải Nghiệm Của Bạn</h5>
-                                        <p>"Sản phẩm chất lượng, vải thoáng mát, phù hợp cho các hoạt động thể thao. Giao hàng nhanh, đóng gói cẩn thận. Sẽ tiếp tục ủng hộ!"</p>
+                                        <p>"Sản phẩm chất lượng, vải thoáng mát, phù hợp cho các hoạt động thể thao. Giao
+                                            hàng nhanh, đóng gói cẩn thận. Sẽ tiếp tục ủng hộ!"</p>
                                     </div>
 
                                     <div class="review-profile">
@@ -1517,7 +1523,7 @@
                         </div>
                     </div>
 
-{{-- =======
+                    {{-- 
 
 
                   <!-- Thêm CSS của Swiper (nếu cần dùng slider) -->
@@ -1659,7 +1665,7 @@
 </script>
 
 
->>>>>>> ea9acc1692e6751cbb5bc03f9208f787549b60c6 --}}
+ --}}
                     <div class="title">
                         <h2>Duyệt theo danh mục</h2>
                         <span class="title-leaf">
@@ -1806,8 +1812,6 @@
                         </span>
                         <p>Một trợ lý ảo sẽ giúp bạn chọn những sản phẩm phù hợp</p>
                     </div> --}}
-
-
                     {{-- <div class="product-border overflow-hidden wow fadeInUp">
                         <div class="product-box-slider no-arrow">
                             <div>
@@ -2375,8 +2379,6 @@
                             </div>
                         </div>
                     </div> --}}
-
-
                     {{-- <div class="section-t-space section-b-space">
                         <div class="row g-md-4 g-3">
                             <div class="col-xxl-8 col-xl-12 col-md-7">
