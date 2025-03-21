@@ -24,7 +24,7 @@
                         </div>
                         <div class="home-detail p-center-left w-75">
                             <div>
-                                <h6>Ưu đãi đặc biệt <span>Giảm 30%</span></h6>
+                                <h6>Ưu đãi đặc biệt</h6>
                                 <h1 class="text-uppercase">Ở nhà & nhận ngay <span class="daily">Trang phục <br> thể
                                         thao</span>
                                 </h1>
@@ -47,8 +47,7 @@
                                     alt="">
                                 <div class="home-detail p-center-left home-p-sm w-75">
                                     <div>
-                                        <h2 class="mt-0 text-danger">45% <span class="discount text-title">GIẢM</span></h2>
-                                        <h3 class="theme-color">Bộ Sưu Tập Thể Thao</h3>
+                                        <h3 class="theme-color">Bộ Sưu Tập Áo Hoodio</h3>
                                         <p class="w-75">Chúng tôi mang đến những bộ trang phục thể thao chất lượng, thoải
                                             mái và phong cách.</p>
                                         <a href="shop-left-sidebar.html" class="shop-button">Mua ngay <i
@@ -65,9 +64,9 @@
                                     alt="">
                                 <div class="home-detail p-center-left home-p-sm w-75">
                                     <div>
-                                        <h3 class="mt-0 theme-color fw-bold">Thời Trang Thể Thao</h3>
+                                        <h3 class="mt-0 theme-color fw-bold">Bộ Đồ Thời Trang</h3>
                                         <h4 class="text-danger">Bộ Sưu Tập Mới</h4>
-                                        <p class="organic">Bắt đầu ngày mới với những bộ trang phục thể thao năng động và
+                                        <p class="organic">Bắt đầu ngày mới với những bộ trang phục
                                             thoải mái.</p>
                                         <a href="shop-left-sidebar.html" class="shop-button">Mua ngay <i
                                                 class="fa-solid fa-right-long"></i></a>
@@ -220,7 +219,7 @@
                                     alt="">
                                 <div class="home-detail p-top-left home-p-medium">
                                     <div>
-                                        <h6 class="text-yellow home-banner">Thể Thao</h6>
+                                        <h6 class="text-yellow home-banner">Áo khoác gió</h6>
                                         <h3 class="text-uppercase fw-normal"><span class="theme-color fw-bold">Sản
                                                 Phẩm</span> Mới Nhất</h3>
                                         <h3 class="fw-light">Cập Nhật Liên Tục</h3>
