@@ -1,6 +1,31 @@
+<style>
+    .variant-container {
+            display: flex;
+            gap: 15px;
+        }
+        .variant {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid #ccc;
+            border-radius: 50%;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            background-color: white;
+            color: #0da487;
+        }
+        .variant.selected {
+            background-color: #0da487;
+            color: white;
+        }
+</style>
 <!-- Quick View Modal Box Start -->
 <div class="modal fade theme-modal view-modal" id="view" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered modal-xl modal-fullscreen-sm-down">
+        {{-- core-quickView --}}
         <div class="modal-content">
             <div class="modal-header p-0">
                 <button type="button" class="btn-close" data-bs-dismiss="modal">
@@ -11,78 +36,58 @@
                 <div class="row g-sm-4 g-2">
                     <div class="col-lg-6">
                         <div class="slider-image">
-                            <img src="../assets/client/images/product/category/1.jpg" class="img-fluid blur-up lazyload"
+                            <img src="" class="img-fluid blur-up lazyload"
                                 alt="">
                         </div>
                     </div>
 
                     <div class="col-lg-6">
                         <div class="right-sidebar-modal">
-                            <h4 class="title-name">Peanut Butter Bite Premium Butter Cookies 600 g</h4>
-                            <h4 class="price">$36.99</h4>
+                            <h4 class="title-name"></h4>
+                            <div style="display: flex">
+                                <h4 class="gia_moi" style="color: #0da487"></h4>
+                                <del class="gia_cu" style="margin-left: 20px"></del>
+                            </div>
                             <div class="product-rating">
                                 <ul class="rating">
                                     <li>
-                                        <i data-feather="star" class="fill"></i>
+                                        <i data-feather="star" class=""></i>
                                     </li>
                                     <li>
-                                        <i data-feather="star" class="fill"></i>
+                                        <i data-feather="star" class=""></i>
                                     </li>
                                     <li>
-                                        <i data-feather="star" class="fill"></i>
+                                        <i data-feather="star" class=""></i>
                                     </li>
                                     <li>
-                                        <i data-feather="star" class="fill"></i>
+                                        <i data-feather="star" class=""></i>
                                     </li>
                                     <li>
-                                        <i data-feather="star"></i>
+                                        <i data-feather="star" class=""></i>
                                     </li>
                                 </ul>
-                                <span class="ms-2">8 Reviews</span>
-                                <span class="ms-2 text-danger">6 sold in last 16 hours</span>
+                                <span class="danh_gia ms-2">8 Reviews</span>
                             </div>
 
                             <div class="product-detail">
-                                <h4>Product Details :</h4>
-                                <p>Candy canes sugar plum tart cotton candy chupa chups sugar plum chocolate I love.
-                                    Caramels marshmallow icing dessert candy canes I love soufflé I love toffee.
-                                    Marshmallow pie sweet sweet roll sesame snaps tiramisu jelly bear claw. Bonbon
-                                    muffin I love carrot cake sugar plum dessert bonbon.</p>
+                                <h4>Mô tả</h4>
+                                <p class="mo_ta"></p>
                             </div>
 
                             <ul class="brand-list">
                                 <li>
                                     <div class="brand-box">
-                                        <h5>Brand Name:</h5>
-                                        <h6>Black Forest</h6>
-                                    </div>
-                                </li>
-
-                                <li>
-                                    <div class="brand-box">
-                                        <h5>Product Code:</h5>
-                                        <h6>W0690034</h6>
-                                    </div>
-                                </li>
-
-                                <li>
-                                    <div class="brand-box">
-                                        <h5>Product Type:</h5>
-                                        <h6>White Cream Cake</h6>
+                                        <h5>Danh mục:</h5>
+                                        <h6 class="danh_muc"></h6>
                                     </div>
                                 </li>
                             </ul>
 
-                            <div class="select-size">
-                                <h4>Cake Size :</h4>
-                                <select class="form-select select-form-size">
-                                    <option selected>Select Size</option>
-                                    <option value="1.2">1/2 KG</option>
-                                    <option value="0">1 KG</option>
-                                    <option value="1.5">1/5 KG</option>
-                                    <option value="red">Red Roses</option>
-                                    <option value="pink">With Pink Roses</option>
-                                </select>
+                            <div class="variant-container">
+                                <div class="variant selected" data-size="S">S</div>
+                                <div class="variant" data-size="M">M</div>
+                                <div class="variant" data-size="L">L</div>
+                                <div class="variant" data-size="XL">XL</div>
                             </div>
 
                             <div class="modal-button">
@@ -536,18 +541,12 @@ $(document).ready(function() {
 });
 
 </script>
-{{--
-@if(session('success'))
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        setTimeout(function () {
-        Swal.fire({
-            title: "Thành công!",
-            text: "{{ session('success') }}",
-            icon: "success",
-            confirmButtonText: "OK"
+    $(document).ready(function () {
+        $(".variant").click(function () {
+            $(".variant").removeClass("selected"); // Bỏ chọn tất cả
+            $(this).addClass("selected"); // Chọn biến thể hiện tại
+            console.log("Size được chọn:", $(this).data("size")); // In ra console
         });
-    }, 2000); // Hiển thị sau 2 giây (2000ms)
     });
 </script>
-@endif --}}

@@ -128,6 +128,7 @@ Route::controller(App\Http\Controllers\Clients\Auth\AuthController::class)->grou
 
 Route::get('/sanpham', [App\Http\Controllers\Clients\SanPhamController::class, 'danhSach'])->name('sanphams.danhsach');
 Route::get('/sanpham/{id}', [App\Http\Controllers\Clients\SanPhamController::class, 'chiTiet'])->name('sanphams.chitiet');
+Route::get('/quick-view', [App\Http\Controllers\Clients\SanPhamController::class, 'quickView'])->name('sanphams.quickview');
 
 Route::get('/sanphamyeuthich', [App\Http\Controllers\Clients\SanPhamController::class, 'sanPhamYeuThich'])->name('sanphams.sanphamyeuthich');
 Route::delete('/xoa-yeu-thich/{id}', [App\Http\Controllers\Clients\SanPhamController::class, 'xoaYeuThich']);

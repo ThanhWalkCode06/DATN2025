@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Clients;
 
-use Illuminate\Support\Facades\Auth;
 use App\Models\SanPham;
 use Illuminate\Http\Request;
 use App\Models\DanhMucSanPham;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class SanPhamController extends Controller
 {
@@ -105,8 +106,28 @@ class SanPhamController extends Controller
             return response()->json(['success' => false, 'message' => 'Lỗi server!'], 500);
 
     }
+    }
 
+    public function quickView(Request $request)
+    {
+        $sanPham = SanPham::with('danhGias','danhMuc','bienThes.thuocTinhs', 'bienThes.giaTriThuocTinhs')->find($request->id);
+        // return response()->json($sanPham);
+        if (!$sanPham) {
+            return response()->json(['error' => 'Sản phẩm không tồn tại'], 404);
+        }
 
-
+        return response()->json([
+        'id' => $sanPham->id,
+        'ten_san_pham' => $sanPham->ten_san_pham,
+        'gia_moi' => number_format($sanPham->gia_moi,0,'','.'),
+        'gia_cu' => number_format($sanPham->gia_cu,0,'','.'),
+        'hinh_anh' => Storage::url($sanPham->hinh_anh ?? 'images/default.png'),
+        'mo_ta' => $sanPham->mo_ta,
+        'danh_muc' => $sanPham->danhMuc->ten_danh_muc,
+        'so_sao' => $sanPham->tinhDiemTrungBinh(),
+        'danh_gia' => $sanPham->danhGias->count(),
+        // 'bien_the' => $sanPham->bienThes->thuocTinhs,
+        'bien_the' => $sanPham->bienThes,
+    ]);
     }
 }

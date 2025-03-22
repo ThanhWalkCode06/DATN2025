@@ -666,8 +666,8 @@
                                         @else
                                         <center>
                                             <h2 style="color: #ccc">Bạn không có đơn hàng nào</h2>
-                                            <img style="width: 300px;color: #ccc" src="{{ asset('assets/images/inner-page/not-found.png') }}" alt="">
-                                            </center>
+                                            <img style="width: 200px;color: #ccc" src="{{ asset('assets/images/inner-page/not-found.png') }}" alt="">
+                                        </center>
                                         @endif
 
                                     </div>

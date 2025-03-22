@@ -355,17 +355,16 @@
                                 <div class="review-box">
                                     <div class="review-contain">
                                         <h5 class="w-75">Chúng Tôi Luôn Quan Tâm Đến Trải Nghiệm Của Bạn</h5>
-                                        <p>"Sản phẩm chất lượng, vải thoáng mát, phù hợp cho các hoạt động thể thao. Giao
-                                            hàng nhanh, đóng gói cẩn thận. Sẽ tiếp tục ủng hộ!"</p>
+                                        <p>"{{ $bestComment['nhan_xet'] }}"</p>
                                     </div>
 
                                     <div class="review-profile">
                                         <div class="review-image">
-                                            <img src="../assets/client/images/sports/review/1.jpg"
+                                            <img src="{{ Storage::url($bestUser['anh_dai_dien'] ?? 'images/default.png') }}"
                                                 class="img-fluid blur-up lazyload" alt="">
                                         </div>
                                         <div class="review-detail">
-                                            <h5>Nguyễn Văn An</h5>
+                                            <h5>{{ $bestUser['ten_nguoi_dung'] }}</h5>
                                             <h6>Khách Hàng Thân Thiết</h6>
                                         </div>
                                     </div>
@@ -393,16 +392,21 @@
                     <div class="section-b-space">
                         <div class="product-border border-row overflow-hidden">
                             <div class="product-box-slider no-arrow">
-
-
                                 <div>
 
                                     <div style="border-bottom: 1px solid #ccc; width: 889px" class="row">
                                         @foreach ($sanPhamFollowComments as $item)
                                         <div style=" border: 1px solid #ccc;width: 222px" class="col-md-3 px-0">
                                             <div style="height: 327px" class="product-box">
+                                                <div style="position: relative; width: 100%">
+                                                    @if ($item['gia_cu'] > $item['gia_moi'])
+                                                    <span style="position: absolute; top: 0; right: 0;"
+                                                    class="badge bg-danger">-{{ round((($item['gia_cu'] - $item['gia_moi']) / $item['gia_cu']) * 100) }}%</span>
+                                                @endif
+                                                </div>
                                                 <div class="product-image">
-                                                    <a href="product-left-thumbnail.html">
+                                                    <a href="{{ route('sanphams.chitiet',$item['id']) }}">
+
                                                         <img src="{{ Storage::url($item['hinh_anh']) }}"
                                                             class="img-fluid blur-up lazyload" alt="">
                                                     </a>
@@ -456,8 +460,8 @@
                                                     <div class="add-to-cart-box bg-white">
                                                         <button class="btn btn-add-cart addcart-button">
                                                             @if ($item['trang_thai'] == 1)
-                                                            <a style="margin-right: 10px;" href="javascript:void(0)" data-bs-toggle="modal"
-                                                                data-bs-target="#view">
+                                                            <a class="btn-quick-view" style="margin-right: 10px;" href="javascript:void(0)" data-bs-toggle="modal"
+                                                                data-bs-target="#view" data-id="{{ $item['id'] }}">
                                                                 <span  class="add-icon bg-light-gray">
                                                                     <i  class="fa-solid fa-cart-plus"></i>
                                                                 </span> Thêm vào giỏ hàng
@@ -1385,255 +1389,110 @@
 
                     <div class="title d-block">
                         <div>
-                            <h2>Our best Seller</h2>
+                            <h2>Sản phẩm bán chạy</h2>
                             <span class="title-leaf">
                                 <svg class="icon-width">
                                     <use xlink:href="https://themes.pixelstrap.com/fastkart/assets/svg/leaf.svg#leaf">
                                     </use>
                                 </svg>
                             </span>
-                            <p>A virtual assistant collects the products from your list</p>
+                            <p>Những sản phẩm được mua nhiều nhất của chúng tôi</p>
                         </div>
                     </div>
 
                     <div class="best-selling-slider product-wrapper wow fadeInUp">
                         <div>
                             <ul class="product-list">
+                                @foreach ($part1 as $item)
                                 <li>
                                     <div class="offer-product">
-                                        <a href="product-left-thumbnail.html" class="offer-image">
-                                            <img src="../assets/client/images/vegetable/product/11.png"
+                                        <a href="{{ route('sanphams.chitiet',$item['id']) }}" class="offer-image">
+                                            <div style="position: relative; width: 100%">
+                                                @if ($item['gia_cu'] > $item['gia_moi'])
+                                                <span style="position: absolute; top: 0; right: 0;"
+                                                class="badge bg-danger">-{{ round((($item['gia_cu'] - $item['gia_moi']) / $item['gia_cu']) * 100) }}%</span>
+                                            @endif
+                                            </div>
+                                            <img src="{{ Storage::url($item['hinh_anh']) }}"
                                                 class="blur-up lazyload" alt="">
                                         </a>
 
                                         <div class="offer-detail">
                                             <div>
-                                                <a href="product-left-thumbnail.html" class="text-title">
-                                                    <h6 class="name">Tuffets Whole Wheat Bread</h6>
+                                                <a href="{{ route('sanphams.chitiet',$item['id']) }}" class="text-title">
+                                                    <h6 class="name">{{ $item['ten_san_pham'] }}</h6>
                                                 </a>
-                                                <span>500 G</span>
-                                                <h6 class="price theme-color">$ 10.00</h6>
+                                                <del>{{ number_format($item['gia_cu'],0,'','.') }} đ</del>
+                                                <h6 class="price theme-color">{{ number_format($item['gia_moi'],0,'','.') }} đ</h6>
                                             </div>
                                         </div>
                                     </div>
                                 </li>
+                                @endforeach
 
-                                <li>
-                                    <div class="offer-product">
-                                        <a href="product-left-thumbnail.html" class="offer-image">
-                                            <img src="../assets/client/images/vegetable/product/12.png"
-                                                class="blur-up lazyload" alt="">
-                                        </a>
-
-                                        <div class="offer-detail">
-                                            <div>
-                                                <a href="product-left-thumbnail.html" class="text-title">
-                                                    <h6 class="name">Potato</h6>
-                                                </a>
-                                                <span>500 G</span>
-                                                <h6 class="price theme-color">$ 10.00</h6>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-
-                                <li>
-                                    <div class="offer-product">
-                                        <a href="product-left-thumbnail.html" class="offer-image">
-                                            <img src="../assets/client/images/vegetable/product/13.png"
-                                                class="blur-up lazyload" alt="">
-                                        </a>
-
-                                        <div class="offer-detail">
-                                            <div>
-                                                <a href="product-left-thumbnail.html" class="text-title">
-                                                    <h6 class="name">Green Chilli</h6>
-                                                </a>
-                                                <span>200 G</span>
-                                                <h6 class="price theme-color">$ 10.00</h6>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-
-                                <li>
-                                    <div class="offer-product">
-                                        <a href="product-left-thumbnail.html" class="offer-image">
-                                            <img src="../assets/client/images/vegetable/product/14.png"
-                                                class="blur-up lazyload" alt="">
-                                        </a>
-
-                                        <div class="offer-detail">
-                                            <div>
-                                                <a href="product-left-thumbnail.html" class="text-title">
-                                                    <h6 class="name">Muffets Burger Bun</h6>
-                                                </a>
-                                                <span>150 G</span>
-                                                <h6 class="price theme-color">$ 10.00</h6>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
                             </ul>
                         </div>
 
                         <div>
                             <ul class="product-list">
+                                @foreach ($part2 as $item)
                                 <li>
                                     <div class="offer-product">
-                                        <a href="product-left-thumbnail.html" class="offer-image">
-                                            <img src="../assets/client/images/vegetable/product/15.png"
+                                        <a href="{{ route('sanphams.chitiet',$item['id']) }}" class="offer-image">
+                                            <div style="position: relative; width: 100%">
+                                                @if ($item['gia_cu'] > $item['gia_moi'])
+                                                <span style="position: absolute; top: 0; right: 0;"
+                                                class="badge bg-danger">-{{ round((($item['gia_cu'] - $item['gia_moi']) / $item['gia_cu']) * 100) }}%</span>
+                                            @endif
+                                            </div>
+                                            <img src="{{ Storage::url($item['hinh_anh']) }}"
                                                 class="blur-up lazyload" alt="">
                                         </a>
 
                                         <div class="offer-detail">
                                             <div>
-                                                <a href="product-left-thumbnail.html" class="text-title">
-                                                    <h6 class="name">Tuffets Britannia Cheezza</h6>
+                                                <a href="{{ route('sanphams.chitiet',$item['id']) }}" class="text-title">
+                                                    <h6 class="name">{{ $item['ten_san_pham'] }}</h6>
                                                 </a>
-                                                <span>500 G</span>
-                                                <h6 class="price theme-color">$ 10.00</h6>
+                                                <del>{{ number_format($item['gia_cu'],0,'','.') }} đ</del>
+                                                <h6 class="price theme-color">{{ number_format($item['gia_moi'],0,'','.') }} đ</h6>
                                             </div>
                                         </div>
                                     </div>
                                 </li>
-
-                                <li>
-                                    <div class="offer-product">
-                                        <a href="product-left-thumbnail.html" class="offer-image">
-                                            <img src="../assets/client/images/vegetable/product/16.png"
-                                                class="blur-up lazyload" alt="">
-                                        </a>
-
-                                        <div class="offer-detail">
-                                            <div>
-                                                <a href="product-left-thumbnail.html" class="text-title">
-                                                    <h6 class="name">Long Life Toned Milk</h6>
-                                                </a>
-                                                <span>1 L</span>
-                                                <h6 class="price theme-color">$ 10.00</h6>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-
-                                <li>
-                                    <div class="offer-product">
-                                        <a href="product-left-thumbnail.html" class="offer-image">
-                                            <img src="../assets/client/images/vegetable/product/17.png"
-                                                class="blur-up lazyload" alt="">
-                                        </a>
-
-                                        <div class="offer-detail">
-                                            <div>
-                                                <a href="product-left-thumbnail.html" class="text-title">
-                                                    <h6 class="name">Organic Tomato</h6>
-                                                </a>
-                                                <span>1 KG</span>
-                                                <h6 class="price theme-color">$ 10.00</h6>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-
-                                <li>
-                                    <div class="offer-product">
-                                        <a href="product-left-thumbnail.html" class="offer-image">
-                                            <img src="../assets/client/images/vegetable/product/18.png"
-                                                class="blur-up lazyload" alt="">
-                                        </a>
-
-                                        <div class="offer-detail">
-                                            <div>
-                                                <a href="product-left-thumbnail.html" class="text-title">
-                                                    <h6 class="name">Organic Jam</h6>
-                                                </a>
-                                                <span>150 G</span>
-                                                <h6 class="price theme-color">$ 10.00</h6>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
+                                @endforeach
                             </ul>
                         </div>
 
                         <div>
                             <ul class="product-list">
+                                @foreach ($part3 as $item)
                                 <li>
                                     <div class="offer-product">
-                                        <a href="product-left-thumbnail.html" class="offer-image">
-                                            <img src="../assets/client/images/vegetable/product/19.png"
+
+                                        <a href="{{ route('sanphams.chitiet',$item['id']) }}" class="offer-image">
+                                            <div style="position: relative; width: 100%">
+                                                @if ($item['gia_cu'] > $item['gia_moi'])
+                                                <span style="position: absolute; top: 0; right: 0;"
+                                                class="badge bg-danger">-{{ round((($item['gia_cu'] - $item['gia_moi']) / $item['gia_cu']) * 100) }}%</span>
+                                            @endif
+                                            </div>
+                                            <img src="{{ Storage::url($item['hinh_anh']) }}"
                                                 class="blur-up lazyload" alt="">
                                         </a>
 
                                         <div class="offer-detail">
                                             <div>
-                                                <a href="product-left-thumbnail.html" class="text-title">
-                                                    <h6 class="name">Good Life Refined Sunflower Oil</h6>
+                                                <a href="{{ route('sanphams.chitiet',$item['id']) }}" class="text-title">
+                                                    <h6 class="name">{{ $item['ten_san_pham'] }}</h6>
                                                 </a>
-                                                <span>1 L</span>
-                                                <h6 class="price theme-color">$ 10.00</h6>
+                                                <del>{{ number_format($item['gia_cu'],0,'','.') }} đ</del>
+                                                <h6 class="price theme-color">{{ number_format($item['gia_moi'],0,'','.') }} đ</h6>
                                             </div>
                                         </div>
                                     </div>
                                 </li>
-
-                                <li>
-                                    <div class="offer-product">
-                                        <a href="product-left-thumbnail.html" class="offer-image">
-                                            <img src="../assets/client/images/vegetable/product/20.png"
-                                                class="blur-up lazyload" alt="">
-                                        </a>
-
-                                        <div class="offer-detail">
-                                            <div>
-                                                <a href="product-left-thumbnail.html" class="text-title">
-                                                    <h6 class="name">Good Life Raw Peanuts</h6>
-                                                </a>
-                                                <span>500 G</span>
-                                                <h6 class="price theme-color">$ 10.00</h6>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-
-                                <li>
-                                    <div class="offer-product">
-                                        <a href="product-left-thumbnail.html" class="offer-image">
-                                            <img src="../assets/client/images/vegetable/product/21.png"
-                                                class="blur-up lazyload" alt="">
-                                        </a>
-
-                                        <div class="offer-detail">
-                                            <div>
-                                                <a href="product-left-thumbnail.html" class="text-title">
-                                                    <h6 class="name">TufBest Farms Mong Dal</h6>
-                                                </a>
-                                                <span>1 KG</span>
-                                                <h6 class="price theme-color">$ 10.00</h6>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-
-                                <li>
-                                    <div class="offer-product">
-                                        <a href="product-left-thumbnail.html" class="offer-image">
-                                            <img src="../assets/client/images/vegetable/product/22.png"
-                                                class="blur-up lazyload" alt="">
-                                        </a>
-
-                                        <div class="offer-detail">
-                                            <div>
-                                                <a href="product-left-thumbnail.html" class="text-title">
-                                                    <h6 class="name">Frooti Mango Drink</h6>
-                                                </a>
-                                                <span>160 ML</span>
-                                                <h6 class="price theme-color">$ 10.00</h6>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
+                                @endforeach
                             </ul>
                         </div>
                     </div>
@@ -1663,73 +1522,29 @@
                                 </use>
                             </svg>
                         </span>
-                        <p>A virtual assistant collects the products from your list</p>
+                        <p>Những bài viết đáng chú ý</p>
                     </div>
 
                     <div class="slider-3-blog ratio_65 no-arrow product-wrapper">
+                        @foreach ($baiViets as $item)
                         <div>
                             <div class="blog-box">
                                 <div class="blog-box-image">
-                                    <a href="blog-detail.html" class="blog-image">
-                                        <img src="../assets/client/images/vegetable/blog/1.jpg"
+                                    <a href="{{  route('baiviets.chitiet',$item['id']) }}" class="blog-image">
+                                        <img style="
+                                            object-fit: contain;" src="{{ Storage::url($item['anh_bia']) }}"
                                             class="bg-img blur-up lazyload" alt="">
                                     </a>
                                 </div>
 
-                                <a href="blog-detail.html" class="blog-detail">
-                                    <h6>20 March, 2022</h6>
-                                    <h5>Fresh Vegetable Online</h5>
+                                <a href="{{  route('baiviets.chitiet',$item['id']) }}" class="blog-detail">
+                                    {{ \Carbon\Carbon::parse($item['created_at'])->diffForHumans() }}
+                                    <h5>{{ $item['tieu_de'] }}</h5>
                                 </a>
                             </div>
                         </div>
+                        @endforeach
 
-                        <div>
-                            <div class="blog-box">
-                                <div class="blog-box-image">
-                                    <a href="blog-detail.html" class="blog-image">
-                                        <img src="../assets/client/images/vegetable/blog/2.jpg"
-                                            class="bg-img blur-up lazyload" alt="">
-                                    </a>
-                                </div>
-
-                                <a href="blog-detail.html" class="blog-detail">
-                                    <h6>10 April, 2022</h6>
-                                    <h5>Fresh Combo Fruit</h5>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div>
-                            <div class="blog-box">
-                                <div class="blog-box-image">
-                                    <a href="blog-detail.html" class="blog-image">
-                                        <img src="../assets/client/images/vegetable/blog/3.jpg"
-                                            class="bg-img blur-up lazyload" alt="">
-                                    </a>
-                                </div>
-
-                                <a href="blog-detail.html" class="blog-detail">
-                                    <h6>10 April, 2022</h6>
-                                    <h5>Nuts to Eat for Better Health</h5>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div>
-                            <div class="blog-box">
-                                <div class="blog-box-image">
-                                    <a href="blog-detail.html" class="blog-image">
-                                        <img src="../assets/client/images/vegetable/blog/1.jpg"
-                                            class="bg-img blur-up lazyload" alt="">
-                                    </a>
-                                </div>
-
-                                <a href="blog-detail.html" class="blog-detail">
-                                    <h6>20 March, 2022</h6>
-                                    <h5>Fresh Vegetable Online</h5>
-                                </a>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
