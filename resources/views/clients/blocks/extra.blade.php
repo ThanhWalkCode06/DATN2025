@@ -1,26 +1,26 @@
 <style>
-    .variant-container {
-            display: flex;
-            gap: 15px;
-        }
-        .variant {
-            width: 30px;
-            height: 30px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border: 1px solid #ccc;
-            border-radius: 50%;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
-            background-color: white;
-            color: #0da487;
-        }
-        .variant.selected {
-            background-color: #0da487;
-            color: white;
-        }
+    .attribute-group {
+    margin-top: 10px;
+}
+
+.options-container {
+    display: flex;
+    gap: 10px;
+}
+
+.attribute-option {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    cursor: pointer;
+    border-radius: 5px;
+    user-select: none;
+}
+
+.attribute-option:hover, .attribute-option.active {
+    background-color: #007bff;
+    color: white;
+    border-color: #0056b3;
+}
 </style>
 <!-- Quick View Modal Box Start -->
 <div class="modal fade theme-modal view-modal" id="view" tabindex="-1">
@@ -83,12 +83,7 @@
                                 </li>
                             </ul>
 
-                            <div class="variant-container">
-                                <div class="variant selected" data-size="S">S</div>
-                                <div class="variant" data-size="M">M</div>
-                                <div class="variant" data-size="L">L</div>
-                                <div class="variant" data-size="XL">XL</div>
-                            </div>
+                            <div class="variant-section"></div>
 
                             <div class="modal-button">
                                 <button onclick="location.href = 'cart.html';"

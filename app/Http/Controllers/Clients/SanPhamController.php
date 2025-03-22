@@ -117,17 +117,35 @@ class SanPhamController extends Controller
         }
 
         return response()->json([
-        'id' => $sanPham->id,
-        'ten_san_pham' => $sanPham->ten_san_pham,
-        'gia_moi' => number_format($sanPham->gia_moi,0,'','.'),
-        'gia_cu' => number_format($sanPham->gia_cu,0,'','.'),
-        'hinh_anh' => Storage::url($sanPham->hinh_anh ?? 'images/default.png'),
-        'mo_ta' => $sanPham->mo_ta,
-        'danh_muc' => $sanPham->danhMuc->ten_danh_muc,
-        'so_sao' => $sanPham->tinhDiemTrungBinh(),
-        'danh_gia' => $sanPham->danhGias->count(),
-        // 'bien_the' => $sanPham->bienThes->thuocTinhs,
-        'bien_the' => $sanPham->bienThes,
-    ]);
+            'id' => $sanPham->id,
+            'ten_san_pham' => $sanPham->ten_san_pham,
+            'gia_moi' => number_format($sanPham->gia_moi, 0, '', '.'),
+            'gia_cu' => number_format($sanPham->gia_cu, 0, '', '.'),
+            'hinh_anh' => Storage::url($sanPham->hinh_anh ?? 'images/default.png'),
+            'mo_ta' => $sanPham->mo_ta,
+            'danh_muc' => $sanPham->danhMuc->ten_danh_muc,
+            'so_sao' => $sanPham->tinhDiemTrungBinh(),
+            'danh_gia' => $sanPham->danhGias->count(),
+            'bien_the' => $sanPham->bienThes->map(function ($bienThe) {
+        return [
+            'id' => $bienThe->id,
+            'ten_bien_the' => $bienThe->ten_bien_the,
+            'gia_nhap' => $bienThe->gia_nhap,
+            'gia_ban' => $bienThe->gia_ban,
+            'so_luong' => $bienThe->so_luong,
+            'thuoc_tinh_gia_tri' => $bienThe->thuocTinhs->map(function ($thuocTinh) use ($bienThe) {
+                return [
+                    'id' => $thuocTinh->id,
+                    'ten' => $thuocTinh->ten_thuoc_tinh,
+                    'gia_tri' => $bienThe->giaTriThuocTinhs
+                        ->where('thuoc_tinh_id', $thuocTinh->id)
+                        ->where('bien_the_id', $bienThe->id) // Lọc đúng biến thể
+                        ->pluck('gia_tri')
+                        ->toArray(),
+                ];
+            }),
+        ];
+    }),
+        ]);
     }
 }
