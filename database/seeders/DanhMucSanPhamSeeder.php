@@ -13,6 +13,12 @@ class DanhMucSanPhamSeeder extends Seeder
      */
     public function run(): void
     {
-        DanhMucSanPham::factory()->count(10)->create();
+        $name = ['Áo', 'Quần', 'Giày', 'Mũ'];
+        foreach ($name as $key => $value) {
+            DanhMucSanPham::create([
+                'ten_danh_muc' => $value,
+                'mo_ta' => 'Consequatur et et omnis natus dolore est autem a. Cumque quibusdam consequatur ullam aut impedit.'
+            ]);
+        }
     }
 }
