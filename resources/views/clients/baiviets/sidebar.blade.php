@@ -1,45 +1,43 @@
 <style>
     .left-search-box {
-    padding: 10px;
-    background: #f8f9fa;
-    border-radius: 8px;
-    position: relative;
-    width: 100%;
-}
+        padding: 10px;
+        background: #f8f9fa;
+        border-radius: 8px;
+        position: relative;
+        width: 100%;
+    }
 
-.search-box {
-    display: flex;
-    position: relative;
-    align-items: center;
-    width: 100%;
-}
+    .search-box {
+        display: flex;
+        position: relative;
+        align-items: center;
+        width: 100%;
+    }
 
-.search-input {
-    width: 100%;
-    padding: 10px 15px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    outline: none;
-    font-size: 14px;
-}
+    .search-input {
+        width: 100%;
+        padding: 10px 15px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        outline: none;
+        font-size: 14px;
+    }
 
-.search-button {
-    position: absolute;
-    right: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
-    color: #555;
-}
+    .search-button {
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+        color: #555;
+    }
 
-.search-button:hover {
-    color: #333;
-}
-
-
+    .search-button:hover {
+        color: #333;
+    }
 </style>
 <div class="col-xxl-3 col-xl-4 col-lg-5">
     <div class="left-sidebar-box wow fadeInUp">
@@ -56,8 +54,6 @@
                     </form>
                 </div>
             </div>
-
-
 
             <div class="accordion-item">
                 <h2 class="accordion-header">
@@ -100,9 +96,9 @@
                             @foreach ($baiVietGanDay as $bv)
                                 <li class="list-group-item d-flex align-items-center">
                                     <a href="{{ route('baiviets.chitiet', $bv->id) }}" class="recent-image">
-                                        <img src="{{ asset('uploads/' . $bv->hinh_anh) }}" class="img-fluid rounded"
+                                        <img src="{{ asset('storage/' . $bv->anh_bia) }}" class="img-fluid rounded"
                                             alt="{{ $bv->tieu_de }}"
-                                            style="width: 60px; height: 60px; object-fit: cover;">
+                                            style="width: 100px; height: 70px; object-fit: cover;">
                                     </a>
                                     <div class="ms-3">
                                         <a href="{{ route('baiviets.chitiet', $bv->id) }}">
