@@ -75,15 +75,10 @@ class SanPhamController extends Controller
      */
     public function store(StoreSanPhamRequest $request)
     {
-
-        // Xử lý upload hình ảnh
-        // dd($request->all());
+        // dd($request->selected_values,$request->all());
         $thuocTinhId = array_keys($request->input('attribute_values', []));
 
-        // dd($thuocTInhId);
         $hinhAnhPath = null;
-        // $arrayAlbum = explode(",",$request->album_anh);
-
 
         if ($request->hasFile('hinh_anh')) {
             $file = $request->file('hinh_anh');
@@ -174,6 +169,7 @@ class SanPhamController extends Controller
                     }
                 }
             } else {
+
                 foreach ($request->selected_values as $key => $tenBienThe) {
                     $hinhAnhBienThe = null;
 
@@ -187,36 +183,41 @@ class SanPhamController extends Controller
                             $hinhAnhBienThe = 'uploads/sanphams/' . $fileName;
                         }
                     }
-                    // Lặp qua từng thuộc tính của biến thể
+
+                    // Tạo biến thể
+                    $bienThe = BienThe::create([
+                        'san_pham_id' => $sanPham->id,
+                        'ten_bien_the' => $tenBienThe,
+                        'gia_nhap' => $request->gia_nhap[$key],
+                        'gia_ban' => $request->gia_ban[$key],
+                        'so_luong' => $request->so_luong[$key],
+                    ]);
+
+                    if ($hinhAnhBienThe) {
+                        $bienThe->anh_bien_the = $hinhAnhBienThe;
+                    }
+                    $bienThe->save();
+
+                    // Lưu từng thuộc tính của biến thể vào bảng trung gian
                     foreach ($request->attribute_values as $thuocTinhId => $giaTriArray) {
                         foreach ($giaTriArray as $giaTri) {
-                            // Lấy ID giá trị thuộc tính từ DB
-                            $giaTriTT = GiaTriThuocTinh::query()
-                                ->where('gia_tri', $giaTri)
-                                ->where('thuoc_tinh_id', $thuocTinhId) // Chắc chắn đúng thuộc tính
-                                ->first();
+                            if (strpos($tenBienThe, $giaTri) !== false) {
+                                $giaTriTT = GiaTriThuocTinh::where('gia_tri', $giaTri)
+                                    ->where('thuoc_tinh_id', $thuocTinhId)
+                                    ->first();
 
-                            if ($giaTriTT) {
-                                // Tạo bản ghi cho từng thuộc tính
-                                $bienTheData = [
-                                    'san_pham_id' => $sanPham->id,
-                                    'ten_bien_the' => $tenBienThe,
-                                    'gia_nhap' => $request->gia_nhap[$key],
-                                    'gia_ban' => $request->gia_ban[$key],
-                                    'so_luong' => $request->so_luong[$key],
-                                    'thuoc_tinh_id' => $thuocTinhId,
-                                    'gia_tri_thuoc_tinh_id' => $giaTriTT->id,
-                                ];
-
-                                if ($hinhAnhBienThe) {
-                                    $bienTheData['anh_bien_the'] = $hinhAnhBienThe;
+                                if ($giaTriTT) {
+                                    DB::table('bien_the_thuoc_tinhs')->insert([
+                                        'bien_the_id' => $bienThe->id,
+                                        'thuoc_tinh_id' => $thuocTinhId,
+                                        'gia_tri_thuoc_tinh_id' => $giaTriTT->id,
+                                    ]);
                                 }
-
-                                BienThe::create($bienTheData);
                             }
                         }
                     }
                 }
+
             }
         }
 
@@ -301,41 +302,25 @@ class SanPhamController extends Controller
         $selected_values = is_array($request->selected_values) ? $request->selected_values : json_decode($request->selected_values, true) ?? [];
         // dd($selected_values);
         if ($request->has('attribute_values')) {
-            if ($bienThes->isNotEmpty()) {
-                $bienThes->each->delete();
-            }
-            if(empty($selected_values)){
 
+            if (empty($selected_values)) {
                 if ($request->hasFile('anh_bien_the')) {
-                    $hinhAnhBienThe = null;
                     $files = $request->file('anh_bien_the');
                     if (isset($files) && $files->isValid()) {
-                        $file = $files;
-                        $fileName = time() . '_' . $file->getClientOriginalName();
-                        $file->storeAs("public/uploads/sanphams/", $fileName);
+                        $fileName = time() . '_' . $files->getClientOriginalName();
+                        $files->storeAs("public/uploads/sanphams/", $fileName);
                         $hinhAnhBienThe = 'uploads/sanphams/' . $fileName;
-                    }
-                }else{
-                    foreach($bienThes as $item){
-                        if($item->ten_bien_the == $selected_values){
-                            $hinhAnhBienThe = $item->anh_bien_the;
-                        }
                     }
                 }
 
-                // Lặp qua từng thuộc tính của biến thể
-                // dd($request->all());
                 foreach ($request->attribute_values as $thuocTinhId => $giaTriArray) {
+                    $index = 0;
                     foreach ($giaTriArray as $giaTri) {
-                        $index = 0;
-                        // dd($request->all());
-                        $giaTriTT = GiaTriThuocTinh::query()
-                            ->where('gia_tri', $giaTri)
-                            ->where('thuoc_tinh_id', $thuocTinhId) // Chắc chắn đúng thuộc tính
+                        $giaTriTT = GiaTriThuocTinh::where('gia_tri', $giaTri)
+                            ->where('thuoc_tinh_id', $thuocTinhId)
                             ->first();
 
                         if ($giaTriTT) {
-
                             $bienTheData = [
                                 'san_pham_id' => $sanPham->id,
                                 'ten_bien_the' => $giaTriArray[$index],
@@ -344,87 +329,66 @@ class SanPhamController extends Controller
                                 'so_luong' => $request->so_luong[$index],
                                 'thuoc_tinh_id' => $thuocTinhId,
                                 'gia_tri_thuoc_tinh_id' => $giaTriTT->id,
+                                'anh_bien_the' => $hinhAnhBienThe ?? null,
                             ];
-
-                            if ($hinhAnhBienThe !=  null) {
-                                $bienTheData['anh_bien_the'] = $hinhAnhBienThe;
-                            }
 
                             BienThe::updateOrCreate($bienTheData);
                             $index++;
                         }
                     }
                 }
-            }
-            else{
-            // dd($request->all());
-            foreach ($request->selected_values as $key => $tenBienThe) {
-
-                // dd($request->all(),$tenBienThe,$bienThes);
-                $files = $request->file('anh_bien_the');
-                // Xử lý upload ảnh
-                if ($request->hasFile('anh_bien_the')) {
+            } else {
+                foreach ($request->selected_values as $key => $tenBienThe) {
                     $hinhAnhBienThe = null;
-                    if(isset($files[$key]) && $files[$key]->isValid()) {
-                        $file = $files[$key];
-                        $fileName = time() . '_' . $file->getClientOriginalName();
-                        $file->storeAs("public/uploads/sanphams/", $fileName);
-                        $hinhAnhBienThe = 'uploads/sanphams/' . $fileName;
-                    }else{
-                        foreach($bienThes as $item){
-                            if($item->ten_bien_the == $tenBienThe){
-                                $hinhAnhBienThe = $item->anh_bien_the;
-                            }
+                    if ($request->hasFile('anh_bien_the')) {
+                        $files = $request->file('anh_bien_the');
+                        if (isset($files[$key]) && $files[$key]->isValid()) {
+                            $fileName = time() . '_' . $files[$key]->getClientOriginalName();
+                            $files[$key]->storeAs("public/uploads/sanphams/", $fileName);
+                            $hinhAnhBienThe = 'uploads/sanphams/' . $fileName;
                         }
                     }
-                }else{
-                    $hinhAnhBienThe = null;
-                    foreach($bienThes as $item){
-                        if($item->ten_bien_the == $tenBienThe){
-                            $hinhAnhBienThe = $item->anh_bien_the;
-                        }
+
+                    $bienThe = BienThe::updateOrCreate(
+                        [
+                            'san_pham_id' => $sanPham->id,
+                            'ten_bien_the' => $tenBienThe,
+                        ],
+                        [
+                            'gia_nhap' => $request->gia_nhap[$key],
+                            'gia_ban' => $request->gia_ban[$key],
+                            'so_luong' => $request->so_luong[$key],
+
+                        ]
+                    );
+                    if ($hinhAnhBienThe) {
+                        $bienThe->anh_bien_the = $hinhAnhBienThe;
                     }
-                }
+                    $bienThe->save();
 
+                    foreach ($request->attribute_values as $thuocTinhId => $giaTriArray) {
+                        foreach ($giaTriArray as $giaTri) {
+                            $giaTriTT = GiaTriThuocTinh::where('gia_tri', $giaTri)
+                                ->where('thuoc_tinh_id', $thuocTinhId)
+                                ->first();
 
-
-                // Lặp qua từng thuộc tính của biến thể
-                foreach ($request->attribute_values as $thuocTinhId => $giaTriArray) {
-                    foreach ($giaTriArray as $giaTri) {
-                        // Lấy ID giá trị thuộc tính từ DB
-                        $giaTriTT = GiaTriThuocTinh::query()
-                            ->where('gia_tri', $giaTri)
-                            ->where('thuoc_tinh_id', $thuocTinhId) // Chắc chắn đúng thuộc tính
-                            ->first();
-
-                        if ($giaTriTT) {
-                            // Tạo bản ghi cho từng thuộc tính
-                            $bienTheData = [
-                                'san_pham_id' => $sanPham->id,
-                                'ten_bien_the' => $tenBienThe,
-                                'gia_nhap' => $request->gia_nhap[$key],
-                                'gia_ban' => $request->gia_ban[$key],
-                                'so_luong' => $request->so_luong[$key],
-                                'thuoc_tinh_id' => $thuocTinhId,
-                                'gia_tri_thuoc_tinh_id' => $giaTriTT->id,
-                            ];
-
-                            if (isset($hinhAnhBienThe) && $hinhAnhBienThe !=  null) {
-                                $bienTheData['anh_bien_the'] = $hinhAnhBienThe;
+                            if ($giaTriTT) {
+                                DB::table('bien_the_thuoc_tinhs')->updateOrInsert([
+                                    'bien_the_id' => $bienThe->id,
+                                    'thuoc_tinh_id' => $thuocTinhId,
+                                    'gia_tri_thuoc_tinh_id' => $giaTriTT->id,
+                                ]);
                             }
-
-                            BienThe::updateOrCreate($bienTheData);
-
                         }
                     }
                 }
             }
-            }
-        }else{
+        } else {
             if ($bienThes->isNotEmpty()) {
                 $bienThes->each->delete();
             }
         }
+
 
         return redirect()->route('sanphams.index')->with('success', 'Sản phẩm đã được cập nhật thành công.');
     }
