@@ -19,7 +19,7 @@ return new class extends Migration
             $table->double('gia_cu');
             $table->double('gia_moi');
             $table->double('khuyen_mai')->default(0);
-            $table->string('hinh_anh')->default('images/default.png');
+            $table->string('hinh_anh')->default('uploads/sanphams/default.png');
             $table->text('mo_ta')->nullable();
             // $table->text('form')->nullable();
             // $table->text('chat_lieu')->nullable();
