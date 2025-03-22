@@ -87,19 +87,9 @@
                                         </td>
                                         <td>{{ number_format($donHang->tong_tien, 0, '', '.') }}đ</td>
                                         <td>
-                                            <ul>
-                                                <li>
-                                                    <a href="{{ route('donhangs.show', $donHang->id) }}">
-                                                        <i class="ri-eye-line"></i>
-                                                    </a>
-                                                </li>
-
-                                                <li>
-                                                    <a href="{{ route('donhangs.edit', $donHang->id) }}">
-                                                        <i class="ri-pencil-line"></i>
-                                                    </a>
-                                                </li>
-                                            </ul>
+                                            <a href="{{ route('donhangs.show', $donHang->id) }}">
+                                                <i class="ri-eye-line"></i>
+                                            </a>
                                         </td>
                                     </tr>
                                 @endforeach
