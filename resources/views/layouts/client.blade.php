@@ -266,4 +266,53 @@
         });
 
         </script>
+<script>
+    $(document).ready(function() {
+        $(".btn-quick-view").click(function() {
+            let productId = $(this).data("id"); // Lấy ID sản phẩm
+
+            $.ajax({
+        url: 'http://127.0.0.1:8000/quick-view?id=' + productId,
+        method: 'GET',
+        success: function (response) {
+            // Cập nhật nội dung modal
+            $('#view .title-name').text(response.ten_san_pham);
+            $('#view .slider-image img').attr('src', response.hinh_anh);
+            $('#view .danh_muc').text(response.danh_muc);
+            $('#view .mo_ta').text(response.mo_ta );
+            $('#view .danh_gia').text(response.danh_gia + ' lượt đánh giá');
+            $('#view .gia_moi').text(response.gia_moi + ' đ');
+            $('#view .gia_cu').text(response.gia_cu +' đ');
+            var so_sao = response.so_sao; // Giá trị số sao từ API
+
+
+            $('#view .rating li').each(function(index) {
+                if (index < so_sao) {
+                    $(this).find('svg').css({
+                        'fill': '#ffc107',  // Màu vàng
+                        'stroke': '#ffc107' // Đồng bộ viền với màu nền
+                    });
+                } else {
+                    $(this).find('svg').css('stroke', '#ffc107'); // Màu xám cho sao chưa chọn
+                }
+            });
+
+
+
+            // Cập nhật danh sách biến thể (size)
+            let sizeOptions = response.sizes.map(size =>
+                `<option value="${size.value}">${size.label}</option>`
+            ).join('');
+            $('.select-form-size').html(sizeOptions);
+
+            // Hiển thị modal
+            $('#view').modal('show');
+        },
+        error: function () {
+            alert('Không tìm thấy sản phẩm!');
+        }
+    });
+        });
+    });
+    </script>
 </html>
