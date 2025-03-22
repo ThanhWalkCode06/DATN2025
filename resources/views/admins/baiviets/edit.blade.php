@@ -156,9 +156,22 @@
     <script src="{{ asset('assets/js/select2-custom.js') }}"></script>
 
     <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
+
 <script>
     ClassicEditor
-        .create(document.querySelector('#noi_dung'))
+        .create(document.querySelector('#noi_dung'), {
+            enterMode: 'BR', // Khi nhấn Enter sẽ xuống dòng thay vì thêm <p>
+            shiftEnterMode: 'P', // Nhấn Shift+Enter mới bọc trong <p>
+            toolbar: ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', 'imageUpload', 'undo', 'redo'],
+            ckfinder: {
+                uploadUrl: '/upload-image', // API để upload ảnh
+            }
+        })
+        .then(editor => {
+            editor.model.document.on('change:data', () => {
+                document.querySelector('textarea[name="noi_dung"]').value = editor.getData();
+            });
+        })
         .catch(error => {
             console.error(error);
         });

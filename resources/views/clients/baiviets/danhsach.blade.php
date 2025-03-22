@@ -1,3 +1,24 @@
+<style>
+   .blog-image {
+    width: 300px; /* Tăng chiều rộng */
+    height: 180px; /* Tăng chiều cao */
+    overflow: hidden; /* Cắt phần dư thừa */
+    border-radius: 8px; /* Bo góc */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.blog-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ảnh luôn lấp đầy khung */
+    object-position: center; /* Căn giữa ảnh */
+    border-radius: 8px; /* Giữ bo góc */
+}
+
+
+</style>
 @extends('layouts.client')
 
 @section('content')
@@ -11,11 +32,10 @@
                         <div class="col-12">
                             <div class="blog-box blog-list wow fadeInUp">
                                 <!-- Hình ảnh bài viết -->
-                                <div class="blog-image flex-shrink-0 me-3" style="width: 250px;">
-                                    <div class="blog-image">
-                                        <img src="{{ asset('storage/' . $baiViet->hinh_anh) }}" class="blur-up lazyload" alt="{{ $baiViet->tieu_de }}">
-                                    </div>
+                                <div class="blog-image flex-shrink-0 me-3" style="width: 340px; height: 217px; overflow: hidden;">
+                                    <img src="{{ asset('storage/' . $baiViet->anh_bia) }}" class="blog-image-full" alt="{{ $baiViet->tieu_de }}">
                                 </div>
+
 
                                 <div class="blog-contain blog-contain-2">
                                     <div class="d-flex align-items-center text-muted mb-2">
@@ -33,8 +53,8 @@
                                     <p class="text-muted">{!! Str::limit(strip_tags($baiViet->noi_dung), 150) !!}</p>
 
                                     <button onclick="location.href = '{{ route('baiviets.chitiet', $baiViet->id) }}';"
-                                        class="blog-button">Read
-                                        More <i class="fa-solid fa-right-long"></i></button>
+                                        class="blog-button">Chi
+                                        Tiết <i class="fa-solid fa-right-long"></i></button>
                                 </div>
                             </div>
                         </div>
