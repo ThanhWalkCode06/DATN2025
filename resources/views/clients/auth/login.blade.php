@@ -56,14 +56,14 @@
                         <div class="input-box">
                             <form  class="row g-4" action="{{ route('login.store.client') }}" method="POST">
                                 @csrf
-                                <div class="col-12">
+                                <div class="col-12 ">
                                     <div class="form-floating theme-form-floating log-in-form">
                                         <input name="username" type="text" class="form-control @error('username') is-invalid @enderror" id="fullname"
                                         placeholder="Tên tài khoản" value="{{ old('username') }}">
                                         <label for="username error-username">Tên tài khoản</label>
                                     </div>
 
-                                    <div class="col-12">
+                                    <div class="col-12 mt-3">
                                         <div class="form-floating theme-form-floating log-in-form">
                                             <input name="password" type="password"
                                                 class="form-control @error('password') is-invalid @enderror" id="password"
@@ -75,7 +75,7 @@
                                         @enderror
                                     </div>
 
-                                    <div class="col-12">
+                                    <div class="col-12 mt-3">
                                         <div class="forgot-box">
                                             <div class="form-check ps-0 m-0 remember-box">
                                                 <input class="checkbox_animated check-box" type="checkbox"
@@ -89,7 +89,7 @@
                                     @error('error')
                                         <p class="text-danger">{{ $message }}</p>
                                     @enderror
-                                    <div class="col-12">
+                                    <div class="col-12 mt-3">
                                         <button class="btn btn-animation w-100 justify-content-center" type="submit">Đăng
                                             nhập</button>
                                     </div>
