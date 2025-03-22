@@ -87,7 +87,7 @@ class DanhMucSanPhamController extends Controller
                 Storage::delete('public/' . $danhMuc->anh_danh_muc);
             }
             // Lưu ảnh mới
-            $path = $request->file('anh_danh_muc')->store('danhmucsanphams', 'public');
+            $path = $request->file('anh_danh_muc')->store('uploads/danhmucsanphams', 'public');
             $danhMuc->anh_danh_muc = $path;
         }
 
