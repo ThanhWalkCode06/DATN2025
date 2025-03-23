@@ -4,35 +4,36 @@ namespace App\Http\Controllers;
 
 
 use App\Models\BienThe;
+use App\Models\DonHang;
 use App\Models\SanPham;
 use App\Models\ThuocTinh;
 use App\Models\AnhSanPham;
 use Illuminate\Http\Request;
+use App\Models\ChiTietDonHang;
 use App\Models\DanhMucSanPham;
 use Illuminate\Support\Carbon;
 use App\Models\GiaTriThuocTinh;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\StoreSanPhamRequest;
 use App\Http\Requests\UpdateSanPhamRequest;
 use App\Http\Controllers\HelperCommon\Helper;
-use App\Models\ChiTietDonHang;
-use App\Models\DonHang;
 
 class SanPhamController extends Controller
 {
 
     public function index(Request $request)
     {
-    $sanPhams = SanPham::with('danhMuc')
-    ->with(['bienThes' => function ($query) {
-        $query->select('id', 'san_pham_id', 'ten_bien_the', 'anh_bien_the', 'gia_nhap', 'gia_ban', 'so_luong')
-              ->whereRaw('id IN (SELECT MAX(id) FROM bien_thes GROUP BY san_pham_id, ten_bien_the)'); // Lấy biến thể mới nhất theo `ten_bien_the`
-    }])
-    ->search($request->input('search'))
-    ->orderBy('created_at', 'desc')
-    ->latest()
-    ->paginate(10);
+        $sanPhams = SanPham::with('danhMuc')
+            ->with(['bienThes' => function ($query) {
+                $query->select('id', 'san_pham_id', 'ten_bien_the', 'anh_bien_the', 'gia_nhap', 'gia_ban', 'so_luong')
+                    ->whereRaw('id IN (SELECT MAX(id) FROM bien_thes GROUP BY san_pham_id, ten_bien_the)'); // Lấy biến thể mới nhất theo `ten_bien_the`
+            }])
+            ->search($request->input('search'))
+            ->orderBy('created_at', 'desc')
+            ->latest()
+            ->paginate(10);
 
 
         // $bienThes = BienThe::select('san_pham_id','ten_bien_the')->where('san_pham_id',52)->distinct()->get();
@@ -43,17 +44,17 @@ class SanPhamController extends Controller
     }
 
     public function sanPhamTopDanhGia()
-{
-    $sanPhams = SanPham::select('san_phams.*')
-        ->join('danh_gias', 'san_phams.id', '=', 'danh_gias.san_pham_id')
-        ->selectRaw('AVG(danh_gias.so_sao) as avg_rating')
-        ->groupBy('san_phams.id')
-        ->orderByDesc('avg_rating')
-        ->limit(4)
-        ->get();
+    {
+        $sanPhams = SanPham::select('san_phams.*')
+            ->join('danh_gias', 'san_phams.id', '=', 'danh_gias.san_pham_id')
+            ->selectRaw('AVG(danh_gias.so_sao) as avg_rating')
+            ->groupBy('san_phams.id')
+            ->orderByDesc('avg_rating')
+            ->limit(4)
+            ->get();
 
-    return view('clients.index', compact('sanPhams'));
-}
+        return view('clients.index', compact('sanPhams'));
+    }
     /**
      * Show the form for creating a new resource.
      */
@@ -96,7 +97,7 @@ class SanPhamController extends Controller
 
             // Lưu đường dẫn ảnh vào session
             // session(['temp_image' => $hinhAnhPath]);
-        }else if (session('temp_image')) {
+        } else if (session('temp_image')) {
             $hinhAnhPath = session('temp_image');
             session()->forget('temp_image');
         }
@@ -111,12 +112,12 @@ class SanPhamController extends Controller
             'trang_thai' => $request->trang_thai,
         ];
         // Tạo sản phẩm
-        if($hinhAnhPath){
+        if ($hinhAnhPath) {
             $data['hinh_anh'] = $hinhAnhPath;
         }
 
         $sanPham = SanPham::create($data);
-        Helper::uploadAlbum($sanPham->id,$token = false);
+        Helper::uploadAlbum($sanPham->id, $token = false);
 
         // Xóa session sau khi lưu
         session()->forget('uploaded_files');
@@ -199,6 +200,7 @@ class SanPhamController extends Controller
                     $bienThe->save();
 
                     // Lưu từng thuộc tính của biến thể vào bảng trung gian
+                    // dd($request->attribute_values);
                     foreach ($request->attribute_values as $thuocTinhId => $giaTriArray) {
                         foreach ($giaTriArray as $giaTri) {
                             if (strpos($tenBienThe, $giaTri) !== false) {
@@ -217,7 +219,6 @@ class SanPhamController extends Controller
                         }
                     }
                 }
-
             }
         }
 
@@ -229,11 +230,11 @@ class SanPhamController extends Controller
      * Display the specified resource.
      */
     public function show($id)
-{
-    $sanPham = SanPham::with(['danhMuc', 'bienThes'])->findOrFail($id);
+    {
+        $sanPham = SanPham::with(['danhMuc', 'bienThes'])->findOrFail($id);
 
-    return view('admins.sanphams.show', compact('sanPham'));
-}
+        return view('admins.sanphams.show', compact('sanPham'));
+    }
 
 
 
@@ -245,9 +246,9 @@ class SanPhamController extends Controller
      */
     public function edit($id)
     {
-        $sanpham = SanPham::with('bienThes','anhSP')->findOrFail($id);
+        $sanpham = SanPham::with('bienThes', 'anhSP')->findOrFail($id);
         $checkedTT = [];
-        foreach($sanpham->bienThes->unique('ten_bien_the') as $ten){
+        foreach ($sanpham->bienThes->unique('ten_bien_the') as $ten) {
             $checkedTT[] = array_unique(explode(' - ', $ten->ten_bien_the));
         }
         // foreach($sanpham->bienThe){
@@ -257,7 +258,7 @@ class SanPhamController extends Controller
         $album = AnhSanPham::where('san_pham_id', $id)->get();
         $thuocTinhs = ThuocTinh::with('giaTriThuocTinhs')->get();
         $danhMucs = DanhMucSanPham::all();
-        return view('admins.sanphams.edit', compact('sanpham', 'danhMucs','thuocTinhs','album','checkedTT'));
+        return view('admins.sanphams.edit', compact('sanpham', 'danhMucs', 'thuocTinhs', 'album', 'checkedTT'));
     }
 
     /**
@@ -277,8 +278,8 @@ class SanPhamController extends Controller
         $hinhAnhPath = null;
 
         if ($request->hasFile('hinh_anh')) {
-            if($sanPham->hinh_anh && Storage::exists('public',$sanPham->hinh_anh)){
-                Storage::delete('public/'.$sanPham->hinh_anh);
+            if ($sanPham->hinh_anh && Storage::exists('public', $sanPham->hinh_anh)) {
+                Storage::delete('public/' . $sanPham->hinh_anh);
             }
             $file = $request->file('hinh_anh');
             $fileName = time() . '.' . $file->getClientOriginalExtension();
@@ -293,11 +294,11 @@ class SanPhamController extends Controller
             'danh_muc_id' => $request->danh_muc_id,
             'trang_thai' => $request->trang_thai,
         ];
-            $data['hinh_anh'] = $hinhAnhPath ?? $sanPham->hinh_anh;
+        $data['hinh_anh'] = $hinhAnhPath ?? $sanPham->hinh_anh;
 
 
         $sanPham->update($data);
-        Helper::uploadAlbum($sanPham->id,$token = true);
+        Helper::uploadAlbum($sanPham->id, $token = true);
 
         $selected_values = is_array($request->selected_values) ? $request->selected_values : json_decode($request->selected_values, true) ?? [];
         // dd($selected_values);
@@ -338,6 +339,8 @@ class SanPhamController extends Controller
                     }
                 }
             } else {
+                $bienTheIdsMoi = []; // Danh sách ID biến thể mới
+
                 foreach ($request->selected_values as $key => $tenBienThe) {
                     $hinhAnhBienThe = null;
                     if ($request->hasFile('anh_bien_the')) {
@@ -349,39 +352,53 @@ class SanPhamController extends Controller
                         }
                     }
 
+                    // Tạo hoặc cập nhật biến thể
                     $bienThe = BienThe::updateOrCreate(
                         [
                             'san_pham_id' => $sanPham->id,
                             'ten_bien_the' => $tenBienThe,
                         ],
                         [
-                            'gia_nhap' => $request->gia_nhap[$key],
-                            'gia_ban' => $request->gia_ban[$key],
-                            'so_luong' => $request->so_luong[$key],
-
+                            'gia_nhap' => $request->gia_nhap[$key] ?? 0,
+                            'gia_ban' => $request->gia_ban[$key] ?? 0,
+                            'so_luong' => $request->so_luong[$key] ?? 0,
                         ]
                     );
+
                     if ($hinhAnhBienThe) {
                         $bienThe->anh_bien_the = $hinhAnhBienThe;
+                        $bienThe->save();
                     }
-                    $bienThe->save();
 
+                    // Lưu lại ID biến thể mới
+                    $bienTheIdsMoi[] = $bienThe->id;
+
+                    // Cập nhật bảng trung gian
+                    DB::table('bien_the_thuoc_tinhs')->where('bien_the_id', $bienThe->id)->delete();
+                    // dd($request->attribute_values);
                     foreach ($request->attribute_values as $thuocTinhId => $giaTriArray) {
                         foreach ($giaTriArray as $giaTri) {
-                            $giaTriTT = GiaTriThuocTinh::where('gia_tri', $giaTri)
-                                ->where('thuoc_tinh_id', $thuocTinhId)
-                                ->first();
+                            if (strpos($tenBienThe, $giaTri) !== false) {
+                                $giaTriTT = GiaTriThuocTinh::where('gia_tri', $giaTri)
+                                    ->where('thuoc_tinh_id', $thuocTinhId)
+                                    ->first();
 
-                            if ($giaTriTT) {
-                                DB::table('bien_the_thuoc_tinhs')->updateOrInsert([
-                                    'bien_the_id' => $bienThe->id,
-                                    'thuoc_tinh_id' => $thuocTinhId,
-                                    'gia_tri_thuoc_tinh_id' => $giaTriTT->id,
-                                ]);
+                                if ($giaTriTT) {
+                                    DB::table('bien_the_thuoc_tinhs')->insert([
+                                        'bien_the_id' => $bienThe->id,
+                                        'thuoc_tinh_id' => $thuocTinhId,
+                                        'gia_tri_thuoc_tinh_id' => $giaTriTT->id,
+                                    ]);
+                                }
                             }
                         }
                     }
                 }
+
+                // Xóa các biến thể không có trong danh sách mới
+                BienThe::where('san_pham_id', $sanPham->id)
+                    ->whereNotIn('id', $bienTheIdsMoi)
+                    ->delete();
             }
         } else {
             if ($bienThes->isNotEmpty()) {
@@ -404,8 +421,8 @@ class SanPhamController extends Controller
         $bienThe = BienThe::findOrFail($id);
         $donHangs = ChiTietDonHang::all();
 
-        foreach($donHangs as $item ){
-            if($item->bien_the_id == $bienThe->id){
+        foreach ($donHangs as $item) {
+            if ($item->bien_the_id == $bienThe->id) {
                 return redirect()->back()->with('error', 'Sản phẩm không thể xóa do đã có đơn hàng!');
             }
         }
@@ -414,8 +431,8 @@ class SanPhamController extends Controller
         }
         $sanpham->delete();
         $sanpham
-        ->where('id', $id)
-        ->update(['deleted_at' => Carbon::now()]);
+            ->where('id', $id)
+            ->update(['deleted_at' => Carbon::now()]);
         return redirect()->route('sanphams.index')->with('success', 'Sản phẩm đã được xóa thành công!');
     }
 }

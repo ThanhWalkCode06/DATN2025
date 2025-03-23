@@ -20,4 +20,10 @@ class GiaTriThuocTinh extends Model
         return $this->belongsTo(ThuocTinh::class, 'thuoc_tinh_id');
     }
 
+
+
+    public function bienTheThuocTinh()
+    {
+        return $this->hasOne(BienTheThuocTinh::class, 'gia_tri_thuoc_tinh_id');
+    }
 }

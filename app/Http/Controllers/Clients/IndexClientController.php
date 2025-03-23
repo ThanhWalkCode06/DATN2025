@@ -19,7 +19,6 @@ class IndexClientController extends Controller
         ->orderByDesc('danh_gias_avg_so_sao') // Sắp xếp theo số sao trung bình giảm dần
         ->take(8)
         ->get()->toArray();
-
         $sanPhamFollowTopOrders = SanPham::select('san_phams.*')
         ->selectRaw('COUNT(chi_tiet_don_hangs.id) as so_luong_don_hang') // Đếm số đơn hàng
         ->leftJoin('bien_thes', 'san_phams.id', '=', 'bien_thes.san_pham_id') // Nối bảng biến thể
