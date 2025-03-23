@@ -31,8 +31,8 @@ return new class extends Migration
 
         Schema::table('bien_thes', function (Blueprint $table) {
             $table->foreign('san_pham_id')->references('id')->on('san_phams');
-            $table->foreign('thuoc_tinh_id')->references('id')->on('thuoc_tinhs');
-            $table->foreign('gia_tri_thuoc_tinh_id')->references('id')->on('gia_tri_thuoc_tinhs');
+            // $table->foreign('thuoc_tinh_id')->references('id')->on('thuoc_tinhs');
+            // $table->foreign('gia_tri_thuoc_tinh_id')->references('id')->on('gia_tri_thuoc_tinhs');
         });
 
         Schema::table('gia_tri_thuoc_tinhs', function (Blueprint $table) {
@@ -98,11 +98,11 @@ return new class extends Migration
             $table->dropForeign('anh_san_phams_san_pham_id_foreign');
         });
 
-        Schema::table('bien_thes', function (Blueprint $table) {
-            $table->dropForeign('bien_thes_san_pham_id_foreign');
-            $table->dropForeign('bien_thes_thuoc_tinh_id_foreign');
-            $table->dropForeign('bien_thes_gia_tri_thuoc_tinh_id_foreign');
-        });
+        // Schema::table('bien_thes', function (Blueprint $table) {
+        //     $table->dropForeign('bien_thes_san_pham_id_foreign');
+        //     $table->dropForeign('bien_thes_thuoc_tinh_id_foreign');
+        //     $table->dropForeign('bien_thes_gia_tri_thuoc_tinh_id_foreign');
+        // });
 
         Schema::table('gia_tri_thuoc_tinhs', function (Blueprint $table) {
             $table->dropForeign('gia_tri_thuoc_tinhs_thuoc_tinh_id_foreign');
