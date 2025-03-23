@@ -17,15 +17,15 @@ class GiaTriThuocTinhSeeder extends Seeder
         $data = [
             0 => [
                 [
-                    'thuoc_tinh_id' => 2,
+                    'thuoc_tinh_id' => 1,
                     'gia_tri' => 'Đỏ',
                 ],
                 [
-                    'thuoc_tinh_id' => 2,
+                    'thuoc_tinh_id' => 1,
                     'gia_tri' => 'Xanh',
                 ],
                 [
-                    'thuoc_tinh_id' => 2,
+                    'thuoc_tinh_id' => 1,
                     'gia_tri' => 'Tím',
                 ],
                 [
@@ -33,7 +33,7 @@ class GiaTriThuocTinhSeeder extends Seeder
                     'gia_tri' => 'Đen',
                 ],
                 [
-                    'thuoc_tinh_id' => 2,
+                    'thuoc_tinh_id' => 1,
                     'gia_tri' => 'Trắng',
                 ],
 
@@ -41,27 +41,24 @@ class GiaTriThuocTinhSeeder extends Seeder
 
             1 => [
                 [
-                    'thuoc_tinh_id' => 1,
+                    'thuoc_tinh_id' => 2,
                     'gia_tri' => 'M',
                 ],
                 [
-                    'thuoc_tinh_id' => 1,
+                    'thuoc_tinh_id' => 2,
                     'gia_tri' => 'S',
                 ],
                 [
-                    'thuoc_tinh_id' => 1,
+                    'thuoc_tinh_id' => 2,
                     'gia_tri' => 'L',
                 ],
-
             ],
         ];
 
-        foreach($data as $index=>$item){
-            foreach($item as $i){
+        foreach ($data as $index => $item) {
+            foreach ($item as $i) {
                 GiaTriThuocTinh::updateOrCreate($i);
             }
         }
-
-
     }
 }
