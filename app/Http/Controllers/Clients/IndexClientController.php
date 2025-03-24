@@ -34,7 +34,7 @@ class IndexClientController extends Controller
         $part1 = array_slice($sanPhamFollowTopOrders, 0, $half); // Lấy nửa đầu
         $part2 = array_slice($sanPhamFollowTopOrders, 4,$half); // Lấy nửa sau
         $part3 = array_slice($sanPhamFollowTopOrders, 8,$half); // Lấy nửa sau
-        
+
         // dd($sanPhamFollowTopOrders,$part1,$part2,$part3);
 
         $baiViets = BaiViet::limit(2)->get()->toArray();
@@ -52,9 +52,9 @@ class IndexClientController extends Controller
         return view('clients.index', compact(
             'danhMucAll',
             'sanPhamFollowComments',
-            // 'part1',
-            // 'part2',
-            // 'part3',
+            'part1',
+            'part2',
+            'part3',
             'baiViets',
             'bestUser',
             'bestComment'

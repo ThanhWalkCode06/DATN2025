@@ -571,6 +571,21 @@ $(document).ready(function () {
                 $('#view .danh_gia').text(response.danh_gia + ' lượt đánh giá');
                 $('#view .gia_moi').text(response.gia_moi + ' đ');
                 $('#view .gia_cu').text(response.gia_cu + ' đ');
+                let so_sao = response.so_sao;
+                $('#view .rating li svg').css({
+                    'fill': 'none',
+                    'stroke': '#ffc107'
+                });
+
+                $('#view .rating li').each(function (index) {
+                    if (index < so_sao) {
+                        $(this).find('svg').css({
+                            'fill': '#ffc107',
+                            'stroke': '#ffc107'
+                        });
+                    }
+                });
+
 
                 // Gom nhóm thuộc tính từ biến thể
                 let thuocTinhMap = {};
