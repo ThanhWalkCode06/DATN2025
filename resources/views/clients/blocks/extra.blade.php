@@ -1,25 +1,28 @@
 <style>
-    .attribute-group {
-    margin-top: 10px;
-}
-
-.options-container {
-    display: flex;
-    gap: 10px;
-}
-
-.attribute-option {
-    padding: 8px 12px;
-    border: 1px solid #ddd;
+.option {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid #ddd;
+    color: #333;
+    font-size: 16px;
+    font-weight: bold;
     cursor: pointer;
-    border-radius: 5px;
-    user-select: none;
+    margin: 5px;
+    transition: all 0.3s ease-in-out;
 }
 
-.attribute-option:hover, .attribute-option.active {
-    background-color: #007bff;
+.option:hover {
+    border-color: #0da487;
+}
+
+.option.selected {
+    background-color: #0da487;
     color: white;
-    border-color: #0056b3;
+    border-color: #0da487;
 }
 </style>
 <!-- Quick View Modal Box Start -->
@@ -544,4 +547,104 @@ $(document).ready(function() {
             console.log("Size được chọn:", $(this).data("size")); // In ra console
         });
     });
+</script>
+<script>
+$(document).ready(function () {
+    let selectedAttributes = {};
+    let bienTheList = []; // Lưu danh sách biến thể để sử dụng lại
+
+    $(".btn-quick-view").click(function () {
+        let productId = $(this).data("id");
+
+        $.ajax({
+            url: 'http://127.0.0.1:8000/quick-view?id=' + productId,
+            method: 'GET',
+            success: function (response) {
+                // Lưu biến thể vào biến toàn cục
+                bienTheList = response.bien_the;
+
+                // Cập nhật thông tin chung
+                $('#view .title-name').text(response.ten_san_pham);
+                $('#view .slider-image img').attr('src', response.hinh_anh);
+                $('#view .danh_muc').text(response.danh_muc);
+                $('#view .mo_ta').text(response.mo_ta);
+                $('#view .danh_gia').text(response.danh_gia + ' lượt đánh giá');
+                $('#view .gia_moi').text(response.gia_moi + ' đ');
+                $('#view .gia_cu').text(response.gia_cu + ' đ');
+
+                // Gom nhóm thuộc tính từ biến thể
+                let thuocTinhMap = {};
+                response.bien_the.forEach(bienThe => {
+                    bienThe.thuoc_tinh_gia_tri.forEach(thuocTinh => {
+                        if (!thuocTinhMap[thuocTinh.ten]) {
+                            thuocTinhMap[thuocTinh.ten] = new Set();
+                        }
+                        thuocTinhMap[thuocTinh.ten].add(thuocTinh.gia_tri);
+                    });
+                });
+
+                // Hiển thị danh sách thuộc tính
+                let thuocTinhHtml = "";
+                Object.keys(thuocTinhMap).forEach(tenThuocTinh => {
+                    thuocTinhHtml += `<h3>${tenThuocTinh}</h3>`;
+                    thuocTinhHtml += `<div id="thuoc_tinh_${tenThuocTinh.replace(/\s+/g, '_')}" class="thuoc-tinh-group">`;
+                    thuocTinhMap[tenThuocTinh].forEach(giaTri => {
+                        thuocTinhHtml += `
+                            <span class="option" data-thuoc-tinh="${tenThuocTinh}" data-gia-tri="${giaTri}">
+                                ${giaTri}
+                            </span>
+                        `;
+                    });
+                    thuocTinhHtml += `</div>`;
+                });
+
+                $('.variant-section').html(thuocTinhHtml);
+            },
+            error: function () {
+                alert('Không tìm thấy sản phẩm!');
+            }
+        });
+    });
+
+    // Xử lý chọn thuộc tính
+    $(document).on("click", ".option", function() {
+        let thuocTinh = $(this).data("thuoc-tinh");
+        let giaTri = $(this).data("gia-tri");
+
+        // Cập nhật giá trị thuộc tính đã chọn
+        selectedAttributes[thuocTinh] = giaTri;
+
+        // Bỏ chọn tất cả option cùng nhóm
+        $(`.option[data-thuoc-tinh='${thuocTinh}']`).removeClass("selected");
+        $(this).addClass("selected");
+
+        // Kiểm tra và cập nhật ảnh biến thể
+        updateVariantImage();
+    });
+
+    function updateVariantImage() {
+        let matchedVariant = null;
+
+        bienTheList.forEach(variant => {
+            let isMatch = true;
+
+            variant.thuoc_tinh_gia_tri.forEach(attr => {
+                if (selectedAttributes[attr.ten] !== attr.gia_tri) {
+                    isMatch = false;
+                }
+            });
+
+            if (isMatch) {
+                matchedVariant = variant;
+            }
+        });
+
+        if (matchedVariant) {
+            $("#view .slider-image img").attr("src", matchedVariant.anh_bien_the);
+        } else {
+            $("#view .slider-image img").attr("src", "/storage/uploads/sanphams/default.png");
+        }
+    }
+});
+
 </script>
