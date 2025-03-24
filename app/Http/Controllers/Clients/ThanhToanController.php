@@ -51,7 +51,7 @@ class ThanhToanController extends Controller
             'bien_thes.ten_bien_the'
         )
             ->join('bien_thes', 'bien_thes.id', '=', 'bien_the_id')
-            ->join('san_phams', 'san_phams.id', '=', 'san_pham_id')
+            ->join('san_phams', 'san_phams.id', '=', 'bien_thes.san_pham_id')
             ->where('don_hang_id', '=', $donHang->id)
             ->get();
 

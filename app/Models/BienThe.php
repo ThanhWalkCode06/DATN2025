@@ -11,8 +11,8 @@ class BienThe extends Model
 
     protected $fillable = [
         'san_pham_id',
-        'thuoc_tinh_id',
-        'gia_tri_thuoc_tinh_id',
+        // 'thuoc_tinh_id',
+        // 'gia_tri_thuoc_tinh_id',
         'ten_bien_the',
         'anh_bien_the',
         'gia_nhap',
@@ -27,7 +27,7 @@ class BienThe extends Model
 
     public function thuocTinhs()
     {
-        return $this->hasMany(ThuocTinh::class,'id', 'thuoc_tinh_id');
+        return $this->hasMany(ThuocTinh::class, 'id', 'thuoc_tinh_id');
     }
     public function giaTriThuocTinhs()
     {
@@ -35,10 +35,10 @@ class BienThe extends Model
     }
 
     public function donHangs()
-{
-    return $this->belongsToMany(DonHang::class, 'chi_tiet_don_hangs', 'bien_the_id', 'don_hang_id')
-                ->withPivot('so_luong');
-}
+    {
+        return $this->belongsToMany(DonHang::class, 'chi_tiet_don_hangs', 'bien_the_id', 'don_hang_id')
+                    ->withPivot('so_luong');
+    }
 
     public function tt()
     {
@@ -58,4 +58,3 @@ class BienThe extends Model
         );
     }
 }
-

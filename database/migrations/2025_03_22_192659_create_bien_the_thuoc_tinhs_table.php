@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('bien_the_id')->constrained('bien_thes')->onDelete('cascade');
             $table->foreignId('thuoc_tinh_id')->constrained('thuoc_tinhs')->onDelete('cascade');
             $table->foreignId('gia_tri_thuoc_tinh_id')->constrained('gia_tri_thuoc_tinhs')->onDelete('cascade');
+            $table->timestamps();
         });
     }
 

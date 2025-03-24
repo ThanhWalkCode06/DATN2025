@@ -23,7 +23,7 @@ class SanPhamFactory extends Factory
             'gia_cu' => $this->faker->numberBetween(200000, 300000),
             'gia_moi' => $this->faker->numberBetween(100000, 199999),
             'mo_ta' => $this->faker->paragraph(),
-            'danh_muc_id' => $this->faker->randomNumber(1, true),
+            'danh_muc_id' => $this->faker->numberBetween(1, 4),
             'trang_thai' => $this->faker->numberBetween(0, 1)
         ];
     }

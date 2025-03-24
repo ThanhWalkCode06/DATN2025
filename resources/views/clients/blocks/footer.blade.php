@@ -62,7 +62,7 @@
                         <div class="theme-logo">
                             <a href="{{ route('home') }}">
                                 <img style="width: 200px"
-                                    src="{{ Storage::url($globalSetting->logo ?? '/images/logo.png') }}"
+                                    src="{{ Storage::url($globalSetting->client_logo ?? '/images/logo-green.png') }}"
                                     class="blur-up lazyload" alt="">
                         </div>
 
@@ -86,13 +86,14 @@
                     <div class="footer-title">
                         <h4>Danh mục sản phẩm</h4>
                     </div>
-                
+
                     <div class="footer-contain">
                         <ul>
-                            @if(isset($danhMucs) && $danhMucs->count() > 0)
+                            @if (isset($danhMucs) && $danhMucs->count() > 0)
                                 @foreach ($danhMucs as $danhMuc)
                                     <li>
-                                        <a href="{{ route('clientsanpham.danhsach', ['danh_muc_id' => $danhMuc->id]) }}" class="text-content">
+                                        <a href="{{ route('clientsanpham.danhsach', ['danh_muc_id' => $danhMuc->id]) }}"
+                                            class="text-content">
                                             {{ $danhMuc->ten_danh_muc }}
                                         </a>
                                     </li>
@@ -103,7 +104,7 @@
                         </ul>
                     </div>
                 </div>
-                
+
 
 
                 <div class="col-xl col-lg-2 col-sm-3">
@@ -184,7 +185,7 @@
                                     <i data-feather="mail"></i>
                                     <div class="contact-number">
                                         <h6 class="text-content">Địa chỉ email :</h6>
-                                        <h5>{{ $globalSetting->email ?? 'Chưa cập nhật' }}</h5>
+                                        <h5>{{ $globalSetting->email_owner ?? 'Chưa cập nhật' }}</h5>
                                     </div>
                                 </div>
                             </li>
