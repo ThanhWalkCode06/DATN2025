@@ -106,6 +106,7 @@
                                         </a>
                                         <small class="text-muted">{{ $bv->created_at->format('d M, Y') }}
                                             <i class="fas fa-thumbs-up ms-1"></i>
+                                        {{-- them giao dien chinh suaw --}}
                                         </small>
                                     </div>
                                 </li>
