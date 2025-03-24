@@ -134,7 +134,9 @@ class SanPhamController extends Controller
                 return [
                     'id' => $bienThe->id,
                     'ten_bien_the' => $bienThe->ten_bien_the,
+                    'gia_ban' => number_format($bienThe->gia_ban,0,'','.'),
                     'anh_bien_the' => Storage::url($bienThe->anh_bien_the ?? 'images/default.png'),
+                    'so_luong' => $bienThe->so_luong,
                     'thuoc_tinh_gia_tri' => $bienThe->tt->map(function ($thuocTinh) use ($bienThe) {
                     $giaTri = $bienThe->gttt
                         ->where('thuoc_tinh_id', $thuocTinh->id)

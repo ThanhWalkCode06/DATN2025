@@ -320,16 +320,20 @@
                                 @foreach ($part1 as $item)
                                 <li>
                                     <div class="offer-product">
-                                        <a href="{{ route('sanphams.chitiet',$item['id']) }}" class="offer-image">
+                                        <div>
+                                            <a href="{{ route('sanphams.chitiet',$item['id']) }}" class="offer-image">
+
+                                                <img src="{{ Storage::url($item['hinh_anh']) }}"
+                                                    class="blur-up lazyload" alt="">
+                                            </a>
                                             <div style="position: relative; width: 100%">
                                                 @if ($item['gia_cu'] > $item['gia_moi'])
                                                 <span style="position: absolute; top: 0; right: 0;"
                                                 class="badge bg-danger">-{{ round((($item['gia_cu'] - $item['gia_moi']) / $item['gia_cu']) * 100) }}%</span>
                                             @endif
                                             </div>
-                                            <img src="{{ Storage::url($item['hinh_anh']) }}"
-                                                class="blur-up lazyload" alt="">
-                                        </a>
+                                        </div>
+
 
                                         <div class="offer-detail">
                                             <div>
@@ -381,16 +385,19 @@
                                 @foreach ($part2 as $item)
                                 <li>
                                     <div class="offer-product">
-                                        <a href="{{ route('sanphams.chitiet',$item['id']) }}" class="offer-image">
+                                        <div>
+                                            <a href="{{ route('sanphams.chitiet',$item['id']) }}" class="offer-image">
+
+                                                <img src="{{ Storage::url($item['hinh_anh']) }}"
+                                                    class="blur-up lazyload" alt="">
+                                            </a>
                                             <div style="position: relative; width: 100%">
                                                 @if ($item['gia_cu'] > $item['gia_moi'])
                                                 <span style="position: absolute; top: 0; right: 0;"
                                                 class="badge bg-danger">-{{ round((($item['gia_cu'] - $item['gia_moi']) / $item['gia_cu']) * 100) }}%</span>
                                             @endif
                                             </div>
-                                            <img src="{{ Storage::url($item['hinh_anh']) }}"
-                                                class="blur-up lazyload" alt="">
-                                        </a>
+                                        </div>
 
                                         <div class="offer-detail">
                                             <div>
@@ -442,16 +449,19 @@
                                 <li>
                                     <div class="offer-product">
 
-                                        <a href="{{ route('sanphams.chitiet',$item['id']) }}" class="offer-image">
+                                        <div>
+                                            <a href="{{ route('sanphams.chitiet',$item['id']) }}" class="offer-image">
+
+                                                <img src="{{ Storage::url($item['hinh_anh']) }}"
+                                                    class="blur-up lazyload" alt="">
+                                            </a>
                                             <div style="position: relative; width: 100%">
                                                 @if ($item['gia_cu'] > $item['gia_moi'])
                                                 <span style="position: absolute; top: 0; right: 0;"
                                                 class="badge bg-danger">-{{ round((($item['gia_cu'] - $item['gia_moi']) / $item['gia_cu']) * 100) }}%</span>
                                             @endif
                                             </div>
-                                            <img src="{{ Storage::url($item['hinh_anh']) }}"
-                                                class="blur-up lazyload" alt="">
-                                        </a>
+                                        </div>
 
                                         <div class="offer-detail">
                                             <div>
