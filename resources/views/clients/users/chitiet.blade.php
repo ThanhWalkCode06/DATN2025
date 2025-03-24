@@ -636,6 +636,7 @@
                                                 5 => 'Trả hàng',
                                             ];
                                         @endphp
+                                        @if($donHangsPaginate->isNotEmpty())
                                         @foreach ($donHangsPaginate as $item)
                                             <div class="order-box dashboard-bg-box">
                                                 <a href="{{ route('order-tracking.client',$item->id) }}">
@@ -662,6 +663,12 @@
                                                 </a>
                                             </div>
                                         @endforeach
+                                        @else
+                                        <center>
+                                            <h2 style="color: #ccc">Bạn không có đơn hàng nào</h2>
+                                            <img style="width: 200px;color: #ccc" src="{{ asset('assets/images/inner-page/not-found.png') }}" alt="">
+                                        </center>
+                                        @endif
 
                                     </div>
 

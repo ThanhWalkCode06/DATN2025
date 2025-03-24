@@ -1,6 +1,34 @@
+<style>
+.option {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid #ddd;
+    color: #333;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin: 5px;
+    transition: all 0.3s ease-in-out;
+}
+
+.option:hover {
+    border-color: #0da487;
+}
+
+.option.selected {
+    background-color: #0da487;
+    color: white;
+    border-color: #0da487;
+}
+</style>
 <!-- Quick View Modal Box Start -->
 <div class="modal fade theme-modal view-modal" id="view" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered modal-xl modal-fullscreen-sm-down">
+        {{-- core-quickView --}}
         <div class="modal-content">
             <div class="modal-header p-0">
                 <button type="button" class="btn-close" data-bs-dismiss="modal">
@@ -11,79 +39,54 @@
                 <div class="row g-sm-4 g-2">
                     <div class="col-lg-6">
                         <div class="slider-image">
-                            <img src="../assets/client/images/product/category/1.jpg" class="img-fluid blur-up lazyload"
+                            <img src="" class="img-fluid blur-up lazyload"
                                 alt="">
                         </div>
                     </div>
 
                     <div class="col-lg-6">
                         <div class="right-sidebar-modal">
-                            <h4 class="title-name">Peanut Butter Bite Premium Butter Cookies 600 g</h4>
-                            <h4 class="price">$36.99</h4>
+                            <h4 class="title-name"></h4>
+                            <div style="display: flex">
+                                <h4 class="gia_moi" style="color: #0da487"></h4>
+                                <del class="gia_cu" style="margin-left: 20px"></del>
+                            </div>
                             <div class="product-rating">
                                 <ul class="rating">
                                     <li>
-                                        <i data-feather="star" class="fill"></i>
+                                        <i data-feather="star" class=""></i>
                                     </li>
                                     <li>
-                                        <i data-feather="star" class="fill"></i>
+                                        <i data-feather="star" class=""></i>
                                     </li>
                                     <li>
-                                        <i data-feather="star" class="fill"></i>
+                                        <i data-feather="star" class=""></i>
                                     </li>
                                     <li>
-                                        <i data-feather="star" class="fill"></i>
+                                        <i data-feather="star" class=""></i>
                                     </li>
                                     <li>
-                                        <i data-feather="star"></i>
+                                        <i data-feather="star" class=""></i>
                                     </li>
                                 </ul>
-                                <span class="ms-2">8 Reviews</span>
-                                <span class="ms-2 text-danger">6 sold in last 16 hours</span>
+                                <span class="danh_gia ms-2">8 Reviews</span>
                             </div>
 
                             <div class="product-detail">
-                                <h4>Product Details :</h4>
-                                <p>Candy canes sugar plum tart cotton candy chupa chups sugar plum chocolate I love.
-                                    Caramels marshmallow icing dessert candy canes I love soufflé I love toffee.
-                                    Marshmallow pie sweet sweet roll sesame snaps tiramisu jelly bear claw. Bonbon
-                                    muffin I love carrot cake sugar plum dessert bonbon.</p>
+                                <h4>Mô tả</h4>
+                                <p class="mo_ta"></p>
                             </div>
 
                             <ul class="brand-list">
                                 <li>
                                     <div class="brand-box">
-                                        <h5>Brand Name:</h5>
-                                        <h6>Black Forest</h6>
-                                    </div>
-                                </li>
-
-                                <li>
-                                    <div class="brand-box">
-                                        <h5>Product Code:</h5>
-                                        <h6>W0690034</h6>
-                                    </div>
-                                </li>
-
-                                <li>
-                                    <div class="brand-box">
-                                        <h5>Product Type:</h5>
-                                        <h6>White Cream Cake</h6>
+                                        <h5>Danh mục:</h5>
+                                        <h6 class="danh_muc"></h6>
                                     </div>
                                 </li>
                             </ul>
 
-                            <div class="select-size">
-                                <h4>Cake Size :</h4>
-                                <select class="form-select select-form-size">
-                                    <option selected>Select Size</option>
-                                    <option value="1.2">1/2 KG</option>
-                                    <option value="0">1 KG</option>
-                                    <option value="1.5">1/5 KG</option>
-                                    <option value="red">Red Roses</option>
-                                    <option value="pink">With Pink Roses</option>
-                                </select>
-                            </div>
+                            <div class="variant-section"></div>
 
                             <div class="modal-button">
                                 <button onclick="location.href = 'cart.html';"
@@ -536,18 +539,112 @@ $(document).ready(function() {
 });
 
 </script>
-{{--
-@if(session('success'))
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        setTimeout(function () {
-        Swal.fire({
-            title: "Thành công!",
-            text: "{{ session('success') }}",
-            icon: "success",
-            confirmButtonText: "OK"
+    $(document).ready(function () {
+        $(".variant").click(function () {
+            $(".variant").removeClass("selected"); // Bỏ chọn tất cả
+            $(this).addClass("selected"); // Chọn biến thể hiện tại
+            console.log("Size được chọn:", $(this).data("size")); // In ra console
         });
-    }, 2000); // Hiển thị sau 2 giây (2000ms)
     });
 </script>
-@endif --}}
+<script>
+$(document).ready(function () {
+    let selectedAttributes = {};
+    let bienTheList = []; // Lưu danh sách biến thể để sử dụng lại
+
+    $(".btn-quick-view").click(function () {
+        let productId = $(this).data("id");
+
+        $.ajax({
+            url: 'http://127.0.0.1:8000/quick-view?id=' + productId,
+            method: 'GET',
+            success: function (response) {
+                // Lưu biến thể vào biến toàn cục
+                bienTheList = response.bien_the;
+
+                // Cập nhật thông tin chung
+                $('#view .title-name').text(response.ten_san_pham);
+                $('#view .slider-image img').attr('src', response.hinh_anh);
+                $('#view .danh_muc').text(response.danh_muc);
+                $('#view .mo_ta').text(response.mo_ta);
+                $('#view .danh_gia').text(response.danh_gia + ' lượt đánh giá');
+                $('#view .gia_moi').text(response.gia_moi + ' đ');
+                $('#view .gia_cu').text(response.gia_cu + ' đ');
+
+                // Gom nhóm thuộc tính từ biến thể
+                let thuocTinhMap = {};
+                response.bien_the.forEach(bienThe => {
+                    bienThe.thuoc_tinh_gia_tri.forEach(thuocTinh => {
+                        if (!thuocTinhMap[thuocTinh.ten]) {
+                            thuocTinhMap[thuocTinh.ten] = new Set();
+                        }
+                        thuocTinhMap[thuocTinh.ten].add(thuocTinh.gia_tri);
+                    });
+                });
+
+                // Hiển thị danh sách thuộc tính
+                let thuocTinhHtml = "";
+                Object.keys(thuocTinhMap).forEach(tenThuocTinh => {
+                    thuocTinhHtml += `<h3>${tenThuocTinh}</h3>`;
+                    thuocTinhHtml += `<div id="thuoc_tinh_${tenThuocTinh.replace(/\s+/g, '_')}" class="thuoc-tinh-group">`;
+                    thuocTinhMap[tenThuocTinh].forEach(giaTri => {
+                        thuocTinhHtml += `
+                            <span class="option" data-thuoc-tinh="${tenThuocTinh}" data-gia-tri="${giaTri}">
+                                ${giaTri}
+                            </span>
+                        `;
+                    });
+                    thuocTinhHtml += `</div>`;
+                });
+
+                $('.variant-section').html(thuocTinhHtml);
+            },
+            error: function () {
+                alert('Không tìm thấy sản phẩm!');
+            }
+        });
+    });
+
+    // Xử lý chọn thuộc tính
+    $(document).on("click", ".option", function() {
+        let thuocTinh = $(this).data("thuoc-tinh");
+        let giaTri = $(this).data("gia-tri");
+
+        // Cập nhật giá trị thuộc tính đã chọn
+        selectedAttributes[thuocTinh] = giaTri;
+
+        // Bỏ chọn tất cả option cùng nhóm
+        $(`.option[data-thuoc-tinh='${thuocTinh}']`).removeClass("selected");
+        $(this).addClass("selected");
+
+        // Kiểm tra và cập nhật ảnh biến thể
+        updateVariantImage();
+    });
+
+    function updateVariantImage() {
+        let matchedVariant = null;
+
+        bienTheList.forEach(variant => {
+            let isMatch = true;
+
+            variant.thuoc_tinh_gia_tri.forEach(attr => {
+                if (selectedAttributes[attr.ten] !== attr.gia_tri) {
+                    isMatch = false;
+                }
+            });
+
+            if (isMatch) {
+                matchedVariant = variant;
+            }
+        });
+
+        if (matchedVariant) {
+            $("#view .slider-image img").attr("src", matchedVariant.anh_bien_the);
+        } else {
+            $("#view .slider-image img").attr("src", "/storage/uploads/sanphams/default.png");
+        }
+    }
+});
+
+</script>

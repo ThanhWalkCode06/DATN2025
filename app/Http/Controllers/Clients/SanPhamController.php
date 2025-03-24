@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Clients;
 
-use Illuminate\Support\Facades\Auth;
 use App\Models\SanPham;
 use Illuminate\Http\Request;
 use App\Models\DanhMucSanPham;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class SanPhamController extends Controller
 {
@@ -37,7 +38,7 @@ class SanPhamController extends Controller
             }
         }
 
-        $sanPhams = $query->paginate(12);
+        $sanPhams = $query->paginate(50);
 
 
         $danhMucs = DanhMucSanPham::withCount([
@@ -45,13 +46,12 @@ class SanPhamController extends Controller
                 $query->where('san_phams.trang_thai', 1);
             }
         ])->get();
-
         return view('clients.sanphams.danhsach', compact('sanPhams', 'danhMucs'));
     }
 
 
 
-    public function chiTiet()
+    public function chiTiet($id)
     {
         return view('clients.sanphams.chitiet');
     }
@@ -59,18 +59,32 @@ class SanPhamController extends Controller
     public function sanPhamYeuThich()
     {
         $user = Auth::user();
-        return view('clients.sanphams.sanphamyeuthich', compact('user'));
+        return view('clients.sanphams.sanphamyeuthich',compact('user'));
     }
 
     public function addsanPhamYeuThich(string $id)
     {
         $user = Auth::user();
-        if ($user) {
-            $user->sanPhamYeuThichs()->attach($id);
-        } else {
-            return redirect()->back()->with(['error' => 'Vui lòng đăng nhập để sử dụng tính năng']);
+        $tam =
+        `<li data-bs-toggle="tooltip" data-bs-placement="top" title="Wishlist">
+            <a href="#" class="notifi-wishlist">
+                <i data-feather="heart"></i>
+            </a>
+            <form action="{{ route('add.wishlist',1) }}" method="POST" class="wishlist-form">
+                @csrf
+            </form>
+        </li>`;
+        if($user){
+            if(!$user->sanPhamYeuThichs()->where('san_pham_id', $id)->exists()){
+                $user->sanPhamYeuThichs()->attach($id);
+                return response()->json(['message' => 'Thêm thành công vào danh sách yêu thích!'], 200);
+            }else{
+                return response()->json(['success' => false, 'message' => 'Sản phẩm đã tồn tại trong danh sách!'], 500);
+            }
+        }else{
+            return response()->json(['success' => false, 'message' => 'Bạn chưa đăng nhập!'], 401);
         }
-        return view('clients.sanphams.sanphamyeuthich', compact('user'));
+
     }
 
     public function xoaYeuThich($id)
@@ -90,6 +104,51 @@ class SanPhamController extends Controller
         } catch (\Exception $e) {
             \Log::error('Lỗi xóa sản phẩm yêu thích: ' . $e->getMessage());
             return response()->json(['success' => false, 'message' => 'Lỗi server!'], 500);
+
+    }
+    }
+
+    public function quickView(Request $request)
+    {
+        $sanPham = SanPham::with([
+            'bienThes.tt.giaTriThuocTinhs'
+        ])->find($request->id);
+
+        // return response()->json($sanPham);
+
+        if (!$sanPham) {
+            return response()->json(['error' => 'Sản phẩm không tồn tại'], 404);
         }
+
+        return response()->json([
+            'id' => $sanPham->id,
+            'ten_san_pham' => $sanPham->ten_san_pham,
+            'gia_moi' => number_format($sanPham->gia_moi, 0, '', '.'),
+            'gia_cu' => number_format($sanPham->gia_cu, 0, '', '.'),
+            'hinh_anh' => Storage::url($sanPham->hinh_anh ?? 'images/default.png'),
+            'mo_ta' => $sanPham->mo_ta,
+            'danh_muc' => $sanPham->danhMuc->ten_danh_muc,
+            'so_sao' => $sanPham->tinhDiemTrungBinh(),
+            'danh_gia' => $sanPham->danhGias->count(),
+            'bien_the' => $sanPham->bienThes->map(function ($bienThe) {
+                return [
+                    'id' => $bienThe->id,
+                    'ten_bien_the' => $bienThe->ten_bien_the,
+                    'anh_bien_the' => Storage::url($bienThe->anh_bien_the ?? 'images/default.png'),
+                    'thuoc_tinh_gia_tri' => $bienThe->tt->map(function ($thuocTinh) use ($bienThe) {
+                    $giaTri = $bienThe->gttt
+                        ->where('thuoc_tinh_id', $thuocTinh->id)
+                        ->pluck('gia_tri') // Lấy danh sách giá trị
+                        ->toArray(); // Chuyển về mảng
+
+                    return [
+                        'id' => $thuocTinh->id,
+                        'ten' => $thuocTinh->ten_thuoc_tinh,
+                        'gia_tri' => count($giaTri) === 1 ? $giaTri[0] : null // Nếu chỉ có 1 giá trị, lấy nó, ngược lại thì null
+                    ];
+                })
+                ];
+            }),
+        ]);
     }
 }

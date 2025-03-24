@@ -61,7 +61,9 @@
                     <div class="footer-logo">
                         <div class="theme-logo">
                             <a href="{{ route('home') }}">
-                                <img style="width: 200px; height: 100px" src="{{ Storage::url($globalSetting->logo ?? '/images/logo.png') }}" class="blur-up lazyload" alt="">
+                                <img style="width: 200px"
+                                    src="{{ Storage::url($globalSetting->client_logo ?? '/images/logo-green.png') }}"
+                                    class="blur-up lazyload" alt="">
                         </div>
 
                         <div class="footer-logo-contain">
@@ -70,12 +72,9 @@
                             <ul class="address">
                                 <li>
                                     <i data-feather="home"></i>
-                                    <a href="https://www.google.com/maps/place/Tr%C6%B0%E1%BB%9Dng+Cao+%C4%91%E1%BA%B3ng+FPT+Polytechnic/@21.0381348,105.7446869,17z/data=!3m1!4b1!4m6!3m5!1s0x313455e940879933:0xcf10b34e9f1a03df!8m2!3d21.0381298!4d105.7472618!16s%2Fg%2F11krd97y__?entry=ttu&g_ep=EgoyMDI1MDMxMi4wIKXMDSoASAFQAw%3D%3D">
-                                    Tòa nhà FPT Polytechnic.</a>
-                                </li>
-                                <li>
-                                    <i data-feather="mail"></i>
-                                    <a href="javascript:void(0)">starsseven.2025@gmail.com</a>
+                                    <a
+                                        href="https://www.google.com/maps/place/Tr%C6%B0%E1%BB%9Dng+Cao+%C4%91%E1%BA%B3ng+FPT+Polytechnic/@21.0381348,105.7446869,17z/data=!3m1!4b1!4m6!3m5!1s0x313455e940879933:0xcf10b34e9f1a03df!8m2!3d21.0381298!4d105.7472618!16s%2Fg%2F11krd97y__?entry=ttu&g_ep=EgoyMDI1MDMxMi4wIKXMDSoASAFQAw%3D%3D">
+                                        Tòa nhà FPT Polytechnic.</a>
                                 </li>
                             </ul>
 
@@ -90,27 +89,22 @@
 
                     <div class="footer-contain">
                         <ul>
-                            <li>
-                                <a href="shop-left-sidebar.html" class="text-content">Áo thể thao</a>
-                            </li>
-                            <li>
-                                <a href="shop-left-sidebar.html" class="text-content">Quần thể thao</a>
-                            </li>
-                            <li>
-                                <a href="shop-left-sidebar.html" class="text-content">Giày thể thao</a>
-                            </li>
-                            <li>
-                                <a href="shop-left-sidebar.html" class="text-content">Phụ kiện thể thao</a>
-                            </li>
-                            <li>
-                                <a href="shop-left-sidebar.html" class="text-content">Đồ tập gym</a>
-                            </li>
-                            <li>
-                                <a href="shop-left-sidebar.html" class="text-content">Bộ đồ thể thao</a>
-                            </li>
+                            @if (isset($danhMucs) && $danhMucs->count() > 0)
+                                @foreach ($danhMucs as $danhMuc)
+                                    <li>
+                                        <a href="{{ route('clientsanpham.danhsach', ['danh_muc_id' => $danhMuc->id]) }}"
+                                            class="text-content">
+                                            {{ $danhMuc->ten_danh_muc }}
+                                        </a>
+                                    </li>
+                                @endforeach
+                            @else
+                                <li>Không có danh mục nào.</li>
+                            @endif
                         </ul>
                     </div>
                 </div>
+
 
 
                 <div class="col-xl col-lg-2 col-sm-3">
@@ -191,7 +185,7 @@
                                     <i data-feather="mail"></i>
                                     <div class="contact-number">
                                         <h6 class="text-content">Địa chỉ email :</h6>
-                                        <h5>{{ $globalSetting->email ?? 'Chưa cập nhật' }}</h5>
+                                        <h5>{{ $globalSetting->email_owner ?? 'Chưa cập nhật' }}</h5>
                                     </div>
                                 </div>
                             </li>

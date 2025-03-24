@@ -19,7 +19,8 @@ class ChiTietDonHangFactory extends Factory
         return [
             'don_hang_id' => $this->faker->numberBetween(1, 50),
             'bien_the_id' => $this->faker->numberBetween(1, 100),
-            'so_luong' => $this->faker->numberBetween(1, 100)
+            'so_luong' => $this->faker->numberBetween(1, 100),
+            'created_at' => $this->faker->dateTimeBetween('-2 months', '+9 months')
         ];
     }
 }

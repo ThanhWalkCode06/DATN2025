@@ -16,6 +16,7 @@ class UserController extends Controller
     public function chiTiet()
     {
         $user = Auth::user();
+        // dd($user);
         $donHangsPaginate = $user->donHangs()->paginate(5);
         $i = 0;
         if($user){
