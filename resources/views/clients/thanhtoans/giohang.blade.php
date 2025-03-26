@@ -208,7 +208,7 @@ $(document).on("click", ".delete-cartIndex-item", function () {
                 Swal.fire("Lỗi", "Không thể xóa sản phẩm", "error");
             }
         },
-        error: function () {
+        error: function (response) {
             Swal.fire("Lỗi", "Có lỗi xảy ra, vui lòng thử lại!", "error");
         },
     });
