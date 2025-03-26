@@ -46,15 +46,15 @@
                                         <tr class="product-box-contain">
                                             <td class="product-detail">
                                                 <div class="product border-0">
-                                                    <a href="{{ route('sanphams.chitiet', 1) }}" class="product-image">
-                                                        <img src="{{ Storage::url($chiTietGioHang->hinh_anh) }}"
+                                                    <a href="{{ route('sanphams.chitiet', $chiTietGioHang->id) }}" class="product-image">
+                                                        <img src="{{ Storage::url($chiTietGioHang->bienThe->anh_bien_the) }}"
                                                             class="img-fluid blur-up lazyload" alt="">
                                                     </a>
                                                     <div class="product-detail">
                                                         <ul>
                                                             <li class="name">
                                                                 <a
-                                                                    href="{{ route('sanphams.chitiet', 1) }}">{{ $chiTietGioHang->ten_san_pham }}</a>
+                                                                    href="{{ route('sanphams.chitiet', 1) }}">{{ $chiTietGioHang->bienThe->sanPham->ten_san_pham }}</a>
                                                             </li>
 
                                                             <li class="text-content">{{ $chiTietGioHang->ten_bien_the }}
@@ -67,11 +67,11 @@
                                             <td class="price">
                                                 <h4 class="table-title text-content">Giá</h4>
                                                 <h5>
-                                                    <span class="gia-moi">{{ $chiTietGioHang->gia_moi }}</span>đ
-                                                    <del class="text-content">{{ $chiTietGioHang->gia_cu }}đ</del>
+                                                    <span class="gia-moi">{{ number_format($chiTietGioHang->bienThe->gia_ban,0,'','.') }}</span>đ
+                                                    <del style="margin-left: 17px" class="text-content">{{ number_format($chiTietGioHang->bienThe->sanPham->gia_cu,0,'','.') }}đ</del>
                                                 </h5>
-                                                <h6 class="theme-color">Tiết kiệm :
-                                                    {{ $chiTietGioHang->gia_cu - $chiTietGioHang->gia_moi }}đ</h6>
+                                                <h6 style="margin-top: 10px" class="theme-color">Tiết kiệm :
+                                                    {{ number_format($chiTietGioHang->bienThe->sanPham->gia_cu - $chiTietGioHang->bienThe->gia_ban,0,'','.') }}đ</h6>
                                             </td>
 
                                             <td class="quantity">

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Clients;
 
 use App\Models\SanPham;
 use Illuminate\Http\Request;
+use App\Models\ChiTietGioHang;
 use App\Models\DanhMucSanPham;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -110,10 +111,10 @@ class SanPhamController extends Controller
 
     public function quickView(Request $request)
     {
+        $chiTiet = collect();
         $sanPham = SanPham::with([
             'bienThes.tt.giaTriThuocTinhs'
         ])->find($request->id);
-
         // return response()->json($sanPham);
 
         if (!$sanPham) {

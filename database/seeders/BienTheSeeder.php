@@ -20,8 +20,8 @@ class BienTheSeeder extends Seeder
     $sanPhams = SanPham::all();
 
     // Lấy danh sách giá trị thuộc tính từ bảng gia_tri_thuoc_tinhs
-    $thuocTinh1Values = DB::table('gia_tri_thuoc_tinhs')->where('thuoc_tinh_id', 1)->pluck('id')->toArray();
-    $thuocTinh2Values = DB::table('gia_tri_thuoc_tinhs')->where('thuoc_tinh_id', 2)->pluck('id')->toArray();
+    $thuocTinh1Values = DB::table('gia_tri_thuoc_tinhs')->where('thuoc_tinh_id', 1)->get();
+    $thuocTinh2Values = DB::table('gia_tri_thuoc_tinhs')->where('thuoc_tinh_id', 2)->get();
 
     $bienTheData = [];
     $bienTheThuocTinhData = [];
@@ -33,7 +33,7 @@ class BienTheSeeder extends Seeder
                 // Tạo biến thể mới
                 $bienThe = BienThe::create([
                     'san_pham_id' => $sanPham->id,
-                    'ten_bien_the' => "Biến thể $tt1 - $tt2",
+                    'ten_bien_the' => "$tt1->gia_tri - $tt2->gia_tri",
                     'gia_nhap' => rand(10000, 19999),
                     'gia_ban' => rand(20000, 99999),
                     'so_luong' => rand(1, 100),
@@ -43,14 +43,14 @@ class BienTheSeeder extends Seeder
                 $bienTheThuocTinhData[] = [
                     'bien_the_id' => $bienThe->id,
                     'thuoc_tinh_id' => 1,
-                    'gia_tri_thuoc_tinh_id' => $tt1,
+                    'gia_tri_thuoc_tinh_id' => $tt1->id,
                     'created_at' => now(),
                     'updated_at' => now(),
                 ];
                 $bienTheThuocTinhData[] = [
                     'bien_the_id' => $bienThe->id,
                     'thuoc_tinh_id' => 2,
-                    'gia_tri_thuoc_tinh_id' => $tt2,
+                    'gia_tri_thuoc_tinh_id' => $tt2->id,
                     'created_at' => now(),
                     'updated_at' => now(),
                 ];
