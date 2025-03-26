@@ -793,52 +793,59 @@ $(document).ready(function () {
                 'Accept': 'application/json'
             },
             success: function(response) {
-                console.log("Cart response:", response); // Kiểm tra dữ liệu
+    console.log("Cart response:", response); // Kiểm tra dữ liệu
 
-                if (response.cart) {
-                    $(".header-wishlist .badge").text(response.cart.totalItem);
-                    $(".total-price").text(response.cart.totalPrice.toLocaleString("vi-VN") + " đ");
+    if (response.cart) {
+        $(".header-wishlist .badge").text(response.cart.totalItem);
+        $(".total-price").text(response.cart.totalPrice.toLocaleString("vi-VN") + " đ");
 
-                    let cartListHtml = '';
-response.cart.items.slice(0, 4).forEach(item => { // Chỉ lấy 4 sản phẩm đầu tiên
-    cartListHtml += `
-        <li style="width: 100%" class="product-box-contain">
-            <div class="drop-cart">
-                <a href="/sanpham/${item.id}" class="drop-image">
-                    <img src="${item.image}" class="blur-up lazyload" alt="">
-                </a>
-                <div class="drop-contain">
-                    <a href="/sanpham/${item.id}">
-                        <h5>${item.name}</h5>
-                    </a>
-                    <h6><span>${item.quantity} x</span> ${item.price.toLocaleString("vi-VN")} đ</h6>
-                    <button class="close-button close_button delete-cart-item" data-id="${item.id_cart}">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
-                </div>
-            </div>
-        </li>`;
-});
+        let cartListHtml = '';
+        let itemsToShow = response.cart.items.slice(0, 4); // Giới hạn chỉ lấy 4 sản phẩm đầu tiên
 
-$(".cart-list").html(cartListHtml); // Cập nhật ngay lập tức
+        itemsToShow.forEach(item => {
+            cartListHtml += `
+                <li style="width: 100%" class="product-box-contain">
+                    <div class="drop-cart">
+                        <a href="/sanpham/${item.id}" class="drop-image">
+                            <img src="${item.image}" class="blur-up lazyload" alt="">
+                        </a>
+                        <div class="drop-contain">
+                            <a href="/sanpham/${item.id}">
+                                <h5>${item.name}</h5>
+                            </a>
+                            <h6><span>${item.quantity} x</span> ${item.price.toLocaleString("vi-VN")} đ</h6>
+                            <button class="close-button close_button delete-cart-item" data-id="${item.id_cart}">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+                    </div>
+                </li>`;
+        });
 
-                }
+        $(".cart-list").html(cartListHtml); // Cập nhật danh sách sản phẩm
 
-                    $.notify({
-                        icon: "fa fa-check",
-                        title: "Sản phẩm đã được thêm vào giỏ hàng.",
-                    }, {
-                        element: "body",
-                        type: "success",
-                        placement: { from: "top", align: "right" },
-                        delay: 3000,
-                        z_index: 9999,
-                        animate: { enter: "animated fadeInDown", exit: "animated fadeOutUp" },
-                        template: '<div class="alert alert-success" style="background-color:#1abc9c; color:white; border-color:#16a085; padding: 10px; border-radius: 5px;">' +
-                                '<strong><i class="fa fa-check"></i> {0}</strong> {1}' +
-                                '</div>'
-                    });
-            },
+        // Nếu số lượng sản phẩm lớn hơn 4, hiển thị "Xem thêm..."
+        if (response.cart.items.length > 4) {
+            $(".cart-list").append('<li class="text-center"><a href="giohang">Xem thêm...</a></li>');
+        }
+    }
+
+    $.notify({
+        icon: "fa fa-check",
+        title: "Sản phẩm đã được thêm vào giỏ hàng.",
+    }, {
+        element: "body",
+        type: "success",
+        placement: { from: "top", align: "right" },
+        delay: 3000,
+        z_index: 9999,
+        animate: { enter: "animated fadeInDown", exit: "animated fadeOutUp" },
+        template: '<div class="alert alert-success" style="background-color:#1abc9c; color:white; border-color:#16a085; padding: 10px; border-radius: 5px;">' +
+                '<strong><i class="fa fa-check"></i> {0}</strong> {1}' +
+                '</div>'
+    });
+},
+
 
             error: function(xhr) {
                 console.log("AJAX error:", xhr.responseText);
@@ -859,6 +866,7 @@ $(document).on("click", ".delete-cart-item", function () {
             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
         },
         success: function (response) {
+            console.log("Response từ server:", response); // Debug dữ liệu
             if (response.status === "success") {
                 $(".header-wishlist .badge").text(response.totalItem); // Cập nhật số sản phẩm
 
@@ -868,6 +876,7 @@ $(document).on("click", ".delete-cart-item", function () {
                 // Cập nhật lại tổng tiền
             let total = 0;
             let totalItem = response.totalItem;
+            let totalPrice = response.totalPrice;
             $(".cart-list li").each(function () {
                 let text = $(this).find("h6").text();
                 let matches = text.match(/(\d+)\s*x\s*([\d\.]+)/);
@@ -882,7 +891,7 @@ $(document).on("click", ".delete-cart-item", function () {
 
             $(".header-wishlist .badge").text(totalItem);
             // Cập nhật tổng tiền
-            $(".total-price").text(total.toLocaleString("vi-VN") + " đ");
+            $(".total-price").text(totalPrice.toLocaleString("vi-VN") + " đ");
             } else {
                 Swal.fire("Lỗi", "Không thể xóa sản phẩm", "error");
             }

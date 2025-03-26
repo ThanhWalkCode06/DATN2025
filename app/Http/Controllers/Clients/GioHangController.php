@@ -6,6 +6,7 @@ use App\Models\BienThe;
 use Illuminate\Http\Request;
 use App\Models\ChiTietGioHang;
 use App\Http\Controllers\Controller;
+use App\Models\PhieuGiamGia;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
@@ -114,16 +115,42 @@ class GioHangController extends Controller
 
     if ($chiTiet) {
         $chiTiet->delete();
-        $userCart = ChiTietGioHang::where('user_id', $request->id)->get();
+        $userCart = ChiTietGioHang::where('user_id', $user->id)->get();
         $totalItem = ChiTietGioHang::where('user_id', $user->id)->count();
+        $totalPrice =  $userCart->sum(fn($cartItem) => optional($cartItem->bienThe)->gia_ban ?? 0);
         return response()->json([
             'status' => 'success',
             'message' => 'Xóa thành công',
             "totalItem" => $totalItem,
+            'totalPrice' => $totalPrice,
         ]);
     }
 
     return response()->json(['status' => 'error', 'message' => 'Sản phẩm không tồn tại']);
+}
+
+public function nhapvoucher(Request $request){
+    $code = $request->code;
+    $currentTotal = (int) $request->total;
+    $voucher = PhieuGiamGia::where('ma_phieu', $code)->first();
+
+    if (!$voucher || $voucher->ngay_ket_thuc < now() || $voucher->trang_thai == 0) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Mã giảm giá không tồn tại hoặc đã hết hạn!'
+        ],403);
+    }
+
+    // Giả sử giảm giá 10% tổng đơn hàng
+    $discount = $voucher->gia_tri;
+    $discountAmount = $currentTotal * ($discount / 100);
+    $newTotal =  max(0, $currentTotal - $discountAmount);
+
+    return response()->json([
+        'success' => true,
+        'discount' => number_format($discountAmount, 0, ',', '.'),
+        'newTotal' => number_format($newTotal, 0, ',', '.')
+    ]);
 }
 
 }
