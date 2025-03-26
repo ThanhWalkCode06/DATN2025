@@ -401,8 +401,12 @@ class SanPhamController extends Controller
                     ->delete();
             }
         } else {
-            if ($bienThes->isNotEmpty()) {
-                $bienThes->each->delete();
+            $bienTheIds = $bienThes->pluck('id')->toArray(); // Lấy danh sách ID hợp lệ
+
+            $donhangChiTiet = ChiTietDonHang::whereIn('bien_the_id', $bienTheIds)->exists();
+
+            if (!$donhangChiTiet) { // Nếu không có đơn hàng nào chứa biến thể
+                $bienThes->each->delete(); // Xóa tất cả biến thể
             }
         }
 

@@ -141,7 +141,13 @@ Route::get('/baiviet/{id}', [App\Http\Controllers\Clients\BaiVietController::cla
 Route::get('/huongdan', [App\Http\Controllers\Clients\HuongDanController::class, 'danhSach'])->name('huongdans.danhsach');
 Route::get('/huongdan/{id}', [App\Http\Controllers\Clients\HuongDanController::class, 'chiTiet'])->name('huongdans.chitiet');
 
-Route::get('/giohang', [App\Http\Controllers\Clients\ThanhToanController::class, 'gioHang'])->name('thanhtoans.giohang');
+Route::get('/giohang', [App\Http\Controllers\Clients\GioHangController::class, 'gioHang'])->name('giohang');
+Route::post('/post-giohang', [App\Http\Controllers\Clients\GioHangController::class, 'storegioHang'])->name('post.giohang');
+Route::post('/xoa-gio-hang', [App\Http\Controllers\Clients\GioHangController::class, 'xoagioHang'])->name('delete.giohang');
+Route::post('/nhap-voucher', [App\Http\Controllers\Clients\GioHangController::class, 'nhapvoucher'])->name('voucher.giohang');
+
+
+
 Route::get('/thanhtoan', [App\Http\Controllers\Clients\ThanhToanController::class, 'thanhToan'])->name('thanhtoans.thanhtoan');
 Route::get('/dathangthanhcong', [App\Http\Controllers\Clients\ThanhToanController::class, 'datHangThanhCong'])->name('thanhtoans.dathangthanhcong');
 

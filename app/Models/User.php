@@ -43,6 +43,11 @@ class User extends Authenticatable
         return $this->hasMany(DonHang::class, 'user_id');
     }
 
+    public function gioHang()
+    {
+        return $this->hasMany(ChiTietGioHang::class, 'user_id');
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *

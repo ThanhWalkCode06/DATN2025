@@ -13,22 +13,21 @@ class BienTheThuocTinhSeeder extends Seeder
      */
     public function run(): void
     {
-        for ($i = 1; $i <= 100; $i++) {
+        $insertData = [];
+
+        for ($i = 1; $i <= 1000; $i++) {
             $rand = rand(1, 2);
 
-            if ($rand == 1) {
-                BienTheThuocTinh::create([
-                    'bien_the_id' => $i,
-                    'thuoc_tinh_id' => 1,
-                    'gia_tri_thuoc_tinh_id' => rand(1, 5),
-                ]);
-            } else {
-                BienTheThuocTinh::create([
-                    'bien_the_id' => $i,
-                    'thuoc_tinh_id' => 2,
-                    'gia_tri_thuoc_tinh_id' => rand(6, 8),
-                ]);
-            }
+            $insertData[] = [
+                'bien_the_id' => $i,
+                'thuoc_tinh_id' => $rand == 1 ? 1 : 2,
+                'gia_tri_thuoc_tinh_id' => $rand == 1 ? rand(1, 5) : rand(6, 8),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
         }
+
+        // Chèn dữ liệu một lần
+        BienTheThuocTinh::insert($insertData);
     }
 }

@@ -46,15 +46,15 @@
                                         <tr class="product-box-contain">
                                             <td class="product-detail">
                                                 <div class="product border-0">
-                                                    <a href="{{ route('sanphams.chitiet', 1) }}" class="product-image">
-                                                        <img src="{{ Storage::url($chiTietGioHang->hinh_anh) }}"
+                                                    <a href="{{ route('sanphams.chitiet', $chiTietGioHang->id) }}" class="product-image">
+                                                        <img src="{{ Storage::url($chiTietGioHang->bienThe->anh_bien_the) }}"
                                                             class="img-fluid blur-up lazyload" alt="">
                                                     </a>
                                                     <div class="product-detail">
                                                         <ul>
                                                             <li class="name">
                                                                 <a
-                                                                    href="{{ route('sanphams.chitiet', 1) }}">{{ $chiTietGioHang->ten_san_pham }}</a>
+                                                                    href="{{ route('sanphams.chitiet', 1) }}">{{ $chiTietGioHang->bienThe->sanPham->ten_san_pham }}</a>
                                                             </li>
 
                                                             <li class="text-content">{{ $chiTietGioHang->ten_bien_the }}
@@ -67,11 +67,11 @@
                                             <td class="price">
                                                 <h4 class="table-title text-content">Giá</h4>
                                                 <h5>
-                                                    <span class="gia-moi">{{ $chiTietGioHang->gia_moi }}</span>đ
-                                                    <del class="text-content">{{ $chiTietGioHang->gia_cu }}đ</del>
+                                                    <span class="gia-moi">{{ number_format($chiTietGioHang->bienThe->gia_ban,0,'','.') }}</span>đ
+                                                    <del style="margin-left: 17px" class="text-content">{{ number_format($chiTietGioHang->bienThe->sanPham->gia_cu,0,'','.') }}đ</del>
                                                 </h5>
-                                                <h6 class="theme-color">Tiết kiệm :
-                                                    {{ $chiTietGioHang->gia_cu - $chiTietGioHang->gia_moi }}đ</h6>
+                                                <h6 style="margin-top: 10px" class="theme-color">Tiết kiệm :
+                                                    {{ number_format($chiTietGioHang->bienThe->sanPham->gia_cu - $chiTietGioHang->bienThe->gia_ban,0,'','.') }}đ</h6>
                                             </td>
 
                                             <td class="quantity">
@@ -81,7 +81,11 @@
                                                         <div class="input-group">
                                                             <input class="form-control input-number so-luong" type="number"
                                                                 name="quantity" value="{{ $chiTietGioHang->so_luong }}"
-                                                                onchange="showTong()">
+                                                                onchange="showTong()"
+                                                                oninput="checkMaxQuantity(this)"
+                                                                onchange="checkMaxQuantity(this)"
+                                                                onkeypress="return isNumberKey(event)"
+                                                                min="1" max="{{ $chiTietGioHang->bienThe->so_luong }}">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -96,8 +100,9 @@
 
                                             <td class="save-remove">
                                                 <h4 class="table-title text-content">Hành động</h4>
-                                                <a class="remove close_button" href="javascript:void(0)"
-                                                    onclick="showTong()">Xóa</a>
+                                                <button style="border: none;color: #2a2929; " class="remove close-button close-button delete-cartIndex-item" data-id="{{ $chiTietGioHang->id }}">
+                                                    <i class="fa-solid fa-trash"></i>
+                                                </button>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -109,34 +114,33 @@
 
                 <div class="col-xxl-3">
                     <div class="summery-box p-sticky">
-                        <div class="summery-header">
+                        {{-- <div class="summery-header">
                             <h3>Tổng giá trị giỏ hàng</h3>
-                        </div>
+                        </div> --}}
 
                         <div class="summery-contain">
-                            <div class="coupon-cart">
+                            {{-- <div class="coupon-cart">
                                 <h6 class="text-content mb-2">Phiếu giảm giá</h6>
-                                <div class="mb-3 coupon-box input-group">
-                                    <input type="email" class="form-control" id="exampleFormControlInput1"
-                                        placeholder="Nhập mã phiếu">
-                                    <button class="btn-apply">Xác nhận</button>
-                                </div>
-                            </div>
+                                <form id="voucherForm" action="{{ route('voucher.giohang') }}" method="post">
+                                    @csrf
+                                    <div class="mb-3 coupon-box input-group">
+                                        <input id="voucherCode" type="text" class="form-control" id="exampleFormControlInput1"
+                                            placeholder="Nhập mã phiếu">
+                                        <button type="submit" class="btn-apply">Xác nhận</button>
+                                    </div>
+                                </form>
+                            </div> --}}
                             <ul>
-                                <li>
-                                    <h4>Tổng sản phẩm</h4>
+                                {{-- <li>
+                                    <h4>Tổng tiền sản phẩm</h4>
                                     <h4 class="price"><span id="tong-san-pham"></span>đ</h4>
-                                </li>
+                                </li> --}}
 
-                                <li>
-                                    <h4>Giảm giá</h4>
-                                    <h4 class="price"><span id="giam-gia">0</span>đ</h4>
-                                </li>
+                                {{-- <li>
+                                    <h4>Vận chuyển</h4>
+                                    <h4 class="price"><span id="van_chuyen">10.000</span>đ</h4>
+                                </li> --}}
 
-                                <li class="align-items-start">
-                                    <h4>Phí vận chuyến</h4>
-                                    <h4 class="price text-end"><span id="phi-van-chuyen">1000</span>đ</h4>
-                                </li>
                             </ul>
                         </div>
 
@@ -170,26 +174,172 @@
 @endsection
 
 @section('js')
-    <script>
-        function showTong() {
-            giaMois = document.getElementsByClassName("gia-moi")
-            soLuongs = document.getElementsByClassName("so-luong")
-            tongs = document.getElementsByClassName("tong")
-            tongSanPham = document.getElementById("tong-san-pham")
-            giamGia = document.getElementById("giam-gia")
-            phiVanChuyen = document.getElementById("phi-van-chuyen")
-            tongTien = document.getElementById("tong-tien")
+<script>
 
-            sum = 0
-            for (let i = 0; i < giaMois.length; i++) {
-                tongs[i].innerHTML = Number(giaMois[i].innerHTML) * Number(soLuongs[i].value)
-                sum += Number(tongs[i].innerHTML)
+$(document).on("click", ".delete-cartIndex-item", function () {
+    let cartItemId = $(this).data("id"); // Lấy ID sản phẩm trong giỏ hàng
+    console.log("Xóa sản phẩm ID:", cartItemId);
+
+    $.ajax({
+        url: "/xoa-gio-hang", // Route xử lý xóa sản phẩm
+        method: "POST",
+        data: { id: cartItemId },
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        },
+        success: function (response) {
+            console.log("response:", response);
+            if (response.status === "success") {
+                $(".header-wishlist .badge").text(response.totalItem); // Cập nhật số sản phẩm
+
+                // Xóa sản phẩm khỏi giao diện
+                let item = $(`.delete-cartIndex-item[data-id="${cartItemId}"]`).closest("tr");
+                $(`.delete-cart-item[data-id="${cartItemId}"]`).closest("li").remove();
+                item.fadeOut(300, function () {
+                    item.remove();
+
+                    // Cập nhật lại tổng tiền sau khi xóa
+                    let totalPrice = response.totalPrice;
+                    $("#tong-tien").text(response.totalPrice.toLocaleString("vi-VN"));
+                    $(".total-price").text(totalPrice.toLocaleString("vi-VN") + " đ");
+
+                });
+            } else {
+                Swal.fire("Lỗi", "Không thể xóa sản phẩm", "error");
             }
+        },
+        error: function () {
+            Swal.fire("Lỗi", "Có lỗi xảy ra, vui lòng thử lại!", "error");
+        },
+    });
+});
 
-            tongSanPham.innerHTML = sum
-            tongTien.innerHTML = Number(tongSanPham.innerHTML) - Number(giamGia.innerHTML) + Number(phiVanChuyen.innerHTML)
+
+
+showTong()
+// let voucherCode = $("#voucherCode").val().trim();
+// $(document).ready(function () {
+//     $("#voucherForm").submit(function (event) {
+//         event.preventDefault(); // Ngăn form load lại trang
+
+//         let voucherCode = $("#voucherCode").val().trim();
+//         let tongTienHienTai = $("#tong-tien").text().replace(/\D/g, ''); // Lấy tổng tiền, bỏ ký tự không phải số
+
+//         if (voucherCode === "") {
+//             Swal.fire({
+//                 icon: "error",
+//                 title: "Lỗi!",
+//                 text: "Vui lòng không để trống.",
+//                 confirmButtonText: "OK"
+//             });
+//             return;
+//         }
+
+//         $.ajax({
+//             url: "{{ route('voucher.giohang') }}", // Route xử lý mã giảm giá
+//             type: "POST",
+//             data: {
+//                 _token: "{{ csrf_token() }}", // Gửi CSRF token
+//                 code: voucherCode,  // ✅ Đã thêm dấu phẩy ở đây
+//                 total: tongTienHienTai
+//             },
+//             success: function (response) {
+//                 if (response.success) {
+//                     Swal.fire({
+//                         icon: "success",
+//                         title: "Áp dụng thành công!",
+//                         text: "Bạn được giảm " + response.discount.toLocaleString("vi-VN") + "đ.",
+//                         confirmButtonText: "OK"
+//                     });
+
+//                     // Cập nhật tổng tiền và giảm giá trên giao diện
+//                     $("#tong-tien").text(response.newTotal.toLocaleString("vi-VN") );
+//                     $("#giam-gia").text(response.discount.toLocaleString("vi-VN") );
+//                 }
+//             },
+//             error: function (xhr) { // ✅ Thêm tham số xhr để bắt lỗi
+//                 let errorMessage = "Lỗi server! Vui lòng thử lại sau.";
+
+//                 // Bắt lỗi 403 khi mã giảm giá sai hoặc hết hạn
+//                 if (xhr.status === 403 && xhr.responseJSON && xhr.responseJSON.message) {
+//                     errorMessage = xhr.responseJSON.message;
+//                 }
+
+//                 Swal.fire({
+//                     icon: "error",
+//                     title: "Lỗi!",
+//                     text: errorMessage,
+//                     confirmButtonText: "OK"
+//                 });
+//             }
+//         });
+//     });
+// });
+
+
+
+function showTong() {
+    let giaMois = document.querySelectorAll(".gia-moi"); // Lấy danh sách mới
+    let soLuongs = document.querySelectorAll(".so-luong");
+    let tongs = document.querySelectorAll(".tong");
+    let tongTien = document.getElementById("tong-tien");
+
+    let sum = 0;
+    giaMois.forEach((giaMoiEl, index) => {
+        let giaMoi = parseFloat(giaMoiEl.innerText.replace(/\D/g, "")) || 0;
+        let soLuong = parseFloat(soLuongs[index]?.value || 0);
+        let tong = giaMoi * soLuong;
+
+        if (tongs[index]) {
+            tongs[index].innerText = tong.toLocaleString("vi-VN");
         }
 
-        showTong()
+        sum += tong;
+    });
+
+    let tongFinal = sum
+    tongTien.innerText = tongFinal.toLocaleString("vi-VN");
+}
+
+        function checkMaxQuantity(input) {
+    setTimeout(() => {
+        let max = parseInt(input.max); // Lấy số lượng tối đa
+        let min = parseInt(input.min) || 1; // Đảm bảo giá trị tối thiểu là 1
+        let value = parseInt(input.value); // Chuyển thành số nguyên
+
+        if (isNaN(value) || value <= 0) { // Nếu nhập không phải số hoặc nhỏ hơn 1
+            Swal.fire({
+                icon: "error",
+                title: "Lỗi nhập số lượng!",
+                text: "Vui lòng nhập số hợp lệ (>=1).",
+                confirmButtonText: "OK"
+            });
+            input.value = min;
+            showTong();
+            return;
+        }
+
+        if (value > max) { // Nếu nhập vượt quá max
+            Swal.fire({
+                icon: "warning",
+                title: "Số lượng vượt quá tồn kho!",
+                text: `Bạn chỉ có thể mua tối đa ${max} sản phẩm.`,
+                confirmButtonText: "OK"
+            });
+            input.value = max;
+            showTong();
+        }
+    }, 500); // Chờ 100ms để trình duyệt cập nhật giá trị
+}
+
+// Ngăn nhập ký tự không phải số
+function isNumberKey(evt) {
+    let charCode = evt.which ? evt.which : evt.keyCode;
+    if (charCode < 48 || charCode > 57) { // Chỉ cho nhập số (0-9)
+        return false;
+    }
+    return true;
+}
+
     </script>
 @endsection
