@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Clients;
 
+use App\Models\DonHang;
 use Illuminate\Http\Request;
 use App\Models\ChiTietDonHang;
 use App\Models\ChiTietGioHang;
 use App\Http\Controllers\Controller;
-use App\Models\DonHang;
+use Illuminate\Support\Facades\Auth;
 
 class ThanhToanController extends Controller
 {
@@ -15,7 +16,7 @@ class ThanhToanController extends Controller
         $chiTietGioHangs = ChiTietGioHang::select('chi_tiet_gio_hangs.*', 'san_phams.ten_san_pham', 'san_phams.san_pham_slug', 'san_phams.gia_cu', 'san_phams.gia_moi', 'san_phams.hinh_anh', 'bien_thes.ten_bien_the')
             ->join('bien_thes', 'bien_thes.id', '=', 'bien_the_id')
             ->join('san_phams', 'san_phams.id', '=', 'san_pham_id')
-            ->where('user_id', '=', 1)
+            ->where('user_id', '=', Auth::user()->id)
             ->get();
 
         // dd($chiTietGioHangs);
@@ -28,7 +29,7 @@ class ThanhToanController extends Controller
         $chiTietGioHangs = ChiTietGioHang::select('chi_tiet_gio_hangs.*', 'san_phams.ten_san_pham', 'san_phams.san_pham_slug', 'san_phams.gia_cu', 'san_phams.gia_moi', 'san_phams.hinh_anh', 'bien_thes.ten_bien_the')
             ->join('bien_thes', 'bien_thes.id', '=', 'bien_the_id')
             ->join('san_phams', 'san_phams.id', '=', 'san_pham_id')
-            ->where('user_id', '=', 1)
+            ->where('user_id', '=', Auth::user()->id)
             ->get();
 
         return view('clients.thanhtoans.thanhtoan', compact('chiTietGioHangs'));

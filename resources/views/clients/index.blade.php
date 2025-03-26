@@ -485,17 +485,6 @@
                                                             </button>
                                                         </div>
 
-                                                    <div class="add-to-cart-box bg-white">
-                                                        <button class="btn btn-add-cart addcart-button">
-                                                            @if ($item['trang_thai'] == 1)
-                                                            <a class="btn-quick-view" style="margin-right: 10px;" href="javascript:void(0)" data-bs-toggle="modal"
-                                                                data-bs-target="#view" data-id="58">
-                                                                <span  class="add-icon bg-light-gray">
-                                                                    <i  class="fa-solid fa-cart-plus"></i>
-                                                                </span> Thêm vào giỏ hàng
-                                                            </a>
-                                                            @endif
-                                                        </button>
                                                     </div>
                                                 </div>
                                             </div>

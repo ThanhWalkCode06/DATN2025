@@ -96,7 +96,8 @@
 
                                             <td class="save-remove">
                                                 <h4 class="table-title text-content">Hành động</h4>
-                                                <a class="remove close_button" href="javascript:void(0)">Xóa</a>
+                                                <a class="remove close_button" href="javascript:void(0)"
+                                                    onclick="showTong()">Xóa</a>
                                             </td>
                                         </tr>
                                     @endforeach
