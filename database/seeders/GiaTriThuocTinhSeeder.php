@@ -29,7 +29,7 @@ class GiaTriThuocTinhSeeder extends Seeder
                     'gia_tri' => 'Tím',
                 ],
                 [
-                    'thuoc_tinh_id' => 2,
+                    'thuoc_tinh_id' => 1,
                     'gia_tri' => 'Đen',
                 ],
                 [

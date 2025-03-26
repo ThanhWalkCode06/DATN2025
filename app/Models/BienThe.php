@@ -37,6 +37,24 @@ class BienThe extends Model
     public function donHangs()
     {
         return $this->belongsToMany(DonHang::class, 'chi_tiet_don_hangs', 'bien_the_id', 'don_hang_id')
-            ->withPivot('so_luong');
+                    ->withPivot('so_luong');
+    }
+
+    public function tt()
+    {
+        return $this->belongsToMany(ThuocTinh::class, 'bien_the_thuoc_tinhs', 'bien_the_id', 'thuoc_tinh_id')
+                    ->withPivot('gia_tri_thuoc_tinh_id'); // Lấy ID giá trị thuộc tính
+    }
+
+    public function gttt()
+    {
+        return $this->hasManyThrough(
+            GiaTriThuocTinh::class,
+            BienTheThuocTinh::class,
+            'bien_the_id', // Khóa ngoại ở bảng `bien_the_thuoc_tinhs`
+            'id', // Khóa chính ở `gia_tri_thuoc_tinhs`
+            'id', // Khóa chính ở `bien_thes`
+            'gia_tri_thuoc_tinh_id' // Liên kết `bien_the_thuoc_tinhs` với `gia_tri_thuoc_tinhs`
+        );
     }
 }

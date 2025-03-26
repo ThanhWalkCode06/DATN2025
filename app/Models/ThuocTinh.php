@@ -21,4 +21,10 @@ class ThuocTinh extends Model
         return $this->hasMany(GiaTriThuocTinh::class, 'thuoc_tinh_id');
 
     }
+
+    public function bt()
+    {
+        return $this->belongsToMany(BienThe::class, 'gia_tri_thuoc_tinhs', 'thuoc_tinh_id', 'bien_the_id')
+                    ->withPivot('gia_tri'); // Lấy thêm giá trị thuộc tính
+    }
 }

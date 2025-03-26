@@ -149,6 +149,7 @@ class SanPhamController extends Controller
     {
         $sanPham = SanPham::with('danhGias', 'danhMuc', 'bienThes.thuocTinhs', 'bienThes.giaTriThuocTinhs')->find($request->id);
         // return response()->json($sanPham);
+
         if (!$sanPham) {
             return response()->json(['error' => 'Sản phẩm không tồn tại'], 404);
         }
