@@ -6,9 +6,10 @@
                 <div class="col-xxl-3 d-xxl-block d-none">
                     <div class="top-left-header">
                         <i class="fas fa-map-marker-alt text-white me-2"></i>
-                     <a href="https://www.google.com/maps/place/Tr%C6%B0%E1%BB%9Dng+Cao+%C4%91%E1%BA%B3ng+FPT+Polytechnic/@21.0381348,105.7446869,17z/data=!3m1!4b1!4m6!3m5!1s0x313455e940879933:0xcf10b34e9f1a03df!8m2!3d21.0381298!4d105.7472618!16s%2Fg%2F11krd97y__?entry=ttu&g_ep=EgoyMDI1MDMxMi4wIKXMDSoASAFQAw%3D%3D">
-                        <span class="text-white">Tòa nhà FPT Polytechnic.</span>
-                    </a>
+                        <a
+                            href="https://www.google.com/maps/place/Tr%C6%B0%E1%BB%9Dng+Cao+%C4%91%E1%BA%B3ng+FPT+Polytechnic/@21.0381348,105.7446869,17z/data=!3m1!4b1!4m6!3m5!1s0x313455e940879933:0xcf10b34e9f1a03df!8m2!3d21.0381298!4d105.7472618!16s%2Fg%2F11krd97y__?entry=ttu&g_ep=EgoyMDI1MDMxMi4wIKXMDSoASAFQAw%3D%3D">
+                            <span class="text-white">Tòa nhà FPT Polytechnic.</span>
+                        </a>
 
                     </div>
                 </div>
@@ -56,7 +57,7 @@
                             </span>
                         </button>
                         <a href="{{ route('home') }}" class="web-logo nav-logo">
-                            <img src="{{ Storage::url($globalSetting->client_logo ?? "images/logo-green.png") }}"
+                            <img src="{{ Storage::url($globalSetting->client_logo ?? 'images/logo-green.png') }}"
                                 class="img-fluid blur-up lazyload" alt="">
                         </a>
 
@@ -147,38 +148,38 @@
                                                     Thanh toán</a>
                                             </div>
                                         </div>
-                                    </div>
-                                </li>
+                                    </li>
+                                @endisset
                                 <li class="right-side onhover-dropdown">
                                     <div class="delivery-login-box">
                                         <div class="delivery-icon">
                                             <i data-feather="user"></i>
                                         </div>
                                         <div class="delivery-detail">
-                                            <h6>Hello,</h6>
-                                            <h5>My Account</h5>
+                                            <h6>Xin chào,</h6>
+                                            <h5>{{ Auth::user()->username ?? 'Guess' }}</h5>
                                         </div>
                                     </div>
                                     <div class="onhover-div onhover-div-login">
                                         <ul class="user-box-name">
                                             @if (!Auth::user())
-                                            <li class="product-box-contain">
-                                                <i></i>
-                                                <a href="{{ route('login.client') }}">Đăng nhập</a>
-                                            </li>
+                                                <li class="product-box-contain">
+                                                    <i></i>
+                                                    <a href="{{ route('login.client') }}">Đăng nhập</a>
+                                                </li>
                                             @else
-                                            <p>Xin chào <strong
-                                                    style="color: #0da487">{{ Auth::user()->username }}</strong>
-                                            </p>
-                                            <li class="product-box-contain">
-                                                <a href="{{ route('users.chitiet') }}">Chi tiết tài
-                                                    khoản</a>
-                                            </li>
-                                            <li class="product-box-contain">
-                                                <i></i>
-                                                <a onclick="Logout(event)" href="#">Đăng xuất</a>
+                                                <p>Xin chào <strong
+                                                        style="color: #0da487">{{ Auth::user()->username }}</strong>
+                                                </p>
+                                                <li class="product-box-contain">
+                                                    <a href="{{ route('users.chitiet') }}">Chi tiết tài
+                                                        khoản</a>
+                                                </li>
+                                                <li class="product-box-contain">
+                                                    <i></i>
+                                                    <a onclick="Logout(event)" href="#">Đăng xuất</a>
 
-                                            </li>
+                                                </li>
                                             @endif
 
 
@@ -214,17 +215,19 @@
                             </div>
 
                             <ul class="category-list">
-                                @if(isset($categories))
-                                @foreach($categories as $category)
-                                    <li class="onhover-category-list">
-                                        <a href="{{ route('clientsanpham.danhsach', ['danh_muc_id' => $category->id]) }}" class="category-name">
-                                            <img src="{{ asset('storage/' . $category->anh_danh_muc) }}" alt="{{ $category->ten_danh_muc }}">
-                                            <h6>{{ $category->ten_danh_muc }}</h6>
-                                            <i class="fa-solid fa-angle-right"></i>
-                                        </a>
-                                    </li>
-                                @endforeach
-                            @endif
+                                @if (isset($categories))
+                                    @foreach ($categories as $category)
+                                        <li class="onhover-category-list">
+                                            <a href="{{ route('clientsanpham.danhsach', ['danh_muc_id' => $category->id]) }}"
+                                                class="category-name">
+                                                <img src="{{ asset('storage/' . $category->anh_danh_muc) }}"
+                                                    alt="{{ $category->ten_danh_muc }}">
+                                                <h6>{{ $category->ten_danh_muc }}</h6>
+                                                <i class="fa-solid fa-angle-right"></i>
+                                            </a>
+                                        </li>
+                                    @endforeach
+                                @endif
 
 
                             </ul>
@@ -285,7 +288,8 @@
                                         </li>
 
                                         <li class="nav-item dropdown">
-                                            <a class="nav-link" href="{{ route('huongdans.danhsach') }}">Hướng dẫn</a>
+                                            <a class="nav-link" href="{{ route('huongdans.danhsach') }}">Hướng
+                                                dẫn</a>
                                         </li>
 
                                         <li class="nav-item dropdown">
