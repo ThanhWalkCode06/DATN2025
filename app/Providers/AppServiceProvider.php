@@ -39,7 +39,7 @@ class AppServiceProvider extends ServiceProvider
             $user = Auth::user();
             $gioHang = $user ? ChiTietGioHang::where('user_id', $user->id)->get() : collect();
             $total = $gioHang->sum(function ($item) {
-                return $item->bienThe->gia_ban ?? 0; // Nếu `bienThe` không tồn tại, lấy 0 để tránh lỗi
+                return $item->bienThe->gia_ban * $item->so_luong ?? 0; // Nếu `bienThe` không tồn tại, lấy 0 để tránh lỗi
             });
 
             // dd($total); // Debug để kiểm tra tổng

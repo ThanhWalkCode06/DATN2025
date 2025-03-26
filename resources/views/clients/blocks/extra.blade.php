@@ -845,11 +845,9 @@ $(document).ready(function () {
                 '</div>'
     });
 },
-
-
             error: function(xhr) {
                 console.log("AJAX error:", xhr.responseText);
-                Swal.fire('Lỗi', 'Số lượng đã vượt mức kho hàng!','error');
+                Swal.fire('Lỗi', 'Bạn chưa đăng nhập!','error');
             }
         });
 
@@ -897,7 +895,7 @@ $(document).on("click", ".delete-cart-item", function () {
             }
         },
         error: function () {
-            Swal.fire("Lỗi", "Có lỗi xảy ra, vui lòng thử lại!", "error");
+            Swal.fire("Lỗi", "Bạn chưa đăng nhập!", "error");
         },
     });
 });

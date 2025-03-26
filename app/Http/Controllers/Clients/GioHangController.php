@@ -117,7 +117,8 @@ class GioHangController extends Controller
         $chiTiet->delete();
         $userCart = ChiTietGioHang::where('user_id', $user->id)->get();
         $totalItem = ChiTietGioHang::where('user_id', $user->id)->count();
-        $totalPrice =  $userCart->sum(fn($cartItem) => optional($cartItem->bienThe)->gia_ban ?? 0);
+
+        $totalPrice =  $userCart->sum(fn($cartItem) => optional($cartItem->bienThe)->gia_ban * optional($cartItem)->so_luong ?? 0);
         return response()->json([
             'status' => 'success',
             'message' => 'Xóa thành công',
@@ -156,8 +157,7 @@ public function nhapvoucher(Request $request){
 public function acceptThanhToan(Request $request){
     $user = Auth::user();
     if($user){
-        $userCart = ChiTietGioHang::where('user_id', $user->id)->get();
-        $cartItem = ChiTietGioHang::where('user_id', $user->id);
+
         foreach ($request->cartData as $item) {
             $cartItem = ChiTietGioHang::where('user_id', $user->id)
                 ->where('id', $item['id'])
@@ -169,8 +169,11 @@ public function acceptThanhToan(Request $request){
                 $mess = "Không tìm thấy sản phẩm có bien_the_id = ".$item['id']." và = cho user_id = $user->id";
             }
         }
+        $userCart = ChiTietGioHang::where('user_id', $user->id)->get();
+        $totalPrice =  $userCart->sum(fn($cartItem) => optional($cartItem->bienThe)->gia_ban * optional($cartItem)->so_luong ?? 0);
         return response()->json([
             'status' => 'success',
+            'totalPrice' => $totalPrice,
             'message' => $mess ?? 0
         ]);
     }else{

@@ -368,15 +368,16 @@ function isNumberKey(evt) {
             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
         },
         success: function (response) {
+            console.log(response)
             if (response.status === "success") {
-                console.log(response)
+                // let tien = $(".total-price").text(response.totalPrice.toLocaleString("vi-VN"))
                 window.location.href = "/thanhtoan"; // Chuyển hướng
             } else {
                 Swal.fire("Lỗi", "Không thể thực hiện thanh toán", "error");
             }
         },
         error: function () {
-            Swal.fire("Lỗi", "Có lỗi xảy ra, vui lòng thử lại!", "error");
+            Swal.fire("Lỗi", "Bạn chưa đăng nhập !", "error");
         },
     });
 });
