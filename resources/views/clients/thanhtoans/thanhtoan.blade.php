@@ -451,7 +451,17 @@
                             <div class="summery-header">
                                 <h3>Chi tiết đơn hàng</h3>
                             </div>
-
+                            <div class="coupon-cart">
+                                <h6 class="text-content mb-2">Phiếu giảm giá</h6>
+                                <form id="voucherForm" action="{{ route('voucher.giohang') }}" method="post">
+                                    @csrf
+                                    <div class="mb-3 coupon-box input-group">
+                                        <input style="border: 1px solid #0da487;" id="voucherCode" type="text" class="form-control" id="exampleFormControlInput1"
+                                            placeholder="Nhập mã phiếu">
+                                        <button style="border: 1px solid #0da487;margin-top: 0px;" type="submit" class="btn-apply">Xác nhận</button>
+                                    </div>
+                                </form>
+                            </div>
                             <ul class="summery-contain">
                                 @foreach ($chiTietGioHangs as $chiTietGioHang)
                                     <li>
@@ -460,7 +470,7 @@
                                         <h4>{{ $chiTietGioHang->ten_san_pham }} x
                                             <span class="so-luong">{{ $chiTietGioHang->so_luong }}</span>
                                         </h4>
-                                        <h4 hidden><span class="gia-moi">{{ $chiTietGioHang->gia_moi }}</span>đ</h4>
+                                        <h4 hidden><span class="gia-moi">{{ $chiTietGioHang->bienThe->gia_ban }}</span>đ</h4>
                                         <h4 class="price"><span class="tong"></span>đ</h4>
                                     </li>
                                 @endforeach
@@ -468,13 +478,13 @@
 
                             <ul class="summery-total">
                                 <li>
-                                    <h4>Tổng sản phẩm</h4>
+                                    <h4>Tổng sản tiền phẩm</h4>
                                     <h4 class="price"><span id="tong-san-pham"></span>đ</h4>
                                 </li>
 
                                 <li>
                                     <h4>Phí vận chuyển</h4>
-                                    <h4 class="price"><span id="phi-van-chuyen">1000</span>đ</h4>
+                                    <h4 class="price"><span id="phi-van-chuyen">10.000</span>đ</h4>
                                 </li>
 
                                 <li>
@@ -557,27 +567,101 @@
 
 @section('js')
     <script>
-        function showTong() {
-            giaMois = document.getElementsByClassName("gia-moi")
-            soLuongs = document.getElementsByClassName("so-luong")
-            tongs = document.getElementsByClassName("tong")
-            tongSanPham = document.getElementById("tong-san-pham")
-            giamGia = document.getElementById("giam-gia")
-            phiVanChuyen = document.getElementById("phi-van-chuyen")
-            tongTien = document.getElementById("tong-tien")
+let voucherCode = $("#voucherCode").val().trim();
+let phiVanChuyen = document.getElementById("phi-van-chuyen");
+$(document).ready(function () {
+    $("#voucherForm").submit(function (event) {
+        event.preventDefault(); // Ngăn form load lại trang
 
-            sum = 0
-            for (let i = 0; i < giaMois.length; i++) {
-                tongs[i].innerHTML = Number(giaMois[i].innerHTML) * Number(soLuongs[i].innerHTML)
-                sum += Number(tongs[i].innerHTML)
-                console.log(i);
-                console.log(sum);
+        let voucherCode = $("#voucherCode").val().trim();
+        let tongTienHienTai = $("#tong-tien").text().replace(/\D/g, ''); // Lấy tổng tiền, bỏ ký tự không phải số
 
-            }
-
-            tongSanPham.innerHTML = sum
-            tongTien.innerHTML = Number(tongSanPham.innerHTML) - Number(giamGia.innerHTML) + Number(phiVanChuyen.innerHTML)
+        if (voucherCode === "") {
+            Swal.fire({
+                icon: "error",
+                title: "Lỗi!",
+                text: "Vui lòng không để trống.",
+                confirmButtonText: "OK"
+            });
+            return;
         }
+
+        $.ajax({
+            url: "{{ route('voucher.giohang') }}", // Route xử lý mã giảm giá
+            type: "POST",
+            data: {
+                _token: "{{ csrf_token() }}", // Gửi CSRF token
+                code: voucherCode,  // ✅ Đã thêm dấu phẩy ở đây
+                total: tongTienHienTai
+            },
+            success: function (response) {
+                console.log(response)
+                if (response.success) {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Áp dụng thành công!",
+                        text: "Bạn được giảm " + response.discount.toLocaleString("vi-VN") + "đ.",
+                        confirmButtonText: "OK"
+                    });
+
+                    let phiVanChuyenValue = Number(phiVanChuyen.innerHTML.replace(/\./g, "").replace("đ", "").trim()) || 0;
+                    let sum = phiVanChuyenValue +  Number(response.newTotal.replace(/\./g, ""))
+                    $("#tong-tien").text(sum.toLocaleString("vi-VN"));
+                    $("#giam-gia").text(response.discount.toLocaleString("vi-VN"));
+                }
+            },
+            error: function (xhr) { // ✅ Thêm tham số xhr để bắt lỗi
+                let errorMessage = "Lỗi server! Vui lòng thử lại sau.";
+
+                // Bắt lỗi 403 khi mã giảm giá sai hoặc hết hạn
+                if (xhr.status === 403 && xhr.responseJSON && xhr.responseJSON.message) {
+                    errorMessage = xhr.responseJSON.message;
+                }
+
+                Swal.fire({
+                    icon: "error",
+                    title: "Lỗi!",
+                    text: errorMessage,
+                    confirmButtonText: "OK"
+                });
+            }
+        });
+    });
+});
+
+
+
+function showTong() {
+    let giaMois = document.getElementsByClassName("gia-moi");
+    let soLuongs = document.getElementsByClassName("so-luong");
+    let tongs = document.getElementsByClassName("tong");
+
+    let tongSanPham = document.getElementById("tong-san-pham");
+    let giamGia = document.getElementById("giam-gia");
+    let phiVanChuyen = document.getElementById("phi-van-chuyen");
+    let tongTien = document.getElementById("tong-tien");
+
+    let sum = 0;
+
+    for (let i = 0; i < giaMois.length; i++) {
+        let giaMoi = Number(giaMois[i].innerHTML.replace(/\./g, "").replace("đ", "").trim());
+        let soLuong = Number(soLuongs[i].innerHTML.replace(/\D/g, "").trim());
+
+        let tong = giaMoi * soLuong;
+        tongs[i].innerHTML = tong.toLocaleString("vi-VN"); // Hiển thị có dấu chấm phân cách
+
+        sum += tong;
+    }
+
+    tongSanPham.innerHTML = sum.toLocaleString("vi-VN");
+
+    let giamGiaValue = Number(giamGia.innerHTML.replace(/\./g, "").replace("đ", "").trim()) || 0;
+    let phiVanChuyenValue = Number(phiVanChuyen.innerHTML.replace(/\./g, "").replace("đ", "").trim()) || 0;
+
+    let total = sum - giamGiaValue + phiVanChuyenValue;
+    tongTien.innerHTML = total.toLocaleString("vi-VN");
+}
+
 
         showTong()
     </script>

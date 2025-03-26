@@ -153,4 +153,33 @@ public function nhapvoucher(Request $request){
     ]);
 }
 
+public function acceptThanhToan(Request $request){
+    $user = Auth::user();
+    if($user){
+        $userCart = ChiTietGioHang::where('user_id', $user->id)->get();
+        $cartItem = ChiTietGioHang::where('user_id', $user->id);
+        foreach ($request->cartData as $item) {
+            $cartItem = ChiTietGioHang::where('user_id', $user->id)
+                ->where('id', $item['id'])
+                ->first();
+
+            if ($cartItem) {
+                $cartItem->update(['so_luong' => $item['quantity']]);
+            } else {
+                $mess = "Không tìm thấy sản phẩm có bien_the_id = ".$item['id']." và = cho user_id = $user->id";
+            }
+        }
+        return response()->json([
+            'status' => 'success',
+            'message' => $mess ?? 0
+        ]);
+    }else{
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Bạn chưa đăng nhập'
+        ], 403);
+    }
+
+}
+
 }
