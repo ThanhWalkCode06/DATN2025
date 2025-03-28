@@ -23,12 +23,12 @@ class ThanhToanRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => [
+            'email_nguoi_nhan' => [
                 'required','email',
             ],
-            'ten_nguoi_dung' => 'required',
-            'dia_chi' => 'required',
-            'so_dien_thoai' => [
+            'ten_nguoi_nhan' => 'required',
+            'dia_chi_nguoi_nhan' => 'required',
+            'sdt_nguoi_nhan' => [
                 'required','digits:10'
             ],
             'tong_tien' => 'required',
@@ -41,15 +41,14 @@ class ThanhToanRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'email.email' => 'Vui lòng nhập email đúng định dạng',
-            'email.unique' => 'Email này đã tồn tại vui lòng nhập email khác',
+            'email_nguoi_nhan.email' => 'Vui lòng nhập email đúng định dạng',
 
-            'ten_nguoi_dung.required' => 'Vui lòng nhập tên ',
-            'dia_chi.required' => 'Vui lòng nhập địa chỉ dùng',
+            'ten_nguoi_nhan.required' => 'Vui lòng nhập tên ',
+            'dia_chi_nguoi_nhan.required' => 'Vui lòng nhập địa chỉ dùng',
             'phuong_thuc_thanh_toan_id.required' => 'Vui lòng chọn phương thức thanh toán',
 
-            'so_dien_thoai.required' => 'Vui lòng nhập số điện thoại',
-            'so_dien_thoai.digits' => 'Vui lòng nhập số điện thoại có 10 số',
+            'sdt_nguoi_nhan.required' => 'Vui lòng nhập số điện thoại',
+            'sdt_nguoi_nhan.digits' => 'Vui lòng nhập số điện thoại có 10 số',
         ];
     }
 }
