@@ -98,7 +98,7 @@
                             <div class="mb-4 row">
                                 <label class="col-sm-3 col-form-label form-label-title">Nội Dung</label>
                                 <div class="col-sm-9">
-                                    <textarea id="editor" class="form-control" name="noi_dung" required>{{ old('noi_dung', $baiViet->noi_dung) }}</textarea>
+                                    <textarea  class="form-control" name="noi_dung" required>{{ old('noi_dung', $baiViet->noi_dung) }}</textarea>
                                     @error('noi_dung')
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror

@@ -235,31 +235,48 @@
                     success: function (response) {
                         $.notify({
                             icon: "fa fa-check",
-                            title: "Thành công!",
-                            message: response.message || "Sản phẩm đã được thêm vào danh sách yêu thích.",
+                            title: "Sản phẩm đã được thêm vào danh sách yêu thích.",
                         }, {
                             element: "body",
-                            type: "success",
+                            type: "Thành công: ",
                             placement: { from: "top", align: "right" },
                             delay: 3000,
+                            z_index: 9999,
                             animate: { enter: "animated fadeInDown", exit: "animated fadeOutUp" },
+                            template: '<div class="alert alert-success" style="background-color:#1abc9c; color:white; border-color:#16a085; padding: 10px; border-radius: 5px;">' +
+                                    '<strong><i class="fa fa-check"></i> {0}</strong> {1}' +
+                                    '</div>'
                         });
 
                         // Đổi màu icon thành đỏ (đã yêu thích)
                         button.find("i").css("color", "red");
                     },
                     error: function (xhr) {
+                        if (xhr.status === 401) {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Lỗi!",
+                                text: "Vui lòng đăng nhập.",
+                                confirmButtonText: "OK"
+                            });
+                            return;
+                        }
                         $.notify({
-                            icon: "fa fa-times",
-                            title: "Lỗi!",
+                            icon: "<i class='fa fa-exclamation-circle'></i>", // Icon lỗi nổi bật hơn
+                            title: "Sản phẩm đã tồn tại ở danh sách yêu thích.", // Màu đỏ dịu hơn
                             message: xhr.responseJSON?.message || "Có lỗi xảy ra, vui lòng thử lại.",
                         }, {
                             element: "body",
-                            type: "danger",
+                            type: "Cảnh báo: ",
                             placement: { from: "top", align: "right" },
                             delay: 3000,
+                            z_index: 9999,
                             animate: { enter: "animated fadeInDown", exit: "animated fadeOutUp" },
+                            template: '<div class="alert alert-danger" style="background-color:#ff6b6b; color:white; border-color:#d64545; padding: 10px; border-radius: 5px;">' +
+                            '<strong><i class="fa fa-exclamation-circle"></i> {0}</strong> {1}' +
+                            '</div>'
                         });
+
                     }
                 });
             });
@@ -268,3 +285,49 @@
         </script>
 
 </html>
+
+{{-- <script>
+ $(".delete-cart-item").click(function () {
+    console.log('hi')
+    let itemId = $(this).data("id");
+    let button = $(this);
+
+    $.ajax({
+        url: "/xoa-gio-hang",
+        method: "POST",
+        data: { id: itemId },
+        headers: {
+            "X-CSRF-TOKEN": $("meta[name='csrf-token']").attr("content")
+        },
+        success: function (response) {
+            console.log("Response từ server:", response);
+
+            // Xóa sản phẩm khỏi giao diện
+            button.closest("li.product-box-contain").remove();
+
+            // Tính lại tổng tiền
+            let total = 0;
+            let totalItem = response.totalItem;
+            $(".cart-list li").each(function () {
+                let text = $(this).find("h6").text();
+                let matches = text.match(/(\d+)\s*x\s*([\d\.]+)/);
+
+                if (matches) {
+                    let soLuong = parseInt(matches[1]);  // Số lượng
+                    let giaBan = parseInt(matches[2].replace(/\./g, "")); // Giá (loại bỏ dấu chấm)
+
+                    total += soLuong * giaBan;
+                }
+            });
+
+            $(".header-wishlist .badge").text(totalItem);
+            // Cập nhật tổng tiền
+            $(".total-price").text(total.toLocaleString("vi-VN") + " đ");
+        },
+        error: function (xhr) {
+            console.log("Lỗi:", xhr.responseText);
+        }
+    });
+});
+
+</script> --}}

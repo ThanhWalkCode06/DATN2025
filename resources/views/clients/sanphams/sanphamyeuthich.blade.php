@@ -68,23 +68,19 @@
                                     <del>{{ number_format($item->gia_cu,0,'.') }} đ</del>
                                 </h5>
 
-                                <div class="add-to-cart-box bg-white mt-2">
-                                    <button style="float: right; color: #0da487" class="btn">Add
+                                <div class="add-to-cart-box bg-white">
+                                    <button class="btn btn-add-cart addcart-button">
+                                        @if ($item['trang_thai'] == 1)
+                                        <a class="btn-quick-view" style="margin-right: 40px;" href="javascript:void(0)" data-bs-toggle="modal"
+                                            data-bs-target="#view" data-id="{{ $item['id'] }}">
+                                            <span  class="add-icon bg-light-gray">
+                                                <i  class="fa-solid fa-cart-plus"></i>
+                                            </span> Thêm vào giỏ hàng
+                                        </a>
+                                        @else
+                                        <span style="color: #0da487" class="bg-light-gray">Hết hàng</span>
+                                        @endif
                                     </button>
-                                    <div class="cart_qty qty-box">
-                                        <div class="input-group bg-white">
-                                            <button type="button" class="qty-left-minus bg-gray" data-type="minus"
-                                                data-field="">
-                                                <i class="fa fa-minus"></i>
-                                            </button>
-                                            <input class="form-control input-number qty-input" type="text"
-                                                name="quantity" value="0">
-                                            <button type="button" class="qty-right-plus bg-gray" data-type="plus"
-                                                data-field="">
-                                                <i class="fa fa-plus"></i>
-                                            </button>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>

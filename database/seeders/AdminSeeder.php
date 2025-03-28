@@ -22,7 +22,7 @@ class AdminSeeder extends Seeder
                 'username' => 'admin',
                 'password' => Hash::make('123456'), // Mật khẩu nên mã hóa
                 'ten_nguoi_dung' => 'Admin',
-
+                'dia_chi' => 'Hà Nội',
                 'so_dien_thoai' => '0987654321'
             ]
         );

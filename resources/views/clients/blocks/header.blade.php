@@ -1,14 +1,26 @@
 <header class="pb-md-4 pb-0">
+<style>
 
+.navbar-nav .nav-link::before {
+    display: none !important;
+}
+
+.nav-item:nth-child(2) .nav-link::before {
+    display: inline-block !important;
+}
+
+
+</style>
     <div class="header-top">
         <div class="container-fluid-lg">
             <div class="row">
                 <div class="col-xxl-3 d-xxl-block d-none">
                     <div class="top-left-header">
                         <i class="fas fa-map-marker-alt text-white me-2"></i>
-                     <a href="https://www.google.com/maps/place/Tr%C6%B0%E1%BB%9Dng+Cao+%C4%91%E1%BA%B3ng+FPT+Polytechnic/@21.0381348,105.7446869,17z/data=!3m1!4b1!4m6!3m5!1s0x313455e940879933:0xcf10b34e9f1a03df!8m2!3d21.0381298!4d105.7472618!16s%2Fg%2F11krd97y__?entry=ttu&g_ep=EgoyMDI1MDMxMi4wIKXMDSoASAFQAw%3D%3D">
-                        <span class="text-white">Tòa nhà FPT Polytechnic.</span>
-                    </a>
+                        <a
+                            href="https://www.google.com/maps/place/Tr%C6%B0%E1%BB%9Dng+Cao+%C4%91%E1%BA%B3ng+FPT+Polytechnic/@21.0381348,105.7446869,17z/data=!3m1!4b1!4m6!3m5!1s0x313455e940879933:0xcf10b34e9f1a03df!8m2!3d21.0381298!4d105.7472618!16s%2Fg%2F11krd97y__?entry=ttu&g_ep=EgoyMDI1MDMxMi4wIKXMDSoASAFQAw%3D%3D">
+                            <span class="text-white">Tòa nhà FPT Polytechnic.</span>
+                        </a>
 
                     </div>
                 </div>
@@ -56,7 +68,7 @@
                             </span>
                         </button>
                         <a href="{{ route('home') }}" class="web-logo nav-logo">
-                            <img src="{{ Storage::url($globalSetting->client_logo ?? "images/logo-green.png") }}"
+                            <img src="{{ Storage::url($globalSetting->client_logo ?? 'images/logo-green.png') }}"
                                 class="img-fluid blur-up lazyload" alt="">
                         </a>
 
@@ -103,107 +115,86 @@
                                     <div class="onhover-dropdown header-badge">
                                         <button type="button" class="btn p-0 position-relative header-wishlist">
                                             <i data-feather="shopping-cart"></i>
-                                            <span class="position-absolute top-0 start-100 translate-middle badge">2
+                                            <span class="position-absolute top-0 start-100 translate-middle badge">{{ $gioHang->count() ?? 0 }}
                                                 <span class="visually-hidden">unread messages</span>
                                             </span>
                                         </button>
 
                                         <div class="onhover-div">
-                                            <ul class="cart-list">
-                                                <li class="product-box-contain">
+                                            <ul style="width: 100%" class="cart-list">
+                                                @foreach ($gioHang->take(4) as $item)
+                                                <li style="width: 100%" class="product-box-contain">
                                                     <div class="drop-cart">
-                                                        <a href="product-left-thumbnail.html" class="drop-image">
-                                                            <img src="../assets/client/images/vegetable/product/1.png"
+                                                        <a href="{{ route('sanphams.chitiet',$item->id) }}" class="drop-image">
+                                                            <img src="{{ Storage::url($item->bienThe->anh_bien_the) }}"
                                                                 class="blur-up lazyload" alt="">
                                                         </a>
 
                                                         <div class="drop-contain">
-                                                            <a href="product-left-thumbnail.html">
-                                                                <h5>Fantasy Crunchy Choco Chip Cookies</h5>
+                                                            <a href="{{ route('sanphams.chitiet',$item->id) }}">
+                                                                <h5>{{ $item->bienThe->sanPham->ten_san_pham }}</h5>
                                                             </a>
-                                                            <h6><span>1 x</span> $80.58</h6>
-                                                            <button class="close-button close_button">
-                                                                <i class="fa-solid fa-xmark"></i>
-                                                            </button>
+                                                            <h6><span>{{ $item->so_luong }} x</span> {{ number_format($item->bienThe->gia_ban,0,'','.') }} đ</h6>
+                                                            @if (!request()->is('giohang','thanhtoan'))
+                                                                <button class="close-button close_button delete-cart-item" data-id="{{ $item->id }}">
+                                                                    <i class="fa-solid fa-xmark"></i>
+                                                                </button>
+                                                            @endif
                                                         </div>
                                                     </div>
                                                 </li>
+                                                @endforeach
 
-                                                <li class="product-box-contain">
-                                                    <div class="drop-cart">
-                                                        <a href="product-left-thumbnail.html" class="drop-image">
-                                                            <img src="../assets/client/images/vegetable/product/2.png"
-                                                                class="blur-up lazyload" alt="">
-                                                        </a>
 
-                                                        <div class="drop-contain">
-                                                            <a href="product-left-thumbnail.html">
-                                                                <h5>Peanut Butter Bite Premium Butter Cookies 600 g
-                                                                </h5>
-                                                            </a>
-                                                            <h6><span>1 x</span> $25.68</h6>
-                                                            <button class="close-button close_button">
-                                                                <i class="fa-solid fa-xmark"></i>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </li>
                                             </ul>
 
                                             <div class="price-box">
-                                                <h5>Total :</h5>
-                                                <h4 class="theme-color fw-bold">$106.58</h4>
+                                                <h5>Tổng tiền :</h5>
+                                                <h4 class="theme-color fw-bold total-price">{{ number_format( $total,0,'','.') }}  đ</h4>
                                             </div>
 
                                             <div class="button-group">
-                                                <a href="{{ route('thanhtoans.giohang') }}"
+                                                <a href="{{ route('giohang') }}"
                                                     class="btn btn-sm cart-button">Xem giỏ hàng</a>
                                                 <a href="{{ route('thanhtoans.thanhtoan') }}"
                                                     class="btn btn-sm cart-button theme-bg-color text-white">
                                                     Thanh toán</a>
                                             </div>
                                         </div>
-                                    </div>
-                                </li>
+                                    </li>
+                                {{-- @endisset --}}
                                 <li class="right-side onhover-dropdown">
                                     <div class="delivery-login-box">
                                         <div class="delivery-icon">
                                             <i data-feather="user"></i>
                                         </div>
                                         <div class="delivery-detail">
-                                            <h6>Hello,</h6>
-                                            <h5>My Account</h5>
+                                            <h6>Xin chào,</h6>
+                                            <h5>{{ Auth::user()->username ?? 'Guess' }}</h5>
                                         </div>
                                     </div>
                                     <div class="onhover-div onhover-div-login">
                                         <ul class="user-box-name">
                                             @if (!Auth::user())
-                                            <li class="product-box-contain">
-                                                <i></i>
-                                                <a href="{{ route('login.client') }}">Đăng nhập</a>
-                                            </li>
+                                                <li class="product-box-contain">
+                                                    <i></i>
+                                                    <a href="{{ route('login.client') }}">Đăng nhập</a>
+                                                </li>
                                             @else
-                                            <p>Xin chào <strong
-                                                    style="color: #0da487">{{ Auth::user()->username }}</strong>
-                                            </p>
-                                            <li class="product-box-contain">
-                                                <a href="{{ route('users.chitiet') }}">Chi tiết tài
-                                                    khoản</a>
-                                            </li>
-                                            <li class="product-box-contain">
-                                                <i></i>
-                                                <a onclick="Logout(event)" href="#">Đăng xuất</a>
+                                                <p>Xin chào <strong
+                                                        style="color: #0da487">{{ Auth::user()->username }}</strong>
+                                                </p>
+                                                <li class="product-box-contain">
+                                                    <a href="{{ route('users.chitiet') }}">Chi tiết tài
+                                                        khoản</a>
+                                                </li>
+                                                <li class="product-box-contain">
+                                                    <i></i>
+                                                    <a onclick="Logout(event)" href="#">Đăng xuất</a>
 
-                                            </li>
+                                                </li>
                                             @endif
 
-                                            {{-- <li class="product-box-contain">
-                                                <a href="sign-up.html">Đăng kí</a>
-                                            </li>
-
-                                            <li class="product-box-contain">
-                                                <a href="forgot.html">Quên mật khẩu</a>
-                                            </li> --}}
 
 
                                         </ul>
@@ -237,17 +228,19 @@
                             </div>
 
                             <ul class="category-list">
-                                @if(isset($categories))
-                                @foreach($categories as $category)
-                                    <li class="onhover-category-list">
-                                        <a href="{{ route('clientsanpham.danhsach', ['danh_muc_id' => $category->id]) }}" class="category-name">
-                                            <img src="{{ asset('storage/' . $category->anh_danh_muc) }}" alt="{{ $category->ten_danh_muc }}">
-                                            <h6>{{ $category->ten_danh_muc }}</h6>
-                                            <i class="fa-solid fa-angle-right"></i>
-                                        </a>
-                                    </li>
-                                @endforeach
-                            @endif
+                                @if (isset($categories))
+                                    @foreach ($categories as $category)
+                                        <li class="onhover-category-list">
+                                            <a href="{{ route('clientsanpham.danhsach', ['danh_muc_id' => $category->id]) }}"
+                                                class="category-name">
+                                                <img src="{{ asset('storage/' . $category->anh_danh_muc) }}"
+                                                    alt="{{ $category->ten_danh_muc }}">
+                                                <h6>{{ $category->ten_danh_muc }}</h6>
+                                                <i class="fa-solid fa-angle-right"></i>
+                                            </a>
+                                        </li>
+                                    @endforeach
+                                @endif
 
 
                             </ul>
@@ -303,12 +296,13 @@
                                             </ul>
                                         </li>
 
-                                        <li class="nav-item dropdown">
+                                        <li class="nav-item">
                                             <a class="nav-link" href="{{ route('baiviets.danhsach') }}">Bài viết</a>
                                         </li>
 
                                         <li class="nav-item dropdown">
-                                            <a class="nav-link" href="{{ route('huongdans.danhsach') }}">Hướng dẫn</a>
+                                            <a class="nav-link" href="{{ route('huongdans.danhsach') }}">Hướng
+                                                dẫn</a>
                                         </li>
 
                                         <li class="nav-item dropdown">
@@ -317,32 +311,7 @@
 
                                         <li class="nav-item dropdown">
                                             <a class="nav-link" href="{{ route('lienhe.home') }}">Liên hệ</a>
-                                            {{-- <ul class="dropdown-menu">
-                                                <li>
-                                                    <a class="dropdown-item" href="seller-become.html">Become a
-                                                        Seller</a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item" href="seller-dashboard.html">Seller
-                                                        Dashboard</a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item" href="seller-detail.html">Seller
-                                                        Detail</a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item" href="seller-detail-2.html">Seller
-                                                        Detail 2</a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item" href="seller-grid.html">Seller
-                                                        Grid</a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item" href="seller-grid-2.html">Seller Grid
-                                                        2</a>
-                                                </li>
-                                            </ul> --}}
+
                                         </li>
                                     </ul>
                                 </div>
@@ -361,3 +330,4 @@
         </div>
     </div>
 </header>
+

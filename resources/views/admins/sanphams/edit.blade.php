@@ -201,7 +201,7 @@ tr{
                                     </div>
                                     <div class="mb-4">
                                         <label class="form-label-title">Mô tả</label>
-                                        <textarea id="editor" name="mo_ta" class="form-control">{{ $sanpham->mo_ta }}</textarea>
+                                        <textarea  name="mo_ta" class="form-control">{{ $sanpham->mo_ta }}</textarea>
                                     </div>
                                 </div>
                             </div>

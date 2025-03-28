@@ -57,4 +57,9 @@ class BienThe extends Model
             'gia_tri_thuoc_tinh_id' // Liên kết `bien_the_thuoc_tinhs` với `gia_tri_thuoc_tinhs`
         );
     }
+
+    public function gioHang()
+    {
+        return $this->hasMany(ChiTietGioHang::class, 'bien_the_id');
+    }
 }

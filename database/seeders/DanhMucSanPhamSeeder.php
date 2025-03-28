@@ -13,7 +13,7 @@ class DanhMucSanPhamSeeder extends Seeder
      */
     public function run(): void
     {
-        $name = ['Áo', 'Quần', 'Giày', 'Mũ'];
+        $name = ['Áo', 'Quần', 'Giày', 'Mũ','Áo Hoodio','Thời Trang','Thể thao'];
         foreach ($name as $key => $value) {
             DanhMucSanPham::create([
                 'ten_danh_muc' => $value,

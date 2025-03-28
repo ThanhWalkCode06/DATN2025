@@ -13,6 +13,6 @@ class ChiTietGioHangSeeder extends Seeder
      */
     public function run(): void
     {
-        // ChiTietGioHang::factory()->count(100)->create();
+        ChiTietGioHang::factory()->count(100)->create();
     }
 }
