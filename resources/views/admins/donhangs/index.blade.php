@@ -38,7 +38,9 @@
                 </div>
                 <div>
                     <div class="table-responsive">
-                        <table class="table all-package order-table theme-table" id="table_id">
+                        <input type="text" class="form-control w-25 float-end mb-2" id="searchInput"
+                            placeholder="Tìm đơn hàng">
+                        <table class="table all-package order-table theme-table" id="dataTable">
                             <thead>
                                 <tr>
                                     <th>Mã đơn hàng</th>
@@ -104,6 +106,18 @@
 @endsection
 
 @section('js')
+    <script>
+        document.getElementById("searchInput").addEventListener("input", function() {
+            let input = this.value.toLowerCase();
+            let rows = document.querySelectorAll("#dataTable tbody tr");
+
+            rows.forEach(row => {
+                let text = row.innerText.toLowerCase();
+                row.style.display = text.includes(input) ? "" : "none";
+            });
+        });
+    </script>
+
     <!-- customizer js -->
     <script src="{{ asset('assets/js/customizer.js') }}"></script>
 
