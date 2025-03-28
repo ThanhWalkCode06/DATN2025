@@ -102,6 +102,7 @@
                                                 id="accordionFlushExample">
 
                                                 @foreach ($pttts as $item)
+                                                @if ($item['trang_thai'] == 1)
                                                 <div class="accordion-item">
                                                     <div class="accordion-header" id="flush-headingOne">
                                                         <div class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne">
@@ -115,6 +116,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                                @endif
                                                 @endforeach
 
                                             </div>
