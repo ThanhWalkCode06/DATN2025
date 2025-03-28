@@ -377,7 +377,7 @@ function isNumberKey(evt) {
             }
         },
         error: function () {
-            Swal.fire("Lỗi", "Bạn chưa đăng nhập !", "error");
+            Swal.fire("Lỗi", "Giỏ hàng trống !", "error");
         },
     });
 });

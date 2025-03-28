@@ -428,7 +428,6 @@ $('input[name="flexRadioDefault"]').on('change', function() {
             type: "POST",
             data: formData,
             success: function(response) {
-                // console.log(response);
                 window.location.href = `/dathangthanhcong/${response.id}`; // Chuyển hướng sau khi đặt hàng thành công (tuỳ chỉnh)
             },
             error: function(xhr) {
@@ -460,4 +459,72 @@ $('input[name="flexRadioDefault"]').on('change', function() {
 
 
 </script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("checkoutForm").addEventListener("submit", function (event) {
+            let isValid = true;
+
+            // Lấy giá trị của các trường
+            let ten = document.querySelector("[name='ten_nguoi_nhan']").value.trim();
+            let email = document.querySelector("[name='email_nguoi_nhan']").value.trim();
+            let sdt = document.querySelector("[name='sdt_nguoi_nhan']").value.trim();
+            let diaChi = document.querySelector("[name='dia_chi_nguoi_nhan']").value.trim();
+
+            // Reset lỗi cũ
+            document.querySelectorAll(".error-message").forEach(el => el.remove());
+
+            // Kiểm tra Họ và tên
+            if (ten === "") {
+                showError("[name='ten_nguoi_nhan']", "Vui lòng nhập họ và tên");
+                isValid = false;
+            }
+
+            // Kiểm tra Email
+            if (email === "") {
+                showError("[name='email_nguoi_nhan']", "Vui lòng nhập email");
+                isValid = false;
+            } else if (!validateEmail(email)) {
+                showError("[name='email_nguoi_nhan']", "Email không hợp lệ");
+                isValid = false;
+            }
+
+            // Kiểm tra Số điện thoại
+            if (sdt === "") {
+                showError("[name='sdt_nguoi_nhan']", "Vui lòng nhập số điện thoại");
+                isValid = false;
+            } else if (!/^\d{10,11}$/.test(sdt)) {
+                showError("[name='sdt_nguoi_nhan']", "Số điện thoại phải có 10-11 số");
+                isValid = false;
+            }
+
+            // Kiểm tra Địa chỉ
+            if (diaChi === "") {
+                showError("[name='dia_chi_nguoi_nhan']", "Vui lòng nhập địa chỉ");
+                isValid = false;
+            }
+
+            // Nếu có lỗi, ngăn không cho submit
+            if (!isValid) {
+                event.preventDefault();
+            }
+        });
+
+        // Hàm hiển thị lỗi
+        function showError(selector, message) {
+            let inputField = document.querySelector(selector);
+            let errorDiv = document.createElement("div");
+            errorDiv.className = "error-message text-danger mt-1";
+            errorDiv.textContent = message;
+            inputField.parentNode.appendChild(errorDiv);
+        }
+
+        // Hàm kiểm tra email hợp lệ
+        function validateEmail(email) {
+            let re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+    });
+    </script>
+
 @endsection

@@ -13,6 +13,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\HelperCommon\Helper;
 use App\Http\Requests\Client\ThanhToanRequest;
+use App\Models\GioHang;
 use App\Models\PhieuGiamGia;
 
 class ThanhToanController extends Controller
@@ -46,71 +47,78 @@ class ThanhToanController extends Controller
         return view('clients.thanhtoans.thanhtoan', compact('chiTietGioHangs','pttts'));
     }
 
-    public function xuLyThanhToan(Request $request){
+    public function xuLyThanhToan(ThanhToanRequest $request){
 
     // return response()->json(['message' => $request->all()], 200);
-        $user = Auth::user();
-        if($user){
-            $checkquantity = Helper::checkQuantity($user->id);
-            if($checkquantity == null){
-                // checkVourcher
-                if($request->phuong_thuc_thanh_toan_id === "1"){
-                    $donHang = DonHang::create([
-                        'user_id' => $user->id,
-                        'ma_don_hang' => Helper::generateOrderCode(),
-                        'ten_nguoi_nhan' => $request->ten_nguoi_nhan,
-                        'email_nguoi_nhan' => $request->email_nguoi_nhan,
-                        'sdt_nguoi_nhan' => $request->sdt_nguoi_nhan,
-                        'dia_chi_nguoi_nhan' => $request->dia_chi_nguoi_nhan,
-                        'tong_tien' => $request->tong_tien,
-                        'ghi_chu' => $request->ghi_chu,
-                        'phuong_thuc_thanh_toan_id' => 1,
-                        'trang_thai_don_hang' => 0,
-                        'trang_thai_thanh_toan' => 0,
-                        'created_at' => now()
-                    ]);
-                }else{
-                    return response()->json([
-                        'status' => 'error',
-                        'message' => 'Lỗi phương thức',
-                    ],500);
-                }
-
-                if($request->voucher_code != ''){
-                    $idVoucher = PhieuGiamGia::where('ma_phieu',$request->voucher_code)->first();
-                    if($idVoucher){
-                        $item = DB::table('phieu_giam_gia_tai_khoans')
-                    ->insert([
-                        'phieu_giam_gia_id' => $idVoucher->id,
-                        'user_id' => $user->id,
-                        'order_id' => $donHang->id,
-                        'created_at' => now(),
-                    ]);
-                    }
-                }
-                $cart = ChiTietGioHang::with('user','bienThe')->where('user_id',$user->id)->get();
-                    foreach($cart as $item){
-                        $chiTietDonHang = ChiTietDonHang::create([
-                            'don_hang_id' => $donHang->id,
-                            'bien_the_id' => $item->bienThe->id,
-                            'so_luong' =>   $item->so_luong,
-                            'created_at' => now()
-                        ]);
-                    }
-                $cart->each->delete();
-                return response()->json([
-                    'status' => 'success',
-                    'id' => $donHang->id
-                ],200);
-
+    $user = Auth::user();
+    if($user){
+        $giohang = ChiTietGioHang::where('user_id',Auth::user()->id)->first();
+        if(!$giohang){
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Giỏ hàng trống'
+            ],403);
+        }
+        $checkquantity = Helper::checkQuantity($user->id);
+        if($checkquantity == null){
+            // checkVourcher
+            if($request->phuong_thuc_thanh_toan_id === "1"){
+                $donHang = DonHang::create([
+                    'user_id' => $user->id,
+                    'ma_don_hang' => Helper::generateOrderCode(),
+                    'ten_nguoi_nhan' => $request->ten_nguoi_nhan,
+                    'email_nguoi_nhan' => $request->email_nguoi_nhan,
+                    'sdt_nguoi_nhan' => $request->sdt_nguoi_nhan,
+                    'dia_chi_nguoi_nhan' => $request->dia_chi_nguoi_nhan,
+                    'tong_tien' => $request->tong_tien,
+                    'ghi_chu' => $request->ghi_chu,
+                    'phuong_thuc_thanh_toan_id' => 1,
+                    'trang_thai_don_hang' => 0,
+                    'trang_thai_thanh_toan' => 0,
+                    'created_at' => now()
+                ]);
             }else{
                 return response()->json([
                     'status' => 'error',
-                    'message' => 'Sản phẩm vượt quá số lượng tồn kho!',
-                    'over_quantity' => $checkquantity
+                    'message' => 'Lỗi phương thức',
                 ],500);
             }
+
+            if($request->voucher_code != ''){
+                $idVoucher = PhieuGiamGia::where('ma_phieu',$request->voucher_code)->first();
+                if($idVoucher){
+                    $item = DB::table('phieu_giam_gia_tai_khoans')
+                ->insert([
+                    'phieu_giam_gia_id' => $idVoucher->id,
+                    'user_id' => $user->id,
+                    'order_id' => $donHang->id,
+                    'created_at' => now(),
+                ]);
+                }
+            }
+            $cart = ChiTietGioHang::with('user','bienThe')->where('user_id',$user->id)->get();
+                foreach($cart as $item){
+                    $chiTietDonHang = ChiTietDonHang::create([
+                        'don_hang_id' => $donHang->id,
+                        'bien_the_id' => $item->bienThe->id,
+                        'so_luong' =>   $item->so_luong,
+                        'created_at' => now()
+                    ]);
+                }
+            $cart->each->delete();
+            return response()->json([
+                'status' => 'success',
+                'id' => $donHang->id
+            ],200);
+
+        }else{
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Sản phẩm vượt quá số lượng tồn kho!',
+                'over_quantity' => $checkquantity
+            ],500);
         }
+    }
     }
 
     public function datHangThanhCong(Request $request, string $id)
