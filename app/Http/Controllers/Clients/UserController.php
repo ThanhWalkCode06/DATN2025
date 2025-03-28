@@ -7,6 +7,7 @@ use App\Models\BienThe;
 use App\Models\DonHang;
 use Illuminate\Http\Request;
 use App\Models\ChiTietDonHang;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\Client\UserRequest;
@@ -48,8 +49,9 @@ class UserController extends Controller
 
     public function orderTracking(string $id){
         if(Auth::user()){
-            $donHang = DonHang::where('id',$id)->get();
-
+            $donHang = DonHang::where('id',$id)->first();
+            $checkVoucher = DB::table('phieu_giam_gia_tai_khoans')->where('order_id',$donHang->id)->first();
+            // dd($donHang);
             $bienThes = DonHang::where('id', $id)->with('bienThes')->first();
             $bienThesPaginated = $bienThes->bienThes()->paginate(5);
 
@@ -61,7 +63,7 @@ class UserController extends Controller
                 'id_san_pham' => $bienThe->san_pham_id,
             ]);
             // dd($bienThesList);
-            return view('clients.users.ordertracking', compact('donHang','bienThesList','bienThesPaginated'));
+            return view('clients.users.ordertracking', compact('donHang','bienThesList','bienThesPaginated','checkVoucher'));
         }else{
             return redirect()->route('login.client');
         }

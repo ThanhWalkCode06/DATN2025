@@ -6,6 +6,7 @@ use App\Models\BienThe;
 use Illuminate\Http\Request;
 use App\Models\ChiTietGioHang;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\HelperCommon\Helper;
 use App\Models\PhieuGiamGia;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -135,10 +136,21 @@ public function nhapvoucher(Request $request){
     $currentTotal = (int) $request->total;
     $voucher = PhieuGiamGia::where('ma_phieu', $code)->first();
 
+    $check = Helper::checkVoucher($code,Auth::user()->id);
+    if($check != ''){
+        return response()->json([
+            'success' => false,
+            'message' => 'Mã này bạn đã dùng trước đó!',
+            'discount' => number_format(0, 0, ',', '.'),
+            'newTotal' => number_format($currentTotal, 0, ',', '.')
+        ],403);
+    }
     if (!$voucher || $voucher->ngay_ket_thuc < now() || $voucher->trang_thai == 0) {
         return response()->json([
             'success' => false,
-            'message' => 'Mã giảm giá không tồn tại hoặc đã hết hạn!'
+            'message' => 'Mã giảm giá không tồn tại hoặc đã hết hạn!',
+            'discount' => 0,
+            'newTotal' => $currentTotal
         ],403);
     }
 

@@ -835,11 +835,13 @@ $(document).ready(function () {
         title: "Sản phẩm đã được thêm vào giỏ hàng.",
     }, {
         element: "body",
-        type: "success",
+        type: "Thành công",
         placement: { from: "top", align: "right" },
-        delay: 3000,
+        delay: 10,
         z_index: 9999,
-        animate: { enter: "animated fadeInDown", exit: "animated fadeOutUp" },
+        animate: { enter: "animated fadeInDown faster", exit: "animated fadeOutUp faster" },
+        showDuration: 100,  // Hiển thị nhanh (mặc định là 400-600ms)
+        hideDuration: 200,
         template: '<div class="alert alert-success" style="background-color:#1abc9c; color:white; border-color:#16a085; padding: 10px; border-radius: 5px;">' +
                 '<strong><i class="fa fa-check"></i> {0}</strong> {1}' +
                 '</div>'
