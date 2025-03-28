@@ -96,11 +96,15 @@
                                         <tr>
                                             <td class="product-detail">
                                                 <div class="product border-0">
-                                                    <a href="{{ route('sanphams.chitiet', 1) }}" class="product-image">
-                                                        <img src="{{ Storage::url($chiTietDonHang->hinh_anh) }}"
+                                                    <div>
+                                                        <h4 class="table-title text-content">Ảnh sản phẩm</h4>
+                                                        <a href="{{ route('sanphams.chitiet',$chiTietDonHang->id) }}" class="product-image">
+                                                        <img width="100px" src="{{ Storage::url($chiTietDonHang->hinh_anh) }}"
                                                             class="img-fluid blur-up lazyload" alt="">
-                                                    </a>
+                                                        </a>
+                                                    </div>
                                                     <div class="product-detail">
+                                                        <h4 class="table-title text-content">Tên sản phẩm</h4>
                                                         <ul>
                                                             <li class="name">
                                                                 <a
@@ -116,7 +120,7 @@
 
                                             <td class="price">
                                                 <h4 class="table-title text-content">Giá</h4>
-                                                <h6 class="theme-color">{{ $chiTietDonHang->gia_moi }}đ</h6>
+                                                <h6 class="theme-color">{{ number_format($chiTietDonHang->gia_ban,0,'','.') }}đ</h6>
                                             </td>
 
                                             <td class="quantity">
@@ -126,7 +130,7 @@
 
                                             <td class="subtotal">
                                                 <h4 class="table-title text-content">Tổng</h4>
-                                                <h5>{{ $chiTietDonHang->gia_moi * $chiTietDonHang->so_luong }}</h5>
+                                                <h5>{{ number_format($chiTietDonHang->gia_ban * $chiTietDonHang->so_luong,0,'','.') }}đ</h5>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -145,19 +149,19 @@
                                     <h5 class="ms-auto theme-color">({{ sizeof($chiTietDonHangs) }} sản phẩm)</h5>
                                 </div>
 
-                                <ul class="summery-contain">
+                                {{-- <ul class="summery-contain">
                                     @foreach ($chiTietDonHangs as $chiTietDonHang)
                                         <li>
                                             <h4>{{ $chiTietDonHang->ten_san_pham }}</h4>
                                             <h4 class="price">{{ $chiTietDonHang->gia_moi }}đ</h4>
                                         </li>
                                     @endforeach
-                                </ul>
+                                </ul> --}}
 
                                 <ul class="summery-total">
                                     <li class="list-total">
                                         <h4>Tổng:</h4>
-                                        <h4 class="price">{{ $donHang->tong_tien }}đ</h4>
+                                        <h4 class="price">{{ number_format($donHang->tong_tien,0,'','.') }}đ</h4>
                                     </li>
                                 </ul>
                             </div>
@@ -177,14 +181,14 @@
                                     <li class="pb-0">
                                         <h4>Ngày giao hàng dự kiến:</h4>
                                         <h4 class="price theme-color">
-                                            <a href="order-tracking.html" class="text-danger">Kiểm tra đơn hàng</a>
+                                            <a href="{{ route('order-tracking.client',$donHang->id) }}" class="text-danger">Kiểm tra đơn hàng</a>
                                         </h4>
                                     </li>
                                 </ul>
 
                                 <ul class="summery-total">
                                     <li class="list-total border-top-0 pt-2">
-                                        <h4 class="fw-bold">Oct 21, 2021</h4>
+                                        <h4 class="fw-bold">{{ $donHang->created_at }}</h4>
                                     </li>
                                 </ul>
                             </div>

@@ -1,4 +1,35 @@
 <style>
+      .number-input {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f8f8f8;
+            border-radius: 8px;
+            padding: 5px;
+            width: 120px;
+        }
+
+        .number-input button {
+            background: none;
+            border: none;
+            /* cursor: pointer; */
+            font-size: 20px;
+            color: #008080;
+            padding: 5px;
+        }
+
+        .number-input input {
+            width: 40px;
+            text-align: center;
+            border: none;
+            background: none;
+            font-size: 18px;
+        }
+
+        .number-input input:focus {
+            outline: none;
+        }
+
 .option {
     display: inline-flex;
     align-items: center;
@@ -8,8 +39,8 @@
     border-radius: 50%;
     border: 2px solid #ddd;
     color: #333;
-    font-size: 16px;
-    font-weight: bold;
+    font-size: 14px;
+    /* font-weight: bold; */
     cursor: pointer;
     margin: 5px;
     transition: all 0.3s ease-in-out;
@@ -27,81 +58,94 @@
 </style>
 <!-- Quick View Modal Box Start -->
 <div class="modal fade theme-modal view-modal" id="view" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered modal-xl modal-fullscreen-sm-down">
-        {{-- core-quickView --}}
-        <div class="modal-content">
-            <div class="modal-header p-0">
-                <button type="button" class="btn-close" data-bs-dismiss="modal">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="row g-sm-4 g-2">
-                    <div class="col-lg-6">
-                        <div class="slider-image">
-                            <img src="" class="img-fluid blur-up lazyload"
-                                alt="">
-                        </div>
-                    </div>
+    <form id="form-cart-post" >
+        @csrf
+        <input type="hidden" name="id_bienthe" id="id_bienthe">
 
-                    <div class="col-lg-6">
-                        <div class="right-sidebar-modal">
-                            <h4 class="title-name"></h4>
-                            <div style="display: flex">
-                                <h4 class="gia_moi" style="color: #0da487"></h4>
-                                <del class="gia_cu" style="margin-left: 20px"></del>
+        <div class="modal-dialog modal-dialog-centered modal-xl modal-fullscreen-sm-down">
+            <div class="modal-content">
+                <div class="modal-header p-0">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-sm-4 g-2">
+                        <div class="col-lg-6">
+                            <div class="slider-image">
+                                <img src="" class="img-fluid blur-up lazyload"
+                                    alt="">
                             </div>
-                            <div class="product-rating">
-                                <ul class="rating">
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="right-sidebar-modal">
+                                <h4 class="title-name"></h4>
+                                <div style="display: flex">
+                                    <h4 class="gia_moi" style="color: #0da487"></h4>
+                                    <del class="gia_cu" style="margin-left: 20px"></del>
+                                </div>
+                                <div class="product-rating">
+                                    <ul class="rating">
+                                        <li>
+                                            <i data-feather="star" class=""></i>
+                                        </li>
+                                        <li>
+                                            <i data-feather="star" class=""></i>
+                                        </li>
+                                        <li>
+                                            <i data-feather="star" class=""></i>
+                                        </li>
+                                        <li>
+                                            <i data-feather="star" class=""></i>
+                                        </li>
+                                        <li>
+                                            <i data-feather="star" class=""></i>
+                                        </li>
+                                    </ul>
+                                    <span class="danh_gia ms-2">8 Reviews</span>
+                                </div>
+
+                                <div class="product-detail">
+                                    <h4>Mô tả</h4>
+                                    <p class="mo_ta"></p>
+                                </div>
+
+                                <ul class="brand-list">
                                     <li>
-                                        <i data-feather="star" class=""></i>
-                                    </li>
-                                    <li>
-                                        <i data-feather="star" class=""></i>
-                                    </li>
-                                    <li>
-                                        <i data-feather="star" class=""></i>
-                                    </li>
-                                    <li>
-                                        <i data-feather="star" class=""></i>
-                                    </li>
-                                    <li>
-                                        <i data-feather="star" class=""></i>
+                                        <div class="brand-box">
+                                            <h5>Danh mục:</h5>
+                                            <h6 class="danh_muc"></h6>
+                                        </div>
                                     </li>
                                 </ul>
-                                <span class="danh_gia ms-2">8 Reviews</span>
-                            </div>
 
-                            <div class="product-detail">
-                                <h4>Mô tả</h4>
-                                <p class="mo_ta"></p>
-                            </div>
+                                <div class="variant-section"></div>
 
-                            <ul class="brand-list">
-                                <li>
-                                    <div class="brand-box">
-                                        <h5>Danh mục:</h5>
-                                        <h6 class="danh_muc"></h6>
-                                    </div>
-                                </li>
-                            </ul>
+                                <span style="margin-top: 5px" class="so_luong"></span>
 
-                            <div class="variant-section"></div>
+                                <h5 style="margin-top: 5px; font-weight: 600" >Số lượng:</h5>
+                                <div style="margin-top: 5px" class="number-input">
+                                    <button onclick="decreaseValue()">−</button>
+                                    <input type="number" name="quantity" id="quantity" value="1" min="1">
+                                    <button onclick="increaseValue()">+</button>
+                                </div>
 
-                            <div class="modal-button">
-                                <button onclick="location.href = 'cart.html';"
-                                    class="btn btn-md add-cart-button icon">Add
-                                    To Cart</button>
-                                <button onclick="location.href = 'product-left.html';"
-                                    class="btn theme-bg-color view-button icon text-white fw-bold btn-md">
-                                    View More Details</button>
+
+                                <div class="modal-button">
+                                    <button type="submit"
+                                        class="btn btn-md add-cart-button icon">Thêm vào giỏ hàng</button>
+                                    <button id="btnChiTiet"
+                                        class="btn theme-bg-color view-button icon text-white fw-bold btn-md">
+                                        Xem chi tiết</button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </form>
 </div>
 <!-- Quick View Modal Box End -->
 
@@ -539,20 +583,14 @@ $(document).ready(function() {
 });
 
 </script>
-<script>
-    $(document).ready(function () {
-        $(".variant").click(function () {
-            $(".variant").removeClass("selected"); // Bỏ chọn tất cả
-            $(this).addClass("selected"); // Chọn biến thể hiện tại
-            console.log("Size được chọn:", $(this).data("size")); // In ra console
-        });
-    });
-</script>
+
 <script>
 $(document).ready(function () {
-    let selectedAttributes = {};
-    let bienTheList = []; // Lưu danh sách biến thể để sử dụng lại
+    let selectedAttributes = {}; // Lưu thuộc tính đã chọn
+    let bienTheList = []; // Lưu danh sách biến thể
+    let matchedVariant = null; // Biến toàn cục để lưu biến thể phù hợp
 
+    // Xử lý khi bấm vào nút "Xem nhanh"
     $(".btn-quick-view").click(function () {
         let productId = $(this).data("id");
 
@@ -560,10 +598,12 @@ $(document).ready(function () {
             url: 'http://127.0.0.1:8000/quick-view?id=' + productId,
             method: 'GET',
             success: function (response) {
-                // Lưu biến thể vào biến toàn cục
+                // Reset dữ liệu khi mở modal mới
+                selectedAttributes = {};
                 bienTheList = response.bien_the;
+                matchedVariant = null;
 
-                // Cập nhật thông tin chung
+                // Cập nhật thông tin sản phẩm
                 $('#view .title-name').text(response.ten_san_pham);
                 $('#view .slider-image img').attr('src', response.hinh_anh);
                 $('#view .danh_muc').text(response.danh_muc);
@@ -571,6 +611,19 @@ $(document).ready(function () {
                 $('#view .danh_gia').text(response.danh_gia + ' lượt đánh giá');
                 $('#view .gia_moi').text(response.gia_moi + ' đ');
                 $('#view .gia_cu').text(response.gia_cu + ' đ');
+
+                document.getElementById("btnChiTiet").addEventListener("click", function() {
+                    location.href = '/sanpham/' + response.id;
+                });
+
+                // Hiển thị số sao đánh giá
+                let so_sao = response.so_sao;
+                $('#view .rating li svg').css({'fill': 'none', 'stroke': '#ffc107'});
+                $('#view .rating li').each(function (index) {
+                    if (index < so_sao) {
+                        $(this).find('svg').css({'fill': '#ffc107', 'stroke': '#ffc107'});
+                    }
+                });
 
                 // Gom nhóm thuộc tính từ biến thể
                 let thuocTinhMap = {};
@@ -586,7 +639,7 @@ $(document).ready(function () {
                 // Hiển thị danh sách thuộc tính
                 let thuocTinhHtml = "";
                 Object.keys(thuocTinhMap).forEach(tenThuocTinh => {
-                    thuocTinhHtml += `<h3>${tenThuocTinh}</h3>`;
+                    thuocTinhHtml += `<h4>${tenThuocTinh}</h4>`;
                     thuocTinhHtml += `<div id="thuoc_tinh_${tenThuocTinh.replace(/\s+/g, '_')}" class="thuoc-tinh-group">`;
                     thuocTinhMap[tenThuocTinh].forEach(giaTri => {
                         thuocTinhHtml += `
@@ -598,7 +651,7 @@ $(document).ready(function () {
                     thuocTinhHtml += `</div>`;
                 });
 
-                $('.variant-section').html(thuocTinhHtml);
+                $('.variant-section').html(thuocTinhHtml); // Thêm thuộc tính vào UI
             },
             error: function () {
                 alert('Không tìm thấy sản phẩm!');
@@ -606,7 +659,7 @@ $(document).ready(function () {
         });
     });
 
-    // Xử lý chọn thuộc tính
+    // Xử lý khi chọn thuộc tính
     $(document).on("click", ".option", function() {
         let thuocTinh = $(this).data("thuoc-tinh");
         let giaTri = $(this).data("gia-tri");
@@ -618,15 +671,16 @@ $(document).ready(function () {
         $(`.option[data-thuoc-tinh='${thuocTinh}']`).removeClass("selected");
         $(this).addClass("selected");
 
-        // Kiểm tra và cập nhật ảnh biến thể
+        // Cập nhật ảnh và giá biến thể
         updateVariantImage();
     });
 
+    // Hàm cập nhật ảnh và giá dựa trên biến thể được chọn
     function updateVariantImage() {
-        let matchedVariant = null;
+        matchedVariant = null; // Đặt lại biến thể phù hợp
 
         bienTheList.forEach(variant => {
-            let isMatch = true;
+            let isMatch = Object.keys(selectedAttributes).length > 0; // Đảm bảo có thuộc tính được chọn
 
             variant.thuoc_tinh_gia_tri.forEach(attr => {
                 if (selectedAttributes[attr.ten] !== attr.gia_tri) {
@@ -641,10 +695,210 @@ $(document).ready(function () {
 
         if (matchedVariant) {
             $("#view .slider-image img").attr("src", matchedVariant.anh_bien_the);
+            $("#view .gia_moi").text(matchedVariant.gia_ban + ' đ');
+            $("#view .so_luong").text("Tồn kho: " + matchedVariant.so_luong);
+            $("#quantity").val(1).attr("max", matchedVariant.so_luong); // Cập nhật max quantity
         } else {
             $("#view .slider-image img").attr("src", "/storage/uploads/sanphams/default.png");
+            $("#view .gia_moi").text("Chọn thuộc tính để xem giá");
+            $("#view .so_luong").text("Tồn kho: ");
+            $("#quantity").val(1).attr("max", ""); // Xóa giới hạn khi chưa chọn biến thể
+        }
+
+        if (matchedVariant) {
+            $("#id_bienthe").val(matchedVariant.id); // Cập nhật ID biến thể
+            console.log("ID biến thể được chọn:", matchedVariant.id); // Debug
+        } else {
+            $("#id_bienthe").val(""); // Xóa ID nếu chưa chọn đầy đủ
         }
     }
-});
 
+    // Chặn nhập số vượt quá tồn kho
+    $("#quantity").on("input", function() {
+        let input = $(this);
+        let value = parseInt(input.val(), 10) || 1;
+
+        let maxQuantity = matchedVariant ? matchedVariant.so_luong : Infinity;
+
+        if (isNaN(value) || value < 1) {
+            input.val(1);
+        } else if (value > maxQuantity) {
+            input.val(maxQuantity); // Chặn vượt số lượng tồn kho
+        }
+    });
+
+    // Nút tăng số lượng
+    function increaseValue() {
+        event.preventDefault();
+        let input = $("#quantity");
+        let value = parseInt(input.val(), 10) || 1;
+        let maxQuantity = matchedVariant ? matchedVariant.so_luong : Infinity;
+
+        if (value < maxQuantity) {
+            input.val(value + 1);
+        }
+    }
+
+    // Nút giảm số lượng
+    function decreaseValue() {
+        event.preventDefault();
+        let input = $("#quantity");
+        let value = parseInt(input.val(), 10) || 1;
+
+        if (value > 1) {
+            input.val(value - 1);
+        }
+    }
+
+    // Gán sự kiện nút tăng/giảm số lượng
+    $(document).on("click", ".number-input button:first-child", decreaseValue);
+    $(document).on("click", ".number-input button:last-child", increaseValue);
+
+    // Reset dữ liệu khi đóng modal để tránh lỗi hiển thị sai
+    $("#view").on("hidden.bs.modal", function () {
+        selectedAttributes = {}; // Xóa thuộc tính đã chọn
+        bienTheList = []; // Xóa danh sách biến thể
+        matchedVariant = null; // Reset biến thể
+        $(".variant-section").html(""); // Xóa giao diện thuộc tính
+        $(".option").removeClass("selected"); // Bỏ chọn option cũ
+        $("#view .gia_moi").text("Chọn thuộc tính để xem giá"); // Reset giá
+        $("#view .so_luong").text("Số lượng: --"); // Reset số lượng
+        $("#view .slider-image img").attr("src", "/storage/uploads/sanphams/default.png"); // Reset ảnh
+        $("#quantity").val(1).attr("max", ""); // Reset số lượng về mặc định
+    });
+
+
+});
+// add-cart-button
+</script>
+<script>
+$(document).ready(function () {
+    $("#form-cart-post").submit(function (event) {
+        event.preventDefault();
+
+        let bienTheId = $("#id_bienthe").val();
+        if (!bienTheId) {
+            Swal.fire('Lỗi', 'Vui lòng chọn biến thể trước khi thêm vào giỏ hàng!', 'warning');
+            return;
+        }
+
+        let formData = $(this).serialize();
+
+        $.ajax({
+            url: '/post-giohang',
+            method: 'POST',
+            data: formData,
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                'Accept': 'application/json'
+            },
+            success: function(response) {
+    console.log("Cart response:", response); // Kiểm tra dữ liệu
+
+    if (response.cart) {
+        $(".header-wishlist .badge").text(response.cart.totalItem);
+        $(".total-price").text(response.cart.totalPrice.toLocaleString("vi-VN") + " đ");
+
+        let cartListHtml = '';
+        let itemsToShow = response.cart.items.slice(0, 4); // Giới hạn chỉ lấy 4 sản phẩm đầu tiên
+
+        itemsToShow.forEach(item => {
+            cartListHtml += `
+                <li style="width: 100%" class="product-box-contain">
+                    <div class="drop-cart">
+                        <a href="/sanpham/${item.id}" class="drop-image">
+                            <img src="${item.image}" class="blur-up lazyload" alt="">
+                        </a>
+                        <div class="drop-contain">
+                            <a href="/sanpham/${item.id}">
+                                <h5>${item.name}</h5>
+                            </a>
+                            <h6><span>${item.quantity} x</span> ${item.price.toLocaleString("vi-VN")} đ</h6>
+                            <button class="close-button close_button delete-cart-item" data-id="${item.id_cart}">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+                    </div>
+                </li>`;
+        });
+
+        $(".cart-list").html(cartListHtml); // Cập nhật danh sách sản phẩm
+
+        // Nếu số lượng sản phẩm lớn hơn 4, hiển thị "Xem thêm..."
+        if (response.cart.items.length > 4) {
+            $(".cart-list").append('<li class="text-center"><a href="giohang">Xem thêm...</a></li>');
+        }
+    }
+
+    $.notify({
+        icon: "fa fa-check",
+        title: "Sản phẩm đã được thêm vào giỏ hàng.",
+    }, {
+        element: "body",
+        type: "Thành công",
+        placement: { from: "top", align: "right" },
+        delay: 10,
+        z_index: 9999,
+        animate: { enter: "animated fadeInDown faster", exit: "animated fadeOutUp faster" },
+        showDuration: 100,  // Hiển thị nhanh (mặc định là 400-600ms)
+        hideDuration: 200,
+        template: '<div class="alert alert-success" style="background-color:#1abc9c; color:white; border-color:#16a085; padding: 10px; border-radius: 5px;">' +
+                '<strong><i class="fa fa-check"></i> {0}</strong> {1}' +
+                '</div>'
+    });
+},
+            error: function(xhr) {
+                console.log("AJAX error:", xhr.responseText);
+                Swal.fire('Lỗi', 'Bạn chưa đăng nhập!','error');
+            }
+        });
+
+    });
+});
+$(document).on("click", ".delete-cart-item", function () {
+    let cartItemId = $(this).data("id"); // Lấy ID sản phẩm trong giỏ hàng
+
+    $.ajax({
+        url: "/xoa-gio-hang", // Route xử lý xóa sản phẩm
+        method: "POST",
+        data: { id: cartItemId },
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        },
+        success: function (response) {
+            console.log("Response từ server:", response); // Debug dữ liệu
+            if (response.status === "success") {
+                $(".header-wishlist .badge").text(response.totalItem); // Cập nhật số sản phẩm
+
+                // Xóa sản phẩm khỏi giao diện
+                $(`.delete-cart-item[data-id="${cartItemId}"]`).closest("li").remove();
+
+                // Cập nhật lại tổng tiền
+            let total = 0;
+            let totalItem = response.totalItem;
+            let totalPrice = response.totalPrice;
+            $(".cart-list li").each(function () {
+                let text = $(this).find("h6").text();
+                let matches = text.match(/(\d+)\s*x\s*([\d\.]+)/);
+
+                if (matches) {
+                    let soLuong = parseInt(matches[1]);  // Số lượng
+                    let giaBan = parseInt(matches[2].replace(/\./g, "")); // Giá (loại bỏ dấu chấm)
+
+                    total += soLuong * giaBan;
+                }
+            });
+
+            $(".header-wishlist .badge").text(totalItem);
+            // Cập nhật tổng tiền
+            $(".total-price").text(totalPrice.toLocaleString("vi-VN") + " đ");
+            } else {
+                Swal.fire("Lỗi", "Không thể xóa sản phẩm", "error");
+            }
+        },
+        error: function () {
+            Swal.fire("Lỗi", "Bạn chưa đăng nhập!", "error");
+        },
+    });
+});
 </script>

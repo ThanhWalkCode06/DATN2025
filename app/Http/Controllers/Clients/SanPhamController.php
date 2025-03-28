@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Clients;
 
 use App\Models\SanPham;
 use Illuminate\Http\Request;
+use App\Models\ChiTietGioHang;
 use App\Models\DanhMucSanPham;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -63,8 +64,8 @@ class SanPhamController extends Controller
         ])
             ->where('san_phams.id', $id)
             ->where('san_phams.trang_thai', 1)
-            ->selectRaw('san_phams.*, 
-                COALESCE(AVG(danh_gias.so_sao), 0) as avg_rating, 
+            ->selectRaw('san_phams.*,
+                COALESCE(AVG(danh_gias.so_sao), 0) as avg_rating,
                 COUNT(danh_gias.id) as total_reviews')
             ->leftJoin('danh_gias', 'san_phams.id', '=', 'danh_gias.san_pham_id')
             ->groupBy('san_phams.id')
@@ -121,7 +122,7 @@ class SanPhamController extends Controller
                 return response()->json(['success' => false, 'message' => 'Sản phẩm đã tồn tại trong danh sách!'], 500);
             }
         } else {
-            return response()->json(['success' => false, 'message' => 'Bạn chưa đăng nhập!'], 401);
+            return response()->json([ 'message' => 'Bạn chưa đăng nhập!'], 401);
         }
     }
 
@@ -147,7 +148,10 @@ class SanPhamController extends Controller
 
     public function quickView(Request $request)
     {
-        $sanPham = SanPham::with('danhGias', 'danhMuc', 'bienThes.thuocTinhs', 'bienThes.giaTriThuocTinhs')->find($request->id);
+        $chiTiet = collect();
+        $sanPham = SanPham::with([
+            'bienThes.tt.giaTriThuocTinhs'
+        ])->find($request->id);
         // return response()->json($sanPham);
 
         if (!$sanPham) {
@@ -168,20 +172,21 @@ class SanPhamController extends Controller
                 return [
                     'id' => $bienThe->id,
                     'ten_bien_the' => $bienThe->ten_bien_the,
-                    'gia_nhap' => $bienThe->gia_nhap,
-                    'gia_ban' => $bienThe->gia_ban,
+                    'gia_ban' => number_format($bienThe->gia_ban,0,'','.'),
+                    'anh_bien_the' => Storage::url($bienThe->anh_bien_the ?? 'images/default.png'),
                     'so_luong' => $bienThe->so_luong,
-                    'thuoc_tinh_gia_tri' => $bienThe->thuocTinhs->map(function ($thuocTinh) use ($bienThe) {
-                        return [
-                            'id' => $thuocTinh->id,
-                            'ten' => $thuocTinh->ten_thuoc_tinh,
-                            'gia_tri' => $bienThe->giaTriThuocTinhs
-                                ->where('thuoc_tinh_id', $thuocTinh->id)
-                                ->where('bien_the_id', $bienThe->id) // Lọc đúng biến thể
-                                ->pluck('gia_tri')
-                                ->toArray(),
-                        ];
-                    }),
+                    'thuoc_tinh_gia_tri' => $bienThe->tt->map(function ($thuocTinh) use ($bienThe) {
+                    $giaTri = $bienThe->gttt
+                        ->where('thuoc_tinh_id', $thuocTinh->id)
+                        ->pluck('gia_tri') // Lấy danh sách giá trị
+                        ->toArray(); // Chuyển về mảng
+
+                    return [
+                        'id' => $thuocTinh->id,
+                        'ten' => $thuocTinh->ten_thuoc_tinh,
+                        'gia_tri' => count($giaTri) === 1 ? $giaTri[0] : null // Nếu chỉ có 1 giá trị, lấy nó, ngược lại thì null
+                    ];
+                })
                 ];
             }),
         ]);
