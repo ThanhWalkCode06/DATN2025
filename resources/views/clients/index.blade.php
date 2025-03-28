@@ -186,10 +186,9 @@
                         <div class="product-border border-row overflow-hidden">
                             <div class="product-box-slider no-arrow">
                                 <div>
-
-                                    <div style="border-bottom: 1px solid #ccc; width: 889px" class="row">
+                                    <div style="border-bottom: 1px solid #ccc;" class="row">
                                         @foreach ($sanPhamFollowComments as $item)
-                                            <div style=" border: 1px solid #ccc;width: 222px" class="col-md-3 px-0">
+                                            <div style=" border: 1px solid #ccc;" class="col-md-3 px-0">
                                                 <div style="height: 327px" class="product-box">
                                                     <div style="position: relative; width: 100%">
                                                         @if ($item['gia_cu'] > $item['gia_moi'])
@@ -211,7 +210,8 @@
                                                                     <a href="#" class="notifi-wishlist">
                                                                         <i data-feather="heart"></i>
                                                                     </a>
-                                                                    <form action="{{ route('add.wishlist', $item['id']) }}"
+                                                                    <form
+                                                                        action="{{ route('add.wishlist', $item['id']) }}"
                                                                         method="POST" class="wishlist-form">
                                                                         @csrf
                                                                     </form>
