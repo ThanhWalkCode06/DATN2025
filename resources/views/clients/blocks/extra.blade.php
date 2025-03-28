@@ -835,21 +835,21 @@ $(document).ready(function () {
         title: "Sản phẩm đã được thêm vào giỏ hàng.",
     }, {
         element: "body",
-        type: "success",
+        type: "Thành công",
         placement: { from: "top", align: "right" },
-        delay: 3000,
+        delay: 10,
         z_index: 9999,
-        animate: { enter: "animated fadeInDown", exit: "animated fadeOutUp" },
+        animate: { enter: "animated fadeInDown faster", exit: "animated fadeOutUp faster" },
+        showDuration: 100,  // Hiển thị nhanh (mặc định là 400-600ms)
+        hideDuration: 200,
         template: '<div class="alert alert-success" style="background-color:#1abc9c; color:white; border-color:#16a085; padding: 10px; border-radius: 5px;">' +
                 '<strong><i class="fa fa-check"></i> {0}</strong> {1}' +
                 '</div>'
     });
 },
-
-
             error: function(xhr) {
                 console.log("AJAX error:", xhr.responseText);
-                Swal.fire('Lỗi', 'Số lượng đã vượt mức kho hàng!','error');
+                Swal.fire('Lỗi', 'Bạn chưa đăng nhập!','error');
             }
         });
 
@@ -897,7 +897,7 @@ $(document).on("click", ".delete-cart-item", function () {
             }
         },
         error: function () {
-            Swal.fire("Lỗi", "Có lỗi xảy ra, vui lòng thử lại!", "error");
+            Swal.fire("Lỗi", "Bạn chưa đăng nhập!", "error");
         },
     });
 });

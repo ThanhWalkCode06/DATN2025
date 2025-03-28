@@ -46,7 +46,7 @@
                                         <tr class="product-box-contain">
                                             <td class="product-detail">
                                                 <div class="product border-0">
-                                                    <a href="{{ route('sanphams.chitiet', $chiTietGioHang->id) }}" class="product-image">
+                                                    <a href="{{ route('sanphams.chitiet', $chiTietGioHang->bienThe->SanPham->id) }}" class="product-image">
                                                         <img src="{{ Storage::url($chiTietGioHang->bienThe->anh_bien_the) }}"
                                                             class="img-fluid blur-up lazyload" alt="">
                                                     </a>
@@ -54,7 +54,7 @@
                                                         <ul>
                                                             <li class="name">
                                                                 <a
-                                                                    href="{{ route('sanphams.chitiet', 1) }}">{{ $chiTietGioHang->bienThe->sanPham->ten_san_pham }}</a>
+                                                                    href="{{ route('sanphams.chitiet',$chiTietGioHang->bienThe->SanPham->id) }}">{{ $chiTietGioHang->bienThe->sanPham->ten_san_pham }}</a>
                                                             </li>
 
                                                             <li class="text-content">{{ $chiTietGioHang->ten_bien_the }}
@@ -154,7 +154,7 @@
                         <div class="button-group cart-button">
                             <ul>
                                 <li>
-                                    <button onclick="location.href = '{{ route('thanhtoans.thanhtoan') }}';"
+                                    <button id="btn-thanh-toan"
                                         class="btn btn-animation proceed-btn fw-bold">Thanh toán</button>
                                 </li>
 
@@ -208,7 +208,7 @@ $(document).on("click", ".delete-cartIndex-item", function () {
                 Swal.fire("Lỗi", "Không thể xóa sản phẩm", "error");
             }
         },
-        error: function () {
+        error: function (response) {
             Swal.fire("Lỗi", "Có lỗi xảy ra, vui lòng thử lại!", "error");
         },
     });
@@ -341,5 +341,45 @@ function isNumberKey(evt) {
     return true;
 }
 
+    </script>
+
+    <script>
+        $(document).on("click", "#btn-thanh-toan", function () {
+    let cartData = [];
+
+    $(".so-luong").each(function () {
+        let row = $(this).closest("tr");
+        let productId = row.find(".delete-cartIndex-item").data("id"); // Lấy ID sản phẩm
+        let quantity = $(this).val(); // Lấy số lượng hiện tại
+
+        cartData.push({
+            id: productId,
+            quantity: quantity
+        });
+    });
+
+
+    // Chuyển sang trang thanh toán và gửi dữ liệu bằng AJAX
+    $.ajax({
+        url: "/accept-thanh-toan", // Route xử lý thanh toán
+        method: "POST",
+        data: { cartData },
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        },
+        success: function (response) {
+            console.log(response)
+            if (response.status === "success") {
+                // let tien = $(".total-price").text(response.totalPrice.toLocaleString("vi-VN"))
+                window.location.href = "/thanhtoan"; // Chuyển hướng
+            } else {
+                Swal.fire("Lỗi", "Không thể thực hiện thanh toán", "error");
+            }
+        },
+        error: function () {
+            Swal.fire("Lỗi", "Bạn chưa đăng nhập !", "error");
+        },
+    });
+});
     </script>
 @endsection

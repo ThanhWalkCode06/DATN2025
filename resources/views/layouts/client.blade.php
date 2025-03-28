@@ -252,6 +252,15 @@
                         button.find("i").css("color", "red");
                     },
                     error: function (xhr) {
+                        if (xhr.status === 401) {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Lỗi!",
+                                text: "Vui lòng đăng nhập.",
+                                confirmButtonText: "OK"
+                            });
+                            return;
+                        }
                         $.notify({
                             icon: "<i class='fa fa-exclamation-circle'></i>", // Icon lỗi nổi bật hơn
                             title: "Sản phẩm đã tồn tại ở danh sách yêu thích.", // Màu đỏ dịu hơn

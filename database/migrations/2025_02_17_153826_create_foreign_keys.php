@@ -47,6 +47,7 @@ return new class extends Migration
         Schema::table('phieu_giam_gia_tai_khoans', function (Blueprint $table) {
             $table->foreign('phieu_giam_gia_id')->references('id')->on('phieu_giam_gias');
             $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('order_id')->references('id')->on('don_hangs');
         });
 
         Schema::table('danh_gias', function (Blueprint $table) {
@@ -116,6 +117,7 @@ return new class extends Migration
         Schema::table('phieu_giam_gia_tai_khoans', function (Blueprint $table) {
             $table->dropForeign('phieu_giam_gia_tai_khoans_phieu_giam_gia_id_foreign');
             $table->dropForeign('phieu_giam_gia_tai_khoans_user_id_foreign');
+            $table->dropForeign('phieu_giam_gia_tai_khoans_order_id_foreign');
         });
 
         Schema::table('danh_gias', function (Blueprint $table) {

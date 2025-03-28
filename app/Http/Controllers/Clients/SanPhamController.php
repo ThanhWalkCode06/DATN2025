@@ -64,8 +64,8 @@ class SanPhamController extends Controller
         ])
             ->where('san_phams.id', $id)
             ->where('san_phams.trang_thai', 1)
-            ->selectRaw('san_phams.*, 
-                COALESCE(AVG(danh_gias.so_sao), 0) as avg_rating, 
+            ->selectRaw('san_phams.*,
+                COALESCE(AVG(danh_gias.so_sao), 0) as avg_rating,
                 COUNT(danh_gias.id) as total_reviews')
             ->leftJoin('danh_gias', 'san_phams.id', '=', 'danh_gias.san_pham_id')
             ->groupBy('san_phams.id')
@@ -122,7 +122,7 @@ class SanPhamController extends Controller
                 return response()->json(['success' => false, 'message' => 'Sản phẩm đã tồn tại trong danh sách!'], 500);
             }
         } else {
-            return response()->json(['success' => false, 'message' => 'Bạn chưa đăng nhập!'], 401);
+            return response()->json([ 'message' => 'Bạn chưa đăng nhập!'], 401);
         }
     }
 

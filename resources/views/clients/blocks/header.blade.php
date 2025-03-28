@@ -124,9 +124,11 @@
                                                                 <h5>{{ $item->bienThe->sanPham->ten_san_pham }}</h5>
                                                             </a>
                                                             <h6><span>{{ $item->so_luong }} x</span> {{ number_format($item->bienThe->gia_ban,0,'','.') }} đ</h6>
-                                                            <button class="close-button close_button delete-cart-item" data-id="{{ $item->id }}">
-                                                                <i class="fa-solid fa-xmark"></i>
-                                                            </button>
+                                                            @if (!request()->is('giohang','thanhtoan'))
+                                                                <button class="close-button close_button delete-cart-item" data-id="{{ $item->id }}">
+                                                                    <i class="fa-solid fa-xmark"></i>
+                                                                </button>
+                                                            @endif
                                                         </div>
                                                     </div>
                                                 </li>
@@ -149,7 +151,7 @@
                                             </div>
                                         </div>
                                     </li>
-                                @endisset
+                                {{-- @endisset --}}
                                 <li class="right-side onhover-dropdown">
                                     <div class="delivery-login-box">
                                         <div class="delivery-icon">

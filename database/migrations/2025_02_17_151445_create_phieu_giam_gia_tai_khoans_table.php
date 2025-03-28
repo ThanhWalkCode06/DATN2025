@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('phieu_giam_gia_id');
             $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('order_id');
             $table->timestamps();
             $table->softDeletes();
         });

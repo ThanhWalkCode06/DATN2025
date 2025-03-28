@@ -6,6 +6,7 @@ use App\Models\BienThe;
 use Illuminate\Http\Request;
 use App\Models\ChiTietGioHang;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\HelperCommon\Helper;
 use App\Models\PhieuGiamGia;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -117,7 +118,8 @@ class GioHangController extends Controller
         $chiTiet->delete();
         $userCart = ChiTietGioHang::where('user_id', $user->id)->get();
         $totalItem = ChiTietGioHang::where('user_id', $user->id)->count();
-        $totalPrice =  $userCart->sum(fn($cartItem) => optional($cartItem->bienThe)->gia_ban ?? 0);
+
+        $totalPrice =  $userCart->sum(fn($cartItem) => optional($cartItem->bienThe)->gia_ban * optional($cartItem)->so_luong ?? 0);
         return response()->json([
             'status' => 'success',
             'message' => 'Xóa thành công',
@@ -134,10 +136,21 @@ public function nhapvoucher(Request $request){
     $currentTotal = (int) $request->total;
     $voucher = PhieuGiamGia::where('ma_phieu', $code)->first();
 
+    $check = Helper::checkVoucher($code,Auth::user()->id);
+    if($check != ''){
+        return response()->json([
+            'success' => false,
+            'message' => 'Mã này bạn đã dùng trước đó!',
+            'discount' => number_format(0, 0, ',', '.'),
+            'newTotal' => number_format($currentTotal, 0, ',', '.')
+        ],403);
+    }
     if (!$voucher || $voucher->ngay_ket_thuc < now() || $voucher->trang_thai == 0) {
         return response()->json([
             'success' => false,
-            'message' => 'Mã giảm giá không tồn tại hoặc đã hết hạn!'
+            'message' => 'Mã giảm giá không tồn tại hoặc đã hết hạn!',
+            'discount' => 0,
+            'newTotal' => $currentTotal
         ],403);
     }
 
@@ -151,6 +164,37 @@ public function nhapvoucher(Request $request){
         'discount' => number_format($discountAmount, 0, ',', '.'),
         'newTotal' => number_format($newTotal, 0, ',', '.')
     ]);
+}
+
+public function acceptThanhToan(Request $request){
+    $user = Auth::user();
+    if($user){
+
+        foreach ($request->cartData as $item) {
+            $cartItem = ChiTietGioHang::where('user_id', $user->id)
+                ->where('id', $item['id'])
+                ->first();
+
+            if ($cartItem) {
+                $cartItem->update(['so_luong' => $item['quantity']]);
+            } else {
+                $mess = "Không tìm thấy sản phẩm có bien_the_id = ".$item['id']." và = cho user_id = $user->id";
+            }
+        }
+        $userCart = ChiTietGioHang::where('user_id', $user->id)->get();
+        $totalPrice =  $userCart->sum(fn($cartItem) => optional($cartItem->bienThe)->gia_ban * optional($cartItem)->so_luong ?? 0);
+        return response()->json([
+            'status' => 'success',
+            'totalPrice' => $totalPrice,
+            'message' => $mess ?? 0
+        ]);
+    }else{
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Bạn chưa đăng nhập'
+        ], 403);
+    }
+
 }
 
 }
