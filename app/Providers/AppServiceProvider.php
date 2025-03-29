@@ -7,6 +7,7 @@ use App\Models\Setting;
 use App\Models\ChiTietDonHang;
 use App\Models\ChiTietGioHang;
 use App\Models\DanhMucSanPham;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Models\ClientDanhMucSanPham;
 use Illuminate\Support\Facades\Auth;
@@ -56,12 +57,16 @@ class AppServiceProvider extends ServiceProvider
             $view->with(compact('baivietSupport'));
         });
         View::composer('clients.blocks.extra', function ($view) {
-            $topOrderProducts = ChiTietDonHang::select('bien_thes.san_pham_id', DB::raw('SUM(chi_tiet_don_hangs.so_luong) as total_quantity'))
-            ->join('bien_thes', 'chi_tiet_don_hangs.bien_the_id', '=', 'bien_thes.id') // Nối với bảng biến thể
-            ->groupBy('bien_thes.san_pham_id') // Nhóm theo sản phẩm
-            ->orderByDesc('total_quantity') // Sắp xếp giảm dần theo số lượng bán
-            ->take(4) // Lấy 4 sản phẩm bán chạy nhất
-            ->with('bienThe.sanPham') // Lấy thông tin sản phẩm
+            $topOrderProducts = ChiTietDonHang::select(
+                'bien_thes.san_pham_id',
+                DB::raw('SUM(chi_tiet_don_hangs.so_luong) as total_quantity')
+            )
+            ->join('bien_thes', 'chi_tiet_don_hangs.bien_the_id', '=', 'bien_thes.id')
+            ->whereDate('chi_tiet_don_hangs.created_at', Carbon::today()) // Chỉ lấy đơn hàng hôm nay
+            ->groupBy('bien_thes.san_pham_id')
+            ->orderByDesc('total_quantity')
+            ->take(4)
+            ->with('bienThe.sanPham')
             ->get();
 
 
