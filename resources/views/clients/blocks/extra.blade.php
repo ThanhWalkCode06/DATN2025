@@ -133,8 +133,10 @@
 
 
                                 <div class="modal-button">
-                                    <button type="submit"
-                                        class="btn btn-md add-cart-button icon">Thêm vào giỏ hàng</button>
+                                    <button type="submit" id="addToCartBtn"
+                                            class="btn btn-md add-cart-button icon" disabled>
+                                        Thêm vào giỏ hàng
+                                    </button>
                                     <button id="btnChiTiet"
                                         class="btn theme-bg-color view-button icon text-white fw-bold btn-md">
                                         Xem chi tiết</button>
@@ -175,8 +177,8 @@
         <div class="modal-content">
             <div class="modal-header">
                 <div>
-                    <h5 class="modal-title w-100" id="deal_today">Deal Today</h5>
-                    <p class="mt-1 text-content">Recommended deals for you.</p>
+                    <h5 class="modal-title w-100" id="deal_today">Top sản phẩm hôm nay</h5>
+                    <p class="mt-1 text-content">Giới thiệu cho bạn những sản phẩm hot hôm nay.</p>
                 </div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal">
                     <i class="fa-solid fa-xmark"></i>
@@ -185,61 +187,30 @@
             <div class="modal-body">
                 <div class="deal-offer-box">
                     <ul class="deal-offer-list">
-                        <li class="list-1">
+                        @foreach ($topOrderProducts as $index => $item)
+                        <li class="list-{{ ++$index }}">
                             <div class="deal-offer-contain">
-                                <a href="shop-left-sidebar.html" class="deal-image">
-                                    <img src="../assets/client/images/vegetable/product/10.png" class="blur-up lazyload"
-                                        alt="">
-                                </a>
+                                <div>
+                                    <a href="{{ route('sanphams.chitiet',$item->sanPham->id) }}" class="deal-image">
+                                        <img src="{{ Storage::url($item->sanPham->hinh_anh) ?? 'images/sanpham-default.png' }}" class="blur-up lazyload"
+                                            alt="">
+                                    </a>
+                                </div>
 
-                                <a href="shop-left-sidebar.html" class="deal-contain">
-                                    <h5>Blended Instant Coffee 50 g Buy 1 Get 1 Free</h5>
-                                    <h6>$52.57 <del>57.62</del> <span>500 G</span></h6>
-                                </a>
+                                <div style="min-width: 220px">
+                                    <a href="{{ route('sanphams.chitiet',$item->sanPham->id) }}" class="deal-contain">
+                                        <h5>{{ $item->sanPham->ten_san_pham }}</h5>
+                                        <h6>{{ number_format($item->sanPham->gia_moi,0,'','.') }}đ
+                                        <del>{{ number_format($item->sanPham->gia_cu,0,'','.') }}đ</del> </h6>
+                                    </a>
+                                </div>
+                                <div>
+                                    <h6>{{ number_format($item->total_quantity,0,'','.') }} sản phẩm</h6>
+                                </div>
                             </div>
+
                         </li>
-
-                        <li class="list-2">
-                            <div class="deal-offer-contain">
-                                <a href="shop-left-sidebar.html" class="deal-image">
-                                    <img src="../assets/client/images/vegetable/product/11.png" class="blur-up lazyload"
-                                        alt="">
-                                </a>
-
-                                <a href="shop-left-sidebar.html" class="deal-contain">
-                                    <h5>Blended Instant Coffee 50 g Buy 1 Get 1 Free</h5>
-                                    <h6>$52.57 <del>57.62</del> <span>500 G</span></h6>
-                                </a>
-                            </div>
-                        </li>
-
-                        <li class="list-3">
-                            <div class="deal-offer-contain">
-                                <a href="shop-left-sidebar.html" class="deal-image">
-                                    <img src="../assets/client/images/vegetable/product/12.png"
-                                        class="blur-up lazyload" alt="">
-                                </a>
-
-                                <a href="shop-left-sidebar.html" class="deal-contain">
-                                    <h5>Blended Instant Coffee 50 g Buy 1 Get 1 Free</h5>
-                                    <h6>$52.57 <del>57.62</del> <span>500 G</span></h6>
-                                </a>
-                            </div>
-                        </li>
-
-                        <li class="list-1">
-                            <div class="deal-offer-contain">
-                                <a href="shop-left-sidebar.html" class="deal-image">
-                                    <img src="../assets/client/images/vegetable/product/13.png"
-                                        class="blur-up lazyload" alt="">
-                                </a>
-
-                                <a href="shop-left-sidebar.html" class="deal-contain">
-                                    <h5>Blended Instant Coffee 50 g Buy 1 Get 1 Free</h5>
-                                    <h6>$52.57 <del>57.62</del> <span>500 G</span></h6>
-                                </a>
-                            </div>
-                        </li>
+                        @endforeach
                     </ul>
                 </div>
             </div>
@@ -677,41 +648,50 @@ $(document).ready(function () {
 
     // Hàm cập nhật ảnh và giá dựa trên biến thể được chọn
     function updateVariantImage() {
-        matchedVariant = null; // Đặt lại biến thể phù hợp
+    matchedVariant = null; // Đặt lại biến thể phù hợp
 
-        bienTheList.forEach(variant => {
-            let isMatch = Object.keys(selectedAttributes).length > 0; // Đảm bảo có thuộc tính được chọn
+    bienTheList.forEach(variant => {
+        let isMatch = Object.keys(selectedAttributes).length > 0; // Đảm bảo có thuộc tính được chọn
 
-            variant.thuoc_tinh_gia_tri.forEach(attr => {
-                if (selectedAttributes[attr.ten] !== attr.gia_tri) {
-                    isMatch = false;
-                }
-            });
-
-            if (isMatch) {
-                matchedVariant = variant;
+        variant.thuoc_tinh_gia_tri.forEach(attr => {
+            if (selectedAttributes[attr.ten] !== attr.gia_tri) {
+                isMatch = false;
             }
         });
 
-        if (matchedVariant) {
-            $("#view .slider-image img").attr("src", matchedVariant.anh_bien_the);
-            $("#view .gia_moi").text(matchedVariant.gia_ban + ' đ');
-            $("#view .so_luong").text("Tồn kho: " + matchedVariant.so_luong);
-            $("#quantity").val(1).attr("max", matchedVariant.so_luong); // Cập nhật max quantity
-        } else {
-            $("#view .slider-image img").attr("src", "/storage/uploads/sanphams/default.png");
-            $("#view .gia_moi").text("Chọn thuộc tính để xem giá");
-            $("#view .so_luong").text("Tồn kho: ");
-            $("#quantity").val(1).attr("max", ""); // Xóa giới hạn khi chưa chọn biến thể
+        if (isMatch) {
+            matchedVariant = variant;
         }
+    });
 
-        if (matchedVariant) {
-            $("#id_bienthe").val(matchedVariant.id); // Cập nhật ID biến thể
-            console.log("ID biến thể được chọn:", matchedVariant.id); // Debug
+    if (matchedVariant) {
+        $("#view .slider-image img").attr("src", matchedVariant.anh_bien_the);
+        $("#view .gia_moi").text(matchedVariant.gia_ban + ' đ');
+        $("#view .so_luong").text("Tồn kho: " + matchedVariant.so_luong);
+        $("#quantity").val(1).attr("max", matchedVariant.so_luong); // Cập nhật max quantity
+
+        // Kiểm tra tồn kho để khóa/mở nút "Thêm vào giỏ hàng"
+        if (matchedVariant.so_luong > 0) {
+            $("#addToCartBtn").prop("disabled", false); // Mở khóa nút
         } else {
-            $("#id_bienthe").val(""); // Xóa ID nếu chưa chọn đầy đủ
+            $("#addToCartBtn").prop("disabled", true);  // Khóa nút
         }
+    } else {
+        $("#view .slider-image img").attr("src", "/storage/uploads/sanphams/default.png");
+        $("#view .gia_moi").text("Chọn thuộc tính để xem giá");
+        $("#view .so_luong").text("Tồn kho: ");
+        $("#quantity").val(1).attr("max", ""); // Xóa giới hạn khi chưa chọn biến thể
+
+        $("#addToCartBtn").prop("disabled", true); // Khóa nút nếu chưa chọn biến thể
     }
+
+    if (matchedVariant) {
+        $("#id_bienthe").val(matchedVariant.id); // Cập nhật ID biến thể
+    } else {
+        $("#id_bienthe").val(""); // Xóa ID nếu chưa chọn đầy đủ
+    }
+}
+
 
     // Chặn nhập số vượt quá tồn kho
     $("#quantity").on("input", function() {
@@ -848,8 +828,14 @@ $(document).ready(function () {
     });
 },
             error: function(xhr) {
-                console.log("AJAX error:", xhr.responseText);
-                Swal.fire('Lỗi', 'Bạn chưa đăng nhập!','error');
+                if (xhr.status === 403 && xhr.responseJSON && xhr.responseJSON.message) {
+                    errorMessage = xhr.responseJSON.message;
+                    Swal.fire('Lỗi', errorMessage,'error');
+                }else{
+                    console.log("AJAX error:", xhr.responseText);
+                    Swal.fire('Lỗi', 'Bạn chưa đăng nhập!','error');
+                }
+
             }
         });
 

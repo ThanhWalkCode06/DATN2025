@@ -95,7 +95,7 @@
                     </div>
 
                     <div class="blog-detail-contain mt-4">
-                        <p>{!! $baiViet->noi_dung !!}</p>
+                        <p>{!! nl2br(e($baiViet->noi_dung)) !!}</p>
                     </div>
                 </div>
 

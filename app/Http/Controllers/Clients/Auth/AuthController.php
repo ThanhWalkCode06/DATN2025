@@ -77,7 +77,7 @@ class AuthController extends Controller
         'email.required' => 'Vui lòng nhập email',
         'email.email' => 'Vui lòng nhập đúng định dạng email',
         'email.unique' => 'Email đã tồn tại',
-        'username.unique' => 'Email đã tồn tại',
+        'username.unique' => 'Tên tài khoản đã tồn tại',
 
     ]);
 

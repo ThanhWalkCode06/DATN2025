@@ -13,6 +13,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\HelperCommon\Helper;
 use App\Http\Requests\Client\ThanhToanRequest;
+use App\Models\BienThe;
 use App\Models\GioHang;
 use App\Models\PhieuGiamGia;
 
@@ -51,6 +52,7 @@ class ThanhToanController extends Controller
 
     // return response()->json(['message' => $request->all()], 200);
     $user = Auth::user();
+    $bienThes = BienThe::all();
     if($user){
         $giohang = ChiTietGioHang::where('user_id',Auth::user()->id)->first();
         if(!$giohang){
@@ -103,6 +105,9 @@ class ThanhToanController extends Controller
                         'bien_the_id' => $item->bienThe->id,
                         'so_luong' =>   $item->so_luong,
                         'created_at' => now()
+                    ]);
+                    BienThe::where('id', $item->bienThe->id)->update([
+                        'so_luong' => DB::raw('so_luong - ' . $item->so_luong) 
                     ]);
                 }
             $cart->each->delete();

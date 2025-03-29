@@ -25,6 +25,16 @@
                                 </div>
                             </div>
 
+                            @if (Auth::check())
+                            <div>
+                                <div class="timer-notification">
+                                    <h6>Mã giảm giá cho người mới:
+                                        <strong class="me-1">COD1234567</strong>
+                                    </h6>
+                                </div>
+                            </div>
+                            @endif
+
                             <div>
                                 <div class="timer-notification">
                                     <h6>Mua hàng ngay thôi nào!
@@ -113,12 +123,16 @@
                                         <div class="onhover-div">
                                             <ul style="width: 100%" class="cart-list">
                                                 @foreach ($gioHang->take(4) as $item)
-                                                    <li style="width: 100%" class="product-box-contain">
-                                                        <div class="drop-cart">
-                                                            <a href="{{ route('sanphams.chitiet', $item->id) }}"
-                                                                class="drop-image">
-                                                                <img src="{{ Storage::url($item->bienThe->anh_bien_the) }}"
-                                                                    class="blur-up lazyload" alt="">
+                                                <li style="width: 100%" class="product-box-contain">
+                                                    <div class="drop-cart">
+                                                        <a href="{{ route('sanphams.chitiet',$item->id) }}" class="drop-image">
+                                                            <img src="{{ Storage::url($item->bienThe->sanPham->hinh_anh) }}"
+                                                                class="blur-up lazyload" alt="">
+                                                        </a>
+
+                                                        <div class="drop-contain">
+                                                            <a href="{{ route('sanphams.chitiet',$item->id) }}">
+                                                                <h5>{{ $item->bienThe->sanPham->ten_san_pham }}</h5>
                                                             </a>
 
                                                             <div class="drop-contain">
@@ -257,39 +271,9 @@
                                             <a class="nav-link" href="{{ route('home') }}">Trang chủ</a>
                                         </li>
 
-                                        <li class="nav-item dropdown">
+                                        <li class="nav-item ">
                                             <a class="nav-link" href="{{ route('sanphams.danhsach') }}">Sản phẩm</a>
 
-                                            <ul class="dropdown-menu">
-                                                <li>
-                                                    <a class="dropdown-item" href="shop-category-slider.html">Shop
-                                                        Category Slider</a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item" href="shop-category.html">Shop
-                                                        Category Sidebar</a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item" href="shop-banner.html">Shop
-                                                        Banner</a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item" href="shop-left-sidebar.html">Shop
-                                                        Left
-                                                        Sidebar</a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item" href="shop-list.html">Shop List</a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item" href="shop-right-sidebar.html">Shop
-                                                        Right Sidebar</a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item" href="shop-top-filter.html">Shop Top
-                                                        Filter</a>
-                                                </li>
-                                            </ul>
                                         </li>
 
                                         <li class="nav-item dropdown">
@@ -318,7 +302,7 @@
                     <div class="header-nav-right">
                         <button class="btn deal-button" data-bs-toggle="modal" data-bs-target="#deal-box">
                             <i data-feather="zap"></i>
-                            <span>Giao dịch hôm nay</span>
+                            <span>Top sản phẩm hôm nay</span>
                         </button>
                     </div>
                 </div>

@@ -2,9 +2,13 @@
 
 namespace App\Providers;
 
-use App\Models\ChiTietGioHang;
+use App\Models\BaiViet;
 use App\Models\Setting;
+use App\Models\ChiTietDonHang;
+use App\Models\ChiTietGioHang;
 use App\Models\DanhMucSanPham;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use App\Models\ClientDanhMucSanPham;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
@@ -44,6 +48,29 @@ class AppServiceProvider extends ServiceProvider
 
             // dd($total); // Debug để kiểm tra tổng
             $view->with(compact('gioHang', 'total'));
+        });
+        View::composer('clients.blocks.footer', function ($view) {
+            $user = Auth::user();
+            $baivietSupport = BaiViet::orderBy('id','asc')->limit(2)->get();
+
+            // dd($total); // Debug để kiểm tra tổng
+            $view->with(compact('baivietSupport'));
+        });
+        View::composer('clients.blocks.extra', function ($view) {
+            $topOrderProducts = ChiTietDonHang::select(
+                'bien_thes.san_pham_id',
+                DB::raw('SUM(chi_tiet_don_hangs.so_luong) as total_quantity')
+            )
+            ->join('bien_thes', 'chi_tiet_don_hangs.bien_the_id', '=', 'bien_thes.id')
+            ->whereDate('chi_tiet_don_hangs.created_at', Carbon::today()) // Chỉ lấy đơn hàng hôm nay
+            ->groupBy('bien_thes.san_pham_id')
+            ->orderByDesc('total_quantity')
+            ->take(4)
+            ->with('bienThe.sanPham')
+            ->get();
+
+
+            $view->with(compact('topOrderProducts'));
         });
     }
 }

@@ -13,6 +13,13 @@ class PhieuGiamGiaSeeder extends Seeder
      */
     public function run(): void
     {
+        PhieuGiamGia::create([
+            'ma_phieu' => 'COD1234567',
+            'ten_phieu' => 'Tân thủ',
+            'gia_tri' => 20,
+            'mo_ta' => 'cho người mới',
+            'trang_thai' => 1,
+        ]);
         PhieuGiamGia::factory()->count(20)->create();
     }
 }

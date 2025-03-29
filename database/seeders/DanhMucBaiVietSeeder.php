@@ -13,6 +13,11 @@ class DanhMucBaiVietSeeder extends Seeder
      */
     public function run(): void
     {
+        DanhMucBaiViet::firstOrCreate([
+            'id' => 1,
+            'ten_danh_muc' => 'Hỗ trợ',
+            'mo_ta' => 'Hỗ trợ khách hàng'
+        ]);
         DanhMucBaiViet::factory()->count(10)->create();
     }
 }

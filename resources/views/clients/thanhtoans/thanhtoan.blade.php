@@ -152,7 +152,9 @@
                                             class="img-fluid blur-up lazyloaded checkout-image" alt="">
                                         <h4>{{ $chiTietGioHang->ten_san_pham }} x
                                             <span class="so-luong">{{ $chiTietGioHang->so_luong }}</span>
+                                            <span>{{ $chiTietGioHang->bienThe->ten_bien_the }}</span>
                                         </h4>
+
                                         <h4 hidden><span class="gia-moi">{{ $chiTietGioHang->bienThe->gia_ban }}</span>đ</h4>
                                         <h4 class="price"><span class="tong"></span>đ</h4>
                                     </li>

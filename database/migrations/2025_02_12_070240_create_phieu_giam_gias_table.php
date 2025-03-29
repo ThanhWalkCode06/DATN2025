@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('ma_phieu')->unique();
             $table->string('ten_phieu');
-            $table->date('ngay_bat_dau');
-            $table->date('ngay_ket_thuc');
+            $table->date('ngay_bat_dau')->nullable();
+            $table->date('ngay_ket_thuc')->nullable();
             $table->double('gia_tri')->default(0);
             $table->text('mo_ta')->nullable();
             $table->boolean('trang_thai')->default(1);
