@@ -114,7 +114,8 @@
                                     <div class="onhover-dropdown header-badge">
                                         <button type="button" class="btn p-0 position-relative header-wishlist">
                                             <i data-feather="shopping-cart"></i>
-                                            <span class="position-absolute top-0 start-100 translate-middle badge">{{ $gioHang->count() ?? 0 }}
+                                            <span
+                                                class="position-absolute top-0 start-100 translate-middle badge">{{ $gioHang->count() ?? 0 }}
                                                 <span class="visually-hidden">unread messages</span>
                                             </span>
                                         </button>
@@ -133,15 +134,24 @@
                                                             <a href="{{ route('sanphams.chitiet',$item->id) }}">
                                                                 <h5>{{ $item->bienThe->sanPham->ten_san_pham }}</h5>
                                                             </a>
-                                                            <h6><span>{{ $item->so_luong }} x</span> {{ number_format($item->bienThe->gia_ban,0,'','.') }} đ</h6>
-                                                            @if (!request()->is('giohang','thanhtoan'))
-                                                                <button class="close-button close_button delete-cart-item" data-id="{{ $item->id }}">
-                                                                    <i class="fa-solid fa-xmark"></i>
-                                                                </button>
-                                                            @endif
+
+                                                            <div class="drop-contain">
+                                                                <a href="{{ route('sanphams.chitiet', $item->id) }}">
+                                                                    <h5>{{ $item->bienThe->sanPham->ten_san_pham }}</h5>
+                                                                </a>
+                                                                <h6><span>{{ $item->so_luong }} x</span>
+                                                                    {{ number_format($item->bienThe->gia_ban, 0, '', '.') }}
+                                                                    đ</h6>
+                                                                @if (!request()->is('giohang', 'thanhtoan'))
+                                                                    <button
+                                                                        class="close-button close_button delete-cart-item"
+                                                                        data-id="{{ $item->id }}">
+                                                                        <i class="fa-solid fa-xmark"></i>
+                                                                    </button>
+                                                                @endif
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </li>
+                                                    </li>
                                                 @endforeach
 
 
@@ -149,18 +159,19 @@
 
                                             <div class="price-box">
                                                 <h5>Tổng tiền :</h5>
-                                                <h4 class="theme-color fw-bold total-price">{{ number_format( $total,0,'','.') }}  đ</h4>
+                                                <h4 class="theme-color fw-bold total-price">
+                                                    {{ number_format($total, 0, '', '.') }} đ</h4>
                                             </div>
 
                                             <div class="button-group">
-                                                <a href="{{ route('giohang') }}"
-                                                    class="btn btn-sm cart-button">Xem giỏ hàng</a>
+                                                <a href="{{ route('giohang') }}" class="btn btn-sm cart-button">Xem giỏ
+                                                    hàng</a>
                                                 <a href="{{ route('thanhtoans.thanhtoan') }}"
                                                     class="btn btn-sm cart-button theme-bg-color text-white">
                                                     Thanh toán</a>
                                             </div>
                                         </div>
-                                    </li>
+                                </li>
                                 {{-- @endisset --}}
                                 <li class="right-side onhover-dropdown">
                                     <div class="delivery-login-box">
@@ -299,4 +310,3 @@
         </div>
     </div>
 </header>
-

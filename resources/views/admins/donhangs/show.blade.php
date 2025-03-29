@@ -85,7 +85,7 @@
                                                 <h5>Tổng giá trị :</h5>
                                             </td>
                                             <td>
-                                                <h4>$55.00</h4>
+                                                <h4>{{ number_format($tongGiaTri, 0, '', '.') }}đ</h4>
                                             </td>
                                         </tr>
 
@@ -94,7 +94,8 @@
                                                 <h5>Phí vận chuyển :</h5>
                                             </td>
                                             <td>
-                                                <h4>$12.00</h4>
+                                                <h4>{{ number_format($donHang->tong_tien - $tongGiaTri, 0, '', '.') }}đ
+                                                </h4>
                                             </td>
                                         </tr>
 
