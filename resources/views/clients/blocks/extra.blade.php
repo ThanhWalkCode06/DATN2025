@@ -175,8 +175,8 @@
         <div class="modal-content">
             <div class="modal-header">
                 <div>
-                    <h5 class="modal-title w-100" id="deal_today">Deal Today</h5>
-                    <p class="mt-1 text-content">Recommended deals for you.</p>
+                    <h5 class="modal-title w-100" id="deal_today">Giao dịch hôm nay</h5>
+                    <p class="mt-1 text-content">Giới thiệu cho bạn những sản phẩm hot hôm nay.</p>
                 </div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal">
                     <i class="fa-solid fa-xmark"></i>
@@ -185,61 +185,22 @@
             <div class="modal-body">
                 <div class="deal-offer-box">
                     <ul class="deal-offer-list">
-                        <li class="list-1">
+                        @foreach ($topOrderProducts as $index => $item)
+                        <li class="list-{{ ++$index }}">
                             <div class="deal-offer-contain">
-                                <a href="shop-left-sidebar.html" class="deal-image">
-                                    <img src="../assets/client/images/vegetable/product/10.png" class="blur-up lazyload"
+                                <a href="{{ route('sanphams.chitiet',$item->sanPham->id) }}" class="deal-image">
+                                    <img src="{{ Storage::url($item->sanPham->hinh_anh) ?? 'images/sanpham-default.png' }}" class="blur-up lazyload"
                                         alt="">
                                 </a>
 
-                                <a href="shop-left-sidebar.html" class="deal-contain">
-                                    <h5>Blended Instant Coffee 50 g Buy 1 Get 1 Free</h5>
-                                    <h6>$52.57 <del>57.62</del> <span>500 G</span></h6>
+                                <a href="{{ route('sanphams.chitiet',$item->sanPham->id) }}" class="deal-contain">
+                                    <h5>{{ $item->sanPham->ten_san_pham }}</h5>
+                                    <h6>{{ number_format($item->sanPham->gia_moi,0,'','.') }}đ
+                                    <del>{{ number_format($item->sanPham->gia_cu,0,'','.') }}đ</del> </h6>
                                 </a>
                             </div>
                         </li>
-
-                        <li class="list-2">
-                            <div class="deal-offer-contain">
-                                <a href="shop-left-sidebar.html" class="deal-image">
-                                    <img src="../assets/client/images/vegetable/product/11.png" class="blur-up lazyload"
-                                        alt="">
-                                </a>
-
-                                <a href="shop-left-sidebar.html" class="deal-contain">
-                                    <h5>Blended Instant Coffee 50 g Buy 1 Get 1 Free</h5>
-                                    <h6>$52.57 <del>57.62</del> <span>500 G</span></h6>
-                                </a>
-                            </div>
-                        </li>
-
-                        <li class="list-3">
-                            <div class="deal-offer-contain">
-                                <a href="shop-left-sidebar.html" class="deal-image">
-                                    <img src="../assets/client/images/vegetable/product/12.png"
-                                        class="blur-up lazyload" alt="">
-                                </a>
-
-                                <a href="shop-left-sidebar.html" class="deal-contain">
-                                    <h5>Blended Instant Coffee 50 g Buy 1 Get 1 Free</h5>
-                                    <h6>$52.57 <del>57.62</del> <span>500 G</span></h6>
-                                </a>
-                            </div>
-                        </li>
-
-                        <li class="list-1">
-                            <div class="deal-offer-contain">
-                                <a href="shop-left-sidebar.html" class="deal-image">
-                                    <img src="../assets/client/images/vegetable/product/13.png"
-                                        class="blur-up lazyload" alt="">
-                                </a>
-
-                                <a href="shop-left-sidebar.html" class="deal-contain">
-                                    <h5>Blended Instant Coffee 50 g Buy 1 Get 1 Free</h5>
-                                    <h6>$52.57 <del>57.62</del> <span>500 G</span></h6>
-                                </a>
-                            </div>
-                        </li>
+                        @endforeach
                     </ul>
                 </div>
             </div>
@@ -848,8 +809,14 @@ $(document).ready(function () {
     });
 },
             error: function(xhr) {
-                console.log("AJAX error:", xhr.responseText);
-                Swal.fire('Lỗi', 'Bạn chưa đăng nhập!','error');
+                if (xhr.status === 403 && xhr.responseJSON && xhr.responseJSON.message) {
+                    errorMessage = xhr.responseJSON.message;
+                    Swal.fire('Lỗi', 'Nhập quá số lượng tồn kho!','error');
+                }else{
+                    console.log("AJAX error:", xhr.responseText);
+                    Swal.fire('Lỗi', 'Bạn chưa đăng nhập!','error');
+                }
+
             }
         });
 

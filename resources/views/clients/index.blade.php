@@ -289,9 +289,9 @@
                     <div class="category-slider-2 product-wrapper no-arrow">
                         @foreach ($danhMucAll as $item)
                         <div>
-                            <a href="shop-left-sidebar.html" class="category-box category-dark">
+                            <a href="{{ '/clientsanpham/?danh_muc_id='.$item->id }}" class="category-box category-dark">
                                 <div>
-                                    <img src="{{ Storage::url('images/'.$item->anh_danh_muc) }}"
+                                    <img src="{{ Storage::url($item->anh_danh_muc) }}"
                                         class="blur-up lazyload" alt="">
                                     <h5>{{ $item->ten_danh_muc }}</h5>
                                 </div>

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('tieu_de');
             $table->unsignedBigInteger('danh_muc_id');
             $table->text('noi_dung');
-            $table->string('anh_bia')->default('uploads/baiviets/default.png');
+            $table->string('anh_bia')->default('images/baiviet-default.png');
             $table->timestamps();
             $table->softDeletes();
         });

@@ -145,13 +145,15 @@ public function nhapvoucher(Request $request){
             'newTotal' => number_format($currentTotal, 0, ',', '.')
         ],403);
     }
-    if (!$voucher || $voucher->ngay_ket_thuc < now() || $voucher->trang_thai == 0) {
-        return response()->json([
-            'success' => false,
-            'message' => 'Mã giảm giá không tồn tại hoặc đã hết hạn!',
-            'discount' => 0,
-            'newTotal' => $currentTotal
-        ],403);
+    if($voucher->ngay_ket_thuc == null && $voucher->ngay_bat_dau){
+        if (!$voucher || $voucher->ngay_ket_thuc < now() || $voucher->trang_thai == 0) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Mã giảm giá không tồn tại hoặc đã hết hạn!',
+                'discount' => 0,
+                'newTotal' => $currentTotal
+            ],403);
+        }
     }
 
     // Giả sử giảm giá 10% tổng đơn hàng
