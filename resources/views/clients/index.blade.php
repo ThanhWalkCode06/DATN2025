@@ -186,9 +186,10 @@
                         <div class="product-border border-row overflow-hidden">
                             <div class="product-box-slider no-arrow">
                                 <div>
-                                    <div style="border-bottom: 1px solid #ccc;" class="row">
+
+                                    <div style="border-bottom: 1px solid #ccc; width: 889px" class="row">
                                         @foreach ($sanPhamFollowComments as $item)
-                                            <div style=" border: 1px solid #ccc;" class="col-md-3 px-0">
+                                            <div style=" border: 1px solid #ccc;width: 222px" class="col-md-3 px-0">
                                                 <div style="height: 327px" class="product-box">
                                                     <div style="position: relative; width: 100%">
                                                         @if ($item['gia_cu'] > $item['gia_moi'])
@@ -207,47 +208,19 @@
 
                                                             <li data-bs-toggle="tooltip" data-bs-placement="top">
                                                                 <center>
-                                                                <a href="#" class="notifi-wishlist">
-                                                                    <i data-feather="heart"></i>
-                                                                </a>
-                                                                <form action="{{ route('add.wishlist',$item['id']) }}" method="POST" class="wishlist-form">
-                                                                    @csrf
-                                                                </form>
-                                                            </center>
-                                                            </li>
-                                                        </ul>
-                                                </div>
-                                                <div class="product-detail">
-                                                    <a href="{{ route('sanphams.chitiet',$item['id']) }}">
-                                                        <h6 class="name">{{ $item['ten_san_pham'] }}</h6>
-                                                    </a>
-
-                                                    <h5 class="sold text-content">
-                                                        <span class="theme-color price">{{ number_format($item['gia_moi'],0,'','.') }} đ</span>
-                                                        <del>{{ number_format($item['gia_cu'],0,'','.') }} đ</del>
-                                                    </h5>
-
-                                                    <div class="product-rating mt-sm-2 mt-1">
-                                                        <ul class="rating">
-                                                            <li>
-                                                                <i data-feather="star" class="{{ $item['danh_gias_avg_so_sao'] >= 1 ? 'fill' : '' }}"></i>
-                                                            </li>
-                                                            <li>
-                                                                <i data-feather="star" class="{{ $item['danh_gias_avg_so_sao'] >= 2 ? 'fill' : '' }}"></i>
-                                                            </li>
-                                                            <li>
-                                                                <i data-feather="star" class="{{ $item['danh_gias_avg_so_sao'] >= 3 ? 'fill' : '' }}"></i>
-                                                            </li>
-                                                            <li>
-                                                                <i data-feather="star" class="{{ $item['danh_gias_avg_so_sao'] >= 4 ? 'fill' : '' }}"></i>
-                                                            </li>
-                                                            <li>
-                                                                <i data-feather="star" class="{{ $item['danh_gias_avg_so_sao'] >= 5 ? 'fill' : '' }}"></i>
+                                                                    <a href="#" class="notifi-wishlist">
+                                                                        <i data-feather="heart"></i>
+                                                                    </a>
+                                                                    <form action="{{ route('add.wishlist', $item['id']) }}"
+                                                                        method="POST" class="wishlist-form">
+                                                                        @csrf
+                                                                    </form>
+                                                                </center>
                                                             </li>
                                                         </ul>
                                                     </div>
                                                     <div class="product-detail">
-                                                        <a href="product-left-thumbnail.html">
+                                                        <a href="{{ route('sanphams.chitiet', $item['id']) }}">
                                                             <h6 class="name">{{ $item['ten_san_pham'] }}</h6>
                                                         </a>
 
@@ -329,15 +302,16 @@
 
                     <div class="category-slider-2 product-wrapper no-arrow">
                         @foreach ($danhMucAll as $item)
-                        <div>
-                            <a href="{{ '/clientsanpham/?danh_muc_id='.$item->id }}" class="category-box category-dark">
-                                <div>
-                                    <img src="{{ Storage::url($item->anh_danh_muc) }}"
-                                        class="blur-up lazyload" alt="">
-                                    <h5>{{ $item->ten_danh_muc }}</h5>
-                                </div>
-                            </a>
-                        </div>
+                            <div>
+                                <a href="{{ '/clientsanpham/?danh_muc_id=' . $item->id }}"
+                                    class="category-box category-dark">
+                                    <div>
+                                        <img src="{{ Storage::url($item->anh_danh_muc) }}" class="blur-up lazyload"
+                                            alt="">
+                                        <h5>{{ $item->ten_danh_muc }}</h5>
+                                    </div>
+                                </a>
+                            </div>
                         @endforeach
 
                     </div>
