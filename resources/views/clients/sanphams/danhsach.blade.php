@@ -5,25 +5,61 @@
 @endsection
 
 @section('css')
-<style>
-    .category-list-box {
-        transition: all 0.3s ease-in-out;
-        border-radius: 5px;
-        padding: 5px;
-    }
+    <style>
+        .category-list-box {
+            transition: all 0.3s ease-in-out;
+            border-radius: 5px;
+            padding: 5px;
+        }
 
-    .category-list-box:hover {
-        background-color: #17a589;
-        transform: scale(1.05);
-        cursor: pointer;
-    }
+        .category-list-box:hover {
+            background-color: #17a589;
+            transform: scale(1.05);
+            cursor: pointer;
+        }
 
-    /* Làm chữ trắng khi hover */
-    .category-list-box:hover .name {
-        font-weight: bold;
-        color: white;
-    }
-</style>
+        .category-list-box:hover .name {
+            font-weight: bold;
+            color: white;
+        }
+
+        .product-option {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            /* Căn giữa các biểu tượng */
+            align-items: center;
+            gap: 10px;
+            /* Giảm khoảng cách giữa hai biểu tượng */
+            padding: 5px 10px;
+            /* Tạo padding hợp lý */
+        }
+
+        .product-option li {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+            /* Chia đều khoảng cách giữa các mục */
+        }
+
+        .product-option a {
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .product-option i {
+            font-size: 20px;
+            transition: color 0.3s ease;
+        }
+
+        .product-option a:hover i {
+            color: #1abc9c;
+        }
+    </style>
 @endsection
 
 @section('breadcrumb')
@@ -214,30 +250,37 @@
 
 
 
-                                            @if (isset($danhMucs) && count($danhMucs) > 0)
-                                                <form method="GET" action="{{ route('sanphams.danhsach') }}">
-                                                    <ul class="category-list custom-padding custom-height" id="category-list">
-                                                        @foreach ($danhMucs as $danhMuc)
-                                                            @if ($danhMuc->san_phams_count > 0)
-                                                                <li>
-                                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                                        <input class="checkbox_animated d-none" type="radio"
-                                                                            name="danh_muc_id" value="{{ $danhMuc->id }}"
-                                                                            id="danhmuc-{{ $danhMuc->id }}"
-                                                                            onchange="this.form.submit()"
-                                                                            {{ request('danh_muc_id') == $danhMuc->id ? 'checked' : '' }}>
-
-                                                                        <label class="form-check-label" for="danhmuc-{{ $danhMuc->id }}">
-                                                                            <span class="name">{{ $danhMuc->ten_danh_muc }}
-                                                                                ({{ $danhMuc->san_phams_count }})</span>
-                                                                        </label>
-                                                                    </div>
-                                                                </li>
-                                                            @endif
-                                                        @endforeach
-                                                    </ul>
-                                                </form>
-                                            @endif
+                                            @if ($danhMucs->isNotEmpty())
+                                            <form method="GET" action="{{ route('sanphams.danhsach') }}">
+                                                <ul class="category-list custom-padding custom-height" id="category-list">
+                                                    @foreach ($danhMucs as $danhMuc)
+                                                        <li>
+                                                            <div class="form-check ps-0 m-0 category-list-box">
+                                                                <input class="checkbox_animated d-none"
+                                                                    type="radio" name="danh_muc_id"
+                                                                    value="{{ $danhMuc->id }}"
+                                                                    id="danhmuc-{{ $danhMuc->id }}"
+                                                                    onchange="this.form.submit()"
+                                                                    {{ request('danh_muc_id') == $danhMuc->id ? 'checked' : '' }}>
+                                        
+                                                                <label class="form-check-label" for="danhmuc-{{ $danhMuc->id }}" style="cursor: pointer;">
+                                                                    {{ $danhMuc->ten_danh_muc }}  
+                                                                    <span class="badge bg-primary text-white ms-2">
+                                                                        {{ $danhMuc->san_phams_count }} sản phẩm
+                                                                    </span>
+                                                                </label>
+                                                            </div>
+                                                        </li>
+                                                    @endforeach
+                                                </ul>
+                                            </form>
+                                        @else
+                                            <p>Không có danh mục nào có sản phẩm.</p>
+                                        @endif
+                                        
+                                        
+                                        
+                                        
 
 
 
@@ -286,11 +329,14 @@
                                                                         onchange="this.form.submit()"
                                                                         {{ request('so_sao') == $i ? 'checked' : '' }}>
 
-                                                                    <label class="form-check-label" for="so_sao-{{ $i }}" style="cursor: pointer;">
+                                                                    <label class="form-check-label"
+                                                                        for="so_sao-{{ $i }}"
+                                                                        style="cursor: pointer;">
                                                                         <ul class="rating">
                                                                             @for ($j = 1; $j <= 5; $j++)
                                                                                 <li>
-                                                                                    <i class="fa fa-star {{ $j <= $i ? 'text-warning' : 'text-secondary' }}"></i>
+                                                                                    <i
+                                                                                        class="fa fa-star {{ $j <= $i ? 'text-warning' : 'text-secondary' }}"></i>
                                                                                 </li>
                                                                             @endfor
                                                                         </ul>
@@ -382,43 +428,34 @@
                             <div class="category-dropdown">
                                 <h5 class="text-content">Sắp xếp theo :</h5>
                                 <div class="dropdown">
-                                    <button class="dropdown-toggle" type="button" id="dropdownMenuButton1"
-                                        data-bs-toggle="dropdown">
-                                        <span>Sản phẩm bán chạy</span> <i class="fa-solid fa-angle-down"></i>
+                                    <button class="dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown">
+                                        <span>
+                                            @php
+                                                $sortText = match(request('sort')) {
+                                                    'pop' => 'Sản phẩm bán chạy',
+                                                    'low' => 'Giá thấp - cao',
+                                                    'high' => 'Giá cao - thấp',
+                                                    'rating' => 'Đánh giá cao - thấp',
+                                                    'off' => 'Giảm giá % cao - thấp',
+                                                    default => 'Sản phẩm mới nhất'
+                                                };
+                                            @endphp
+                                            {{ $sortText }}
+                                        </span>
+                                        <i class="fa-solid fa-angle-down"></i>
                                     </button>
+                                    
                                     <ul class="dropdown-menu">
-                                        <li>
-                                            <a class="dropdown-item" id="pop" href="javascript:void(0)">Sản phẩm
-                                                bán chạy</a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item" id="low" href="javascript:void(0)">Giá thấp -
-                                                cao</a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item" id="high" href="javascript:void(0)">Giá cao -
-                                                thấp</a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item" id="rating" href="javascript:void(0)">Đánh giá
-                                                cao - thấp</a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item" id="aToz" href="javascript:void(0)">Thứ tự từ A
-                                                - Z
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item" id="zToa" href="javascript:void(0)">Thứ tự từ Z
-                                                - A</a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item" id="off" href="javascript:void(0)">Giảm giá %
-                                                từ cao - thấp</a>
-                                        </li>
+                                        <li><a class="dropdown-item" href="{{ request()->fullUrlWithQuery(['sort' => 'pop']) }}">Sản phẩm bán chạy</a></li>
+                                        <li><a class="dropdown-item" href="{{ request()->fullUrlWithQuery(['sort' => 'low']) }}">Giá thấp - cao</a></li>
+                                        <li><a class="dropdown-item" href="{{ request()->fullUrlWithQuery(['sort' => 'high']) }}">Giá cao - thấp</a></li>
+                                        <li><a class="dropdown-item" href="{{ request()->fullUrlWithQuery(['sort' => 'rating']) }}">Đánh giá cao - thấp</a></li>
+    
+                                        <li><a class="dropdown-item" href="{{ request()->fullUrlWithQuery(['sort' => 'off']) }}">Giảm giá % cao - thấp</a></li>
                                     </ul>
                                 </div>
                             </div>
+                            
 
                             <div class="grid-option d-none d-md-block">
                                 <ul>
@@ -465,23 +502,23 @@
 
                                             </a>
                                             <ul class="product-option">
-                                                <li data-bs-toggle="tooltip" data-bs-placement="top" title="View">
-                                                    <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                        data-bs-target="#view">
+                                                <li data-bs-toggle="tooltip" data-bs-placement="top" title="Xem chi tiết">
+                                                    <a href="{{ route('sanphams.chitiet', ['id' => $sanPham['id']]) }}">
                                                         <i data-feather="eye"></i>
                                                     </a>
                                                 </li>
-                                                <li data-bs-toggle="tooltip" data-bs-placement="top" title="Compare">
-                                                    <a href="compare.html">
-                                                        <i data-feather="refresh-cw"></i>
-                                                    </a>
-                                                </li>
+                                                
                                                 <li data-bs-toggle="tooltip" data-bs-placement="top" title="Wishlist">
-                                                    <a href="wishlist.html" class="notifi-wishlist">
+                                                    <a href="#" class="notifi-wishlist">
                                                         <i data-feather="heart"></i>
                                                     </a>
+                                                    <form action="{{ route('add.wishlist', $sanPham['id']) }}"
+                                                        method="POST" class="wishlist-form">
+                                                        @csrf
+                                                    </form>
                                                 </li>
                                             </ul>
+
                                         </div>
                                     </div>
                                     <div class="product-footer">
@@ -509,15 +546,21 @@
                                             <h5 class="price">
                                                 <span
                                                     class="theme-color">{{ number_format($sanPham->gia_moi, 0, ',', '.') }}
-                                                    VNĐ</span>
-                                                <del>{{ number_format($sanPham->gia_cu, 0, ',', '.') }} VNĐ</del>
+                                                    ₫</span>
+                                                <del>{{ number_format($sanPham->gia_cu, 0, ',', '.') }} ₫</del>
 
                                             </h5>
                                             <div class="add-to-cart-box bg-white">
                                                 <button class="btn btn-add-cart addcart-button">
-                                                    <span class="add-icon bg-light-gray">
-                                                        <i class="fa-solid fa-cart-plus"></i>
-                                                    </span> Thêm vào giỏ hàng
+                                                    @if ($sanPham['trang_thai'] == 1)
+                                                        <a class="btn-quick-view" style="margin-right: 10px;"
+                                                            href="javascript:void(0)" data-bs-toggle="modal"
+                                                            data-bs-target="#view" data-id="{{ $sanPham['id'] }}">
+                                                            <span class="add-icon bg-light-gray">
+                                                                <i class="fa-solid fa-cart-plus"></i>
+                                                            </span> Thêm vào giỏ hàng
+                                                        </a>
+                                                    @endif
                                                 </button>
                                             </div>
                                         </div>
@@ -527,29 +570,33 @@
                         @endforeach
                     </div>
 
+                    @if ($sanPhams->hasPages())
                     <nav class="custom-pagination">
                         <ul class="pagination justify-content-center">
-                            <li class="page-item disabled">
-                                <a class="page-link" href="javascript:void(0)" tabindex="-1">
+                            {{-- Nút "Trang đầu" --}}
+                            <li class="page-item {{ $sanPhams->onFirstPage() ? 'disabled' : '' }}">
+                                <a class="page-link" href="{{ $sanPhams->url(1) }}">
                                     <i class="fa-solid fa-angles-left"></i>
                                 </a>
                             </li>
-                            <li class="page-item active">
-                                <a class="page-link" href="javascript:void(0)">1</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="javascript:void(0)">2</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="javascript:void(0)">3</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="javascript:void(0)">
+                
+                            {{-- Các trang --}}
+                            @foreach ($sanPhams->links()->elements[0] as $page => $url)
+                                <li class="page-item {{ $sanPhams->currentPage() == $page ? 'active' : '' }}">
+                                    <a class="page-link" href="{{ $url }}">{{ $page }}</a>
+                                </li>
+                            @endforeach
+                
+                            {{-- Nút "Trang cuối" --}}
+                            <li class="page-item {{ $sanPhams->hasMorePages() ? '' : 'disabled' }}">
+                                <a class="page-link" href="{{ $sanPhams->url($sanPhams->lastPage()) }}">
                                     <i class="fa-solid fa-angles-right"></i>
                                 </a>
                             </li>
                         </ul>
                     </nav>
+                @endif
+                
                 </div>
             </div>
         </div>
