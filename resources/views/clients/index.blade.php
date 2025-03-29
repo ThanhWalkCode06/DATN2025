@@ -216,7 +216,7 @@
                                                         </ul>
                                                 </div>
                                                 <div class="product-detail">
-                                                    <a href="product-left-thumbnail.html">
+                                                    <a href="{{ route('sanphams.chitiet',$item['id']) }}">
                                                         <h6 class="name">{{ $item['ten_san_pham'] }}</h6>
                                                     </a>
 

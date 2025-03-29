@@ -198,7 +198,11 @@
                                     <h6>{{ number_format($item->sanPham->gia_moi,0,'','.') }}đ
                                     <del>{{ number_format($item->sanPham->gia_cu,0,'','.') }}đ</del> </h6>
                                 </a>
+                                <div style="margin-left: 50px">
+                                    <h6>{{ number_format($item->total_quantity,0,'','.') }} sản phẩm</h6>
+                                </div>
                             </div>
+
                         </li>
                         @endforeach
                     </ul>

@@ -54,7 +54,9 @@
                                                         <ul>
                                                             <li class="name">
                                                                 <a
-                                                                    href="{{ route('sanphams.chitiet',$chiTietGioHang->bienThe->SanPham->id) }}">{{ $chiTietGioHang->bienThe->sanPham->ten_san_pham }}</a>
+                                                                    href="{{ route('sanphams.chitiet',$chiTietGioHang->bienThe->SanPham->id) }}">
+                                                                    {{ $chiTietGioHang->bienThe->sanPham->ten_san_pham  }}</a>
+                                                                    <p>{{ $chiTietGioHang->bienThe->ten_bien_the }}</p>
                                                             </li>
 
                                                             <li class="text-content">{{ $chiTietGioHang->ten_bien_the }}
