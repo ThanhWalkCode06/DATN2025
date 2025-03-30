@@ -72,15 +72,15 @@
                                             @if ($donHang->trang_thai_don_hang == -1)
                                                 <span class="text-danger">Đã hủy</span>
                                             @elseif ($donHang->trang_thai_don_hang == 0)
-                                                <span class="text-danger">Chưa xác nhận</span>
+                                                <span class="text-danger">Chờ xác nhận</span>
                                             @elseif ($donHang->trang_thai_don_hang == 1)
-                                                <span class="text-success">Đã xác nhận</span>
+                                                <span class="text-primary">Đang xử lý</span>
                                             @elseif ($donHang->trang_thai_don_hang == 2)
-                                                <span class="text-primary">Chờ vận chuyển</span>
-                                            @elseif ($donHang->trang_thai_don_hang == 3)
                                                 <span class="text-primary">Đang giao</span>
-                                            @elseif ($donHang->trang_thai_don_hang == 4)
+                                            @elseif ($donHang->trang_thai_don_hang == 3)
                                                 <span class="text-success">Đã giao</span>
+                                            @elseif ($donHang->trang_thai_don_hang == 4)
+                                                <span class="text-success">Hoàn thành</span>
                                             @elseif ($donHang->trang_thai_don_hang == 5)
                                                 <span class="text-danger">Trả hàng</span>
                                             @else

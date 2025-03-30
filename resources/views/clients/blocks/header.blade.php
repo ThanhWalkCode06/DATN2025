@@ -1,5 +1,16 @@
 <header class="pb-md-4 pb-0">
+<style>
 
+.navbar-nav .nav-link::before {
+    display: none !important;
+}
+
+.nav-item:nth-child(2) .nav-link::before {
+    display: inline-block !important;
+}
+
+
+</style>
     <div class="header-top">
         <div class="container-fluid-lg">
             <div class="row">
@@ -284,7 +295,7 @@
 
                                         </li>
 
-                                        <li class="nav-item dropdown">
+                                        <li class="nav-item">
                                             <a class="nav-link" href="{{ route('baiviets.danhsach') }}">Bài viết</a>
                                         </li>
 
