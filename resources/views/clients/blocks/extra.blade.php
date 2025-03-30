@@ -792,6 +792,7 @@ $(document).ready(function () {
                         <div class="drop-contain">
                             <a href="/sanpham/${item.id}">
                                 <h5>${item.name}</h5>
+                                <h6>${item.name_bienthe}</h6>
                             </a>
                             <h6><span>${item.quantity} x</span> ${item.price.toLocaleString("vi-VN")} đ</h6>
                             <button class="close-button close_button delete-cart-item" data-id="${item.id_cart}">

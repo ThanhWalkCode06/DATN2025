@@ -19,7 +19,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('ten_nguoi_dung')->nullable();
             $table->boolean('gioi_tinh')->nullable();
-            $table->string('anh_dai_dien')->default('images/default.png');
+            $table->string('anh_dai_dien')->default('images/default.jpg');
             $table->date('ngay_sinh')->nullable();
             $table->string('so_dien_thoai')->unique()->nullable();
             $table->string('dia_chi')->nullable();

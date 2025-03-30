@@ -86,6 +86,7 @@ class GioHangController extends Controller
                             'id' => optional($item->bienThe->sanPham)->id ?? 'Không xác định',
                             'id_cart' => $item->id ?? 'Không xác định',
                             'name' => optional($item->bienThe->sanPham)->ten_san_pham ?? 'Không xác định',
+                            'name_bienthe' => $item->bienThe->ten_bien_the ?? 'Không xác định',
                             'image' => Storage::url(optional($item->bienThe->sanPham)->hinh_anh) ?? 'Không xác định',
                             'quantity' => $item->so_luong,
                             'price' => optional($item->bienThe)->gia_ban ?? 0,
@@ -145,27 +146,36 @@ public function nhapvoucher(Request $request){
             'newTotal' => number_format($currentTotal, 0, ',', '.')
         ],403);
     }
-    if($voucher->ngay_ket_thuc == null && $voucher->ngay_bat_dau){
-        if (!$voucher || $voucher->ngay_ket_thuc < now() || $voucher->trang_thai == 0) {
+
+    if($voucher) {
+        if(empty($voucher->ngay_ket_thuc) && empty($voucher->ngay_bat_dau) ){
+            $discount = $voucher->gia_tri;
+            $discountAmount = $currentTotal * ($discount / 100);
+            $newTotal =  max(0, $currentTotal - $discountAmount);
+
+            return response()->json([
+                'success' => true,
+                'discount' => number_format($discountAmount, 0, ',', '.'),
+                'newTotal' => number_format($newTotal, 0, ',', '.')
+            ]);
+        }
+        if($voucher->ngay_ket_thuc < now() || $voucher->trang_thai == 0){
             return response()->json([
                 'success' => false,
-                'message' => 'Mã giảm giá không tồn tại hoặc đã hết hạn!',
+                'message' => 'Mã giảm giá đã hết hạn!',
                 'discount' => 0,
                 'newTotal' => $currentTotal
             ],403);
         }
+    }else{
+        return response()->json([
+            'success' => false,
+            'message' => 'Mã giảm giá không tồn tại!',
+            'discount' => 0,
+            'newTotal' => $currentTotal
+        ],403);
     }
 
-    // Giả sử giảm giá 10% tổng đơn hàng
-    $discount = $voucher->gia_tri;
-    $discountAmount = $currentTotal * ($discount / 100);
-    $newTotal =  max(0, $currentTotal - $discountAmount);
-
-    return response()->json([
-        'success' => true,
-        'discount' => number_format($discountAmount, 0, ',', '.'),
-        'newTotal' => number_format($newTotal, 0, ',', '.')
-    ]);
 }
 
 public function acceptThanhToan(Request $request){

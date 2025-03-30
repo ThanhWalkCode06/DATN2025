@@ -87,14 +87,38 @@ Theo dõi đơn hàng
                     <div style="display: flex">
                         @php $trangThai = $donHang->trang_thai_don_hang; @endphp
 
-                        @if ($trangThai == 4 || $trangThai == 0)
-                            <form id="order-form-{{ $donHang->id }}" action="{{ route('order.updateTrangThai', $donHang->id) }}" method="POST" onsubmit="return false;">
+                        @if ($trangThai == 0 || $trangThai == 1)
+                            <form style="margin-left: 10px" id="order-form-{{ $donHang->id }}" action="{{ route('order.updateTrangThai', $donHang->id) }}" method="POST" onsubmit="return false;">
                                 @csrf
-                                <input type="hidden" name="trang_thai" value="{{ $trangThai == 4 ? 5 : -1 }}">
-                                <button style="border: none" type="button" class=" {{ $trangThai == 4 ? 'btn-success' : 'btn-danger' }} btn-sm confirm-btn"
+                                <input type="hidden" name="trang_thai" value="-1">
+                                <button style="border: none" type="button" class="btn-danger btn-sm confirm-btn"
                                     data-id="{{ $donHang->id }}"
-                                    data-action="{{ $trangThai == 4 ? 'Trả hàng' : 'Hủy đơn' }}">
-                                    {{ $trangThai == 4 ? 'Trả hàng' : 'Hủy đơn' }}
+                                    data-action="{{ 'Hủy đơn'}}">
+                                    {{ 'Hủy đơn' }}
+                                </button>
+                            </form>
+                        @endif
+
+                        @if ($trangThai == 3 || $trangThai == 4)
+                            <form style="margin-left: 10px" id="order-form-{{ $donHang->id }}" action="{{ route('order.updateTrangThai', $donHang->id) }}" method="POST" onsubmit="return false;">
+                                @csrf
+                                <input type="hidden" name="trang_thai" value="5">
+                                <button style="border: none" type="button" class="btn-success btn-sm confirm-btn"
+                                    data-id="{{ $donHang->id }}"
+                                    data-action="{{ 'Trả hàng'  }}">
+                                    {{ 'Trả hàng'  }}
+                                </button>
+                            </form>
+                        @endif
+
+                        @if ($trangThai == 3)
+                            <form style="margin-left: 10px" id="order-form-{{ $donHang->id }}" action="{{ route('order.updateTrangThai', $donHang->id) }}" method="POST" onsubmit="return false;">
+                                @csrf
+                                <input type="hidden" name="trang_thai" value="4">
+                                <button style="border: none" type="button" class="btn-primary btn-sm confirm-btn"
+                                    data-id="{{ $donHang->id }}"
+                                    data-action="Hoàn thành">
+                                    Hoàn thành
                                 </button>
                             </form>
                         @endif
@@ -162,7 +186,7 @@ Theo dõi đơn hàng
                         @php
                         $statusText = match($donHang->trang_thai_don_hang) {
                             -1 => 'Hủy Đơn',        // Trạng thái 0 -> Ẩn đơn hàng
-                             5 => 'Hoàn Trả Hàng',  // Trạng thái 1 -> Hoàn trả hàng
+                             5 => 'Trả Hàng',  // Trạng thái 1 -> Hoàn trả hàng
                             default => ''
                         };
                         @endphp
@@ -198,19 +222,19 @@ Theo dõi đơn hàng
                         <div class="col-12 overflow-hidden">
                             <ol class="progtrckr">
                                 <li class="progtrckr-{{ $statusChart >= 0 ? 'done' : 'todo' }}">
-                                    <h5>Chưa xác nhận</h5>
+                                    <h5>Chờ xác nhận</h5>
                                 </li>
                                 <li class="progtrckr-{{ $statusChart >= 1 ? 'done' : 'todo' }}">
-                                    <h5>Đã xác nhận</h5>
+                                    <h5>Đang xử lý</h5>
                                 </li>
                                 <li class="progtrckr-{{ $statusChart >= 2 ? 'done' : 'todo' }}">
-                                    <h5>Chờ vận chuyển</h5>
-                                </li>
-                                <li class="progtrckr-{{ $statusChart >= 3 ? 'done' : 'todo' }}">
                                     <h5>Đang giao</h5>
                                 </li>
-                                <li class="progtrckr-{{ $statusChart >= 4 ? 'done' : 'todo' }}">
+                                <li class="progtrckr-{{ $statusChart >= 3 ? 'done' : 'todo' }}">
                                     <h5>Đã giao</h5>
+                                </li>
+                                <li class="progtrckr-{{ $statusChart >= 4 ? 'done' : 'todo' }}">
+                                    <h5>Hoàn thành</h5>
                                 </li>
                                 {{-- <li class="progtrckr-todo">
                                     <h5>Shipped</h5>

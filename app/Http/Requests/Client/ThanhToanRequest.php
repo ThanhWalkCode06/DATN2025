@@ -34,7 +34,8 @@ class ThanhToanRequest extends FormRequest
             'tong_tien' => 'required',
             'giam_gia' => 'nullable',
             'voucher_code' => 'nullable',
-            'phuong_thuc_thanh_toan_id' => 'required'
+            'phuong_thuc_thanh_toan_id' => 'required',
+            'chinh_sach' => 'required'
         ];
     }
 

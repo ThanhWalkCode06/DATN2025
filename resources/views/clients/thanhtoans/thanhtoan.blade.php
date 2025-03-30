@@ -5,6 +5,19 @@
 @endsection
 
 @section('css')
+<style>
+    .checkbox_animated:after {
+        content: "";
+        position: absolute;
+        top: -0.125rem;
+        left: 0;
+        width: 1.3rem;
+        height: 1.3rem;
+        background: #fff;
+        border: 1px solid #ccc;
+        cursor: pointer;
+    }
+</style>
 @endsection
 
 @section('breadcrumb')
@@ -79,6 +92,15 @@
                                                 <div class="mt-3">
                                                     <label for="">Ghi chú:</label>
                                                     <input class="form-control" type="text" name="ghi_chu" value="{{ old('ghi_chu') ?? '' }}">
+                                                    @error('dia_chi_nguoi_nhan')
+                                                        <p class="text-danger">{{ $message }}</p>
+                                                    @enderror
+                                                </div>
+
+                                                <div class="mt-3">
+                                                    <input style="border:#0da487" class="checkbox_animated checkall" type="checkbox" name="chinh_sach">
+                                                    <label for="">Đồng ý rằng khi hoàn hàng sẽ không được nhận lại tiền</label>
+
                                                 </div>
                                             </form>
                                         </div>
@@ -320,8 +342,8 @@ $(document).ready(function () {
                 }
             },
             error: function (xhr) {
-                let errorMessage = "Lỗi server! Vui lòng thử lại sau.";
-
+                // let errorMessage = "Lỗi server! Vui lòng thử lại sau.";
+                console.log(xhr)
                 if (xhr.status === 403 && xhr.responseJSON && xhr.responseJSON.message) {
                     errorMessage = xhr.responseJSON.message;
 
@@ -422,7 +444,8 @@ $('input[name="flexRadioDefault"]').on('change', function() {
             email_nguoi_nhan: $('input[name="email_nguoi_nhan"]').val(),
             sdt_nguoi_nhan: $('input[name="sdt_nguoi_nhan"]').val(),
             dia_chi_nguoi_nhan: $('input[name="dia_chi_nguoi_nhan"]').val(),
-            ghi_chu: $('input[name="ghi_chu"]').val()
+            ghi_chu: $('input[name="ghi_chu"]').val(),
+            chinh_sach: $('input[name="chinh_sach"]').is(':checked') ? 1 : 0,
         };
         // Gửi request AJAX
         $.ajax({
@@ -430,6 +453,7 @@ $('input[name="flexRadioDefault"]').on('change', function() {
             type: "POST",
             data: formData,
             success: function(response) {
+                // console.log(response)
                 window.location.href = `/dathangthanhcong/${response.id}`; // Chuyển hướng sau khi đặt hàng thành công (tuỳ chỉnh)
             },
             error: function(xhr) {
