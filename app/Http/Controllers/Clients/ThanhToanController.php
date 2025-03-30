@@ -61,6 +61,12 @@ class ThanhToanController extends Controller
                 'message' => 'Giỏ hàng trống'
             ],403);
         }
+        if($request->chinh_sach == 0){
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Bạn phải đồng ý với chính sách mua hàng'
+            ],403);
+        }
         $checkquantity = Helper::checkQuantity($user->id);
         if($checkquantity == null){
             // checkVourcher
@@ -107,7 +113,7 @@ class ThanhToanController extends Controller
                         'created_at' => now()
                     ]);
                     BienThe::where('id', $item->bienThe->id)->update([
-                        'so_luong' => DB::raw('so_luong - ' . $item->so_luong) 
+                        'so_luong' => DB::raw('so_luong - ' . $item->so_luong)
                     ]);
                 }
             $cart->each->delete();

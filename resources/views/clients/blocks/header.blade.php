@@ -142,21 +142,29 @@
                                                         </a>
 
                                                         <div class="drop-contain">
-                                                            <a href="{{ route('sanphams.chitiet',$item->id) }}">
+                                                            {{-- <a href="{{ route('sanphams.chitiet',$item->id) }}">
                                                                 <h5>{{ $item->bienThe->sanPham->ten_san_pham }}</h5>
-                                                            </a>
+                                                            </a> --}}
 
                                                             <div class="drop-contain">
                                                                 <a href="{{ route('sanphams.chitiet', $item->id) }}">
                                                                     <h5>{{ $item->bienThe->sanPham->ten_san_pham }}</h5>
+                                                                    <h6>{{ $item->bienThe->ten_bien_the }}</h6>
                                                                 </a>
                                                                 <h6><span>{{ $item->so_luong }} x</span>
                                                                     {{ number_format($item->bienThe->gia_ban, 0, '', '.') }}
-                                                                    đ</h6>
+                                                                đ</h6>
+                                                                <style>
+                                                                    .hidden-delete {
+                                                                        visibility: hidden;
+                                                                    }
+                                                                </style>
                                                                 @if (!request()->is('giohang', 'thanhtoan'))
-                                                                    <button
-                                                                        class="close-button close_button delete-cart-item"
-                                                                        data-id="{{ $item->id }}">
+                                                                    <button class="close-button close_button delete-cart-item" data-id="{{ $item->id }}">
+                                                                        <i class="fa-solid fa-xmark"></i>
+                                                                    </button>
+                                                                @else
+                                                                    <button class="close-button close_button delete-cart-item hidden-delete" data-id="{{ $item->id }}">
                                                                         <i class="fa-solid fa-xmark"></i>
                                                                     </button>
                                                                 @endif

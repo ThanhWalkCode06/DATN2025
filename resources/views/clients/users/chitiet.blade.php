@@ -628,11 +628,11 @@
                                         @php
                                             $orderStatus = [
                                                 -1 => 'Đã hủy',
-                                                0 => 'Chưa xác nhận',
-                                                1 => 'Đã xác nhận',
-                                                2 => 'Chờ vận chuyển',
-                                                3 => 'Đang giao',
-                                                4 => 'Đã giao',
+                                                0 => 'Chờ xác nhận',
+                                                1 => 'Đang xử lý',
+                                                2 => 'Đang giao',
+                                                3 => 'Đã giao',
+                                                4 => 'Hoàn thành',
                                                 5 => 'Trả hàng',
                                             ];
                                         @endphp
@@ -647,12 +647,20 @@
 
                                                         <div class="order-detail">
                                                             {{-- {{ dd($item->trang_thai) }} --}}
-                                                            <h4>Đơn Hàng <span class="{{ in_array($item->trang_thai_don_hang, [-1, 0, 5]) ? '' : 'success-bg' }}">{{ $orderStatus[$item->trang_thai_don_hang] }}</span></h4>
-                                                            <h6 class="text-content mt-3">Mã đơn hàng: {{  $item->ma_don_hang }}
-                                                            <h6 class="text-content mt-3">Trạng thái thanh toán:
-                                                                <span style="float: right; padding-top: 0px; padding-bottom: 0px; padding-left: 5px; padding-right: 0px " class="{{ $item->trang_thai_thanh_toan == 0 ? 'btn bg-danger-subtle text-danger' : 'btn bg-success-subtle text-success' }}">
-                                                                    {{ $item->trang_thai_thanh_toan == 0 ? 'Chưa thanh toán' : 'Đã thanh toán' }}</span>
-                                                            </h6>
+                                                           <div>
+                                                            <h4>Đơn Hàng <span class="{{ in_array($item->trang_thai_don_hang, [-1, 0]) ? '' : 'success-bg' }}">{{ $orderStatus[$item->trang_thai_don_hang] }}</span>
+                                                            <span style="border:none; background: none; color:#4a5568; margin-left: 35px">Ngày đặt: {{ $item->created_at }}</span>
+                                                            </h4>
+                                                           </div>
+                                                            <div>
+                                                                <h6 class="text-content mt-3">Mã đơn hàng: {{  $item->ma_don_hang }}
+                                                            </div>
+                                                            <div>
+                                                                <h6 class="text-content mt-3">Trạng thái thanh toán:
+                                                                    <span style="float: right; padding-top: 0px; padding-bottom: 0px; padding-left: 5px; padding-right: 0px " class="{{ $item->trang_thai_thanh_toan == 0 ? 'btn bg-danger-subtle text-danger' : 'btn bg-success-subtle text-success' }}">
+                                                                        {{ $item->trang_thai_thanh_toan == 0 ? 'Chưa thanh toán' : 'Đã thanh toán' }}</span>
+                                                                </h6>
+                                                            </div>
                                                             <h6 class="text-content mt-3">Địa chỉ nhận: {{  $item->dia_chi_nguoi_nhan }}
                                                             </h6>
                                                             <h6 class="text-content mt-3">Tổng tiền: <strong style="font-weight: bold" class="text-success">
