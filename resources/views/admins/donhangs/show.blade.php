@@ -99,15 +99,6 @@
                                             </td>
                                         </tr>
 
-                                        {{-- <tr class="table-order">
-                                            <td colspan="3">
-                                                <h5>Tax(GST) :</h5>
-                                            </td>
-                                            <td>
-                                                <h4>$10.00</h4>
-                                            </td>
-                                        </tr> --}}
-
                                         <tr class="table-order">
                                             <td colspan="3">
                                                 <h4 class="theme-color fw-bold">Tổng tiền :</h4>
@@ -137,15 +128,15 @@
                                             @if ($donHang->trang_thai_don_hang == -1)
                                                 <span class="text-danger">Đã hủy</span>
                                             @elseif ($donHang->trang_thai_don_hang == 0)
-                                                <span class="text-danger">Chưa xác nhận</span>
+                                                <span class="text-danger">Chờ xác nhận</span>
                                             @elseif ($donHang->trang_thai_don_hang == 1)
-                                                <span class="text-success">Đã xác nhận</span>
+                                                <span class="text-primary">Đang xử lý</span>
                                             @elseif ($donHang->trang_thai_don_hang == 2)
-                                                <span class="text-primary">Chờ vận chuyển</span>
-                                            @elseif ($donHang->trang_thai_don_hang == 3)
                                                 <span class="text-primary">Đang giao</span>
-                                            @elseif ($donHang->trang_thai_don_hang == 4)
+                                            @elseif ($donHang->trang_thai_don_hang == 3)
                                                 <span class="text-success">Đã giao</span>
+                                            @elseif ($donHang->trang_thai_don_hang == 4)
+                                                <span class="text-success">Hoàn thành</span>
                                             @elseif ($donHang->trang_thai_don_hang == 5)
                                                 <span class="text-danger">Trả hàng</span>
                                             @else
@@ -181,7 +172,7 @@
                             @else
                             <li class="progtrckr-todo">
                         @endif
-                        <h5>Xác nhận</h5>
+                        <h5>Đang xử lý</h5>
                         </li>
 
                         @if ($donHang->trang_thai_don_hang >= 2)
@@ -189,7 +180,7 @@
                             @else
                             <li class="progtrckr-todo">
                         @endif
-                        <h5>Chờ vận chuyển</h5>
+                        <h5>Đang giao</h5>
                         </li>
 
                         @if ($donHang->trang_thai_don_hang >= 3)
@@ -197,38 +188,43 @@
                             @else
                             <li class="progtrckr-todo">
                         @endif
-                        <h5>Đang giao</h5>
-                        </li>
-
-                        @if ($donHang->trang_thai_don_hang >= 4)
-                            <li class="progtrckr-done">
-                            @else
-                            <li class="progtrckr-todo">
-                        @endif
                         <h5>Đã giao</h5>
                         </li>
+
+                        @if ($donHang->trang_thai_don_hang == 5)
+                            <li class="progtrckr-done">
+                                <h5>Trả hàng</h5>
+                            </li>
+                        @endif
+
+                        @if ($donHang->trang_thai_don_hang != 5)
+                            @if ($donHang->trang_thai_don_hang == 4)
+                                <li class="progtrckr-done">
+                                @else
+                                <li class="progtrckr-todo">
+                            @endif
+                            <h5>Hoàn thành</h5>
+                            </li>
+                        @endif
                     </ol>
                 </div>
                 <form action="{{ route('donhangs.update', $donHang->id) }}" method="post">
                     @csrf
                     @method('PUT')
                     <div class="card-footer text-end border-0 pb-0 d-flex justify-content-end">
-                        @if ($donHang->trang_thai_don_hang != -1 && $donHang->trang_thai_don_hang != 5)
+                        @if ($donHang->trang_thai_don_hang != -1 && $donHang->trang_thai_don_hang <= 3)
                             <select class="form-control me-3" name="trang_thai">
                                 <option @if ($donHang->trang_thai_don_hang == 0) selected @endif
-                                    @if ($donHang->trang_thai_don_hang > 0) disabled @endif value="0">Chưa xác nhận
+                                    @if ($donHang->trang_thai_don_hang > 0) disabled @endif value="0">Chờ xác nhận
                                 </option>
                                 <option @if ($donHang->trang_thai_don_hang == 1) selected @endif
-                                    @if ($donHang->trang_thai_don_hang > 1) disabled @endif value="1">Xác nhận</option>
+                                    @if ($donHang->trang_thai_don_hang > 1) disabled @endif value="1">Đang xử lý</option>
                                 <option @if ($donHang->trang_thai_don_hang == 2) selected @endif
-                                    @if ($donHang->trang_thai_don_hang > 2) disabled @endif value="2">Chờ vận chuyển
+                                    @if ($donHang->trang_thai_don_hang == 0 || $donHang->trang_thai_don_hang > 2) disabled @endif value="2">
+                                    Đang giao
                                 </option>
                                 <option @if ($donHang->trang_thai_don_hang == 3) selected @endif
-                                    @if ($donHang->trang_thai_don_hang > 3) disabled @endif value="3">Đang giao</option>
-                                <option @if ($donHang->trang_thai_don_hang == 4) selected @endif
-                                    @if ($donHang->trang_thai_don_hang > 4) disabled @endif value="4">Đã giao</option>
-                                <option @if ($donHang->trang_thai_don_hang == 5) selected @endif
-                                    @if ($donHang->trang_thai_don_hang != 4) disabled @endif value="5">Trả hàng</option>
+                                    @if ($donHang->trang_thai_don_hang != 2) disabled @endif value="3">Đã giao</option>
                             </select>
                             <input class="btn btn-primary me-3" type="submit" name="doi_trang_thai" value="Đổi trạng thái"
                                 onclick="return confirm('Xác nhận đổi trạng thái?');">
@@ -236,7 +232,7 @@
                                 <input class="btn btn-primary me-3" type="submit" name="xac_nhan_thanh_toan"
                                     value="Xác nhận thanh toán" onclick="return confirm('Xác nhận thanh toán?');">
                             @endif
-                            @if ($donHang->trang_thai_thanh_toan == 0 && $donHang->trang_thai_don_hang <= 3)
+                            @if ($donHang->trang_thai_thanh_toan == 0 && $donHang->trang_thai_don_hang <= 1)
                                 <input class="btn btn-danger me-3" type="submit" name="huy_don_hang" value="Hủy đơn hàng"
                                     onclick="return confirm('Xác nhận hủy đơn hàng?');">
                             @endif
