@@ -34,5 +34,8 @@ class DonHang extends Model
             ->withPivot('so_luong');
     }
 
-  
+    public function chiTietDonHangs() {
+        return $this->hasMany(ChiTietDonHang::class, 'don_hang_id');
+    }
+    
 }

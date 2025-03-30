@@ -56,29 +56,35 @@
                                         <div class="checkout-detail">
                                             <form action="{{ route('thanhtoans.xuLy') }}" method="POST" id="checkoutForm">
                                                 @csrf
-                                                    <input type="hidden" name="voucher_code" id="hiddenVoucherCode">
-                                                    <input type="hidden" name="tong_tien" id="hiddenTongTien">
-                                                    <input type="hidden" name="giam_gia" id="hiddenGiamGia">
-                                                    <input type="hidden" name="phuong_thuc_thanh_toan_id" id="hiddenPaymentMethod" value="1">
+                                                <input type="hidden" name="voucher_code" id="hiddenVoucherCode">
+                                                <input type="hidden" name="tong_tien" id="hiddenTongTien">
+                                                <input type="hidden" name="giam_gia" id="hiddenGiamGia">
+                                                <input type="hidden" name="phuong_thuc_thanh_toan_id"
+                                                    id="hiddenPaymentMethod" value="1">
                                                 <div class="mt-3">
                                                     <label for="">Họ và tên:</label>
-                                                    <input class="form-control" type="text" name="ten_nguoi_nhan" value="{{ Auth::user()->ten_nguoi_dung ?? '' }}">
+                                                    <input class="form-control" type="text" name="ten_nguoi_nhan"
+                                                        value="{{ Auth::user()->ten_nguoi_dung ?? '' }}">
                                                 </div>
                                                 <div class="mt-3">
                                                     <label for="">Email:</label>
-                                                    <input class="form-control" type="text" name="email_nguoi_nhan" value="{{ Auth::user()->email ?? '' }}">
+                                                    <input class="form-control" type="text" name="email_nguoi_nhan"
+                                                        value="{{ Auth::user()->email ?? '' }}">
                                                 </div>
                                                 <div class="mt-3">
                                                     <label for="">Số điện thoại:</label>
-                                                    <input class="form-control" type="number" name="sdt_nguoi_nhan" value="{{ Auth::user()->so_dien_thoai ?? '' }}">
+                                                    <input class="form-control" type="number" name="sdt_nguoi_nhan"
+                                                        value="{{ Auth::user()->so_dien_thoai ?? '' }}">
                                                 </div>
                                                 <div class="mt-3">
                                                     <label for="">Địa chỉ:</label>
-                                                    <input class="form-control" type="text" name="dia_chi_nguoi_nhan" value="{{ Auth::user()->dia_chi ?? '' }}">
+                                                    <input class="form-control" type="text" name="dia_chi_nguoi_nhan"
+                                                        value="{{ Auth::user()->dia_chi ?? '' }}">
                                                 </div>
                                                 <div class="mt-3">
                                                     <label for="">Ghi chú:</label>
-                                                    <input class="form-control" type="text" name="ghi_chu" value="{{ old('ghi_chu') ?? '' }}">
+                                                    <input class="form-control" type="text" name="ghi_chu"
+                                                        value="{{ old('ghi_chu') ?? '' }}">
                                                 </div>
                                             </form>
                                         </div>
@@ -102,21 +108,23 @@
                                                 id="accordionFlushExample">
 
                                                 @foreach ($pttts as $item)
-                                                @if ($item['trang_thai'] == 1)
-                                                <div class="accordion-item">
-                                                    <div class="accordion-header" id="flush-headingOne">
-                                                        <div class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne">
-                                                            <div class="custom-form-check form-check mb-0">
-                                                                <label class="form-check-label" for="cash">
-                                                                    <input class="form-check-input mt-0" type="radio" name="flexRadioDefault" id="cash"
-                                                                    data-id="{{ $item['id'] }}" {{ $item['id'] == 1 ? 'checked' : '' }}>
-                                                                    {{ $item['ten_phuong_thuc'] }}
-                                                                </label>
+                                                    @if ($item['trang_thai'] == 1)
+                                                        <div class="accordion-item">
+                                                            <div class="accordion-header" id="flush-headingOne">
+                                                                <div class="accordion-button collapsed" data-bs-toggle="collapse"
+                                                                    data-bs-target="#flush-collapseOne">
+                                                                    <div class="custom-form-check form-check mb-0">
+                                                                        <label class="form-check-label" for="cash">
+                                                                            <input class="form-check-input mt-0" type="radio"
+                                                                                name="flexRadioDefault" id="cash"
+                                                                                data-id="{{ $item['id'] }}" {{ $item['id'] == 1 ? 'checked' : '' }}>
+                                                                            {{ $item['ten_phuong_thuc'] }}
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                </div>
-                                                @endif
+                                                    @endif
                                                 @endforeach
 
                                             </div>
@@ -139,9 +147,10 @@
                                 <form id="voucherForm" action="{{ route('voucher.giohang') }}" method="post">
                                     @csrf
                                     <div class="mb-3 coupon-box input-group">
-                                        <input style="border: 1px solid #0da487;" id="voucherCode" type="text" class="form-control" id="exampleFormControlInput1"
-                                            placeholder="Nhập mã phiếu">
-                                        <button style="border: 1px solid #0da487;margin-top: 0px;" type="submit" class="btn-apply">Xác nhận</button>
+                                        <input style="border: 1px solid #0da487;" id="voucherCode" type="text"
+                                            class="form-control" id="exampleFormControlInput1" placeholder="Nhập mã phiếu">
+                                        <button style="border: 1px solid #0da487;margin-top: 0px;" type="submit"
+                                            class="btn-apply">Xác nhận</button>
                                     </div>
                                 </form>
                             </div>
@@ -184,7 +193,8 @@
                             </ul>
                         </div>
 
-                        <a href="javascript:void(0);" id="btnDatHang" class="btn theme-bg-color text-white btn-md w-100 mt-4 fw-bold">
+                        <a href="javascript:void(0);" id="btnDatHang"
+                            class="btn theme-bg-color text-white btn-md w-100 mt-4 fw-bold">
                             Đặt hàng
                         </a>
                     </div>
@@ -228,7 +238,8 @@
 
                     <form>
                         <div class="form-floating mb-4 theme-form-floating">
-                            <textarea class="form-control" placeholder="Leave a comment here" id="address" style="height: 100px"></textarea>
+                            <textarea class="form-control" placeholder="Leave a comment here" id="address"
+                                style="height: 100px"></textarea>
                             <label for="address">Enter Address</label>
                         </div>
                     </form>
@@ -252,281 +263,292 @@
 @endsection
 
 @section('js')
-<script>
-let phiVanChuyen = document.getElementById("phi-van-chuyen");
+
+    <script>
+        let phiVanChuyen = document.getElementById("phi-van-chuyen");
 
 
-let originalDiscount = parseFloat($("#giam-gia").text().replace(/\D/g, "")); // Lấy giảm giá ban đầu
-let voucherCode = $("#voucherCode").val().trim();
-
-
-$(document).ready(function () {
-    let originalTotal = $("#tong-tien").text().trim(); // Lưu tổng tiền gốc
-    let appliedVoucher = ""; // Lưu mã đã áp dụng (ban đầu rỗng)
-    let tongTienHienTai = Number($("#tong-tien").text().replace(/\D/g, "")) || 0;
-
-    $("#voucherForm").submit(function (event) {
-        event.preventDefault();
+        let originalDiscount = parseFloat($("#giam-gia").text().replace(/\D/g, "")); // Lấy giảm giá ban đầu
         let voucherCode = $("#voucherCode").val().trim();
 
-        if (!voucherCode) {
-            Swal.fire({
-                icon: "error",
-                title: "Lỗi!",
-                text: "Vui lòng nhập mã giảm giá.",
-                confirmButtonText: "OK"
-            });
-            return;
-        }
 
-        if (voucherCode !== appliedVoucher) {
-            $("#tong-tien").text(originalTotal.toLocaleString("vi-VN"));
-            $("#giam-gia").text("0đ");
-        }
+        $(document).ready(function () {
+            let originalTotal = $("#tong-tien").text().trim(); // Lưu tổng tiền gốc
+            let appliedVoucher = ""; // Lưu mã đã áp dụng (ban đầu rỗng)
+            let tongTienHienTai = Number($("#tong-tien").text().replace(/\D/g, "")) || 0;
 
-        // ✅ Ngăn nhập lại cùng 1 mã nhưng cho phép đổi mã khác
-        if (voucherCode === appliedVoucher) {
-            Swal.fire({
-                icon: "warning",
-                title: "Thông báo!",
-                text: "Mã giảm giá này đã được áp dụng!",
-                confirmButtonText: "OK"
-            });
-            return;
-        }
+            $("#voucherForm").submit(function (event) {
+                event.preventDefault();
+                let voucherCode = $("#voucherCode").val().trim();
 
-        $.ajax({
-            url: "{{ route('voucher.giohang') }}",
-            type: "POST",
-            data: {
-                _token: "{{ csrf_token() }}",
-                code: voucherCode,
-                total: tongTienHienTai
-            },
-            success: function (response) {
-                if (response.success) {
-                    Swal.fire({
-                        icon: "success",
-                        title: "Áp dụng thành công!",
-                        text: `Bạn được giảm ${response.discount.toLocaleString("vi-VN")}đ.`,
-                        confirmButtonText: "OK"
-                    });
-
-                    // ✅ Cập nhật tổng tiền và giảm giá
-                    $("#tong-tien").text(response.newTotal.toLocaleString("vi-VN"));
-                    $("#giam-gia").text(response.discount.toLocaleString("vi-VN"));
-
-                    appliedVoucher = voucherCode; // ✅ Lưu mã đã áp dụng
-                }
-            },
-            error: function (xhr) {
-                let errorMessage = "Lỗi server! Vui lòng thử lại sau.";
-
-                if (xhr.status === 403 && xhr.responseJSON && xhr.responseJSON.message) {
-                    errorMessage = xhr.responseJSON.message;
-
-                    // ✅ Reset tổng tiền khi nhập sai mã
-                    $("#tong-tien").text(originalTotal);
-                    $("#giam-gia").text("0");
-
-                    appliedVoucher = ""; // ✅ Cho phép nhập lại mã khác
-                }
-
-                Swal.fire({
-                    icon: "error",
-                    title: "Lỗi!",
-                    text: errorMessage,
-                    confirmButtonText: "OK"
-                });
-            }
-        });
-    });
-});
-
-
-
-
-
-function showTong() {
-    let giaMois = document.getElementsByClassName("gia-moi");
-    let soLuongs = document.getElementsByClassName("so-luong");
-    let tongs = document.getElementsByClassName("tong");
-
-    let tongSanPham = document.getElementById("tong-san-pham");
-    let giamGia = document.getElementById("giam-gia");
-    let phiVanChuyen = document.getElementById("phi-van-chuyen");
-    let tongTien = document.getElementById("tong-tien");
-
-    let sum = 0;
-
-    for (let i = 0; i < giaMois.length; i++) {
-        let giaMoi = Number(giaMois[i].innerHTML.replace(/\./g, "").replace("đ", "").trim());
-        let soLuong = Number(soLuongs[i].innerHTML.replace(/\D/g, "").trim());
-
-        let tong = giaMoi * soLuong;
-        tongs[i].innerHTML = tong.toLocaleString("vi-VN"); // Hiển thị có dấu chấm phân cách
-
-        sum += tong;
-    }
-
-    tongSanPham.innerHTML = sum.toLocaleString("vi-VN");
-
-    let giamGiaValue = Number(giamGia.innerHTML.replace(/\./g, "").replace("đ", "").trim()) || 0;
-    let phiVanChuyenValue = Number(phiVanChuyen.innerHTML.replace(/\./g, "").replace("đ", "").trim()) || 0;
-
-    let total = sum - giamGiaValue + phiVanChuyenValue;
-    tongTien.innerHTML = total.toLocaleString("vi-VN");
-}
-showTong()
-
-$(document).ready(function() {
-
-    function updateHiddenInputs() {
-    // Lấy giá trị từ HTML và chuyển thành số
-    let tongSanPham = parseInt($('#tong-tien').text().replace(/\D/g, '')) || 0;
-    let phiVanChuyen = parseInt($('#phi-van-chuyen').text().replace(/\D/g, '')) || 0;
-    let giamGia = parseInt($('#giam-gia').text().replace(/\D/g, '')) || 0;
-    let voucherCode = $('#voucherCode').val() || ''; // Lấy mã giảm giá nếu có
-
-    // Tính tổng tiền = Tổng sản phẩm + Phí vận chuyển - Giảm giá
-    let tongTien = tongSanPham;
-
-    // Gán giá trị vào input ẩn
-    $('#hiddenTongTien').val(tongTien);
-    $('#hiddenGiamGia').val(giamGia);
-    $('#hiddenVoucherCode').val(voucherCode);
-
-    console.log("Tổng tiền:", tongTien);
-    console.log("Giảm giá:", giamGia);
-    console.log("Mã giảm giá:", voucherCode);
-}
-
-$('input[name="flexRadioDefault"]').on('change', function() {
-    let paymentMethodId = $(this).data('id'); // Lấy ID từ thuộc tính data-id
-    $('#hiddenPaymentMethod').val(paymentMethodId); // Gán vào input ẩn
-    console.log("Phương thức thanh toán đã chọn:", paymentMethodId);
-});
-
-    $("#btnDatHang").click(function(e) {
-        e.preventDefault(); // Ngăn chặn load lại trang
-        updateHiddenInputs();
-
-        // Lấy dữ liệu từ form
-        var formData = {
-            _token: $('meta[name="csrf-token"]').attr('content'), // Lấy CSRF token
-            voucher_code: $('#hiddenVoucherCode').val(),
-            tong_tien: $('#hiddenTongTien').val(),
-            giam_gia: $('#hiddenGiamGia').val(),
-            phuong_thuc_thanh_toan_id: $('#hiddenPaymentMethod').val(),
-            ten_nguoi_nhan: $('input[name="ten_nguoi_nhan"]').val(),
-            email_nguoi_nhan: $('input[name="email_nguoi_nhan"]').val(),
-            sdt_nguoi_nhan: $('input[name="sdt_nguoi_nhan"]').val(),
-            dia_chi_nguoi_nhan: $('input[name="dia_chi_nguoi_nhan"]').val(),
-            ghi_chu: $('input[name="ghi_chu"]').val()
-        };
-        // Gửi request AJAX
-        $.ajax({
-            url: "{{ route('thanhtoans.xuLy') }}", // Đường dẫn đến route xử lý thanh toán
-            type: "POST",
-            data: formData,
-            success: function(response) {
-                window.location.href = `/dathangthanhcong/${response.id}`; // Chuyển hướng sau khi đặt hàng thành công (tuỳ chỉnh)
-            },
-            error: function(xhr) {
-                let response = xhr.responseJSON;
-                if (response && response.over_quantity) {
-                    let message = "<strong>Sản phẩm vượt quá số lượng tồn kho:</strong><br>";
-                    response.over_quantity.forEach(item => {
-                        message += `🔹 ${item.ten_san_pham}: ${item.so_luong_muon_mua} / ${item.so_luong_ton_kho} kho<br>`;
-                    });
-
+                if (!voucherCode) {
                     Swal.fire({
                         icon: "error",
-                        title: "Lỗi số lượng!",
-                        html: message, // Dùng html để hiển thị danh sách sản phẩm
+                        title: "Lỗi!",
+                        text: "Vui lòng nhập mã giảm giá.",
                         confirmButtonText: "OK"
                     });
-                }  else {
-                Swal.fire({
-                    icon: "error",
-                    title: "Lỗi!",
-                    text: response.message || "Có lỗi xảy ra, vui lòng thử lại!",
-                    confirmButtonText: "OK"
+                    return;
+                }
+
+                if (voucherCode !== appliedVoucher) {
+                    $("#tong-tien").text(originalTotal.toLocaleString("vi-VN"));
+                    $("#giam-gia").text("0đ");
+                }
+
+                // ✅ Ngăn nhập lại cùng 1 mã nhưng cho phép đổi mã khác
+                if (voucherCode === appliedVoucher) {
+                    Swal.fire({
+                        icon: "warning",
+                        title: "Thông báo!",
+                        text: "Mã giảm giá này đã được áp dụng!",
+                        confirmButtonText: "OK"
+                    });
+                    return;
+                }
+
+                $.ajax({
+                    url: "{{ route('voucher.giohang') }}",
+                    type: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        code: voucherCode,
+                        total: tongTienHienTai
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            Swal.fire({
+                                icon: "success",
+                                title: "Áp dụng thành công!",
+                                text: `Bạn được giảm ${response.discount.toLocaleString("vi-VN")}đ.`,
+                                confirmButtonText: "OK"
+                            });
+
+                            // ✅ Cập nhật tổng tiền và giảm giá
+                            $("#tong-tien").text(response.newTotal.toLocaleString("vi-VN"));
+                            $("#giam-gia").text(response.discount.toLocaleString("vi-VN"));
+
+                            appliedVoucher = voucherCode; // ✅ Lưu mã đã áp dụng
+                        }
+                    },
+                    error: function (xhr) {
+                        let errorMessage = "Lỗi server! Vui lòng thử lại sau.";
+
+                        if (xhr.status === 403 && xhr.responseJSON && xhr.responseJSON.message) {
+                            errorMessage = xhr.responseJSON.message;
+
+                            // ✅ Reset tổng tiền khi nhập sai mã
+                            $("#tong-tien").text(originalTotal);
+                            $("#giam-gia").text("0");
+
+                            appliedVoucher = ""; // ✅ Cho phép nhập lại mã khác
+                        }
+
+                        Swal.fire({
+                            icon: "error",
+                            title: "Lỗi!",
+                            text: errorMessage,
+                            confirmButtonText: "OK"
+                        });
+                    }
                 });
-            }
-            }
-        });
-    });
-});
-
-
-</script>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        document.getElementById("checkoutForm").addEventListener("submit", function (event) {
-            let isValid = true;
-
-            // Lấy giá trị của các trường
-            let ten = document.querySelector("[name='ten_nguoi_nhan']").value.trim();
-            let email = document.querySelector("[name='email_nguoi_nhan']").value.trim();
-            let sdt = document.querySelector("[name='sdt_nguoi_nhan']").value.trim();
-            let diaChi = document.querySelector("[name='dia_chi_nguoi_nhan']").value.trim();
-
-            // Reset lỗi cũ
-            document.querySelectorAll(".error-message").forEach(el => el.remove());
-
-            // Kiểm tra Họ và tên
-            if (ten === "") {
-                showError("[name='ten_nguoi_nhan']", "Vui lòng nhập họ và tên");
-                isValid = false;
-            }
-
-            // Kiểm tra Email
-            if (email === "") {
-                showError("[name='email_nguoi_nhan']", "Vui lòng nhập email");
-                isValid = false;
-            } else if (!validateEmail(email)) {
-                showError("[name='email_nguoi_nhan']", "Email không hợp lệ");
-                isValid = false;
-            }
-
-            // Kiểm tra Số điện thoại
-            if (sdt === "") {
-                showError("[name='sdt_nguoi_nhan']", "Vui lòng nhập số điện thoại");
-                isValid = false;
-            } else if (!/^\d{10,11}$/.test(sdt)) {
-                showError("[name='sdt_nguoi_nhan']", "Số điện thoại phải có 10-11 số");
-                isValid = false;
-            }
-
-            // Kiểm tra Địa chỉ
-            if (diaChi === "") {
-                showError("[name='dia_chi_nguoi_nhan']", "Vui lòng nhập địa chỉ");
-                isValid = false;
-            }
-
-            // Nếu có lỗi, ngăn không cho submit
-            if (!isValid) {
-                event.preventDefault();
-            }
+            });
         });
 
-        // Hàm hiển thị lỗi
-        function showError(selector, message) {
-            let inputField = document.querySelector(selector);
-            let errorDiv = document.createElement("div");
-            errorDiv.className = "error-message text-danger mt-1";
-            errorDiv.textContent = message;
-            inputField.parentNode.appendChild(errorDiv);
-        }
 
-        // Hàm kiểm tra email hợp lệ
-        function validateEmail(email) {
-            let re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return re.test(email);
+
+
+
+        function showTong() {
+            let giaMois = document.getElementsByClassName("gia-moi");
+            let soLuongs = document.getElementsByClassName("so-luong");
+            let tongs = document.getElementsByClassName("tong");
+
+            let tongSanPham = document.getElementById("tong-san-pham");
+            let giamGia = document.getElementById("giam-gia");
+            let phiVanChuyen = document.getElementById("phi-van-chuyen");
+            let tongTien = document.getElementById("tong-tien");
+
+            let sum = 0;
+
+            for (let i = 0; i < giaMois.length; i++) {
+                let giaMoi = Number(giaMois[i].innerHTML.replace(/\./g, "").replace("đ", "").trim());
+                let soLuong = Number(soLuongs[i].innerHTML.replace(/\D/g, "").trim());
+
+                let tong = giaMoi * soLuong;
+                tongs[i].innerHTML = tong.toLocaleString("vi-VN"); // Hiển thị có dấu chấm phân cách
+
+                sum += tong;
+            }
+
+            tongSanPham.innerHTML = sum.toLocaleString("vi-VN");
+
+            let giamGiaValue = Number(giamGia.innerHTML.replace(/\./g, "").replace("đ", "").trim()) || 0;
+            let phiVanChuyenValue = Number(phiVanChuyen.innerHTML.replace(/\./g, "").replace("đ", "").trim()) || 0;
+
+            let total = sum - giamGiaValue + phiVanChuyenValue;
+            tongTien.innerHTML = total.toLocaleString("vi-VN");
         }
-    });
+        showTong()
+
+        $(document).ready(function () {
+
+            function updateHiddenInputs() {
+                // Lấy giá trị từ HTML và chuyển thành số
+                let tongSanPham = parseInt($('#tong-tien').text().replace(/\D/g, '')) || 0;
+                let phiVanChuyen = parseInt($('#phi-van-chuyen').text().replace(/\D/g, '')) || 0;
+                let giamGia = parseInt($('#giam-gia').text().replace(/\D/g, '')) || 0;
+                let voucherCode = $('#voucherCode').val() || ''; // Lấy mã giảm giá nếu có
+
+                // Tính tổng tiền = Tổng sản phẩm + Phí vận chuyển - Giảm giá
+                let tongTien = tongSanPham;
+
+                // Gán giá trị vào input ẩn
+                $('#hiddenTongTien').val(tongTien);
+                $('#hiddenGiamGia').val(giamGia);
+                $('#hiddenVoucherCode').val(voucherCode);
+
+                console.log("Tổng tiền:", tongTien);
+                console.log("Giảm giá:", giamGia);
+                console.log("Mã giảm giá:", voucherCode);
+            }
+
+            $('input[name="flexRadioDefault"]').on('change', function () {
+                let paymentMethodId = $(this).data('id'); // Lấy ID từ thuộc tính data-id
+                $('#hiddenPaymentMethod').val(paymentMethodId); // Gán vào input ẩn
+                console.log("Phương thức thanh toán đã chọn:", paymentMethodId);
+            });
+
+            $("#btnDatHang").click(function (e) {
+                e.preventDefault(); // Ngăn chặn load lại trang
+                updateHiddenInputs();
+
+                // Lấy dữ liệu từ form
+                var formData = {
+                    _token: $('meta[name="csrf-token"]').attr('content'), // Lấy CSRF token
+                    voucher_code: $('#hiddenVoucherCode').val(),
+                    tong_tien: $('#hiddenTongTien').val(),
+                    giam_gia: $('#hiddenGiamGia').val(),
+                    phuong_thuc_thanh_toan_id: $('#hiddenPaymentMethod').val(),
+                    ten_nguoi_nhan: $('input[name="ten_nguoi_nhan"]').val(),
+                    email_nguoi_nhan: $('input[name="email_nguoi_nhan"]').val(),
+                    sdt_nguoi_nhan: $('input[name="sdt_nguoi_nhan"]').val(),
+                    dia_chi_nguoi_nhan: $('input[name="dia_chi_nguoi_nhan"]').val(),
+                    ghi_chu: $('input[name="ghi_chu"]').val()
+                };
+                // Gửi request AJAX
+                $.ajax({
+                    url: "{{ route('thanhtoans.xuLy') }}", // Đường dẫn đến route xử lý thanh toán
+                    type: "POST",
+                    data: formData,
+                    success: function (response) {
+                        console.log(response);
+
+                        if (response.status === "vnpay") {
+                            // Nếu là VNPAY, chuyển hướng đến trang thanh toán của VNPAY
+                            window.location.href = response.vnpay_url;
+
+                        } else if (response.status === "success") {
+                            // Nếu là tiền mặt, chuyển hướng đến trang đặt hàng thành công
+                            window.location.href = `/dathangthanhcong/${response.id}`;
+                        }
+                    }
+                    ,
+                    error: function (xhr) {
+                        let response = xhr.responseJSON;
+                        if (response && response.over_quantity) {
+                            let message = "<strong>Sản phẩm vượt quá số lượng tồn kho:</strong><br>";
+                            response.over_quantity.forEach(item => {
+                                message += `🔹 ${item.ten_san_pham}: ${item.so_luong_muon_mua} / ${item.so_luong_ton_kho} kho<br>`;
+                            });
+
+                            Swal.fire({
+                                icon: "error",
+                                title: "Lỗi số lượng!",
+                                html: message, // Dùng html để hiển thị danh sách sản phẩm
+                                confirmButtonText: "OK"
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Lỗi!",
+                                text: response.message || "Có lỗi xảy ra, vui lòng thử lại!",
+                                confirmButtonText: "OK"
+                            });
+                        }
+                    }
+                });
+            });
+        });
+
+
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.getElementById("checkoutForm").addEventListener("submit", function (event) {
+                let isValid = true;
+
+                // Lấy giá trị của các trường
+                let ten = document.querySelector("[name='ten_nguoi_nhan']").value.trim();
+                let email = document.querySelector("[name='email_nguoi_nhan']").value.trim();
+                let sdt = document.querySelector("[name='sdt_nguoi_nhan']").value.trim();
+                let diaChi = document.querySelector("[name='dia_chi_nguoi_nhan']").value.trim();
+
+                // Reset lỗi cũ
+                document.querySelectorAll(".error-message").forEach(el => el.remove());
+
+                // Kiểm tra Họ và tên
+                if (ten === "") {
+                    showError("[name='ten_nguoi_nhan']", "Vui lòng nhập họ và tên");
+                    isValid = false;
+                }
+
+                // Kiểm tra Email
+                if (email === "") {
+                    showError("[name='email_nguoi_nhan']", "Vui lòng nhập email");
+                    isValid = false;
+                } else if (!validateEmail(email)) {
+                    showError("[name='email_nguoi_nhan']", "Email không hợp lệ");
+                    isValid = false;
+                }
+
+                // Kiểm tra Số điện thoại
+                if (sdt === "") {
+                    showError("[name='sdt_nguoi_nhan']", "Vui lòng nhập số điện thoại");
+                    isValid = false;
+                } else if (!/^\d{10,11}$/.test(sdt)) {
+                    showError("[name='sdt_nguoi_nhan']", "Số điện thoại phải có 10-11 số");
+                    isValid = false;
+                }
+
+                // Kiểm tra Địa chỉ
+                if (diaChi === "") {
+                    showError("[name='dia_chi_nguoi_nhan']", "Vui lòng nhập địa chỉ");
+                    isValid = false;
+                }
+
+                // Nếu có lỗi, ngăn không cho submit
+                if (!isValid) {
+                    event.preventDefault();
+                }
+            });
+
+            // Hàm hiển thị lỗi
+            function showError(selector, message) {
+                let inputField = document.querySelector(selector);
+                let errorDiv = document.createElement("div");
+                errorDiv.className = "error-message text-danger mt-1";
+                errorDiv.textContent = message;
+                inputField.parentNode.appendChild(errorDiv);
+            }
+
+            // Hàm kiểm tra email hợp lệ
+            function validateEmail(email) {
+                let re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return re.test(email);
+            }
+        });
     </script>
 
 @endsection
