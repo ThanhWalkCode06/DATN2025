@@ -328,8 +328,7 @@
                                         <div class="product-main no-arrow slick-slider">
                                             <div class="slider-image">
                                                 <!-- Ảnh chính -->
-                                                <img id="main-image"
-                                                    src="{{ asset('storage/' . $sanPhams->anhSP->first()->link_anh_san_pham) }}"
+                                                <img id="main-image" src="{{ asset('storage/' . $sanPhams->hinh_anh) }}"
                                                     class="img-fluid" alt="">
                                             </div>
                                         </div>
@@ -1067,8 +1066,8 @@
     </script>
     {{-- <script>
         $('.slick-slide').on('click', function(event) {
-            event.preventDefault(); 
-            $(this).blur(); 
+            event.preventDefault();
+            $(this).blur();
         });
     </script> --}}
     <script>
