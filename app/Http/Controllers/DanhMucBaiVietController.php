@@ -100,9 +100,16 @@ class DanhMucBaiVietController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
-    {
-        $danhMucBaiViet = DanhMucBaiViet::FindorFail($id);
-        $danhMucBaiViet->delete();
-        return redirect()->route('danhmucbaiviets.index')->with('success', 'Danh mục đã được xóa.');
+{
+    $danhMucBaiViet = DanhMucBaiViet::findOrFail($id);
+
+    // Kiểm tra nếu danh mục có bài viết nào không
+    if ($danhMucBaiViet->baiViets()->count() > 0) {
+        return redirect()->route('danhmucbaiviets.index')->with('error', 'Không thể xóa danh mục này vì vẫn còn bài viết.');
     }
+
+    $danhMucBaiViet->delete();
+    return redirect()->route('danhmucbaiviets.index')->with('success', 'Danh mục đã được xóa.');
+}
+
 }

@@ -10,8 +10,8 @@ class DanhGia extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'danh_gias'; // Định danh bảng
-  
+    protected $table = 'danh_gias';
+
     protected $fillable = [
         'user_id',
         'san_pham_id',
@@ -26,7 +26,7 @@ class DanhGia extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    // Liên kết với Sản phẩm
+    // Liên kết với Sản phẩmq
     public function sanPham()
     {
         return $this->belongsTo(SanPham::class, 'san_pham_id');
