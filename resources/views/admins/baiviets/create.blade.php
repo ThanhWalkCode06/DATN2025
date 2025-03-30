@@ -95,8 +95,8 @@ Thêm mới bài viết
                         <div class="mb-4 row">
                             <label class="col-sm-3 col-form-label form-label-title">Nội Dung</label>
                             <div class="col-sm-9">
-                                 <textarea class="form-control" name="noi_dung" rows="5">{{ old('noi_dung', isset($baiViet) ? $baiViet->noi_dung : '') }}</textarea> 
-                                 <!-- <textarea id="noi_dung" class="form-control" name="noi_dung" rows="5">{{ old('noi_dung', isset($baiViet) ? $baiViet->noi_dung : '') }}</textarea>  -->
+
+                                  <textarea id="noi_dung" class="form-control" name="noi_dung" rows="5">{{ old('noi_dung', isset($baiViet) ? $baiViet->noi_dung : '') }}</textarea>
                                  @error('noi_dung')
                                 <small class="text-danger">{{ $message }}</small>
                                 @enderror
@@ -143,33 +143,43 @@ Thêm mới bài viết
 <script src="{{ asset('assets/js/dropzone/dropzone-script.js') }}"></script>
 
 <!-- ck editor js -->
-<script src="{{ asset('assets/js/ckeditor.js') }}"></script>
-<script src="{{ asset('assets/js/ckeditor-custom.js') }}"></script>
+<script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
+
 
 <!-- select2 js -->
 <script src="{{ asset('assets/js/select2.min.js') }}"></script>
 <script src="{{ asset('assets/js/select2-custom.js') }}"></script>
 
-<script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
+
 
 <script>
     ClassicEditor
         .create(document.querySelector('#noi_dung'), {
-            enterMode: 'BR', // Khi nhấn Enter sẽ xuống dòng thay vì thêm <p>
-            shiftEnterMode: 'P', // Nhấn Shift+Enter mới bọc trong <p>
-            toolbar: ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', 'imageUpload', 'undo', 'redo'],
-            ckfinder: {
-                uploadUrl: '/upload-image', // API để upload ảnh
-            }
+            language: 'vi', // Đặt ngôn ngữ tiếng Việt
+            removePlugins: ['SpellChecker'], // Tắt kiểm tra chính tả
+            toolbar: [
+                'heading', '|', 'bold', 'italic', 'underline', '|', 'link', 'blockQuote', '|',
+                'bulletedList', 'numberedList', '|', 'undo', 'redo'
+            ]
         })
         .then(editor => {
+            window.editor = editor;
+
+            // Xử lý lỗi không cách được bằng cách bắt sự kiện keydown
+            editor.ui.view.editable.element.addEventListener('keydown', (event) => {
+                if (event.key === ' ') {
+                    event.stopPropagation(); // Ngăn chặn lỗi CKEditor chặn dấu cách
+                }
+            });
+
             editor.model.document.on('change:data', () => {
                 document.querySelector('textarea[name="noi_dung"]').value = editor.getData();
             });
         })
         .catch(error => {
-            console.error(error);
+            console.error('Lỗi CKEditor:', error);
         });
 </script>
+
 
 @endsection

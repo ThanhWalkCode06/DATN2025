@@ -36,9 +36,9 @@ class AppServiceProvider extends ServiceProvider
             $view->with('categories', ClientDanhMucSanPham::all());
         });
 
-        View::composer('*', function ($view) {
-            $view->with('danhMucs', ClientDanhMucSanPham::all());
-        });
+        // View::composer('*', function ($view) {
+        //     $view->with('danhMucs', ClientDanhMucSanPham::all());
+        // });
         View::composer('clients.blocks.header', function ($view) {
             $user = Auth::user();
             $gioHang = $user ? ChiTietGioHang::where('user_id', $user->id)->get() : collect();
