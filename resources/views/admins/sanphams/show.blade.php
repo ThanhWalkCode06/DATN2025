@@ -94,7 +94,7 @@
                 </div>
             </div>
 
-            <div class="row mt-4">
+            {{-- <div class="row mt-4">
                 <nav class="w-100">
                     <div class="nav nav-tabs" id="product-tab" role="tablist">
                         <a class="nav-item nav-link active" id="product-desc-tab" data-toggle="tab" href="#product-desc" role="tab" aria-controls="product-desc" aria-selected="true">Mô tả</a>
@@ -109,7 +109,7 @@
                         Chức năng bình luận sẽ được cập nhật sau.
                     </div>
                 </div>
-            </div>
+            </div> --}}
         </div>
     </div>
 </div>

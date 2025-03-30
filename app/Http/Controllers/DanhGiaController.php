@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\DanhGia;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DanhGiaController extends Controller
 {
@@ -62,16 +63,12 @@ class DanhGiaController extends Controller
     public function update(Request $request, DanhGia $danhgia)
     {
         if ($request->an_danh_gia) {
-            $data = [
-                'trang_thai' => 0
-            ];
+            $data = ['trang_thai' => 0];
             DanhGia::where("id", $danhgia->id)->update($data);
         }
 
         if ($request->hien_danh_gia) {
-            $data = [
-                'trang_thai' => 1
-            ];
+            $data = ['trang_thai' => 1];
             DanhGia::where("id", $danhgia->id)->update($data);
         }
 
@@ -88,10 +85,33 @@ class DanhGiaController extends Controller
 
     public function showDanhGias()
     {
-        // Lấy danh sách đánh giá có trạng thái = 1 (được duyệt)
         $danhGias = DanhGia::with(['user', 'sanPham'])->where('trang_thai', 1)->get();
-
-        // Truyền dữ liệu sang view 'clients.gioithieu'
         return view('clients.gioithieu', compact('danhGias'));
     }
+
+    // public function trangThaiDanhGia(Request $request)
+    // {
+    //     $danhGia = DanhGia::find($request->id);
+        
+    //     if (!$danhGia) {
+    //         return response()->json(['success' => false, 'message' => 'Đánh giá không tồn tại']);
+    //     }
+    
+    //     $danhGia->trang_thai = !$danhGia->trang_thai;
+    //     $danhGia->save();
+    
+    //     return response()->json(['success' => true, 'status' => $danhGia->trang_thai]);
+    // }
+    
+    public function trangThaiDanhGia(Request $request)
+{
+    $danhGia = DanhGia::find($request->id);
+    if ($danhGia) {
+        $danhGia->trang_thai = $danhGia->trang_thai == 1 ? 0 : 1;
+        $danhGia->save();
+        return response()->json(['success' => true, 'status' => $danhGia->trang_thai]);
+    }
+    return response()->json(['success' => false, 'message' => 'Đánh giá không tồn tại.']);
+}
+    
 }
