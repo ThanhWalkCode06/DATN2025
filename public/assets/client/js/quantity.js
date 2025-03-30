@@ -1,13 +1,18 @@
- /**=====================
+/**=====================
      Quantity js
 ==========================**/
- $('.qty-right-plus').click(function () {
-     if ($(this).prev().val() < 9) {
-         $(this).prev().val(+$(this).prev().val() + 1);
-     }
- });
- $('.qty-left-minus').click(function () {
-     if ($(this).next().val() > 1) {
-         if ($(this).next().val() > 1) $(this).next().val(+$(this).next().val() - 1);
-     }
- });
+$('.qty-right-plus').off().on('click', function () {
+    var $qty = $(this).prev();
+    var currentVal = parseInt($qty.val());
+    if (!isNaN(currentVal)) {
+        $qty.val(currentVal + 1);
+    }
+});
+
+$('.qty-left-minus').off().on('click', function () {
+    var $qty = $(this).next();
+    var currentVal = parseInt($qty.val());
+    if (!isNaN(currentVal) && currentVal > 1) {
+        $qty.val(currentVal - 1);
+    }
+});

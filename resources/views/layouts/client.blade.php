@@ -165,31 +165,32 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     @yield('js')
-    @if(session('success'))
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            Swal.fire({
-                title: "Thành công!",
-                text: "{{ session('success') }}",
-                icon: "success",
-                confirmButtonText: "OK"
+    @if (session('success'))
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                Swal.fire({
+                    title: "Thành công!",
+                    text: "{{ session('success') }}",
+                    icon: "success",
+                    confirmButtonText: "OK"
+                });
             });
-        });
-    </script>
+        </script>
     @endif
-    @if(session('error'))
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            Swal.fire({
-                title: "Thất bại!",
-                text: "{{ session('success') }}",
-                icon: "error",
-                confirmButtonText: "OK"
+    @if (session('error'))
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                Swal.fire({
+                    title: "Vui lòng đăng nhập để bình luận",
+                    text: "{{ session('success') }}",
+                    icon: "error",
+                    confirmButtonText: "OK"
+                });
             });
-        });
-    </script>
+        </script>
     @endif
 
+  
 </body>
 <script>
     function Logout(ev) {
@@ -200,12 +201,12 @@
             // text: "Hãy chắc chắn rằng bạn đã lưu tất cả công việc trước khi đăng xuất.",
             iconHtml: '<i class="fas fa-sign-out-alt" style="color:#e74c3c"></i>',
             showCancelButton: true,
-            confirmButtonColor: "#e74c3c",  // Màu đỏ nổi bật
-            cancelButtonColor: "#0e947a",  // Màu xanh nhẹ
+            confirmButtonColor: "#e74c3c", // Màu đỏ nổi bật
+            cancelButtonColor: "#0e947a", // Màu xanh nhẹ
             confirmButtonText: "Đăng xuất ngay",
             cancelButtonText: "Ở lại",
             background: "#f4f6f7", // Màu nền nhẹ nhàng
-            color: "#333",  // Màu chữ
+            color: "#333", // Màu chữ
             customClass: {
                 popup: "swal-custom-popup",
                 title: "swal-custom-title",
@@ -218,71 +219,83 @@
             }
         });
     }
-    </script>
-    <script>
-        $(document).ready(function () {
-            $(".notifi-wishlist").on("click", function (e) {
-                e.preventDefault(); // Ngăn chặn load lại trang
+</script>
+<script>
+    $(document).ready(function() {
+        $(".notifi-wishlist").on("click", function(e) {
+            e.preventDefault(); // Ngăn chặn load lại trang
 
-                var button = $(this); // Lưu nút đang bấm
-                var form = button.closest("li").find(".wishlist-form"); // Tìm form gần nhất
-                var formData = form.serialize(); // Lấy dữ liệu form
+            var button = $(this); // Lưu nút đang bấm
+            var form = button.closest("li").find(".wishlist-form"); // Tìm form gần nhất
+            var formData = form.serialize(); // Lấy dữ liệu form
 
-                $.ajax({
-                    url: form.attr("action"),
-                    type: "POST",
-                    data: formData,
-                    success: function (response) {
-                        $.notify({
-                            icon: "fa fa-check",
-                            title: "Sản phẩm đã được thêm vào danh sách yêu thích.",
-                        }, {
-                            element: "body",
-                            type: "Thành công: ",
-                            placement: { from: "top", align: "right" },
-                            delay: 3000,
-                            z_index: 9999,
-                            animate: { enter: "animated fadeInDown", exit: "animated fadeOutUp" },
-                            template: '<div class="alert alert-success" style="background-color:#1abc9c; color:white; border-color:#16a085; padding: 10px; border-radius: 5px;">' +
-                                    '<strong><i class="fa fa-check"></i> {0}</strong> {1}' +
-                                    '</div>'
+            $.ajax({
+                url: form.attr("action"),
+                type: "POST",
+                data: formData,
+                success: function(response) {
+                    $.notify({
+                        icon: "fa fa-check",
+                        title: "Sản phẩm đã được thêm vào danh sách yêu thích.",
+                    }, {
+                        element: "body",
+                        type: "Thành công: ",
+                        placement: {
+                            from: "top",
+                            align: "right"
+                        },
+                        delay: 3000,
+                        z_index: 9999,
+                        animate: {
+                            enter: "animated fadeInDown",
+                            exit: "animated fadeOutUp"
+                        },
+                        template: '<div class="alert alert-success" style="background-color:#1abc9c; color:white; border-color:#16a085; padding: 10px; border-radius: 5px;">' +
+                            '<strong><i class="fa fa-check"></i> {0}</strong> {1}' +
+                            '</div>'
+                    });
+
+                    // Đổi màu icon thành đỏ (đã yêu thích)
+                    button.find("i").css("color", "red");
+                },
+                error: function(xhr) {
+                    if (xhr.status === 401) {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Lỗi!",
+                            text: "Vui lòng đăng nhập.",
+                            confirmButtonText: "OK"
                         });
-
-                        // Đổi màu icon thành đỏ (đã yêu thích)
-                        button.find("i").css("color", "red");
-                    },
-                    error: function (xhr) {
-                        if (xhr.status === 401) {
-                            Swal.fire({
-                                icon: "error",
-                                title: "Lỗi!",
-                                text: "Vui lòng đăng nhập.",
-                                confirmButtonText: "OK"
-                            });
-                            return;
-                        }
-                        $.notify({
-                            icon: "<i class='fa fa-exclamation-circle'></i>", // Icon lỗi nổi bật hơn
-                            title: "Sản phẩm đã tồn tại ở danh sách yêu thích.", // Màu đỏ dịu hơn
-                            message: xhr.responseJSON?.message || "Có lỗi xảy ra, vui lòng thử lại.",
-                        }, {
-                            element: "body",
-                            type: "Cảnh báo: ",
-                            placement: { from: "top", align: "right" },
-                            delay: 3000,
-                            z_index: 9999,
-                            animate: { enter: "animated fadeInDown", exit: "animated fadeOutUp" },
-                            template: '<div class="alert alert-danger" style="background-color:#ff6b6b; color:white; border-color:#d64545; padding: 10px; border-radius: 5px;">' +
+                        return;
+                    }
+                    $.notify({
+                        icon: "<i class='fa fa-exclamation-circle'></i>", // Icon lỗi nổi bật hơn
+                        title: "Sản phẩm đã tồn tại ở danh sách yêu thích.", // Màu đỏ dịu hơn
+                        message: xhr.responseJSON?.message ||
+                            "Có lỗi xảy ra, vui lòng thử lại.",
+                    }, {
+                        element: "body",
+                        type: "Cảnh báo: ",
+                        placement: {
+                            from: "top",
+                            align: "right"
+                        },
+                        delay: 3000,
+                        z_index: 9999,
+                        animate: {
+                            enter: "animated fadeInDown",
+                            exit: "animated fadeOutUp"
+                        },
+                        template: '<div class="alert alert-danger" style="background-color:#ff6b6b; color:white; border-color:#d64545; padding: 10px; border-radius: 5px;">' +
                             '<strong><i class="fa fa-exclamation-circle"></i> {0}</strong> {1}' +
                             '</div>'
-                        });
+                    });
 
-                    }
-                });
+                }
             });
         });
-
-        </script>
+    });
+</script>
 
 </html>
 
