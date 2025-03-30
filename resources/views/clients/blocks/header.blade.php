@@ -36,6 +36,16 @@
                                 </div>
                             </div>
 
+                            @if (Auth::check())
+                            <div>
+                                <div class="timer-notification">
+                                    <h6>Mã giảm giá cho người mới:
+                                        <strong class="me-1">COD1234567</strong>
+                                    </h6>
+                                </div>
+                            </div>
+                            @endif
+
                             <div>
                                 <div class="timer-notification">
                                     <h6>Mua hàng ngay thôi nào!
@@ -115,7 +125,8 @@
                                     <div class="onhover-dropdown header-badge">
                                         <button type="button" class="btn p-0 position-relative header-wishlist">
                                             <i data-feather="shopping-cart"></i>
-                                            <span class="position-absolute top-0 start-100 translate-middle badge">{{ $gioHang->count() ?? 0 }}
+                                            <span
+                                                class="position-absolute top-0 start-100 translate-middle badge">{{ $gioHang->count() ?? 0 }}
                                                 <span class="visually-hidden">unread messages</span>
                                             </span>
                                         </button>
@@ -126,7 +137,7 @@
                                                 <li style="width: 100%" class="product-box-contain">
                                                     <div class="drop-cart">
                                                         <a href="{{ route('sanphams.chitiet',$item->id) }}" class="drop-image">
-                                                            <img src="{{ Storage::url($item->bienThe->anh_bien_the) }}"
+                                                            <img src="{{ Storage::url($item->bienThe->sanPham->hinh_anh) }}"
                                                                 class="blur-up lazyload" alt="">
                                                         </a>
 
@@ -134,15 +145,24 @@
                                                             <a href="{{ route('sanphams.chitiet',$item->id) }}">
                                                                 <h5>{{ $item->bienThe->sanPham->ten_san_pham }}</h5>
                                                             </a>
-                                                            <h6><span>{{ $item->so_luong }} x</span> {{ number_format($item->bienThe->gia_ban,0,'','.') }} đ</h6>
-                                                            @if (!request()->is('giohang','thanhtoan'))
-                                                                <button class="close-button close_button delete-cart-item" data-id="{{ $item->id }}">
-                                                                    <i class="fa-solid fa-xmark"></i>
-                                                                </button>
-                                                            @endif
+
+                                                            <div class="drop-contain">
+                                                                <a href="{{ route('sanphams.chitiet', $item->id) }}">
+                                                                    <h5>{{ $item->bienThe->sanPham->ten_san_pham }}</h5>
+                                                                </a>
+                                                                <h6><span>{{ $item->so_luong }} x</span>
+                                                                    {{ number_format($item->bienThe->gia_ban, 0, '', '.') }}
+                                                                    đ</h6>
+                                                                @if (!request()->is('giohang', 'thanhtoan'))
+                                                                    <button
+                                                                        class="close-button close_button delete-cart-item"
+                                                                        data-id="{{ $item->id }}">
+                                                                        <i class="fa-solid fa-xmark"></i>
+                                                                    </button>
+                                                                @endif
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </li>
+                                                    </li>
                                                 @endforeach
 
 
@@ -150,18 +170,19 @@
 
                                             <div class="price-box">
                                                 <h5>Tổng tiền :</h5>
-                                                <h4 class="theme-color fw-bold total-price">{{ number_format( $total,0,'','.') }}  đ</h4>
+                                                <h4 class="theme-color fw-bold total-price">
+                                                    {{ number_format($total, 0, '', '.') }} đ</h4>
                                             </div>
 
                                             <div class="button-group">
-                                                <a href="{{ route('giohang') }}"
-                                                    class="btn btn-sm cart-button">Xem giỏ hàng</a>
+                                                <a href="{{ route('giohang') }}" class="btn btn-sm cart-button">Xem giỏ
+                                                    hàng</a>
                                                 <a href="{{ route('thanhtoans.thanhtoan') }}"
                                                     class="btn btn-sm cart-button theme-bg-color text-white">
                                                     Thanh toán</a>
                                             </div>
                                         </div>
-                                    </li>
+                                </li>
                                 {{-- @endisset --}}
                                 <li class="right-side onhover-dropdown">
                                     <div class="delivery-login-box">
@@ -261,39 +282,9 @@
                                             <a class="nav-link" href="{{ route('home') }}">Trang chủ</a>
                                         </li>
 
-                                        <li class="nav-item dropdown">
+                                        <li class="nav-item ">
                                             <a class="nav-link" href="{{ route('sanphams.danhsach') }}">Sản phẩm</a>
 
-                                            <ul class="dropdown-menu">
-                                                <li>
-                                                    <a class="dropdown-item" href="shop-category-slider.html">Shop
-                                                        Category Slider</a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item" href="shop-category.html">Shop
-                                                        Category Sidebar</a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item" href="shop-banner.html">Shop
-                                                        Banner</a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item" href="shop-left-sidebar.html">Shop
-                                                        Left
-                                                        Sidebar</a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item" href="shop-list.html">Shop List</a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item" href="shop-right-sidebar.html">Shop
-                                                        Right Sidebar</a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item" href="shop-top-filter.html">Shop Top
-                                                        Filter</a>
-                                                </li>
-                                            </ul>
                                         </li>
 
                                         <li class="nav-item">
@@ -322,7 +313,7 @@
                     <div class="header-nav-right">
                         <button class="btn deal-button" data-bs-toggle="modal" data-bs-target="#deal-box">
                             <i data-feather="zap"></i>
-                            <span>Giao dịch hôm nay</span>
+                            <span>Top sản phẩm hôm nay</span>
                         </button>
                     </div>
                 </div>
@@ -330,4 +321,3 @@
         </div>
     </div>
 </header>
-

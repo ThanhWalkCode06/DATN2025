@@ -47,14 +47,16 @@
                                             <td class="product-detail">
                                                 <div class="product border-0">
                                                     <a href="{{ route('sanphams.chitiet', $chiTietGioHang->bienThe->SanPham->id) }}" class="product-image">
-                                                        <img src="{{ Storage::url($chiTietGioHang->bienThe->anh_bien_the) }}"
+                                                        <img src="{{ Storage::url($chiTietGioHang->bienThe->sanPham->hinh_anh) }}"
                                                             class="img-fluid blur-up lazyload" alt="">
                                                     </a>
                                                     <div class="product-detail">
                                                         <ul>
                                                             <li class="name">
                                                                 <a
-                                                                    href="{{ route('sanphams.chitiet',$chiTietGioHang->bienThe->SanPham->id) }}">{{ $chiTietGioHang->bienThe->sanPham->ten_san_pham }}</a>
+                                                                    href="{{ route('sanphams.chitiet',$chiTietGioHang->bienThe->SanPham->id) }}">
+                                                                    {{ $chiTietGioHang->bienThe->sanPham->ten_san_pham  }}</a>
+                                                                    <p>{{ $chiTietGioHang->bienThe->ten_bien_the }}</p>
                                                             </li>
 
                                                             <li class="text-content">{{ $chiTietGioHang->ten_bien_the }}

@@ -25,25 +25,22 @@ class BienThe extends Model
         return $this->belongsTo(SanPham::class, 'san_pham_id');
     }
 
-    public function thuocTinhs()
-    {
-        return $this->hasMany(ThuocTinh::class, 'id', 'thuoc_tinh_id');
-    }
-    public function giaTriThuocTinhs()
-    {
-        return $this->hasMany(GiaTriThuocTinh::class, 'id', 'gia_tri_thuoc_tinh_id');
-    }
+
+    // public function giaTriThuocTinhs()
+    // {
+    //     return $this->hasMany(GiaTriThuocTinh::class, 'id', 'gia_tri_thuoc_tinh_id');
+    // }
 
     public function donHangs()
     {
         return $this->belongsToMany(DonHang::class, 'chi_tiet_don_hangs', 'bien_the_id', 'don_hang_id')
-                    ->withPivot('so_luong');
+            ->withPivot('so_luong');
     }
 
     public function tt()
     {
         return $this->belongsToMany(ThuocTinh::class, 'bien_the_thuoc_tinhs', 'bien_the_id', 'thuoc_tinh_id')
-                    ->withPivot('gia_tri_thuoc_tinh_id'); // Lấy ID giá trị thuộc tính
+            ->withPivot('gia_tri_thuoc_tinh_id'); // Lấy ID giá trị thuộc tính
     }
 
     public function gttt()
@@ -61,5 +58,17 @@ class BienThe extends Model
     public function gioHang()
     {
         return $this->hasMany(ChiTietGioHang::class, 'bien_the_id');
+    }
+
+    public function thuocTinh()
+    {
+        return $this->belongsTo(ThuocTinh::class, 'thuoc_tinh_id', 'id');
+    }
+
+    // Quan hệ với bảng trung gian bien_the_thuoc_tinhs để lấy giá trị thuộc tính
+    public function giaTriThuocTinhs()
+    {
+        return $this->belongsToMany(GiaTriThuocTinh::class, 'bien_the_thuoc_tinhs', 'bien_the_id', 'gia_tri_thuoc_tinh_id')
+                    ->withTimestamps();
     }
 }

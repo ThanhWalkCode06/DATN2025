@@ -70,21 +70,21 @@
                                         </td>
                                         <td class="text-wrap">{{ $danhGia->nhan_xet }}</td>
 
-                                        @if ($danhGia->trang_thai == 1)
-                                            <td class="td-check">
-                                                <i class="ri-checkbox-circle-line"></i>
-                                            </td>
-                                        @else
-                                            <td class="td-cross">
-                                                <i class="ri-close-circle-line"></i>
-                                            </td>
-                                        @endif
+                                        <td class="status-icon">
+                                            @if ($danhGia->trang_thai == 1)
+                                                <i class="ri-checkbox-circle-line text-success"></i>  {{-- ✔️ màu xanh --}}
+                                            @else
+                                                <i class="ri-close-circle-line text-danger"></i>  {{-- ❌ màu đỏ --}}
+                                            @endif
+                                        </td>
+                                        
 
                                         <td>
-                                            <a href="{{ route('danhgias.show', $danhGia->id) }}">
-                                                <i class="ri-eye-line"></i>
-                                            </a>
+                                            <button class="toggleStatus btn btn-sm {{ $danhGia->trang_thai == 1 ? 'btn-danger' : 'btn-primary' }}" data-id="{{ $danhGia->id }}">
+                                                {{ $danhGia->trang_thai == 1 ? 'Ẩn' : 'Hiện' }}
+                                            </button>
                                         </td>
+                                        
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -98,6 +98,47 @@
 @endsection
 
 @section('js')
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $(".toggleStatus").click(function () {
+                let button = $(this);
+                let danhGiaId = button.data("id");
+    
+                $.ajax({
+                    url: "{{ route('danhgias.trangthaidanhgia') }}",
+                    type: "POST",
+                    data: {
+                        id: danhGiaId,
+                        _token: "{{ csrf_token() }}"
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            let statusCell = button.closest("tr").find(".status-icon");
+    
+                            if (response.status == 1) {
+                                button.removeClass('btn-primary').addClass('btn-danger').text('Ẩn');
+                                statusCell.html('<i class="ri-checkbox-circle-line text-success"></i>');
+                            } else {
+                                button.removeClass('btn-danger').addClass('btn-primary').text('Hiện');
+                                statusCell.html('<i class="ri-close-circle-line text-danger"></i>');
+                            }
+                        } else {
+                            alert(response.message);
+                        }
+                    },
+                    error: function () {
+                        alert("Lỗi khi cập nhật trạng thái.");
+                    }
+                });
+            });
+        });
+    </script>
+    
+
+
     <!-- customizer js -->
     <script src="{{ asset('assets/js/customizer.js') }}"></script>
 

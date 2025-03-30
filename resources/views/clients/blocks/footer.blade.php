@@ -115,19 +115,19 @@
                     <div class="footer-contain">
                         <ul>
                             <li>
-                                <a href="index.html" class="text-content">Trang chủ</a>
+                                <a href="{{ route('home') }}" class="text-content">Trang chủ</a>
                             </li>
                             <li>
-                                <a href="shop-left-sidebar.html" class="text-content">Cửa hàng</a>
+                                <a href="{{ route('sanphams.danhsach') }}" class="text-content">Cửa hàng</a>
                             </li>
                             <li>
-                                <a href="about-us.html" class="text-content">Về chúng tôi</a>
+                                <a href="{{ route('gioithieu') }}" class="text-content">Về chúng tôi</a>
                             </li>
                             <li>
-                                <a href="blog-list.html" class="text-content">Tin tức</a>
+                                <a href="{{ route('baiviets.danhsach') }}" class="text-content">Tin tức</a>
                             </li>
                             <li>
-                                <a href="contact-us.html" class="text-content">Liên hệ</a>
+                                <a href="{{ route('lienhe.home') }}" class="text-content">Liên hệ</a>
                             </li>
                         </ul>
                     </div>
@@ -141,24 +141,11 @@
 
                     <div class="footer-contain">
                         <ul>
+                            @foreach ($baivietSupport as $item)
                             <li>
-                                <a href="order-success.html" class="text-content">Đơn hàng của bạn</a>
+                                <a href="{{ route('baiviets.chitiet',$item->id) }}" class="text-content">{{ $item->tieu_de }}</a>
                             </li>
-                            <li>
-                                <a href="user-dashboard.html" class="text-content">Tài khoản của bạn</a>
-                            </li>
-                            <li>
-                                <a href="order-tracking.html" class="text-content">Theo dõi đơn hàng</a>
-                            </li>
-                            <li>
-                                <a href="wishlist.html" class="text-content">Danh sách yêu thích</a>
-                            </li>
-                            <li>
-                                <a href="search.html" class="text-content">Tìm kiếm</a>
-                            </li>
-                            <li>
-                                <a href="faq.html" class="text-content">Câu hỏi thường gặp</a>
-                            </li>
+                            @endforeach
                         </ul>
                     </div>
                 </div>

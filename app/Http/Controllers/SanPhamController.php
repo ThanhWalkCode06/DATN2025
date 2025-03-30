@@ -278,7 +278,7 @@ class SanPhamController extends Controller
         $hinhAnhPath = null;
 
         if ($request->hasFile('hinh_anh')) {
-            if ($sanPham->hinh_anh && Storage::exists('public', $sanPham->hinh_anh)) {
+            if ($sanPham->hinh_anh && Storage::exists('public', $sanPham->hinh_anh) && !Storage::exists('public/images')) {
                 Storage::delete('public/' . $sanPham->hinh_anh);
             }
             $file = $request->file('hinh_anh');

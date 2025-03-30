@@ -23,10 +23,13 @@ use App\Http\Controllers\DanhMucBaiVietController;
 use App\Http\Controllers\DanhMucSanPhamController;
 use App\Http\Controllers\GiaTriThuocTinhController;
 use App\Http\Controllers\Admins\Auth\AuthController;
+use App\Http\Controllers\Clients\IndexClientController;
+
+
 use App\Http\Controllers\ClientDanhMucSanPhamController;
+use App\Http\Controllers\Clients\DanhGiaClientsController;
 use App\Http\Controllers\Admins\Responsibility\RoleController;
 use App\Http\Controllers\Admins\Responsibility\PermissionController;
-use App\Http\Controllers\Clients\IndexClientController;
 use App\Http\Controllers\Clients\UserController as ClientsUserController;
 use App\Http\Controllers\Clients\Auth\AuthController as AuthAuthController;
 
@@ -124,7 +127,8 @@ Route::controller(App\Http\Controllers\Clients\Auth\AuthController::class)->grou
     Route::get('/logout', 'logout')->name('logout.client');
 });
 
-
+Route::get('/san-pham/{san_pham_id}/danh-gia', [DanhGiaClientsController::class, 'danhSachDanhGia']);
+Route::post('/san-pham/{san_pham_id}/danh-gia', [DanhGiaClientsController::class, 'themDanhGia'])->name('sanphams.themdanhgia');
 
 Route::get('/sanpham', [App\Http\Controllers\Clients\SanPhamController::class, 'danhSach'])->name('sanphams.danhsach');
 Route::get('/sanpham/{id}', [App\Http\Controllers\Clients\SanPhamController::class, 'chiTiet'])->name('sanphams.chitiet');
@@ -171,3 +175,8 @@ Route::get('clientdanhmucsanpham', [ClientDanhMucSanPhamController::class, 'inde
 Route::get('/clientsanpham', [ClientDanhMucSanPhamController::class, 'danhSachSanPham'])->name('clientsanpham.danhsach');
 Route::get('/top-san-pham', [SanPhamController::class, 'sanPhamTopDanhGia'])->name('sanpham.top_danh_gia');
 Route::post('/lienhe', [ContactController::class, 'send'])->name('send.contact');
+
+Route::get('/san-pham/{id}/bien-the', [SanPhamController::class, 'getBienThe']);
+Route::post('/danhgias/toggle-status', [DanhGiaController::class, 'trangThaiDanhGia'])->name('danhgias.trangthaidanhgia');
+
+

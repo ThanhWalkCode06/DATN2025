@@ -31,4 +31,9 @@ class DanhGia extends Model
     {
         return $this->belongsTo(SanPham::class, 'san_pham_id');
     }
+
+    public function nguoiDung()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

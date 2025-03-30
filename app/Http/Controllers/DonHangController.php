@@ -53,8 +53,14 @@ class DonHangController extends Controller
             ->join('bien_thes', 'bien_thes.id', '=', 'bien_the_id')
             ->where('don_hang_id', '=', $donhang->id)
             ->get();
-        // dd($chiTietDonHangs);
-        return view('admins.donhangs.show', compact('donHang', 'chiTietDonHangs'));
+
+        $tongGiaTri = 0;
+
+        foreach ($chiTietDonHangs as $chiTietDonHang) {
+            $tongGiaTri += $chiTietDonHang->gia_ban * $chiTietDonHang->so_luong;
+        }
+
+        return view('admins.donhangs.show', compact('donHang', 'chiTietDonHangs', 'tongGiaTri'));
     }
 
     /**
