@@ -14,6 +14,7 @@ use App\Models\PhuongThucThanhToan;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use App\Http\Controllers\HelperCommon\Helper;
 use App\Http\Requests\Client\ThanhToanRequest;
 
@@ -127,7 +128,13 @@ class ThanhToanController extends Controller
         }
 
         // Thanh toán qua VNPAY
-        if ($request->phuong_thuc_thanh_toan_id === "2") { // VNPAY
+        if ($request->phuong_thuc_thanh_toan_id === "2") {
+            if (!empty($request->voucher)) {
+                $idVoucher = PhieuGiamGia::where('ma_phieu', $request->voucher)->first();
+                if ($idVoucher) {
+                    Session::put("voucher", $idVoucher->id);
+                }
+            }
             $vnp_Url = config('services.vnpay.vnp_url');
             $vnp_TmnCode = config('services.vnpay.vnp_tmn_code');
             $vnp_HashSecret = config('services.vnpay.vnp_hash_secret');
@@ -162,7 +169,8 @@ class ThanhToanController extends Controller
 
             return response()->json([
                 'status' => 'vnpay',
-                'vnpay_url' => $vnp_Url
+                'vnpay_url' => $vnp_Url . (strpos($vnp_Url, '?') === false ? '?' : '&') . 'voucher=' . urlencode($request->voucher_code ?? ""),
+                'voucher' => $request->voucher_code ?? ""
             ]);
         }
 
@@ -192,6 +200,18 @@ class ThanhToanController extends Controller
             'trang_thai_thanh_toan' => 1, // Đã thanh toán
             'created_at' => now()
         ]);
+
+        if(Session::has('voucher')){
+        $voucherId = Session::get('voucher');
+            DB::table('phieu_giam_gia_tai_khoans')->insert([
+                'phieu_giam_gia_id' => $voucherId,
+                'user_id' => $user->id,
+                'order_id' => $donHang->id,
+                'created_at' => now(),
+            ]);
+            Session::forget("voucher");
+        }
+
 
         // Duyệt qua từng sản phẩm trong giỏ hàng để thêm vào chi tiết đơn hàng
         foreach ($cart as $item) {
