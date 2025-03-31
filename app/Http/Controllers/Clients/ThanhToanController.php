@@ -210,8 +210,8 @@ class ThanhToanController extends Controller
             ChiTietGioHang::where('user_id', $user->id)->delete();
     
             // Lấy lại chi tiết đơn hàng để gửi về view
-            $chiTietDonHangs = DonHang::with('chiTietDonHangs.bienThe.sanPham')->where('id', $donHang->id)->first();
-
+            $chiTietDonHangs = ChiTietDonHang::where('id', $donHang->id)->get();
+            
 
            
             return view('clients.thanhtoans.dathangthanhcong', compact('donHang', 'chiTietDonHangs', 'cart'));
