@@ -136,10 +136,11 @@
                                                                     data-bs-toggle="collapse"
                                                                     data-bs-target="#flush-collapseOne">
                                                                     <div class="custom-form-check form-check mb-0">
-                                                                        <label class="form-check-label" for="cash">
+                                                                        <label class="form-check-label"
+                                                                            for="{{ 'cash' . $item['id'] }}">
                                                                             <input class="form-check-input mt-0"
                                                                                 type="radio" name="flexRadioDefault"
-                                                                                id="cash"
+                                                                                id="{{ 'cash' . $item['id'] }}"
                                                                                 data-id="{{ $item['id'] }}"
                                                                                 {{ $item['id'] == 1 ? 'checked' : '' }}>
                                                                             {{ $item['ten_phuong_thuc'] }}
@@ -150,7 +151,6 @@
                                                         </div>
                                                     @endif
                                                 @endforeach
-
                                             </div>
                                         </div>
                                     </div>
@@ -229,347 +229,290 @@
         </div>
     </section>
     <!-- Checkout section End -->
-
-    <!-- Add address modal box start -->
-    {{-- <div class="modal fade theme-modal" id="add-address" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel1">Add a new address</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="form-floating mb-4 theme-form-floating">
-                            <input type="text" class="form-control" id="fname" placeholder="Enter First Name">
-                            <label for="fname">First Name</label>
-                        </div>
-                    </form>
-
-                    <form>
-                        <div class="form-floating mb-4 theme-form-floating">
-                            <input type="text" class="form-control" id="lname" placeholder="Enter Last Name">
-                            <label for="lname">Last Name</label>
-                        </div>
-                    </form>
-
-                    <form>
-                        <div class="form-floating mb-4 theme-form-floating">
-                            <input type="email" class="form-control" id="email" placeholder="Enter Email Address">
-                            <label for="email">Email Address</label>
-                        </div>
-                    </form>
-
-                    <form>
-                        <div class="form-floating mb-4 theme-form-floating">
-                            <textarea class="form-control" placeholder="Leave a comment here" id="address"
-                                style="height: 100px"></textarea>
-                            <label for="address">Enter Address</label>
-                        </div>
-                    </form>
-
-                    <form>
-                        <div class="form-floating mb-4 theme-form-floating">
-                            <input type="email" class="form-control" id="pin" placeholder="Enter Pin Code">
-                            <label for="pin">Pin Code</label>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary btn-md" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn theme-bg-color btn-md text-white" data-bs-dismiss="modal">Save
-                        changes</button>
-                </div>
-            </div>
-        </div>
-    </div> --}}
-    <!-- Add address modal box end -->
 @endsection
 
-
 @section('js')
-<script>
-let phiVanChuyen = document.getElementById("phi-van-chuyen");
+    <script>
+        let phiVanChuyen = document.getElementById("phi-van-chuyen");
 
 
-let originalDiscount = parseFloat($("#giam-gia").text().replace(/\D/g, "")); // Lấy giảm giá ban đầu
-let voucherCode = $("#voucherCode").val().trim();
-
-
-$(document).ready(function () {
-    let originalTotal = $("#tong-tien").text().trim(); // Lưu tổng tiền gốc
-    let appliedVoucher = ""; // Lưu mã đã áp dụng (ban đầu rỗng)
-    let tongTienHienTai = Number($("#tong-tien").text().replace(/\D/g, "")) || 0;
-
-    $("#voucherForm").submit(function (event) {
-        event.preventDefault();
+        let originalDiscount = parseFloat($("#giam-gia").text().replace(/\D/g, "")); // Lấy giảm giá ban đầu
         let voucherCode = $("#voucherCode").val().trim();
 
-        if (!voucherCode) {
-            Swal.fire({
-                icon: "error",
-                title: "Lỗi!",
-                text: "Vui lòng nhập mã giảm giá.",
-                confirmButtonText: "OK"
-            });
-            return;
-        }
 
-        if (voucherCode !== appliedVoucher) {
-            $("#tong-tien").text(originalTotal.toLocaleString("vi-VN"));
-            $("#giam-gia").text("0đ");
-        }
+        $(document).ready(function() {
+            let originalTotal = $("#tong-tien").text().trim(); // Lưu tổng tiền gốc
+            let appliedVoucher = ""; // Lưu mã đã áp dụng (ban đầu rỗng)
+            let tongTienHienTai = Number($("#tong-tien").text().replace(/\D/g, "")) || 0;
 
-        // ✅ Ngăn nhập lại cùng 1 mã nhưng cho phép đổi mã khác
-        if (voucherCode === appliedVoucher) {
-            Swal.fire({
-                icon: "warning",
-                title: "Thông báo!",
-                text: "Mã giảm giá này đã được áp dụng!",
-                confirmButtonText: "OK"
-            });
-            return;
-        }
+            $("#voucherForm").submit(function(event) {
+                event.preventDefault();
+                let voucherCode = $("#voucherCode").val().trim();
 
-        $.ajax({
-            url: "{{ route('voucher.giohang') }}",
-            type: "POST",
-            data: {
-                _token: "{{ csrf_token() }}",
-                code: voucherCode,
-                total: tongTienHienTai
-            },
-            success: function (response) {
-                if (response.success) {
-                    Swal.fire({
-                        icon: "success",
-                        title: "Áp dụng thành công!",
-                        text: `Bạn được giảm ${response.discount.toLocaleString("vi-VN")}đ.`,
-                        confirmButtonText: "OK"
-                    });
-
-                    // ✅ Cập nhật tổng tiền và giảm giá
-                    $("#tong-tien").text(response.newTotal.toLocaleString("vi-VN"));
-                    $("#giam-gia").text(response.discount.toLocaleString("vi-VN"));
-
-                    appliedVoucher = voucherCode; // ✅ Lưu mã đã áp dụng
-                }
-            },
-            error: function (xhr) {
-                // let errorMessage = "Lỗi server! Vui lòng thử lại sau.";
-                console.log(xhr)
-                if (xhr.status === 403 && xhr.responseJSON && xhr.responseJSON.message) {
-                    errorMessage = xhr.responseJSON.message;
-
-                    // ✅ Reset tổng tiền khi nhập sai mã
-                    $("#tong-tien").text(originalTotal);
-                    $("#giam-gia").text("0");
-
-                    appliedVoucher = ""; // ✅ Cho phép nhập lại mã khác
-                }
-
-                Swal.fire({
-                    icon: "error",
-                    title: "Lỗi!",
-                    text: errorMessage,
-                    confirmButtonText: "OK"
-                });
-            }
-        });
-    });
-});
-
-
-
-
-
-function showTong() {
-    let giaMois = document.getElementsByClassName("gia-moi");
-    let soLuongs = document.getElementsByClassName("so-luong");
-    let tongs = document.getElementsByClassName("tong");
-
-    let tongSanPham = document.getElementById("tong-san-pham");
-    let giamGia = document.getElementById("giam-gia");
-    let phiVanChuyen = document.getElementById("phi-van-chuyen");
-    let tongTien = document.getElementById("tong-tien");
-
-    let sum = 0;
-
-    for (let i = 0; i < giaMois.length; i++) {
-        let giaMoi = Number(giaMois[i].innerHTML.replace(/\./g, "").replace("đ", "").trim());
-        let soLuong = Number(soLuongs[i].innerHTML.replace(/\D/g, "").trim());
-
-        let tong = giaMoi * soLuong;
-        tongs[i].innerHTML = tong.toLocaleString("vi-VN"); // Hiển thị có dấu chấm phân cách
-
-        sum += tong;
-    }
-
-    tongSanPham.innerHTML = sum.toLocaleString("vi-VN");
-
-    let giamGiaValue = Number(giamGia.innerHTML.replace(/\./g, "").replace("đ", "").trim()) || 0;
-    let phiVanChuyenValue = Number(phiVanChuyen.innerHTML.replace(/\./g, "").replace("đ", "").trim()) || 0;
-
-    let total = sum - giamGiaValue + phiVanChuyenValue;
-    tongTien.innerHTML = total.toLocaleString("vi-VN");
-}
-showTong()
-
-$(document).ready(function() {
-
-    function updateHiddenInputs() {
-    // Lấy giá trị từ HTML và chuyển thành số
-    let tongSanPham = parseInt($('#tong-tien').text().replace(/\D/g, '')) || 0;
-    let phiVanChuyen = parseInt($('#phi-van-chuyen').text().replace(/\D/g, '')) || 0;
-    let giamGia = parseInt($('#giam-gia').text().replace(/\D/g, '')) || 0;
-    let voucherCode = $('#voucherCode').val() || ''; // Lấy mã giảm giá nếu có
-
-    // Tính tổng tiền = Tổng sản phẩm + Phí vận chuyển - Giảm giá
-    let tongTien = tongSanPham;
-
-    // Gán giá trị vào input ẩn
-    $('#hiddenTongTien').val(tongTien);
-    $('#hiddenGiamGia').val(giamGia);
-    $('#hiddenVoucherCode').val(voucherCode);
-
-    console.log("Tổng tiền:", tongTien);
-    console.log("Giảm giá:", giamGia);
-    console.log("Mã giảm giá:", voucherCode);
-}
-
-$('input[name="flexRadioDefault"]').on('change', function() {
-    let paymentMethodId = $(this).data('id'); // Lấy ID từ thuộc tính data-id
-    $('#hiddenPaymentMethod').val(paymentMethodId); // Gán vào input ẩn
-    console.log("Phương thức thanh toán đã chọn:", paymentMethodId);
-});
-
-    $("#btnDatHang").click(function(e) {
-        e.preventDefault(); // Ngăn chặn load lại trang
-        updateHiddenInputs();
-
-        // Lấy dữ liệu từ form
-        var formData = {
-            _token: $('meta[name="csrf-token"]').attr('content'), // Lấy CSRF token
-            voucher_code: $('#hiddenVoucherCode').val(),
-            tong_tien: $('#hiddenTongTien').val(),
-            giam_gia: $('#hiddenGiamGia').val(),
-            phuong_thuc_thanh_toan_id: $('#hiddenPaymentMethod').val(),
-            ten_nguoi_nhan: $('input[name="ten_nguoi_nhan"]').val(),
-            email_nguoi_nhan: $('input[name="email_nguoi_nhan"]').val(),
-            sdt_nguoi_nhan: $('input[name="sdt_nguoi_nhan"]').val(),
-            dia_chi_nguoi_nhan: $('input[name="dia_chi_nguoi_nhan"]').val(),
-            ghi_chu: $('input[name="ghi_chu"]').val(),
-        };
-        // Gửi request AJAX
-        $.ajax({
-            url: "{{ route('thanhtoans.xuLy') }}", // Đường dẫn đến route xử lý thanh toán
-            type: "POST",
-            data: formData,
-            success: function(response) {
-                console.log(response)
-                if(response.status === "vnpay") {
-                    window.location.href = response.vnpay_url;
-                }else if (response.status === "success") {
-                    window.location.href = `/dathangthanhcong/${response.id}`;
-                }
-            },
-            error: function(xhr) {
-                let response = xhr.responseJSON;
-                if (response && response.over_quantity) {
-                    let message = "<strong>Sản phẩm vượt quá số lượng tồn kho:</strong><br>";
-                    response.over_quantity.forEach(item => {
-                        message += `🔹 ${item.ten_san_pham}: ${item.so_luong_muon_mua} / ${item.so_luong_ton_kho} kho<br>`;
-                    });
-
+                if (!voucherCode) {
                     Swal.fire({
                         icon: "error",
-                        title: "Lỗi số lượng!",
-                        html: message, // Dùng html để hiển thị danh sách sản phẩm
+                        title: "Lỗi!",
+                        text: "Vui lòng nhập mã giảm giá.",
                         confirmButtonText: "OK"
                     });
-                }  else {
-                Swal.fire({
-                    icon: "error",
-                    title: "Lỗi!",
-                    text: response.message || "Có lỗi xảy ra, vui lòng thử lại!",
-                    confirmButtonText: "OK"
+                    return;
+                }
+
+                if (voucherCode !== appliedVoucher) {
+                    $("#tong-tien").text(originalTotal.toLocaleString("vi-VN"));
+                    $("#giam-gia").text("0đ");
+                }
+
+                // ✅ Ngăn nhập lại cùng 1 mã nhưng cho phép đổi mã khác
+                if (voucherCode === appliedVoucher) {
+                    Swal.fire({
+                        icon: "warning",
+                        title: "Thông báo!",
+                        text: "Mã giảm giá này đã được áp dụng!",
+                        confirmButtonText: "OK"
+                    });
+                    return;
+                }
+
+                $.ajax({
+                    url: "{{ route('voucher.giohang') }}",
+                    type: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        code: voucherCode,
+                        total: tongTienHienTai
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            Swal.fire({
+                                icon: "success",
+                                title: "Áp dụng thành công!",
+                                text: `Bạn được giảm ${response.discount.toLocaleString("vi-VN")}đ.`,
+                                confirmButtonText: "OK"
+                            });
+
+                            // ✅ Cập nhật tổng tiền và giảm giá
+                            $("#tong-tien").text(response.newTotal.toLocaleString("vi-VN"));
+                            $("#giam-gia").text(response.discount.toLocaleString("vi-VN"));
+
+                            appliedVoucher = voucherCode; // ✅ Lưu mã đã áp dụng
+                        }
+                    },
+                    error: function(xhr) {
+                        // let errorMessage = "Lỗi server! Vui lòng thử lại sau.";
+                        console.log(xhr)
+                        if (xhr.status === 403 && xhr.responseJSON && xhr.responseJSON
+                            .message) {
+                            errorMessage = xhr.responseJSON.message;
+
+                            // ✅ Reset tổng tiền khi nhập sai mã
+                            $("#tong-tien").text(originalTotal);
+                            $("#giam-gia").text("0");
+
+                            appliedVoucher = ""; // ✅ Cho phép nhập lại mã khác
+                        }
+
+                        Swal.fire({
+                            icon: "error",
+                            title: "Lỗi!",
+                            text: errorMessage,
+                            confirmButtonText: "OK"
+                        });
+                    }
                 });
-            }
-            }
-        });
-    });
-});
-
-
-</script>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        document.getElementById("checkoutForm").addEventListener("submit", function (event) {
-            let isValid = true;
-
-            // Lấy giá trị của các trường
-            let ten = document.querySelector("[name='ten_nguoi_nhan']").value.trim();
-            let email = document.querySelector("[name='email_nguoi_nhan']").value.trim();
-            let sdt = document.querySelector("[name='sdt_nguoi_nhan']").value.trim();
-            let diaChi = document.querySelector("[name='dia_chi_nguoi_nhan']").value.trim();
-
-            // Reset lỗi cũ
-            document.querySelectorAll(".error-message").forEach(el => el.remove());
-
-            // Kiểm tra Họ và tên
-            if (ten === "") {
-                showError("[name='ten_nguoi_nhan']", "Vui lòng nhập họ và tên");
-                isValid = false;
-            }
-
-            // Kiểm tra Email
-            if (email === "") {
-                showError("[name='email_nguoi_nhan']", "Vui lòng nhập email");
-                isValid = false;
-            } else if (!validateEmail(email)) {
-                showError("[name='email_nguoi_nhan']", "Email không hợp lệ");
-                isValid = false;
-            }
-
-            // Kiểm tra Số điện thoại
-            if (sdt === "") {
-                showError("[name='sdt_nguoi_nhan']", "Vui lòng nhập số điện thoại");
-                isValid = false;
-            } else if (!/^\d{10,11}$/.test(sdt)) {
-                showError("[name='sdt_nguoi_nhan']", "Số điện thoại phải có 10-11 số");
-                isValid = false;
-            }
-
-            // Kiểm tra Địa chỉ
-            if (diaChi === "") {
-                showError("[name='dia_chi_nguoi_nhan']", "Vui lòng nhập địa chỉ");
-                isValid = false;
-            }
-
-            // Nếu có lỗi, ngăn không cho submit
-            if (!isValid) {
-                event.preventDefault();
-            }
+            });
         });
 
-        // Hàm hiển thị lỗi
-        function showError(selector, message) {
-            let inputField = document.querySelector(selector);
-            let errorDiv = document.createElement("div");
-            errorDiv.className = "error-message text-danger mt-1";
-            errorDiv.textContent = message;
-            inputField.parentNode.appendChild(errorDiv);
-        }
 
-        // Hàm kiểm tra email hợp lệ
-        function validateEmail(email) {
-            let re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return re.test(email);
+
+
+
+        function showTong() {
+            let giaMois = document.getElementsByClassName("gia-moi");
+            let soLuongs = document.getElementsByClassName("so-luong");
+            let tongs = document.getElementsByClassName("tong");
+
+            let tongSanPham = document.getElementById("tong-san-pham");
+            let giamGia = document.getElementById("giam-gia");
+            let phiVanChuyen = document.getElementById("phi-van-chuyen");
+            let tongTien = document.getElementById("tong-tien");
+
+            let sum = 0;
+
+            for (let i = 0; i < giaMois.length; i++) {
+                let giaMoi = Number(giaMois[i].innerHTML.replace(/\./g, "").replace("đ", "").trim());
+                let soLuong = Number(soLuongs[i].innerHTML.replace(/\D/g, "").trim());
+
+                let tong = giaMoi * soLuong;
+                tongs[i].innerHTML = tong.toLocaleString("vi-VN"); // Hiển thị có dấu chấm phân cách
+
+                sum += tong;
+            }
+
+            tongSanPham.innerHTML = sum.toLocaleString("vi-VN");
+
+            let giamGiaValue = Number(giamGia.innerHTML.replace(/\./g, "").replace("đ", "").trim()) || 0;
+            let phiVanChuyenValue = Number(phiVanChuyen.innerHTML.replace(/\./g, "").replace("đ", "").trim()) || 0;
+
+            let total = sum - giamGiaValue + phiVanChuyenValue;
+            tongTien.innerHTML = total.toLocaleString("vi-VN");
         }
-    });
+        showTong()
+
+        $(document).ready(function() {
+
+            function updateHiddenInputs() {
+                // Lấy giá trị từ HTML và chuyển thành số
+                let tongSanPham = parseInt($('#tong-tien').text().replace(/\D/g, '')) || 0;
+                let phiVanChuyen = parseInt($('#phi-van-chuyen').text().replace(/\D/g, '')) || 0;
+                let giamGia = parseInt($('#giam-gia').text().replace(/\D/g, '')) || 0;
+                let voucherCode = $('#voucherCode').val() || ''; // Lấy mã giảm giá nếu có
+
+                // Tính tổng tiền = Tổng sản phẩm + Phí vận chuyển - Giảm giá
+                let tongTien = tongSanPham;
+
+                // Gán giá trị vào input ẩn
+                $('#hiddenTongTien').val(tongTien);
+                $('#hiddenGiamGia').val(giamGia);
+                $('#hiddenVoucherCode').val(voucherCode);
+
+                console.log("Tổng tiền:", tongTien);
+                console.log("Giảm giá:", giamGia);
+                console.log("Mã giảm giá:", voucherCode);
+            }
+
+            $('input[name="flexRadioDefault"]').on('change', function() {
+                let paymentMethodId = $(this).data('id'); // Lấy ID từ thuộc tính data-id
+                $('#hiddenPaymentMethod').val(paymentMethodId); // Gán vào input ẩn
+                console.log("Phương thức thanh toán đã chọn:", paymentMethodId);
+            });
+
+            $("#btnDatHang").click(function(e) {
+                e.preventDefault(); // Ngăn chặn load lại trang
+                updateHiddenInputs();
+
+                // Lấy dữ liệu từ form
+                var formData = {
+                    _token: $('meta[name="csrf-token"]').attr('content'), // Lấy CSRF token
+                    voucher_code: $('#hiddenVoucherCode').val(),
+                    tong_tien: $('#hiddenTongTien').val(),
+                    giam_gia: $('#hiddenGiamGia').val(),
+                    phuong_thuc_thanh_toan_id: $('#hiddenPaymentMethod').val(),
+                    ten_nguoi_nhan: $('input[name="ten_nguoi_nhan"]').val(),
+                    email_nguoi_nhan: $('input[name="email_nguoi_nhan"]').val(),
+                    sdt_nguoi_nhan: $('input[name="sdt_nguoi_nhan"]').val(),
+                    dia_chi_nguoi_nhan: $('input[name="dia_chi_nguoi_nhan"]').val(),
+                    ghi_chu: $('input[name="ghi_chu"]').val(),
+                };
+                // Gửi request AJAX
+                $.ajax({
+                    url: "{{ route('thanhtoans.xuLy') }}", // Đường dẫn đến route xử lý thanh toán
+                    type: "POST",
+                    data: formData,
+                    success: function(response) {
+                        console.log(response)
+                        if (response.status === "vnpay") {
+                            window.location.href = response.vnpay_url;
+                        } else if (response.status === "success") {
+                            window.location.href = `/dathangthanhcong/${response.id}`;
+                        }
+                    },
+                    error: function(xhr) {
+                        let response = xhr.responseJSON;
+                        if (response && response.over_quantity) {
+                            let message =
+                                "<strong>Sản phẩm vượt quá số lượng tồn kho:</strong><br>";
+                            response.over_quantity.forEach(item => {
+                                message +=
+                                    `🔹 ${item.ten_san_pham}: ${item.so_luong_muon_mua} / ${item.so_luong_ton_kho} kho<br>`;
+                            });
+
+                            Swal.fire({
+                                icon: "error",
+                                title: "Lỗi số lượng!",
+                                html: message, // Dùng html để hiển thị danh sách sản phẩm
+                                confirmButtonText: "OK"
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Lỗi!",
+                                text: response.message ||
+                                    "Có lỗi xảy ra, vui lòng thử lại!",
+                                confirmButtonText: "OK"
+                            });
+                        }
+                    }
+                });
+            });
+        });
     </script>
 
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById("checkoutForm").addEventListener("submit", function(event) {
+                let isValid = true;
+
+                // Lấy giá trị của các trường
+                let ten = document.querySelector("[name='ten_nguoi_nhan']").value.trim();
+                let email = document.querySelector("[name='email_nguoi_nhan']").value.trim();
+                let sdt = document.querySelector("[name='sdt_nguoi_nhan']").value.trim();
+                let diaChi = document.querySelector("[name='dia_chi_nguoi_nhan']").value.trim();
+
+                // Reset lỗi cũ
+                document.querySelectorAll(".error-message").forEach(el => el.remove());
+
+                // Kiểm tra Họ và tên
+                if (ten === "") {
+                    showError("[name='ten_nguoi_nhan']", "Vui lòng nhập họ và tên");
+                    isValid = false;
+                }
+
+                // Kiểm tra Email
+                if (email === "") {
+                    showError("[name='email_nguoi_nhan']", "Vui lòng nhập email");
+                    isValid = false;
+                } else if (!validateEmail(email)) {
+                    showError("[name='email_nguoi_nhan']", "Email không hợp lệ");
+                    isValid = false;
+                }
+
+                // Kiểm tra Số điện thoại
+                if (sdt === "") {
+                    showError("[name='sdt_nguoi_nhan']", "Vui lòng nhập số điện thoại");
+                    isValid = false;
+                } else if (!/^\d{10,11}$/.test(sdt)) {
+                    showError("[name='sdt_nguoi_nhan']", "Số điện thoại phải có 10-11 số");
+                    isValid = false;
+                }
+
+                // Kiểm tra Địa chỉ
+                if (diaChi === "") {
+                    showError("[name='dia_chi_nguoi_nhan']", "Vui lòng nhập địa chỉ");
+                    isValid = false;
+                }
+
+                // Nếu có lỗi, ngăn không cho submit
+                if (!isValid) {
+                    event.preventDefault();
+                }
+            });
+
+            // Hàm hiển thị lỗi
+            function showError(selector, message) {
+                let inputField = document.querySelector(selector);
+                let errorDiv = document.createElement("div");
+                errorDiv.className = "error-message text-danger mt-1";
+                errorDiv.textContent = message;
+                inputField.parentNode.appendChild(errorDiv);
+            }
+
+            // Hàm kiểm tra email hợp lệ
+            function validateEmail(email) {
+                let re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return re.test(email);
+            }
+        });
+    </script>
 @endsection
