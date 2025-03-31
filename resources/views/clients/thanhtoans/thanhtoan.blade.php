@@ -451,13 +451,8 @@ $('input[name="flexRadioDefault"]').on('change', function() {
             type: "POST",
             data: formData,
             success: function(response) {
-                if (response.status === "success" && response.redirect_url) {
-                    window.location.href = response.redirect_url; // Chuyển hướng đến VNPAY
-                } else {
-                    console.log(response);
-                }
                 // console.log(response)
-                // window.location.href = `/dathangthanhcong/${response.id}`; // Chuyển hướng sau khi đặt hàng thành công (tuỳ chỉnh)
+                window.location.href = `/dathangthanhcong/${response.id}`; // Chuyển hướng sau khi đặt hàng thành công (tuỳ chỉnh)
             },
             error: function(xhr) {
                 let response = xhr.responseJSON;

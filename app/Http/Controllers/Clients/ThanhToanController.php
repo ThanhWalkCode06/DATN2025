@@ -15,7 +15,6 @@ use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\HelperCommon\Helper;
-use App\Http\Controllers\Payment\PaymentVnPay;
 use App\Http\Requests\Client\ThanhToanRequest;
 
 class ThanhToanController extends Controller
@@ -49,7 +48,7 @@ class ThanhToanController extends Controller
         return view('clients.thanhtoans.thanhtoan', compact('chiTietGioHangs','pttts'));
     }
 
-    public function xuLyThanhToan(Request $request){
+    public function xuLyThanhToan(ThanhToanRequest $request){
 
     // return response()->json(['message' => $request->all()], 200);
     $user = Auth::user();
@@ -79,27 +78,6 @@ class ThanhToanController extends Controller
                     'trang_thai_don_hang' => 0,
                     'trang_thai_thanh_toan' => 0,
                     'created_at' => now()
-                ]);
-            }else if($request->phuong_thuc_thanh_toan_id === "2"){
-                $donHang = DonHang::create([
-                    'user_id' => $user->id,
-                    'ma_don_hang' => Helper::generateOrderCode(),
-                    'ten_nguoi_nhan' => $request->ten_nguoi_nhan,
-                    'email_nguoi_nhan' => $request->email_nguoi_nhan,
-                    'sdt_nguoi_nhan' => $request->sdt_nguoi_nhan,
-                    'dia_chi_nguoi_nhan' => $request->dia_chi_nguoi_nhan,
-                    'tong_tien' => $request->tong_tien,
-                    'ghi_chu' => $request->ghi_chu,
-                    'phuong_thuc_thanh_toan_id' => 2,
-                    'trang_thai_don_hang' => -2,
-                    'trang_thai_thanh_toan' => 0,
-                    'created_at' => now()
-                ]);
-                $paymentUrl = PaymentVnPay::createPayment($donHang);
-
-                return response()->json([
-                    'status' => 'success',
-                    'redirect_url' => $paymentUrl
                 ]);
             }else{
                 return response()->json([
