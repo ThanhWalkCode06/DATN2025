@@ -8,7 +8,7 @@
 @endsection
 
 @section('breadcrumb')
-{{-- @php
+    {{-- @php
     dd( $chiTietDonHangs);
 @endphp --}}
 
@@ -101,10 +101,11 @@
                                             <td class="product-detail">
                                                 <div class="product border-0">
                                                     <div>
-                                                        <h4 class="table-title text-content">Ảnh sản phẩm</h4>
-                                                        <a href="{{ route('sanphams.chitiet',$chiTietDonHang->id) }}" class="product-image">
-                                                        <img width="100px" src="{{ Storage::url($chiTietDonHang->hinh_anh) }}"
-                                                            class="img-fluid blur-up lazyload" alt="">
+                                                        <a href="{{ route('sanphams.chitiet', $chiTietDonHang->id) }}"
+                                                            class="product-image">
+                                                            <img width="100px"
+                                                                src="{{ Storage::url($chiTietDonHang->anh_bien_the) }}"
+                                                                class="img-fluid blur-up lazyload" alt="">
                                                         </a>
                                                     </div>
                                                     <div class="product-detail">
@@ -124,7 +125,8 @@
 
                                             <td class="price">
                                                 <h4 class="table-title text-content">Giá</h4>
-                                                <h6 class="theme-color">{{ number_format($chiTietDonHang->gia_ban,0,'','.') }}đ</h6>
+                                                <h6 class="theme-color">
+                                                    {{ number_format($chiTietDonHang->gia_ban, 0, '', '.') }}đ</h6>
                                             </td>
 
                                             <td class="quantity">
@@ -134,7 +136,8 @@
 
                                             <td class="subtotal">
                                                 <h4 class="table-title text-content">Tổng</h4>
-                                                <h5>{{ number_format($chiTietDonHang->gia_ban * $chiTietDonHang->so_luong,0,'','.') }}đ</h5>
+                                                <h5>{{ number_format($chiTietDonHang->gia_ban * $chiTietDonHang->so_luong, 0, '', '.') }}đ
+                                                </h5>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -165,7 +168,7 @@
                                 <ul class="summery-total">
                                     <li class="list-total">
                                         <h4>Tổng:</h4>
-                                        <h4 class="price">{{ number_format($donHang->tong_tien,0,'','.') }}đ</h4>
+                                        <h4 class="price">{{ number_format($donHang->tong_tien, 0, '', '.') }}đ</h4>
                                     </li>
                                 </ul>
                             </div>
@@ -185,7 +188,8 @@
                                     <li class="pb-0">
                                         <h4>Ngày giao hàng dự kiến:</h4>
                                         <h4 class="price theme-color">
-                                            <a href="{{ route('order-tracking.client',$donHang->id) }}" class="text-danger">Kiểm tra đơn hàng</a>
+                                            <a href="{{ route('order-tracking.client', $donHang->id) }}"
+                                                class="text-danger">Kiểm tra đơn hàng</a>
                                         </h4>
                                     </li>
                                 </ul>

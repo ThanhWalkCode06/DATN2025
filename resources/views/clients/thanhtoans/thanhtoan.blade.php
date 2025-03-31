@@ -182,7 +182,7 @@
                             <ul class="summery-contain">
                                 @foreach ($chiTietGioHangs as $chiTietGioHang)
                                     <li>
-                                        <img src="{{ Storage::url($chiTietGioHang->hinh_anh) }}"
+                                        <img src="{{ Storage::url($chiTietGioHang->anh_bien_the) }}"
                                             class="img-fluid blur-up lazyloaded checkout-image" alt="">
                                         <h4>{{ $chiTietGioHang->ten_san_pham }} x
                                             <span class="so-luong">{{ $chiTietGioHang->so_luong }}</span>
