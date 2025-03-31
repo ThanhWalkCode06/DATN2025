@@ -221,7 +221,7 @@ Thêm mới sản phẩm
 
                                 <div class="mb-4">
                                     <label class="form-label-title">Mô tả</label>
-                                    <textarea name="mo_ta" class="form-control">{{ old('mo_ta') }}</textarea>
+                                    <textarea id="mo_ta" name="mo_ta" class="form-control">{{ old('mo_ta') }}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -343,8 +343,7 @@ Thêm mới sản phẩm
 <script src="{{ asset('assets/js/dropzone/dropzone-script.js') }}"></script>
 
 <!-- ck editor js -->
-<script src="{{ asset('assets/js/ckeditor.js') }}"></script>
-<script src="{{ asset('assets/js/ckeditor-custom.js') }}"></script>
+<script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
 
 <!-- select2 js -->
 <script src="{{ asset('assets/js/select2.min.js') }}"></script>/
@@ -583,3 +582,23 @@ Thêm mới sản phẩm
         console.log(event.key); // Kiểm tra xem dấu cách có bị chặn không
     });
 </script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Kiểm tra xem phần tử có tồn tại trước khi khởi tạo CKEditor
+        if (document.querySelector('#mo_ta')) {
+            ClassicEditor
+                .create(document.querySelector('#mo_ta'))
+                .then(editor => {
+                    window.editorMoTa = editor;
+                    editor.model.document.on('change:data', () => {
+                        document.querySelector('textarea[name="mo_ta"]').value = editor.getData();
+                    });
+                })
+                .catch(error => {
+                    console.error('Lỗi CKEditor (Mô tả):', error);
+                });
+        }
+    });
+</script>
+
