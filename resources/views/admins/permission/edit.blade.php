@@ -61,6 +61,8 @@
                                 </thead>
                                 <tbody id="permissions-container">
                                     <tr>
+                                        <p class="text-danger">Vui lòng đặt theo cú pháp: <b>Tên Route(Nếu là router resource thì thêm s và thêm '-')</b></p>
+                                        <span class="text-danger">VD: resource: orders-view, route đơn: danhgia</span>
                                         <td>
                                             <input style="border: 1px solid #ced4da;" class="form-control @error('name') is-invalid @enderror" type="text" placeholder="Tên quyền"
                                             name="name" value="{{ $itemId->name }}">

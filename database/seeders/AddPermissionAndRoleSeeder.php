@@ -157,26 +157,6 @@ class AddPermissionAndRoleSeeder extends Seeder
                 'guard_name' => 'web',
             ],
             [
-                'name' => 'bienthes-view',
-                'description' => 'Xem biến thể',
-                'guard_name' => 'web',
-            ],
-            [
-                'name' => 'bienthes-add',
-                'description' => 'Thêm biến thể',
-                'guard_name' => 'web',
-            ],
-            [
-                'name' => 'bienthes-update',
-                'description' => 'Sửa biến thể',
-                'guard_name' => 'web',
-            ],
-            [
-                'name' => 'bienthes-delete',
-                'description' => 'Xóa biến thể',
-                'guard_name' => 'web',
-            ],
-            [
                 'name' => 'thuoctinhs-view',
                 'description' => 'Xem thuộc tính',
                 'guard_name' => 'web',

@@ -97,11 +97,10 @@
                                                     @enderror
                                                 </div>
 
-                                                <div class="mt-3">
+                                                {{-- <div class="mt-3">
                                                     <input style="border:#0da487" class="checkbox_animated checkall" type="checkbox" name="chinh_sach">
                                                     <label for="">Đồng ý rằng khi hoàn hàng sẽ không được nhận lại tiền</label>
-
-                                                </div>
+                                                </div> --}}
                                             </form>
                                         </div>
                                     </div>
@@ -445,7 +444,6 @@ $('input[name="flexRadioDefault"]').on('change', function() {
             sdt_nguoi_nhan: $('input[name="sdt_nguoi_nhan"]').val(),
             dia_chi_nguoi_nhan: $('input[name="dia_chi_nguoi_nhan"]').val(),
             ghi_chu: $('input[name="ghi_chu"]').val(),
-            chinh_sach: $('input[name="chinh_sach"]').is(':checked') ? 1 : 0,
         };
         // Gửi request AJAX
         $.ajax({
@@ -453,8 +451,13 @@ $('input[name="flexRadioDefault"]').on('change', function() {
             type: "POST",
             data: formData,
             success: function(response) {
+                if (response.status === "success" && response.redirect_url) {
+                    window.location.href = response.redirect_url; // Chuyển hướng đến VNPAY
+                } else {
+                    console.log(response);
+                }
                 // console.log(response)
-                window.location.href = `/dathangthanhcong/${response.id}`; // Chuyển hướng sau khi đặt hàng thành công (tuỳ chỉnh)
+                // window.location.href = `/dathangthanhcong/${response.id}`; // Chuyển hướng sau khi đặt hàng thành công (tuỳ chỉnh)
             },
             error: function(xhr) {
                 let response = xhr.responseJSON;
