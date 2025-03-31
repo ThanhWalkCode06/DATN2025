@@ -167,59 +167,60 @@ class ThanhToanController extends Controller
     }
 
     public function vnpayReturn(Request $request)
-    {
-        if ($request->vnp_ResponseCode == "00") { // Thanh toán thành công
-            $user = Auth::user();
+{
+    if ($request->vnp_ResponseCode == "00") { // Thanh toán thành công
+        $user = Auth::user();
 
-            // Lấy giỏ hàng của người dùng trước khi xóa
-            $cart = ChiTietGioHang::with('bienThe.sanPham')->where('user_id', $user->id)->get();
+        // Lấy giỏ hàng của người dùng trước khi xóa
+        $cart = ChiTietGioHang::with('bienThe.sanPham')->where('user_id', $user->id)->get();
 
-            // Tạo đơn hàng mới
-            $donHang = DonHang::create([
-                'user_id' => $user->id,
-                'ma_don_hang' => $request->vnp_TxnRef,
-                'ten_nguoi_nhan' => $user->username,
-                'tong_tien' => $request->vnp_Amount / 100,
-                'email_nguoi_nhan' => $user->email,
-                'sdt_nguoi_nhan' => $user->so_dien_thoai,
-                'dia_chi_nguoi_nhan' => $user->dia_chi,
-                'phuong_thuc_thanh_toan_id' => 2,
-                'trang_thai_don_hang' => 0,
-                'trang_thai_thanh_toan' => 1, // Đã thanh toán
+        // Tạo đơn hàng mới
+        $donHang = DonHang::create([
+            'user_id' => $user->id,
+            'ma_don_hang' => $request->vnp_TxnRef,
+            'ten_nguoi_nhan' => $user->username,
+            'tong_tien' => $request->vnp_Amount / 100,
+            'email_nguoi_nhan' => $user->email,
+            'sdt_nguoi_nhan' => $user->so_dien_thoai,
+            'dia_chi_nguoi_nhan' => $user->dia_chi,
+            'phuong_thuc_thanh_toan_id' => 2,
+            'trang_thai_don_hang' => 0,
+            'trang_thai_thanh_toan' => 1, // Đã thanh toán
+            'created_at' => now()
+        ]);
+
+        // Duyệt qua từng sản phẩm trong giỏ hàng để thêm vào chi tiết đơn hàng
+        foreach ($cart as $item) {
+            ChiTietDonHang::create([
+                'don_hang_id' => $donHang->id,
+                'bien_the_id' => $item->bien_the_id,
+                'so_luong' => $item->so_luong,
+                'san_pham_id' => $item->san_pham_id,
                 'created_at' => now()
             ]);
 
-            // Duyệt qua từng sản phẩm trong giỏ hàng để thêm vào chi tiết đơn hàng
-            foreach ($cart as $item) {
-                ChiTietDonHang::create([
-                    'don_hang_id' => $donHang->id,
-                    'bien_the_id' => $item->bien_the_id,
-                    'so_luong' => $item->so_luong,
-                    'san_pham_id'=>$item->san_pham_id,
-                    // 'gia_ban' => $item->bienThe->gia_ban, // Lưu giá bán tại thời điểm đặt hàng
-                    // 'ten_san_pham' => $item->bienThe->sanPham->ten_san_pham, // Lưu tên sản phẩm
-                    // 'hinh_anh' => $item->bienThe->sanPham->hinh_anh, // Lưu ảnh sản phẩm
-                    // 'ten_bien_the' => $item->bienThe->ten_bien_the, // Lưu biến thể
-                    'created_at' => now()
-                ]);
+            $bienThe = BienThe::where('id', $item->bien_the_id)->first();
 
-                // Giảm số lượng sản phẩm trong kho
-                BienThe::where('id', $item->bien_the_id)->decrement('so_luong', $item->so_luong);
+            if ($bienThe->so_luong >= $item->so_luong) {
+                $bienThe->decrement('so_luong', $item->so_luong);
+            } else {
+                ChiTietDonHang::where('don_hang_id',$donHang->id)->delete();
+                $donHang->delete();
+                return redirect('/thanhtoan')->with('error', "Sản phẩm {$item->bienThe->sanPham->ten_san_pham} {$item->bienThe->ten_bien_the} không đủ hàng!");
             }
-
-            // Xóa giỏ hàng sau khi đã lưu bản sao
-            ChiTietGioHang::where('user_id', $user->id)->delete();
-
-            // Lấy lại chi tiết đơn hàng để gửi về view
-            $chiTietDonHangs = ChiTietDonHang::where('id', $donHang->id)->get();
-
-
-
-            return view('clients.thanhtoans.dathangthanhcong', compact('donHang', 'chiTietDonHangs', 'cart'));
-        } else {
-            return redirect('/checkout')->with('error', 'Thanh toán thất bại!');
         }
+
+        // Xóa giỏ hàng sau khi đã lưu bản sao
+        ChiTietGioHang::where('user_id', $user->id)->delete();
+
+        // Lấy lại chi tiết đơn hàng để gửi về view
+        $chiTietDonHangs = ChiTietDonHang::where('id', $donHang->id)->get();
+        return redirect()->route('thanhtoans.dathangthanhcong', $donHang->id);
+    } else {
+        return redirect('/thanhtoan')->with('error', 'Thanh toán thất bại!');
     }
+}
+
 
 
 
