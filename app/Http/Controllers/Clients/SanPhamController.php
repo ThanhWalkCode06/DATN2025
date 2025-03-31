@@ -19,54 +19,70 @@ class SanPhamController extends Controller
         $query = SanPham::with(['danhMuc', 'bienThes'])
             ->where('san_phams.trang_thai', 1)
             ->select([
-                'san_phams.id', 
-                'san_phams.ten_san_pham', 
-                'san_phams.gia_cu', 
-                'san_phams.gia_moi', 
+                'san_phams.id',
+                'san_phams.ten_san_pham',
+                'san_phams.gia_cu',
+                'san_phams.gia_moi',
                 'san_phams.khuyen_mai',
-                'san_phams.hinh_anh', 
+                'san_phams.hinh_anh',
                 'san_phams.danh_muc_id',
-                'san_phams.trang_thai', 
+                'san_phams.trang_thai',
                 'san_phams.created_at'
             ])
             ->orderByDesc('san_phams.created_at'); // Sắp xếp mới nhất lên đầu
 
-    
+
         // **Luôn JOIN bảng đánh giá nếu lọc số sao hoặc sắp xếp theo rating**
         $joinDanhGia = false;
-    
+
         // **Lọc theo danh mục**
         if ($request->filled('danh_muc_id')) {
             $query->where('san_phams.danh_muc_id', $request->danh_muc_id);
         }
-    
+
         // **Lọc theo số sao**
         if ($request->filled('so_sao')) {
             $soSao = (int) $request->so_sao;
             $query->leftJoin('danh_gias', 'san_phams.id', '=', 'danh_gias.san_pham_id');
             $joinDanhGia = true; // Đánh dấu đã JOIN bảng danh_gias
-    
+
             $query->addSelect(\DB::raw('COALESCE(AVG(danh_gias.so_sao), 0) as avg_rating'))
-                ->groupBy('san_phams.id', 'san_phams.ten_san_pham', 'san_phams.gia_cu', 'san_phams.gia_moi', 
-                          'san_phams.khuyen_mai', 'san_phams.hinh_anh', 'san_phams.danh_muc_id', 
-                          'san_phams.trang_thai', 'san_phams.created_at');
-    
+                ->groupBy(
+                    'san_phams.id',
+                    'san_phams.ten_san_pham',
+                    'san_phams.gia_cu',
+                    'san_phams.gia_moi',
+                    'san_phams.khuyen_mai',
+                    'san_phams.hinh_anh',
+                    'san_phams.danh_muc_id',
+                    'san_phams.trang_thai',
+                    'san_phams.created_at'
+                );
+
             if ($soSao == 5) {
                 $query->havingRaw('AVG(danh_gias.so_sao) = 5.0');
             } else {
                 $query->havingRaw('AVG(danh_gias.so_sao) BETWEEN ? AND ?', [$soSao, $soSao + 0.9]);
             }
         }
-    
+
         // **Bộ lọc sắp xếp**
         if ($request->filled('sort')) {
             switch ($request->sort) {
                 case 'pop': // Sản phẩm bán chạy
                     $query->leftJoin('chi_tiet_don_hangs', 'san_phams.id', '=', 'chi_tiet_don_hangs.san_pham_id')
                         ->addSelect(\DB::raw('COALESCE(SUM(chi_tiet_don_hangs.so_luong), 0) as tong_so_luong'))
-                        ->groupBy('san_phams.id', 'san_phams.ten_san_pham', 'san_phams.gia_cu', 'san_phams.gia_moi', 
-                                  'san_phams.khuyen_mai', 'san_phams.hinh_anh', 'san_phams.danh_muc_id', 
-                                  'san_phams.trang_thai', 'san_phams.created_at')
+                        ->groupBy(
+                            'san_phams.id',
+                            'san_phams.ten_san_pham',
+                            'san_phams.gia_cu',
+                            'san_phams.gia_moi',
+                            'san_phams.khuyen_mai',
+                            'san_phams.hinh_anh',
+                            'san_phams.danh_muc_id',
+                            'san_phams.trang_thai',
+                            'san_phams.created_at'
+                        )
                         ->orderByDesc('tong_so_luong');
                     break;
                 case 'low': // Giá thấp - cao
@@ -76,13 +92,21 @@ class SanPhamController extends Controller
                     $query->orderBy('san_phams.gia_moi', 'desc');
                     break;
                 case 'rating': // Đánh giá cao - thấp
-                    if (!$joinDanhGia) { 
+                    if (!$joinDanhGia) {
                         // Nếu chưa JOIN bảng danh_gias, cần JOIN trước khi sắp xếp theo rating
                         $query->leftJoin('danh_gias', 'san_phams.id', '=', 'danh_gias.san_pham_id')
-                              ->addSelect(\DB::raw('COALESCE(AVG(danh_gias.so_sao), 0) as avg_rating'))
-                              ->groupBy('san_phams.id', 'san_phams.ten_san_pham', 'san_phams.gia_cu', 'san_phams.gia_moi', 
-                                        'san_phams.khuyen_mai', 'san_phams.hinh_anh', 'san_phams.danh_muc_id', 
-                                        'san_phams.trang_thai', 'san_phams.created_at');
+                            ->addSelect(\DB::raw('COALESCE(AVG(danh_gias.so_sao), 0) as avg_rating'))
+                            ->groupBy(
+                                'san_phams.id',
+                                'san_phams.ten_san_pham',
+                                'san_phams.gia_cu',
+                                'san_phams.gia_moi',
+                                'san_phams.khuyen_mai',
+                                'san_phams.hinh_anh',
+                                'san_phams.danh_muc_id',
+                                'san_phams.trang_thai',
+                                'san_phams.created_at'
+                            );
                     }
                     $query->orderByDesc('avg_rating');
                     break;
@@ -91,16 +115,16 @@ class SanPhamController extends Controller
                     break;
             }
         }
-    
+
         $sanPhams = $query->paginate(20)->appends($request->query());
-    
+
         $danhMucs = DanhMucSanPham::withCount([
             'sanPhams' => function ($query) {
                 $query->where('trang_thai', 1);
             }
         ])->having('san_phams_count', '>', 0)
-          ->get();
-    
+            ->get();
+
         return view('clients.sanphams.danhsach', compact('sanPhams', 'danhMucs'));
     }
 
@@ -119,11 +143,26 @@ class SanPhamController extends Controller
         ])
             ->where('san_phams.id', $id)
             ->where('san_phams.trang_thai', 1)
-            ->selectRaw('san_phams.*, 
-                COALESCE(AVG(danh_gias.so_sao), 0) as avg_rating, 
+            ->selectRaw('san_phams.*,
+                COALESCE(AVG(danh_gias.so_sao), 0) as avg_rating,
                 COUNT(danh_gias.id) as total_reviews')
             ->leftJoin('danh_gias', 'san_phams.id', '=', 'danh_gias.san_pham_id')
-            ->groupBy('san_phams.id')
+            ->groupBy(
+                'san_phams.id',
+                'san_phams.ten_san_pham',
+                'san_phams.ma_san_pham',
+                'san_phams.san_pham_slug',
+                'san_phams.gia_cu',
+                'san_phams.gia_moi',
+                'san_phams.khuyen_mai',
+                'san_phams.hinh_anh',
+                'san_phams.mo_ta',
+                'san_phams.danh_muc_id',
+                'san_phams.trang_thai',
+                'san_phams.created_at',
+                'san_phams.updated_at',
+                'san_phams.deleted_at',
+            )
             ->firstOrFail();
 
         // Tính phần trăm giảm giá
@@ -139,32 +178,32 @@ class SanPhamController extends Controller
 
 
 
-            $bienThes = BienThe::where('san_pham_id', $id)->get();
+        $bienThes = BienThe::where('san_pham_id', $id)->get();
 
-            $mauSac = $bienThes->groupBy(function ($bienThe) {
-                $thuocTinh = optional($bienThe->giaTriThuocTinhs)
-                    ->where('thuocTinh.ten_thuoc_tinh', 'Color')->first();
-                return $thuocTinh ? $thuocTinh->gia_tri : 'Không xác định';
-            })->map(function ($items) {
-                $thuocTinh = optional($items->first()->giaTriThuocTinhs)
-                    ->where('thuocTinh.ten_thuoc_tinh', 'Color')->first();
-                
-                return [
-                    'gia_tri' => $thuocTinh ? $thuocTinh->gia_tri : 'Không xác định',
-                    'anh' => Storage::url(optional($items->first())->anh_bien_the ?? 'default.png'), // Ảnh mặc định của màu
-                    'bien_thes' => $items->map(function ($bienThe) {
-                        $thuocTinhSize = optional($bienThe->giaTriThuocTinhs
-                            ->where('thuocTinh.ten_thuoc_tinh', 'Size')->first());
-                        return [
-                            'id' => $bienThe->id,
-                            'gia_tri' => $thuocTinhSize ? $thuocTinhSize->gia_tri : 'Không xác định',
-                            'gia_ban' => $bienThe->gia_ban,
-                            'so_luong' => $bienThe->so_luong,
-                            'anh' => Storage::url($bienThe->anh_bien_the ?? 'default.png') // Ảnh riêng của biến thể (màu + size)
-                        ];
-                    })->unique('gia_tri')->values()
-                ];
-            })->values();
+        $mauSac = $bienThes->groupBy(function ($bienThe) {
+            $thuocTinh = optional($bienThe->giaTriThuocTinhs)
+                ->where('thuocTinh.ten_thuoc_tinh', 'Color')->first();
+            return $thuocTinh ? $thuocTinh->gia_tri : 'Không xác định';
+        })->map(function ($items) {
+            $thuocTinh = optional($items->first()->giaTriThuocTinhs)
+                ->where('thuocTinh.ten_thuoc_tinh', 'Color')->first();
+
+            return [
+                'gia_tri' => $thuocTinh ? $thuocTinh->gia_tri : 'Không xác định',
+                'anh' => Storage::url(optional($items->first())->anh_bien_the ?? 'default.png'), // Ảnh mặc định của màu
+                'bien_thes' => $items->map(function ($bienThe) {
+                    $thuocTinhSize = optional($bienThe->giaTriThuocTinhs
+                        ->where('thuocTinh.ten_thuoc_tinh', 'Size')->first());
+                    return [
+                        'id' => $bienThe->id,
+                        'gia_tri' => $thuocTinhSize ? $thuocTinhSize->gia_tri : 'Không xác định',
+                        'gia_ban' => $bienThe->gia_ban,
+                        'so_luong' => $bienThe->so_luong,
+                        'anh' => Storage::url($bienThe->anh_bien_the ?? 'default.png') // Ảnh riêng của biến thể (màu + size)
+                    ];
+                })->unique('gia_tri')->values()
+            ];
+        })->values();
 
         // dd($mauSac);
 
@@ -213,7 +252,7 @@ class SanPhamController extends Controller
                 return response()->json(['success' => false, 'message' => 'Sản phẩm đã tồn tại trong danh sách!'], 500);
             }
         } else {
-            return response()->json([ 'message' => 'Bạn chưa đăng nhập!'], 401);
+            return response()->json(['message' => 'Bạn chưa đăng nhập!'], 401);
         }
     }
 
@@ -263,21 +302,21 @@ class SanPhamController extends Controller
                 return [
                     'id' => $bienThe->id,
                     'ten_bien_the' => $bienThe->ten_bien_the,
-                    'gia_ban' => number_format($bienThe->gia_ban,0,'','.'),
+                    'gia_ban' => number_format($bienThe->gia_ban, 0, '', '.'),
                     'anh_bien_the' => Storage::url($bienThe->anh_bien_the ?? 'images/default.png'),
                     'so_luong' => $bienThe->so_luong,
                     'thuoc_tinh_gia_tri' => $bienThe->tt->map(function ($thuocTinh) use ($bienThe) {
-                    $giaTri = $bienThe->gttt
-                        ->where('thuoc_tinh_id', $thuocTinh->id)
-                        ->pluck('gia_tri') // Lấy danh sách giá trị
-                        ->toArray(); // Chuyển về mảng
+                        $giaTri = $bienThe->gttt
+                            ->where('thuoc_tinh_id', $thuocTinh->id)
+                            ->pluck('gia_tri') // Lấy danh sách giá trị
+                            ->toArray(); // Chuyển về mảng
 
-                    return [
-                        'id' => $thuocTinh->id,
-                        'ten' => $thuocTinh->ten_thuoc_tinh,
-                        'gia_tri' => count($giaTri) === 1 ? $giaTri[0] : null // Nếu chỉ có 1 giá trị, lấy nó, ngược lại thì null
-                    ];
-                })
+                        return [
+                            'id' => $thuocTinh->id,
+                            'ten' => $thuocTinh->ten_thuoc_tinh,
+                            'gia_tri' => count($giaTri) === 1 ? $giaTri[0] : null // Nếu chỉ có 1 giá trị, lấy nó, ngược lại thì null
+                        ];
+                    })
                 ];
             }),
         ]);

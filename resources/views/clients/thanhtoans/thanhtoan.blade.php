@@ -5,6 +5,19 @@
 @endsection
 
 @section('css')
+    <style>
+        .checkbox_animated:after {
+            content: "";
+            position: absolute;
+            top: -0.125rem;
+            left: 0;
+            width: 1.3rem;
+            height: 1.3rem;
+            background: #fff;
+            border: 1px solid #ccc;
+            cursor: pointer;
+        }
+    </style>
 @endsection
 
 @section('breadcrumb')
@@ -111,13 +124,15 @@
                                                     @if ($item['trang_thai'] == 1)
                                                         <div class="accordion-item">
                                                             <div class="accordion-header" id="flush-headingOne">
-                                                                <div class="accordion-button collapsed" data-bs-toggle="collapse"
+                                                                <div class="accordion-button collapsed"
+                                                                    data-bs-toggle="collapse"
                                                                     data-bs-target="#flush-collapseOne">
                                                                     <div class="custom-form-check form-check mb-0">
                                                                         <label class="form-check-label" for="cash">
-                                                                            <input class="form-check-input mt-0" type="radio"
-                                                                                name="flexRadioDefault" id="cash"
-                                                                                data-id="{{ $item['id'] }}" {{ $item['id'] == 1 ? 'checked' : '' }}>
+                                                                            <input class="form-check-input mt-0"
+                                                                                type="radio" name="flexRadioDefault"
+                                                                                id="cash" data-id="{{ $item['id'] }}"
+                                                                                {{ $item['id'] == 1 ? 'checked' : '' }}>
                                                                             {{ $item['ten_phuong_thuc'] }}
                                                                         </label>
                                                                     </div>
@@ -148,7 +163,8 @@
                                     @csrf
                                     <div class="mb-3 coupon-box input-group">
                                         <input style="border: 1px solid #0da487;" id="voucherCode" type="text"
-                                            class="form-control" id="exampleFormControlInput1" placeholder="Nhập mã phiếu">
+                                            class="form-control" id="exampleFormControlInput1"
+                                            placeholder="Nhập mã phiếu">
                                         <button style="border: 1px solid #0da487;margin-top: 0px;" type="submit"
                                             class="btn-apply">Xác nhận</button>
                                     </div>
@@ -164,7 +180,8 @@
                                             <span>{{ $chiTietGioHang->bienThe->ten_bien_the }}</span>
                                         </h4>
 
-                                        <h4 hidden><span class="gia-moi">{{ $chiTietGioHang->bienThe->gia_ban }}</span>đ</h4>
+                                        <h4 hidden><span class="gia-moi">{{ $chiTietGioHang->bienThe->gia_ban }}</span>đ
+                                        </h4>
                                         <h4 class="price"><span class="tong"></span>đ</h4>
                                     </li>
                                 @endforeach
@@ -263,7 +280,6 @@
 @endsection
 
 @section('js')
-
     <script>
         let phiVanChuyen = document.getElementById("phi-van-chuyen");
 
@@ -272,12 +288,12 @@
         let voucherCode = $("#voucherCode").val().trim();
 
 
-        $(document).ready(function () {
+        $(document).ready(function() {
             let originalTotal = $("#tong-tien").text().trim(); // Lưu tổng tiền gốc
             let appliedVoucher = ""; // Lưu mã đã áp dụng (ban đầu rỗng)
             let tongTienHienTai = Number($("#tong-tien").text().replace(/\D/g, "")) || 0;
 
-            $("#voucherForm").submit(function (event) {
+            $("#voucherForm").submit(function(event) {
                 event.preventDefault();
                 let voucherCode = $("#voucherCode").val().trim();
 
@@ -315,7 +331,7 @@
                         code: voucherCode,
                         total: tongTienHienTai
                     },
-                    success: function (response) {
+                    success: function(response) {
                         if (response.success) {
                             Swal.fire({
                                 icon: "success",
@@ -331,10 +347,11 @@
                             appliedVoucher = voucherCode; // ✅ Lưu mã đã áp dụng
                         }
                     },
-                    error: function (xhr) {
+                    error: function(xhr) {
                         let errorMessage = "Lỗi server! Vui lòng thử lại sau.";
 
-                        if (xhr.status === 403 && xhr.responseJSON && xhr.responseJSON.message) {
+                        if (xhr.status === 403 && xhr.responseJSON && xhr.responseJSON
+                            .message) {
                             errorMessage = xhr.responseJSON.message;
 
                             // ✅ Reset tổng tiền khi nhập sai mã
@@ -391,7 +408,7 @@
         }
         showTong()
 
-        $(document).ready(function () {
+        $(document).ready(function() {
 
             function updateHiddenInputs() {
                 // Lấy giá trị từ HTML và chuyển thành số
@@ -413,13 +430,13 @@
                 console.log("Mã giảm giá:", voucherCode);
             }
 
-            $('input[name="flexRadioDefault"]').on('change', function () {
+            $('input[name="flexRadioDefault"]').on('change', function() {
                 let paymentMethodId = $(this).data('id'); // Lấy ID từ thuộc tính data-id
                 $('#hiddenPaymentMethod').val(paymentMethodId); // Gán vào input ẩn
                 console.log("Phương thức thanh toán đã chọn:", paymentMethodId);
             });
 
-            $("#btnDatHang").click(function (e) {
+            $("#btnDatHang").click(function(e) {
                 e.preventDefault(); // Ngăn chặn load lại trang
                 updateHiddenInputs();
 
@@ -441,7 +458,7 @@
                     url: "{{ route('thanhtoans.xuLy') }}", // Đường dẫn đến route xử lý thanh toán
                     type: "POST",
                     data: formData,
-                    success: function (response) {
+                    success: function(response) {
                         console.log(response);
 
                         if (response.status === "vnpay") {
@@ -452,14 +469,15 @@
                             // Nếu là tiền mặt, chuyển hướng đến trang đặt hàng thành công
                             window.location.href = `/dathangthanhcong/${response.id}`;
                         }
-                    }
-                    ,
-                    error: function (xhr) {
+                    },
+                    error: function(xhr) {
                         let response = xhr.responseJSON;
                         if (response && response.over_quantity) {
-                            let message = "<strong>Sản phẩm vượt quá số lượng tồn kho:</strong><br>";
+                            let message =
+                                "<strong>Sản phẩm vượt quá số lượng tồn kho:</strong><br>";
                             response.over_quantity.forEach(item => {
-                                message += `🔹 ${item.ten_san_pham}: ${item.so_luong_muon_mua} / ${item.so_luong_ton_kho} kho<br>`;
+                                message +=
+                                    `🔹 ${item.ten_san_pham}: ${item.so_luong_muon_mua} / ${item.so_luong_ton_kho} kho<br>`;
                             });
 
                             Swal.fire({
@@ -472,7 +490,8 @@
                             Swal.fire({
                                 icon: "error",
                                 title: "Lỗi!",
-                                text: response.message || "Có lỗi xảy ra, vui lòng thử lại!",
+                                text: response.message ||
+                                    "Có lỗi xảy ra, vui lòng thử lại!",
                                 confirmButtonText: "OK"
                             });
                         }
@@ -480,13 +499,11 @@
                 });
             });
         });
-
-
     </script>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            document.getElementById("checkoutForm").addEventListener("submit", function (event) {
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById("checkoutForm").addEventListener("submit", function(event) {
                 let isValid = true;
 
                 // Lấy giá trị của các trường
@@ -550,5 +567,4 @@
             }
         });
     </script>
-
 @endsection

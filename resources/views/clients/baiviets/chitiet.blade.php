@@ -52,6 +52,12 @@
             display: flex;
             align-items: center;
         }
+
+        .first-letter::first-letter {
+            text-transform: uppercase;
+            font-size: 2em;
+            font-weight: bold;
+        }
     </style>
 
     <section class="blog-detail section-b-space">
@@ -61,11 +67,10 @@
                     <div class="ratio_50 position-relative">
                         <div class="blog-detail-image rounded-3 overflow-hidden position-relative">
                             <img src="{{ asset('storage/' . $baiViet->anh_bia) }}"
-                                 class="bg-img blur-up lazyload w-100 h-100 object-fit-cover"
-                                 alt="{{ $baiViet->tieu_de }}">
+                                class="bg-img blur-up lazyload w-100 h-100 object-fit-cover" alt="{{ $baiViet->tieu_de }}">
 
                             <div class="position-absolute top-0 start-0 w-100 h-100"
-                                 style="background: linear-gradient(to bottom, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.6));">
+                                style="background: linear-gradient(to bottom, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.6));">
                             </div>
 
                             <div class="blog-image-contain">
@@ -95,8 +100,9 @@
                     </div>
 
                     <div class="blog-detail-contain mt-4">
-                        <p>{!! nl2br(e($baiViet->noi_dung)) !!}</p>
+                        <p class="first-letter">{!! $baiViet->noi_dung !!}</p>
                     </div>
+
                 </div>
 
                 @include('clients.baiviets.sidebar')

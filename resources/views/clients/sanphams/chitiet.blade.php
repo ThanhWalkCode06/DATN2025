@@ -26,7 +26,7 @@
 
         .option-box:hover,
         .option input:checked+.option-box {
-            /* border: 2px solid black; */
+            border: 2px solid black;
         }
 
         input[type="radio"].variant-color-selector {
@@ -60,8 +60,19 @@
         }
 
 
+        .swiper-container {
+            width: 100%;
+            overflow: hidden;
+            padding: 10px;
 
+        }
 
+        .swiper-slide {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: auto;
+        }
 
 
         .product-box-3 {
@@ -113,45 +124,168 @@
         }
 
 
-        .swiper-container {
-            width: 100%;
-            overflow: hidden;
-            padding: 10px;
-            position: relative;
-            /* Quan trọng để các nút điều hướng đúng vị trí */
-        }
-
-        .swiper-slide {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: auto;
-        }
-
         .swiper-button-next,
         .swiper-button-prev {
             position: absolute;
             top: 50%;
+            /* Đặt giữa chiều cao của slider */
             transform: translateY(-50%);
+            /* Căn chỉnh chính xác giữa */
             z-index: 10;
+            /* Đảm bảo hiển thị trên cùng */
             color: black;
+            /* Màu đen để dễ nhìn */
             font-size: 24px;
-            background: rgba(255, 255, 255, 0.8);
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            cursor: pointer;
+            /* Tăng kích thước nếu cần */
+        }
+
+        .swiper-container {
+            position: relative;
+            /* Đảm bảo container có vị trí tương đối */
         }
 
         .swiper-button-next:hover,
         .swiper-button-prev:hover {
-            color: #1abc9c;
+            color: #1abc9c
         }
 
-        
+        .left-slider-image .slick-track {
+            display: flex !important;
+            justify-content: center;
+            gap: 10px;
+            /* Khoảng cách giữa các ảnh */
+        }
+
+        .sidebar-image img {
+            width: 100px;
+            /* Điều chỉnh kích thước ảnh thumbnail */
+            height: auto;
+            cursor: pointer;
+        }
+
+        #main-image {
+            display: block !important;
+            width: 100%;
+            max-height: 400px;
+            /* Giới hạn chiều cao hợp lý */
+            object-fit: contain;
+        }
+
+        .slider-image {
+            /* opacity: 1 !important; */
+        }
+
+        .slick-slide {
+            opacity: 1 !important;
+            filter: none !important;
+        }
+
+        /* Nếu Slick Slider vẫn làm mờ ảnh không active */
+        .slick-slide[aria-hidden="true"] {
+            opacity: 1 !important;
+        }
+
+        .slider-image img,
+        .sidebar-image img {
+            filter: none !important;
+            opacity: 1 !important;
+        }
+
+        .product-left-box img:not(#main-image) {
+            width: 150px;
+            height: 100px;
+            object-fit: cover;
+        }
+
+        .product-rating-list .feather .feather-star {
+            color: #ffcc00;
+        }
+
+        .rating i {
+            font-size: 24px;
+            cursor: pointer;
+            color: #ccc;
+        }
+
+        .rating i.selected {
+            color: #f39c12;
+        }
+
+        #color-options {
+            display: flex;
+            gap: 10px;
+            /* Tạo khoảng cách giữa các phần tử */
+        }
+
+        .product-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            /* Khoảng cách giữa các phần tử */
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .product-image img {
+            width: 100px;
+            /* Định kích thước ảnh */
+            height: 100px;
+            object-fit: cover;
+        }
+
+        .product-content {
+            flex: 1;
+            /* Cho phép phần nội dung mở rộng */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .name {
+            margin: 0;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .product-review-rating {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .product-rating {
+            display: flex;
+            flex-direction: column;
+            /* Xếp giá thành 2 dòng */
+            align-items: flex-start;
+            /* Căn trái */
+            text-align: left;
+        }
+
+        .theme-color {
+            color: #009970;
+            /* Màu xanh tương tự ảnh */
+            font-weight: bold;
+            font-size: 16px;
+            display: block;
+            width: 100%;
+            /* Đảm bảo cùng độ rộng */
+        }
+
+        del {
+            color: gray;
+            font-size: 14px;
+            margin-top: 2px;
+            display: block;
+            width: 100%;
+            /* Đảm bảo cùng độ rộng */
+        }
+
+        .review-box {
+            margin: 5px 0;
+        }
     </style>
 @endsection
 
@@ -191,52 +325,29 @@
                             <div class="product-left-box">
                                 <div class="row g-sm-4 g-2">
                                     <div class="col-12">
-                                        <div class="product-main no-arrow">
-                                            <div>
-                                                <div class="slider-image">
-                                                    <!-- Hiển thị hình ảnh chính của sản phẩm -->
-                                                    <img src="{{ asset('storage/' . $sanPhams->hinh_anh) }}" id="img-1"
-                                                        data-zoom-image="{{ asset('storage/' . $sanPhams->hinh_anh) }}"
-                                                        class="img-fluid image_zoom_cls-0 blur-up lazyload" alt="">
-                                                </div>
+                                        <div class="product-main no-arrow slick-slider">
+                                            <div class="slider-image">
+                                                <!-- Ảnh chính -->
+                                                <img id="main-image" src="{{ asset('storage/' . $sanPhams->hinh_anh) }}"
+                                                    class="img-fluid" alt="">
                                             </div>
-
-                                            <!-- Hiển thị các hình ảnh phụ -->
-                                            @foreach ($anhSPs as $anhSP)
-                                                <div>
-                                                    <div class="slider-image">
-                                                        <img src="{{ asset('storage/' . $anhSP->link_anh_san_pham) }}"
-                                                            data-zoom-image="{{ asset('storage/' . $anhSP->link_anh_san_pham) }}"
-                                                            class="img-fluid image_zoom_cls-0 blur-up lazyload"
-                                                            alt="">
-                                                    </div>
-                                                </div>
-                                            @endforeach
                                         </div>
                                     </div>
 
                                     <div class="col-12">
-                                        <div class="left-slider-image left-slider no-arrow slick-top">
-                                            <!-- Hiển thị hình ảnh chính của sản phẩm trong sidebar -->
-                                            <div>
-                                                <div class="sidebar-image">
-                                                    <img src="{{ asset('storage/' . $sanPhams->hinh_anh) }}"
-                                                        class="img-fluid blur-up lazyload" alt="">
-                                                </div>
-                                            </div>
-
-                                            <!-- Hiển thị các hình ảnh phụ trong sidebar -->
-                                            @foreach ($anhSPs as $anhSP)
-                                                <div>
-                                                    <div class="sidebar-image">
-                                                        <img src="{{ asset('storage/' . $anhSP->link_anh_san_pham) }}"
-                                                            class="img-fluid blur-up lazyload" alt="">
-                                                    </div>
+                                        <div
+                                            class="left-slider-image left-slider no-arrow slick-top d-flex justify-content-center">
+                                            @foreach ($sanPhams->anhSP as $anh)
+                                                <div class="sidebar-image mx-2">
+                                                    <img src="{{ asset('storage/' . $anh->link_anh_san_pham) }}"
+                                                        class="img-fluid image-thumbnail" alt=""
+                                                        data-large="{{ asset('storage/' . $anh->link_anh_san_pham) }}">
                                                 </div>
                                             @endforeach
                                         </div>
                                     </div>
                                 </div>
+
                             </div>
                         </div>
 
@@ -247,24 +358,14 @@
                             </h2>
                             <br>
                             <div class="right-box-contain">
-                                <h6 class="offer-top">({{ $phanTramGiamGia }}% off)</h6> <!-- Giữ mặc định -->
-
-
-                                <!-- Hiển thị giá cập nhật khi chọn size -->
-                                <div class="mt-3">
-                                    <strong class="price-label"></strong>
-                                    <span id="product-price" class="theme-color price"
-                                        style="font-size: 20px; font-weight: bold;">0₫</span>
+                                <h6 class="offer-top">({{ $phanTramGiamGia }}% off)</h6>
+                                <h2 class="name"></h2>
+                                <div class="price-rating">
+                                    <h3 class="theme-color price">
+                                        <?= number_format($sanPhams->gia_moi, 0, ',', '.') ?>₫ <br><del
+                                            class="text-content">
+                                            <?= number_format($sanPhams->gia_cu, 0, ',', '.') ?>₫</del>
                                 </div>
-                                <h3 class="theme-color price">
-                                    <span id="default-price" style="font-size: 20px; font-weight: bold;">
-                                        {{ number_format($sanPhams->gia_moi, 0, ',', '.') }}₫
-                                    </span>
-                                    <br>
-                                    <del id="default-old-price" class="text-content">
-                                        {{ number_format($sanPhams->gia_cu, 0, ',', '.') }}₫
-                                    </del>
-                                </h3>
 
                                 <div class="product-contain">
                                     <p class="w-100"></p>
@@ -273,47 +374,38 @@
                                 <div class="product-package">
                                     <!-- Hiển thị danh sách màu sắc -->
                                     <div class="mb-3">
-                                        <strong>Màu Sắc: <span id="selected-color"></span></strong>
-                                        <div class="d-flex flex-wrap" id="color-options">
+                                        <strong>Màu Sắc: <span id="selected-color">Chọn màu</span></strong>
+                                        <div class="d-flex" id="color-options">
                                             @foreach ($mauSac as $index => $mau)
-                                                <label class="color-option rounded-circle d-flex align-items-center justify-content-center"
-                                                       style="cursor: pointer; width: 60px; height: 60px; position: relative; border: 3px solid transparent;"
-                                                       data-color-name="{{ $mau['gia_tri'] }}">
-                                                    <input type="radio" name="color" class="d-none variant-color-selector"
-                                                           value="{{ $index }}" data-mau="{{ $mau['gia_tri'] }}"
-                                                           data-bienthes='@json($mau['bien_thes'])'
-                                                           {{ $index === 0 ? 'checked' : '' }}>
+                                                <label class="option color-option"
+                                                    style="cursor: pointer; position: relative;">
+                                                    <input type="radio" name="color"
+                                                        class="d-none variant-color-selector" value="{{ $index }}"
+                                                        data-mau="{{ $mau['gia_tri'] }}"
+                                                        data-bienthes='@json($mau['bien_thes'])'
+                                                        {{ $index === 0 ? 'checked' : '' }}>
                                                     <img src="{{ $mau['anh'] }}" alt="{{ $mau['gia_tri'] }}"
-                                                         class="color-img rounded-circle" 
-                                                         style="width: 50px; height: 50px; object-fit: cover;">
+                                                        style="width: 50px; height: 50px; border: 2px solid #ddd; margin-right: 5px;"
+                                                        class="color-img">
                                                 </label>
                                             @endforeach
                                         </div>
                                     </div>
-                                    
+
                                     <!-- Hiển thị danh sách kích thước -->
                                     <div class="mb-3">
                                         <strong>Size:</strong>
-                                        <div class="d-flex flex-wrap" id="size-options">
+                                        <div class="d-flex" id="size-options">
                                             <!-- Kích thước sẽ cập nhật bằng JavaScript -->
                                         </div>
                                     </div>
-                                    
 
                                     <!-- Hiển thị giá sản phẩm -->
                                     <div class="mt-3">
-                                        {{-- <strong>GIÁ:</strong>
-                                            <span id="product-price">0 VNĐ</span><br> --}}
-                                        <strong>Số lượng:</strong>
-                                        <span id="product-quantity"></span>
-
+                                        <strong>GIÁ:</strong>
+                                        <span id="product-price">0 VNĐ</span>
                                     </div>
                                 </div>
-
-
-
-
-
 
                                 <div class="note-box product-package">
                                     <div class="cart_qty qty-box product-qty">
@@ -329,30 +421,33 @@
                                         </div>
                                     </div>
 
-                                    <button class="btn btn-add-cart addcart-button">
-                                        @if ($sanPhams['trang_thai'] == 1)
-                                        <a href="{{ route('thanhtoans.thanhtoan') }}"
-                                        class="btn btn-sm cart-button theme-bg-color text-white">
-                                        Mua ngay</a>
-                                        @endif
-                                    </button>
+                                    <button onclick="location.href = 'cart.html';"
+                                        class="btn btn-md bg-dark cart-button text-white w-100">Thêm vào giỏ hàng</button>
                                 </div>
 
                                 <div class="buy-box">
-                                    <li data-bs-toggle="tooltip" data-bs-placement="top" title="">
-                                        <a href="#" class="notifi-wishlist">
-                                            <i data-feather="heart"></i>Thêm vào danh sách sản phẩm yêu thích
-                                        </a>
-                                        <form action="{{ route('add.wishlist', $sanPhams['id']) }}"
-                                            method="POST" class="wishlist-form">
-                                            @csrf
-                                        </form>
-                                    </li>
+                                    <a href="wishlist.html">
+                                        <i data-feather="heart"></i>
+                                        <span>
+                                            Thêm vào danh sách yêu thích</span>
+                                    </a>
+
+                                    {{-- <a href="compare.html">
+                                        <i data-feather="shuffle"></i>
+                                        <span>Add To Compare</span>
+                                    </a> --}}
 
                                 </div>
 
                                 <div class="pickup-box">
-                               
+                                    {{-- <div class="product-title">
+                                        <h4>Mô tả</h4>
+                                    </div>
+
+                                    <div class="pickup-detail">
+                                        <h4 class="text-content w-100">{!! $sanPhams->mo_ta !!}</h4>
+                                    </div> --}}
+
                                     <div class="product-info">
                                         <ul class="product-info-list product-info-list-2">
                                             <li>Danh mục :
@@ -374,7 +469,6 @@
 
                                     </div>
                                 </div>
-
 
                                 <div class="payment-option">
                                     <div class="product-title">
@@ -413,17 +507,7 @@
                                         </li>
                                     </ul>
                                 </div>
-
                             </div>
-
-
-
-
-
-
-
-
-
                         </div>
                     </div>
                 </div>
@@ -593,8 +677,8 @@
                                                 <div class="col-xl-7">
                                                     <div class="review-people">
                                                         <ul class="review-list">
-                                                            @if ($sanPhams->danhGias->count() > 0)
-                                                                @foreach ($sanPhams->danhGias->sortByDesc('created_at') as $danhGia)
+                                                            @if ($sanPhams->danhGias->where('trang_thai', 1)->count() > 0)
+                                                                @foreach ($sanPhams->danhGias->where('trang_thai', 1)->sortByDesc('created_at') as $danhGia)
                                                                     <li>
                                                                         <div class="people-box">
                                                                             <div>
@@ -606,7 +690,9 @@
                                                                             <div class="people-comment">
                                                                                 <div class="people-name">
                                                                                     <a href="javascript:void(0)"
-                                                                                        class="name">{{ $danhGia->nguoiDung->ten_nguoi_dung }}</a>
+                                                                                        class="name">
+                                                                                        {{ $danhGia->nguoiDung->ten_nguoi_dung }}
+                                                                                    </a>
                                                                                     <div class="date-time">
                                                                                         <h6 class="text-content">
                                                                                             {{ \Carbon\Carbon::parse($danhGia->created_at)->format('d/m/Y H:i') }}
@@ -616,7 +702,8 @@
                                                                                                 @for ($i = 1; $i <= 5; $i++)
                                                                                                     <li>
                                                                                                         <i data-feather="star"
-                                                                                                            class="{{ $i <= $danhGia->so_sao ? 'fill' : '' }}"></i>
+                                                                                                            class="{{ $i <= $danhGia->so_sao ? 'fill' : '' }}">
+                                                                                                        </i>
                                                                                                     </li>
                                                                                                 @endfor
                                                                                             </ul>
@@ -633,13 +720,10 @@
                                                             @else
                                                                 <p style="color: red">Chưa có đánh giá nào.</p>
                                                             @endif
-
-
-
-
                                                         </ul>
                                                     </div>
                                                 </div>
+
                                             </div>
                                         </div>
                                     </div>
@@ -686,9 +770,8 @@
                                     </div>
                                     <div class="product-footer">
                                         <div class="product-detail">
-                                            <span class="span-name">
-                                                {{ $item->danhMuc->ten_danh_muc ?? 'Không có danh mục' }}
-                                            </span>
+                                            <span
+                                                class="span-name">{{ $item->danhMuc->ten_danh_muc ?? 'Không có danh mục' }}</span>
 
                                             <a href="{{ route('sanphams.chitiet', $item->id) }}">
                                                 <h5 class="name">{{ $item->ten_san_pham }}</h5>
@@ -704,227 +787,150 @@
                                                     @endfor
                                                 </ul>
                                                 <span>({{ number_format($item->tinhDiemTrungBinh(), 1) }} / 5)</span>
-                                                <span class="text-muted">
-                                                    ({{ $item->soLuongDanhGia() }} đánh giá)
-                                                </span>
+                                                <span class="text-muted">({{ $item->soLuongDanhGia() }} đánh giá)</span>
                                             </div>
 
                                             <h5 class="price">
-                                                <span class="theme-color">
-                                                    {{ number_format($item->gia_moi, 0, ',', '.') }} ₫
-                                                </span>
+                                                <span class="theme-color">{{ number_format($item->gia_moi, 0, ',', '.') }}
+                                                    ₫</span>
                                                 <del>{{ number_format($item->gia_cu, 0, ',', '.') }} ₫</del>
                                             </h5>
 
                                             <!-- Nút thêm vào giỏ hàng -->
                                             <div class="add-to-cart-box bg-white">
-
-                                                {{-- <button class="btn btn-add-cart addcart-button">
-                                                    @if ($sanPhams['trang_thai'] == 1)
-                                                        <a class="btn-quick-view" style="margin-right: 10px;"
-                                                            href="javascript:void(0)" data-bs-toggle="modal"
-                                                            data-bs-target="#view" data-id="{{ $sanPhams['id'] }}">
-                                                            <span class="add-icon bg-light-gray">
-                                                                <i class="fa-solid fa-cart-plus"></i>
-                                                            </span> Thêm vào giỏ hàng
-                                                        </a>
-                                                    @endif
-                                                </button> --}}
+                                                <button class="btn btn-add-cart addcart-button">
+                                                    <span class="add-icon bg-light-gray">
+                                                        <i class="fa-solid fa-cart-plus"></i>
+                                                    </span> Thêm vào giỏ hàng
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         @endforeach
+
                     </div>
 
                     <!-- Nút điều hướng -->
                     <div class="swiper-button-next"></div>
                     <div class="swiper-button-prev"></div>
                 </div>
+
+
             </div>
+
         </div>
     </section>
     <!-- Related Product Section End -->
 
     <!-- Review Modal Start -->
+
     <div class="modal fade theme-modal question-modal" id="writereview" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Viết đánh giá</h1>
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Viết đánh giá sản phẩm</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal">
                         <i class="fa-solid fa-xmark"></i>
                     </button>
                 </div>
+                @if (session('error_binhluan'))
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function() {
+                            Swal.fire({
+                                title: "Lỗi bình luận!",
+                                text: "{{ session('error_binhluan') }}",
+                                icon: "error",
+                                confirmButtonText: "OK"
+                            });
+                        });
+                    </script>
+                @endif
                 <div class="modal-body pt-0">
-                    <form class="product-review-form">
+                    <form id="reviewForm" method="POST"
+                        action="{{ route('sanphams.themdanhgia', ['san_pham_id' => $sanPhams->id]) }}">
+                        @csrf
+                        <input type="hidden" name="san_pham_id" value="{{ $sanPhams->id }}">
+                        <input type="hidden" name="so_sao" id="so_sao" value="5"> <!-- Giá trị mặc định -->
+
                         <div class="product-wrapper">
                             <div class="product-image">
                                 <img src="{{ Storage::url($sanPhams->hinh_anh) }}" class="img-fluid rounded shadow-sm"
-                                    alt="{{ $sanPhams->ten_san_pham }}">
+                                    style="witdh:100%; height:100%;" alt="{{ $sanPhams->ten_san_pham }}">
                             </div>
                             <div class="product-content">
                                 <h5 class="name">{{ $sanPhams->ten_san_pham }}</h5>
                                 <div class="product-review-rating">
                                     <div class="product-rating">
-                                        {{-- <h6 class="price-number">{{ number_format($sanPhams->gia_moi, 0, ',', '.') }} đ --}}
                                         <span class="theme-color">{{ number_format($sanPhams->gia_moi, 0, ',', '.') }}
                                             ₫</span>
                                         <del>{{ number_format($sanPhams->gia_cu, 0, ',', '.') }} ₫</del>
-
-                                        </h6>
                                     </div>
                                 </div>
                             </div>
-
                         </div>
+
                         <div class="review-box">
-                            <div class="product-review-rating">
-                                <label></label>
-                                <div class="product-rating">
-                                    <ul class="rating">
-                                        <li>
-                                            <i data-feather="star" class="fill"></i>
-                                        </li>
-                                        <li>
-                                            <i data-feather="star" class="fill"></i>
-                                        </li>
-                                        <li>
-                                            <i data-feather="star" class="fill"></i>
-                                        </li>
-                                        <li>
-                                            <i data-feather="star" class="fill"></i>
-                                        </li>
-                                        <li>
-                                            <i data-feather="star"></i>
-                                        </li>
-                                    </ul>
-                                </div>
+                            <label></label>
+                            <div class="rating" id="ratingStars">
+                                <i class="fa fa-star" data-value="1"></i>
+                                <i class="fa fa-star" data-value="2"></i>
+                                <i class="fa fa-star" data-value="3"></i>
+                                <i class="fa fa-star" data-value="4"></i>
+                                <i class="fa fa-star" data-value="5"></i>
                             </div>
                         </div>
+
                         <div class="review-box">
-                            <label for="content" class="form-label">Câu trả lời của bạn *</label>
-                            <textarea id="content" rows="3" class="form-control" placeholder="Câu trả lời của bạn"></textarea>
+                            <label for="nhan_xet" class="form-label">Nhận xét của bạn *</label>
+                            <textarea id="nhan_xet" name="nhan_xet" rows="3" class="form-control"
+                                placeholder="Viết nhận xét của bạn..."></textarea>
                         </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-md btn-theme-outline fw-bold"
+                                data-bs-dismiss="modal">Đóng</button>
+                            <button type="submit" class="btn btn-md fw-bold text-light theme-bg-color">Gửi</button>
+                        </div>
+                        {{-- <button type="submit" class="btn btn-primary mt-3">Gửi đánh giá</button> --}}
                     </form>
+
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-md btn-theme-outline fw-bold"
-                        data-bs-dismiss="modal">Đóng</button>
-                    <button type="button" class="btn btn-md fw-bold text-light theme-bg-color">Gửi</button>
-                </div>
+
             </div>
         </div>
     </div>
+
+
+
     <!-- Review Modal End -->
 @endsection
 
 @section('js')
     <script>
-        $(document).ready(function() {
-            // Khởi tạo tính năng zoom cho ảnh chính  
-            const mainImage = $('#img-1');
-            if (mainImage.length) êm
-                mainImage.elevateZoom({
-                    zoomType: "inner",
-                    cursor: "crosshair",
-                    scrollZoom: true,
-                    responsive: true,
-                    zoomWindowWidth: 400,
-                    zoomWindowHeight: 400,
-                });
-            }
-
-            // Khởi tạo tính năng zoom cho các ảnh phụ khi di chuyển chuột  
-            $('.slider-image img').not('#img-1').each(function() {
-                $(this).hover(function() {
-                    $(this).elevateZoom({
-                        zoomType: "inner",
-                        cursor: "crosshair",
-                        scrollZoom: true,
-                        responsive: true,
-                        zoomWindowWidth: 400,
-                        zoomWindowHeight: 400,
-                    });
-                }, function() {
-                    // Khi chuột rời đi, hủy zoom để giải phóng bộ nhớ  
-                    $.fn.elevateZoom.destroy();
-                });
-            });
-            $(document).on('mousewheel DOMMouseScroll', function(e) {
-                var zoomWindow = $('.zoomWindow');
-                if (zoomWindow.is(':visible')) {
-                    e.preventDefault(); // Ngăn chặn sự kiện mặc định  
-                    var delta = (e.originalEvent.wheelDelta || -e.originalEvent.detail);
-                    window.scrollBy(0, delta > 0 ? -30 : 30); // Cuộn lên hoặc cuộn xuống  
-                }
-            });
-        });
-    </script>
-
-    <script>
         document.addEventListener("DOMContentLoaded", function() {
+            let colorInputs = document.querySelectorAll(".variant-color-selector");
             let colorOptions = document.querySelectorAll(".color-option");
+            let selectedColorText = document.getElementById("selected-color");
             let sizeContainer = document.querySelector("#size-options");
             let priceDisplay = document.querySelector("#product-price");
-            let quantityDisplay = document.querySelector("#product-quantity");
-            let priceLabel = document.querySelector(".price-label");
-            let mainPriceSection = document.querySelector(".price-rating");
-            let defaultPrice = document.querySelector("#default-price");
-            let defaultOldPrice = document.querySelector("#default-old-price");
-            let selectedColorText = document.querySelector("#selected-color"); // Hiển thị tên màu đã chọn
-            let productImage = document.querySelector("#product-image"); // Ảnh sản phẩm
 
-            function formatCurrency(value) {
-                return new Intl.NumberFormat("vi-VN").format(value) + "₫";
-            }
-
-            function updatePriceAndQuantity() {
-                let selectedSize = document.querySelector(".variant-size-selector:checked");
-                let discountLabel = document.querySelector(".offer-top"); // Phần trăm giảm giá
-
-                if (selectedSize) {
-                    let sizePrice = parseFloat(selectedSize.getAttribute("data-price"));
-                    let oldPrice = parseFloat(defaultOldPrice.innerText.replace("₫", "").replace(/\./g,
-                        "")); // Lấy giá cũ
-
-                    // Cập nhật giá mới
-                    priceDisplay.textContent = formatCurrency(sizePrice);
-                    quantityDisplay.textContent = selectedSize.getAttribute("data-quantity");
-
-                    // Ẩn giá mặc định và hiển thị giá mới
-                    defaultPrice.style.display = "none";
-                    priceLabel.style.display = "inline";
-                    priceDisplay.style.display = "inline";
-
-                    // **Tính phần trăm giảm giá mới**
-                    if (oldPrice > 0 && sizePrice < oldPrice) {
-                        let discountPercent = Math.round(100 - (sizePrice / oldPrice) * 100);
-                        discountLabel.textContent = `(${discountPercent}% off)`;
-                        discountLabel.style.visibility =
-                            "visible"; // Hiện phần trăm giảm giá nhưng giữ nguyên kích thước
-                    } else {
-                        discountLabel.style.visibility = "hidden"; // Ẩn nhưng giữ không gian
-                    }
-                }
-            }
-
-
+            // Danh sách kích thước theo thứ tự mong muốn
+            const sizeOrder = ["S", "M", "L", "XL", "XXL"];
 
             function updateSizes(bienThes) {
                 sizeContainer.innerHTML = ""; // Xóa danh sách size cũ
 
                 if (bienThes.length === 0) {
                     sizeContainer.innerHTML = "<p>Không có size phù hợp.</p>";
-                    priceDisplay.innerText = formatCurrency(0);
-                    quantityDisplay.innerText = "0";
+                    priceDisplay.innerText = "0 VNĐ"; // Không set giá mặc định
                     return;
                 }
 
-                // **Sắp xếp size theo thứ tự S → M → L → XL → XXL**
-                let sizeOrder = ["S", "M", "L", "XL", "XXL"];
-                bienThes.sort((a, b) => sizeOrder.indexOf(a.gia_tri) - sizeOrder.indexOf(b.gia_tri));
+                // Sắp xếp size theo thứ tự mong muốn
+                bienThes.sort((a, b) => {
+                    return sizeOrder.indexOf(a.gia_tri) - sizeOrder.indexOf(b.gia_tri);
+                });
 
                 bienThes.forEach((size, index) => {
                     let label = document.createElement("label");
@@ -932,8 +938,7 @@
                     label.style.cursor = "pointer";
                     label.innerHTML = `
                 <input type="radio" name="size" class="d-none variant-size-selector"
-                    value="${size.id}" data-price="${size.gia_ban}" data-quantity="${size.so_luong}"
-                    ${index === 0 ? "checked" : ""}> <!-- Chọn size đầu tiên mặc định -->
+                    value="${size.id}" data-price="${size.gia_ban}">
                 <span class="option-box">${size.gia_tri}</span>
             `;
                     sizeContainer.appendChild(label);
@@ -941,58 +946,64 @@
 
                 attachSizeEvents();
 
-                // **Tự động cập nhật giá & số lượng của size đầu tiên**
-                updatePriceAndQuantity();
+                // Tự động chọn size đầu tiên nếu có
+                let firstSize = document.querySelector(".variant-size-selector");
+                if (firstSize) {
+                    firstSize.checked = true;
+                    updatePrice();
+                }
+            }
+
+            function updatePrice() {
+                let selectedSize = document.querySelector(".variant-size-selector:checked");
+                if (selectedSize) {
+                    let sizePrice = selectedSize.getAttribute("data-price");
+                    priceDisplay.innerText = sizePrice + " VNĐ";
+                } else {
+                    priceDisplay.innerText = "0 VNĐ"; // Nếu chưa chọn size, giữ nguyên 0 VNĐ
+                }
             }
 
             function attachSizeEvents() {
                 let sizeInputs = document.querySelectorAll(".variant-size-selector");
                 sizeInputs.forEach(input => {
                     input.addEventListener("change", function() {
-                        updatePriceAndQuantity();
+                        updatePrice();
                     });
                 });
             }
 
-            colorOptions.forEach(option => {
-                option.addEventListener("click", function() {
-                    // Xóa class 'selected' của các màu khác
-                    colorOptions.forEach(opt => opt.classList.remove("selected"));
-                    this.classList.add("selected"); // Thêm class 'selected' vào màu được chọn
-
-                    // **Cập nhật tên màu sắc**
-                    let colorName = this.getAttribute("data-color-name");
-                    if (colorName) {
-                        selectedColorText.innerText = colorName; // Hiển thị màu được chọn
-                    } else {
-                        selectedColorText.innerText = "Không xác định"; // Nếu không có tên màu
-                    }
-                    console.log("Tên màu lấy được:", colorName); // Kiểm tra giá trị lấy được
-
-
-                    // Lấy dữ liệu biến thể từ radio button bên trong
-                    let bienThes = JSON.parse(this.querySelector("input[type='radio']")
-                        .getAttribute("data-bienthes"));
-
-                    // **Cập nhật ảnh biến thể nếu có**
-                    let imageUrl = this.getAttribute("data-image");
-                    if (imageUrl) {
-                        productImage.src = imageUrl;
-                    }
-
+            colorInputs.forEach(input => {
+                input.addEventListener("change", function() {
+                    let bienThes = JSON.parse(this.getAttribute("data-bienthes"));
                     updateSizes(bienThes);
                 });
             });
 
-            // Ẩn giá biến thể ban đầu
-            priceLabel.style.display = "none";
-            priceDisplay.style.display = "none";
+            colorOptions.forEach(option => {
+                option.addEventListener("click", function() {
+                    let colorName = this.querySelector(".color-img").alt;
+                    selectedColorText.innerText = colorName;
+
+                    colorOptions.forEach(opt => opt.classList.remove("selected"));
+                    this.classList.add("selected");
+
+                    this.querySelector("input[type='radio']").checked = true;
+
+                    let bienThes = JSON.parse(this.querySelector("input[type='radio']")
+                        .getAttribute("data-bienthes"));
+                    updateSizes(bienThes);
+                });
+            });
+
+            // Không tự động chọn màu hoặc size khi load trang
+            priceDisplay.innerText = "0 VNĐ";
         });
-    </script>
 
 
 
-    <script>
+
+
         document.addEventListener("DOMContentLoaded", function() {
             var swiper = new Swiper('.swiper-container', {
                 slidesPerView: 6, // Hiển thị 6 sản phẩm cùng lúc
@@ -1022,7 +1033,171 @@
             });
         });
     </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Lắng nghe sự kiện click trên tất cả ảnh thumbnail
+            document.querySelectorAll('.image-thumbnail').forEach(thumbnail => {
+                thumbnail.addEventListener('click', function() {
+                    const newImageSrc = this.getAttribute('data-large');
+                    const mainImage = document.getElementById('main-image');
+
+                    if (mainImage) {
+                        mainImage.src = newImageSrc;
+                        mainImage.style.display = 'block'; // Hiển thị ảnh chính nếu bị ẩn
+                    }
+                });
+            });
+        });
+    </script>
 
 
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script>
+        $('.left-slider-image').slick({
+            slidesToShow: 4,
+            /
+            slidesToScroll: 1,
+            infinite: true,
+            arrows: true,
+            variableWidth: true,
+            adaptiveHeight: true,
+            fade: false,
+            centerMode: false
+        });
+    </script>
+    {{-- <script>
+        $('.slick-slide').on('click', function(event) {
+            event.preventDefault();
+            $(this).blur();
+        });
+    </script> --}}
+    <script>
+        $('.left-slider-image').on('init reInit afterChange', function() {
+            $('.slick-slide').css('opacity', '1');
+        });
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelectorAll(".sidebar-image img").forEach(img => {
+                img.addEventListener("click", function() {
+                    let mainImage = document.getElementById("main-image");
+                    mainImage.src = this.getAttribute("data-large");
+                });
+            });
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+    <script>
+        function themDanhGia() {
+            let sanPhamId = document.getElementById("san_pham_id").value;
+            let soSao = document.getElementById("so_sao").value;
+            let nhanXet = document.getElementById("nhan_xet").value;
+
+            fetch(`/san-pham/${sanPhamId}/danh-gia`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": document.querySelector('input[name="_token"]').value
+                    },
+                    body: JSON.stringify({
+                        so_sao: soSao,
+                        nhan_xet: nhanXet
+                    })
+                })
+                .then(response => response.json())
+                .then(() => {
+                    // Đóng modal sau khi gửi đánh giá thành công
+                    var myModal = new bootstrap.Modal(document.getElementById('writereview'));
+                    myModal.hide();
+
+                    // Tải lại danh sách đánh giá
+                    loadDanhGias();
+                });
+        }
+
+        function loadDanhGias() {
+            let sanPhamId = document.getElementById("san_pham_id").value;
+
+            fetch(`/san-pham/${sanPhamId}/danh-gia`)
+                .then(response => response.json())
+                .then(data => {
+                    let danhGiaHtml = "";
+                    data.forEach(danhGia => {
+                        danhGiaHtml +=
+                            `<p><strong>${danhGia.nguoi_dung.ten_nguoi_dung}</strong> (${danhGia.so_sao}⭐): ${danhGia.nhan_xet}</p>`;
+                    });
+                    document.getElementById("danhGias").innerHTML = danhGiaHtml;
+                });
+        }
+
+        // Gọi load danh sách đánh giá khi trang được load
+        document.addEventListener("DOMContentLoaded", loadDanhGias);
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const stars = document.querySelectorAll("#ratingStars i");
+            const soSaoInput = document.getElementById("so_sao");
+
+            stars.forEach(star => {
+                star.addEventListener("click", function() {
+                    let rating = this.getAttribute("data-value");
+                    soSaoInput.value = rating; // Cập nhật giá trị sao
+
+                    // Cập nhật hiển thị sao
+                    stars.forEach(s => {
+                        if (s.getAttribute("data-value") <= rating) {
+                            s.classList.add("selected");
+                        } else {
+                            s.classList.remove("selected");
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+
+    {{-- <script>
+    function loadDanhGias() {
+        let sanPhamId = document.getElementById("san_pham_id").value;
+
+        fetch(`/san-pham/${sanPhamId}/danh-gia`)
+            .then(response => response.json())
+            .then(data => {
+                let danhGiaHtml = "";
+                data.forEach(danhGia => {
+                    danhGiaHtml +=
+                        `<p><strong>${danhGia.nguoi_dung.ten_nguoi_dung}</strong> (${danhGia.so_sao}⭐): ${danhGia.nhan_xet}</p>`;
+                });
+                document.getElementById("danhGias").innerHTML = danhGiaHtml;
+            });
+    }
+</script> --}}
+
+    {{-- <script>
+    function themDanhGia() {
+        let sanPhamId = document.getElementById("san_pham_id").value;
+        let soSao = document.getElementById("so_sao").value;
+        let nhanXet = document.getElementById("nhan_xet").value;
+
+        fetch(`/san-pham/${sanPhamId}/danh-gia`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content")
+                },
+                body: JSON.stringify({
+                    so_sao: soSao,
+                    nhan_xet: nhanXet
+                })
+            })
+            .then(response => response.json())
+            .then(() => {
+                var myModal = bootstrap.Modal.getInstance(document.getElementById('writereview'));
+                myModal.hide();
+
+                document.getElementById("nhan_xet").value = "";
+
+                loadDanhGias();
+            });
+    }
+</script> --}}
 @endsection

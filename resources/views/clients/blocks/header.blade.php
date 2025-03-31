@@ -1,5 +1,16 @@
 <header class="pb-md-4 pb-0">
+<style>
 
+.navbar-nav .nav-link::before {
+    display: none !important;
+}
+
+.nav-item:nth-child(2) .nav-link::before {
+    display: inline-block !important;
+}
+
+
+</style>
     <div class="header-top">
         <div class="container-fluid-lg">
             <div class="row">
@@ -131,21 +142,29 @@
                                                         </a>
 
                                                         <div class="drop-contain">
-                                                            <a href="{{ route('sanphams.chitiet',$item->id) }}">
+                                                            {{-- <a href="{{ route('sanphams.chitiet',$item->id) }}">
                                                                 <h5>{{ $item->bienThe->sanPham->ten_san_pham }}</h5>
-                                                            </a>
+                                                            </a> --}}
 
                                                             <div class="drop-contain">
                                                                 <a href="{{ route('sanphams.chitiet', $item->id) }}">
                                                                     <h5>{{ $item->bienThe->sanPham->ten_san_pham }}</h5>
+                                                                    <h6>{{ $item->bienThe->ten_bien_the }}</h6>
                                                                 </a>
                                                                 <h6><span>{{ $item->so_luong }} x</span>
                                                                     {{ number_format($item->bienThe->gia_ban, 0, '', '.') }}
-                                                                    đ</h6>
+                                                                đ</h6>
+                                                                <style>
+                                                                    .hidden-delete {
+                                                                        visibility: hidden;
+                                                                    }
+                                                                </style>
                                                                 @if (!request()->is('giohang', 'thanhtoan'))
-                                                                    <button
-                                                                        class="close-button close_button delete-cart-item"
-                                                                        data-id="{{ $item->id }}">
+                                                                    <button class="close-button close_button delete-cart-item" data-id="{{ $item->id }}">
+                                                                        <i class="fa-solid fa-xmark"></i>
+                                                                    </button>
+                                                                @else
+                                                                    <button class="close-button close_button delete-cart-item hidden-delete" data-id="{{ $item->id }}">
                                                                         <i class="fa-solid fa-xmark"></i>
                                                                     </button>
                                                                 @endif
@@ -276,7 +295,7 @@
 
                                         </li>
 
-                                        <li class="nav-item dropdown">
+                                        <li class="nav-item">
                                             <a class="nav-link" href="{{ route('baiviets.danhsach') }}">Bài viết</a>
                                         </li>
 

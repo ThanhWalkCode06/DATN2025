@@ -23,10 +23,13 @@ use App\Http\Controllers\DanhMucBaiVietController;
 use App\Http\Controllers\DanhMucSanPhamController;
 use App\Http\Controllers\GiaTriThuocTinhController;
 use App\Http\Controllers\Admins\Auth\AuthController;
+use App\Http\Controllers\Clients\IndexClientController;
+
+
 use App\Http\Controllers\ClientDanhMucSanPhamController;
+use App\Http\Controllers\Clients\DanhGiaClientsController;
 use App\Http\Controllers\Admins\Responsibility\RoleController;
 use App\Http\Controllers\Admins\Responsibility\PermissionController;
-use App\Http\Controllers\Clients\IndexClientController;
 use App\Http\Controllers\Clients\UserController as ClientsUserController;
 use App\Http\Controllers\Clients\Auth\AuthController as AuthAuthController;
 use App\Http\Controllers\Clients\ThanhToanController;
@@ -104,7 +107,7 @@ Route::prefix('admin')->middleware(['auth', 'checkStatus'])->group(function () {
 //     return view('admins.auth.mailForgetPass');
 // });
 
-Route::get('/', [IndexClientController::class,'index'])->name('home');
+Route::get('/', [IndexClientController::class, 'index'])->name('home');
 
 Route::controller(App\Http\Controllers\Clients\Auth\AuthController::class)->group(function () {
     Route::get('/login', 'showLogin')->name('login.client');
@@ -125,7 +128,8 @@ Route::controller(App\Http\Controllers\Clients\Auth\AuthController::class)->grou
     Route::get('/logout', 'logout')->name('logout.client');
 });
 
-
+Route::get('/san-pham/{san_pham_id}/danh-gia', [DanhGiaClientsController::class, 'danhSachDanhGia']);
+Route::post('/san-pham/{san_pham_id}/danh-gia', [DanhGiaClientsController::class, 'themDanhGia'])->name('sanphams.themdanhgia');
 
 Route::get('/sanpham', [App\Http\Controllers\Clients\SanPhamController::class, 'danhSach'])->name('sanphams.danhsach');
 Route::get('/sanpham/{id}', [App\Http\Controllers\Clients\SanPhamController::class, 'chiTiet'])->name('sanphams.chitiet');
@@ -174,4 +178,3 @@ Route::get('/top-san-pham', [SanPhamController::class, 'sanPhamTopDanhGia'])->na
 Route::post('/lienhe', [ContactController::class, 'send'])->name('send.contact');
 
 Route::get('/vnpay-return', [ThanhToanController::class, 'vnpayReturn'])->name('vnpay.return');
-

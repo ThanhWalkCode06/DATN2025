@@ -1,9 +1,9 @@
 <style>
    .blog-image {
-    width: 300px; /* Tăng chiều rộng */
-    height: 180px; /* Tăng chiều cao */
-    overflow: hidden; /* Cắt phần dư thừa */
-    border-radius: 8px; /* Bo góc */
+    width: 300px;
+    height: 180px;
+    overflow: hidden;
+    border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -12,9 +12,9 @@
 .blog-image img {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Ảnh luôn lấp đầy khung */
-    object-position: center; /* Căn giữa ảnh */
-    border-radius: 8px; /* Giữ bo góc */
+    object-fit: cover;
+    object-position: center;
+    border-radius: 8px;
 }
 
 
@@ -49,7 +49,8 @@
                                     <a href="{{ route('baiviets.chitiet', $baiViet->id) }}">
                                         <h3 class="">{{ $baiViet->tieu_de }}</h3>
                                     </a>
-
+                                    {{-- Sửa lại nội dung
+                                    <p class="text-muted">{ Str::limit(strip_tags($baiViet->noi_dung), 150) }</p> --}}
                                     <p class="text-muted">{!! Str::limit(strip_tags($baiViet->noi_dung), 150) !!}</p>
 
                                     <button onclick="location.href = '{{ route('baiviets.chitiet', $baiViet->id) }}';"

@@ -196,6 +196,7 @@ $(document).on("click", ".delete-cartIndex-item", function () {
 
                 // Xóa sản phẩm khỏi giao diện
                 let item = $(`.delete-cartIndex-item[data-id="${cartItemId}"]`).closest("tr");
+
                 $(`.delete-cart-item[data-id="${cartItemId}"]`).closest("li").remove();
                 item.fadeOut(300, function () {
                     item.remove();
