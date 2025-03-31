@@ -33,6 +33,7 @@ use App\Http\Controllers\Admins\Responsibility\RoleController;
 use App\Http\Controllers\Admins\Responsibility\PermissionController;
 use App\Http\Controllers\Clients\UserController as ClientsUserController;
 use App\Http\Controllers\Clients\Auth\AuthController as AuthAuthController;
+use App\Http\Controllers\Clients\ThanhToanController;
 
 // Login Admin Controller
 Route::prefix('/admin')->controller(AuthController::class)->group(function () {
@@ -108,7 +109,7 @@ Route::prefix('admin')->middleware(['auth', 'checkStatus'])->group(function () {
 //     return view('admins.auth.mailForgetPass');
 // });
 
-Route::get('/', [IndexClientController::class,'index'])->name('home');
+Route::get('/', [IndexClientController::class, 'index'])->name('home');
 
 Route::controller(App\Http\Controllers\Clients\Auth\AuthController::class)->group(function () {
     Route::get('/login', 'showLogin')->name('login.client');
@@ -182,4 +183,5 @@ Route::get('/san-pham/{id}/bien-the', [SanPhamController::class, 'getBienThe']);
 Route::post('/danhgias/toggle-status', [DanhGiaController::class, 'trangThaiDanhGia'])->name('danhgias.trangthaidanhgia');
 
 
-Route::get('/vnpay-return', [PaymentVnPay::class, 'vnpayReturn'])->name('vnpay.return');
+Route::get('/vnpay-return', [ThanhToanController::class, 'vnpayReturn'])->name('vnpay.return');
+
