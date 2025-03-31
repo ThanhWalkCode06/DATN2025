@@ -169,8 +169,7 @@ class ThanhToanController extends Controller
 
             return response()->json([
                 'status' => 'vnpay',
-                'vnpay_url' => $vnp_Url . (strpos($vnp_Url, '?') === false ? '?' : '&') . 'voucher=' . urlencode($request->voucher_code ?? ""),
-                'voucher' => $request->voucher_code ?? ""
+                'vnpay_url' => $vnp_Url,
             ]);
         }
 
