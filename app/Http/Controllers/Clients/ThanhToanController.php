@@ -58,12 +58,12 @@ class ThanhToanController extends Controller
         }
 
         $bienThes = BienThe::all();
-        $giohang = ChiTietGioHang::where('user_id',Auth::user()->id)->first();
-        if(!$giohang){
+        $giohang = ChiTietGioHang::where('user_id', Auth::user()->id)->first();
+        if (!$giohang) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Giỏ hàng trống'
-            ],403);
+            ], 403);
         }
         $checkquantity = Helper::checkQuantity($user->id);
         if ($checkquantity !== null) {
@@ -179,71 +179,71 @@ class ThanhToanController extends Controller
 
 
     public function vnpayReturn(Request $request)
-{
-    if ($request->vnp_ResponseCode == "00") { // Thanh toán thành công
-        $user = Auth::user();
+    {
+        if ($request->vnp_ResponseCode == "00") { // Thanh toán thành công
+            $user = Auth::user();
 
-        // Lấy giỏ hàng của người dùng trước khi xóa
-        $cart = ChiTietGioHang::with('bienThe.sanPham')->where('user_id', $user->id)->get();
+            // Lấy giỏ hàng của người dùng trước khi xóa
+            $cart = ChiTietGioHang::with('bienThe.sanPham')->where('user_id', $user->id)->get();
 
-        // Tạo đơn hàng mới
-        $donHang = DonHang::create([
-            'user_id' => $user->id,
-            'ma_don_hang' => $request->vnp_TxnRef,
-            'ten_nguoi_nhan' => $user->username,
-            'tong_tien' => $request->vnp_Amount / 100,
-            'email_nguoi_nhan' => $user->email,
-            'sdt_nguoi_nhan' => $user->so_dien_thoai,
-            'dia_chi_nguoi_nhan' => $user->dia_chi,
-            'phuong_thuc_thanh_toan_id' => 2,
-            'trang_thai_don_hang' => 0,
-            'trang_thai_thanh_toan' => 1, // Đã thanh toán
-            'created_at' => now()
-        ]);
-
-        if(Session::has('voucher')){
-        $voucherId = Session::get('voucher');
-            DB::table('phieu_giam_gia_tai_khoans')->insert([
-                'phieu_giam_gia_id' => $voucherId,
+            // Tạo đơn hàng mới
+            $donHang = DonHang::create([
                 'user_id' => $user->id,
-                'order_id' => $donHang->id,
-                'created_at' => now(),
-            ]);
-            Session::forget("voucher");
-        }
-
-
-        // Duyệt qua từng sản phẩm trong giỏ hàng để thêm vào chi tiết đơn hàng
-        foreach ($cart as $item) {
-            ChiTietDonHang::create([
-                'don_hang_id' => $donHang->id,
-                'bien_the_id' => $item->bien_the_id,
-                'so_luong' => $item->so_luong,
-                'san_pham_id' => $item->san_pham_id,
+                'ma_don_hang' => $request->vnp_TxnRef,
+                'ten_nguoi_nhan' => $user->username,
+                'tong_tien' => $request->vnp_Amount / 100,
+                'email_nguoi_nhan' => $user->email,
+                'sdt_nguoi_nhan' => $user->so_dien_thoai,
+                'dia_chi_nguoi_nhan' => $user->dia_chi,
+                'phuong_thuc_thanh_toan_id' => 2,
+                'trang_thai_don_hang' => 0,
+                'trang_thai_thanh_toan' => 1, // Đã thanh toán
                 'created_at' => now()
             ]);
 
-            $bienThe = BienThe::where('id', $item->bien_the_id)->first();
-
-            if ($bienThe->so_luong >= $item->so_luong) {
-                $bienThe->decrement('so_luong', $item->so_luong);
-            } else {
-                ChiTietDonHang::where('don_hang_id',$donHang->id)->delete();
-                $donHang->delete();
-                return redirect('/thanhtoan')->with('error', "Sản phẩm {$item->bienThe->sanPham->ten_san_pham} {$item->bienThe->ten_bien_the} không đủ hàng!");
+            if (Session::has('voucher')) {
+                $voucherId = Session::get('voucher');
+                DB::table('phieu_giam_gia_tai_khoans')->insert([
+                    'phieu_giam_gia_id' => $voucherId,
+                    'user_id' => $user->id,
+                    'order_id' => $donHang->id,
+                    'created_at' => now(),
+                ]);
+                Session::forget("voucher");
             }
+
+
+            // Duyệt qua từng sản phẩm trong giỏ hàng để thêm vào chi tiết đơn hàng
+            foreach ($cart as $item) {
+                ChiTietDonHang::create([
+                    'don_hang_id' => $donHang->id,
+                    'bien_the_id' => $item->bien_the_id,
+                    'so_luong' => $item->so_luong,
+                    'san_pham_id' => $item->san_pham_id,
+                    'created_at' => now()
+                ]);
+
+                $bienThe = BienThe::where('id', $item->bien_the_id)->first();
+
+                if ($bienThe->so_luong >= $item->so_luong) {
+                    $bienThe->decrement('so_luong', $item->so_luong);
+                } else {
+                    ChiTietDonHang::where('don_hang_id', $donHang->id)->delete();
+                    $donHang->delete();
+                    return redirect('/thanhtoan')->with('error', "Sản phẩm {$item->bienThe->sanPham->ten_san_pham} {$item->bienThe->ten_bien_the} không đủ hàng!");
+                }
+            }
+
+            // Xóa giỏ hàng sau khi đã lưu bản sao
+            ChiTietGioHang::where('user_id', $user->id)->delete();
+
+            // Lấy lại chi tiết đơn hàng để gửi về view
+            $chiTietDonHangs = ChiTietDonHang::where('id', $donHang->id)->get();
+            return redirect()->route('thanhtoans.dathangthanhcong', $donHang->id);
+        } else {
+            return redirect('/thanhtoan')->with('error', 'Thanh toán thất bại!');
         }
-
-        // Xóa giỏ hàng sau khi đã lưu bản sao
-        ChiTietGioHang::where('user_id', $user->id)->delete();
-
-        // Lấy lại chi tiết đơn hàng để gửi về view
-        $chiTietDonHangs = ChiTietDonHang::where('id', $donHang->id)->get();
-        return redirect()->route('thanhtoans.dathangthanhcong', $donHang->id);
-    } else {
-        return redirect('/thanhtoan')->with('error', 'Thanh toán thất bại!');
     }
-}
 
 
 
@@ -276,91 +276,91 @@ class ThanhToanController extends Controller
         return view('clients.thanhtoans.dathangthanhcong', compact('donHang', 'chiTietDonHangs'));
     }
 
-//     public function xuLyThanhToan(Request $request)
-//     {
-//         // return response()->json(['message' => $request->all()], 200);
-//         $user = Auth::user();
-//         if (!$user) {
-//             return response()->json(['status' => 'error', 'message' => 'Chưa đăng nhập'], 403);
-//         }
+    //     public function xuLyThanhToan(Request $request)
+    //     {
+    //         // return response()->json(['message' => $request->all()], 200);
+    //         $user = Auth::user();
+    //         if (!$user) {
+    //             return response()->json(['status' => 'error', 'message' => 'Chưa đăng nhập'], 403);
+    //         }
 
-//         $giohang = ChiTietGioHang::where('user_id', $user->id)->first();
-//         if (!$giohang) {
-//             return response()->json(['status' => 'error', 'message' => 'Giỏ hàng trống'], 403);
-//         }
+    //         $giohang = ChiTietGioHang::where('user_id', $user->id)->first();
+    //         if (!$giohang) {
+    //             return response()->json(['status' => 'error', 'message' => 'Giỏ hàng trống'], 403);
+    //         }
 
-//         $checkquantity = Helper::checkQuantity($user->id);
-//         if ($checkquantity !== null) {
-//             return response()->json([
-//                 'status' => 'error',
-//                 'message' => 'Sản phẩm vượt quá số lượng tồn kho!',
-//                 'over_quantity' => $checkquantity
-//             ], 500);
-//         }
+    //         $checkquantity = Helper::checkQuantity($user->id);
+    //         if ($checkquantity !== null) {
+    //             return response()->json([
+    //                 'status' => 'error',
+    //                 'message' => 'Sản phẩm vượt quá số lượng tồn kho!',
+    //                 'over_quantity' => $checkquantity
+    //             ], 500);
+    //         }
 
-//         if ($request->phuong_thuc_thanh_toan_id == "1") { // Thanh toán COD
-//             $donHang = DonHang::create([
-//                 'user_id' => $user->id,
-//                 'ma_don_hang' => Helper::generateOrderCode(),
-//                 'ten_nguoi_nhan' => $request->ten_nguoi_nhan,
-//                 'email_nguoi_nhan' => $request->email_nguoi_nhan,
-//                 'sdt_nguoi_nhan' => $request->sdt_nguoi_nhan,
-//                 'dia_chi_nguoi_nhan' => $request->dia_chi_nguoi_nhan,
-//                 'tong_tien' => $request->tong_tien,
-//                 'ghi_chu' => $request->ghi_chu,
-//                 'phuong_thuc_thanh_toan_id' => 1,
-//                 'trang_thai_don_hang' => 0,
-//                 'trang_thai_thanh_toan' => 0,
-//                 'created_at' => now()
-//             ]);
-//             $this->xuLyChiTietDonHang($donHang, $request->voucher_code);
-//             return response()->json(['status' => 'success', 'id' => $donHang->id], 200);
-//         }
+    //         if ($request->phuong_thuc_thanh_toan_id == "1") { // Thanh toán COD
+    //             $donHang = DonHang::create([
+    //                 'user_id' => $user->id,
+    //                 'ma_don_hang' => Helper::generateOrderCode(),
+    //                 'ten_nguoi_nhan' => $request->ten_nguoi_nhan,
+    //                 'email_nguoi_nhan' => $request->email_nguoi_nhan,
+    //                 'sdt_nguoi_nhan' => $request->sdt_nguoi_nhan,
+    //                 'dia_chi_nguoi_nhan' => $request->dia_chi_nguoi_nhan,
+    //                 'tong_tien' => $request->tong_tien,
+    //                 'ghi_chu' => $request->ghi_chu,
+    //                 'phuong_thuc_thanh_toan_id' => 1,
+    //                 'trang_thai_don_hang' => 0,
+    //                 'trang_thai_thanh_toan' => 0,
+    //                 'created_at' => now()
+    //             ]);
+    //             $this->xuLyChiTietDonHang($donHang, $request->voucher_code);
+    //             return response()->json(['status' => 'success', 'id' => $donHang->id], 200);
+    //         }
 
-//         if ($request->phuong_thuc_thanh_toan_id == "2") { // Thanh toán VNPAY
-//             $vnp_TmnCode = env('VNP_TMN_CODE');
-//             $vnp_HashSecret = env('VNP_HASH_SECRET');
-//             $vnp_Url = env('VNP_URL');
-//             $vnp_ReturnUrl = env('VNP_RETURN_URL');
+    //         if ($request->phuong_thuc_thanh_toan_id == "2") { // Thanh toán VNPAY
+    //             $vnp_TmnCode = env('VNP_TMN_CODE');
+    //             $vnp_HashSecret = env('VNP_HASH_SECRET');
+    //             $vnp_Url = env('VNP_URL');
+    //             $vnp_ReturnUrl = env('VNP_RETURN_URL');
 
-//             $vnp_TxnRef = Helper::generateOrderCode(); // Chưa tạo đơn hàng
-//             $vnp_OrderInfo = "Thanh toán đơn hàng #" . $vnp_TxnRef;
-//             $vnp_OrderType = "billpayment";
-//             $vnp_Amount = $request->tong_tien * 100;
-//             $vnp_Locale = "vn";
-//             $vnp_IpAddr = request()->ip();
+    //             $vnp_TxnRef = Helper::generateOrderCode(); // Chưa tạo đơn hàng
+    //             $vnp_OrderInfo = "Thanh toán đơn hàng #" . $vnp_TxnRef;
+    //             $vnp_OrderType = "billpayment";
+    //             $vnp_Amount = $request->tong_tien * 100;
+    //             $vnp_Locale = "vn";
+    //             $vnp_IpAddr = request()->ip();
 
-//             $inputData = [
-//                 "vnp_Version" => "2.1.0",
-//                 "vnp_TmnCode" => $vnp_TmnCode,
-//                 "vnp_Amount" => $vnp_Amount,
-//                 "vnp_Command" => "pay",
-//                 "vnp_CreateDate" => date('YmdHis'),
-//                 "vnp_CurrCode" => "VND",
-//                 "vnp_IpAddr" => $vnp_IpAddr,
-//                 "vnp_Locale" => $vnp_Locale,
-//                 "vnp_OrderInfo" => $vnp_OrderInfo,
-//                 "vnp_OrderType" => $vnp_OrderType,
-//                 "vnp_ReturnUrl" => $vnp_ReturnUrl . "?order_code=" . $vnp_TxnRef,
-// "vnp_TxnRef" => $vnp_TxnRef
-//             ];
+    //             $inputData = [
+    //                 "vnp_Version" => "2.1.0",
+    //                 "vnp_TmnCode" => $vnp_TmnCode,
+    //                 "vnp_Amount" => $vnp_Amount,
+    //                 "vnp_Command" => "pay",
+    //                 "vnp_CreateDate" => date('YmdHis'),
+    //                 "vnp_CurrCode" => "VND",
+    //                 "vnp_IpAddr" => $vnp_IpAddr,
+    //                 "vnp_Locale" => $vnp_Locale,
+    //                 "vnp_OrderInfo" => $vnp_OrderInfo,
+    //                 "vnp_OrderType" => $vnp_OrderType,
+    //                 "vnp_ReturnUrl" => $vnp_ReturnUrl . "?order_code=" . $vnp_TxnRef,
+    // "vnp_TxnRef" => $vnp_TxnRef
+    //             ];
 
-//             ksort($inputData);
-//             $query = "";
-//             $hashdata = "";
-//             foreach ($inputData as $key => $value) {
-//                 $hashdata .= '&' . urlencode($key) . "=" . urlencode($value);
-//                 $query .= urlencode($key) . "=" . urlencode($value) . '&';
-//             }
+    //             ksort($inputData);
+    //             $query = "";
+    //             $hashdata = "";
+    //             foreach ($inputData as $key => $value) {
+    //                 $hashdata .= '&' . urlencode($key) . "=" . urlencode($value);
+    //                 $query .= urlencode($key) . "=" . urlencode($value) . '&';
+    //             }
 
-//             $vnpSecureHash = hash_hmac('sha512', ltrim($hashdata, '&'), $vnp_HashSecret);
-//             $vnp_Url .= "?" . $query . "vnp_SecureHash=" . $vnpSecureHash;
+    //             $vnpSecureHash = hash_hmac('sha512', ltrim($hashdata, '&'), $vnp_HashSecret);
+    //             $vnp_Url .= "?" . $query . "vnp_SecureHash=" . $vnpSecureHash;
 
-//             // Chuyển hướng thẳng đến VNPAY thay vì trả về JSON
-//             return redirect()->away($vnp_Url);
-//         }
+    //             // Chuyển hướng thẳng đến VNPAY thay vì trả về JSON
+    //             return redirect()->away($vnp_Url);
+    //         }
 
 
-//         // return response()->json(['status' => 'error', 'message' => 'Lỗi phương thức'], 500);
-//     }
+    //         // return response()->json(['status' => 'error', 'message' => 'Lỗi phương thức'], 500);
+    //     }
 }
