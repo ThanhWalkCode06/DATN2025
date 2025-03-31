@@ -137,7 +137,7 @@
                                             class="btn btn-md add-cart-button icon" disabled>
                                         Thêm vào giỏ hàng
                                     </button>
-                                    <button id="btnChiTiet"
+                                    <button type="button" id="btnChiTiet"
                                         class="btn theme-bg-color view-button icon text-white fw-bold btn-md">
                                         Xem chi tiết</button>
                                 </div>

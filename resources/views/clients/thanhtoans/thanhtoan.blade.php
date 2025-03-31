@@ -5,19 +5,19 @@
 @endsection
 
 @section('css')
-<style>
-    .checkbox_animated:after {
-        content: "";
-        position: absolute;
-        top: -0.125rem;
-        left: 0;
-        width: 1.3rem;
-        height: 1.3rem;
-        background: #fff;
-        border: 1px solid #ccc;
-        cursor: pointer;
-    }
-</style>
+    <style>
+        .checkbox_animated:after {
+            content: "";
+            position: absolute;
+            top: -0.125rem;
+            left: 0;
+            width: 1.3rem;
+            height: 1.3rem;
+            background: #fff;
+            border: 1px solid #ccc;
+            cursor: pointer;
+        }
+    </style>
 @endsection
 
 @section('breadcrumb')
@@ -69,39 +69,44 @@
                                         <div class="checkout-detail">
                                             <form action="{{ route('thanhtoans.xuLy') }}" method="POST" id="checkoutForm">
                                                 @csrf
-                                                    <input type="hidden" name="voucher_code" id="hiddenVoucherCode">
-                                                    <input type="hidden" name="tong_tien" id="hiddenTongTien">
-                                                    <input type="hidden" name="giam_gia" id="hiddenGiamGia">
-                                                    <input type="hidden" name="phuong_thuc_thanh_toan_id" id="hiddenPaymentMethod" value="1">
+                                                <input type="hidden" name="voucher_code" id="hiddenVoucherCode">
+                                                <input type="hidden" name="tong_tien" id="hiddenTongTien">
+                                                <input type="hidden" name="giam_gia" id="hiddenGiamGia">
+                                                <input type="hidden" name="phuong_thuc_thanh_toan_id"
+                                                    id="hiddenPaymentMethod" value="1">
                                                 <div class="mt-3">
                                                     <label for="">Họ và tên:</label>
-                                                    <input class="form-control" type="text" name="ten_nguoi_nhan" value="{{ Auth::user()->ten_nguoi_dung ?? '' }}">
+                                                    <input class="form-control" type="text" name="ten_nguoi_nhan"
+                                                        value="{{ Auth::user()->ten_nguoi_dung ?? '' }}">
                                                 </div>
                                                 <div class="mt-3">
                                                     <label for="">Email:</label>
-                                                    <input class="form-control" type="text" name="email_nguoi_nhan" value="{{ Auth::user()->email ?? '' }}">
+                                                    <input class="form-control" type="text" name="email_nguoi_nhan"
+                                                        value="{{ Auth::user()->email ?? '' }}">
                                                 </div>
                                                 <div class="mt-3">
                                                     <label for="">Số điện thoại:</label>
-                                                    <input class="form-control" type="number" name="sdt_nguoi_nhan" value="{{ Auth::user()->so_dien_thoai ?? '' }}">
+                                                    <input class="form-control" type="number" name="sdt_nguoi_nhan"
+                                                        value="{{ Auth::user()->so_dien_thoai ?? '' }}">
                                                 </div>
                                                 <div class="mt-3">
                                                     <label for="">Địa chỉ:</label>
-                                                    <input class="form-control" type="text" name="dia_chi_nguoi_nhan" value="{{ Auth::user()->dia_chi ?? '' }}">
+                                                    <input class="form-control" type="text" name="dia_chi_nguoi_nhan"
+                                                        value="{{ Auth::user()->dia_chi ?? '' }}">
                                                 </div>
                                                 <div class="mt-3">
                                                     <label for="">Ghi chú:</label>
-                                                    <input class="form-control" type="text" name="ghi_chu" value="{{ old('ghi_chu') ?? '' }}">
+                                                    <input class="form-control" type="text" name="ghi_chu"
+                                                        value="{{ old('ghi_chu') ?? '' }}">
                                                     @error('dia_chi_nguoi_nhan')
                                                         <p class="text-danger">{{ $message }}</p>
                                                     @enderror
                                                 </div>
 
-                                                <div class="mt-3">
+                                                {{-- <div class="mt-3">
                                                     <input style="border:#0da487" class="checkbox_animated checkall" type="checkbox" name="chinh_sach">
                                                     <label for="">Đồng ý rằng khi hoàn hàng sẽ không được nhận lại tiền</label>
-
-                                                </div>
+                                                </div> --}}
                                             </form>
                                         </div>
                                     </div>
@@ -124,21 +129,26 @@
                                                 id="accordionFlushExample">
 
                                                 @foreach ($pttts as $item)
-                                                @if ($item['trang_thai'] == 1)
-                                                <div class="accordion-item">
-                                                    <div class="accordion-header" id="flush-headingOne">
-                                                        <div class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne">
-                                                            <div class="custom-form-check form-check mb-0">
-                                                                <label class="form-check-label" for="cash">
-                                                                    <input class="form-check-input mt-0" type="radio" name="flexRadioDefault" id="cash"
-                                                                    data-id="{{ $item['id'] }}" {{ $item['id'] == 1 ? 'checked' : '' }}>
-                                                                    {{ $item['ten_phuong_thuc'] }}
-                                                                </label>
+                                                    @if ($item['trang_thai'] == 1)
+                                                        <div class="accordion-item">
+                                                            <div class="accordion-header" id="flush-headingOne">
+                                                                <div class="accordion-button collapsed"
+                                                                    data-bs-toggle="collapse"
+                                                                    data-bs-target="#flush-collapseOne">
+                                                                    <div class="custom-form-check form-check mb-0">
+                                                                        <label class="form-check-label" for="cash">
+                                                                            <input class="form-check-input mt-0"
+                                                                                type="radio" name="flexRadioDefault"
+                                                                                id="cash"
+                                                                                data-id="{{ $item['id'] }}"
+                                                                                {{ $item['id'] == 1 ? 'checked' : '' }}>
+                                                                            {{ $item['ten_phuong_thuc'] }}
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                </div>
-                                                @endif
+                                                    @endif
                                                 @endforeach
 
                                             </div>
@@ -161,9 +171,11 @@
                                 <form id="voucherForm" action="{{ route('voucher.giohang') }}" method="post">
                                     @csrf
                                     <div class="mb-3 coupon-box input-group">
-                                        <input style="border: 1px solid #0da487;" id="voucherCode" type="text" class="form-control" id="exampleFormControlInput1"
+                                        <input style="border: 1px solid #0da487;" id="voucherCode" type="text"
+                                            class="form-control" id="exampleFormControlInput1"
                                             placeholder="Nhập mã phiếu">
-                                        <button style="border: 1px solid #0da487;margin-top: 0px;" type="submit" class="btn-apply">Xác nhận</button>
+                                        <button style="border: 1px solid #0da487;margin-top: 0px;" type="submit"
+                                            class="btn-apply">Xác nhận</button>
                                     </div>
                                 </form>
                             </div>
@@ -177,7 +189,8 @@
                                             <span>{{ $chiTietGioHang->bienThe->ten_bien_the }}</span>
                                         </h4>
 
-                                        <h4 hidden><span class="gia-moi">{{ $chiTietGioHang->bienThe->gia_ban }}</span>đ</h4>
+                                        <h4 hidden><span class="gia-moi">{{ $chiTietGioHang->bienThe->gia_ban }}</span>đ
+                                        </h4>
                                         <h4 class="price"><span class="tong"></span>đ</h4>
                                     </li>
                                 @endforeach
@@ -206,7 +219,8 @@
                             </ul>
                         </div>
 
-                        <a href="javascript:void(0);" id="btnDatHang" class="btn theme-bg-color text-white btn-md w-100 mt-4 fw-bold">
+                        <a href="javascript:void(0);" id="btnDatHang"
+                            class="btn theme-bg-color text-white btn-md w-100 mt-4 fw-bold">
                             Đặt hàng
                         </a>
                     </div>
@@ -250,7 +264,8 @@
 
                     <form>
                         <div class="form-floating mb-4 theme-form-floating">
-                            <textarea class="form-control" placeholder="Leave a comment here" id="address" style="height: 100px"></textarea>
+                            <textarea class="form-control" placeholder="Leave a comment here" id="address"
+                                style="height: 100px"></textarea>
                             <label for="address">Enter Address</label>
                         </div>
                     </form>
@@ -272,6 +287,7 @@
     </div> --}}
     <!-- Add address modal box end -->
 @endsection
+
 
 @section('js')
 <script>
@@ -445,7 +461,6 @@ $('input[name="flexRadioDefault"]').on('change', function() {
             sdt_nguoi_nhan: $('input[name="sdt_nguoi_nhan"]').val(),
             dia_chi_nguoi_nhan: $('input[name="dia_chi_nguoi_nhan"]').val(),
             ghi_chu: $('input[name="ghi_chu"]').val(),
-            chinh_sach: $('input[name="chinh_sach"]').is(':checked') ? 1 : 0,
         };
         // Gửi request AJAX
         $.ajax({
@@ -453,8 +468,12 @@ $('input[name="flexRadioDefault"]').on('change', function() {
             type: "POST",
             data: formData,
             success: function(response) {
-                // console.log(response)
-                window.location.href = `/dathangthanhcong/${response.id}`; // Chuyển hướng sau khi đặt hàng thành công (tuỳ chỉnh)
+                console.log(response)
+                if(response.status === "vnpay") {
+                    window.location.href = response.vnpay_url;
+                }else if (response.status === "success") {
+                    window.location.href = `/dathangthanhcong/${response.id}`;
+                }
             },
             error: function(xhr) {
                 let response = xhr.responseJSON;

@@ -15,23 +15,25 @@ use App\Http\Controllers\ThongKeController;
 use App\Http\Controllers\HelperCommon\Helper;
 
 use App\Http\Controllers\ThuocTinhController;
-use App\Http\Controllers\Admins\UserController;
+use App\Http\Controllers\Payment\PaymentVnPay;
 
+use App\Http\Controllers\Admins\UserController;
 use App\Http\Controllers\PhieuGiamGiaController;
 use App\Http\Controllers\Admins\SettingController;
 use App\Http\Controllers\DanhMucBaiVietController;
 use App\Http\Controllers\DanhMucSanPhamController;
 use App\Http\Controllers\GiaTriThuocTinhController;
 use App\Http\Controllers\Admins\Auth\AuthController;
+
+
 use App\Http\Controllers\Clients\IndexClientController;
-
-
 use App\Http\Controllers\ClientDanhMucSanPhamController;
 use App\Http\Controllers\Clients\DanhGiaClientsController;
 use App\Http\Controllers\Admins\Responsibility\RoleController;
 use App\Http\Controllers\Admins\Responsibility\PermissionController;
 use App\Http\Controllers\Clients\UserController as ClientsUserController;
 use App\Http\Controllers\Clients\Auth\AuthController as AuthAuthController;
+use App\Http\Controllers\Clients\ThanhToanController;
 
 // Login Admin Controller
 Route::prefix('/admin')->controller(AuthController::class)->group(function () {
@@ -86,7 +88,6 @@ Route::prefix('admin')->middleware(['auth', 'checkStatus'])->group(function () {
         Route::resource('danhmucsanphams', DanhMucSanPhamController::class);
         Route::resource('sanphams', SanPhamController::class);
 
-        Route::resource('bienthes', BienTheController::class);
         Route::get('users/search', [UserController::class, 'search'])->name('users-search');
         Route::resource('users', UserController::class);
         Route::resource('thuoctinhs', ThuocTinhController::class);
@@ -94,10 +95,12 @@ Route::prefix('admin')->middleware(['auth', 'checkStatus'])->group(function () {
         Route::resource('donhangs', DonHangController::class);
         Route::resource('baiviets', BaiVietController::class);
         Route::resource('danhmucbaiviets', DanhMucBaiVietController::class);
-        Route::resource('baiviets', BaiVietController::class);
         Route::resource('phieugiamgias', PhieuGiamGiaController::class);
         Route::resource("danhgias", DanhGiaController::class);
         Route::get('/gioi-thieu', [DanhGiaController::class, 'danhGiaNoiBat'])->name('gioithieu');
+        Route::get('/test',function(){
+            dd(1);
+        })->name('hihi');
     });
 });
 
@@ -106,7 +109,7 @@ Route::prefix('admin')->middleware(['auth', 'checkStatus'])->group(function () {
 //     return view('admins.auth.mailForgetPass');
 // });
 
-Route::get('/', [IndexClientController::class,'index'])->name('home');
+Route::get('/', [IndexClientController::class, 'index'])->name('home');
 
 Route::controller(App\Http\Controllers\Clients\Auth\AuthController::class)->group(function () {
     Route::get('/login', 'showLogin')->name('login.client');
@@ -179,4 +182,6 @@ Route::post('/lienhe', [ContactController::class, 'send'])->name('send.contact')
 Route::get('/san-pham/{id}/bien-the', [SanPhamController::class, 'getBienThe']);
 Route::post('/danhgias/toggle-status', [DanhGiaController::class, 'trangThaiDanhGia'])->name('danhgias.trangthaidanhgia');
 
+
+Route::get('/vnpay-return', [ThanhToanController::class, 'vnpayReturn'])->name('vnpay.return');
 

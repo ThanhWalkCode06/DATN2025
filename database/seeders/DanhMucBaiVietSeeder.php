@@ -18,6 +18,6 @@ class DanhMucBaiVietSeeder extends Seeder
             'ten_danh_muc' => 'Hỗ trợ',
             'mo_ta' => 'Hỗ trợ khách hàng'
         ]);
-        DanhMucBaiViet::factory()->count(10)->create();
+        // DanhMucBaiViet::factory()->count(10)->create();
     }
 }

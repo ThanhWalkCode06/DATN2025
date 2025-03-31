@@ -8,6 +8,10 @@
 @endsection
 
 @section('breadcrumb')
+{{-- @php
+    dd( $chiTietDonHangs);
+@endphp --}}
+
     <!-- Breadcrumb Section Start -->
     <section class="breadcrumb-section pt-0">
         <div class="container-fluid-lg">

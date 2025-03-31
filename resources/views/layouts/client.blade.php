@@ -183,8 +183,8 @@
         <script>
             document.addEventListener("DOMContentLoaded", function() {
                 Swal.fire({
-                    title: "Vui lòng đăng nhập để bình luận",
-                    text: "{{ session('success') }}",
+                    title: "Thất bại",
+                    text: "{{ session('error') }}",
                     icon: "error",
                     confirmButtonText: "OK"
                 });
@@ -192,7 +192,7 @@
         </script>
     @endif
 
-  
+
 </body>
 <script>
     function Logout(ev) {
