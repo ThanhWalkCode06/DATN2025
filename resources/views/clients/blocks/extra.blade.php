@@ -625,7 +625,7 @@ $(document).ready(function () {
                 $('.variant-section').html(thuocTinhHtml); // Thêm thuộc tính vào UI
             },
             error: function () {
-                alert('Không tìm thấy sản phẩm!');
+                // alert('Không tìm thấy sản phẩm!');
             }
         });
     });
