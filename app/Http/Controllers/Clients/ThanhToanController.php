@@ -195,10 +195,11 @@ class ThanhToanController extends Controller
                     'don_hang_id' => $donHang->id,
                     'bien_the_id' => $item->bien_the_id,
                     'so_luong' => $item->so_luong,
-                    'gia_ban' => $item->bienThe->gia_ban, // Lưu giá bán tại thời điểm đặt hàng
-                    'ten_san_pham' => $item->bienThe->sanPham->ten_san_pham, // Lưu tên sản phẩm
-                    'hinh_anh' => $item->bienThe->sanPham->hinh_anh, // Lưu ảnh sản phẩm
-                    'ten_bien_the' => $item->bienThe->ten_bien_the, // Lưu biến thể
+                    'san_pham_id'=>$item->san_pham_id,
+                    // 'gia_ban' => $item->bienThe->gia_ban, // Lưu giá bán tại thời điểm đặt hàng
+                    // 'ten_san_pham' => $item->bienThe->sanPham->ten_san_pham, // Lưu tên sản phẩm
+                    // 'hinh_anh' => $item->bienThe->sanPham->hinh_anh, // Lưu ảnh sản phẩm
+                    // 'ten_bien_the' => $item->bienThe->ten_bien_the, // Lưu biến thể
                     'created_at' => now()
                 ]);
 

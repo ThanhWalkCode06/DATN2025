@@ -452,6 +452,7 @@
                 updateHiddenInputs();
 
                 // Lấy dữ liệu từ form
+
                 var formData = {
                     _token: $('meta[name="csrf-token"]').attr('content'), // Lấy CSRF token
                     voucher_code: $('#hiddenVoucherCode').val(),
@@ -462,7 +463,8 @@
                     email_nguoi_nhan: $('input[name="email_nguoi_nhan"]').val(),
                     sdt_nguoi_nhan: $('input[name="sdt_nguoi_nhan"]').val(),
                     dia_chi_nguoi_nhan: $('input[name="dia_chi_nguoi_nhan"]').val(),
-                    ghi_chu: $('input[name="ghi_chu"]').val()
+                    ghi_chu: $('input[name="ghi_chu"]').val(),
+                    chinh_sach: $('input[name="chinh_sach"]').is(':checked') ? 1 : 0,
                 };
                 // Gửi request AJAX
                 $.ajax({
