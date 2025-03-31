@@ -39,6 +39,14 @@ class SanPhamController extends Controller
         if ($request->filled('danh_muc_id')) {
             $query->where('san_phams.danh_muc_id', $request->danh_muc_id);
         }
+        // Loc theo gia
+        if ($request->has('price_range')) {
+            foreach ($request->price_range as $range) {
+                [$minPrice, $maxPrice] = explode(',', $range);
+                $query->whereBetween('san_phams.gia_moi', [(int)$minPrice, (int)$maxPrice]);
+            }
+        }
+
 
         // **Lọc theo số sao**
         if ($request->filled('so_sao')) {

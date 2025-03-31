@@ -247,9 +247,6 @@
                                     <div id="collapseOne" class="accordion-collapse collapse show">
                                         <div class="accordion-body">
 
-
-
-
                                             @if ($danhMucs->isNotEmpty())
                                             <form method="GET" action="{{ route('sanphams.danhsach') }}">
                                                 <ul class="category-list custom-padding custom-height" id="category-list">
@@ -262,9 +259,9 @@
                                                                     id="danhmuc-{{ $danhMuc->id }}"
                                                                     onchange="this.form.submit()"
                                                                     {{ request('danh_muc_id') == $danhMuc->id ? 'checked' : '' }}>
-                                        
+
                                                                 <label class="form-check-label" for="danhmuc-{{ $danhMuc->id }}" style="cursor: pointer;">
-                                                                    {{ $danhMuc->ten_danh_muc }}  
+                                                                    {{ $danhMuc->ten_danh_muc }}
                                                                     <span class="badge bg-primary text-white ms-2">
                                                                         {{ $danhMuc->san_phams_count }} sản phẩm
                                                                     </span>
@@ -277,35 +274,40 @@
                                         @else
                                             <p>Không có danh mục nào có sản phẩm.</p>
                                         @endif
-                                        
-                                        
-                                        
-                                        
-
-
-
-
 
 
                                         </div>
                                     </div>
                                 </div>
 
-                                <div class="accordion-item">
-                                    <h2 class="accordion-header" id="panelsStayOpen-headingThree">
-                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                            data-bs-target="#collapseThree">
-                                            <span>Giá</span>
-                                        </button>
-                                    </h2>
-                                    <div id="collapseThree" class="accordion-collapse collapse show">
-                                        <div class="accordion-body">
-                                            <div class="range-slider">
-                                                <input type="text" class="js-range-slider" value="">
-                                            </div>
+                                <form method="GET" action="{{ route('sanphams.danhsach') }}">
+                                    <h5>Bộ lọc giá:</h5>
+
+                                    @php
+                                        $priceRanges = [
+                                            'duoi_5000000' => ['label' => 'Nhỏ hơn 5.000.000đ', 'min' => 0, 'max' => 5000000],
+                                            '5000000_7000000' => ['label' => 'Từ 5.000.000đ - 7.000.000đ', 'min' => 5000000, 'max' => 7000000],
+                                            '7000000_10000000' => ['label' => 'Từ 7.000.000đ - 10.000.000đ', 'min' => 7000000, 'max' => 10000000],
+                                            '10000000_15000000' => ['label' => 'Từ 10.000.000đ - 15.000.000đ', 'min' => 10000000, 'max' => 15000000],
+                                            '15000000_20000000' => ['label' => 'Từ 15.000.000đ - 20.000.000đ', 'min' => 15000000, 'max' => 20000000],
+                                            'tren_20000000' => ['label' => 'Lớn hơn 20.000.000đ', 'min' => 20000000, 'max' => 999999999]
+                                        ];
+                                        $selectedPrices = request('price_range', []);
+                                    @endphp
+
+                                    @foreach ($priceRanges as $key => $range)
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="price_range[]" id="price_{{ $key }}"
+                                                value="{{ $range['min'] }},{{ $range['max'] }}"
+                                                onchange="this.form.submit()"
+                                                {{ in_array("{$range['min']},{$range['max']}", $selectedPrices) ? 'checked' : '' }}>
+                                            <label class="form-check-label" for="price_{{ $key }}">
+                                                {{ $range['label'] }}
+                                            </label>
                                         </div>
-                                    </div>
-                                </div>
+                                    @endforeach
+                                </form>
+
 
                                 <div class="accordion-item">
                                     <h2 class="accordion-header" id="panelsStayOpen-headingSix">
@@ -444,18 +446,18 @@
                                         </span>
                                         <i class="fa-solid fa-angle-down"></i>
                                     </button>
-                                    
+
                                     <ul class="dropdown-menu">
                                         <li><a class="dropdown-item" href="{{ request()->fullUrlWithQuery(['sort' => 'pop']) }}">Sản phẩm bán chạy</a></li>
                                         <li><a class="dropdown-item" href="{{ request()->fullUrlWithQuery(['sort' => 'low']) }}">Giá thấp - cao</a></li>
                                         <li><a class="dropdown-item" href="{{ request()->fullUrlWithQuery(['sort' => 'high']) }}">Giá cao - thấp</a></li>
                                         <li><a class="dropdown-item" href="{{ request()->fullUrlWithQuery(['sort' => 'rating']) }}">Đánh giá cao - thấp</a></li>
-    
+
                                         <li><a class="dropdown-item" href="{{ request()->fullUrlWithQuery(['sort' => 'off']) }}">Giảm giá % cao - thấp</a></li>
                                     </ul>
                                 </div>
                             </div>
-                            
+
 
                             <div class="grid-option d-none d-md-block">
                                 <ul>
@@ -507,7 +509,7 @@
                                                         <i data-feather="eye"></i>
                                                     </a>
                                                 </li>
-                                                
+
                                                 <li data-bs-toggle="tooltip" data-bs-placement="top" title="Wishlist">
                                                     <a href="#" class="notifi-wishlist">
                                                         <i data-feather="heart"></i>
@@ -579,14 +581,14 @@
                                     <i class="fa-solid fa-angles-left"></i>
                                 </a>
                             </li>
-                
+
                             {{-- Các trang --}}
                             @foreach ($sanPhams->links()->elements[0] as $page => $url)
                                 <li class="page-item {{ $sanPhams->currentPage() == $page ? 'active' : '' }}">
                                     <a class="page-link" href="{{ $url }}">{{ $page }}</a>
                                 </li>
                             @endforeach
-                
+
                             {{-- Nút "Trang cuối" --}}
                             <li class="page-item {{ $sanPhams->hasMorePages() ? '' : 'disabled' }}">
                                 <a class="page-link" href="{{ $sanPhams->url($sanPhams->lastPage()) }}">
@@ -596,7 +598,7 @@
                         </ul>
                     </nav>
                 @endif
-                
+
                 </div>
             </div>
         </div>

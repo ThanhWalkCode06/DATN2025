@@ -5,11 +5,6 @@
     display: none !important;
 }
 
-.nav-item:nth-child(2) .nav-link::before {
-    display: inline-block !important;
-}
-
-
 </style>
     <div class="header-top">
         <div class="container-fluid-lg">
