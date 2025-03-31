@@ -98,6 +98,16 @@
                                                     <label for="">Ghi chú:</label>
                                                     <input class="form-control" type="text" name="ghi_chu"
                                                         value="{{ old('ghi_chu') ?? '' }}">
+                                                    @error('dia_chi_nguoi_nhan')
+                                                        <p class="text-danger">{{ $message }}</p>
+                                                    @enderror
+                                                </div>
+
+                                                <div class="mt-3">
+                                                    <input style="border:#0da487" class="checkbox_animated checkall"
+                                                        type="checkbox" name="chinh_sach">
+                                                    <label for="">Đồng ý rằng khi hoàn hàng sẽ không được nhận lại
+                                                        tiền</label>
                                                 </div>
                                             </form>
                                         </div>
@@ -131,7 +141,8 @@
                                                                         <label class="form-check-label" for="cash">
                                                                             <input class="form-check-input mt-0"
                                                                                 type="radio" name="flexRadioDefault"
-                                                                                id="cash" data-id="{{ $item['id'] }}"
+                                                                                id="cash"
+                                                                                data-id="{{ $item['id'] }}"
                                                                                 {{ $item['id'] == 1 ? 'checked' : '' }}>
                                                                             {{ $item['ten_phuong_thuc'] }}
                                                                         </label>

@@ -177,4 +177,7 @@ Route::get('/clientsanpham', [ClientDanhMucSanPhamController::class, 'danhSachSa
 Route::get('/top-san-pham', [SanPhamController::class, 'sanPhamTopDanhGia'])->name('sanpham.top_danh_gia');
 Route::post('/lienhe', [ContactController::class, 'send'])->name('send.contact');
 
+Route::get('/san-pham/{id}/bien-the', [SanPhamController::class, 'getBienThe']);
+Route::post('/danhgias/toggle-status', [DanhGiaController::class, 'trangThaiDanhGia'])->name('danhgias.trangthaidanhgia');
+
 Route::get('/vnpay-return', [ThanhToanController::class, 'vnpayReturn'])->name('vnpay.return');
