@@ -41,11 +41,14 @@ class SanPhamController extends Controller
         }
         // Loc theo gia
         if ($request->has('price_range')) {
-            foreach ($request->price_range as $range) {
-                [$minPrice, $maxPrice] = explode(',', $range);
-                $query->whereBetween('san_phams.gia_moi', [(int)$minPrice, (int)$maxPrice]);
-            }
+            $query->where(function ($q) use ($request) {
+                foreach ($request->price_range as $range) {
+                    [$minPrice, $maxPrice] = explode(',', $range);
+                    $q->orWhereBetween('san_phams.gia_moi', [(int)$minPrice, (int)$maxPrice]);
+                }
+            });
         }
+
 
 
         // **Lọc theo số sao**

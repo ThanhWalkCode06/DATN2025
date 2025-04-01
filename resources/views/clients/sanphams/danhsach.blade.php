@@ -281,11 +281,11 @@
                                 </div>
 
                                 <form method="GET" action="{{ route('sanphams.danhsach') }}">
-                                    <h5>Bộ lọc giá:</h5>
+                                    <h5>Chọn Khoảng Giá:</h5>
 
                                     @php
                                         $priceRanges = [
-                                            'duoi_50000' => ['label' => 'Nhỏ hơn 50.000đ', 'min' => 0, 'max' => 5000000],
+                                            'duoi_50000' => ['label' => 'Nhỏ hơn 50.000đ', 'min' => 0, 'max' => 50000],
                                             '50000_70000' => ['label' => 'Từ 50.000đ - 70.000đ', 'min' => 50000, 'max' => 70000],
                                             '70000_100000' => ['label' => 'Từ 70.000đ - 100.000đ', 'min' => 70000, 'max' => 100000],
                                             '100000_150000' => ['label' => 'Từ 100.000đ - 150.000đ', 'min' => 100000, 'max' => 150000],
