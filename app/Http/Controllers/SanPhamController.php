@@ -19,6 +19,8 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\StoreSanPhamRequest;
 use App\Http\Requests\UpdateSanPhamRequest;
 use App\Http\Controllers\HelperCommon\Helper;
+use App\Models\ChiTietGioHang;
+use App\Models\GioHang;
 
 class SanPhamController extends Controller
 {
@@ -117,7 +119,7 @@ class SanPhamController extends Controller
         }
 
         $sanPham = SanPham::create($data);
-        Helper::uploadAlbum($sanPham->id, $token = false);
+        Helper::uploadAlbum($sanPham->id, $token = false,'hihi');
 
         // Xóa session sau khi lưu
         session()->forget('uploaded_files');
@@ -246,6 +248,7 @@ class SanPhamController extends Controller
      */
     public function edit($id)
     {
+
         $sanpham = SanPham::with('bienThes', 'anhSP')->findOrFail($id);
         $checkedTT = [];
         foreach ($sanpham->bienThes->unique('ten_bien_the') as $ten) {
@@ -298,7 +301,7 @@ class SanPhamController extends Controller
 
 
         $sanPham->update($data);
-        Helper::uploadAlbum($sanPham->id, $token = true);
+        Helper::uploadAlbum($sanPham->id, $token = true,json_decode($request->input('deleted_images'), true));
 
         $selected_values = is_array($request->selected_values) ? $request->selected_values : json_decode($request->selected_values, true) ?? [];
         // dd($selected_values);
@@ -395,6 +398,17 @@ class SanPhamController extends Controller
                     }
                 }
 
+                $hasCart = ChiTietGioHang::whereIn('bien_the_id', $bienTheIdsMoi)->exists();
+                $hasOrder = ChiTietDonHang::whereIn('bien_the_id', $bienTheIdsMoi)->exists();
+
+                if ($hasOrder) {
+                    return redirect()->back()->with('error', 'Sản phẩm không thể xóa do đã có đơn hàng!');
+                }
+
+                if ($hasCart) {
+                    return redirect()->back()->with('error', 'Sản phẩm không thể xóa do đã có trong giỏ hàng!');
+                }
+
                 // Xóa các biến thể không có trong danh sách mới
                 BienThe::where('san_pham_id', $sanPham->id)
                     ->whereNotIn('id', $bienTheIdsMoi)
@@ -421,15 +435,18 @@ class SanPhamController extends Controller
      */
     public function destroy($id)
     {
-        $sanpham = SanPham::findOrFail($id);
-        $bienThe = BienThe::findOrFail($id);
-        $donHangs = ChiTietDonHang::all();
+        $sanpham = SanPham::with('bienThes')->find($id);
+        $hasCart = ChiTietGioHang::whereIn('bien_the_id', $sanpham->bienThes->pluck('id'))->exists();
+        $hasOrder = ChiTietDonHang::whereIn('bien_the_id', $sanpham->bienThes->pluck('id'))->exists();
 
-        foreach ($donHangs as $item) {
-            if ($item->bien_the_id == $bienThe->id) {
-                return redirect()->back()->with('error', 'Sản phẩm không thể xóa do đã có đơn hàng!');
-            }
+        if ($hasOrder) {
+            return redirect()->back()->with('error', 'Sản phẩm không thể xóa do đã có đơn hàng!');
         }
+
+        if ($hasCart) {
+            return redirect()->back()->with('error', 'Sản phẩm không thể xóa do đã có trong giỏ hàng!');
+        }
+
         if ($sanpham->hinh_anh && file_exists(public_path('uploads/' . $sanpham->hinh_anh))) {
             unlink(public_path('uploads/' . $sanpham->hinh_anh));
         }

@@ -15,41 +15,61 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
 class Helper extends Controller{
-    public static function uploadAlbum($sanPhamId, $token)
+    public static function uploadAlbum($sanPhamId, $token,$deletedImages)
 {
-    if(is_array(request()->file('album_anh'))){
+    // if(is_array(request()->file('album_anh'))){
         // dd(1,$token);
         if($token === false){
+            if(is_array(request()->file('album_anh'))){
                 foreach (request()->file('album_anh') as $file) {
                     $fileName = time() . '_' . $file->getClientOriginalName();
-                    $file->storeAs("public/uploads/album/", $fileName);
+                    $file->storeAs("uploads/album/", $fileName);
 
                     AnhSanPham::create([
                         'san_pham_id' => $sanPhamId,
                         'link_anh_san_pham' => "uploads/album/" . $fileName
                     ]);
                 }
-        }else{
-            $album = AnhSanPham::find($sanPhamId);
-            // dd(1,$album);
-            if($album){
-                if ($album->anh_bien_the) {
-                    Storage::delete('public/' . $album->anh_bien_the);
-                }
-                $album->delete();
             }
+        }else{
+            $album = AnhSanPham::where('san_pham_id', $sanPhamId)->get();
+
+            if (!empty($deletedImages)) {
+                foreach ($deletedImages as $imageId) {
+                    $image = AnhSanPham::find($imageId);
+                    if ($image) {
+                        Storage::delete('public/' . $image->link_anh_san_pham);
+                        $image->delete();
+                    }
+                }
+            }
+
+            // if (is_array(request()->file('album_anh'))) {
+            //     if ($album->isNotEmpty()) { // Kiểm tra có dữ liệu không
+            //         foreach ($album as $item) {
+            //             if ($item->anh_bien_the && Storage::exists($item->anh_bien_the)) {
+            //                 Storage::delete($item->anh_bien_the);
+            //             }
+            //         }
+            //         $album->each->delete(); // Xóa tất cả bản ghi sau khi xóa file
+            //     }
+            // }
+
+
+            if (request()->hasFile('album_anh')) {
                 foreach (request()->file('album_anh') as $file) {
                     $fileName = time() . '_' . $file->getClientOriginalName();
-                    $file->storeAs("public/uploads/album/", $fileName);
+                    $path = $file->storeAs("uploads/album/", $fileName, 'public'); // Đúng storage
 
                     AnhSanPham::create([
                         'san_pham_id' => $sanPhamId,
-                        'link_anh_san_pham' => "uploads/album/" . $fileName
+                        'link_anh_san_pham' => $path
                     ]);
                 }
+            }
 
 
-        }
+        // }
     }
 
 
