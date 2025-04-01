@@ -59,6 +59,23 @@
         .product-option a:hover i {
             color: #1abc9c;
         }
+
+        .khoang-gia-title {
+            font-size: 17px;
+            font-weight: bold;
+            position: relative;
+            display: inline-block;
+        }
+
+        .khoang-gia-title::after {
+            content: "";
+            display: block;
+            width: 147px;
+            height: 1px;
+            background-color: #008080;
+            margin-top: 5px;
+        }
+
     </style>
 @endsection
 
@@ -248,32 +265,34 @@
                                         <div class="accordion-body">
 
                                             @if ($danhMucs->isNotEmpty())
-                                            <form method="GET" action="{{ route('sanphams.danhsach') }}">
-                                                <ul class="category-list custom-padding custom-height" id="category-list">
-                                                    @foreach ($danhMucs as $danhMuc)
-                                                        <li>
-                                                            <div class="form-check ps-0 m-0 category-list-box">
-                                                                <input class="checkbox_animated d-none"
-                                                                    type="radio" name="danh_muc_id"
-                                                                    value="{{ $danhMuc->id }}"
-                                                                    id="danhmuc-{{ $danhMuc->id }}"
-                                                                    onchange="this.form.submit()"
-                                                                    {{ request('danh_muc_id') == $danhMuc->id ? 'checked' : '' }}>
+                                                <form method="GET" action="{{ route('sanphams.danhsach') }}">
+                                                    <ul class="category-list custom-padding custom-height"
+                                                        id="category-list">
+                                                        @foreach ($danhMucs as $danhMuc)
+                                                            <li>
+                                                                <div class="form-check ps-0 m-0 category-list-box">
+                                                                    <input class="checkbox_animated d-none" type="radio"
+                                                                        name="danh_muc_id" value="{{ $danhMuc->id }}"
+                                                                        id="danhmuc-{{ $danhMuc->id }}"
+                                                                        onchange="this.form.submit()"
+                                                                        {{ request('danh_muc_id') == $danhMuc->id ? 'checked' : '' }}>
 
-                                                                <label class="form-check-label" for="danhmuc-{{ $danhMuc->id }}" style="cursor: pointer;">
-                                                                    {{ $danhMuc->ten_danh_muc }}
-                                                                    <span class="badge bg-primary text-white ms-2">
-                                                                        {{ $danhMuc->san_phams_count }} sản phẩm
-                                                                    </span>
-                                                                </label>
-                                                            </div>
-                                                        </li>
-                                                    @endforeach
-                                                </ul>
-                                            </form>
-                                        @else
-                                            <p>Không có danh mục nào có sản phẩm.</p>
-                                        @endif
+                                                                    <label class="form-check-label"
+                                                                        for="danhmuc-{{ $danhMuc->id }}"
+                                                                        style="cursor: pointer;">
+                                                                        {{ $danhMuc->ten_danh_muc }}
+                                                                        <span class="badge bg-primary text-white ms-2">
+                                                                            {{ $danhMuc->san_phams_count }} sản phẩm
+                                                                        </span>
+                                                                    </label>
+                                                                </div>
+                                                            </li>
+                                                        @endforeach
+                                                    </ul>
+                                                </form>
+                                            @else
+                                                <p>Không có danh mục nào có sản phẩm.</p>
+                                            @endif
 
 
                                         </div>
@@ -281,22 +300,39 @@
                                 </div>
 
                                 <form method="GET" action="{{ route('sanphams.danhsach') }}">
-                                    <h5>Chọn Khoảng Giá:</h5>
+                                    <h5 class="khoang-gia-title">Chọn Khoảng Giá</h5>
 
                                     @php
                                         $priceRanges = [
                                             'duoi_50000' => ['label' => 'Nhỏ hơn 50.000đ', 'min' => 0, 'max' => 50000],
-                                            '50000_70000' => ['label' => 'Từ 50.000đ - 70.000đ', 'min' => 50000, 'max' => 70000],
-                                            '70000_100000' => ['label' => 'Từ 70.000đ - 100.000đ', 'min' => 70000, 'max' => 100000],
-                                            '100000_150000' => ['label' => 'Từ 100.000đ - 150.000đ', 'min' => 100000, 'max' => 150000],
-                                            'tren_200000' => ['label' => 'Lớn hơn 200.000đ', 'min' => 200000, 'max' => 999999999]
+                                            '50000_70000' => [
+                                                'label' => 'Từ 50.000đ - 70.000đ',
+                                                'min' => 50000,
+                                                'max' => 70000,
+                                            ],
+                                            '70000_100000' => [
+                                                'label' => 'Từ 70.000đ - 100.000đ',
+                                                'min' => 70000,
+                                                'max' => 100000,
+                                            ],
+                                            '100000_150000' => [
+                                                'label' => 'Từ 100.000đ - 150.000đ',
+                                                'min' => 100000,
+                                                'max' => 150000,
+                                            ],
+                                            'tren_200000' => [
+                                                'label' => 'Lớn hơn 200.000đ',
+                                                'min' => 200000,
+                                                'max' => 999999999,
+                                            ],
                                         ];
                                         $selectedPrices = request('price_range', []);
                                     @endphp
 
                                     @foreach ($priceRanges as $key => $range)
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="price_range[]" id="price_{{ $key }}"
+                                            <input class="form-check-input" type="checkbox" name="price_range[]"
+                                                id="price_{{ $key }}"
                                                 value="{{ $range['min'] }},{{ $range['max'] }}"
                                                 onchange="this.form.submit()"
                                                 {{ in_array("{$range['min']},{$range['max']}", $selectedPrices) ? 'checked' : '' }}>
@@ -429,16 +465,17 @@
                             <div class="category-dropdown">
                                 <h5 class="text-content">Sắp xếp theo :</h5>
                                 <div class="dropdown">
-                                    <button class="dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown">
+                                    <button class="dropdown-toggle" type="button" id="dropdownMenuButton1"
+                                        data-bs-toggle="dropdown">
                                         <span>
                                             @php
-                                                $sortText = match(request('sort')) {
+                                                $sortText = match (request('sort')) {
                                                     'pop' => 'Sản phẩm bán chạy',
                                                     'low' => 'Giá thấp - cao',
                                                     'high' => 'Giá cao - thấp',
                                                     'rating' => 'Đánh giá cao - thấp',
                                                     'off' => 'Giảm giá % cao - thấp',
-                                                    default => 'Sản phẩm mới nhất'
+                                                    default => 'Sản phẩm mới nhất',
                                                 };
                                             @endphp
                                             {{ $sortText }}
@@ -447,12 +484,22 @@
                                     </button>
 
                                     <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="{{ request()->fullUrlWithQuery(['sort' => 'pop']) }}">Sản phẩm bán chạy</a></li>
-                                        <li><a class="dropdown-item" href="{{ request()->fullUrlWithQuery(['sort' => 'low']) }}">Giá thấp - cao</a></li>
-                                        <li><a class="dropdown-item" href="{{ request()->fullUrlWithQuery(['sort' => 'high']) }}">Giá cao - thấp</a></li>
-                                        <li><a class="dropdown-item" href="{{ request()->fullUrlWithQuery(['sort' => 'rating']) }}">Đánh giá cao - thấp</a></li>
+                                        <li><a class="dropdown-item"
+                                                href="{{ request()->fullUrlWithQuery(['sort' => 'pop']) }}">Sản phẩm bán
+                                                chạy</a></li>
+                                        <li><a class="dropdown-item"
+                                                href="{{ request()->fullUrlWithQuery(['sort' => 'low']) }}">Giá thấp -
+                                                cao</a></li>
+                                        <li><a class="dropdown-item"
+                                                href="{{ request()->fullUrlWithQuery(['sort' => 'high']) }}">Giá cao -
+                                                thấp</a></li>
+                                        <li><a class="dropdown-item"
+                                                href="{{ request()->fullUrlWithQuery(['sort' => 'rating']) }}">Đánh giá
+                                                cao - thấp</a></li>
 
-                                        <li><a class="dropdown-item" href="{{ request()->fullUrlWithQuery(['sort' => 'off']) }}">Giảm giá % cao - thấp</a></li>
+                                        <li><a class="dropdown-item"
+                                                href="{{ request()->fullUrlWithQuery(['sort' => 'off']) }}">Giảm giá % cao
+                                                - thấp</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -503,7 +550,8 @@
 
                                             </a>
                                             <ul class="product-option">
-                                                <li data-bs-toggle="tooltip" data-bs-placement="top" title="Xem chi tiết">
+                                                <li data-bs-toggle="tooltip" data-bs-placement="top"
+                                                    title="Xem chi tiết">
                                                     <a href="{{ route('sanphams.chitiet', ['id' => $sanPham['id']]) }}">
                                                         <i data-feather="eye"></i>
                                                     </a>
@@ -572,31 +620,31 @@
                     </div>
 
                     @if ($sanPhams->hasPages())
-                    <nav class="custom-pagination">
-                        <ul class="pagination justify-content-center">
-                            {{-- Nút "Trang đầu" --}}
-                            <li class="page-item {{ $sanPhams->onFirstPage() ? 'disabled' : '' }}">
-                                <a class="page-link" href="{{ $sanPhams->url(1) }}">
-                                    <i class="fa-solid fa-angles-left"></i>
-                                </a>
-                            </li>
-
-                            {{-- Các trang --}}
-                            @foreach ($sanPhams->links()->elements[0] as $page => $url)
-                                <li class="page-item {{ $sanPhams->currentPage() == $page ? 'active' : '' }}">
-                                    <a class="page-link" href="{{ $url }}">{{ $page }}</a>
+                        <nav class="custom-pagination">
+                            <ul class="pagination justify-content-center">
+                                {{-- Nút "Trang đầu" --}}
+                                <li class="page-item {{ $sanPhams->onFirstPage() ? 'disabled' : '' }}">
+                                    <a class="page-link" href="{{ $sanPhams->url(1) }}">
+                                        <i class="fa-solid fa-angles-left"></i>
+                                    </a>
                                 </li>
-                            @endforeach
 
-                            {{-- Nút "Trang cuối" --}}
-                            <li class="page-item {{ $sanPhams->hasMorePages() ? '' : 'disabled' }}">
-                                <a class="page-link" href="{{ $sanPhams->url($sanPhams->lastPage()) }}">
-                                    <i class="fa-solid fa-angles-right"></i>
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
-                @endif
+                                {{-- Các trang --}}
+                                @foreach ($sanPhams->links()->elements[0] as $page => $url)
+                                    <li class="page-item {{ $sanPhams->currentPage() == $page ? 'active' : '' }}">
+                                        <a class="page-link" href="{{ $url }}">{{ $page }}</a>
+                                    </li>
+                                @endforeach
+
+                                {{-- Nút "Trang cuối" --}}
+                                <li class="page-item {{ $sanPhams->hasMorePages() ? '' : 'disabled' }}">
+                                    <a class="page-link" href="{{ $sanPhams->url($sanPhams->lastPage()) }}">
+                                        <i class="fa-solid fa-angles-right"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    @endif
 
                 </div>
             </div>
