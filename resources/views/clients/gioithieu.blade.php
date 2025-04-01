@@ -401,7 +401,10 @@ Giới thiệu
                             </a>
                         </div>
                     </div>
-
+                    @endforeach
+                    @else
+                    <p class="text-center">Chưa có bài viết nào.</p>
+                    @endif
                 </div>
             </div>
         </div>
