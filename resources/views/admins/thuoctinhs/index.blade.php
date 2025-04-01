@@ -40,7 +40,7 @@
                         </a>
                     </form>
                 </div>
-
+{{-- 
                 @if (session('success'))
                                         
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -57,7 +57,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
                     
-                @endif
+                @endif --}}
                 <div class="table-responsive category-table">
                     <table class="table all-package theme-table" id="table_id">
                         <thead>
