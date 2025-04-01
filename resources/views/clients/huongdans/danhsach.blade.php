@@ -102,6 +102,10 @@
             <img src="{{ asset('storage/images/b7.1.png') }}" alt="Bước 7.1 - Thanh toán tiền mặt">
         </div>
 
+        <div class="sub-step">
+            <h3>Bước 7.2: Thanh toán bằng VNPay</h3>
+            <p>Chọn VNPay và bấm "Đặt hàng" để chuyển sang giao diện VNPay.</p>
+            <img src="{{ asset('storage/images/b7.2.png') }}" alt="Bước 7.2 - Thanh toán VNPay">
             
             <div class="sub-step">
                 <h4>Bước 7.2.1: Điền thông tin thanh toán VNPay</h4>
