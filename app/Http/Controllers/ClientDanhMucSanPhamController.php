@@ -19,7 +19,7 @@ class ClientDanhMucSanPhamController extends Controller
         $danh_muc_id = $request->query('danh_muc_id');
 
         // Lấy danh sách danh mục kèm số lượng sản phẩm
-        $danhMucs = DanhMucSanPham::withCount('sanPhams')->get();
+        $danhMucsp = DanhMucSanPham::withCount('sanPhams')->get();
 
         // Lấy danh sách sản phẩm theo danh mục
         if ($danh_muc_id) {
@@ -28,7 +28,7 @@ class ClientDanhMucSanPhamController extends Controller
             $sanPhams = SanPham::all();
         }
 
-        return view('clients.sanphams.danhsach', compact('sanPhams', 'danhMucs'));
+        return view('clients.sanphams.danhsach', compact('sanPhams', 'danhMucsp'));
     }
 
     public function sanPhamTrangchu()
