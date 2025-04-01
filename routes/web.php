@@ -175,7 +175,7 @@ Route::get('/danh-muc', [SanPhamController::class, 'danhMuc'])->name('danh-muc')
 Route::get('/gioi-thieu', [DanhGiaController::class, 'showDanhGias'])->name('gioithieu');
 
 Route::get('clientdanhmucsanpham', [ClientDanhMucSanPhamController::class, 'index'])->name('danhsach');
-Route::get('/clientsanpham', [ClientDanhMucSanPhamController::class, 'danhSachSanPham'])->name('clientsanpham.danhsach');
+
 Route::get('/top-san-pham', [SanPhamController::class, 'sanPhamTopDanhGia'])->name('sanpham.top_danh_gia');
 Route::post('/lienhe', [ContactController::class, 'send'])->name('send.contact');
 

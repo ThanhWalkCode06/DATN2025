@@ -89,10 +89,10 @@
 
                     <div class="footer-contain">
                         <ul>
-                            @if (isset($danhMucs) && $danhMucs->count() > 0)
-                                @foreach ($danhMucs as $danhMuc)
+                            @if (isset($danhMucsp) && $danhMucsp->count() > 0)
+                                @foreach ($danhMucsp as $danhMuc)
                                     <li>
-                                        <a href="{{ route('clientsanpham.danhsach', ['danh_muc_id' => $danhMuc->id]) }}"
+                                        <a href="{{ route('sanphams.danhsach', ['danh_muc_id' => $danhMuc->id]) }}"
                                             class="text-content">
                                             {{ $danhMuc->ten_danh_muc }}
                                         </a>

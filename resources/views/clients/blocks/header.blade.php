@@ -250,17 +250,17 @@
 
                         <div class="category-dropdown">
                             <div class="category-title">
-                                <h5>Categories</h5>
+                                <h5>Danh mục sản phẩm</h5>
                                 <button type="button" class="btn p-0 close-button text-content">
                                     <i class="fa-solid fa-xmark"></i>
                                 </button>
                             </div>
 
                             <ul class="category-list">
-                                @if (isset($categories))
-                                    @foreach ($categories as $category)
+                                @if (isset($danhMucsp))
+                                    @foreach ($danhMucsp as $category)
                                         <li class="onhover-category-list">
-                                            <a href="{{ route('clientsanpham.danhsach', ['danh_muc_id' => $category->id]) }}"
+                                            <a href="{{ route('sanphams.danhsach', ['danh_muc_id' => $category->id]) }}"
                                                 class="category-name">
                                                 <img src="{{ asset('storage/' . $category->anh_danh_muc) }}"
                                                     alt="{{ $category->ten_danh_muc }}">
