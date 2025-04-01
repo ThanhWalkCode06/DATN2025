@@ -285,10 +285,10 @@ Giới thiệu
                         <div class="team-box">
                             <div class="team-image">
                                 <img src="../assets/images/team/thanh.jpg" class="img-fluid blur-up lazyload"
-                                    alt="nguyễn Văn Thanh">
+                                    alt="nguyễn Trọng Thanh">
                             </div>
                             <div class="team-name">
-                                <h3>Nguyễn Văn Thanh</h3>
+                                <h3>Nguyễn Trọng Thanh</h3>
                                 <h5>Customer Support</h5>
                                 <p>Ensuring the best service for our customers.</p>
                             </div>
@@ -349,7 +349,7 @@ Giới thiệu
 
                             <div class="reviewer-profile">
                                 <div class="reviewer-image">
-                                    <img src="{{ asset($danhGia->user->anh_dai_dien ?? 'default-avatar.jpg') }}"
+                                    <img src="{{ asset(Storage::url($danhGia->anh_dai_dien)) }}"
                                         alt="Ảnh đại diện">
                                 </div>
 
@@ -388,7 +388,7 @@ Giới thiệu
                             <div class="blog-box-image">
                                 <div class="blog-image">
                                     <a href="{{ route('baiviets.chitiet', $baiViet->id) }}" class="rounded-3">
-                                        <img src="{{ asset($baiViet->anh_bia) }}"
+                                        <img src="{{ asset(Storage::url($baiViet->anh_bia)) }}"
                                             class="bg-img blur-up lazyload" alt="{{ $baiViet->tieu_de }}">
                                     </a>
                                 </div>
