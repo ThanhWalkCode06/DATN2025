@@ -33,6 +33,8 @@ class UpdateSanPhamRequest extends FormRequest
             'hinh_anh' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
 
 
+            'gia_cu' => ['required', 'numeric','min:1'],
+            'gia_moi' => ['required', 'numeric','min:0','lt:gia_cu'],
             'anh_bien_the' => 'nullable|array',
             'anh_bien_the.*' => 'nullable|image',
             'gia_nhap' => [ 'array'],
@@ -49,12 +51,20 @@ class UpdateSanPhamRequest extends FormRequest
         $validator->after(function ($validator) {
             $gia_nhap = $this->input('gia_nhap', []);
             $gia_ban = $this->input('gia_ban', []);
-
+            $gia_cu = $this->input('gia_cu');
+            // dd($gia_cu);
             foreach ($gia_nhap as $index => $value) {
                 if (isset($gia_nhap[$index]) && $value >= $gia_ban[$index]) {
                     $validator->errors()->add("gia_nhap.$index", "Giá nhập phải nhỏ hơn giá bán.");
                 }
+                if($value >= $gia_cu){
+                    $validator->errors()->add("gia_nhap.$index", "Giá nhập phải nhỏ hơn giá cũ.");
+                }
+                if($gia_ban[$index] >= $gia_cu){
+                    $validator->errors()->add("gia_ban.$index", "Giá bán phải nhỏ hơn giá cũ.");
+                }
             }
+            // dd($validator->errors()->all());
         });
         if ($this->hasFile('hinh_anh')) {
             $file = $this->file('hinh_anh');
@@ -93,6 +103,8 @@ class UpdateSanPhamRequest extends FormRequest
             'gia_nhap.*.numeric' => 'Bắt buộc phải nhập số',
             'gia_nhap.*.min' => 'Bắt buộc lớn hơn 0',
             'gia_moi.lt' =>'Giá mới phải ít hơn giá cũ',
+            'gia_moi.required' =>'Bắt buộc phải nhập',
+            'gia_cu.required' =>'Bắt buộc phải nhập',
 
             'gia_ban.*.required' => 'Bắt buộc phải nhập',
             'gia_ban.*.numeric' => 'Bắt buộc phải nhập số',

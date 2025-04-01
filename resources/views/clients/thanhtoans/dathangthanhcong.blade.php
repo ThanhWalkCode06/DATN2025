@@ -113,7 +113,7 @@
                                                         <ul>
                                                             <li class="name">
                                                                 <a
-                                                                    href="product-left-thumbnail.html">{{ $chiTietDonHang->ten_san_pham }}</a>
+                                                                    href="{{ route('sanphams.chitiet', $chiTietDonHang->id) }}">{{ $chiTietDonHang->ten_san_pham }}</a>
                                                             </li>
 
                                                             <li class="text-content">{{ $chiTietDonHang->ten_bien_the }}

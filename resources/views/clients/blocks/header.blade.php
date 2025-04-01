@@ -137,14 +137,11 @@
                                                 <li style="width: 100%" class="product-box-contain">
                                                     <div class="drop-cart">
                                                         <a href="{{ route('sanphams.chitiet',$item->id) }}" class="drop-image">
-                                                            <img src="{{ Storage::url($item->bienThe->sanPham->hinh_anh) }}"
+                                                            <img src="{{ Storage::url($item->bienThe->anh_bien_the) }}"
                                                                 class="blur-up lazyload" alt="">
                                                         </a>
 
                                                         <div class="drop-contain">
-                                                            {{-- <a href="{{ route('sanphams.chitiet',$item->id) }}">
-                                                                <h5>{{ $item->bienThe->sanPham->ten_san_pham }}</h5>
-                                                            </a> --}}
 
                                                             <div class="drop-contain">
                                                                 <a href="{{ route('sanphams.chitiet', $item->id) }}">

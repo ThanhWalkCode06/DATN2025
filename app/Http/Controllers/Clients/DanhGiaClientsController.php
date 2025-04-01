@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Clients;
 
-use App\Http\Controllers\Controller;
+use App\Models\User;
 use App\Models\DanhGia;
 use App\Models\SanPham;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Models\BienThe;
 use Illuminate\Support\Facades\Auth;
 
 class DanhGiaClientsController extends Controller
@@ -45,15 +47,62 @@ class DanhGiaClientsController extends Controller
 
         $daMuaHang = \App\Models\DonHang::where('user_id', Auth::id())
             ->whereHas('bienThes', function ($query) use ($san_pham_id) {
-                $query->where('chi_tiet_don_hangs.san_pham_id', $san_pham_id); 
+                $query->where('chi_tiet_don_hangs.san_pham_id', $san_pham_id);
             })
             ->exists();
 
 
-        if (!$daMuaHang) {
-            return redirect()->route('sanphams.chitiet', ['id' => $san_pham_id])
-                ->with('error_binhluan', 'Bạn chỉ có thể đánh giá sản phẩm sau khi đã mua.');
-        }
+        // if (!$daMuaHang) {
+        //     return redirect()->route('sanphams.chitiet', ['id' => $san_pham_id])
+        //         ->with('error_binhluan', 'Bạn chỉ có thể đánh giá sản phẩm sau khi đã mua.');
+        // }
+
+            $user = User::with(['danhGias', 'donHangs.chiTietDonHangs'])
+            ->where('id', Auth::user()->id)
+            ->first();
+
+            // Kiểm tra nếu user không tồn tại
+            if (!$user) {
+                return redirect()->route('sanphams.chitiet', ['id' => $san_pham_id])
+                    ->with('error_binhluan', 'Người dùng không tồn tại.');
+            }
+
+            // Lấy danh sách ID biến thể của sản phẩm
+            $idBienThes = BienThe::where('san_pham_id', $san_pham_id)->pluck('id')->toArray();
+
+            // Kiểm tra nếu sản phẩm không có biến thể nào
+            if (empty($idBienThes)) {
+                return redirect()->route('sanphams.chitiet', ['id' => $san_pham_id])
+                    ->with('error_binhluan', 'Sản phẩm này không có biến thể để đánh giá.');
+            }
+
+            // Đếm số lần sản phẩm đã được mua trong đơn hàng "Đã nhận hàng"
+            $soLanMua = 0;
+            foreach ($user->donHangs as $donHang) {
+                // dd($user->donHangs);
+                if ($donHang->trang_thai_don_hang === 4) { // Chỉ lấy đơn hàng đã nhận
+                    foreach ($donHang->chiTietDonHangs as $chiTiet) {
+                        // dd($chiTiet);
+                        if (in_array($chiTiet->bien_the_id, $idBienThes)) {
+                            $soLanMua++;
+                            // dd($soLanMua);
+                        }
+                    }
+                }
+            }
+            // Đếm số lần đã đánh giá sản phẩm
+            $soLanDanhGia = $user->danhGias->where('san_pham_id', $san_pham_id)->count();
+
+            // Kiểm tra điều kiện đánh giá
+            if ($soLanMua > $soLanDanhGia) {
+                echo "Bạn có thể đánh giá sản phẩm này!";
+            } else {
+                return redirect()->route('sanphams.chitiet', ['id' => $san_pham_id])
+                    ->with('error_binhluan', 'Bạn chỉ có thể đánh giá sản phẩm sau khi đã mua.');
+            }
+
+
+
 
         // Validate dữ liệu
         $request->validate([
@@ -66,7 +115,7 @@ class DanhGiaClientsController extends Controller
             'user_id' => Auth::id(),
             'san_pham_id' => $san_pham_id,
             'so_sao' => $request->so_sao,
-            'nhan_xet' => $request->nhan_xet ?? '', 
+            'nhan_xet' => $request->nhan_xet ?? '',
             'trang_thai' => 1 // Đánh giá mới mặc định chưa duyệt
         ]);
 

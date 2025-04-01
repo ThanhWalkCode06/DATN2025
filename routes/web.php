@@ -1,6 +1,8 @@
 <?php
 
+use App\Models\DanhGia;
 use App\Models\SanPham;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LienHeController;
@@ -11,21 +13,22 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DanhGiaController;
 use App\Http\Controllers\DonHangController;
 use App\Http\Controllers\SanPhamController;
+
 use App\Http\Controllers\ThongKeController;
 use App\Http\Controllers\HelperCommon\Helper;
 
 use App\Http\Controllers\ThuocTinhController;
 use App\Http\Controllers\Payment\PaymentVnPay;
-
 use App\Http\Controllers\Admins\UserController;
 use App\Http\Controllers\PhieuGiamGiaController;
 use App\Http\Controllers\Admins\SettingController;
 use App\Http\Controllers\DanhMucBaiVietController;
 use App\Http\Controllers\DanhMucSanPhamController;
+
+
 use App\Http\Controllers\GiaTriThuocTinhController;
 use App\Http\Controllers\Admins\Auth\AuthController;
-
-
+use App\Http\Controllers\Clients\ThanhToanController;
 use App\Http\Controllers\Clients\IndexClientController;
 use App\Http\Controllers\ClientDanhMucSanPhamController;
 use App\Http\Controllers\Clients\DanhGiaClientsController;
@@ -33,7 +36,6 @@ use App\Http\Controllers\Admins\Responsibility\RoleController;
 use App\Http\Controllers\Admins\Responsibility\PermissionController;
 use App\Http\Controllers\Clients\UserController as ClientsUserController;
 use App\Http\Controllers\Clients\Auth\AuthController as AuthAuthController;
-use App\Http\Controllers\Clients\ThanhToanController;
 
 // Login Admin Controller
 Route::prefix('/admin')->controller(AuthController::class)->group(function () {
@@ -184,4 +186,28 @@ Route::post('/danhgias/toggle-status', [DanhGiaController::class, 'trangThaiDanh
 
 
 Route::get('/vnpay-return', [ThanhToanController::class, 'vnpayReturn'])->name('vnpay.return');
+// Route::get('/test', function(){
+//     $user = User::with(['danhGias', 'donHangs.chiTietDonHangs'])
+//     ->where('id', Auth::user()->id)
+//     ->first();
+
+//     $sanPhamDaMua = []; // Danh sách sản phẩm đã mua ở trạng thái "Đã nhận hàng"
+
+//     foreach ($user->donHangs as $donHang) {
+//         if ($donHang->trang_thai === 5) { // Kiểm tra trạng thái đơn hàng
+//             foreach ($donHang->chiTietDonHangs as $chiTiet) {
+//                 $sanPhamDaMua[] = $chiTiet->id_bien_the;
+//             }
+//         }
+//     }
+
+//     // Kiểm tra sản phẩm có trong danh sách được phép đánh giá hay không
+//     $idBienTheCanDanhGia = 123; // ID biến thể của sản phẩm cần kiểm tra
+//     if (in_array($idBienTheCanDanhGia, $sanPhamDaMua)) {
+//         echo "Bạn có thể đánh giá sản phẩm này!";
+//     } else {
+//         echo "Bạn chưa mua hoặc đơn hàng chưa hoàn thành!";
+//     }
+
+// })->name('vnpay.return');
 

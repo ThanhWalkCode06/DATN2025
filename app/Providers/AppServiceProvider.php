@@ -46,7 +46,6 @@ class AppServiceProvider extends ServiceProvider
                 return $item->bienThe->gia_ban * $item->so_luong ?? 0; // Nếu `bienThe` không tồn tại, lấy 0 để tránh lỗi
             });
 
-            // dd($total); // Debug để kiểm tra tổng
             $view->with(compact('gioHang', 'total'));
         });
         View::composer('clients.blocks.footer', function ($view) {
