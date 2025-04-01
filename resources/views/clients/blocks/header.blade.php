@@ -82,7 +82,7 @@
                                 class="img-fluid blur-up lazyload" alt="">
                         </a>
 
-                        <div class="middle-box">
+                        {{-- <div class="middle-box">
                             <div class="search-box">
                                 <div class="input-group">
                                     <input type="search" class="form-control" placeholder="Tìm kiếm">
@@ -91,7 +91,7 @@
                                     </button>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
 
                         <div class="rightside-box">
                             <div class="search-full">
