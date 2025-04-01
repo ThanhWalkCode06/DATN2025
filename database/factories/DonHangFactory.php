@@ -25,7 +25,7 @@ class DonHangFactory extends Factory
             'dia_chi_nguoi_nhan' => $this->faker->address(),
             'tong_tien' => $this->faker->numberBetween(100000, 10000000),
             'ghi_chu' => $this->faker->text(),
-            'phuong_thuc_thanh_toan_id' => $this->faker->numberBetween(1, 3),
+            'phuong_thuc_thanh_toan_id' => $this->faker->numberBetween(1, 2),
             'trang_thai_don_hang' => $this->faker->numberBetween(-1, 5),
             'trang_thai_thanh_toan' => $this->faker->numberBetween(0, 1)
         ];
