@@ -114,9 +114,9 @@
                                         <h3 class="text-uppercase fw-normal"><span class="theme-color fw-bold">Sản
                                                 Phẩm</span> Mới Nhất</h3>
                                         <h3 class="fw-light">Cập Nhật Liên Tục</h3>
-                                        <button onclick="location.href = '/clientsanpham';"
+                                        {{-- <button onclick="location.href = '/clientsanpham';"
                                             class="btn btn-animation btn-md mend-auto">Mua Ngay <i
-                                                class="fa-solid fa-arrow-right icon"></i></button>
+                                                class="fa-solid fa-arrow-right icon"></i></button> --}}
                                     </div>
                                 </div>
                             </div>
