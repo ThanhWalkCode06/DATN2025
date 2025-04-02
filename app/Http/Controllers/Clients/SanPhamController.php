@@ -31,6 +31,12 @@ class SanPhamController extends Controller
             'san_phams.created_at'
         ]);
 
+         // **Lọc theo từ khóa tìm kiếm**
+    if ($request->filled('query')) {
+        $query->where('san_phams.ten_san_pham', 'LIKE', '%' . $request->query('query') . '%');
+    }
+
+
     // **Luôn JOIN bảng đánh giá nếu lọc số sao hoặc sắp xếp theo rating**
     $joinDanhGia = false;
 
