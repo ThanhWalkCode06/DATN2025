@@ -23,7 +23,7 @@ class UpdateThuocTinhRequest extends FormRequest
      */
     public function rules(): array
     {
-       
+
         return [
             'ten_thuoc_tinh' => [
                 'required',
@@ -37,40 +37,40 @@ class UpdateThuocTinhRequest extends FormRequest
             'gia_tri.*' => [
                 'required', // Không được bỏ trống
                 'string', // Đảm bảo là chuỗi
-                'distinct', // Không cho phép trùng trong request
-                function ($attribute, $value, $fail) {
-                    $thuocTinhId = request()->route('thuoctinh');
-                
-                    // Lấy danh sách ID của giá trị thuộc tính từ request
-                    $giaTriIds = request()->input('gia_tri_id', []); 
-                
-                    // Tìm ID của giá trị thuộc tính hiện tại
-                    preg_match('/\d+/', $attribute, $matches); 
-                    $index = $matches[0] ?? null; 
-                
-                    $giaTriId = $giaTriIds[$index] ?? null;
-                
-                    // Kiểm tra trùng, bỏ qua chính nó
-                    $exists = DB::table('gia_tri_thuoc_tinhs')
-                        ->where('gia_tri', $value)
-                        ->whereNull('deleted_at')
-                        ->where('thuoc_tinh_id', $thuocTinhId)
-                        ->when($giaTriId, function ($query) use ($giaTriId) {
-                            return $query->where('id', '!=', $giaTriId);
-                        })
-                        ->exists();
-                
-                    if ($exists) {
-                        $fail('Giá trị thuộc tính "' . $value . '" đã tồn tại.');
-                    }
-                }
-                
-                
+                // 'distinct', // Không cho phép trùng trong request
+                // function ($attribute, $value, $fail) {
+                //     $thuocTinhId = request()->route('thuoctinh');
+
+                //     // Lấy danh sách ID của giá trị thuộc tính từ request
+                //     $giaTriIds = request()->input('gia_tri_id', []);
+
+                //     // Tìm ID của giá trị thuộc tính hiện tại
+                //     preg_match('/\d+/', $attribute, $matches);
+                //     $index = $matches[0] ?? null;
+
+                //     $giaTriId = $giaTriIds[$index] ?? null;
+
+                //     // Kiểm tra trùng, bỏ qua chính nó
+                //     $exists = DB::table('gia_tri_thuoc_tinhs')
+                //         ->where('gia_tri', $value)
+                //         ->whereNull('deleted_at')
+                //         ->where('thuoc_tinh_id', $thuocTinhId)
+                //         ->when($giaTriId, function ($query) use ($giaTriId) {
+                //             return $query->where('id', '!=', $giaTriId);
+                //         })
+                //         ->exists();
+
+                //     if ($exists) {
+                //         $fail('Giá trị thuộc tính "' . $value . '" đã tồn tại.');
+                //     }
+                // }
+
+
             ],
         ];
     }
-    
-    
+
+
     public function messages()
     {
         return [
@@ -85,6 +85,6 @@ class UpdateThuocTinhRequest extends FormRequest
             'gia_tri.*.distinct'      => 'Giá trị thuộc tính không được trùng nhau.',
         ];
     }
-    
+
 
 }
