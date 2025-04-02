@@ -103,8 +103,28 @@
                         <p class="first-letter">{!!   nl2br(e($baiViet->noi_dung))  !!}</p>
                     </div>
 
-
                 </div>
+                <div class="comment-box overflow-hidden">
+                    <div class="leave-title">
+                        <h3>Comments</h3>
+                    </div>
+
+                    <div class="user-comment-box">
+                        <ul>
+                            <li>
+                                <div class="user-box border-color">
+                                    <div class="reply-button">
+                                        <i class="fa-solid fa-reply"></i>
+                                        <span class="theme-color">Reply</span>
+                                    </div>
+                                    <div class="user-image">
+                                        <img src="../assets/images/inner-page/user/1.jpg"
+                                            class="img-fluid blur-up lazyload" alt="">
+                                        <div class="user-name">
+                                            <h6>30 Jan, 2022</h6>
+                                            <h5 class="text-content">Glenn Greer</h5>
+                                        </div>
+                                    </div>
 
                 @include('clients.baiviets.sidebar')
             </div>
