@@ -38,17 +38,21 @@
                 </div>
                 
                 <!-- Form lọc theo sản phẩm -->
-                <form method="GET" action="{{ route('danhgias.index') }}">
-                    <div class="form-group">
-                        <label for="san_pham_id">Lọc theo sản phẩm</label>
-                        <select name="san_pham_id" id="san_pham_id" class="form-control" onchange="this.form.submit()">
-                            <option value="">Chọn sản phẩm</option>
-                            @foreach ($sanPhams as $sanPham)
-                                <option value="{{ $sanPham->id }}" {{ request('san_pham_id') == $sanPham->id ? 'selected' : '' }}>
-                                    {{ $sanPham->ten_san_pham }}
-                                </option>
-                            @endforeach
-                        </select>
+                <form method="GET" action="{{ route('danhgias.index') }}" class="mb-3">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <select name="san_pham_id" class="form-control">
+                                <option value="">Tất cả sản phẩm</option>
+                                @foreach($sanPhams as $sanPham)
+                                    <option value="{{ $sanPham->id }}" {{ request('san_pham_id') == $sanPham->id ? 'selected' : '' }}>
+                                        {{ $sanPham->ten_san_pham }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-primary">Lọc</button>
+                        </div>
                     </div>
                 </form>
                 
