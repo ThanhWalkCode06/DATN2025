@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Validation\Rule;
 use App\Models\PhieuGiamGia;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
 
 class PhieuGiamGiaController extends Controller
 {
@@ -135,4 +136,30 @@ class PhieuGiamGiaController extends Controller
 
         return redirect()->route('phieugiamgias.index')->with('success', 'Xóa thành công!');
     }
+
+
+    // public function showCart()
+    // {
+    //     $userId = Auth::id(); // Get the logged-in user's ID
+    
+    //     if (!$userId) {
+    //         return redirect()->route('login')->with('error', 'Vui lòng đăng nhập để xem mã giảm giá.');
+    //     }
+    
+    //     // Get discount vouchers for the logged-in user
+    //     $phieuGiamGiaThanhToans = PhieuGiamGia::where('trang_thai', 1)
+    //         ->where('ngay_bat_dau', '<=', now()) // Start date is in the past
+    //         ->where('ngay_ket_thuc', '>=', now()) // End date is in the future
+    //         ->whereHas('phieu_giam_gia_tai_khoans', function ($query) use ($userId) {
+    //             $query->where('user_id', $userId);
+    //         })
+    //         ->get();
+    //         if ($phieuGiamGiaThanhToans->isEmpty()) {
+    //             // Optionally log something or return a default empty message
+    //             // Example: Log::info('No discount vouchers found.');
+    //         }
+    //     // Pass the variable to the view, even if it's empty
+    //     return view('clients.thanhtoans.thanhtoan', compact('phieuGiamGiaThanhToans')); // Ensure $phieuGiamGias is always passed
+    // }
+    
 }

@@ -186,6 +186,9 @@ Route::post('/danhgias/toggle-status', [DanhGiaController::class, 'trangThaiDanh
 
 
 Route::get('/vnpay-return', [ThanhToanController::class, 'vnpayReturn'])->name('vnpay.return');
+
+// Route::get('/phieugiamgia', [PhieuGiamGiaController::class, 'showCart'])->name('cart.show');
+
 // Route::get('/test', function(){
 //     $user = User::with(['danhGias', 'donHangs.chiTietDonHangs'])
 //     ->where('id', Auth::user()->id)
