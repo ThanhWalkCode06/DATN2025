@@ -1,13 +1,11 @@
 <header class="pb-md-4 pb-0">
-    <style>
-        .navbar-nav .nav-link::before {
-            display: none !important;
-        }
+<style>
 
-        .nav-item:nth-child(2) .nav-link::before {
-            display: inline-block !important;
-        }
-    </style>
+.navbar-nav .nav-link::before {
+    display: none !important;
+}
+
+</style>
     <div class="header-top">
         <div class="container-fluid-lg">
             <div class="row">

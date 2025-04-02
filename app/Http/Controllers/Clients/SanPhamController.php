@@ -36,9 +36,19 @@ class SanPhamController extends Controller
         $query->where('san_phams.ten_san_pham', 'LIKE', '%' . $request->query('query') . '%');
     }
 
-
-    // **Luôn JOIN bảng đánh giá nếu lọc số sao hoặc sắp xếp theo rating**
-    $joinDanhGia = false;
+    // **Lọc theo danh mục**
+    if ($request->filled('danh_muc_id')) {
+        $query->where('san_phams.danh_muc_id', $request->danh_muc_id);
+    }
+    // Loc theo gia
+    if ($request->has('price_range')) {
+        $query->where(function ($q) use ($request) {
+            foreach ($request->price_range as $range) {
+                [$minPrice, $maxPrice] = explode(',', $range);
+                $q->orWhereBetween('san_phams.gia_moi', [(int)$minPrice, (int)$maxPrice]);
+            }
+        });
+    }
 
     // **Lọc theo danh mục**
     if ($request->filled('danh_muc_id')) {
