@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
+
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -52,7 +53,8 @@
     <!-- App css -->
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css') }}">
 
-
+    <!-- Pusher -->
+    <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
 
     @yield('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/load.css') }}">
@@ -68,7 +70,7 @@
 
 </head>
 
-<body >
+<body>
     <div class="fullpage-loader">
         <span></span>
         <span></span>
@@ -126,45 +128,46 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     <div class="button-box">
                         <button type="button" class="btn btn--no" data-bs-dismiss="modal">Không</button>
-                        <a href="{{ route('logout') }}"><button type="button" class="btn  btn--yes btn-primary">Có</button></a>
+                        <a href="{{ route('logout') }}"><button type="button"
+                                class="btn  btn--yes btn-primary">Có</button></a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-    const icon = document.querySelector(".mode i");
-    const body = document.body;
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const icon = document.querySelector(".mode i");
+            const body = document.body;
 
-    // Kiểm tra trạng thái trong localStorage để áp dụng ngay khi trang load
-    if (localStorage.getItem("darkMode") === "enabled") {
-        body.classList.add("dark-only");
-        icon.classList.add("fa-moon-o", "fa-lightbulb-o");
-        setTimeout(() => {
-            const thElements = document.querySelectorAll(".sorting_disabled");
-            const checkbox = document.querySelector(".checkbox_animated");
-            console.log(checkbox); // Kiểm tra lại
-            if (thElements) {
-                // checkbox.style.background-color = "#0da487";
-                thElements.forEach(th => {
-                    th.style.color = "#0da487"; // Áp dụng màu cho từng phần tử
-                });
+            // Kiểm tra trạng thái trong localStorage để áp dụng ngay khi trang load
+            if (localStorage.getItem("darkMode") === "enabled") {
+                body.classList.add("dark-only");
+                icon.classList.add("fa-moon-o", "fa-lightbulb-o");
+                setTimeout(() => {
+                    const thElements = document.querySelectorAll(".sorting_disabled");
+                    const checkbox = document.querySelector(".checkbox_animated");
+                    console.log(checkbox); // Kiểm tra lại
+                    if (thElements) {
+                        // checkbox.style.background-color = "#0da487";
+                        thElements.forEach(th => {
+                            th.style.color = "#0da487"; // Áp dụng màu cho từng phần tử
+                        });
+                    }
+                }, 100);
             }
-        }, 100);
-    }
 
-    icon.addEventListener("click", function () {
+            icon.addEventListener("click", function() {
 
-        if (body.classList.contains("dark-only")) {
-            localStorage.removeItem("darkMode");
-        } else {
-            localStorage.setItem("darkMode", "enabled");
-        }
-    });
-});
-</script>
+                if (body.classList.contains("dark-only")) {
+                    localStorage.removeItem("darkMode");
+                } else {
+                    localStorage.setItem("darkMode", "enabled");
+                }
+            });
+        });
+    </script>
 
     <!-- Bootstrap js -->
     <script src="{{ asset('assets/js/jquery-3.6.0.min.js') }}"></script>
@@ -216,44 +219,60 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
-    window.addEventListener('load', function () {
-        let loader = document.querySelector('.fullpage-loader');
-        loader.style.opacity = '0';
-    setTimeout(() => {
-        loader.style.display = 'none';
-    }, 500); // Ẩn hẳn sau 0.5 giây
-    });
-
+        window.addEventListener('load', function() {
+            let loader = document.querySelector('.fullpage-loader');
+            loader.style.opacity = '0';
+            setTimeout(() => {
+                loader.style.display = 'none';
+            }, 500); // Ẩn hẳn sau 0.5 giây
+        });
     </script>
 
-@if (session('success'))
-<script>$(window).ready(function(){
-    $.notify({
-        title: "Thực hiện thao tác thành công!",
-        message: "{{ session('success') }}"
-    }, {
-        type: "primary",
-        delay: 5000
-    });
+    <script>
+        Pusher.logToConsole = true;
 
+        var pusher = new Pusher("0ca5e8c271c25e1264d2", {
+            cluster: "ap1"
+        });
 
-})</script>
-@endif
+        var channel = pusher.subscribe("don-hang");
+        channel.bind("dat-hang-thanh-cong", function(data) {
+            alert("Có đơn hàng mới! Tổng tiền: " + data.donHang.tong_tien + " VNĐ");
+            console.log(data.donHang)
+            console.log(data.donHang.tong_tien)
+        });
+    </script>
 
-@if (session('error'))
-<script>$(window).ready(function(){
-    $.notify({
-        title: "Thao tác thất bại!!",
-        message: "{{ session('error') }}"
-    }, {
-        type: "secondary",
-        delay: 5000
-    });
-})</script>
-@endif
+    @if (session('success'))
+        <script>
+            $(window).ready(function() {
+                $.notify({
+                    title: "Thực hiện thao tác thành công!",
+                    message: "{{ session('success') }}"
+                }, {
+                    type: "primary",
+                    delay: 5000
+                });
+            })
+        </script>
+    @endif
 
-<script src="{{ asset('assets/js/alert/confirmalert.js') }}"></script>
-@yield('js')
+    @if (session('error'))
+        <script>
+            $(window).ready(function() {
+                $.notify({
+                    title: "Thao tác thất bại!!",
+                    message: "{{ session('error') }}"
+                }, {
+                    type: "secondary",
+                    delay: 5000
+                });
+            })
+        </script>
+    @endif
+
+    <script src="{{ asset('assets/js/alert/confirmalert.js') }}"></script>
+    @yield('js')
 </body>
 
 </html>

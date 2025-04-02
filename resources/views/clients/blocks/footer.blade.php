@@ -109,7 +109,7 @@
 
                 <div class="col-xl col-lg-2 col-sm-3">
                     <div class="footer-title">
-                        <h4>Chính sách</h4>
+                        <h4>Mục khác</h4>
                     </div>
 
                     <div class="footer-contain">
