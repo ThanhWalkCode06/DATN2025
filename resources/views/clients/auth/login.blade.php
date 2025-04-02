@@ -38,7 +38,7 @@
         <!-- Breadcrumb Section End -->
 
         <!-- Đăng nhập section start -->
-        <section class="log-in-section background-image-2 section-b-space">
+        <section class="log-in-section section-b-space">
             <div class="container-fluid-lg w-100">
                 <div class="row">
                     <div class="col-xxl-6 col-xl-5 col-lg-6 d-lg-block d-none ms-auto">
