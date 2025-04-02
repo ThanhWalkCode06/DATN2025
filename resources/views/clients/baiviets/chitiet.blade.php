@@ -125,6 +125,28 @@
                                             <h5 class="text-content">Glenn Greer</h5>
                                         </div>
                                     </div>
+                                    <div class="user-contain">
+                                        <p>"Yeah, I think maybe you do. Right, gimme a Pepsi free. Of course, theEnchantment Under The Sea Dance they're supposed to go to this, that's
+                                            where they kiss for the first time. You'll find out. Are you sure about
+                                            this storm?"</p>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="li-padding">
+                                <div class="user-box">
+                                    <div class="reply-button">
+                                        <i class="fa-solid fa-reply"></i>
+                                        <span class="theme-color">Reply</span>
+                                    </div>
+                                    <div class="user-image">
+                                        <img src="../assets/images/inner-page/user/3.jpg"
+                                            class="img-fluid blur-up lazyload" alt="">
+                                        <div class="user-name">
+                                            <h6>30 Jan, 2022</h6>
+                                            <h5 class="text-content">Glenn Greer</h5>
+                                        </div>
+                                    </div>
 
                 @include('clients.baiviets.sidebar')
             </div>
