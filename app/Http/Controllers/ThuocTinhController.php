@@ -156,7 +156,6 @@ class ThuocTinhController extends Controller
      * Cập nhật thuộc tính và giá trị thuộc tính
      */
 
-
     public function update(UpdateThuocTinhRequest $request, $id)
     {
         $thuocTinh = ThuocTinh::find($id);
@@ -234,10 +233,6 @@ class ThuocTinhController extends Controller
 
         return redirect()->route('thuoctinhs.index')->with('success', 'Cập nhật thành công');
     }
-
-
-
-
 
     /**
      * Remove the specified resource from storage.
