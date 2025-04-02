@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\DanhGia;
+use App\Models\SanPham;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,22 +14,26 @@ class DanhGiaController extends Controller
      */
     public function index(Request $request)
     {
-        $danhGias = DanhGia::select('danh_gias.*', 'users.ten_nguoi_dung', 'san_phams.ten_san_pham')
-            ->join('users', 'users.id', '=',  'danh_gias.user_id')
-            ->join('san_phams', 'san_phams.id', '=', 'danh_gias.san_pham_id')
-            ->orderBy('danh_gias.created_at', 'desc');
+        // Lấy danh sách sản phẩm để hiển thị trong filter
+        $sanPhams = SanPham::all();
 
-        // Nếu có lọc theo sản phẩm
-        if ($request->has('san_pham_id') && $request->san_pham_id != '') {
-            $danhGias->where('danh_gias.san_pham_id', $request->san_pham_id);
+        // Nếu có sản phẩm được chọn để lọc
+        $query = DanhGia::select('danh_gias.*', 'users.ten_nguoi_dung', 'san_phams.ten_san_pham')
+            ->join('users', 'users.id', '=', 'user_id')
+            ->join('san_phams', 'san_phams.id', '=', 'san_pham_id');
+
+        // Nếu có lọc theo sản phẩm, thêm điều kiện lọc vào truy vấn
+        if ($request->has('san_pham_id')) {
+            $query->where('san_phams.id', $request->san_pham_id);
         }
 
-        $locdanhGias = $danhGias->paginate(10);
+        // Sắp xếp theo thời gian tạo (mới nhất ở trên cùng)
+        $query->orderBy('danh_gias.created_at', 'desc');
 
-        // Lấy danh sách sản phẩm để hiển thị trong dropdown lọc
-        $sanPhams = \App\Models\SanPham::all();
-        
-        return view('admins.danhgias.index', compact('danhGias'));
+        // Phân trang kết quả
+        $danhGias = $query->paginate(10); // 10 là số lượng kết quả mỗi trang
+
+        return view('admins.danhgias.index', compact('danhGias', 'sanPhams'));
     }
 
     /**
