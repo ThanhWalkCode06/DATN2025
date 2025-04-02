@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\DanhGia;
+use App\Models\SanPham;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -26,9 +27,9 @@ class DanhGiaController extends Controller
         $locdanhGias = $danhGias->paginate(10);
 
         // Lấy danh sách sản phẩm để hiển thị trong dropdown lọc
-        $sanPhams = \App\Models\SanPham::all();
-        
-        return view('admins.danhgias.index', compact('danhGias'));
+        $sanPhams = SanPham::all();
+
+        return view('admins.danhgias.index', compact('danhGias', 'sanPhams'));
     }
 
     /**
