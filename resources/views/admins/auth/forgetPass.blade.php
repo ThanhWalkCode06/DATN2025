@@ -105,30 +105,29 @@
         </section>
         <!-- log in section end -->
 
-    <!-- Bg overlay Start -->
-    <div class="bg-overlay"></div>
-    <!-- Bg overlay End -->
+        <!-- Bg overlay Start -->
+        <div class="bg-overlay"></div>
+        <!-- Bg overlay End -->
 
-    <script>
-        window.addEventListener('load', function () {
-            let loader = document.querySelector('.fullpage-loader');
-            console.log(loader)
-            if (loader) { // Kiểm tra loader có tồn tại không
-                loader.style.opacity = '0';
-                setTimeout(() => {
-                    loader.style.display = 'none';
-                }, 500); // Ẩn hẳn sau 0.5 giây
-            }
-        });
-    </script>
-</body>
+        <script>
+            window.addEventListener('load', function() {
+                let loader = document.querySelector('.fullpage-loader');
+                console.log(loader)
+                if (loader) { // Kiểm tra loader có tồn tại không
+                    loader.style.opacity = '0';
+                    setTimeout(() => {
+                        loader.style.display = 'none';
+                    }, 500); // Ẩn hẳn sau 0.5 giây
+                }
+            });
+        </script>
+    </body>
+
     </html>
 
 
-@section('js')
-
-
-    <script src="{{ asset('assets/js/config.js') }}"></script>
+    @section('js')
+        <script src="{{ asset('assets/js/config.js') }}"></script>
 
 
         <!-- bootstrap tag-input js -->

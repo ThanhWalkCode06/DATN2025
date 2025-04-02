@@ -141,7 +141,6 @@
     });
 </script>
 @section('js')
-
     <script src="{{ asset('assets/js/config.js') }}"></script>
 
     <!-- bootstrap tag-input js -->
@@ -162,6 +161,4 @@
     <!-- select2 js -->
     <script src="{{ asset('assets/js/select2.min.js') }}"></script>
     <script src="{{ asset('assets/js/select2-custom.js') }}"></script>
-
-
 @endsection

@@ -53,46 +53,49 @@
                                 <h3>Chào mừng tới Seven Stars</h3>
                                 <h4>Đăng nhập tài khoản của bạn</h4>
                             </div>
-                        <div class="input-box">
-                            <form  class="row g-4" action="{{ route('login.store.client') }}" method="POST">
-                                @csrf
-                                <div class="col-12 ">
-                                    <div class="form-floating theme-form-floating log-in-form">
-                                        <input name="username" type="text" class="form-control @error('username') is-invalid @enderror" id="fullname"
-                                        placeholder="Tên tài khoản" value="{{ old('username') }}">
-                                        <label for="username error-username">Tên tài khoản</label>
-                                    </div>
-
-                                    <div class="col-12 mt-3">
+                            <div class="input-box">
+                                <form class="row g-4" action="{{ route('login.store.client') }}" method="POST">
+                                    @csrf
+                                    <div class="col-12 ">
                                         <div class="form-floating theme-form-floating log-in-form">
-                                            <input name="password" type="password"
-                                                class="form-control @error('password') is-invalid @enderror" id="password"
-                                                placeholder="Password" value="{{ old('password') }}">
-                                            <label for="password">Mật khẩu</label>
+                                            <input name="username" type="text"
+                                                class="form-control @error('username') is-invalid @enderror" id="fullname"
+                                                placeholder="Tên tài khoản" value="{{ old('username') }}">
+                                            <label for="username error-username">Tên tài khoản</label>
                                         </div>
-                                        @error('password')
-                                            <p class="text-danger" id="error-username">{{ $message }}</p>
-                                        @enderror
-                                    </div>
 
-                                    <div class="col-12 mt-3">
-                                        <div class="forgot-box">
-                                            <div class="form-check ps-0 m-0 remember-box">
-                                                <input class="checkbox_animated check-box" type="checkbox"
-                                                    id="flexCheckDefault">
-                                                <label class="form-check-label" for="flexCheckDefault">Nhớ mật khẩu</label>
+                                        <div class="col-12 mt-3">
+                                            <div class="form-floating theme-form-floating log-in-form">
+                                                <input name="password" type="password"
+                                                    class="form-control @error('password') is-invalid @enderror"
+                                                    id="password" placeholder="Password" value="{{ old('password') }}">
+                                                <label for="password">Mật khẩu</label>
                                             </div>
-                                            <a href="{{ route('pass.forget.client') }}" class="forgot-password">Quên mật
-                                                khẩu?</a>
+                                            @error('password')
+                                                <p class="text-danger" id="error-username">{{ $message }}</p>
+                                            @enderror
                                         </div>
-                                    </div>
-                                    @error('error')
-                                        <p class="text-danger">{{ $message }}</p>
-                                    @enderror
-                                    <div class="col-12 mt-3">
-                                        <button class="btn btn-animation w-100 justify-content-center" type="submit">Đăng
-                                            nhập</button>
-                                    </div>
+
+                                        <div class="col-12 mt-3">
+                                            <div class="forgot-box">
+                                                <div class="form-check ps-0 m-0 remember-box">
+                                                    <input class="checkbox_animated check-box" type="checkbox"
+                                                        id="flexCheckDefault">
+                                                    <label class="form-check-label" for="flexCheckDefault">Nhớ mật
+                                                        khẩu</label>
+                                                </div>
+                                                <a href="{{ route('pass.forget.client') }}" class="forgot-password">Quên mật
+                                                    khẩu?</a>
+                                            </div>
+                                        </div>
+                                        @error('error')
+                                            <p class="text-danger">{{ $message }}</p>
+                                        @enderror
+                                        <div class="col-12 mt-3">
+                                            <button class="btn btn-animation w-100 justify-content-center"
+                                                type="submit">Đăng
+                                                nhập</button>
+                                        </div>
                                 </form>
                             </div>
 
