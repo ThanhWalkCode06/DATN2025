@@ -36,6 +36,25 @@
                 <div class="title-header option-title">
                     <h5>Đánh giá sản phẩm</h5>
                 </div>
+
+                {{-- loc sp --}}
+                <form method="GET" action="{{ route('danhgias.index') }}" class="mb-3">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <select name="san_pham_id" class="form-control">
+                                <option value="">Tất cả sản phẩm</option>
+                                @foreach($sanPhams as $sanPham)
+                                    <option value="{{ $sanPham->id }}" {{ request('san_pham_id') == $sanPham->id ? 'selected' : '' }}>
+                                        {{ $sanPham->ten_san_pham }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-primary">Lọc</button>
+                        </div>
+                    </div>
+                </form>
                 <div>
                     <div class="table-responsive">
                         <table class="user-table ticket-table review-table theme-table table" id="table_id">
@@ -89,6 +108,9 @@
                                 @endforeach
                             </tbody>
                         </table>
+                    </div>
+                    <div class="d-flex justify-content-center mt-3">
+                        {{ $danhGias->links('pagination::bootstrap-5') }}
                     </div>
                 </div>
             </div>
