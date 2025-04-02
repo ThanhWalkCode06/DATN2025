@@ -411,12 +411,12 @@
                     type: "POST",
                     data: formData,
                     success: function(response) {
-                        console.log(response)
                         if (response.status === "vnpay") {
                             window.location.href = response.vnpay_url;
                         } else if (response.status === "success") {
                             window.location.href = `/dathangthanhcong/${response.id}`;
                         }
+
                     },
                     error: function(xhr) {
                         let response = xhr.responseJSON;

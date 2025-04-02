@@ -97,7 +97,7 @@ class ThanhToanController extends Controller
             $this->thongBaoDatHang($donHang);
 
             // Xử lý voucher nếu có
-            if (!empty($request->voucher_code)) {
+            if (!empty($request->voucher_code) && $request->giam_gia !== "0") {
                 $idVoucher = PhieuGiamGia::where('ma_phieu', $request->voucher_code)->first();
                 if ($idVoucher) {
                     DB::table('phieu_giam_gia_tai_khoans')->insert([
@@ -133,7 +133,7 @@ class ThanhToanController extends Controller
 
         // Thanh toán qua VNPAY
         if ($request->phuong_thuc_thanh_toan_id === "2") {
-            if (!empty($request->voucher)) {
+            if (!empty($request->voucher) && $request->giam_gia !== "0") {
                 $idVoucher = PhieuGiamGia::where('ma_phieu', $request->voucher)->first();
                 if ($idVoucher) {
                     Session::put("voucher", $idVoucher->id);
@@ -203,7 +203,6 @@ class ThanhToanController extends Controller
                 'trang_thai_thanh_toan' => 1, // Đã thanh toán
                 'created_at' => now()
             ]);
-
             $this->thongBaoDatHang($donHang);
 
             if (Session::has('voucher')) {
