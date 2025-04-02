@@ -16,7 +16,7 @@ class PhuongThucThanhToanSeeder extends Seeder
         $item = [
             ['ten_phuong_thuc' => 'Tiền mặt'],
             ['ten_phuong_thuc' => 'Vn Pay'],
-            ['ten_phuong_thuc' => 'MoMo'],
+            // ['ten_phuong_thuc' => 'MoMo'],
         ];
         foreach ($item as $data) {
             PhuongThucThanhToan::firstOrCreate($data);

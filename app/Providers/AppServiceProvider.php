@@ -32,13 +32,13 @@ class AppServiceProvider extends ServiceProvider
         View::composer('*', function ($view) {
             $view->with('globalSetting', Setting::first());
         });
-        View::composer('layouts.client', function ($view) {
-            $view->with('categories', ClientDanhMucSanPham::all());
-        });
-
-        // View::composer('*', function ($view) {
-        //     $view->with('danhMucs', ClientDanhMucSanPham::all());
+        // View::composer('layouts.client', function ($view) {
+        //     $view->with('categories', ClientDanhMucSanPham::all());
         // });
+
+        View::composer('*', function ($view) {
+            $view->with('danhMucsp', ClientDanhMucSanPham::all());
+        });
         View::composer('clients.blocks.header', function ($view) {
             $user = Auth::user();
             $gioHang = $user ? ChiTietGioHang::where('user_id', $user->id)->get() : collect();
@@ -46,7 +46,6 @@ class AppServiceProvider extends ServiceProvider
                 return $item->bienThe->gia_ban * $item->so_luong ?? 0; // Nếu `bienThe` không tồn tại, lấy 0 để tránh lỗi
             });
 
-            // dd($total); // Debug để kiểm tra tổng
             $view->with(compact('gioHang', 'total'));
         });
         View::composer('clients.blocks.footer', function ($view) {

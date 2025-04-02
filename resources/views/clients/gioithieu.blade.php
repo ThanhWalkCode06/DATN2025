@@ -66,19 +66,17 @@ Giới thiệu
                     <div>
                         <div class="review-title">
                             <h4>About Seven Stars</h4>
-                            <h2>Elevate Your Performance with Our Sportswear</h2>
+                            <h2>Nâng cao hiệu suất của bạn với trang phục thể thao của chúng tôi</h2>
                         </div>
 
                         <div class="product-info">
                             <p class="text-content">
-                                Seven Stars is your ultimate destination for premium sportswear. Whether you're hitting
-                                the gym,
-                                running on the track, or engaging in your favorite sport, our high-performance apparel
-                                keeps you
-                                comfortable and stylish. Designed for athletes, by athletes, our collection ensures
-                                flexibility,
-                                durability, and breathability to enhance your every move.
-                            </p>
+                                Seven Stars là điểm đến cuối cùng của bạn cho trang phục thể thao cao cấp. Cho dù bạn đang đến
+                                phòng tập thể dục,
+                                chạy trên đường đua hay tham gia môn thể thao yêu thích của mình, trang phục hiệu suất cao của chúng tôi
+                                giúp bạn thoải mái và phong cách. Được thiết kế cho các vận động viên, bởi các vận động viên, bộ sưu tập của chúng tôi đảm bảo
+                                tính linh hoạt,
+                                độ bền và khả năng thoáng khí để nâng cao mọi chuyển động của bạn. </p>
 
                             <ul class="product-highlights">
                                 <li>
@@ -89,7 +87,7 @@ Giới thiệu
                                         </div>
 
                                         <div class="highlight-detail">
-                                            <h5 class="text">Fast & Free Delivery</h5>
+                                            <h5 class="text">Giao hàng nhanh</h5>
                                         </div>
                                     </div>
                                 </li>
@@ -102,7 +100,7 @@ Giới thiệu
                                         </div>
 
                                         <div class="highlight-detail">
-                                            <h5 class="text">Premium Quality Fabrics</h5>
+                                            <h5 class="text">Vải chất lượng cao cấp</h5>
                                         </div>
                                     </div>
                                 </li>
@@ -115,7 +113,7 @@ Giới thiệu
                                         </div>
 
                                         <div class="highlight-detail">
-                                            <h5 class="text">Designed for Maximum Performance</h5>
+                                            <h5 class="text">Được thiết kế để có hiệu suất tối đa</h5>
                                         </div>
                                     </div>
                                 </li>
@@ -128,7 +126,7 @@ Giới thiệu
                                         </div>
 
                                         <div class="highlight-detail">
-                                            <h5 class="text">Trendy & Stylish Designs</h5>
+                                            <h5 class="text">Thiết kế hợp thời trang và phong cách</h5>
                                         </div>
                                     </div>
                                 </li>
@@ -287,10 +285,10 @@ Giới thiệu
                         <div class="team-box">
                             <div class="team-image">
                                 <img src="../assets/images/team/thanh.jpg" class="img-fluid blur-up lazyload"
-                                    alt="Lê Văn Thanh">
+                                    alt="nguyễn Trọng Thanh">
                             </div>
                             <div class="team-name">
-                                <h3>Lê Văn Thanh</h3>
+                                <h3>Nguyễn Trọng Thanh</h3>
                                 <h5>Customer Support</h5>
                                 <p>Ensuring the best service for our customers.</p>
                             </div>
@@ -351,7 +349,7 @@ Giới thiệu
 
                             <div class="reviewer-profile">
                                 <div class="reviewer-image">
-                                    <img src="{{ asset($danhGia->user->anh_dai_dien ?? 'default-avatar.jpg') }}"
+                                    <img src="{{ asset(Storage::url($danhGia->anh_dai_dien)) }}"
                                         alt="Ảnh đại diện">
                                 </div>
 
@@ -377,8 +375,8 @@ Giới thiệu
 <section class="section-lg-space">
     <div class="container-fluid-lg">
         <div class="about-us-title text-center">
-            <h4 class="text-content">Our Blog</h4>
-            <h2 class="center">Our Latest Blog</h2>
+            <h4 class="text-content">Bài viết</h4>
+            <h2 class="center">Blog mới nhất của chúng tôi</h2>
         </div>
         <div class="row">
             <div class="col-12">
@@ -390,7 +388,7 @@ Giới thiệu
                             <div class="blog-box-image">
                                 <div class="blog-image">
                                     <a href="{{ route('baiviets.chitiet', $baiViet->id) }}" class="rounded-3">
-                                        <img src="{{ asset($baiViet->anh_bia) }}"
+                                        <img src="{{ asset(Storage::url($baiViet->anh_bia)) }}"
                                             class="bg-img blur-up lazyload" alt="{{ $baiViet->tieu_de }}">
                                     </a>
                                 </div>

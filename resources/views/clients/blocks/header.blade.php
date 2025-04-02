@@ -32,13 +32,13 @@
                             </div>
 
                             @if (Auth::check())
-                            <div>
-                                <div class="timer-notification">
-                                    <h6>Mã giảm giá cho người mới:
-                                        <strong class="me-1">COD1234567</strong>
-                                    </h6>
+                                <div>
+                                    <div class="timer-notification">
+                                        <h6>Mã giảm giá cho người mới:
+                                            <strong class="me-1">COD1234567</strong>
+                                        </h6>
+                                    </div>
                                 </div>
-                            </div>
                             @endif
 
                             <div>
@@ -76,17 +76,20 @@
                             <img src="{{ Storage::url($globalSetting->client_logo ?? 'images/logo-green.png') }}"
                                 class="img-fluid blur-up lazyload" alt="">
                         </a>
-
                         <div class="middle-box">
                             <div class="search-box">
-                                <div class="input-group">
-                                    <input type="search" class="form-control" placeholder="Tìm kiếm">
-                                    <button class="btn" type="button" id="button-addon2">
-                                        <i data-feather="search"></i>
-                                    </button>
-                                </div>
+                                <form action="{{ route('sanphams.danhsach') }}" method="GET">
+                                    <div class="input-group">
+                                        <input type="search" name="query" id="searchInput" class="form-control" placeholder="Tìm kiếm sản phẩm" value="{{ request('query') }}">
+                                        <button class="btn" type="submit" id="button-addon2">
+                                            <i data-feather="search"></i>
+                                        </button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
+                        
+
 
                         <div class="rightside-box">
                             <div class="search-full">
@@ -129,42 +132,44 @@
                                         <div class="onhover-div">
                                             <ul style="width: 100%" class="cart-list">
                                                 @foreach ($gioHang->take(4) as $item)
-                                                <li style="width: 100%" class="product-box-contain">
-                                                    <div class="drop-cart">
-                                                        <a href="{{ route('sanphams.chitiet',$item->id) }}" class="drop-image">
-                                                            <img src="{{ Storage::url($item->bienThe->sanPham->hinh_anh) }}"
-                                                                class="blur-up lazyload" alt="">
-                                                        </a>
-
-                                                        <div class="drop-contain">
-                                                            {{-- <a href="{{ route('sanphams.chitiet',$item->id) }}">
-                                                                <h5>{{ $item->bienThe->sanPham->ten_san_pham }}</h5>
-                                                            </a> --}}
+                                                    <li style="width: 100%" class="product-box-contain">
+                                                        <div class="drop-cart">
+                                                            <a href="{{ route('sanphams.chitiet', $item->id) }}"
+                                                                class="drop-image">
+                                                                <img src="{{ Storage::url($item->bienThe->anh_bien_the) }}"
+                                                                    class="blur-up lazyload" alt="">
+                                                            </a>
 
                                                             <div class="drop-contain">
-                                                                <a href="{{ route('sanphams.chitiet', $item->id) }}">
-                                                                    <h5>{{ $item->bienThe->sanPham->ten_san_pham }}</h5>
-                                                                    <h6>{{ $item->bienThe->ten_bien_the }}</h6>
-                                                                </a>
-                                                                <h6><span>{{ $item->so_luong }} x</span>
-                                                                    {{ number_format($item->bienThe->gia_ban, 0, '', '.') }}
-                                                                đ</h6>
-                                                                <style>
-                                                                    .hidden-delete {
-                                                                        visibility: hidden;
-                                                                    }
-                                                                </style>
-                                                                @if (!request()->is('giohang', 'thanhtoan'))
-                                                                    <button class="close-button close_button delete-cart-item" data-id="{{ $item->id }}">
-                                                                        <i class="fa-solid fa-xmark"></i>
-                                                                    </button>
-                                                                @else
-                                                                    <button class="close-button close_button delete-cart-item hidden-delete" data-id="{{ $item->id }}">
-                                                                        <i class="fa-solid fa-xmark"></i>
-                                                                    </button>
-                                                                @endif
+
+                                                                <div class="drop-contain">
+                                                                    <a href="{{ route('sanphams.chitiet', $item->id) }}">
+                                                                        <h5>{{ $item->bienThe->sanPham->ten_san_pham }}</h5>
+                                                                        <h6>{{ $item->bienThe->ten_bien_the }}</h6>
+                                                                    </a>
+                                                                    <h6><span>{{ $item->so_luong }} x</span>
+                                                                        {{ number_format($item->bienThe->gia_ban, 0, '', '.') }}
+                                                                        đ</h6>
+                                                                    <style>
+                                                                        .hidden-delete {
+                                                                            visibility: hidden;
+                                                                        }
+                                                                    </style>
+                                                                    @if (!request()->is('giohang', 'thanhtoan'))
+                                                                        <button
+                                                                            class="close-button close_button delete-cart-item"
+                                                                            data-id="{{ $item->id }}">
+                                                                            <i class="fa-solid fa-xmark"></i>
+                                                                        </button>
+                                                                    @else
+                                                                        <button
+                                                                            class="close-button close_button delete-cart-item hidden-delete"
+                                                                            data-id="{{ $item->id }}">
+                                                                            <i class="fa-solid fa-xmark"></i>
+                                                                        </button>
+                                                                    @endif
+                                                                </div>
                                                             </div>
-                                                        </div>
                                                     </li>
                                                 @endforeach
 
@@ -174,7 +179,8 @@
                                             <div class="price-box">
                                                 <h5>Tổng tiền :</h5>
                                                 <h4 class="theme-color fw-bold total-price">
-                                                    {{ number_format($total, 0, '', '.') }} đ</h4>
+                                                    {{ number_format($total, 0, '', '.') }} đ
+                                                </h4>
                                             </div>
 
                                             <div class="button-group">
@@ -245,17 +251,17 @@
 
                         <div class="category-dropdown">
                             <div class="category-title">
-                                <h5>Categories</h5>
+                                <h5>Danh mục sản phẩm</h5>
                                 <button type="button" class="btn p-0 close-button text-content">
                                     <i class="fa-solid fa-xmark"></i>
                                 </button>
                             </div>
 
                             <ul class="category-list">
-                                @if (isset($categories))
-                                    @foreach ($categories as $category)
+                                @if (isset($danhMucsp))
+                                    @foreach ($danhMucsp as $category)
                                         <li class="onhover-category-list">
-                                            <a href="{{ route('clientsanpham.danhsach', ['danh_muc_id' => $category->id]) }}"
+                                            <a href="{{ route('sanphams.danhsach', ['danh_muc_id' => $category->id]) }}"
                                                 class="category-name">
                                                 <img src="{{ asset('storage/' . $category->anh_danh_muc) }}"
                                                     alt="{{ $category->ten_danh_muc }}">
@@ -276,8 +282,7 @@
                             <div class="offcanvas offcanvas-collapse order-xl-2" id="primaryMenu">
                                 <div class="offcanvas-header navbar-shadow">
                                     <h5>Menu</h5>
-                                    <button class="btn-close lead" type="button"
-                                        data-bs-dismiss="offcanvas"></button>
+                                    <button class="btn-close lead" type="button" data-bs-dismiss="offcanvas"></button>
                                 </div>
                                 <div class="offcanvas-body">
                                     <ul class="navbar-nav">

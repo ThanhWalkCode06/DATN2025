@@ -47,7 +47,7 @@
                                 </h1>
                                 <p class="w-75 d-none d-sm-block">Những bộ quần áo thể thao thoải mái, phong cách giúp bạn
                                     tự tin vận động mỗi ngày.</p>
-                                <button onclick="location.href = '/clientsanpham/?danh_muc_id=7';"
+                                <button onclick="location.href = '/sanpham/?danh_muc_id=3';"
                                     class="btn btn-animation mt-xxl-4 mt-2 home-button mend-auto">Mua ngay <i
                                         class="fa-solid fa-right-long icon"></i></button>
                             </div>
@@ -67,7 +67,7 @@
                                         <h3 class="theme-color">Bộ Sưu Tập Áo Hoodio</h3>
                                         <p class="w-75">Chúng tôi mang đến những bộ trang phục thể thao chất lượng, thoải
                                             mái và phong cách.</p>
-                                        <a href='/clientsanpham/?danh_muc_id=5' class="shop-button">Mua ngay <i
+                                        <a href='/sanpham/?danh_muc_id=1' class="shop-button">Mua ngay <i
                                                 class="fa-solid fa-right-long"></i></a>
                                     </div>
 
@@ -85,7 +85,7 @@
                                         <h4 class="text-danger">Bộ Sưu Tập Mới</h4>
                                         <p class="organic">Bắt đầu ngày mới với những bộ trang phục
                                             thoải mái.</p>
-                                        <a href='/clientsanpham/?danh_muc_id=6' class="shop-button">Mua ngay <i
+                                        <a href='/sanpham/?danh_muc_id=2' class="shop-button">Mua ngay <i
                                                 class="fa-solid fa-right-long"></i></a>
                                     </div>
 
@@ -114,9 +114,9 @@
                                         <h3 class="text-uppercase fw-normal"><span class="theme-color fw-bold">Sản
                                                 Phẩm</span> Mới Nhất</h3>
                                         <h3 class="fw-light">Cập Nhật Liên Tục</h3>
-                                        <button onclick="location.href = '/clientsanpham';"
+                                        {{-- <button onclick="location.href = '/clientsanpham';"
                                             class="btn btn-animation btn-md mend-auto">Mua Ngay <i
-                                                class="fa-solid fa-arrow-right icon"></i></button>
+                                                class="fa-solid fa-arrow-right icon"></i></button> --}}
                                     </div>
                                 </div>
                             </div>
@@ -303,7 +303,7 @@
                     <div class="category-slider-2 product-wrapper no-arrow">
                         @foreach ($danhMucAll as $item)
                             <div>
-                                <a href="{{ '/clientsanpham/?danh_muc_id=' . $item->id }}"
+                                <a href="{{ '/sanpham/?danh_muc_id=' . $item->id }}"
                                     class="category-box category-dark">
                                     <div>
                                         <img src="{{ Storage::url($item->anh_danh_muc) }}" class="blur-up lazyload"

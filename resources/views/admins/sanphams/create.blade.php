@@ -158,7 +158,7 @@ Thêm mới sản phẩm
                                 <div class="mb-4">
                                     <label class="form-label-title">Giá cũ</label>
                                     <input type="number" name="gia_cu" class="form-control"
-                                        value="{{ old('gia_cu', 0) }}" min="0">
+                                        value="{{ old('gia_cu') }}" >
                                     @error('gia_cu')
                                     <div class="text-danger">{{ $message }}</div>
                                     @enderror
@@ -167,7 +167,7 @@ Thêm mới sản phẩm
                                 <div class="mb-4">
                                     <label class="form-label-title">Giá mới</label>
                                     <input type="number" name="gia_moi" class="form-control"
-                                        value="{{ old('gia_moi', 0) }}" min="0">
+                                        value="{{ old('gia_moi') }}" >
                                     @error('gia_moi')
                                     <div class="text-danger">{{ $message }}</div>
                                     @enderror
@@ -407,6 +407,7 @@ Thêm mới sản phẩm
         $("select[name^='attribute_values']").change(function() {
             generateVariants();
         });
+        var variants = [];
 
         function generateVariants() {
             let selectedValues = {};
@@ -418,7 +419,7 @@ Thêm mới sản phẩm
                 }
             });
 
-            let variants = cartesianProduct(Object.values(selectedValues));
+            variants = cartesianProduct(Object.values(selectedValues));
 
             $("#variantTable").find("tr").remove();
 
@@ -504,78 +505,121 @@ Thêm mới sản phẩm
         if ($("select[name^='attribute_values']").val().length > 0) {
             generateVariants();
         }
+
+        $("#mainForm").submit(function (e) {
+        if (Object.keys(variants).length === 0) {
+            e.preventDefault(); // Ngăn form submit nếu không có biến thể
+
+            Swal.fire({
+                icon: "warning",
+                title: "Bạn chưa thêm biến thể!",
+                text: "Vui lòng thêm ít nhất một biến thể.",
+                confirmButtonText: "OK"
+            });
+        }
+    });
     });
 </script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        let fileList = []; // Danh sách file
-        const MAX_FILES = 6;
-        const fileInput = document.getElementById("album_anh");
-        const previewContainer = document.getElementById("imagePreview");
+    let fileList = []; // Danh sách file thực tế
+    const MAX_FILES = 6;
+    const fileInput = document.getElementById("album_anh");
+    const previewContainer = document.getElementById("imagePreview");
+    const fileInputLabel = document.querySelector("label[for='album_anh']"); // Thêm phần hiển thị trạng thái
 
-        fileInput.addEventListener("change", function(event) {
-            let newFiles = Array.from(event.target.files);
+    // Hàm cập nhật label hiển thị
+    function updateFileInputLabel() {
+        if (fileList.length > 0) {
+            fileInputLabel.textContent = `${fileList.length} file(s) chosen`;
+        } else {
+            fileInputLabel.textContent = "No file chosen";
+        }
+    }
 
-            // Kiểm tra nếu tổng số file vượt quá giới hạn
-            if (fileList.length + newFiles.length > MAX_FILES) {
-                Swal.fire({
-                    icon: "error",
-                    title: "Quá số lượng!",
-                    text: "Bạn chỉ có thể chọn tối đa 6 ảnh.",
-                    confirmButtonColor: "#007bff"
-                });
-                fileInput.value = "";
-                return;
-            }
+    fileInput.addEventListener("change", function(event) {
+        let newFiles = Array.from(event.target.files);
+        let availableSlots = MAX_FILES - fileList.length;
 
-            // Lọc và thêm file vào danh sách
-            newFiles.forEach((file) => {
-                if (fileList.length < MAX_FILES) {
-                    fileList.push(file);
-                    previewImage(file);
-                }
+        if (availableSlots <= 0) {
+            Swal.fire({
+                icon: "error",
+                title: "Đã đủ ảnh!",
+                text: `Bạn đã có đủ ${MAX_FILES} ảnh.`,
+                confirmButtonColor: "#007bff"
             });
+            fileInput.value = "";
+            return;
+        }
 
-            updateInputFiles(); // Cập nhật input file
-        });
+        if (newFiles.length > availableSlots) {
+            Swal.fire({
+                icon: "error",
+                title: "Quá số lượng!",
+                text: `Bạn chỉ có thể thêm ${availableSlots} ảnh nữa.`,
+                confirmButtonColor: "#007bff"
+            });
+            fileInput.value = "";
+            return;
+        }
 
-        function previewImage(file) {
+        // Thêm file vào danh sách
+        fileList = [...fileList, ...newFiles]; // Sử dụng spread operator để đảm bảo immutability
+
+        // Cập nhật UI và input file
+        renderPreviews();
+        updateInputFiles();
+        updateFileInputLabel(); // Cập nhật label hiển thị
+    });
+
+    function renderPreviews() {
+        // Xóa toàn bộ preview cũ
+        previewContainer.innerHTML = '';
+
+        // Render lại toàn bộ từ fileList
+        fileList.forEach((file, index) => {
             let reader = new FileReader();
             reader.onload = function(e) {
                 let imgWrapper = document.createElement("div");
                 imgWrapper.classList.add("image-wrapper");
-                imgWrapper.setAttribute("data-name", file.name);
+                imgWrapper.dataset.index = index;
 
                 let img = document.createElement("img");
                 img.src = e.target.result;
+                img.style.maxWidth = "100px";
 
                 let removeBtn = document.createElement("button");
                 removeBtn.innerHTML = "&times;";
                 removeBtn.classList.add("remove-btn");
-                removeBtn.addEventListener("click", function() {
-                    removeFile(file.name);
-                    imgWrapper.remove();
-                });
+                removeBtn.onclick = () => removeFile(index);
 
                 imgWrapper.appendChild(img);
                 imgWrapper.appendChild(removeBtn);
                 previewContainer.appendChild(imgWrapper);
             };
             reader.readAsDataURL(file);
-        }
+        });
+    }
 
-        function removeFile(fileName) {
-            fileList = fileList.filter(file => file.name !== fileName);
-            updateInputFiles(); // Cập nhật input file
-        }
+    function removeFile(index) {
+        fileList.splice(index, 1); // Xóa file khỏi danh sách
+        renderPreviews(); // Render lại UI
+        updateInputFiles(); // Cập nhật input file
+        updateFileInputLabel(); // Cập nhật label
+    }
 
-        function updateInputFiles() {
-            let dataTransfer = new DataTransfer();
-            fileList.forEach(file => dataTransfer.items.add(file));
-            fileInput.files = dataTransfer.files; // Cập nhật lại input file
+    function updateInputFiles() {
+        let dataTransfer = new DataTransfer();
+        fileList.forEach(file => dataTransfer.items.add(file));
+        fileInput.files = dataTransfer.files;
 
-        }
-    });
+        // Debug
+        console.log("Current files:", Array.from(fileInput.files).map(f => f.name));
+    }
+
+    // Khởi tạo
+    updateFileInputLabel();
+});
 </script>
 <script>
     document.getElementById('editor').addEventListener('keydown', function(event) {

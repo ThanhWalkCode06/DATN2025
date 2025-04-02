@@ -9,7 +9,9 @@
     <meta name="keywords" content="Fastkart">
     <meta name="author" content="Fastkart">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <link rel="icon" href="{{ asset('assets/client/images/favicon/1.png') }}" type="image/x-icon">
+    <meta name="user-logged-in" content="{{ Auth::check() ? 'true' : 'false' }}">
+
+    <link rel="icon" href="{{ asset('assets/images/favicon.png') }}" type="image/x-icon">
     <title>@yield('title')</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/iconly@latest/css/iconly.css">
@@ -181,8 +183,8 @@
         <script>
             document.addEventListener("DOMContentLoaded", function() {
                 Swal.fire({
-                    title: "Vui lòng đăng nhập để bình luận",
-                    text: "{{ session('success') }}",
+                    title: "Thất bại",
+                    text: "{{ session('error') }}",
                     icon: "error",
                     confirmButtonText: "OK"
                 });
@@ -190,7 +192,7 @@
         </script>
     @endif
 
-  
+
 </body>
 <script>
     function Logout(ev) {

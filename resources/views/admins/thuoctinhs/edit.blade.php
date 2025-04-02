@@ -125,52 +125,62 @@
         document.addEventListener('DOMContentLoaded', function () {
             const giaTriContainer = document.getElementById('giaTriContainer');
             const addGiaTriButton = document.getElementById('addGiaTri');
-
+    
             addGiaTriButton.addEventListener('click', function () {
                 const newInputGroup = document.createElement('div');
                 newInputGroup.classList.add('input-group', 'mb-2');
                 newInputGroup.innerHTML = `
-                <input type="text" name="gia_tri[]" class="form-control" placeholder="Giá trị thuộc tính">
-                <button type="button" class="btn btn-danger removeGiaTri">Xóa</button>
-                <p class="text-danger error-message" style="display: none;"></p>
-            `;
+                    <input type="text" name="gia_tri[]" class="form-control" placeholder="Giá trị thuộc tính">
+                    <button type="button" class="btn btn-danger removeGiaTri">Xóa</button>
+                    <p class="text-danger error-message" style="display: none;"></p>
+                `;
                 giaTriContainer.appendChild(newInputGroup);
+                attachValidation();
             });
-
+    
             giaTriContainer.addEventListener('click', function (event) {
                 if (event.target.classList.contains('removeGiaTri')) {
                     event.target.closest('.input-group').remove();
+                    validateInputs();
                 }
             });
-
-            document.querySelector('form').addEventListener('submit', function (event) {
-                let isValid = true;
+    
+            function attachValidation() {
+                document.querySelectorAll('input[name="gia_tri[]"]').forEach(input => {
+                    input.addEventListener('input', validateInputs);
+                });
+            }
+    
+            function validateInputs() {
                 const inputs = document.querySelectorAll('input[name="gia_tri[]"]');
-                const values = [...inputs].map(input => input.value.trim()).filter(val => val !== "");
-
-                // Xóa thông báo lỗi cũ
-                document.querySelectorAll('.error-message').forEach(el => el.style.display = 'none');
-
-                // Kiểm tra trùng lặp
                 const seen = new Set();
-                inputs.forEach((input, index) => {
-                    const value = input.value.trim();
+                let isValid = true;
+    
+                inputs.forEach(input => {
+                    const value = input.value.trim().toLowerCase(); // Chuyển về chữ thường
                     const errorMessage = input.parentElement.querySelector('.error-message');
-
+    
                     if (value !== "" && seen.has(value)) {
                         errorMessage.textContent = "Giá trị thuộc tính không được trùng nhau.";
                         errorMessage.style.display = 'block';
                         isValid = false;
                     } else {
                         seen.add(value);
+                        errorMessage.style.display = 'none';
                     }
                 });
-
-                if (!isValid) {
+    
+                return isValid;
+            }
+    
+            document.querySelector('form').addEventListener('submit', function (event) {
+                if (!validateInputs()) {
                     event.preventDefault();
                 }
             });
+    
+            attachValidation();
         });
-
     </script>
+    
 @endsection

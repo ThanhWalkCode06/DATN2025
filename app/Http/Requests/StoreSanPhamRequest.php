@@ -39,9 +39,9 @@ class StoreSanPhamRequest extends FormRequest
         'trang_thai' => 'required|boolean',
 
         'gia_nhap' => [ 'array'],
-        'gia_nhap.*' => ['required', 'numeric','min:0'],
+        'gia_nhap.*' => ['required', 'numeric','min:0','lt:gia_cu'],
         'gia_ban' => [ 'array'],
-        'gia_ban.*' => ['required', 'numeric','min:0'],
+        'gia_ban.*' => ['required', 'numeric','min:0','lt:gia_cu'],
         'so_luong' => [ 'array'],
         'so_luong.*' => ['required', 'integer','min:0'],
 
@@ -85,6 +85,10 @@ class StoreSanPhamRequest extends FormRequest
             'danh_muc_id.exists' => 'Danh mục sản phẩm không hợp lệ.',
             'trang_thai.boolean' => 'Trạng thái phải là còn hàng hoặc hết hàng.',
 
+            'gia_moi.required' =>'Bắt buộc phải nhập',
+            'gia_cu.required' =>'Bắt buộc phải nhập',
+
+
             'gia_nhap.*.required' => 'Bắt buộc phải nhập',
             'gia_nhap.*.numeric' => 'Bắt buộc phải nhập số',
             'gia_nhap.*.min' => 'Bắt buộc lớn hơn 0',
@@ -101,6 +105,9 @@ class StoreSanPhamRequest extends FormRequest
             'anh_bien_the.required' => 'Bắt buộc phải nhập',
             'hinh_anh.required' => 'Bắt buộc phải nhập',
 
+            'gia_moi.lt' => "Giá mới phải nhỏ hơn giá cũ",
+            'gia_nhap.*.lt' => "Giá nhập phải nhỏ hơn giá cũ",
+            'gia_ban.*.lt' => "Giá bán phải nhỏ hơn giá cũ",
         ];
     }
 }

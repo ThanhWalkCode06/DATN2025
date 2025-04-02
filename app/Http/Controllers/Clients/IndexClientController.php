@@ -17,6 +17,7 @@ class IndexClientController extends Controller
         $danhMucAll = DanhMucSanPham::all();
         $sanPhamFollowComments = SanPham::with('bienThes', 'danhGias', 'anhSP')
             ->withAvg('danhGias', 'so_sao') // Lấy trung bình số sao từ bảng danh_gias
+            ->whereNull('san_phams.deleted_at')
             ->orderByDesc('danh_gias_avg_so_sao') // Sắp xếp theo số sao trung bình giảm dần
             ->take(8)
             ->get()->toArray();
@@ -24,6 +25,7 @@ class IndexClientController extends Controller
             ->selectRaw('COUNT(chi_tiet_don_hangs.id) as so_luong_don_hang') // Đếm số đơn hàng
             ->leftJoin('bien_thes', 'san_phams.id', '=', 'bien_thes.san_pham_id') // Nối bảng biến thể
             ->leftJoin('chi_tiet_don_hangs', 'bien_thes.id', '=', 'chi_tiet_don_hangs.bien_the_id') // Nối với đơn hàng
+            ->whereNull('san_phams.deleted_at')
             ->groupBy(
                 'san_phams.id',
                 'san_phams.ten_san_pham',

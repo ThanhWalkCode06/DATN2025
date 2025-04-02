@@ -276,7 +276,6 @@
                                                                         id="danhmuc-{{ $danhMuc->id }}"
                                                                         onchange="this.form.submit()"
                                                                         {{ request('danh_muc_id') == $danhMuc->id ? 'checked' : '' }}>
-
                                                                     <label class="form-check-label"
                                                                         for="danhmuc-{{ $danhMuc->id }}"
                                                                         style="cursor: pointer;">
@@ -293,8 +292,6 @@
                                             @else
                                                 <p>Không có danh mục nào có sản phẩm.</p>
                                             @endif
-
-
                                         </div>
                                     </div>
                                 </div>
@@ -343,7 +340,6 @@
                                     @endforeach
                                 </form>
 
-
                                 <div class="accordion-item">
                                     <h2 class="accordion-header" id="panelsStayOpen-headingSix">
                                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
@@ -355,6 +351,12 @@
                                         <div class="accordion-body">
                                             <ul class="category-list custom-padding">
                                                 <form action="{{ route('sanphams.danhsach') }}" method="GET">
+                                                    <!-- Giữ lại các bộ lọc khác -->
+                                                    @foreach (request()->except('so_sao') as $key => $value)
+                                                        <input type="hidden" name="{{ $key }}"
+                                                            value="{{ $value }}">
+                                                    @endforeach
+
                                                     <!-- Bộ lọc đánh giá -->
                                                     <ul>
                                                         @foreach ([5, 4, 3, 2, 1] as $i)
@@ -386,37 +388,6 @@
                                                         @endforeach
                                                     </ul>
                                                 </form>
-
-
-
-
-
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="accordion-item">
-                                    <h2 class="accordion-header" id="panelsStayOpen-headingFour">
-                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                            data-bs-target="#collapseFour">
-                                            <span>Giảm giá</span>
-                                        </button>
-                                    </h2>
-                                    <div id="collapseFour" class="accordion-collapse collapse show">
-                                        <div class="accordion-body">
-                                            <ul class="category-list custom-padding">
-                                                <li>
-                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox"
-                                                            id="flexCheckDefault">
-                                                        <label class="form-check-label" for="flexCheckDefault">
-                                                            <span class="name">upto 5%</span>
-                                                            <span class="number">(06)</span>
-                                                        </label>
-                                                    </div>
-                                                </li>
-
                                             </ul>
                                         </div>
                                     </div>
@@ -424,8 +395,8 @@
 
                                 <div class="accordion-item">
                                     <h2 class="accordion-header" id="panelsStayOpen-headingFive">
-                                        <button class="accordion-button collapsed" type="button"
-                                            data-bs-toggle="collapse" data-bs-target="#collapseFive">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#collapseFive">
                                             <span>Kích cỡ & Màu sắc</span>
                                         </button>
                                     </h2>
@@ -473,7 +444,6 @@
                                                     'pop' => 'Sản phẩm bán chạy',
                                                     'low' => 'Giá thấp - cao',
                                                     'high' => 'Giá cao - thấp',
-                                                    'rating' => 'Đánh giá cao - thấp',
                                                     'off' => 'Giảm giá % cao - thấp',
                                                     default => 'Sản phẩm mới nhất',
                                                 };
@@ -496,12 +466,12 @@
                                         <li><a class="dropdown-item"
                                                 href="{{ request()->fullUrlWithQuery(['sort' => 'rating']) }}">Đánh giá
                                                 cao - thấp</a></li>
-
                                         <li><a class="dropdown-item"
                                                 href="{{ request()->fullUrlWithQuery(['sort' => 'off']) }}">Giảm giá % cao
                                                 - thấp</a></li>
                                     </ul>
                                 </div>
+
                             </div>
 
 
@@ -587,37 +557,58 @@
                                                         </li>
                                                     @endfor
                                                 </ul>
-                                                <span>({{ number_format($sanPham->tinhDiemTrungBinh(), 1) }} / 5)</span>
-                                                <span class="text-muted">({{ $sanPham->soLuongDanhGia() }} đánh
-                                                    giá)</span>
                                             </div>
-
-                                            <h5 class="price">
+                                        </div>
+                                        <div class="product-footer">
+                                            <div class="product-detail">
                                                 <span
-                                                    class="theme-color">{{ number_format($sanPham->gia_moi, 0, ',', '.') }}
-                                                    ₫</span>
-                                                <del>{{ number_format($sanPham->gia_cu, 0, ',', '.') }} ₫</del>
-
-                                            </h5>
-                                            <div class="add-to-cart-box bg-white">
-                                                <button class="btn btn-add-cart addcart-button">
-                                                    @if ($sanPham['trang_thai'] == 1)
-                                                        <a class="btn-quick-view" style="margin-right: 10px;"
-                                                            href="javascript:void(0)" data-bs-toggle="modal"
-                                                            data-bs-target="#view" data-id="{{ $sanPham['id'] }}">
-                                                            <span class="add-icon bg-light-gray">
-                                                                <i class="fa-solid fa-cart-plus"></i>
-                                                            </span> Thêm vào giỏ hàng
-                                                        </a>
-                                                    @endif
-                                                </button>
+                                                    class="span-name">{{ $sanPham->danhMuc->ten_danh_muc ?? 'Không có danh mục' }}</span>
+                                                <a href="{{ route('sanphams.chitiet', $sanPham->id) }}">
+                                                    <h5 class="name">{{ $sanPham->ten_san_pham }}</h5>
+                                                </a>
+                                                <p class="text-content mt-1 mb-2 product-content">{{ $sanPham->mo_ta }}
+                                                </p>
+                                                <div class="product-rating mt-2">
+                                                    <ul class="rating">
+                                                        @for ($i = 1; $i <= 5; $i++)
+                                                            <li>
+                                                                <i data-feather="star"
+                                                                    class="{{ $i <= $sanPham->tinhDiemTrungBinh() ? 'fill' : '' }}"></i>
+                                                            </li>
+                                                        @endfor
+                                                    </ul>
+                                                    <span>({{ number_format($sanPham->tinhDiemTrungBinh(), 1) }} /
+                                                        5)</span>
+                                                    <span class="text-muted">({{ $sanPham->soLuongDanhGia() }} đánh
+                                                        giá)</span>
+                                                </div>
+                                                <h5 class="price">
+                                                    <span class="theme-color">
+                                                        {{ number_format($sanPham->gia_moi, 0, ',', '.') }} ₫
+                                                    </span>
+                                                    <del>{{ number_format($sanPham->gia_cu, 0, ',', '.') }} ₫</del>
+                                                </h5>
+                                                <div class="add-to-cart-box bg-white">
+                                                    <button class="btn btn-add-cart addcart-button">
+                                                        @if ($sanPham['trang_thai'] == 1)
+                                                            <a class="btn-quick-view" style="margin-right: 10px;"
+                                                                href="javascript:void(0)" data-bs-toggle="modal"
+                                                                data-bs-target="#view" data-id="{{ $sanPham['id'] }}">
+                                                                <span class="add-icon bg-light-gray">
+                                                                    <i class="fa-solid fa-cart-plus"></i>
+                                                                </span> Thêm vào giỏ hàng
+                                                            </a>
+                                                        @endif
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        @endforeach
-                    </div>
+                            @endforeach
+                        </div>
+                    @endif
+
 
                     @if ($sanPhams->hasPages())
                         <nav class="custom-pagination">

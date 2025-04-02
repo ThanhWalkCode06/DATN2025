@@ -55,6 +55,7 @@ class BaiVietSeeder extends Seeder
                         4.3. Cookies
                         Chúng Tôi có thể sử dụng cookies và web beacon (còn được gọi là web bug, thẻ pixel hoặc ảnh GIF nhìn rõ) để quản lý Website, Ứng Dụng và các tác vụ email. Cookies là một tệp nhỏ được lưu trên máy tính của Bạn khi Bạn truy cập một website hoặc ứng dụng. Mục đích của nó là quản lý trải nghiệm website và ứng dụng của Bạn và cho phép tùy chỉnh các website và ứng dụng được hiển thị cho Bạn khi Bạn quay lại trang đó. Web beacon là các đoạn mã máy tính nhỏ cho phép chủ sở hữu Website theo dõi hành động của người dùng trên Website và người nhận thư điện tử. Cookies và web beacon giúp Chúng Tôi hiểu cách người tiêu dùng sử dụng Website và Ứng Dụng và email để Chúng Tôi có thể thiết kế các dịch vụ tốt hơn trong tương lai. Chúng Tôi có thể sử dụng cookies và web beacon để đo lường hiệu quả của các sáng kiến quảng cáo trực tuyến của Chúng Tôi và xác định mối tương quan giữa khách hàng của Chúng Tôi và các website trực tuyến mà họ truy cập. Các công ty quảng cáo của bên thứ ba cũng có thể sử dụng cookies và web beacon để thu thập thông tin về các lượt truy cập của Bạn vào Website và Ứng Dụng của Chúng Tôi và các website khác (chẳng hạn như các website Bạn truy cập và liệu Bạn có nhấp vào quảng cáo hay không) để phân phối quảng cáo phù hợp hơn với Bạn, trên và ngoài Website và Ứng Dụng của Chúng Tôi.
                         Danh sách cookie',
+                        'created_at' => now()
                 ],
                 [
                     'user_id' => 1,
@@ -74,9 +75,10 @@ class BaiVietSeeder extends Seeder
 
                     Công Ty cấp cho Bạn quyền giới hạn để truy cập và sử dụng Website này vì mục đích cá nhân và không được tải xuống hoặc sửa đổi Website, hoặc bất kỳ phần nào trong đó, trừ khi có sự đồng ý rõ ràng bằng văn bản từ Công Ty. Quyền sử dụng này không bao gồm bất kỳ việc bán lại hoặc sử dụng với mục đích thương mại Website hoặc nội dung Website; việc sưu tập, sử dụng bất kỳ danh sách sản phẩm, mô tả hoặc giá cả; bất kỳ việc sử dụng phái sinh nào của Website hoặc nội dung Website; hoặc bất kỳ việc sử dụng khai thác dữ liệu, rô-bốt hoặc các công cụ thu thập và trích xuất dữ liệu tương tự. Không được mô phỏng, sao chụp, sao chép, bán, bán lại, truy cập hoặc khai thác Website hoặc bất kỳ phần nào của Website vì bất kỳ mục đích thương mại nào mà không có sự đồng ý rõ ràng bằng văn bản từ Công Ty. Bạn không được làm giả hoặc sử dụng các kỹ thuật làm giả để đính kèm bất kỳ nhãn hiệu, biểu tượng hoặc thông tin độc quyền nào khác (bao gồm hình ảnh, văn bản, bố cục trang hoặc biểu mẫu) của Công Ty và các công ty liên kết(bao gồm cả Công Ty mẹ, "Công Ty Liên Kết") mà không có sự đồng ý rõ ràng bằng văn bản từ Công Ty.
                     Bất kỳ việc sử dụng trái phép nào đều chấm dứt quyền sử dụng do Công Ty cấp.',
+                    'created_at' => now()
                 ]
             ]
         );
-        BaiViet::factory()->count(20)->create();
+        // BaiViet::factory()->count(20)->create();
     }
 }

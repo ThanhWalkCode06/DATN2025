@@ -1,6 +1,8 @@
 <?php
 
+use App\Models\DanhGia;
 use App\Models\SanPham;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LienHeController;
@@ -11,21 +13,23 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DanhGiaController;
 use App\Http\Controllers\DonHangController;
 use App\Http\Controllers\SanPhamController;
+
 use App\Http\Controllers\ThongKeController;
 use App\Http\Controllers\HelperCommon\Helper;
 
 use App\Http\Controllers\ThuocTinhController;
+use App\Http\Controllers\Payment\PaymentVnPay;
 use App\Http\Controllers\Admins\UserController;
-
 use App\Http\Controllers\PhieuGiamGiaController;
 use App\Http\Controllers\Admins\SettingController;
 use App\Http\Controllers\DanhMucBaiVietController;
 use App\Http\Controllers\DanhMucSanPhamController;
+
+
 use App\Http\Controllers\GiaTriThuocTinhController;
 use App\Http\Controllers\Admins\Auth\AuthController;
+use App\Http\Controllers\Clients\ThanhToanController;
 use App\Http\Controllers\Clients\IndexClientController;
-
-
 use App\Http\Controllers\ClientDanhMucSanPhamController;
 use App\Http\Controllers\Clients\DanhGiaClientsController;
 use App\Http\Controllers\Admins\Responsibility\RoleController;
@@ -86,7 +90,6 @@ Route::prefix('admin')->middleware(['auth', 'checkStatus'])->group(function () {
         Route::resource('danhmucsanphams', DanhMucSanPhamController::class);
         Route::resource('sanphams', SanPhamController::class);
 
-        Route::resource('bienthes', BienTheController::class);
         Route::get('users/search', [UserController::class, 'search'])->name('users-search');
         Route::resource('users', UserController::class);
         Route::resource('thuoctinhs', ThuocTinhController::class);
@@ -94,10 +97,12 @@ Route::prefix('admin')->middleware(['auth', 'checkStatus'])->group(function () {
         Route::resource('donhangs', DonHangController::class);
         Route::resource('baiviets', BaiVietController::class);
         Route::resource('danhmucbaiviets', DanhMucBaiVietController::class);
-        Route::resource('baiviets', BaiVietController::class);
         Route::resource('phieugiamgias', PhieuGiamGiaController::class);
         Route::resource("danhgias", DanhGiaController::class);
         Route::get('/gioi-thieu', [DanhGiaController::class, 'danhGiaNoiBat'])->name('gioithieu');
+        Route::get('/test',function(){
+            dd(1);
+        })->name('hihi');
     });
 });
 
@@ -106,7 +111,7 @@ Route::prefix('admin')->middleware(['auth', 'checkStatus'])->group(function () {
 //     return view('admins.auth.mailForgetPass');
 // });
 
-Route::get('/', [IndexClientController::class,'index'])->name('home');
+Route::get('/', [IndexClientController::class, 'index'])->name('home');
 
 Route::controller(App\Http\Controllers\Clients\Auth\AuthController::class)->group(function () {
     Route::get('/login', 'showLogin')->name('login.client');
@@ -172,11 +177,37 @@ Route::get('/danh-muc', [SanPhamController::class, 'danhMuc'])->name('danh-muc')
 Route::get('/gioi-thieu', [DanhGiaController::class, 'showDanhGias'])->name('gioithieu');
 
 Route::get('clientdanhmucsanpham', [ClientDanhMucSanPhamController::class, 'index'])->name('danhsach');
-Route::get('/clientsanpham', [ClientDanhMucSanPhamController::class, 'danhSachSanPham'])->name('clientsanpham.danhsach');
+
 Route::get('/top-san-pham', [SanPhamController::class, 'sanPhamTopDanhGia'])->name('sanpham.top_danh_gia');
 Route::post('/lienhe', [ContactController::class, 'send'])->name('send.contact');
 
 Route::get('/san-pham/{id}/bien-the', [SanPhamController::class, 'getBienThe']);
 Route::post('/danhgias/toggle-status', [DanhGiaController::class, 'trangThaiDanhGia'])->name('danhgias.trangthaidanhgia');
 
+
+Route::get('/vnpay-return', [ThanhToanController::class, 'vnpayReturn'])->name('vnpay.return');
+// Route::get('/test', function(){
+//     $user = User::with(['danhGias', 'donHangs.chiTietDonHangs'])
+//     ->where('id', Auth::user()->id)
+//     ->first();
+
+//     $sanPhamDaMua = []; // Danh sách sản phẩm đã mua ở trạng thái "Đã nhận hàng"
+
+//     foreach ($user->donHangs as $donHang) {
+//         if ($donHang->trang_thai === 5) { // Kiểm tra trạng thái đơn hàng
+//             foreach ($donHang->chiTietDonHangs as $chiTiet) {
+//                 $sanPhamDaMua[] = $chiTiet->id_bien_the;
+//             }
+//         }
+//     }
+
+//     // Kiểm tra sản phẩm có trong danh sách được phép đánh giá hay không
+//     $idBienTheCanDanhGia = 123; // ID biến thể của sản phẩm cần kiểm tra
+//     if (in_array($idBienTheCanDanhGia, $sanPhamDaMua)) {
+//         echo "Bạn có thể đánh giá sản phẩm này!";
+//     } else {
+//         echo "Bạn chưa mua hoặc đơn hàng chưa hoàn thành!";
+//     }
+
+// })->name('vnpay.return');
 

@@ -145,13 +145,13 @@ tr{
 
                                     <div class="mb-4">
                                         <label class="form-label-title">Giá cũ</label>
-                                        <input type="number" name="gia_cu" class="form-control" value="{{ $sanpham->gia_cu }}" min="0">
+                                        <input type="number" name="gia_cu" class="form-control" value="{{ $sanpham->gia_cu }}" >
                                         @error('gia_cu') <div class="text-danger">{{ $message }}</div> @enderror
                                     </div>
 
                                     <div class="mb-4">
                                         <label class="form-label-title">Giá mới</label>
-                                        <input type="number" name="gia_moi" class="form-control" value="{{ $sanpham->gia_moi }}" min="0">
+                                        <input type="number" name="gia_moi" class="form-control" value="{{ $sanpham->gia_moi }}" >
                                         @error('gia_moi') <div class="text-danger">{{ $message }}</div> @enderror
                                     </div>
 
@@ -490,79 +490,136 @@ tr{
     });
 
     renderVariantTable();
+
+    $("#mainForm").submit(function (e) {
+        if (Object.keys(existingVariants).length === 0) {
+            e.preventDefault(); // Ngăn form submit nếu không có biến thể
+
+            Swal.fire({
+                icon: "warning",
+                title: "Bạn chưa thêm biến thể!",
+                text: "Vui lòng thêm ít nhất một biến thể.",
+                confirmButtonText: "OK"
+            });
+        }
+    });
 });
 
 </script>
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        const MAX_FILES = 6; // Giới hạn ảnh
-        let fileList = []; // Danh sách file mới
-        let previewContainer = document.getElementById("imagePreview");
-        let fileInput = document.getElementById("album_anh");
+    const MAX_FILES = 6;
+    let fileList = []; // Danh sách file mới
+    let previewContainer = document.getElementById("imagePreview");
+    let fileInput = document.getElementById("album_anh");
+    let deletedImages = []; // Danh sách ảnh bị xóa
 
-        // XÓA ẢNH CŨ KHI BẤM NÚT "XÓA"
-        document.querySelectorAll(".remove-image").forEach(button => {
-            button.addEventListener("click", function () {
-                let parentDiv = this.closest(".image-item");
-                let imageId = this.getAttribute("data-id");
-                parentDiv.remove(); // Xóa ảnh khỏi giao diện
-                updateFileLimit();
+    let deletedImagesInput = document.createElement("input");
+    deletedImagesInput.type = "hidden";
+    deletedImagesInput.name = "deleted_images";
+    previewContainer.appendChild(deletedImagesInput);
 
-            });
-        });
+    // XÓA ẢNH
+    previewContainer.addEventListener("click", function (e) {
+        if (e.target.classList.contains("remove-image")) {
+            let imgWrapper = e.target.closest(".image-item");
+            let imageId = e.target.getAttribute("data-id");
 
-        // HIỂN THỊ ẢNH MỚI KHI CHỌN FILE
-        fileInput.addEventListener("change", function (event) {
-            let newFiles = Array.from(event.target.files);
-
-            // Kiểm tra tổng số file không vượt quá MAX_FILES
-            if (document.querySelectorAll(".image-item").length + newFiles.length > MAX_FILES) {
-                Swal.fire({
-                    icon: "error",
-                    title: "Quá số lượng!",
-                    text: "Bạn chỉ có thể chọn tối đa 6 ảnh.",
-                    confirmButtonColor: "#007bff"
-                });
-                fileInput.value = ""; // Xóa file đã chọn
-                return;
+            if (imageId) {
+                deletedImages.push(imageId);
+                deletedImagesInput.value = JSON.stringify(deletedImages);
+            } else {
+                let fileIndex = parseInt(imgWrapper.getAttribute("data-file-index"));
+                if (!isNaN(fileIndex)) {
+                    fileList.splice(fileIndex, 1);
+                    updateFileInput();
+                }
             }
 
-            // Lặp qua các file mới và hiển thị ảnh xem trước
-            newFiles.forEach(file => {
-                let reader = new FileReader();
-                reader.onload = function (e) {
-                    let imgWrapper = document.createElement("div");
-                    imgWrapper.classList.add("image-item");
-
-                    let img = document.createElement("img");
-                    img.src = e.target.result;
-                    img.style.width = "100px";
-
-                    let removeBtn = document.createElement("button");
-                    removeBtn.innerHTML = "&times;";
-                    removeBtn.classList.add("remove-image");
-                    removeBtn.addEventListener("click", function () {
-                        imgWrapper.remove();
-                        updateFileLimit();
-                    });
-
-                    imgWrapper.appendChild(img);
-                    imgWrapper.appendChild(removeBtn);
-                    previewContainer.appendChild(imgWrapper);
-                };
-                reader.readAsDataURL(file);
-            });
-
+            imgWrapper.remove();
             updateFileLimit();
-        });
-
-        // CẬP NHẬT GIỚI HẠN FILE
-        function updateFileLimit() {
-            let currentFiles = document.querySelectorAll(".image-item").length;
-            fileInput.disabled = (currentFiles >= MAX_FILES);
         }
     });
+
+    // CHỌN ẢNH MỚI
+    fileInput.addEventListener("change", function (event) {
+        let currentCount = document.querySelectorAll(".image-item").length;
+        let newFiles = Array.from(event.target.files);
+        let remainingSlots = MAX_FILES - currentCount;
+
+        // Nếu chọn quá số lượng cho phép
+        if (newFiles.length > remainingSlots) {
+            Swal.fire({
+                icon: "error",
+                title: "Quá số lượng!",
+                text: `Bạn chỉ có thể thêm tối đa ${remainingSlots} ảnh nữa.`,
+                confirmButtonColor: "#007bff"
+            });
+            fileInput.value = ""; // Reset input nhưng KHÔNG làm mất ảnh đã chọn trước
+            return; // Dừng xử lý, KHÔNG thêm bất kỳ ảnh nào
+        }
+
+        // Thêm file mới vào danh sách
+        let startIndex = fileList.length;
+        fileList = [...fileList, ...newFiles];
+        updateFileInput();
+        renderNewFiles(newFiles, startIndex);
+    });
+
+    function updateFileInput() {
+        let dataTransfer = new DataTransfer();
+        fileList.forEach(file => dataTransfer.items.add(file));
+        fileInput.files = dataTransfer.files;
+
+        // Debug
+        console.log("Files in input:", Array.from(fileInput.files).map(f => f.name));
+    }
+
+    function renderNewFiles(files, startIndex = 0) {
+        // Xóa các preview ảnh mới cũ (không có data-id)
+        document.querySelectorAll('.image-item:not([data-id])').forEach(el => el.remove());
+
+        // Render lại toàn bộ ảnh mới từ fileList
+        fileList.forEach((file, index) => {
+            let reader = new FileReader();
+            reader.onload = function (e) {
+                let imgWrapper = document.createElement("div");
+                imgWrapper.classList.add("image-item");
+                imgWrapper.setAttribute("data-file-index", index);
+
+                let img = document.createElement("img");
+                img.src = e.target.result;
+                img.style.width = "100px";
+
+                let removeBtn = document.createElement("button");
+                removeBtn.innerHTML = "&times;";
+                removeBtn.classList.add("remove-image");
+
+                imgWrapper.appendChild(img);
+                imgWrapper.appendChild(removeBtn);
+                previewContainer.appendChild(imgWrapper);
+            };
+            reader.readAsDataURL(file);
+        });
+
+        updateFileLimit();
+    }
+
+    function updateFileLimit() {
+        let totalImages = document.querySelectorAll(".image-item").length;
+        fileInput.disabled = (totalImages >= MAX_FILES);
+
+        // Đảm bảo không thể chọn thêm khi đủ 6 ảnh
+        if (totalImages >= MAX_FILES) {
+            fileInput.value = "";
+        }
+    }
+
+    updateFileLimit();
+});
+
+
 </script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
