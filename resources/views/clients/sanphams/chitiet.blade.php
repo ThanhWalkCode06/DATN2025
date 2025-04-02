@@ -31,23 +31,48 @@
         }
 
         /* Tùy chỉnh màu sắc sản phẩm */
+
+        #selected-color {
+            margin-left: 5px;
+            /* Tạo khoảng cách giữa chữ "Màu Sắc:" và màu được chọn */
+        }
+
+        .mb-3 strong {
+            display: block;
+            margin-bottom: 10px;
+            /* Tạo khoảng cách giữa tiêu đề và các nút chọn màu */
+        }
+
         .color-option {
-            display: inline-block;
-            cursor: pointer;
-            padding: 5px;
-            border: 1px solid #ddd;
+            transition: all 0.3s ease;
         }
 
-        .color-option img {
-            width: 50px;
-            height: 50px;
-            border: 2px solid transparent;
+        .color-option:hover {
+
+            border-color: #000;
+            /* Thêm viền màu đen khi hover */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            /* Thêm bóng đổ */
         }
 
-        .color-option.selected img {
-            border: 2px solid #1abc9c !important;
-            box-shadow: 0px 0px 5px #1abc9c;
+
+
+        .color-option input[type="radio"]:checked {
+            border: 3px solid #009970;
+            /* Thêm viền màu khi được chọn */
         }
+
+        .color-option .color-name {
+            transition: all 0.3s ease;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .color-option:hover .color-name {
+            color: #009970;
+            /* Màu chữ thay đổi khi hover */
+        }
+
 
         /* Hộp chứa sản phẩm */
         .product-box-3 {
@@ -269,6 +294,57 @@
         .review-box {
             margin: 5px 0;
         }
+
+
+
+
+        .product-main {
+            position: relative;
+            overflow: hidden;
+            /* Đảm bảo phần zoom không ra ngoài */
+            max-width: 100%;
+            height: auto;
+        }
+
+        .main-product-img {
+            width: 100%;
+            /* Ảnh chính chiếm 100% chiều rộng của container */
+            height: auto;
+            transition: transform 0.2s ease;
+            /* Hiệu ứng zoom ảnh chính khi di chuột */
+            max-width: 100%;
+            /* Đảm bảo ảnh không vượt quá container */
+        }
+
+        .zoom-lens {
+            position: absolute;
+            border: 2px solid #000;
+            width: 100px;
+            height: 100px;
+            display: none;
+            cursor: zoom-in;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            pointer-events: none;
+            /* Đảm bảo lens không gây cản trở chuột */
+        }
+
+        .slick-slider .slick-slide {
+            padding: 0 5px;
+            /* Điều chỉnh khoảng cách giữa các ảnh thumbnail */
+        }
+
+        /* Thêm hiệu ứng zoom nhẹ khi hover vào ảnh thumbnail trong slider */
+        .slick-slider .slick-slide img {
+            transition: transform 0.3s ease, filter 0.3s ease;
+        }
+
+        .slick-slider .slick-slide:hover img {
+            transform: scale(1.1);
+            /* Phóng to nhẹ khi hover */
+            filter: brightness(1.1);
+            /* Làm ảnh sáng lên một chút */
+        }
     </style>
 @endsection
 
@@ -306,22 +382,27 @@
                     <div class="row g-4">
                         <div class="col-xl-6 wow fadeInUp">
                             <div class="product-left-box">
-                                <div class="row g-sm-4 g-2">
-                                    <div class="col-12">
-                                        <div class="product-main no-arrow slick-slider">
-                                            <div class="slider-image">
-                                                <!-- Ảnh chính -->
-                                                <img id="main-image" src="{{ asset('storage/' . $sanPhams->hinh_anh) }}"
-                                                    class="img-fluid" alt="">
-                                            </div>
+                                <div class="row g-3 justify-content-center">
+                                    <!-- Ảnh chính -->
+                                    <div class="col-12 text-center">
+                                        <div class="product-main zoom-container">
+                                            <img id="main-image" src="{{ asset('storage/' . $sanPhams->hinh_anh) }}"
+                                                class="img-fluid main-product-img" alt="">
+                                            <div class="zoom-lens"></div>
                                         </div>
                                     </div>
 
+                                    <!-- Slider ảnh thumbnail (ảnh chính + ảnh phụ) -->
                                     <div class="col-12">
-                                        <div
-                                            class="left-slider-image left-slider no-arrow slick-top d-flex justify-content-center">
+                                        <div class="left-slider-image slick-slider">
+                                            <div class="thumbnail-item">
+                                                <img src="{{ asset('storage/' . $sanPhams->hinh_anh) }}"
+                                                    class="img-fluid image-thumbnail active" alt="Ảnh chính"
+                                                    data-large="{{ asset('storage/' . $sanPhams->hinh_anh) }}">
+                                            </div>
+
                                             @foreach ($sanPhams->anhSP as $anh)
-                                                <div class="sidebar-image mx-2">
+                                                <div class="thumbnail-item">
                                                     <img src="{{ asset('storage/' . $anh->link_anh_san_pham) }}"
                                                         class="img-fluid image-thumbnail" alt=""
                                                         data-large="{{ asset('storage/' . $anh->link_anh_san_pham) }}">
@@ -330,6 +411,7 @@
                                         </div>
                                     </div>
                                 </div>
+
 
                             </div>
                         </div>
@@ -341,7 +423,7 @@
                             </h2>
                             <br>
                             <div class="right-box-contain">
-                                <h6 class="offer-top">({{ $phanTramGiamGia }}% off)</h6> <!-- Giữ mặc định -->
+                                <h6 class="offer-top">Giảm giá {{ $phanTramGiamGia }}% </h6> <!-- Giữ mặc định -->
                                 <div class="d-flex align-items-center gap-2 mt-3">
                                     <strong class="price-label"></strong>
                                     <span id="product-price" class="theme-color price"
@@ -370,18 +452,22 @@
                                             @foreach ($mauSac as $index => $mau)
                                                 <label
                                                     class="color-option rounded-circle d-flex align-items-center justify-content-center"
-                                                    style="cursor: pointer; width: 60px; height: 60px; position: relative; border: 3px solid transparent;"
-                                                    data-color-name="{{ $mau['gia_tri'] }}">
+                                                    style="cursor: pointer; width: 50px; height: 50px; position: relative; border: 1px solid #009970;"
+                                                    data-color-name="{{ $mau['gia_tri'] }}"
+                                                    data-index="{{ $index }}">
+
                                                     <input type="radio" name="color"
                                                         class="d-none variant-color-selector" value="{{ $index }}"
                                                         data-mau="{{ $mau['gia_tri'] }}"
                                                         data-bienthes='@json($mau['bien_thes'])'
                                                         {{ $index === 0 ? 'checked' : '' }}>
-                                                    <img src="{{ $mau['anh'] }}" alt="{{ $mau['gia_tri'] }}"
-                                                        class="color-img rounded-circle"
-                                                        style="width: 50px; height: 50px; object-fit: cover;">
+
+                                                    <!-- Replace image with text (color name) -->
+                                                    <span class="color-name">{{ $mau['gia_tri'] }}</span>
+                                                    <!-- Added color name here -->
                                                 </label>
                                             @endforeach
+
                                         </div>
                                     </div>
 
@@ -927,7 +1013,7 @@
             let defaultPrice = document.querySelector("#default-price");
             let defaultOldPrice = document.querySelector("#default-old-price");
             let selectedColorText = document.querySelector("#selected-color");
-            let productImage = document.querySelector("#product-image");
+            let productImage = document.querySelector("#main-image"); // Main image
             let discountLabel = document.querySelector(".offer-top");
 
             function formatCurrency(value) {
@@ -939,6 +1025,7 @@
                 if (selectedSize) {
                     let sizePrice = parseFloat(selectedSize.getAttribute("data-price"));
                     let oldPrice = parseFloat(defaultOldPrice.innerText.replace("₫", "").replace(/\./g, ""));
+                    let variantImage = selectedSize.getAttribute("data-image");
 
                     priceDisplay.textContent = formatCurrency(sizePrice);
                     quantityDisplay.textContent = selectedSize.getAttribute("data-quantity");
@@ -949,10 +1036,16 @@
 
                     if (oldPrice > 0 && sizePrice < oldPrice) {
                         let discountPercent = Math.round(100 - (sizePrice / oldPrice) * 100);
-                        discountLabel.textContent = `(${discountPercent}% off)`;
+                        discountLabel.textContent = `Giảm giá ${discountPercent}% `;
                         discountLabel.style.visibility = "visible";
                     } else {
                         discountLabel.style.visibility = "hidden";
+                    }
+
+                    // Update main image when size is selected
+                    if (variantImage && variantImage !== "null" && variantImage !== "undefined") {
+                        productImage.src = variantImage; // Update image to the selected variant
+                        productImage.style.display = "block"; // Show main image
                     }
                 }
             }
@@ -967,9 +1060,6 @@
                     return;
                 }
 
-                let sizeOrder = ["S", "M", "L", "XL", "XXL"];
-                bienThes.sort((a, b) => sizeOrder.indexOf(a.gia_tri) - sizeOrder.indexOf(b.gia_tri));
-
                 let firstSizeInput = null;
 
                 bienThes.forEach((size, index) => {
@@ -977,10 +1067,12 @@
                     label.classList.add("option", "size-option");
                     label.style.cursor = "pointer";
                     label.innerHTML = `
-                    <input type="radio" name="size" class="d-none variant-size-selector"
-                        value="${size.id}" data-price="${size.gia_ban}" data-quantity="${size.so_luong}">
-                    <span class="option-box">${size.gia_tri}</span>
-                `;
+                <input type="radio" name="size" class="d-none variant-size-selector"
+                    value="${size.id}" data-price="${size.gia_ban}" 
+                    data-quantity="${size.so_luong}" 
+                    data-image="${size.anh}">  
+                <span class="option-box">${size.gia_tri}</span>
+            `;
                     sizeContainer.appendChild(label);
 
                     if (index === 0) {
@@ -990,6 +1082,7 @@
 
                 attachSizeEvents();
 
+                // Set first size as selected
                 if (firstSizeInput) {
                     firstSizeInput.checked = true;
                     firstSizeInput.dispatchEvent(new Event("change"));
@@ -998,6 +1091,7 @@
 
             function attachSizeEvents() {
                 let sizeInputs = document.querySelectorAll(".variant-size-selector");
+
                 sizeInputs.forEach(input => {
                     input.addEventListener("change", function() {
                         document.querySelectorAll(".size-option").forEach(label => {
@@ -1005,6 +1099,7 @@
                         });
 
                         this.closest("label").classList.add("selected");
+
                         updatePriceAndQuantity();
 
                         let addToCartBtn = document.querySelector(".btn-add-cart");
@@ -1023,15 +1118,12 @@
 
                     let bienThes = JSON.parse(this.querySelector("input[type='radio']")
                         .getAttribute("data-bienthes"));
-                    let imageUrl = this.getAttribute("data-image");
-                    if (imageUrl) {
-                        productImage.src = imageUrl;
-                    }
+
                     updateSizes(bienThes);
                 });
             });
 
-            priceLabel.style.display = "none";
+            // Hide 0 price initially
             priceDisplay.style.display = "none";
         });
     </script>
@@ -1150,25 +1242,77 @@
             });
         });
     </script>
+
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            // Lắng nghe sự kiện click trên tất cả ảnh thumbnail
+            const mainImage = document.getElementById('main-image');
+            const zoomLens = document.querySelector('.zoom-lens');
+
             document.querySelectorAll('.image-thumbnail').forEach(thumbnail => {
                 thumbnail.addEventListener('click', function() {
                     const newImageSrc = this.getAttribute('data-large');
-                    const mainImage = document.getElementById('main-image');
 
                     if (mainImage) {
                         mainImage.src = newImageSrc;
-                        mainImage.style.display = 'block'; // Hiển thị ảnh chính nếu bị ẩn
+
+                        // Xóa class active khỏi tất cả ảnh
+                        document.querySelectorAll('.image-thumbnail').forEach(img => img.classList
+                            .remove('active'));
+
+                        // Thêm class active vào ảnh đang chọn
+                        this.classList.add('active');
                     }
                 });
+            });
+
+            // Hiệu ứng zoom khi rê chuột vào ảnh chính
+            document.querySelector('.zoom-container').addEventListener("mousemove", function(e) {
+                const {
+                    left,
+                    top,
+                    width,
+                    height
+                } = mainImage.getBoundingClientRect();
+                const x = (e.pageX - left - window.scrollX) / width * 100;
+                const y = (e.pageY - top - window.scrollY) / height * 100;
+
+                // Cập nhật transform origin để điều chỉnh vị trí zoom
+                mainImage.style.transformOrigin = `${x}% ${y}%`;
+
+                // Sử dụng scale hợp lý để không làm phồng ảnh
+                mainImage.style.transform = "scale(1.5)"; // Điều chỉnh scale sao cho hợp lý
+
+                // Đảm bảo zoom lens không vượt quá ảnh chính
+                zoomLens.style.left =
+                    `${Math.min(Math.max(e.pageX - left - zoomLens.offsetWidth / 2, 0), width - zoomLens.offsetWidth)}px`;
+                zoomLens.style.top =
+                    `${Math.min(Math.max(e.pageY - top - zoomLens.offsetHeight / 2, 0), height - zoomLens.offsetHeight)}px`;
+                zoomLens.style.display = "block";
+            });
+
+            // Reset khi rời chuột khỏi ảnh
+            document.querySelector('.zoom-container').addEventListener("mouseleave", function() {
+                mainImage.style.transform = "scale(1)";
+                zoomLens.style.display = "none";
+            });
+
+            // Khởi tạo slider ảnh thumbnail
+            $('.left-slider-image').slick({
+                slidesToShow: 5,
+                slidesToScroll: 1,
+                infinite: true,
+                arrows: true,
+                centerMode: false,
+                variableWidth: false,
+                adaptiveHeight: false
             });
         });
     </script>
 
 
-    <script>
+
+
+    {{-- <script>
         $('.left-slider-image').slick({
             slidesToShow: 4,
             /
@@ -1181,12 +1325,7 @@
             centerMode: false
         });
     </script>
-    {{-- <script>
-        $('.slick-slide').on('click', function(event) {
-            event.preventDefault();
-            $(this).blur();
-        });
-    </script> --}}
+
     <script>
         $('.left-slider-image').on('init reInit afterChange', function() {
             $('.slick-slide').css('opacity', '1');
@@ -1201,7 +1340,8 @@
                 });
             });
         });
-    </script>
+    </script> --}}
+
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
     <script>
         function themDanhGia() {

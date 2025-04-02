@@ -59,23 +59,6 @@
         .product-option a:hover i {
             color: #1abc9c;
         }
-
-        .khoang-gia-title {
-            font-size: 17px;
-            font-weight: bold;
-            position: relative;
-            display: inline-block;
-        }
-
-        .khoang-gia-title::after {
-            content: "";
-            display: block;
-            width: 147px;
-            height: 1px;
-            background-color: #008080;
-            margin-top: 5px;
-        }
-
     </style>
 @endsection
 
@@ -264,6 +247,9 @@
                                     <div id="collapseOne" class="accordion-collapse collapse show">
                                         <div class="accordion-body">
 
+
+
+
                                             @if ($danhMucs->isNotEmpty())
                                                 <form method="GET" action="{{ route('sanphams.danhsach') }}">
                                                     <ul class="category-list custom-padding custom-height"
@@ -276,6 +262,7 @@
                                                                         id="danhmuc-{{ $danhMuc->id }}"
                                                                         onchange="this.form.submit()"
                                                                         {{ request('danh_muc_id') == $danhMuc->id ? 'checked' : '' }}>
+
                                                                     <label class="form-check-label"
                                                                         for="danhmuc-{{ $danhMuc->id }}"
                                                                         style="cursor: pointer;">
@@ -292,53 +279,35 @@
                                             @else
                                                 <p>Không có danh mục nào có sản phẩm.</p>
                                             @endif
+
+
+
+
+
+
+
+
+
+
                                         </div>
                                     </div>
                                 </div>
 
-                                <form method="GET" action="{{ route('sanphams.danhsach') }}">
-                                    <h5 class="khoang-gia-title">Chọn Khoảng Giá</h5>
-
-                                    @php
-                                        $priceRanges = [
-                                            'duoi_50000' => ['label' => 'Nhỏ hơn 50.000đ', 'min' => 0, 'max' => 50000],
-                                            '50000_70000' => [
-                                                'label' => 'Từ 50.000đ - 70.000đ',
-                                                'min' => 50000,
-                                                'max' => 70000,
-                                            ],
-                                            '70000_100000' => [
-                                                'label' => 'Từ 70.000đ - 100.000đ',
-                                                'min' => 70000,
-                                                'max' => 100000,
-                                            ],
-                                            '100000_150000' => [
-                                                'label' => 'Từ 100.000đ - 150.000đ',
-                                                'min' => 100000,
-                                                'max' => 150000,
-                                            ],
-                                            'tren_200000' => [
-                                                'label' => 'Lớn hơn 200.000đ',
-                                                'min' => 200000,
-                                                'max' => 999999999,
-                                            ],
-                                        ];
-                                        $selectedPrices = request('price_range', []);
-                                    @endphp
-
-                                    @foreach ($priceRanges as $key => $range)
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="price_range[]"
-                                                id="price_{{ $key }}"
-                                                value="{{ $range['min'] }},{{ $range['max'] }}"
-                                                onchange="this.form.submit()"
-                                                {{ in_array("{$range['min']},{$range['max']}", $selectedPrices) ? 'checked' : '' }}>
-                                            <label class="form-check-label" for="price_{{ $key }}">
-                                                {{ $range['label'] }}
-                                            </label>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="panelsStayOpen-headingThree">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#collapseThree">
+                                            <span>Giá</span>
+                                        </button>
+                                    </h2>
+                                    <div id="collapseThree" class="accordion-collapse collapse show">
+                                        <div class="accordion-body">
+                                            <div class="range-slider">
+                                                <input type="text" class="js-range-slider" value="">
+                                            </div>
                                         </div>
-                                    @endforeach
-                                </form>
+                                    </div>
+                                </div>
 
                                 <div class="accordion-item">
                                     <h2 class="accordion-header" id="panelsStayOpen-headingSix">
@@ -441,11 +410,10 @@
                                         <span>
                                             @php
                                                 $sortText = match (request('sort')) {
-                                                    'pop' => 'Sản phẩm bán chạy',
                                                     'low' => 'Giá thấp - cao',
                                                     'high' => 'Giá cao - thấp',
                                                     'off' => 'Giảm giá % cao - thấp',
-                                                    default => 'Sản phẩm mới nhất',
+                                                    default => 'Sắp xếp',
                                                 };
                                             @endphp
                                             {{ $sortText }}
@@ -455,17 +423,11 @@
 
                                     <ul class="dropdown-menu">
                                         <li><a class="dropdown-item"
-                                                href="{{ request()->fullUrlWithQuery(['sort' => 'pop']) }}">Sản phẩm bán
-                                                chạy</a></li>
-                                        <li><a class="dropdown-item"
                                                 href="{{ request()->fullUrlWithQuery(['sort' => 'low']) }}">Giá thấp -
                                                 cao</a></li>
                                         <li><a class="dropdown-item"
                                                 href="{{ request()->fullUrlWithQuery(['sort' => 'high']) }}">Giá cao -
                                                 thấp</a></li>
-                                        <li><a class="dropdown-item"
-                                                href="{{ request()->fullUrlWithQuery(['sort' => 'rating']) }}">Đánh giá
-                                                cao - thấp</a></li>
                                         <li><a class="dropdown-item"
                                                 href="{{ request()->fullUrlWithQuery(['sort' => 'off']) }}">Giảm giá % cao
                                                 - thấp</a></li>
@@ -503,59 +465,45 @@
                         </div>
                     </div>
 
-                    <div
-                        class="row g-sm-4 g-3 row-cols-xxl-4 row-cols-xl-3 row-cols-lg-2 row-cols-md-3 row-cols-2 product-list-section">
-                        @foreach ($sanPhams as $sanPham)
-                            <div>
-                                <div class="product-box-3 h-100 wow fadeInUp">
-                                    <div class="product-header">
-                                        @if ($sanPham->gia_cu > $sanPham->gia_moi)
-                                            <span class="badge bg-danger">-{{ $sanPham->phanTramGiamGia() }}%</span>
-                                        @endif
-                                        <div class="product-image text-center" style="max-width: 250px;">
-                                            <a href="{{ route('sanphams.chitiet', $sanPham->id) }}">
-                                                <img src="{{ Storage::url($sanPham->hinh_anh) }}"
-                                                    class="img-fluid rounded shadow-sm"
-                                                    alt="{{ $sanPham->ten_san_pham }}">
-
-                                            </a>
-                                            <ul class="product-option">
-                                                <li data-bs-toggle="tooltip" data-bs-placement="top"
-                                                    title="Xem chi tiết">
-                                                    <a href="{{ route('sanphams.chitiet', ['id' => $sanPham['id']]) }}">
-                                                        <i data-feather="eye"></i>
-                                                    </a>
-                                                </li>
-
-                                                <li data-bs-toggle="tooltip" data-bs-placement="top" title="Wishlist">
-                                                    <a href="#" class="notifi-wishlist">
-                                                        <i data-feather="heart"></i>
-                                                    </a>
-                                                    <form action="{{ route('add.wishlist', $sanPham['id']) }}"
-                                                        method="POST" class="wishlist-form">
-                                                        @csrf
-                                                    </form>
-                                                </li>
-                                            </ul>
-
-                                        </div>
-                                    </div>
-                                    <div class="product-footer">
-                                        <div class="product-detail">
-                                            <span
-                                                class="span-name">{{ $sanPham->danhMuc->ten_danh_muc ?? 'Không có danh mục' }}</span>
-                                            <a href="{{ route('sanphams.chitiet', $sanPham->id) }}">
-                                                <h5 class="name">{{ $sanPham->ten_san_pham }}</h5>
-                                            </a>
-                                            <p class="text-content mt-1 mb-2 product-content">{{ $sanPham->mo_ta }}</p>
-                                            <div class="product-rating mt-2">
-                                                <ul class="rating">
-                                                    @for ($i = 1; $i <= 5; $i++)
-                                                        <li>
-                                                            <i data-feather="star"
-                                                                class="{{ $i <= $sanPham->tinhDiemTrungBinh() ? 'fill' : '' }}"></i>
-                                                        </li>
-                                                    @endfor
+                    @if ($sanPhams->isEmpty())
+                        <div class="text-center mt-4">
+                            <h4 style="color: red">Không có sản phẩm nào phù hợp với bộ lọc</h4>
+                            <p>Hãy thử thay đổi tiêu chí lọc để tìm kiếm sản phẩm phù hợp.</p>
+                        </div>
+                    @else
+                        <div
+                            class="row g-sm-4 g-3 row-cols-xxl-4 row-cols-xl-3 row-cols-lg-2 row-cols-md-3 row-cols-2 product-list-section">
+                            @foreach ($sanPhams as $sanPham)
+                                <div>
+                                    <div class="product-box-3 h-100 wow fadeInUp">
+                                        <div class="product-header">
+                                            @if ($sanPham->gia_cu > $sanPham->gia_moi)
+                                                <span class="badge bg-danger">-{{ $sanPham->phanTramGiamGia() }}%</span>
+                                            @endif
+                                            <div class="product-image text-center" style="max-width: 250px;">
+                                                <a href="{{ route('sanphams.chitiet', $sanPham->id) }}">
+                                                    <img src="{{ Storage::url($sanPham->hinh_anh) }}"
+                                                        class="img-fluid rounded shadow-sm"
+                                                        alt="{{ $sanPham->ten_san_pham }}">
+                                                </a>
+                                                <ul class="product-option">
+                                                    <li data-bs-toggle="tooltip" data-bs-placement="top"
+                                                        title="Xem chi tiết">
+                                                        <a
+                                                            href="{{ route('sanphams.chitiet', ['id' => $sanPham['id']]) }}">
+                                                            <i data-feather="eye"></i>
+                                                        </a>
+                                                    </li>
+                                                    <li data-bs-toggle="tooltip" data-bs-placement="top"
+                                                        title="Wishlist">
+                                                        <a href="#" class="notifi-wishlist">
+                                                            <i data-feather="heart"></i>
+                                                        </a>
+                                                        <form action="{{ route('add.wishlist', $sanPham['id']) }}"
+                                                            method="POST" class="wishlist-form">
+                                                            @csrf
+                                                        </form>
+                                                    </li>
                                                 </ul>
                                             </div>
                                         </div>
