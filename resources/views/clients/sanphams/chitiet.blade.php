@@ -1015,6 +1015,7 @@
             let selectedColorText = document.querySelector("#selected-color");
             let productImage = document.querySelector("#main-image"); // Main image
             let discountLabel = document.querySelector(".offer-top");
+            let selectedSizeValue = null; // Biến lưu size đã chọn
 
             function formatCurrency(value) {
                 return new Intl.NumberFormat("vi-VN").format(value) + "₫";
@@ -1023,6 +1024,7 @@
             function updatePriceAndQuantity() {
                 let selectedSize = document.querySelector(".variant-size-selector:checked");
                 if (selectedSize) {
+                    selectedSizeValue = selectedSize.getAttribute("data-size"); // Lưu size đang chọn
                     let sizePrice = parseFloat(selectedSize.getAttribute("data-price"));
                     let oldPrice = parseFloat(defaultOldPrice.innerText.replace("₫", "").replace(/\./g, ""));
                     let variantImage = selectedSize.getAttribute("data-image");
@@ -1042,10 +1044,9 @@
                         discountLabel.style.visibility = "hidden";
                     }
 
-                    // Update main image when size is selected
                     if (variantImage && variantImage !== "null" && variantImage !== "undefined") {
-                        productImage.src = variantImage; // Update image to the selected variant
-                        productImage.style.display = "block"; // Show main image
+                        productImage.src = variantImage;
+                        productImage.style.display = "block";
                     }
                 }
             }
@@ -1060,9 +1061,16 @@
                     return;
                 }
 
-                let firstSizeInput = null;
+                const sizeOrder = {
+                    "S": 1,
+                    "M": 2,
+                    "L": 3,
+                    "XL": 4,
+                    "XXL": 5
+                };
+                bienThes.sort((a, b) => (sizeOrder[a.gia_tri] || 99) - (sizeOrder[b.gia_tri] || 99));
 
-                bienThes.forEach((size, index) => {
+                bienThes.forEach(size => {
                     let label = document.createElement("label");
                     label.classList.add("option", "size-option");
                     label.style.cursor = "pointer";
@@ -1070,22 +1078,23 @@
                 <input type="radio" name="size" class="d-none variant-size-selector"
                     value="${size.id}" data-price="${size.gia_ban}" 
                     data-quantity="${size.so_luong}" 
-                    data-image="${size.anh}">  
+                    data-image="${size.anh}" 
+                    data-size="${size.gia_tri}">  
                 <span class="option-box">${size.gia_tri}</span>
             `;
                     sizeContainer.appendChild(label);
-
-                    if (index === 0) {
-                        firstSizeInput = label.querySelector("input");
-                    }
                 });
 
                 attachSizeEvents();
 
-                // Set first size as selected
-                if (firstSizeInput) {
-                    firstSizeInput.checked = true;
-                    firstSizeInput.dispatchEvent(new Event("change"));
+                // Nếu đã chọn size trước đó, chọn lại size khi đổi màu
+                if (selectedSizeValue) {
+                    let previousSelectedSize = Array.from(document.querySelectorAll(".variant-size-selector"))
+                        .find(input => input.getAttribute("data-size") === selectedSizeValue);
+                    if (previousSelectedSize) {
+                        previousSelectedSize.checked = true;
+                        previousSelectedSize.dispatchEvent(new Event("change"));
+                    }
                 }
             }
 
@@ -1099,7 +1108,6 @@
                         });
 
                         this.closest("label").classList.add("selected");
-
                         updatePriceAndQuantity();
 
                         let addToCartBtn = document.querySelector(".btn-add-cart");
@@ -1123,7 +1131,6 @@
                 });
             });
 
-            // Hide 0 price initially
             priceDisplay.style.display = "none";
         });
     </script>
