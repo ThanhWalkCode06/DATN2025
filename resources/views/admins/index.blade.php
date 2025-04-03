@@ -10,18 +10,42 @@
 
 @section('content')
     <!-- chart caard section start -->
+    <form method="GET" action="{{ route('index') }}" class="mb-4">
+        <div class="row">
+            <div class="col-md-4">
+                <label for="start_date">Từ ngày:</label>
+                <input type="date" id="start_date" name="start_date" class="form-control" 
+                    value="{{ request('start_date') ?? now()->setTimezone('Asia/Ho_Chi_Minh')->format('Y-m-d') }}">
+            </div>
+            <div class="col-md-4">
+                <label for="end_date">Đến ngày:</label>
+                <input type="date" id="end_date" name="end_date" class="form-control" 
+                    value="{{ request('end_date') ?? now()->setTimezone('Asia/Ho_Chi_Minh')->format('Y-m-d') }}">
+            </div>
+            <div class="col-md-4 d-flex align-items-end">
+                <button type="submit" class="btn btn-primary">Lọc</button>
+            </div>
+        </div>
+    </form>
+    
+  
+    
+    
+    
+    
+    
     <div class="col-sm-6 col-xxl-3 col-lg-6">
         <div class="main-tiles border-5 border-0  card-hover card o-hidden">
             <div class="custome-1-bg b-r-4 card-body">
                 <div class="media align-items-center static-top-widget">
                     <div class="media-body p-0">
                         <span class="m-0">Tổng doanh thu</span>
-                          <h4 class="mb-0 counter">
-                          {{ number_format($tongDoanhThu, 0, ',', '.') }} 
-                        <span class="badge badge-light-primary grow">
-                    <i data-feather="dollar-sign"></i>
-                 </span>
-                  </h4>
+                        <h4 class="mb-0 counter">
+                            {{ number_format($tongDoanhThu, 0, ',', '.') }}
+                            <span class="badge badge-light-primary grow">
+                                <i data-feather="dollar-sign"></i>
+                            </span>
+                        </h4>
 
                     </div>
                     <div class="align-self-center text-center">
@@ -121,25 +145,7 @@
         <div class="card o-hidden card-hover">
             <div class=" card-header-top card-header--2 px-0 pt-0">
                 <div class="row">
-                    <form method="GET" action="{{ route('index') }}" class="mb-3">
-                        <div class="d-flex align-items-center">
-                            <span class="fw-bold">Lọc theo:</span>
-                            <div class="dropdown">
-                                <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton2"
-                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                    {{ request('filter') == 'thang' ? 'Tháng này' : (request('filter') == 'nam' ? 'Năm nay' : 'Hôm nay') }}
-                                </button>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
-                                    <li><a class="dropdown-item" href="{{ route('index', ['filter' => 'ngay']) }}">Hôm
-                                            nay</a></li>
-                                    <li><a class="dropdown-item" href="{{ route('index', ['filter' => 'thang']) }}">Tháng
-                                        </a></li>
-                                    <li><a class="dropdown-item" href="{{ route('index', ['filter' => 'nam']) }}">Năm </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </form>
+                
 
 
 
@@ -157,7 +163,7 @@
                                 <div class="table-responsive">
                                     <table class="best-selling-table w-image table border-0">
                                         <tbody>
-                                            @if ($topBanChay->isEmpty())
+                                            @if ($topBanChay)
                                                 <tr>
                                                     <td colspan="4" class="text-center text-muted">
                                                         <span class="text-danger">Không có sản phẩm trong thời gian
@@ -318,17 +324,22 @@
                         <button class="btn p-0 dropdown-toggle" type="button" id="dropdownMenuButton2"
                             data-bs-toggle="dropdown" data-bs-auto-close="true">Trạng thái</button>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
-                            {{-- <li><a class="dropdown-item" href="{{ route('index', ['filter' => 'hom_nay']) }}">Hôm nay</a>
-                            </li> --}}
-                            {{-- <li><a class="dropdown-item" href="{{ route('index', ['filter' => 'thang_nay']) }}">Tháng này</a>
-                            </li>  --}}
                             <li><a class="dropdown-item"
                                     href="{{ route('index', ['trang_thai' => 'chua_xac_nhan']) }}">Chưa xác nhận</a></li>
+                            <li><a class="dropdown-item" href="{{ route('index', ['trang_thai' => 'dang_xu_ly']) }}">Đang
+                                    xử lý</a></li>
+                            <li><a class="dropdown-item" href="{{ route('index', ['trang_thai' => 'dang_giao']) }}">Đang
+                                    giao</a></li>
+                            <li><a class="dropdown-item" href="{{ route('index', ['trang_thai' => 'da_giao']) }}">Đã
+                                    giao</a></li>
+                            <li><a class="dropdown-item" href="{{ route('index', ['trang_thai' => 'hoan_thanh']) }}">Hoàn
+                                    thành</a></li>
+                            <li><a class="dropdown-item" href="{{ route('index', ['trang_thai' => 'da_huy']) }}">Đã
+                                    hủy</a></li>
                             <li><a class="dropdown-item" href="{{ route('index', ['trang_thai' => 'tra_hang']) }}">Trả
                                     hàng</a></li>
-                            <li><a class="dropdown-item" href="{{ route('index', ['sort' => 'tong_tien']) }}">Tổng
-                                    tiền</a></li>
                         </ul>
+
 
                     </div>
                 </div>
@@ -364,16 +375,18 @@
                                             <td>{{ $donHang->ten_nguoi_nhan }}</td>
                                             <td>{{ number_format($donHang->tong_tien, 0, ',', '.') }} VNĐ</td>
                                             <td>
-                                                @if ($donHang->trang_thai_don_hang == 0)
-                                                    <span class="text-danger">Chưa xác nhận</span>
+                                                @if ($donHang->trang_thai_don_hang == -1)
+                                                    <span class="text-danger">Đã hủy</span>
+                                                @elseif ($donHang->trang_thai_don_hang == 0)
+                                                    <span class="text-danger">Chờ xác nhận</span>
                                                 @elseif ($donHang->trang_thai_don_hang == 1)
-                                                    <span class="text-success">Đã xác nhận</span>
+                                                    <span class="text-primary">Đang xử lý</span>
                                                 @elseif ($donHang->trang_thai_don_hang == 2)
-                                                    <span class="text-primary">Chờ vận chuyển</span>
-                                                @elseif ($donHang->trang_thai_don_hang == 3)
                                                     <span class="text-primary">Đang giao</span>
-                                                @elseif ($donHang->trang_thai_don_hang == 4)
+                                                @elseif ($donHang->trang_thai_don_hang == 3)
                                                     <span class="text-success">Đã giao</span>
+                                                @elseif ($donHang->trang_thai_don_hang == 4)
+                                                    <span class="text-success">Hoàn thành</span>
                                                 @elseif ($donHang->trang_thai_don_hang == 5)
                                                     <span class="text-danger">Trả hàng</span>
                                                 @else
@@ -408,10 +421,26 @@
     <script>
         var dataChart = {!! json_encode(array_values($dataChart)) !!};
     </script>
-    
+
     <!-- Load file JS sau khi có dữ liệu -->
     <script src="{{ asset('assets/js/chart/apex-chart/chart-custom1.js') }}"></script>
-    
+
     <script src="{{ asset('assets/js/sidebar-menu.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+      <script>
+        // Function to update the start date input with current date
+        function updateStartDate() {
+            const today = new Date();
+            const day = String(today.getDate()).padStart(2, '0');
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const year = today.getFullYear();
+            const currentDate = `${year}-${month}-${day}`;
+            
+            document.getElementById('start_date').value = currentDate;
+        }
+    
+        // Update start date every second to reflect real-time changes
+        setInterval(updateStartDate, 1000); // Update every 1000ms (1 second)
+    </script>
 @endsection
