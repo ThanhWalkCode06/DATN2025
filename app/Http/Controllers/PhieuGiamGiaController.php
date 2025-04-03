@@ -50,8 +50,8 @@ class PhieuGiamGiaController extends Controller
             ],
             'ngay_bat_dau' => 'required|date|after_or_equal:today',
             'ngay_ket_thuc' => 'required|date|after:ngay_bat_dau',
-            'gia_tri' => 'required|numeric|min:1|max:99.99',
-            'trang_thai' => 'required|in:0,1',
+            'muc_giam_toi_da' => 'numeric',
+            'muc_gia_toi_thieu' => 'numeric',
         ], [
             'ten_phieu.unique' => 'Tên phiếu giảm giá đã tồn tại.',
             'ma_phieu.unique' => 'Mã giảm giá đã tồn tại.',
@@ -59,6 +59,9 @@ class PhieuGiamGiaController extends Controller
             'ngay_ket_thuc.after' => 'Ngày kết thúc phải sau ngày bắt đầu.',
             'gia_tri.min' => 'Giá trị giảm giá phải lớn hơn 0.',
             'gia_tri.max' => 'Giá trị giảm giá phải dưới 100.',
+
+            'muc_giam_toi_da.numeric' => 'Phải là giá trị số.',
+            'muc_gia_toi_thieu.numeric' => 'Phải là giá trị số.',
         ]);
 
         // Kiểm tra nếu có bản ghi bị xóa mềm
@@ -77,7 +80,7 @@ class PhieuGiamGiaController extends Controller
 
         return redirect()->route('phieugiamgias.index')->with('success', 'Thêm phiếu giảm giá thành công!');
     }
-  
+
     /**
      * Hiển thị chi tiết phiếu giảm giá.
      */
@@ -111,12 +114,16 @@ class PhieuGiamGiaController extends Controller
                 'ngay_ket_thuc' => 'required|date|after:ngay_bat_dau',
                 'gia_tri' => 'required|numeric|min:1|max:99.99',
                 'trang_thai' => 'required|in:0,1',
+                'muc_giam_toi_da' => 'numeric',
+                'muc_gia_toi_thieu' => 'numeric',
             ],
             [
                 'ngay_bat_dau.after_or_equal' => 'Ngày bắt đầu không được trước hôm nay.',
                 'ngay_ket_thuc.after' => 'Ngày kết thúc phải sau ngày bắt đầu.',
                 'gia_tri.min' => 'Giá trị giảm giá phải lớn hơn 0.',
                 'gia_tri.max' => 'Giá trị giảm giá phải nhỏ hơn 100.',
+                'muc_giam_toi_da.numeric' => 'Phải là giá trị số.',
+                'muc_gia_toi_thieu.numeric' => 'Phải là giá trị số.',
             ]
         );
 
@@ -141,11 +148,11 @@ class PhieuGiamGiaController extends Controller
     // public function showCart()
     // {
     //     $userId = Auth::id(); // Get the logged-in user's ID
-    
+
     //     if (!$userId) {
     //         return redirect()->route('login')->with('error', 'Vui lòng đăng nhập để xem mã giảm giá.');
     //     }
-    
+
     //     // Get discount vouchers for the logged-in user
     //     $phieuGiamGiaThanhToans = PhieuGiamGia::where('trang_thai', 1)
     //         ->where('ngay_bat_dau', '<=', now()) // Start date is in the past
@@ -161,5 +168,5 @@ class PhieuGiamGiaController extends Controller
     //     // Pass the variable to the view, even if it's empty
     //     return view('clients.thanhtoans.thanhtoan', compact('phieuGiamGiaThanhToans')); // Ensure $phieuGiamGias is always passed
     // }
-    
+
 }
