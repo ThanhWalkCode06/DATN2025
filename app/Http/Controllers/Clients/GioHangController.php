@@ -80,7 +80,7 @@ class GioHangController extends Controller
                 'message' => 'Thêm vào giỏ hàng thành công!',
                 "cart" => [
                     "totalItem" => $totalItem,
-                    "cl" => $totalPrice,
+                    "totalPrice" => $totalPrice,
                     'items' => $userCart->map(function ($item) {
                         return [
                             'id' => optional($item->bienThe->sanPham)->id ?? 'Không xác định',
