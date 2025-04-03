@@ -60,10 +60,9 @@ class ThongKeController extends Controller
             }
         }
 
+        // Sắp xếp đơn hàng theo thời gian tạo (mới nhất lên đầu)
+        $donHangs = $query->orderBy('created_at', 'desc')->paginate(10)->appends(request()->query());
 
-
-
-        $donHangs = $query->paginate(10)->appends(request()->query());
 
 
         // Nhận bộ lọc thời gian từ request
