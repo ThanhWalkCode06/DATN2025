@@ -73,10 +73,50 @@ class UserController extends Controller
 
     public function updateTrangThai(Request $request,string $id){
         $donHang = DonHang::find($id);
-        // dd($donHang,$request->trang_thai);
-        $donHang->update([
-            "trang_thai_don_hang" => $request->trang_thai
-        ]);
-        return redirect()->back()->with('success','Cập nhật trạng thái đơn hàng thành công');
+        // dd($request->trang_thai);
+        if($request->trang_thai == -1){
+            // dd(1);
+            if($donHang->trang_thai_don_hang <= 1){
+
+                $chiTietDonHangs = ChiTietDonHang::where('don_hang_id', $donHang->id)->get();
+                foreach ($chiTietDonHangs as $chiTiet) {
+                    $bienThe = BienThe::find($chiTiet->bien_the_id);
+                    if ($bienThe) {
+                        $bienThe->increment('so_luong', $chiTiet->so_luong);
+                    }
+                }
+                $donHang->update([
+                    "trang_thai_don_hang" => $request->trang_thai
+                ]);
+                return redirect()->back()->with('success','Cập nhật trạng thái đơn hàng thành công');
+            }
+        }
+        if($request->trang_thai == 5){
+            if($donHang->trang_thai_don_hang >= 3){
+                $chiTietDonHangs = ChiTietDonHang::where('don_hang_id', $donHang->id)->get();
+                foreach ($chiTietDonHangs as $chiTiet) {
+                    $bienThe = BienThe::find($chiTiet->bien_the_id);
+                    if ($bienThe) {
+                        $bienThe->increment('so_luong', $chiTiet->so_luong);
+                    }
+                }
+                $donHang->update([
+                    "trang_thai_don_hang" => $request->trang_thai
+                ]);
+                return redirect()->back()->with('success','Cập nhật trạng thái đơn hàng thành công');
+            }
+        }
+
+        if($request->trang_thai == 4){
+            if($donHang->trang_thai_don_hang == 3){
+                $donHang->update([
+                    "trang_thai_don_hang" => $request->trang_thai
+                ]);
+                return redirect()->back()->with('success','Cập nhật trạng thái đơn hàng thành công');
+            }
+        }
+
+
+        return redirect()->back()->with('error','Cập nhật trạng thái đơn hàng thất bại');
     }
 }

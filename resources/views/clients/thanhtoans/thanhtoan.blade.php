@@ -160,71 +160,133 @@
                     </div>
                 </div>
 
-                <div class="col-lg-4">
-                    <div class="right-side-summery-box">
-                        <div class="summery-box-2">
-                            <div class="summery-header">
-                                <h3>Chi tiết đơn hàng</h3>
-                            </div>
-                            <div class="coupon-cart">
-                                <h6 class="text-content mb-2">Phiếu giảm giá</h6>
-                                <form id="voucherForm" action="{{ route('voucher.giohang') }}" method="post">
-                                    @csrf
-                                    <div class="mb-3 coupon-box input-group">
-                                        <input style="border: 1px solid #0da487;" id="voucherCode" type="text"
-                                            class="form-control" id="exampleFormControlInput1"
-                                            placeholder="Nhập mã phiếu">
-                                        <button style="border: 1px solid #0da487;margin-top: 0px;" type="submit"
-                                            class="btn-apply">Xác nhận</button>
+                        <div class="col-lg-4">
+                            <div class="right-side-summery-box">
+                                <div class="summery-box-2">
+                                    <div class="summery-header">
+                                        <h3>Chi tiết đơn hàng</h3>
                                     </div>
-                                </form>
+                                    <a href="javascript:void(0);" id="btnMaGiamGia"
+                                        class="btn theme-bg-color text-white btn-md w-100 mt-3 fw-bold"
+                                        data-bs-toggle="modal" data-bs-target="#modalVoucher">
+                                        Phiếu giảm giá dành cho bạn
+                                    </a>
+
+                                    <br>
+                                    <div class="coupon-cart">
+                                        {{-- <h6 class="text-content mb-2">Phiếu giảm giá</h6> --}}
+                                        <form id="voucherForm" action="{{ route('voucher.giohang') }}" method="post">
+                                            @csrf
+                                            <div class="mb-3 coupon-box input-group">
+                                                <input style="border: 1px solid #0da487;" id="voucherCode" type="text"
+                                                    class="form-control" id="exampleFormControlInput1"
+                                                    placeholder="Nhập mã phiếu">
+                                                <button style="border: 1px solid #0da487;margin-top: 0px;" type="submit"
+                                                    class="btn-apply">Xác nhận</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <ul class="summery-contain">
+                                        @foreach ($chiTietGioHangs as $chiTietGioHang)
+                                            <li>
+                                                <img src="{{ Storage::url($chiTietGioHang->anh_bien_the) }}"
+                                                    class="img-fluid blur-up lazyloaded checkout-image" alt="">
+                                                <h4>{{ $chiTietGioHang->ten_san_pham }} x
+                                                    <span class="so-luong">{{ $chiTietGioHang->so_luong }}</span>
+                                                    <span>{{ $chiTietGioHang->bienThe->ten_bien_the }}</span>
+                                                </h4>
+
+                                                <h4 hidden><span class="gia-moi">{{ $chiTietGioHang->bienThe->gia_ban }}</span>đ
+                                                </h4>
+                                                <h4 class="price"><span class="tong"></span>đ</h4>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+
+                                    <ul class="summery-total">
+                                        <li>
+                                            <h4>Tổng tiền sản phẩm</h4>
+                                            <h4 class="price"><span id="tong-san-pham"></span>đ</h4>
+                                        </li>
+
+                                        <li>
+                                            <h4>Phí vận chuyển</h4>
+                                            <h4 class="price"><span id="phi-van-chuyen">10.000</span>đ</h4>
+                                        </li>
+
+                                        <li>
+                                            <h4>Giảm giá</h4>
+                                            <h4 class="price">- <span id="giam-gia">0</span>đ</h4>
+                                        </li>
+
+                                        <li class="list-total">
+                                            <h4>Tổng tiền</h4>
+                                            <h4 class="price"><span id="tong-tien"></span>đ</h4>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <a href="javascript:void(0);" id="btnDatHang"
+                                    class="btn theme-bg-color text-white btn-md w-100 mt-4 fw-bold">
+                                    Đặt hàng
+                                </a>
                             </div>
-                            <ul class="summery-contain">
-                                @foreach ($chiTietGioHangs as $chiTietGioHang)
-                                    <li>
-                                        <img src="{{ Storage::url($chiTietGioHang->anh_bien_the) }}"
-                                            class="img-fluid blur-up lazyloaded checkout-image" alt="">
-                                        <h4>{{ $chiTietGioHang->ten_san_pham }} x
-                                            <span class="so-luong">{{ $chiTietGioHang->so_luong }}</span>
-                                            <span>{{ $chiTietGioHang->bienThe->ten_bien_the }}</span>
-                                        </h4>
 
-                                        <h4 hidden><span class="gia-moi">{{ $chiTietGioHang->bienThe->gia_ban }}</span>đ
-                                        </h4>
-                                        <h4 class="price"><span class="tong"></span>đ</h4>
-                                    </li>
-                                @endforeach
-                            </ul>
+                            <!-- Modal Phiếu Giảm Giá -->
+                            <div id="modalVoucher" class="modal fade" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog" style="max-width: 600px;">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title">Danh sách phiếu giảm giá</h4>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body text-center p-4">
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>#</th>
+                                                            <th>Mã</th>
+                                                            <th>Tên Phiếu</th>
+                                                            <th>Giá Trị</th>
+                                                            <th>Thời Gian</th>
+                                                            {{-- <th>Mô Tả</th> --}}
+                                                            <th>Trạng Thái</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                      
+                                                            @foreach ($phieuGiamGiaThanhToans as $key => $phieu)
+                                                                <tr>
+                                                                    <td>{{ $key + 1 }}</td>
+                                                                    <td>{{ $phieu->ma_phieu }}</td>
+                                                                    <td>{{ $phieu->ten_phieu }}</td>
+                                                                    <td>{{ number_format($phieu->gia_tri, 0, ',', '.') }} VNĐ</td>
+                                                                    <td>{{ date('d/m/Y', strtotime($phieu->ngay_bat_dau)) }} - {{ date('d/m/Y', strtotime($phieu->ngay_ket_thuc)) }}</td>
+                                                                    {{-- <td>{{ $phieu->mo_ta }}</td> --}}
+                                                                    <td>
+                                                                        @if($phieu->trang_thai == 1)
+                                                                            <span class="badge bg-success">Hoạt động</span>
+                                                                        @else
+                                                                            <span class="badge bg-danger">Không hoạt động</span>
+                                                                        @endif
+                                                                    </td>
+                                                                </tr>
+                                                            @endforeach
+                                                        
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Đóng</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
 
-                            <ul class="summery-total">
-                                <li>
-                                    <h4>Tổng tiền sản phẩm</h4>
-                                    <h4 class="price"><span id="tong-san-pham"></span>đ</h4>
-                                </li>
-
-                                <li>
-                                    <h4>Phí vận chuyển</h4>
-                                    <h4 class="price"><span id="phi-van-chuyen">10.000</span>đ</h4>
-                                </li>
-
-                                <li>
-                                    <h4>Giảm giá</h4>
-                                    <h4 class="price">- <span id="giam-gia">0</span>đ</h4>
-                                </li>
-
-                                <li class="list-total">
-                                    <h4>Tổng tiền</h4>
-                                    <h4 class="price"><span id="tong-tien"></span>đ</h4>
-                                </li>
-                            </ul>
                         </div>
-
-                        <a href="javascript:void(0);" id="btnDatHang"
-                            class="btn theme-bg-color text-white btn-md w-100 mt-4 fw-bold">
-                            Đặt hàng
-                        </a>
-                    </div>
-                </div>
             </div>
         </div>
     </section>
@@ -411,12 +473,12 @@
                     type: "POST",
                     data: formData,
                     success: function(response) {
-                        console.log(response)
                         if (response.status === "vnpay") {
                             window.location.href = response.vnpay_url;
                         } else if (response.status === "success") {
                             window.location.href = `/dathangthanhcong/${response.id}`;
                         }
+
                     },
                     error: function(xhr) {
                         let response = xhr.responseJSON;

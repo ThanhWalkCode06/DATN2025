@@ -96,6 +96,28 @@ Thêm mới sản phẩm
                                         </div>
                                     </div>
 
+                                    <!-- Giá trị giảm giá -->
+                                    <div class="mb-4 row align-items-center">
+                                        <label class="col-lg-2 col-md-3 col-form-label form-label-title">Mức giảm tối đa:</label>
+                                        <div class="col-md-9 col-lg-10">
+                                            <input class="form-control @error('muc_giam_toi_da')  @enderror" type="number" name="muc_giam_toi_da" step="0.01" value="{{ old('muc_giam_toi_da') }}">
+                                            @error('muc_giam_toi_da')
+                                            <div class="text-danger">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <!-- Giá trị giảm giá -->
+                                    <div class="mb-4 row align-items-center">
+                                        <label class="col-lg-2 col-md-3 col-form-label form-label-title">Mức giá tối thiểu áp dụng:</label>
+                                        <div class="col-md-9 col-lg-10">
+                                            <input class="form-control @error('muc_gia_toi_thieu')  @enderror" type="number" name="muc_gia_toi_thieu" step="0.01" value="{{ old('muc_gia_toi_thieu') }}">
+                                            @error('muc_gia_toi_thieu')
+                                            <div class="text-danger">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
                                     <!-- Trạng thái -->
                                     <div class="mb-4 row align-items-center">
                                         <label class="col-lg-2 col-md-3 col-form-label form-label-title">Trạng thái</label>

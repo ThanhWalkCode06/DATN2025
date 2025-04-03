@@ -17,6 +17,15 @@ class PhieuGiamGia extends Model
         'ngay_ket_thuc',
         'gia_tri',
         'trang_thai',
-        'mo_ta'
+        'mo_ta',
+        'muc_giam_toi_da',
+        'muc_gia_toi_thieu',
     ];
+
+   public function phieu_giam_gia_tai_khoans()
+{
+    return $this->hasMany(PhieuGiamGiaTaiKhoan::class, 'phieu_giam_gia_id');
+}
+
+
 }

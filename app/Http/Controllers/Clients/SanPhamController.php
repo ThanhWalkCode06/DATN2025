@@ -66,7 +66,7 @@ class SanPhamController extends Controller
                 $query->havingRaw('AVG(danh_gias.so_sao) BETWEEN ? AND ?', [$soSao, $soSao + 0.9]);
             }
         }
-    
+     
         // **Bộ lọc sắp xếp**
         if ($request->filled('sort')) {
             switch ($request->sort) {
@@ -88,7 +88,7 @@ class SanPhamController extends Controller
         } else {
             $query->orderByDesc('san_phams.created_at'); // Nếu không có sort, sắp xếp theo mới nhất
         }
-    
+      
         $sanPhams = $query->paginate(8)->appends($request->query());
     
         $danhMucs = DanhMucSanPham::withCount([
@@ -101,9 +101,6 @@ class SanPhamController extends Controller
         return view('clients.sanphams.danhsach', compact('sanPhams', 'danhMucs'));
     }
     
-
-
-
     public function chiTiet($id)
     {
         $sanPham = SanPham::with([
