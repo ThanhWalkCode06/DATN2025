@@ -73,7 +73,6 @@ class SanPhamController extends Controller
         }
 
 
-
         // **Bộ lọc sắp xếp**
         if ($request->filled('sort')) {
             switch ($request->sort) {
@@ -89,7 +88,14 @@ class SanPhamController extends Controller
                 case 'high': // Giá cao - thấp
                     $query->orderBy('san_phams.gia_moi', 'desc');
                     break;
-
+                // case 'rating': // Đánh giá cao - thấp
+                //     if (!$joinDanhGia) {
+                //         $query->leftJoin('danh_gias', 'san_phams.id', '=', 'danh_gias.san_pham_id')
+                //               ->addSelect(\DB::raw('COALESCE(AVG(danh_gias.so_sao), 0) as avg_rating'))
+                //               ->groupBy('san_phams.id');
+                //     }
+                //     $query->orderByDesc('avg_rating');
+                //     break;
                 case 'off': // Giảm giá % từ cao đến thấp
                     $query->whereNotNull('san_phams.gia_cu')
                         ->where('san_phams.gia_cu', '>', 0)
@@ -102,6 +108,7 @@ class SanPhamController extends Controller
         } else {
             $query->orderByDesc('san_phams.created_at'); // Nếu không có sort, sắp xếp theo mới nhất
         }
+
 
         $sanPhams = $query->paginate(8)->appends($request->query());
 

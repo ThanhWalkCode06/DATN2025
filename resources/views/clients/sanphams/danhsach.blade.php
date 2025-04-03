@@ -471,7 +471,7 @@
                                 <a><i class="fa-solid fa-filter"></i> Filter Menu</a>
                             </div>
                         </div>
-
+{{-- 
                         <div class="top-filter-menu">
                             <div class="category-dropdown">
                                 <h5 class="text-content">Sắp xếp theo :</h5>
@@ -533,7 +533,7 @@
                                     </li>
                                 </ul>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
 
                     @if ($sanPhams->isEmpty())
