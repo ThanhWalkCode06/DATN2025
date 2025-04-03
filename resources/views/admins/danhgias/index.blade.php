@@ -36,8 +36,8 @@
                 <div class="title-header option-title">
                     <h5>Đánh giá sản phẩm</h5>
                 </div>
-
-                {{-- loc sp --}}
+                
+                <!-- Form lọc theo sản phẩm -->
                 <form method="GET" action="{{ route('danhgias.index') }}" class="mb-3">
                     <div class="row">
                         <div class="col-md-4">
@@ -56,6 +56,7 @@
                         </div>
                     </div>
                 </form>
+                
                 <div>
                     <div class="table-responsive">
                         <table class="user-table ticket-table review-table theme-table table" id="table_id">
@@ -97,8 +98,6 @@
                                                 <i class="ri-close-circle-line text-danger"></i> {{-- ❌ màu đỏ --}}
                                             @endif
                                         </td>
-
-
                                         <td>
                                             <button
                                                 class="toggleStatus btn btn-sm {{ $danhGia->trang_thai == 1 ? 'btn-danger' : 'btn-primary' }}"
@@ -106,15 +105,16 @@
                                                 {{ $danhGia->trang_thai == 1 ? 'Ẩn' : 'Hiện' }}
                                             </button>
                                         </td>
-
                                     </tr>
                                 @endforeach
                             </tbody>
                         </table>
                     </div>
-                    <div class="d-flex justify-content-center mt-3">
-                        {{-- {{ $danhGias->links('pagination::bootstrap-5') }} --}}
-                    </div>
+                </div>
+                
+                <!-- Phân trang -->
+                <div class="pagination-wrapper">
+                    {{ $danhGias->links('pagination::bootstrap-5') }}
                 </div>
             </div>
             <!-- Table End -->
