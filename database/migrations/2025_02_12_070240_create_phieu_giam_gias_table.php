@@ -18,6 +18,7 @@ return new class extends Migration
             $table->date('ngay_bat_dau')->nullable();
             $table->date('ngay_ket_thuc')->nullable();
             $table->double('gia_tri')->default(0);
+            $table->unsignedInteger('so_luong')->default(0);
             $table->text('mo_ta')->nullable();
             $table->boolean('trang_thai')->default(1);
             $table->timestamps();
