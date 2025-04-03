@@ -59,7 +59,7 @@
                                             <tr class="table-order">
                                                 <td>
                                                     <a href="javascript:void(0)">
-                                                        <img src="{{ asset('assets/images/profile/3.jpg') }}"
+                                                        <img src="{{ Storage::url($chiTietDonHang->hinh_anh) }}"
                                                             class="img-fluid blur-up lazyload" alt="">
                                                     </a>
                                                 </td>

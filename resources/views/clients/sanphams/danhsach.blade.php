@@ -469,13 +469,13 @@
                                 <a><i class="fa-solid fa-filter"></i> Filter Menu</a>
                             </div>
                         </div>
-{{-- 
+
                         <div class="top-filter-menu">
                             <div class="category-dropdown">
                                 <h5 class="text-content">Sắp xếp theo :</h5>
                                 <div class="dropdown">
                                     <button class="dropdown-toggle" type="button" id="dropdownMenuButton1"
-                                            data-bs-toggle="dropdown">
+                                        data-bs-toggle="dropdown">
                                         <span>
                                             @php
                                                 $sortText = match (request('sort')) {
@@ -489,17 +489,20 @@
                                         </span>
                                         <i class="fa-solid fa-angle-down"></i>
                                     </button>
-                                
+
                                     <ul class="dropdown-menu">
                                         <li><a class="dropdown-item"
-                                               href="{{ request()->fullUrlWithQuery(['sort' => 'low']) }}">Giá thấp - cao</a></li>
+                                                href="{{ request()->fullUrlWithQuery(['sort' => 'low']) }}">Giá thấp -
+                                                cao</a></li>
                                         <li><a class="dropdown-item"
-                                               href="{{ request()->fullUrlWithQuery(['sort' => 'high']) }}">Giá cao - thấp</a></li>
+                                                href="{{ request()->fullUrlWithQuery(['sort' => 'high']) }}">Giá cao -
+                                                thấp</a></li>
                                         <li><a class="dropdown-item"
-                                               href="{{ request()->fullUrlWithQuery(['sort' => 'off']) }}">Giảm giá % cao - thấp</a></li>
+                                                href="{{ request()->fullUrlWithQuery(['sort' => 'off']) }}">Giảm giá % cao
+                                                - thấp</a></li>
                                     </ul>
                                 </div>
-                                
+
 
                             </div>
 
@@ -529,7 +532,7 @@
                                     </li>
                                 </ul>
                             </div>
-                        </div> --}}
+                        </div>
                     </div>
 
                     @if ($sanPhams->isEmpty())
@@ -758,14 +761,15 @@
                         displayName = formatPriceRange(value);
                     } else {
                         displayName = filterNames[key] && filterNames[key][value] ? filterNames[key][
-                            value] : value;
+                            value
+                        ] : value;
                     }
 
                     const filterTag = document.createElement("span");
                     filterTag.className = "badge text-white px-3 py-2 d-flex align-items-center";
                     filterTag.style.backgroundColor = getBadgeColor(key);
                     filterTag.innerHTML = `
-                <span class="me-2">${displayName}</span> 
+                <span class="me-2">${displayName}</span>
                 <span style="cursor:pointer;" class="ms-2 remove-filter" data-key="${key}">✖</span>
             `;
                     selectedFiltersContainer.appendChild(filterTag);
