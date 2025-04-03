@@ -212,7 +212,7 @@
                         let chatMessage = document.createElement("p");
                         chatMessage.classList.add(align);
                         chatMessage.innerHTML =
-                            `<strong>${chat.nguoi_gui_id}:</strong> ${chat.noi_dung}`;
+                            `<strong>${chat.ten_nguoi_gui}:</strong> ${chat.noi_dung}`;
 
                         chatBox.appendChild(chatMessage);
                     });
@@ -263,7 +263,7 @@
                 var align = chat.nguoi_gui_id === userId ? "text-end" : "text-start";
                 let chatMessage = document.createElement("p");
                 chatMessage.classList.add(align);
-                chatMessage.innerHTML = `<strong>${chat.nguoi_gui_id}:</strong> ${chat.noi_dung}`;
+                chatMessage.innerHTML = `<strong>${chat.ten_nguoi_gui}:</strong> ${chat.noi_dung}`;
 
                 chatBox.appendChild(chatMessage);
                 chatBox.scrollTop = chatBox.scrollHeight;

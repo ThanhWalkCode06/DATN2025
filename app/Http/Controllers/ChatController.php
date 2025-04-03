@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\ChatEvent;
 use App\Models\Chat;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -29,9 +30,14 @@ class ChatController extends Controller
 
     public function sendChat(Request $request)
     {
+        $nguoiGui = User::find(Auth::user()->id);
+        $nguoiNhan = User::find(1);
+
         $chat = Chat::create([
             'nguoi_gui_id' => Auth::user()->id,
             'nguoi_nhan_id' => 1,
+            'ten_nguoi_gui' => $nguoiGui->ten_nguoi_dung,
+            'ten_nguoi_nhan' => $nguoiNhan->ten_nguoi_dung,
             'noi_dung' => $request->noi_dung,
             'created_at' => now()
         ]);

@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('nguoi_gui_id');
             $table->unsignedBigInteger('nguoi_nhan_id');
+            $table->text('ten_nguoi_gui');
+            $table->text('ten_nguoi_nhan');
             $table->text('noi_dung');
             $table->timestamps();
 

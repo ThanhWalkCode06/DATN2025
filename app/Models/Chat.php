@@ -12,6 +12,8 @@ class Chat extends Model
     protected $fillable = [
         'nguoi_gui_id',
         'nguoi_nhan_id',
+        'ten_nguoi_gui',
+        'ten_nguoi_nhan',
         'noi_dung'
     ];
 }
