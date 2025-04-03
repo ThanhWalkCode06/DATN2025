@@ -198,6 +198,27 @@
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             var userId = {{ Auth::user()->id ?? 'null' }};
+            var nguoiNhanId = 1;
+
+            // Load tin nhắn
+            fetch(`/messages/${nguoiNhanId}`)
+                .then(response => response.json())
+                .then(messages => {
+                    var chatBox = document.getElementById("chat-box");
+                    chatBox.innerHTML = "";
+                    messages.forEach(chat => {
+                        var align = chat.nguoi_gui_id === userId ? "text-end" : "text-start";
+
+                        let chatMessage = document.createElement("p");
+                        chatMessage.classList.add(align);
+                        chatMessage.innerHTML =
+                            `<strong>${chat.nguoi_gui_id}:</strong> ${chat.noi_dung}`;
+
+                        chatBox.appendChild(chatMessage);
+                    });
+                    chatBox.scrollTop = chatBox.scrollHeight;
+                })
+                .catch(error => console.error("Lỗi khi tải tin nhắn:", error));
 
             document.getElementById("chat-form").addEventListener("submit", function(e) {
                 e.preventDefault();
@@ -214,7 +235,7 @@
                         },
                         body: JSON.stringify({
                             nguoi_gui_id: userId,
-                            nguoi_nhan_id: 1,
+                            nguoi_nhan_id: nguoiNhanId,
                             noi_dung: noiDung
                         })
                     })
@@ -235,11 +256,11 @@
             var channel = pusher.subscribe("chat." + {{ Auth::user()->id }});
 
             channel.bind("send-chat", function(data) {
-                var align = data.nguoi_gui_id === userId ? "text-end" : "text-start";
                 var chatBox = document.getElementById("chat-box");
                 const chat = data.chat
                 console.log(chat);
 
+                var align = chat.nguoi_gui_id === userId ? "text-end" : "text-start";
                 let chatMessage = document.createElement("p");
                 chatMessage.classList.add(align);
                 chatMessage.innerHTML = `<strong>${chat.nguoi_gui_id}:</strong> ${chat.noi_dung}`;
