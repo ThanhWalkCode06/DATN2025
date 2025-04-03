@@ -50,8 +50,9 @@ class DonHangController extends Controller
             ->join('phuong_thuc_thanh_toans', 'phuong_thuc_thanh_toans.id', '=', 'phuong_thuc_thanh_toan_id')
             ->find($donhang->id);
 
-        $chiTietDonHangs = ChiTietDonHang::select('chi_tiet_don_hangs.*', 'bien_thes.ten_bien_the', 'bien_thes.anh_bien_the', 'bien_thes.gia_ban')
+        $chiTietDonHangs = ChiTietDonHang::select('chi_tiet_don_hangs.*', 'bien_thes.ten_bien_the', 'bien_thes.anh_bien_the', 'bien_thes.gia_ban', 'san_phams.hinh_anh')
             ->join('bien_thes', 'bien_thes.id', '=', 'bien_the_id')
+            ->join('san_phams', 'san_phams.id', '=', 'bien_thes.san_pham_id')
             ->where('don_hang_id', '=', $donhang->id)
             ->get();
 
