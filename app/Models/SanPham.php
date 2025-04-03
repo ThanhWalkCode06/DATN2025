@@ -77,4 +77,9 @@ class SanPham extends Model
         }
         return 0;
     }
+
+    public function giaThapNhatCuaSP()
+    {
+        return $this->bienThes->min('gia_ban') ?? 0;
+    }
 }

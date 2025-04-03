@@ -80,7 +80,7 @@ class GioHangController extends Controller
                 'message' => 'Thêm vào giỏ hàng thành công!',
                 "cart" => [
                     "totalItem" => $totalItem,
-                    "totalPrice" => $totalPrice,
+                    "cl" => $totalPrice,
                     'items' => $userCart->map(function ($item) {
                         return [
                             'id' => optional($item->bienThe->sanPham)->id ?? 'Không xác định',
@@ -148,9 +148,23 @@ public function nhapvoucher(Request $request){
     }
 
     if($voucher) {
-        if(empty($voucher->ngay_ket_thuc) && empty($voucher->ngay_bat_dau) ){
+        // $toiThieu = $voucher->muc_gia_toi_thieu;
+        if(($currentTotal - 10000) < $voucher->muc_gia_toi_thieu){
+            return response()->json([
+                'success' => false,
+                'message' => 'Đơn hàng phải tối thiểu '.number_format($voucher->muc_gia_toi_thieu,0,'','.').'đ ! (Không tính tiền ship)',
+                'discount' => 0,
+                'newTotal' => $currentTotal
+            ],403);
+        }
+
+
+        if((empty($voucher->ngay_ket_thuc) && empty($voucher->ngay_bat_dau) &&  $voucher->trang_thai == 1) || ($voucher->ngay_ket_thuc > now() && $voucher->trang_thai == 1)) {
             $discount = $voucher->gia_tri;
             $discountAmount = $currentTotal * ($discount / 100);
+            if($discountAmount >= $voucher->muc_giam_toi_da){
+                $discountAmount = $voucher->muc_giam_toi_da;
+            }
             $newTotal =  max(0, $currentTotal - $discountAmount);
 
             return response()->json([
