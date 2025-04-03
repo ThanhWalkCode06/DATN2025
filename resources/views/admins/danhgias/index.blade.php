@@ -43,8 +43,9 @@
                         <div class="col-md-4">
                             <select name="san_pham_id" class="form-control">
                                 <option value="">Tất cả sản phẩm</option>
-                                @foreach($sanPhams as $sanPham)
-                                    <option value="{{ $sanPham->id }}" {{ request('san_pham_id') == $sanPham->id ? 'selected' : '' }}>
+                                @foreach ($sanPhams as $sanPham)
+                                    <option value="{{ $sanPham->id }}"
+                                        {{ request('san_pham_id') == $sanPham->id ? 'selected' : '' }}>
                                         {{ $sanPham->ten_san_pham }}
                                     </option>
                                 @endforeach
@@ -92,13 +93,15 @@
 
                                         <td class="status-icon">
                                             @if ($danhGia->trang_thai == 1)
-                                                <i class="ri-checkbox-circle-line text-success"></i>  {{-- ✔️ màu xanh --}}
+                                                <i class="ri-checkbox-circle-line text-success"></i> {{-- ✔️ màu xanh --}}
                                             @else
-                                                <i class="ri-close-circle-line text-danger"></i>  {{-- ❌ màu đỏ --}}
+                                                <i class="ri-close-circle-line text-danger"></i> {{-- ❌ màu đỏ --}}
                                             @endif
                                         </td>
                                         <td>
-                                            <button class="toggleStatus btn btn-sm {{ $danhGia->trang_thai == 1 ? 'btn-danger' : 'btn-primary' }}" data-id="{{ $danhGia->id }}">
+                                            <button
+                                                class="toggleStatus btn btn-sm {{ $danhGia->trang_thai == 1 ? 'btn-danger' : 'btn-primary' }}"
+                                                data-id="{{ $danhGia->id }}">
                                                 {{ $danhGia->trang_thai == 1 ? 'Ẩn' : 'Hiện' }}
                                             </button>
                                         </td>
@@ -120,15 +123,14 @@
 @endsection
 
 @section('js')
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
     <script>
-        $(document).ready(function () {
-            $(".toggleStatus").click(function () {
+        $(document).ready(function() {
+            $(".toggleStatus").click(function() {
                 let button = $(this);
                 let danhGiaId = button.data("id");
-    
+
                 $.ajax({
                     url: "{{ route('danhgias.trangthaidanhgia') }}",
                     type: "POST",
@@ -136,29 +138,33 @@
                         id: danhGiaId,
                         _token: "{{ csrf_token() }}"
                     },
-                    success: function (response) {
+                    success: function(response) {
                         if (response.success) {
                             let statusCell = button.closest("tr").find(".status-icon");
-    
+
                             if (response.status == 1) {
-                                button.removeClass('btn-primary').addClass('btn-danger').text('Ẩn');
-                                statusCell.html('<i class="ri-checkbox-circle-line text-success"></i>');
+                                button.removeClass('btn-primary').addClass('btn-danger').text(
+                                    'Ẩn');
+                                statusCell.html(
+                                    '<i class="ri-checkbox-circle-line text-success"></i>');
                             } else {
-                                button.removeClass('btn-danger').addClass('btn-primary').text('Hiện');
-                                statusCell.html('<i class="ri-close-circle-line text-danger"></i>');
+                                button.removeClass('btn-danger').addClass('btn-primary').text(
+                                    'Hiện');
+                                statusCell.html(
+                                    '<i class="ri-close-circle-line text-danger"></i>');
                             }
                         } else {
                             alert(response.message);
                         }
                     },
-                    error: function () {
+                    error: function() {
                         alert("Lỗi khi cập nhật trạng thái.");
                     }
                 });
             });
         });
     </script>
-    
+
 
 
     <!-- customizer js -->

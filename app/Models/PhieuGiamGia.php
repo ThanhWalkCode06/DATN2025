@@ -19,4 +19,11 @@ class PhieuGiamGia extends Model
         'trang_thai',
         'mo_ta'
     ];
+
+   public function phieu_giam_gia_tai_khoans()
+{
+    return $this->hasMany(PhieuGiamGiaTaiKhoan::class, 'phieu_giam_gia_id');
+}
+
+
 }

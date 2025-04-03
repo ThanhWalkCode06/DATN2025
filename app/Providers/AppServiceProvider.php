@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\BaiViet;
 use App\Models\Setting;
+use App\Models\PhieuGiamGia;
 use App\Models\ChiTietDonHang;
 use App\Models\ChiTietGioHang;
 use App\Models\DanhMucSanPham;
@@ -32,10 +33,7 @@ class AppServiceProvider extends ServiceProvider
         View::composer('*', function ($view) {
             $view->with('globalSetting', Setting::first());
         });
-        // View::composer('layouts.client', function ($view) {
-        //     $view->with('categories', ClientDanhMucSanPham::all());
-        // });
-
+       
         View::composer('*', function ($view) {
             $view->with('danhMucsp', ClientDanhMucSanPham::all());
         });
@@ -71,5 +69,25 @@ class AppServiceProvider extends ServiceProvider
 
             $view->with(compact('topOrderProducts'));
         });
+
+
+
+            View::composer('*', function ($view) {
+                $userId = Auth::id();
+                $phieuGiamGiaThanhToans = collect(); // Khởi tạo Collection rỗng nếu user chưa đăng nhập
+        
+                if ($userId) {
+                    $phieuGiamGiaThanhToans = PhieuGiamGia::where('trang_thai', 1)
+                        ->where('ngay_bat_dau', '<=', now())
+                        ->where('ngay_ket_thuc', '>=', now())
+                        // ->whereHas('phieu_giam_gia_tai_khoans', function ($query) use ($userId) {
+                        //     $query->where('user_id', $userId);
+                        // })
+                        ->get();
+                }
+                
+                // Chia sẻ biến $phieuGiamGiaThanhToans cho tất cả các view
+                $view->with('phieuGiamGiaThanhToans', $phieuGiamGiaThanhToans);
+            });
     }
 }
