@@ -87,7 +87,7 @@ class GioHangController extends Controller
                             'id_cart' => $item->id ?? 'Không xác định',
                             'name' => optional($item->bienThe->sanPham)->ten_san_pham ?? 'Không xác định',
                             'name_bienthe' => $item->bienThe->ten_bien_the ?? 'Không xác định',
-                            'image' => Storage::url(optional($item->bienThe->sanPham)->hinh_anh) ?? 'Không xác định',
+                            'image' => Storage::url(optional($item->bienThe)->anh_bien_the) ?? 'Không xác định',
                             'quantity' => $item->so_luong,
                             'price' => optional($item->bienThe)->gia_ban ?? 0,
                         ];
