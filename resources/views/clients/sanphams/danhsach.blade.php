@@ -59,6 +59,27 @@
         .product-option a:hover i {
             color: #1abc9c;
         }
+
+        #clearAllFilters {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 25px;
+            font-size: 12px;
+            font-weight: bold;
+            color: white;
+            background: linear-gradient(135deg, #ff416c, #ff4b2b);
+            border: none;
+            border-radius: 30px;
+            text-decoration: none;
+            transition: all 0.3s ease-in-out;
+        }
+
+        #clearAllFilters:hover {
+            background: linear-gradient(135deg, #ff4b2b);
+            transform: translateY(-3px);
+        }
+
+      
     </style>
 @endsection
 
@@ -237,6 +258,17 @@
 
 
                             <div class="accordion custom-accordion" id="accordionExample">
+                                <div class="selected-filters mt-4 text-center">
+                                    <strong class="text-dark fs-4 d-block">Bộ lọc đã chọn</strong>
+                                    <div id="selectedFilters" class="d-flex flex-wrap justify-content-center gap-3 mt-3">
+                                    </div>
+                                    <a href="{{ route('sanphams.danhsach') }}" id="clearAllFilters">
+                                        <i class="fas fa-trash-alt"></i> Bỏ hết
+                                    </a>
+                                </div>
+
+
+
                                 <div class="accordion-item">
                                     <h2 class="accordion-header" id="panelsStayOpen-headingOne">
                                         <button class="accordion-button" type="button" data-bs-toggle="collapse"
@@ -267,7 +299,7 @@
                                                                         for="danhmuc-{{ $danhMuc->id }}"
                                                                         style="cursor: pointer;">
                                                                         {{ $danhMuc->ten_danh_muc }}
-                                                                        <span class="badge bg-primary text-white ms-2">
+                                                                        <span class="badge bg-success text-white ms-2">
                                                                             {{ $danhMuc->san_phams_count }} sản phẩm
                                                                         </span>
                                                                     </label>
@@ -302,17 +334,48 @@
                                     </h2>
                                     <div id="collapseThree" class="accordion-collapse collapse show">
                                         <div class="accordion-body">
-                                            <div class="range-slider">
-                                                <input type="text" class="js-range-slider" value="">
+                                            <div class="form-check">
+                                                <input class="form-check-input price-filter" type="checkbox"
+                                                    value="0-100000" id="price1" data-value="0-100000">
+                                                <label class="form-check-label" for="price1">Giá dưới 100.000đ</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input price-filter" type="checkbox"
+                                                    value="100000-200000" id="price2" data-value="100000-200000">
+                                                <label class="form-check-label" for="price2">100.000đ - 200.000đ</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input price-filter" type="checkbox"
+                                                    value="200000-300000" id="price3" data-value="200000-300000">
+                                                <label class="form-check-label" for="price3">200.000đ - 300.000đ</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input price-filter" type="checkbox"
+                                                    value="300000-500000" id="price4" data-value="300000-500000">
+                                                <label class="form-check-label" for="price4">300.000đ - 500.000đ</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input price-filter" type="checkbox"
+                                                    value="500000-1000000" id="price5" data-value="500000-1000000">
+                                                <label class="form-check-label" for="price5">500.000đ -
+                                                    1.000.000đ</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input price-filter" type="checkbox"
+                                                    value="1000000-999999999" id="price6"
+                                                    data-value="1000000-999999999">
+                                                <label class="form-check-label" for="price6">Giá trên 1.000.000đ</label>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
+
+
                                 <div class="accordion-item">
                                     <h2 class="accordion-header" id="panelsStayOpen-headingSix">
-                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                            data-bs-target="#collapseSix">
+                                        <button class="accordion-button collapsed" type="button"
+                                            data-bs-toggle="collapse" data-bs-target="#collapseSix">
                                             <span>Đánh giá</span>
                                         </button>
                                     </h2>
@@ -362,7 +425,7 @@
                                     </div>
                                 </div>
 
-                                <div class="accordion-item">
+                                {{-- <div class="accordion-item">
                                     <h2 class="accordion-header" id="panelsStayOpen-headingFive">
                                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                             data-bs-target="#collapseFive">
@@ -387,7 +450,15 @@
                                             </ul>
                                         </div>
                                     </div>
-                                </div>
+                                </div> --}}
+                                {{-- <div class="d-flex justify-content-center mt-3">
+                                    <button id="clearFilters"
+                                        class="btn btn-outline-danger px-4 py-2 fw-bold rounded-pill shadow">
+                                        <i class="fa fa-times-circle me-2"></i> Xóa bộ lọc
+                                    </button>
+                                </div> --}}
+
+
                             </div>
                         </div>
                     </div>
@@ -423,13 +494,13 @@
 
                                     <ul class="dropdown-menu">
                                         <li><a class="dropdown-item"
-                                                href="{{ request()->fullUrlWithQuery(['sort' => 'low']) }}">Giá thấp -
+                                                href="{{ request()->fullUrlWithQuery(['sort' => 'Giá thấp - cao']) }}">Giá thấp -
                                                 cao</a></li>
                                         <li><a class="dropdown-item"
-                                                href="{{ request()->fullUrlWithQuery(['sort' => 'high']) }}">Giá cao -
+                                                href="{{ request()->fullUrlWithQuery(['sort' => 'Giá cao - thấp']) }}">Giá cao -
                                                 thấp</a></li>
                                         <li><a class="dropdown-item"
-                                                href="{{ request()->fullUrlWithQuery(['sort' => 'off']) }}">Giảm giá % cao
+                                                href="{{ request()->fullUrlWithQuery(['sort' => 'Giảm giá % cao - thấp']) }}">Giảm giá % cao
                                                 - thấp</a></li>
                                     </ul>
                                 </div>
@@ -593,4 +664,139 @@
 @endsection
 
 @section('js')
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const priceFilters = document.querySelectorAll(".price-filter");
+
+            // Lấy khoảng giá từ URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const selectedPrice = urlParams.get("price_range");
+
+            // Đánh dấu checkbox nếu có giá trị trong URL
+            if (selectedPrice) {
+                priceFilters.forEach(filter => {
+                    if (filter.dataset.value === selectedPrice) {
+                        filter.checked = true;
+                    }
+                });
+            }
+
+            // Khi chọn một checkbox, bỏ chọn các checkbox khác và cập nhật URL
+            priceFilters.forEach(filter => {
+                filter.addEventListener("change", function() {
+                    if (this.checked) {
+                        // Bỏ chọn tất cả checkbox khác
+                        priceFilters.forEach(f => {
+                            if (f !== this) f.checked = false;
+                        });
+
+                        // Cập nhật URL với giá trị mới
+                        urlParams.set("price_range", this.value);
+                    } else {
+                        // Nếu bỏ chọn thì xóa param
+                        urlParams.delete("price_range");
+                    }
+
+                    window.location.href = window.location.pathname + "?" + urlParams.toString();
+                });
+            });
+        });
+    </script>
+
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const selectedFiltersContainer = document.getElementById("selectedFilters");
+
+            function formatCurrencyVND(value) {
+                return new Intl.NumberFormat("vi-VN", {
+                    style: "currency",
+                    currency: "VND"
+                }).format(value);
+            }
+
+            function formatPriceRange(value) {
+                console.log("Giá trị price_range từ URL:", value); // Debug: Kiểm tra giá trị lấy từ URL
+                let [min, max] = value.split("-").map(Number);
+                if (isNaN(min) || isNaN(max)) {
+                    console.error("Lỗi chuyển đổi giá trị price_range:", value);
+                    return value; // Trả về nguyên gốc nếu lỗi
+                }
+                if (max >= 999999999) {
+                    return `Giá trên ${formatCurrencyVND(min)}`;
+                }
+                if (min === 0) {
+                    return `Giá dưới ${formatCurrencyVND(max)}`;
+                }
+                return `${formatCurrencyVND(min)} - ${formatCurrencyVND(max)}`;
+            }
+
+            const filterNames = {
+                "danh_muc_id": {
+                    "1": "Áo Hoodio",
+                    "2": "Thời Trang",
+                    "3": "Thể thao",
+                    "4": "Áo"
+                },
+                "so_sao": {
+                    "5": "(5 sao)",
+                    "4": "(4 sao)",
+                    "3": "(3 sao)",
+                    "2": "(2 sao)",
+                    "1": "(1 sao)"
+                }
+            };
+
+            function updateSelectedFilters() {
+                selectedFiltersContainer.innerHTML = "";
+                const urlParams = new URLSearchParams(window.location.search);
+
+                urlParams.forEach((value, key) => {
+                    console.log(`Key: ${key}, Value: ${value}`); // Debug: Kiểm tra giá trị URL
+                    let displayName;
+
+                    if (key === "price_range") { // Sửa lại key thành "price_range"
+                        displayName = formatPriceRange(value);
+                    } else {
+                        displayName = filterNames[key] && filterNames[key][value] ? filterNames[key][
+                            value
+                        ] : value;
+                    }
+
+                    const filterTag = document.createElement("span");
+                    filterTag.className = "badge text-white px-3 py-2 d-flex align-items-center";
+                    filterTag.style.backgroundColor = getBadgeColor(key);
+                    filterTag.innerHTML = `
+                <span class="me-2">${displayName}</span> 
+                <span style="cursor:pointer;" class="ms-2 remove-filter" data-key="${key}">✖</span>
+            `;
+                    selectedFiltersContainer.appendChild(filterTag);
+                });
+
+                document.querySelectorAll(".remove-filter").forEach((btn) => {
+                    btn.addEventListener("click", function() {
+                        let filterKey = this.getAttribute("data-key");
+                        let params = new URLSearchParams(window.location.search);
+                        params.delete(filterKey);
+
+                        window.location.href = window.location.pathname + "?" + params.toString();
+                    });
+                });
+            }
+
+            function getBadgeColor(key) {
+                if (key.includes("danh_muc")) return "#17a589";
+                if (key.includes("price")) return "#17a589";
+                if (key.includes("so_sao")) return "#17a589";
+                return "#6c757d";
+            }
+
+            updateSelectedFilters();
+        });
+    </script>
+
+
+
+    </script>
 @endsection
