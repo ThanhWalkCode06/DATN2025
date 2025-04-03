@@ -18,7 +18,9 @@ class UserController extends Controller
     {
         $user = Auth::user();
         // dd($user);
-        $donHangsPaginate = $user->donHangs()->paginate(5);
+        $donHangsPaginate = $user->donHangs()
+        ->orderBy('id', 'desc')
+        ->paginate(5);
         $i = 0;
         if($user){
             foreach($donHangsPaginate as $item){

@@ -34,6 +34,7 @@ use App\Http\Controllers\ClientDanhMucSanPhamController;
 use App\Http\Controllers\Clients\DanhGiaClientsController;
 use App\Http\Controllers\Admins\Responsibility\RoleController;
 use App\Http\Controllers\Admins\Responsibility\PermissionController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\Clients\UserController as ClientsUserController;
 use App\Http\Controllers\Clients\Auth\AuthController as AuthAuthController;
 
@@ -100,7 +101,7 @@ Route::prefix('admin')->middleware(['auth', 'checkStatus'])->group(function () {
         Route::resource('phieugiamgias', PhieuGiamGiaController::class);
         Route::resource("danhgias", DanhGiaController::class);
         Route::get('/gioi-thieu', [DanhGiaController::class, 'danhGiaNoiBat'])->name('gioithieu');
-        Route::get('/test',function(){
+        Route::get('/test', function () {
             dd(1);
         })->name('hihi');
     });
@@ -184,8 +185,10 @@ Route::post('/lienhe', [ContactController::class, 'send'])->name('send.contact')
 Route::get('/san-pham/{id}/bien-the', [SanPhamController::class, 'getBienThe']);
 Route::post('/danhgias/toggle-status', [DanhGiaController::class, 'trangThaiDanhGia'])->name('danhgias.trangthaidanhgia');
 
-
 Route::get('/vnpay-return', [ThanhToanController::class, 'vnpayReturn'])->name('vnpay.return');
+
+// Route::get('/phieugiamgia', [PhieuGiamGiaController::class, 'showCart'])->name('cart.show');
+
 // Route::get('/test', function(){
 //     $user = User::with(['danhGias', 'donHangs.chiTietDonHangs'])
 //     ->where('id', Auth::user()->id)
@@ -211,3 +214,5 @@ Route::get('/vnpay-return', [ThanhToanController::class, 'vnpayReturn'])->name('
 
 // })->name('vnpay.return');
 
+Route::get('/messages/{receiverId}', [ChatController::class, 'getMessages']);
+Route::post('/send-chat', [ChatController::class, 'sendChat']);
