@@ -72,10 +72,12 @@ class UserController extends Controller
     }
 
     public function updateTrangThai(Request $request,string $id){
+        // dd($request->all(),$request->ly_do);
         $donHang = DonHang::find($id);
-        // dd($request->trang_thai);
+
+        if($donHang){
+            // Xác nhận Hủy hàng
         if($request->trang_thai == -1){
-            // dd(1);
             if($donHang->trang_thai_don_hang <= 1){
 
                 $chiTietDonHangs = ChiTietDonHang::where('don_hang_id', $donHang->id)->get();
@@ -86,11 +88,13 @@ class UserController extends Controller
                     }
                 }
                 $donHang->update([
-                    "trang_thai_don_hang" => $request->trang_thai
+                    "trang_thai_don_hang" => $request->trang_thai,
+                    "ly_do" => $request->ly_do
                 ]);
                 return redirect()->back()->with('success','Cập nhật trạng thái đơn hàng thành công');
             }
         }
+        // Xác nhận  đã nhận hàng
         if($request->trang_thai == 5){
             if($donHang->trang_thai_don_hang >= 3){
                 $chiTietDonHangs = ChiTietDonHang::where('don_hang_id', $donHang->id)->get();
@@ -101,7 +105,8 @@ class UserController extends Controller
                     }
                 }
                 $donHang->update([
-                    "trang_thai_don_hang" => $request->trang_thai
+                    "trang_thai_don_hang" => $request->trang_thai,
+                    "ly_do" => $request->ly_do,
                 ]);
                 return redirect()->back()->with('success','Cập nhật trạng thái đơn hàng thành công');
             }
@@ -118,5 +123,8 @@ class UserController extends Controller
 
 
         return redirect()->back()->with('error','Cập nhật trạng thái đơn hàng thất bại');
+    }else{
+        abort(404);
     }
+}
 }

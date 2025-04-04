@@ -20,7 +20,8 @@ class DonHang extends Model
         'ghi_chu',
         'phuong_thuc_thanh_toan_id',
         'trang_thai_don_hang',
-        'trang_thai_thanh_toan'
+        'trang_thai_thanh_toan',
+        'ly_do'
     ];
 
     public function user()
@@ -37,5 +38,5 @@ class DonHang extends Model
     public function chiTietDonHangs() {
         return $this->hasMany(ChiTietDonHang::class, 'don_hang_id');
     }
-    
+
 }
