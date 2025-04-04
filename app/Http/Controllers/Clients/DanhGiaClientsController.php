@@ -80,7 +80,7 @@ class DanhGiaClientsController extends Controller
             $soLanMua = 0;
             foreach ($user->donHangs as $donHang) {
                 // dd($user->donHangs);
-                if ($donHang->trang_thai_don_hang === 4) { // Chỉ lấy đơn hàng đã nhận
+                if ($donHang->trang_thai_don_hang === 4 && $donHang->trang_thai_don_hang === 5) { // Chỉ lấy đơn hàng đã nhận
                     foreach ($donHang->chiTietDonHangs as $chiTiet) {
                         // dd($chiTiet);
                         if (in_array($chiTiet->bien_the_id, $idBienThes)) {

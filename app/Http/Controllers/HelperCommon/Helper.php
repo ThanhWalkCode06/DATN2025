@@ -23,11 +23,11 @@ class Helper extends Controller{
             if(is_array(request()->file('album_anh'))){
                 foreach (request()->file('album_anh') as $file) {
                     $fileName = time() . '_' . $file->getClientOriginalName();
-                    $file->storeAs("uploads/album/", $fileName);
+                    $path = $file->storeAs("uploads/album/", $fileName, 'public');
 
                     AnhSanPham::create([
                         'san_pham_id' => $sanPhamId,
-                        'link_anh_san_pham' => "uploads/album/" . $fileName
+                        'link_anh_san_pham' =>  $path
                     ]);
                 }
             }
