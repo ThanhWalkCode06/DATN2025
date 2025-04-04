@@ -237,7 +237,8 @@
                             body: JSON.stringify({
                                 nguoi_gui_id: userId,
                                 nguoi_nhan_id: nguoiNhanId,
-                                noi_dung: noiDung
+                                noi_dung: noiDung,
+                                channel: userId
                             })
                         })
                         .then(response => response.json())
