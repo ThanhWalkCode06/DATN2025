@@ -118,6 +118,15 @@ Thêm mới sản phẩm
                                         </div>
                                     </div>
 
+                                    <div class="mb-4 row align-items-center">
+                                        <label class="col-lg-2 col-md-3 col-form-label form-label-title">Mô tả</label>
+                                        <div class="col-md-9 col-lg-10">
+                                            <input class="form-control @error('mo_ta')  @enderror" type="text" name="mo_ta"  value="{{ old('mo_ta') }}">
+                                            @error('mo_ta')
+                                            <div class="text-danger">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
                                     <!-- Trạng thái -->
                                     <div class="mb-4 row align-items-center">
                                         <label class="col-lg-2 col-md-3 col-form-label form-label-title">Trạng thái</label>

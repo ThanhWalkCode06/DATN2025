@@ -250,7 +250,7 @@
                                                             <th>Tên Phiếu</th>
                                                             <th>Giá Trị</th>
                                                             <th>Thời Gian</th>
-                                                            {{-- <th>Mô Tả</th> --}}
+                                                            <th>Mô Tả</th>
                                                             <th>Trạng Thái</th>
                                                         </tr>
                                                     </thead>
@@ -261,9 +261,9 @@
                                                                     <td>{{ $key + 1 }}</td>
                                                                     <td>{{ $phieu->ma_phieu }}</td>
                                                                     <td>{{ $phieu->ten_phieu }}</td>
-                                                                    <td>{{ number_format($phieu->gia_tri, 0, ',', '.') }} VNĐ</td>
+                                                                    <td>{{ number_format($phieu->gia_tri, 0, ',', '.') }} %</td>
                                                                     <td>{{ date('d/m/Y', strtotime($phieu->ngay_bat_dau)) }} - {{ date('d/m/Y', strtotime($phieu->ngay_ket_thuc)) }}</td>
-                                                                    {{-- <td>{{ $phieu->mo_ta }}</td> --}}
+                                                                    <td>{{ $phieu->mo_ta }}</td>
                                                                     <td>
                                                                         @if($phieu->trang_thai == 1)
                                                                             <span class="badge bg-success">Hoạt động</span>
