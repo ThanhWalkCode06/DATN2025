@@ -50,8 +50,8 @@ class PhieuGiamGiaController extends Controller
             ],
             'ngay_bat_dau' => 'required|date|after_or_equal:today',
             'ngay_ket_thuc' => 'required|date|after:ngay_bat_dau',
-            'muc_giam_toi_da' => 'numeric',
-            'muc_gia_toi_thieu' => 'numeric',
+            'muc_giam_toi_da' => 'numeric|min:5000',
+            'muc_gia_toi_thieu' => 'numeric|min:0',
         ], [
             'ten_phieu.unique' => 'Tên phiếu giảm giá đã tồn tại.',
             'ma_phieu.unique' => 'Mã giảm giá đã tồn tại.',
@@ -62,6 +62,8 @@ class PhieuGiamGiaController extends Controller
 
             'muc_giam_toi_da.numeric' => 'Phải là giá trị số.',
             'muc_gia_toi_thieu.numeric' => 'Phải là giá trị số.',
+            'muc_giam_toi_da.min' => 'Ít nhất phải 5.000 đ',
+            'muc_gia_toi_thieu.min' => 'Ít nhất phải 0 đ',
         ]);
 
         // Kiểm tra nếu có bản ghi bị xóa mềm
@@ -114,8 +116,8 @@ class PhieuGiamGiaController extends Controller
                 'ngay_ket_thuc' => 'required|date|after:ngay_bat_dau',
                 'gia_tri' => 'required|numeric|min:1|max:99.99',
                 'trang_thai' => 'required|in:0,1',
-                'muc_giam_toi_da' => 'numeric',
-                'muc_gia_toi_thieu' => 'numeric',
+                'muc_giam_toi_da' => 'numeric|min:5000',
+                'muc_gia_toi_thieu' => 'numeric|min:0',
             ],
             [
                 'ngay_bat_dau.after_or_equal' => 'Ngày bắt đầu không được trước hôm nay.',
@@ -124,6 +126,8 @@ class PhieuGiamGiaController extends Controller
                 'gia_tri.max' => 'Giá trị giảm giá phải nhỏ hơn 100.',
                 'muc_giam_toi_da.numeric' => 'Phải là giá trị số.',
                 'muc_gia_toi_thieu.numeric' => 'Phải là giá trị số.',
+                'muc_giam_toi_da.min' => 'Ít nhất phải 5.000 đ',
+                'muc_gia_toi_thieu.min' => 'Ít nhất phải 0 đ',
             ]
         );
 
