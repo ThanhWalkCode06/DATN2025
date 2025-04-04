@@ -101,6 +101,8 @@ Route::prefix('admin')->middleware(['auth', 'checkStatus'])->group(function () {
         Route::resource('phieugiamgias', PhieuGiamGiaController::class);
         Route::resource("danhgias", DanhGiaController::class);
         Route::get('/gioi-thieu', [DanhGiaController::class, 'danhGiaNoiBat'])->name('gioithieu');
+        Route::get('/chat', [ChatController::class, 'showAdminChat'])->name('admin-chat');
+        Route::get('/chat-users', [ChatController::class, 'getChatUsers']);
         Route::get('/test', function () {
             dd(1);
         })->name('hihi');
