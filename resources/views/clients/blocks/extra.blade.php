@@ -619,7 +619,8 @@
                     $('#view .title-name').text(response.ten_san_pham);
                     $('#view .slider-image img').attr('src', response.hinh_anh);
                     $('#view .danh_muc').text(response.danh_muc);
-                    $('#view .mo_ta').text(response.mo_ta);
+                    $('#view .mo_ta').html(response.mo_ta);
+
                     $('#view .danh_gia').text(response.danh_gia + ' lượt đánh giá');
                     $('#view .gia_moi').text(response.gia_moi + ' đ');
                     $('#view .gia_cu').text(response.gia_cu + ' đ');

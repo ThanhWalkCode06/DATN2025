@@ -558,7 +558,7 @@
                                 </use>
                             </svg>
                         </span>
-                        <p>Những bài viết đáng chú ý</p>
+                        <p>Bài viết mới nhất</p>
                     </div>
 
                     <div class="slider-3-blog ratio_65 no-arrow product-wrapper">
