@@ -102,7 +102,7 @@ Theo dõi đơn hàng
                         @endif
 
                         {{-- TRẢ HÀNG --}}
-                        @if ($trangThai == 3 || $trangThai == 4)
+                        @if ($trangThai == 3 )
                             <form style="margin-left: 10px" id="return-form-{{ $donHang->id }}" action="{{ route('order.updateTrangThai', $donHang->id) }}" method="POST" onsubmit="return false;">
                                 @csrf
                                 <input type="hidden" name="trang_thai" value="5">

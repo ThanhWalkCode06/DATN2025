@@ -32,10 +32,14 @@
                             <td>{{ ucfirst($gd->loai) }}</td>
                             <td>
                                 @if($gd->so_tien > 0)
+                                @if($gd->loai == 'Hoàn tiền') <!-- Nếu loại giao dịch là 'Hoàn tiền' -->
                                     <span class="text-success">+{{ number_format($gd->so_tien, 0, ',', '.') }} VNĐ</span>
                                 @else
-                                    <span class="text-danger">{{ number_format($gd->so_tien, 0, ',', '.') }} VNĐ</span>
+                                    <span class="text-danger">-{{ number_format($gd->so_tien, 0, ',', '.') }} VNĐ</span> <!-- Nếu không phải 'Hoàn tiền', thì là thanh toán -->
                                 @endif
+                            @else
+                                <span class="text-danger">-{{ number_format($gd->so_tien, 0, ',', '.') }} VNĐ</span> <!-- Dành cho các giao dịch chi tiền (số tiền âm) -->
+                            @endif
                             </td>
                             <td>{{ $gd->mo_ta }}</td>
                         </tr>
@@ -45,7 +49,7 @@
                 </tbody>
             </table>
 
-            {{ $giaodichs->links() }}
+            {{ $giaodichs->links('pagination::bootstrap-5') }}
         </div>
     </div>
 </div>
