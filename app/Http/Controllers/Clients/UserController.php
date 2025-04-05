@@ -52,20 +52,25 @@ class UserController extends Controller
     public function orderTracking(string $id){
         if(Auth::user()){
             $donHang = DonHang::where('id',$id)->first();
-            $checkVoucher = DB::table('phieu_giam_gia_tai_khoans')->where('order_id',$donHang->id)->first();
-            // dd($donHang);
-            $bienThes = DonHang::where('id', $id)->with('bienThes')->first();
-            $bienThesPaginated = $bienThes->bienThes()->paginate(5);
+                if($donHang){
+                    $checkVoucher = DB::table('phieu_giam_gia_tai_khoans')->where('order_id',$donHang->id)->first();
+                    // dd($donHang);
+                    $bienThes = DonHang::where('id', $id)->with('bienThes')->first();
+                    $bienThesPaginated = $bienThes->bienThes()->paginate(5);
 
-            $bienThesList = $bienThesPaginated->map(fn($bienThe) => [
-                'anh_bien_the' => $bienThe->anh_bien_the,
-                'ten_bien_the' => $bienThe->sanPham->ten_san_pham . ' - ' . $bienThe->ten_bien_the,
-                'gia_ban' => $bienThe->gia_ban,
-                'so_luong' => $bienThe->pivot->so_luong,
-                'id_san_pham' => $bienThe->san_pham_id,
-            ]);
-            // dd($bienThesList);
-            return view('clients.users.ordertracking', compact('donHang','bienThesList','bienThesPaginated','checkVoucher'));
+                    $bienThesList = $bienThesPaginated->map(fn($bienThe) => [
+                        'anh_bien_the' => $bienThe->anh_bien_the,
+                        'ten_bien_the' => $bienThe->sanPham->ten_san_pham . ' - ' . $bienThe->ten_bien_the,
+                        'gia_ban' => $bienThe->gia_ban,
+                        'so_luong' => $bienThe->pivot->so_luong,
+                        'id_san_pham' => $bienThe->san_pham_id,
+                    ]);
+                    // dd($bienThesList);
+                return view('clients.users.ordertracking', compact('donHang','bienThesList','bienThesPaginated','checkVoucher'));
+                }else{
+                    abort(404);
+                }
+
         }else{
             return redirect()->route('login.client');
         }
