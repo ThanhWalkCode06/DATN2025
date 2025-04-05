@@ -254,7 +254,13 @@ class ThanhToanController extends Controller
 
             $cart->each->delete();
 
-            return response()->json(['status' => 'success', 'id' => $donHang->id], 200);
+            return response()->json([
+                'status' => 'success',
+                'id' => $donHang->id,
+                'message' => 'Thanh toán bằng ví thành công.',
+                'so_du_con_lai' => number_format($user->vi->fresh()->so_du, 0, ',', '.') . ' VNĐ'
+            ], 200);
+            
         }
 
 
