@@ -201,7 +201,7 @@
                                         <a href="{{ route('sanphams.chitiet', $item->sanPham->id) }}"
                                             class="deal-contain">
                                             <h5>{{ $item->sanPham->ten_san_pham }}</h5>
-                                            <h6>{{ number_format($item->sanPham->gia_moi, 0, '', '.') }}đ
+                                            <h6>{{ number_format($item->sanPham->giaThapNhatCuaSP(), 0, '', '.') }}đ
                                                 <del>{{ number_format($item->sanPham->gia_cu, 0, '', '.') }}đ</del>
                                             </h6>
                                         </a>

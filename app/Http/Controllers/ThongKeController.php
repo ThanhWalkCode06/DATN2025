@@ -7,6 +7,7 @@ use App\Models\DonHang;
 use App\Models\SanPham;
 use Illuminate\Http\Request;
 use App\Models\ChiTietDonHang;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 
@@ -14,159 +15,139 @@ use Illuminate\Support\Facades\DB;
 class ThongKeController extends Controller
 {
     public function index(Request $request)
-
-
     {
+        // Kiểm tra xem có đang lọc không
+        $hasDateFilter = $request->has('start_date') && $request->has('end_date');
 
-        // Nhận ngày bắt đầu và kết thúc từ request (nếu có)
-        $startDate = $request->input('start_date', now()->startOfMonth()->toDateString());
-        $endDate = $request->input('end_date', now()->endOfMonth()->toDateString());
-        // Thống kê cơ bản
-        $tongDonHang = DonHang::count();
+        if ($hasDateFilter) {
+            $startDate = $request->input('start_date');
+            $endDate = $request->input('end_date');
+        } else {
+            // Nếu không có lọc, mặc định lấy ngày hiện tại
+            $startDate = now()->format('Y-m-d');
+            $endDate = now()->format('Y-m-d');
+        }
+
+        // Ngăn chặn ngày tương lai
+        $today = now()->format('Y-m-d');
+        if ($startDate > $today) $startDate = $today;
+        if ($endDate > $today) $endDate = $today;
+
+        // Chuyển sang Carbon để xử lý thời gian chính xác
+        $startDate = Carbon::parse($startDate)->startOfDay();
+        $endDate = Carbon::parse($endDate)->endOfDay();
+
+        // Thống kê
+        $tongDonHang = DonHang::whereBetween('created_at', [$startDate, $endDate])->count();
         $tongSanPhamConHang = SanPham::where('trang_thai', 1)->count();
         $tongKhachHangHoatDong = User::where('trang_thai', 1)->count();
 
-        // Xử lý bộ lọc đơn hàng
-        $query = DonHang::query();
+        $trangThaiMapping = [
+            'chua_xac_nhan' => 0,
+            'dang_xu_ly' => 1,
+            'dang_giao' => 2,
+            'da_giao' => 3,
+            'hoan_thanh' => 4,
+            'da_huy' => -1,
+            'tra_hang' => 5
+        ];
 
-        // Lọc theo trạng thái đơn hàng
-        if ($request->has('trang_thai')) {
-            $trangThai = $request->trang_thai;
+        $query = DonHang::whereBetween('created_at', [$startDate, $endDate]);
 
-            switch ($trangThai) {
-                case 'chua_xac_nhan':
-                    $query->where('trang_thai_don_hang', 0); // Chưa xác nhận
-                    break;
-                case 'dang_xu_ly':
-                    $query->where('trang_thai_don_hang', 1); // Đang xử lý
-                    break;
-                case 'dang_giao':
-                    $query->where('trang_thai_don_hang', 2); // Đang giao
-                    break;
-                case 'da_giao':
-                    $query->where('trang_thai_don_hang', 3); // Đã giao
-                    break;
-                case 'hoan_thanh':
-                    $query->where('trang_thai_don_hang', 4); // Hoàn thành
-                    break;
-                case 'da_huy':
-                    $query->where('trang_thai_don_hang', -1); // Đã hủy
-                    break;
-                case 'tra_hang':
-                    $query->where('trang_thai_don_hang', 5); // Trả hàng
-                    break;
-                default:
-                    break;
-            }
+        if ($request->has('trang_thai') && array_key_exists($request->trang_thai, $trangThaiMapping)) {
+            $query->where('trang_thai_don_hang', $trangThaiMapping[$request->trang_thai]);
         }
 
-        // Sắp xếp đơn hàng theo thời gian tạo (mới nhất lên đầu)
-        $donHangs = $query->orderBy('created_at', 'desc')->paginate(10)->appends(request()->query());
+        $donHangs = $query->orderBy('created_at', 'desc')->paginate(10);
 
-
-
-        // Nhận bộ lọc thời gian từ request
-        $filter = $request->input('filter', 'ngay'); // Mặc định là "ngày"
-
-        // Hàm áp dụng bộ lọc ngày/tháng/năm vào query
-        function applyDateFilter($query, $filter)
-        {
-            switch ($filter) {
-                case 'thang':
-                    return $query->whereMonth('chi_tiet_don_hangs.created_at', now()->month)
-                        ->whereYear('chi_tiet_don_hangs.created_at', now()->year);
-                case 'nam':
-                    return $query->whereYear('chi_tiet_don_hangs.created_at', now()->year);
-                default:
-                    return $query->whereDate('chi_tiet_don_hangs.created_at', now());
-            }
-        }
-
-        // Truy vấn top 5 sản phẩm bán chạy
-        $topBanChay = DB::table('chi_tiet_don_hangs')
+        $tongDoanhThu = DB::table('chi_tiet_don_hangs')
             ->join('bien_thes', 'bien_thes.id', '=', 'chi_tiet_don_hangs.bien_the_id')
-            ->join('san_phams', 'san_phams.id', '=', 'bien_thes.san_pham_id')
-            ->select(
-                'san_phams.id',
-                'san_phams.ten_san_pham',
-                'san_phams.hinh_anh',
-                DB::raw('SUM(chi_tiet_don_hangs.so_luong) as tong_da_ban')
-            );
+            ->join('don_hangs', 'don_hangs.id', '=', 'chi_tiet_don_hangs.don_hang_id')
+            ->where('don_hangs.trang_thai_don_hang', 4)
+            ->whereBetween('don_hangs.created_at', [$startDate, $endDate])
+            ->sum(DB::raw('chi_tiet_don_hangs.so_luong * bien_thes.gia_ban'));
 
-        $topBanChay = applyDateFilter($topBanChay, $filter)
-            ->groupBy('san_phams.id', 'san_phams.ten_san_pham', 'san_phams.hinh_anh')
-            ->orderByDesc('tong_da_ban')
-            ->take(5)
-            ->get();
-
-        // Top 5 sản phẩm doanh thu cao nhất từ các đơn hàng đã hoàn thành
         $topDoanhThu = DB::table('chi_tiet_don_hangs')
             ->join('bien_thes', 'bien_thes.id', '=', 'chi_tiet_don_hangs.bien_the_id')
             ->join('san_phams', 'san_phams.id', '=', 'bien_thes.san_pham_id')
-            ->join('don_hangs', 'don_hangs.id', '=', 'chi_tiet_don_hangs.don_hang_id') // Kết nối với bảng đơn hàng
+            ->join('don_hangs', 'don_hangs.id', '=', 'chi_tiet_don_hangs.don_hang_id')
             ->select(
                 'san_phams.id',
                 'san_phams.ten_san_pham',
                 'san_phams.hinh_anh',
                 DB::raw('SUM(chi_tiet_don_hangs.so_luong * bien_thes.gia_ban) as tong_doanh_thu')
             )
-            ->where('don_hangs.trang_thai_don_hang', 4) // Điều kiện lọc chỉ lấy đơn hàng đã hoàn thành (giả sử trạng thái 4 là "hoàn thành")
+            ->where('don_hangs.trang_thai_don_hang', 4)
+            ->whereBetween('don_hangs.created_at', [$startDate, $endDate])
             ->groupBy('san_phams.id', 'san_phams.ten_san_pham', 'san_phams.hinh_anh')
             ->orderByDesc('tong_doanh_thu')
             ->take(5)
             ->get();
 
-
-        // Top 5 sản phẩm lợi nhuận cao nhất
-        $topLoiNhuan = DB::table('chi_tiet_don_hangs')
+        $topBanChay = DB::table('chi_tiet_don_hangs')
             ->join('bien_thes', 'bien_thes.id', '=', 'chi_tiet_don_hangs.bien_the_id')
             ->join('san_phams', 'san_phams.id', '=', 'bien_thes.san_pham_id')
+            ->join('don_hangs', 'don_hangs.id', '=', 'chi_tiet_don_hangs.don_hang_id')
+            ->where('don_hangs.trang_thai_don_hang', 4)
+            ->whereBetween('don_hangs.created_at', [$startDate, $endDate])
             ->select(
                 'san_phams.id',
                 'san_phams.ten_san_pham',
                 'san_phams.hinh_anh',
-                DB::raw('SUM((bien_thes.gia_ban - bien_thes.gia_nhap) * chi_tiet_don_hangs.so_luong) as tong_loi_nhuan')
-            );
-
-        $topLoiNhuan = applyDateFilter($topLoiNhuan, $filter)
+                DB::raw('SUM(chi_tiet_don_hangs.so_luong) as tong_da_ban')
+            )
             ->groupBy('san_phams.id', 'san_phams.ten_san_pham', 'san_phams.hinh_anh')
-            ->orderByDesc('tong_loi_nhuan')
+            ->orderByDesc('tong_da_ban')
             ->take(5)
             ->get();
 
+        $topKhachHang = DB::table('don_hangs')
+            ->join('users', 'users.id', '=', 'don_hangs.user_id') // Liên kết bảng 'users' với bảng 'don_hangs'
+            ->select(
+                'users.id',
+                'users.ten_nguoi_dung', // Trường tên người dùng trong bảng 'users'
+                'users.anh_dai_dien', // Dùng trường 'anh_dai_dien' thay cho 'hinh_anh'
+                DB::raw('COUNT(don_hangs.id) as so_luong_don_hang') // Đếm số lượng đơn hàng của mỗi khách hàng
+            )
+            ->where('don_hangs.trang_thai_don_hang', 4) // Chỉ lấy đơn hàng đã hoàn thành
+            ->whereBetween('don_hangs.created_at', [$startDate, $endDate]) // Lọc theo thời gian
+            ->groupBy('users.id', 'users.ten_nguoi_dung', 'users.anh_dai_dien') // Nhóm theo người dùng
+            ->orderByDesc('so_luong_don_hang') // Sắp xếp theo số lượng đơn hàng giảm dần
+            ->take(5) // Lấy top 5 khách hàng
+            ->get();
 
-        $tongDoanhThu = DB::table('chi_tiet_don_hangs')
-            ->join('bien_thes', 'bien_thes.id', '=', 'chi_tiet_don_hangs.bien_the_id')
-            ->join('don_hangs', 'don_hangs.id', '=', 'chi_tiet_don_hangs.don_hang_id')
-            ->where('don_hangs.trang_thai_don_hang', 4) // Chỉ lấy đơn hàng hoàn thành
-            ->sum(DB::raw('bien_thes.gia_ban * chi_tiet_don_hangs.so_luong'));
 
 
 
 
-
-
-
+        // Biểu đồ doanh thu theo tháng (năm hiện tại)
         $doanhThuTheoThang = DB::table('chi_tiet_don_hangs')
             ->join('bien_thes', 'bien_thes.id', '=', 'chi_tiet_don_hangs.bien_the_id')
             ->join('don_hangs', 'don_hangs.id', '=', 'chi_tiet_don_hangs.don_hang_id')
             ->select(DB::raw('MONTH(chi_tiet_don_hangs.created_at) as thang, 
-                     SUM(bien_thes.gia_ban * chi_tiet_don_hangs.so_luong) as doanh_thu'))
-            ->whereYear('chi_tiet_don_hangs.created_at', date('Y')) // Chỉ lấy dữ liệu năm hiện tại
-            ->where('don_hangs.trang_thai_don_hang', 4) // Lọc chỉ đơn hàng hoàn thành
+                               SUM(bien_thes.gia_ban * chi_tiet_don_hangs.so_luong) as doanh_thu'))
+            ->whereYear('chi_tiet_don_hangs.created_at', date('Y'))
+            ->where('don_hangs.trang_thai_don_hang', 4)
             ->groupBy(DB::raw('MONTH(chi_tiet_don_hangs.created_at)'))
             ->orderBy('thang')
             ->pluck('doanh_thu', 'thang')
             ->toArray();
 
-
-        // Tạo mảng 12 tháng mặc định bằng 0
         $dataChart = array_fill(0, 12, 0);
         foreach ($doanhThuTheoThang as $thang => $doanhThu) {
-            $dataChart[$thang - 1] = $doanhThu; // Gán dữ liệu vào đúng tháng
+            $dataChart[$thang - 1] = $doanhThu;
         }
 
-
-        return view('admins.index', compact('tongDonHang', 'tongKhachHangHoatDong', 'tongSanPhamConHang', 'donHangs', 'topBanChay', 'topDoanhThu', 'topLoiNhuan', 'tongDoanhThu', 'dataChart'));
+        return view('admins.index', compact(
+            'tongDoanhThu',
+            'tongDonHang',
+            'tongKhachHangHoatDong',
+            'tongSanPhamConHang',
+            'dataChart',
+            'donHangs',
+            'topBanChay',
+            'topKhachHang',
+            'topDoanhThu'
+        ));
     }
 }

@@ -69,7 +69,7 @@ class User extends Authenticatable
      * The attributes that should be cast.
      *
      * @var array<string, string>
-     */
+     */ 
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
@@ -82,8 +82,8 @@ class User extends Authenticatable
         return $this->hasOne(Vi::class, 'nguoi_dung_id');
     }
 
-    public function layHoacTaoVi()
-    {
-        return $this->vi()->firstOrCreate(['nguoi_dung_id' => $this->id], ['so_du' => 0]);
+    public function layHoacTaoVi() {
+        return $this->vi ?? $this->vi()->create(['so_du' => 0]);
     }
+    
 }

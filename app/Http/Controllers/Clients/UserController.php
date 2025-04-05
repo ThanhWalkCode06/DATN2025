@@ -71,52 +71,83 @@ class UserController extends Controller
         }
     }
 
-    public function updateTrangThai(Request $request,string $id){
+    public function updateTrangThai(Request $request, string $id)
+    {
+        // Tìm đơn hàng
         $donHang = DonHang::find($id);
-        // dd($request->trang_thai);
-        if($request->trang_thai == -1){
-            // dd(1);
-            if($donHang->trang_thai_don_hang <= 1){
-
-                $chiTietDonHangs = ChiTietDonHang::where('don_hang_id', $donHang->id)->get();
-                foreach ($chiTietDonHangs as $chiTiet) {
-                    $bienThe = BienThe::find($chiTiet->bien_the_id);
-                    if ($bienThe) {
-                        $bienThe->increment('so_luong', $chiTiet->so_luong);
+    
+        if ($donHang) {
+            // Xác nhận Hủy hàng
+            if ($request->trang_thai == -1) {
+                // Kiểm tra trạng thái đơn hàng và trạng thái thanh toán
+                if ($donHang->trang_thai_don_hang <= 1 && $donHang->trang_thai_thanh_toan == 1) { // 1 là trạng thái đã thanh toán
+                    $chiTietDonHangs = ChiTietDonHang::where('don_hang_id', $donHang->id)->get();
+                    foreach ($chiTietDonHangs as $chiTiet) {
+                        $bienThe = BienThe::find($chiTiet->bien_the_id);
+                        if ($bienThe) {
+                            $bienThe->increment('so_luong', $chiTiet->so_luong);
+                        }
                     }
+    
+                    // Lấy ví người dùng
+                    $nguoiDung = $donHang->nguoiDung;
+                    $vi = $nguoiDung->vi ?? $nguoiDung->vi()->create(['so_du' => 0]);
+    
+                    // Cộng lại tiền vào ví
+                    $vi->so_du += $donHang->tong_tien;
+                    $vi->save();
+    
+                    // Ghi log giao dịch hoàn tiền
+                    $vi->giaodichs()->create([
+                        'so_tien' => $donHang->tong_tien,
+                        'loai' => 'hoan_tien',
+                        'mo_ta' => 'Hoàn tiền do hủy đơn hàng #' . $donHang->id,
+                    ]);
+    
+                    // Cập nhật trạng thái đơn hàng
+                    $donHang->update([
+                        "trang_thai_don_hang" => $request->trang_thai,
+                        "ly_do" => $request->ly_do
+                    ]);
+    
+                    return redirect()->back()->with('success', 'Cập nhật trạng thái đơn hàng thành công');
                 }
-                $donHang->update([
-                    "trang_thai_don_hang" => $request->trang_thai
-                ]);
-                return redirect()->back()->with('success','Cập nhật trạng thái đơn hàng thành công');
             }
-        }
-        if($request->trang_thai == 5){
-            if($donHang->trang_thai_don_hang >= 3){
-                $chiTietDonHangs = ChiTietDonHang::where('don_hang_id', $donHang->id)->get();
-                foreach ($chiTietDonHangs as $chiTiet) {
-                    $bienThe = BienThe::find($chiTiet->bien_the_id);
-                    if ($bienThe) {
-                        $bienThe->increment('so_luong', $chiTiet->so_luong);
+    
+            // Xác nhận đã nhận hàng (trạng thái = 5)
+            if ($request->trang_thai == 5) {
+                if ($donHang->trang_thai_don_hang >= 3) {
+                    $chiTietDonHangs = ChiTietDonHang::where('don_hang_id', $donHang->id)->get();
+                    foreach ($chiTietDonHangs as $chiTiet) {
+                        $bienThe = BienThe::find($chiTiet->bien_the_id);
+                        if ($bienThe) {
+                            $bienThe->increment('so_luong', $chiTiet->so_luong);
+                        }
                     }
+    
+                    // Cập nhật trạng thái đơn hàng
+                    $donHang->update([
+                        "trang_thai_don_hang" => $request->trang_thai,
+                        "ly_do" => $request->ly_do,
+                    ]);
+                    return redirect()->back()->with('success', 'Cập nhật trạng thái đơn hàng thành công');
                 }
-                $donHang->update([
-                    "trang_thai_don_hang" => $request->trang_thai
-                ]);
-                return redirect()->back()->with('success','Cập nhật trạng thái đơn hàng thành công');
             }
-        }
-
-        if($request->trang_thai == 4){
-            if($donHang->trang_thai_don_hang == 3){
-                $donHang->update([
-                    "trang_thai_don_hang" => $request->trang_thai
-                ]);
-                return redirect()->back()->with('success','Cập nhật trạng thái đơn hàng thành công');
+    
+            // Trạng thái đơn hàng là "đã giao" (trạng thái = 4)
+            if ($request->trang_thai == 4) {
+                if ($donHang->trang_thai_don_hang == 3) {
+                    $donHang->update([
+                        "trang_thai_don_hang" => $request->trang_thai
+                    ]);
+                    return redirect()->back()->with('success', 'Cập nhật trạng thái đơn hàng thành công');
+                }
             }
+    
+            return redirect()->back()->with('error', 'Cập nhật trạng thái đơn hàng thất bại');
+        } else {
+            abort(404);
         }
-
-
-        return redirect()->back()->with('error','Cập nhật trạng thái đơn hàng thất bại');
     }
+    
 }
