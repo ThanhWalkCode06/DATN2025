@@ -492,6 +492,7 @@
 
                                     <ul class="dropdown-menu">
                                         <li><a class="dropdown-item"
+
                                                 href="{{ request()->fullUrlWithQuery(['sort' => 'Giá thấp - cao']) }}">Giá
                                                 thấp -
                                                 cao</a></li>
@@ -611,7 +612,7 @@
                                                         {{ number_format($sanPham->giaThapNhatCuaSP(), 0, ',', '.') }} ₫
                                                     </span>
                                                     <del>{{ number_format($sanPham->gia_cu, 0, ',', '.') }} ₫</del>
-                                                    
+
                                                 </h5>
                                                 <div class="add-to-cart-box bg-white">
                                                     <button class="btn btn-add-cart addcart-button">
@@ -714,6 +715,7 @@
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const selectedFiltersContainer = document.getElementById("selectedFilters");
+
             const clearAllFilters = document.getElementById("clearAllFilters");
 
             function formatCurrencyVND(value) {

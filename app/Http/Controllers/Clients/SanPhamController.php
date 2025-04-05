@@ -43,6 +43,7 @@ class SanPhamController extends Controller
         // **Lọc theo khoảng giá**
         if ($request->filled('price_range')) {
             $ranges = explode(',', $request->price_range);
+
             $query->where(function ($q) use ($ranges) {
                 foreach ($ranges as $range) {
                     [$min, $max] = explode('-', $range);
@@ -139,6 +140,7 @@ class SanPhamController extends Controller
             $query->orderByDesc('san_phams.created_at');
         }
 
+
         // Thực hiện phân trang sau khi đã áp dụng bộ lọc và sắp xếp
         $sanPhams = $query->paginate(8)->appends($request->except('page'));
 
@@ -153,18 +155,6 @@ class SanPhamController extends Controller
         // Trả về view với dữ liệu cần thiết
         return view('clients.sanphams.danhsach', compact('sanPhams', 'danhMucs'));
     }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -209,7 +199,7 @@ class SanPhamController extends Controller
         $phanTramGiamGia = ($sanPham->gia_cu > 0)
         ? round((($sanPham->gia_cu - $sanPham->giaThapNhatCuaSP()) / $sanPham->gia_cu) * 100)
         : 0;
-    
+
 
         // Lấy sản phẩm cùng danh mục (loại trừ sản phẩm hiện tại)
         $sanPhamLienQuan = SanPham::where('danh_muc_id', $sanPham->danh_muc_id)
