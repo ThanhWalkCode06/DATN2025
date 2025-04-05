@@ -27,13 +27,14 @@
                 <tbody>
                     @forelse ($giaodichs as $gd)
                         <tr>
-                            <td>{{ $gd->created_at->format('d/m/Y H:i') }}</td>
+                            <td>{{ $gd->created_at->format('H:i d/m/Y') }}</td>
+
                             <td>{{ ucfirst($gd->loai) }}</td>
                             <td>
                                 @if($gd->so_tien > 0)
-                                    <span class="text-success">+{{ number_format($gd->so_tien, 0, ',', '.') }}</span>
+                                    <span class="text-success">+{{ number_format($gd->so_tien, 0, ',', '.') }} VNĐ</span>
                                 @else
-                                    <span class="text-danger">{{ number_format($gd->so_tien, 0, ',', '.') }}</span>
+                                    <span class="text-danger">{{ number_format($gd->so_tien, 0, ',', '.') }} VNĐ</span>
                                 @endif
                             </td>
                             <td>{{ $gd->mo_ta }}</td>
