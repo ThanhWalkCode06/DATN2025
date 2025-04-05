@@ -192,15 +192,7 @@ class ThanhToanController extends Controller
             // Trừ tiền trong ví
             $user->vi->decrement('so_du', $tongTien);
 
-            // Lưu lịch sử giao dịch vào bảng lich_su_vi
-            DB::table('giaodichvis')->insert([
-                'vi_id' => $user->vi->id,
-                'so_tien' => $tongTien,
-                'loai' => 'Mua hàng', // Giao dịch chi tiền
-                'mo_ta' => 'Trừ  tiền do mua đơn hàng ' ,
-                'created_at' => now(),
-                'updated_at' => now()
-            ]);
+
 
             // Tạo đơn hàng với phương thức thanh toán ví (không cần tham chiếu bảng phương thức thanh toán)
             $donHang = DonHang::create([
@@ -216,6 +208,17 @@ class ThanhToanController extends Controller
                 'trang_thai_don_hang' => 0,
                 'trang_thai_thanh_toan' => 1, // Đã thanh toán
                 'created_at' => now()
+            ]);
+
+
+            // Sau khi tạo đơn hàng, bạn có thể lấy ma_don_hang và lưu vào bảng giaodichvis
+            DB::table('giaodichvis')->insert([
+                'vi_id' => $user->vi->id,
+                'so_tien' => $tongTien,
+                'loai' => 'Mua hàng', // Giao dịch chi tiền
+                'mo_ta' => 'Trừ tiền do mua đơn hàng ' . $donHang->ma_don_hang, // Thêm mã đơn hàng vào mô tả
+                'created_at' => now(),
+                'updated_at' => now()
             ]);
 
             $this->thongBaoDatHang($donHang);
