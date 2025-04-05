@@ -78,8 +78,6 @@
             background: linear-gradient(135deg, #ff4b2b);
             transform: translateY(-3px);
         }
-
-      
     </style>
 @endsection
 
@@ -262,7 +260,7 @@
                                     <strong class="text-dark fs-4 d-block">Bộ lọc đã chọn</strong>
                                     <div id="selectedFilters" class="d-flex flex-wrap justify-content-center gap-3 mt-3">
                                     </div>
-                                    <a href="{{ route('sanphams.danhsach') }}" id="clearAllFilters">
+                                    <a href="{{ route('sanphams.danhsach') }}" id="clearAllFilters" style="display: none;">
                                         <i class="fas fa-trash-alt"></i> Bỏ hết
                                     </a>
                                 </div>
@@ -494,16 +492,17 @@
 
                                     <ul class="dropdown-menu">
                                         <li><a class="dropdown-item"
-                                                href="{{ request()->fullUrlWithQuery(['sort' => 'Giá thấp - cao']) }}">Giá thấp -
+                                                href="{{ request()->fullUrlWithQuery(['sort' => 'low']) }}">Giá thấp -
                                                 cao</a></li>
                                         <li><a class="dropdown-item"
-                                                href="{{ request()->fullUrlWithQuery(['sort' => 'Giá cao - thấp']) }}">Giá cao -
+                                                href="{{ request()->fullUrlWithQuery(['sort' => 'high']) }}">Giá cao -
                                                 thấp</a></li>
                                         <li><a class="dropdown-item"
-                                                href="{{ request()->fullUrlWithQuery(['sort' => 'Giảm giá % cao - thấp']) }}">Giảm giá % cao
+                                                href="{{ request()->fullUrlWithQuery(['sort' => 'off']) }}">Giảm giá % cao
                                                 - thấp</a></li>
                                     </ul>
                                 </div>
+
 
                             </div>
 
@@ -708,6 +707,7 @@
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const selectedFiltersContainer = document.getElementById("selectedFilters");
+            const clearAllFilters = document.getElementById("clearAllFilters"); // Lấy nút "Bỏ hết"
 
             function formatCurrencyVND(value) {
                 return new Intl.NumberFormat("vi-VN", {
@@ -751,12 +751,13 @@
             function updateSelectedFilters() {
                 selectedFiltersContainer.innerHTML = "";
                 const urlParams = new URLSearchParams(window.location.search);
+                let hasFilter = false; // Kiểm tra có bộ lọc nào không
 
                 urlParams.forEach((value, key) => {
                     console.log(`Key: ${key}, Value: ${value}`); // Debug: Kiểm tra giá trị URL
                     let displayName;
 
-                    if (key === "price_range") { // Sửa lại key thành "price_range"
+                    if (key === "price_range") {
                         displayName = formatPriceRange(value);
                     } else {
                         displayName = filterNames[key] && filterNames[key][value] ? filterNames[key][
@@ -768,11 +769,16 @@
                     filterTag.className = "badge text-white px-3 py-2 d-flex align-items-center";
                     filterTag.style.backgroundColor = getBadgeColor(key);
                     filterTag.innerHTML = `
-                <span class="me-2">${displayName}</span> 
+                <span class="me-2">${displayName}</span>
                 <span style="cursor:pointer;" class="ms-2 remove-filter" data-key="${key}">✖</span>
             `;
                     selectedFiltersContainer.appendChild(filterTag);
+
+                    hasFilter = true; // Nếu có ít nhất 1 bộ lọc, thì set hasFilter = true
                 });
+
+                // Hiển thị hoặc ẩn nút "Bỏ hết"
+                clearAllFilters.style.display = hasFilter ? "inline-block" : "none";
 
                 document.querySelectorAll(".remove-filter").forEach((btn) => {
                     btn.addEventListener("click", function() {

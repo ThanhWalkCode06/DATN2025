@@ -10,6 +10,23 @@ use Illuminate\Support\Facades\Auth;
 
 class ChatController extends Controller
 {
+    public function showAdminChat()
+    {
+        return view('admins.chat');
+    }
+
+    public function getChatUsers()
+    {
+        $user_id = Auth::user()->id;
+        $users = Chat::select('users.id', 'users.ten_nguoi_dung')
+            ->where('nguoi_nhan_id', '=', $user_id)
+            ->join('users', 'nguoi_gui_id', '=', 'users.id')
+            ->distinct()
+            ->get();
+
+        return response()->json($users);
+    }
+
     public function getMessages($nguoi_nhan_id)
     {
         $user_id = Auth::user()->id;
@@ -30,15 +47,16 @@ class ChatController extends Controller
 
     public function sendChat(Request $request)
     {
-        $nguoiGui = User::find(Auth::user()->id);
-        $nguoiNhan = User::find(1);
+        $nguoiGui = User::find($request->input('nguoi_gui_id'));
+        $nguoiNhan = User::find($request->input('nguoi_nhan_id'));
 
         $chat = Chat::create([
-            'nguoi_gui_id' => Auth::user()->id,
-            'nguoi_nhan_id' => 1,
+            'nguoi_gui_id' => $nguoiGui->id,
+            'nguoi_nhan_id' => $nguoiNhan->id,
             'ten_nguoi_gui' => $nguoiGui->ten_nguoi_dung,
             'ten_nguoi_nhan' => $nguoiNhan->ten_nguoi_dung,
             'noi_dung' => $request->noi_dung,
+            'channel' => $request->input('channel'),
             'created_at' => now()
         ]);
 

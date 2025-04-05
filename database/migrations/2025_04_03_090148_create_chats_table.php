@@ -18,6 +18,7 @@ return new class extends Migration
             $table->text('ten_nguoi_gui');
             $table->text('ten_nguoi_nhan');
             $table->text('noi_dung');
+            $table->unsignedBigInteger('channel');
             $table->timestamps();
 
             $table->foreign('nguoi_gui_id')->references('id')->on('users')->onDelete('cascade');

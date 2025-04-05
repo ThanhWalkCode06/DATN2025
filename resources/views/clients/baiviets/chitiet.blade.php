@@ -100,7 +100,8 @@
                     </div>
 
                     <div class="blog-detail-contain mt-4">
-                        <p class="first-letter">{!!   nl2br(e($baiViet->noi_dung))  !!}</p>
+                        <p class="first-letter">{!! $baiViet->noi_dung !!}</p>
+
                     </div>
 
 

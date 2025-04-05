@@ -112,6 +112,13 @@
                         </a>
                     </li>
 
+                    <li class="sidebar-list">
+                        <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin-chat') }}">
+                            <i class="ri-message-line"></i>
+                            <span>Chat với người dùng</span>
+                        </a>
+                    </li>
+
                     {{-- <li class="sidebar-list">
                         <a class="sidebar-link sidebar-title link-nav" href="{{ route('lienhe') }}">
                             <i class="ri-phone-line"></i>
