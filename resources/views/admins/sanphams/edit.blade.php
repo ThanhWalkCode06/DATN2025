@@ -144,7 +144,7 @@ tr{
                                     </div>
 
                                     <div class="mb-4">
-                                        <label class="form-label-title">Giá khuyến mãi</label>
+                                        <label class="form-label-title">Giá gốc</label>
                                         <input type="number" name="gia_cu" class="form-control" value="{{ $sanpham->gia_cu }}" >
                                         @error('gia_cu') <div class="text-danger">{{ $message }}</div> @enderror
                                     </div>

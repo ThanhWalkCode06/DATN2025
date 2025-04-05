@@ -156,7 +156,7 @@ Thêm mới sản phẩm
                                 </div>
 
                                 <div class="mb-4">
-                                    <label class="form-label-title">Giá khuyến mãi</label>
+                                    <label class="form-label-title">Giá gốc</label>
                                     <input type="number" name="gia_cu" class="form-control"
                                         value="{{ old('gia_cu') }}" >
                                     @error('gia_cu')

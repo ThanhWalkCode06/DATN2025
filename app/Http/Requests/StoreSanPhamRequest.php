@@ -86,7 +86,7 @@ class StoreSanPhamRequest extends FormRequest
             'anh_bien_the.required' => 'Bắt buộc phải nhập',
             'hinh_anh.required' => 'Bắt buộc phải nhập',
 
-            'gia_ban.*.lt' => "Giá bán phải nhỏ hơn giá khuyến mãi",
+            'gia_ban.*.lt' => "Giá bán phải nhỏ hơn giá gốc",
         ];
     }
 }

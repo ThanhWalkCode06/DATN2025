@@ -84,7 +84,7 @@ class UpdateSanPhamRequest extends FormRequest
             'gia_ban.*.required' => 'Bắt buộc phải nhập',
             'gia_ban.*.numeric' => 'Bắt buộc phải nhập số',
             'gia_ban.*.min' => 'Bắt buộc lớn hơn 0',
-            'gia_ban.*.lt' => "Giá bán phải nhỏ hơn giá khuyến mãi",
+            'gia_ban.*.lt' => "Giá bán phải nhỏ hơn giá gốc",
 
 
             'so_luong.*.required' => 'Bắt buộc phải nhập',
