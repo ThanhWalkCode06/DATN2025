@@ -479,9 +479,9 @@
                                         <span>
                                             @php
                                                 $sortText = match (request('sort')) {
-                                                    'low' => 'Giá thấp - cao',
-                                                    'high' => 'Giá cao - thấp',
-                                                    'off' => 'Giảm giá % cao - thấp',
+                                                    'Giá thấp - cao' => 'Giá thấp - cao',
+                                                    'Giá cao - thấp' => 'Giá cao - thấp',
+                                                    'Giảm giá % cao - thấp' => 'Giảm giá % cao - thấp',
                                                     default => 'Sắp xếp',
                                                 };
                                             @endphp
@@ -492,13 +492,16 @@
 
                                     <ul class="dropdown-menu">
                                         <li><a class="dropdown-item"
-                                                href="{{ request()->fullUrlWithQuery(['sort' => 'low']) }}">Giá thấp -
+                                                href="{{ request()->fullUrlWithQuery(['sort' => 'Giá thấp - cao']) }}">Giá
+                                                thấp -
                                                 cao</a></li>
                                         <li><a class="dropdown-item"
-                                                href="{{ request()->fullUrlWithQuery(['sort' => 'high']) }}">Giá cao -
+                                                href="{{ request()->fullUrlWithQuery(['sort' => 'Giá cao - thấp']) }}">Giá
+                                                cao -
                                                 thấp</a></li>
                                         <li><a class="dropdown-item"
-                                                href="{{ request()->fullUrlWithQuery(['sort' => 'off']) }}">Giảm giá % cao
+                                                href="{{ request()->fullUrlWithQuery(['sort' => 'Giảm giá % cao - thấp']) }}">Giảm
+                                                giá % cao
                                                 - thấp</a></li>
                                     </ul>
                                 </div>
@@ -547,8 +550,10 @@
                                 <div>
                                     <div class="product-box-3 h-100 wow fadeInUp">
                                         <div class="product-header">
-                                            @if ($sanPham->gia_cu > $sanPham->gia_moi)
-                                                <span class="badge bg-danger">-{{ $sanPham->phanTramGiamGia() }}%</span>
+                                            @if ($sanPham->gia_cu > $sanPham->giaThapNhatCuaSP())
+                                                <span class="badge bg-danger">
+                                                    -{{ $sanPham->phanTramGiamGia() }}%
+                                                </span>
                                             @endif
                                             <div class="product-image text-center" style="max-width: 250px;">
                                                 <a href="{{ route('sanphams.chitiet', $sanPham->id) }}">
@@ -601,10 +606,12 @@
                                                         giá)</span>
                                                 </div>
                                                 <h5 class="price">
+
                                                     <span class="theme-color">
-                                                        {{ number_format($sanPham->gia_moi, 0, ',', '.') }} ₫
+                                                        {{ number_format($sanPham->giaThapNhatCuaSP(), 0, ',', '.') }} ₫
                                                     </span>
                                                     <del>{{ number_format($sanPham->gia_cu, 0, ',', '.') }} ₫</del>
+                                                    
                                                 </h5>
                                                 <div class="add-to-cart-box bg-white">
                                                     <button class="btn btn-add-cart addcart-button">
@@ -707,7 +714,7 @@
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const selectedFiltersContainer = document.getElementById("selectedFilters");
-            const clearAllFilters = document.getElementById("clearAllFilters"); // Lấy nút "Bỏ hết"
+            const clearAllFilters = document.getElementById("clearAllFilters");
 
             function formatCurrencyVND(value) {
                 return new Intl.NumberFormat("vi-VN", {
@@ -717,12 +724,7 @@
             }
 
             function formatPriceRange(value) {
-                console.log("Giá trị price_range từ URL:", value); // Debug: Kiểm tra giá trị lấy từ URL
                 let [min, max] = value.split("-").map(Number);
-                if (isNaN(min) || isNaN(max)) {
-                    console.error("Lỗi chuyển đổi giá trị price_range:", value);
-                    return value; // Trả về nguyên gốc nếu lỗi
-                }
                 if (max >= 999999999) {
                     return `Giá trên ${formatCurrencyVND(min)}`;
                 }
@@ -751,33 +753,29 @@
             function updateSelectedFilters() {
                 selectedFiltersContainer.innerHTML = "";
                 const urlParams = new URLSearchParams(window.location.search);
-                let hasFilter = false; // Kiểm tra có bộ lọc nào không
+                let hasFilter = false;
 
                 urlParams.forEach((value, key) => {
-                    console.log(`Key: ${key}, Value: ${value}`); // Debug: Kiểm tra giá trị URL
                     let displayName;
 
                     if (key === "price_range") {
                         displayName = formatPriceRange(value);
                     } else {
                         displayName = filterNames[key] && filterNames[key][value] ? filterNames[key][
-                            value
-                        ] : value;
+                            value] : value;
                     }
 
                     const filterTag = document.createElement("span");
                     filterTag.className = "badge text-white px-3 py-2 d-flex align-items-center";
-                    filterTag.style.backgroundColor = getBadgeColor(key);
+                    filterTag.style.backgroundColor = "#17a589";
                     filterTag.innerHTML = `
                 <span class="me-2">${displayName}</span>
                 <span style="cursor:pointer;" class="ms-2 remove-filter" data-key="${key}">✖</span>
             `;
                     selectedFiltersContainer.appendChild(filterTag);
-
-                    hasFilter = true; // Nếu có ít nhất 1 bộ lọc, thì set hasFilter = true
+                    hasFilter = true;
                 });
 
-                // Hiển thị hoặc ẩn nút "Bỏ hết"
                 clearAllFilters.style.display = hasFilter ? "inline-block" : "none";
 
                 document.querySelectorAll(".remove-filter").forEach((btn) => {
@@ -791,18 +789,7 @@
                 });
             }
 
-            function getBadgeColor(key) {
-                if (key.includes("danh_muc")) return "#17a589";
-                if (key.includes("price")) return "#17a589";
-                if (key.includes("so_sao")) return "#17a589";
-                return "#6c757d";
-            }
-
             updateSelectedFilters();
         });
-    </script>
-
-
-
     </script>
 @endsection
