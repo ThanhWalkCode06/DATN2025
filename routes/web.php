@@ -218,3 +218,8 @@ Route::get('/vnpay-return', [ThanhToanController::class, 'vnpayReturn'])->name('
 
 Route::get('/messages/{receiverId}', [ChatController::class, 'getMessages']);
 Route::post('/send-chat', [ChatController::class, 'sendChat']);
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/vi', [App\Http\Controllers\ViController::class, 'hienThi'])->name('vi');
+});
+

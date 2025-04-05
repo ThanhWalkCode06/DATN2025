@@ -151,6 +151,27 @@
                                                         </div>
                                                     @endif
                                                 @endforeach
+                                                  <!-- Thêm phương thức thanh toán bằng ví -->
+            <div class="accordion-item">
+                <div class="accordion-header" id="flush-headingWallet">
+                    <div class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#flush-collapseWallet">
+                        <div class="custom-form-check form-check mb-0">
+                            <label class="form-check-label" for="walletPayment">
+                                <input class="form-check-input mt-0" type="radio" name="flexRadioDefault"
+                                    id="walletPayment" data-id="wallet" {{ old('payment_method') == 'wallet' ? 'checked' : '' }}>
+                                Thanh toán bằng ví
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div id="flush-collapseWallet" class="accordion-collapse collapse" aria-labelledby="flush-headingWallet"
+                    data-bs-parent="#accordionFlushExample">
+                    <div class="accordion-body">
+                        <!-- Thông tin về ví, ví dụ số dư, hoặc mô tả thêm về phương thức này -->
+                        <p>Chọn phương thức thanh toán bằng ví để trừ số tiền trong tài khoản ví của bạn.</p>
+                    </div>
+                </div>
+            </div>
                                             </div>
                                         </div>
                                     </div>

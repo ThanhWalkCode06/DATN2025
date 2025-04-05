@@ -35,11 +35,13 @@ class User extends Authenticatable
 
     ];
 
-    public function sanPhamYeuThichs(){
-        return $this->belongsToMany(SanPham::class,'san_pham_yeu_thichs', 'user_id', 'san_pham_id');
+    public function sanPhamYeuThichs()
+    {
+        return $this->belongsToMany(SanPham::class, 'san_pham_yeu_thichs', 'user_id', 'san_pham_id');
     }
 
-    public function donHangs(){
+    public function donHangs()
+    {
         return $this->hasMany(DonHang::class, 'user_id');
     }
 
@@ -67,11 +69,21 @@ class User extends Authenticatable
      * The attributes that should be cast.
      *
      * @var array<string, string>
-     */
+     */ 
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
 
     protected $guard_name = 'web';
+
+    public function vi()
+    {
+        return $this->hasOne(Vi::class, 'nguoi_dung_id');
+    }
+
+    public function layHoacTaoVi() {
+        return $this->vi ?? $this->vi()->create(['so_du' => 0]);
+    }
+    
 }
