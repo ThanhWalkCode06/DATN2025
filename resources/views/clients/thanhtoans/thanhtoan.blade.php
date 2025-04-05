@@ -152,7 +152,7 @@
                                                     @endif
                                                 @endforeach
                                                   <!-- Thêm phương thức thanh toán bằng ví -->
-                                                  <div class="accordion-item">
+                                                  {{-- <div class="accordion-item">
                                                     <div class="accordion-header" id="flush-headingWallet">
                                                         <div class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#flush-collapseWallet">
                                                             <div class="custom-form-check form-check mb-0">
@@ -170,7 +170,7 @@
                                                             <p>Chọn phương thức thanh toán bằng ví để trừ số tiền trong tài khoản ví của bạn.</p>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                </div> --}}
                                                 
                                             </div>
                                         </div>
@@ -315,7 +315,7 @@
 @endsection
 
 @section('js')
-    {{-- Thanh toán bằng ví --}}
+    {{-- Thanh toán bằng ví
     <script>
       document.addEventListener('DOMContentLoaded', function () {
     const radioButtons = document.querySelectorAll('input[name="flexRadioDefault"]');
@@ -334,7 +334,7 @@
 });
 
     </script>
-    
+     --}}
     <script>
         let phiVanChuyen = document.getElementById("phi-van-chuyen");
 

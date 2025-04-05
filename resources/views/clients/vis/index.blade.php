@@ -49,7 +49,7 @@
                 </tbody>
             </table>
 
-            {{ $giaodichs->links() }}
+            {{ $giaodichs->links('pagination::bootstrap-5') }}
         </div>
     </div>
 </div>

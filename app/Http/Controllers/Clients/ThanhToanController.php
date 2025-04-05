@@ -178,16 +178,17 @@ class ThanhToanController extends Controller
         }
 
         // Thanh toán bằng ví
-        if ($request->phuong_thuc_thanh_toan_id === "wallet") {
+        if ($request->phuong_thuc_thanh_toan_id === "3") {
             $soDu = $user->vi->so_du ?? 0;
             $tongTien = $request->tong_tien;
 
             if ($soDu < $tongTien) {
                 return response()->json([
                     'status' => 'error',
-                    'message' => 'Số dư ví không đủ để thanh toán đơn hàng.'
+                    'message' => 'Số dư ví không đủ để thanh toán đơn hàng. Số dư hiện tại: ' . number_format($soDu, 0, ',', '.') . ' VNĐ.'
                 ], 400);
             }
+            
 
             // Trừ tiền trong ví
             $user->vi->decrement('so_du', $tongTien);
@@ -204,7 +205,7 @@ class ThanhToanController extends Controller
                 'dia_chi_nguoi_nhan' => $request->dia_chi_nguoi_nhan,
                 'tong_tien' => $tongTien,
                 'ghi_chu' => $request->ghi_chu,
-                'phuong_thuc_thanh_toan_id' => 1, // Giả sử 1 là ID cho tiền mặt (có thể tùy chỉnh lại)
+                'phuong_thuc_thanh_toan_id' => 3, // Giả sử 1 là ID cho tiền mặt (có thể tùy chỉnh lại)
                 'trang_thai_don_hang' => 0,
                 'trang_thai_thanh_toan' => 1, // Đã thanh toán
                 'created_at' => now()

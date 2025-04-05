@@ -99,7 +99,7 @@ class UserController extends Controller
                         "ly_do" => $request->ly_do
                     ]);
 
-                    return redirect()->back()->with('success', 'Cập nhật trạng thái đơn hàng thành công');
+                    return redirect()->back()->with('success', 'Huỷ đơn hàng thành công');
                 }
 
                 // Trường hợp đã thanh toán
@@ -139,7 +139,7 @@ class UserController extends Controller
                 $soDu = number_format($vi->so_du, 0, ',', '.');
 
                 // Thông báo cho người dùng về số dư hiện tại
-                return redirect()->back()->with('success', 'Cập nhật trạng thái đơn hàng thành công. Số dư ví hiện tại của bạn là: ' . $soDu . ' VNĐ');
+                return redirect()->back()->with('success', 'Huỷ đơn hàng thành công. Số dư ví hiện tại của bạn là: ' . $soDu . ' VNĐ');
                 }
             } else {
                 return redirect()->back()->with('error', 'Không thể hủy đơn hàng khi trạng thái không phù hợp');
