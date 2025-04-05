@@ -13,8 +13,8 @@
                     <div class="top-left-header">
                         <i class="fas fa-map-marker-alt text-white me-2"></i>
                         <a
-                            href="https://www.google.com/maps/place/Tr%C6%B0%E1%BB%9Dng+Cao+%C4%91%E1%BA%B3ng+FPT+Polytechnic/@21.0381348,105.7446869,17z/data=!3m1!4b1!4m6!3m5!1s0x313455e940879933:0xcf10b34e9f1a03df!8m2!3d21.0381298!4d105.7472618!16s%2Fg%2F11krd97y__?entry=ttu&g_ep=EgoyMDI1MDMxMi4wIKXMDSoASAFQAw%3D%3D">
-                            <span class="text-white">Tòa nhà FPT Polytechnic.</span>
+                            href="{{ $globalSetting->url_map ?? '' }}">
+                            <span class="text-white">{{ $globalSetting->location ?? '' }}</span>
                         </a>
 
                     </div>
@@ -88,7 +88,7 @@
                                 </form>
                             </div>
                         </div>
-                        
+
 
 
                         <div class="rightside-box">

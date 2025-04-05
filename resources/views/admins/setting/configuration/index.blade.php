@@ -126,6 +126,14 @@
                                 @enderror
                             </div>
                             <div class="mb-3">
+                                <label class="form-label">Link google map </label>
+                                <input type="text" name="url_map" class="form-control"
+                                    value="{{ $globalSetting->url_map ?? '' }}">
+                                @error('url_map')
+                                    <p class="text-danger">{{ $message }}</p>
+                                @enderror
+                            </div>
+                            <div class="mb-3">
                                 <label class="form-label">Địa chỉ email </label>
                                 <input type="text" name="email_owner" class="form-control"
                                     value="{{ $globalSetting->email_owner ?? 'thanhchillchill@gmail.com' }}">
