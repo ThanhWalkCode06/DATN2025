@@ -151,6 +151,27 @@
                                                         </div>
                                                     @endif
                                                 @endforeach
+                                                  <!-- Thêm phương thức thanh toán bằng ví -->
+            <div class="accordion-item">
+                <div class="accordion-header" id="flush-headingWallet">
+                    <div class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#flush-collapseWallet">
+                        <div class="custom-form-check form-check mb-0">
+                            <label class="form-check-label" for="walletPayment">
+                                <input class="form-check-input mt-0" type="radio" name="flexRadioDefault"
+                                    id="walletPayment" data-id="wallet" {{ old('payment_method') == 'wallet' ? 'checked' : '' }}>
+                                Thanh toán bằng ví
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div id="flush-collapseWallet" class="accordion-collapse collapse" aria-labelledby="flush-headingWallet"
+                    data-bs-parent="#accordionFlushExample">
+                    <div class="accordion-body">
+                        <!-- Thông tin về ví, ví dụ số dư, hoặc mô tả thêm về phương thức này -->
+                        <p>Chọn phương thức thanh toán bằng ví để trừ số tiền trong tài khoản ví của bạn.</p>
+                    </div>
+                </div>
+            </div>
                                             </div>
                                         </div>
                                     </div>
@@ -250,7 +271,7 @@
                                                             <th>Tên Phiếu</th>
                                                             <th>Giá Trị</th>
                                                             <th>Thời Gian</th>
-                                                            {{-- <th>Mô Tả</th> --}}
+                                                            <th>Mô Tả</th>
                                                             <th>Trạng Thái</th>
                                                         </tr>
                                                     </thead>
@@ -261,9 +282,9 @@
                                                                     <td>{{ $key + 1 }}</td>
                                                                     <td>{{ $phieu->ma_phieu }}</td>
                                                                     <td>{{ $phieu->ten_phieu }}</td>
-                                                                    <td>{{ number_format($phieu->gia_tri, 0, ',', '.') }} VNĐ</td>
+                                                                    <td>{{ number_format($phieu->gia_tri, 0, ',', '.') }} %</td>
                                                                     <td>{{ date('d/m/Y', strtotime($phieu->ngay_bat_dau)) }} - {{ date('d/m/Y', strtotime($phieu->ngay_ket_thuc)) }}</td>
-                                                                    {{-- <td>{{ $phieu->mo_ta }}</td> --}}
+                                                                    <td>{{ $phieu->mo_ta }}</td>
                                                                     <td>
                                                                         @if($phieu->trang_thai == 1)
                                                                             <span class="badge bg-success">Hoạt động</span>

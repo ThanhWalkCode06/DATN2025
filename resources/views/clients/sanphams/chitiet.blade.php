@@ -431,7 +431,7 @@
 
                                     <span id="default-price" class="theme-color price"
                                         style="font-size: 20px; font-weight: bold;">
-                                        {{ number_format($sanPhams->gia_moi, 0, ',', '.') }}₫
+                                        {{ number_format($sanPhams->giaThapNhatCuaSP(), 0, ',', '.') }}₫
                                     </span>
 
                                     <del id="default-old-price" class="text-content text-muted" style="font-size: 18px;">
@@ -1207,9 +1207,47 @@
                             showConfirmButton: false,
                             timer: 1500
                         });
-                    } else {
-                        Swal.fire("Lỗi", response.message, "error");
                     }
+                    $(".header-wishlist .badge").text(response.cart.totalItem);
+                    $(".total-price").text(response.cart.totalPrice.toLocaleString(
+                        "vi-VN") + " đ");
+
+                    let cartListHtml = '';
+                    let itemsToShow = response.cart.items.slice(0,
+                        4); // Giới hạn chỉ lấy 4 sản phẩm đầu tiên
+
+                    itemsToShow.forEach(item => {
+                        cartListHtml += `
+                <li style="width: 100%" class="product-box-contain">
+                    <div class="drop-cart">
+                        <a href="/sanpham/${item.id}" class="drop-image">
+                            <img src="${item.image}" class="blur-up lazyload" alt="">
+                        </a>
+                        <div class="drop-contain">
+                            <a href="/sanpham/${item.id}">
+                                <h5>${item.name}</h5>
+                                <h6>${item.name_bienthe}</h6>
+                            </a>
+                            <h6><span>${item.quantity} x</span> ${item.price.toLocaleString("vi-VN")} đ</h6>
+                            <button class="close-button close_button delete-cart-item" data-id="${item.id_cart}">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+                    </div>
+                </li>`;
+                    });
+
+                    $(".cart-list").html(cartListHtml); // Cập nhật danh sách sản phẩm
+
+                    // Nếu số lượng sản phẩm lớn hơn 4, hiển thị "Xem thêm..."
+                    if (response.cart.items.length > 4) {
+                        $(".cart-list").append(
+                            '<li class="text-center"><a href="giohang">Xem thêm...</a></li>'
+                        );
+                    } 
+                    // else {
+                    //     Swal.fire("Lỗi", response.message, "error");
+                    // }
                 },
                 error: function(xhr) {
                     Swal.fire("Lỗi", "Có lỗi xảy ra khi thêm vào giỏ hàng!", "error");

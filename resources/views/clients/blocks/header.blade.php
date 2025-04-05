@@ -218,6 +218,8 @@
                                                     <a href="{{ route('users.chitiet') }}">Chi tiết tài
                                                         khoản</a>
                                                 </li>
+                                                <li><a href="{{ route('vi') }}">Ví của tôi</a></li>
+
                                                 <li class="product-box-contain">
                                                     <i></i>
                                                     <a onclick="Logout(event)" href="#">Đăng xuất</a>

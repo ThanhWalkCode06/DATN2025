@@ -189,12 +189,15 @@
 
                                     <div style="border-bottom: 1px solid #ccc; width: 889px" class="row">
                                         @foreach ($sanPhamFollowComments as $item)
+                                        @php
+                                            $giaThapNhat = collect($item['bien_thes'])->min('gia_ban') ?? 0;
+                                        @endphp
                                             <div style=" border: 1px solid #ccc;width: 222px" class="col-md-3 px-0">
                                                 <div style="height: 327px" class="product-box">
                                                     <div style="position: relative; width: 100%">
-                                                        @if ($item['gia_cu'] > $item['gia_moi'])
+                                                        @if ($item['gia_cu'] > $giaThapNhat)
                                                             <span style="position: absolute; top: 0; right: 0;"
-                                                                class="badge bg-danger">-{{ round((($item['gia_cu'] - $item['gia_moi']) / $item['gia_cu']) * 100) }}%</span>
+                                                                class="badge bg-danger">-{{ round((($item['gia_cu'] - $giaThapNhat) / $item['gia_cu']) * 100) }}%</span>
                                                         @endif
                                                     </div>
                                                     <div class="product-image">
@@ -226,7 +229,7 @@
 
                                                         <h5 class="sold text-content">
                                                             <span
-                                                                class="theme-color price">{{ number_format($item['gia_moi'], 0, '', '.') }}
+                                                                class="theme-color price">{{ number_format($giaThapNhat, 0, '', '.') }}
                                                                 đ</span>
                                                             <del>{{ number_format($item['gia_cu'], 0, '', '.') }} đ</del>
                                                         </h5>
@@ -333,6 +336,9 @@
                         <div>
                             <ul class="product-list">
                                 @foreach ($part1 as $item)
+                                @php
+                                    $giaThapNhat = collect($item['bien_thes'])->min('gia_ban') ?? 0;
+                                @endphp
                                     <li>
                                         <div class="offer-product">
                                             <div>
@@ -343,9 +349,9 @@
                                                         class="blur-up lazyload" alt="">
                                                 </a>
                                                 <div style="position: relative; width: 100%">
-                                                    @if ($item['gia_cu'] > $item['gia_moi'])
+                                                    @if ($item['gia_cu'] > $giaThapNhat)
                                                         <span style="position: absolute; top: 0; right: 0;"
-                                                            class="badge bg-danger">-{{ round((($item['gia_cu'] - $item['gia_moi']) / $item['gia_cu']) * 100) }}%</span>
+                                                            class="badge bg-danger">-{{ round((($item['gia_cu'] - $giaThapNhat) / $item['gia_cu']) * 100) }}%</span>
                                                     @endif
                                                 </div>
                                             </div>
@@ -359,7 +365,7 @@
                                                     </a>
                                                     <del>{{ number_format($item['gia_cu'], 0, '', '.') }} đ</del>
                                                     <h6 class="price theme-color">
-                                                        {{ number_format($item['gia_moi'], 0, '', '.') }} đ</h6>
+                                                        {{ number_format($giaThapNhat, 0, '', '.') }} đ</h6>
                                                 </div>
                                             </div>
                                         </div>
@@ -403,6 +409,9 @@
                         <div>
                             <ul class="product-list">
                                 @foreach ($part2 as $item)
+                                @php
+                                $giaThapNhat = collect($item['bien_thes'])->min('gia_ban') ?? 0;
+                                @endphp
                                     <li>
                                         <div class="offer-product">
                                             <div>
@@ -413,9 +422,9 @@
                                                         class="blur-up lazyload" alt="">
                                                 </a>
                                                 <div style="position: relative; width: 100%">
-                                                    @if ($item['gia_cu'] > $item['gia_moi'])
+                                                    @if ($item['gia_cu'] > $giaThapNhat)
                                                         <span style="position: absolute; top: 0; right: 0;"
-                                                            class="badge bg-danger">-{{ round((($item['gia_cu'] - $item['gia_moi']) / $item['gia_cu']) * 100) }}%</span>
+                                                            class="badge bg-danger">-{{ round((($item['gia_cu'] - $giaThapNhat) / $item['gia_cu']) * 100) }}%</span>
                                                     @endif
                                                 </div>
                                             </div>
@@ -428,7 +437,7 @@
                                                     </a>
                                                     <del>{{ number_format($item['gia_cu'], 0, '', '.') }} đ</del>
                                                     <h6 class="price theme-color">
-                                                        {{ number_format($item['gia_moi'], 0, '', '.') }} đ</h6>
+                                                        {{ number_format($giaThapNhat, 0, '', '.') }} đ</h6>
                                                 </div>
                                             </div>
                                         </div>
@@ -471,6 +480,9 @@
                         <div>
                             <ul class="product-list">
                                 @foreach ($part3 as $item)
+                                @php
+                                $giaThapNhat = collect($item['bien_thes'])->min('gia_ban') ?? 0;
+                                @endphp
                                     <li>
                                         <div class="offer-product">
 
@@ -482,9 +494,9 @@
                                                         class="blur-up lazyload" alt="">
                                                 </a>
                                                 <div style="position: relative; width: 100%">
-                                                    @if ($item['gia_cu'] > $item['gia_moi'])
+                                                    @if ($item['gia_cu'] > $giaThapNhat)
                                                         <span style="position: absolute; top: 0; right: 0;"
-                                                            class="badge bg-danger">-{{ round((($item['gia_cu'] - $item['gia_moi']) / $item['gia_cu']) * 100) }}%</span>
+                                                            class="badge bg-danger">-{{ round((($item['gia_cu'] - $giaThapNhat) / $item['gia_cu']) * 100) }}%</span>
                                                     @endif
                                                 </div>
                                             </div>
@@ -497,7 +509,7 @@
                                                     </a>
                                                     <del>{{ number_format($item['gia_cu'], 0, '', '.') }} đ</del>
                                                     <h6 class="price theme-color">
-                                                        {{ number_format($item['gia_moi'], 0, '', '.') }} đ</h6>
+                                                        {{ number_format($giaThapNhat, 0, '', '.') }} đ</h6>
                                                 </div>
                                             </div>
                                         </div>
@@ -546,7 +558,7 @@
                                 </use>
                             </svg>
                         </span>
-                        <p>Những bài viết đáng chú ý</p>
+                        <p>Bài viết mới nhất</p>
                     </div>
 
                     <div class="slider-3-blog ratio_65 no-arrow product-wrapper">
