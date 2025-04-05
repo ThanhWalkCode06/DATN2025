@@ -177,6 +177,83 @@ class ThanhToanController extends Controller
             ]);
         }
 
+        // Thanh toán bằng ví
+        if ($request->phuong_thuc_thanh_toan_id === "wallet") {
+            $soDu = $user->vi->so_du ?? 0;
+            $tongTien = $request->tong_tien;
+
+            if ($soDu < $tongTien) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Số dư ví không đủ để thanh toán đơn hàng.'
+                ], 400);
+            }
+
+            // Trừ tiền trong ví
+            $user->vi->decrement('so_du', $tongTien);
+
+            // Lưu lịch sử giao dịch vào bảng lich_su_vi
+            DB::table('giaodichvis')->insert([
+                'vi_id' => $user->vi->id,
+                'so_tien' => $tongTien,
+                'loai' => 'Mua hàng', // Giao dịch chi tiền
+                'mo_ta' => 'Trừ  tiền do mua đơn hàng ' ,
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
+
+            // Tạo đơn hàng với phương thức thanh toán ví (không cần tham chiếu bảng phương thức thanh toán)
+            $donHang = DonHang::create([
+                'user_id' => $user->id,
+                'ma_don_hang' => Helper::generateOrderCode(),
+                'ten_nguoi_nhan' => $request->ten_nguoi_nhan,
+                'email_nguoi_nhan' => $request->email_nguoi_nhan,
+                'sdt_nguoi_nhan' => $request->sdt_nguoi_nhan,
+                'dia_chi_nguoi_nhan' => $request->dia_chi_nguoi_nhan,
+                'tong_tien' => $tongTien,
+                'ghi_chu' => $request->ghi_chu,
+                'phuong_thuc_thanh_toan_id' => 1, // Giả sử 1 là ID cho tiền mặt (có thể tùy chỉnh lại)
+                'trang_thai_don_hang' => 0,
+                'trang_thai_thanh_toan' => 1, // Đã thanh toán
+                'created_at' => now()
+            ]);
+
+            $this->thongBaoDatHang($donHang);
+
+            // Lưu voucher nếu có
+            if (!empty($request->voucher_code) && $request->giam_gia !== "0") {
+                $idVoucher = PhieuGiamGia::where('ma_phieu', $request->voucher_code)->first();
+                if ($idVoucher) {
+                    DB::table('phieu_giam_gia_tai_khoans')->insert([
+                        'phieu_giam_gia_id' => $idVoucher->id,
+                        'user_id' => $user->id,
+                        'order_id' => $donHang->id,
+                        'created_at' => now(),
+                    ]);
+                }
+            }
+
+            // Di chuyển giỏ hàng vào chi tiết đơn hàng
+            $cart = ChiTietGioHang::with('user', 'bienThe')->where('user_id', $user->id)->get();
+            foreach ($cart as $item) {
+                ChiTietDonHang::create([
+                    'don_hang_id' => $donHang->id,
+                    'bien_the_id' => $item->bienThe->id,
+                    'so_luong' => $item->so_luong,
+                    'created_at' => now()
+                ]);
+
+                BienThe::where('id', $item->bienThe->id)->update([
+                    'so_luong' => DB::raw('so_luong - ' . $item->so_luong)
+                ]);
+            }
+
+            $cart->each->delete();
+
+            return response()->json(['status' => 'success', 'id' => $donHang->id], 200);
+        }
+
+
         return response()->json(['status' => 'error', 'message' => 'Lỗi phương thức'], 500);
     }
 
