@@ -35,11 +35,13 @@ class User extends Authenticatable
 
     ];
 
-    public function sanPhamYeuThichs(){
-        return $this->belongsToMany(SanPham::class,'san_pham_yeu_thichs', 'user_id', 'san_pham_id');
+    public function sanPhamYeuThichs()
+    {
+        return $this->belongsToMany(SanPham::class, 'san_pham_yeu_thichs', 'user_id', 'san_pham_id');
     }
 
-    public function donHangs(){
+    public function donHangs()
+    {
         return $this->hasMany(DonHang::class, 'user_id');
     }
 
@@ -74,4 +76,14 @@ class User extends Authenticatable
     ];
 
     protected $guard_name = 'web';
+
+    public function vi()
+    {
+        return $this->hasOne(Vi::class, 'nguoi_dung_id');
+    }
+
+    public function layHoacTaoVi()
+    {
+        return $this->vi()->firstOrCreate(['nguoi_dung_id' => $this->id], ['so_du' => 0]);
+    }
 }

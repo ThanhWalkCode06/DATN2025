@@ -14,6 +14,7 @@ class Chat extends Model
         'nguoi_nhan_id',
         'ten_nguoi_gui',
         'ten_nguoi_nhan',
-        'noi_dung'
+        'noi_dung',
+        'channel',
     ];
 }

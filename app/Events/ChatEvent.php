@@ -33,7 +33,7 @@ class ChatEvent implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new Channel('chat.' . $this->chat->nguoi_gui_id),
+            new Channel('chat.' . $this->chat->channel),
         ];
     }
 
