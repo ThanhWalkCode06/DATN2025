@@ -42,7 +42,7 @@
                     <div class="row">
                         <div class="col-md-4">
                             <select name="san_pham_id" class="form-control">
-                                <option value="">Tất cả sản phẩm</option>
+                                <option value="all">Tất cả sản phẩm</option>
                                 @foreach ($sanPhams as $sanPham)
                                     <option value="{{ $sanPham->id }}"
                                         {{ request('san_pham_id') == $sanPham->id ? 'selected' : '' }}>
@@ -52,7 +52,7 @@
                             </select>
                         </div>
                         <div class="col-md-2">
-                            <button type="submit" class="btn btn-primary">Lọc</button>
+                            <button type="submit" class="btn btn-primary">Tìm Kiếm</button>
                         </div>
                     </div>
                 </form>

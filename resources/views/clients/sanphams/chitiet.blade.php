@@ -852,9 +852,9 @@
                                 <div class="product-box-3 wow fadeInUp">
                                     <div class="product-header">
                                         <!-- Hiển thị % giảm giá nếu có -->
-                                        @if ($item->gia_cu > $item->gia_moi)
+                                        @if ($item->gia_cu > $item->giaThapNhatCuaSP())
                                             <span class="badge bg-danger">
-                                                -{{ round((($item->gia_cu - $item->gia_moi) / $item->gia_cu) * 100) }}%
+                                                -{{ round((($item->gia_cu - $item->giaThapNhatCuaSP()) / $item->gia_cu) * 100) }}%
                                             </span>
                                         @endif
                                         <div class="product-image">
@@ -887,7 +887,7 @@
                                             </div>
 
                                             <h5 class="price">
-                                                <span class="theme-color">{{ number_format($item->gia_moi, 0, ',', '.') }}
+                                                <span class="theme-color">{{ number_format($item->giaThapNhatCuaSP(), 0, ',', '.') }}
                                                     ₫</span>
                                                 <del>{{ number_format($item->gia_cu, 0, ',', '.') }} ₫</del>
                                             </h5>
@@ -959,7 +959,7 @@
                                 <h5 class="name">{{ $sanPhams->ten_san_pham }}</h5>
                                 <div class="product-review-rating">
                                     <div class="product-rating">
-                                        <span class="theme-color">{{ number_format($sanPhams->gia_moi, 0, ',', '.') }}
+                                        <span class="theme-color">{{ number_format($sanPhams->giaThapNhatCuaSP(), 0, ',', '.') }}
                                             ₫</span>
                                         <del>{{ number_format($sanPhams->gia_cu, 0, ',', '.') }} ₫</del>
                                     </div>

@@ -23,9 +23,12 @@ class DanhGiaController extends Controller
             ->join('san_phams', 'san_phams.id', '=', 'san_pham_id');
 
         // Nếu có lọc theo sản phẩm, thêm điều kiện lọc vào truy vấn
-        if ($request->has('san_pham_id')) {
-            $query->where('san_phams.id', $request->san_pham_id);
-        }
+        if ($request->has('san_pham_id')) {  
+            if ($request->san_pham_id !== 'all') {  
+                $query->where('san_phams.id', $request->san_pham_id);  
+            }  
+            // Nếu là 'all', không lọc gì cả  
+        }  
 
         // Sắp xếp theo thời gian tạo (mới nhất ở trên cùng)
         $query->orderBy('danh_gias.created_at', 'desc');
