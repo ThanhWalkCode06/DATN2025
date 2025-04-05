@@ -21,7 +21,7 @@ class SanPhamFactory extends Factory
             'ma_san_pham' => $this->faker->ean13(),
             'khuyen_mai' => $this->faker->numberBetween(0, 99),
             'gia_cu' => $this->faker->numberBetween(200000, 300000),
-            'gia_moi' => $this->faker->numberBetween(100000, 199999),
+            // 'gia_moi' => $this->faker->numberBetween(100000, 199999),
             'mo_ta' => $this->faker->paragraph(),
             'danh_muc_id' => $this->faker->numberBetween(1, 4),
             'trang_thai' => $this->faker->numberBetween(0, 1)

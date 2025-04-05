@@ -21,7 +21,7 @@ class BienTheFactory extends Factory
             // 'thuoc_tinh_id' => $this->faker->numberBetween(1, 2),
             // 'gia_tri_thuoc_tinh_id' => $this->faker->numberBetween(1, 8),
             'ten_bien_the' => $this->faker->name(),
-            'gia_nhap' => $this->faker->numberBetween(100000, 199999),
+            // 'gia_nhap' => $this->faker->numberBetween(100000, 199999),
             'gia_ban' => $this->faker->numberBetween(200000, 999999),
             'so_luong' => $this->faker->randomNumber(3)
         ];

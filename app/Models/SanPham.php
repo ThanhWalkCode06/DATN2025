@@ -15,7 +15,6 @@ class SanPham extends Model
         'ma_san_pham',
         // 'khuyen_mai',
         'gia_cu',
-        'gia_moi',
         'hinh_anh',
         'mo_ta',
         'chat_lieu',
@@ -70,7 +69,7 @@ class SanPham extends Model
         return $this->danhGias->count(); // Đếm số lượt đánh giá
     }
 
-  
+
     public function giaThapNhatCuaSP()
     {
         return $this->bienThes->min('gia_ban') ?? 0;

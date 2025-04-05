@@ -18,7 +18,7 @@ return new class extends Migration
             // $table->unsignedBigInteger('gia_tri_thuoc_tinh_id');
             $table->string('ten_bien_the');
             $table->string('anh_bien_the')->default('images/sanpham-default.png');
-            $table->double('gia_nhap')->default(0);
+            // $table->double('gia_nhap')->default(0);
             $table->double('gia_ban')->default(0);
             $table->integer('so_luong')->default(0);
             $table->timestamps();

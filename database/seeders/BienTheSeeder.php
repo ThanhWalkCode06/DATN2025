@@ -34,7 +34,6 @@ class BienTheSeeder extends Seeder
                 $bienThe = BienThe::create([
                     'san_pham_id' => $sanPham->id,
                     'ten_bien_the' => "$tt1->gia_tri - $tt2->gia_tri",
-                    'gia_nhap' => rand(10000, 19999),
                     'gia_ban' => rand(20000, 99999),
                     'so_luong' => rand(1, 100),
                 ]);
