@@ -39,7 +39,6 @@ class IndexClientController extends Controller
                 'san_phams.ma_san_pham',
                 'san_phams.san_pham_slug',
                 'san_phams.gia_cu',
-                'san_phams.gia_moi',
                 'san_phams.khuyen_mai',
                 'san_phams.hinh_anh',
                 'san_phams.mo_ta',

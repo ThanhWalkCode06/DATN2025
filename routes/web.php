@@ -12,11 +12,11 @@ use App\Http\Controllers\BaiVietController;
 use App\Http\Controllers\BienTheController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DanhGiaController;
+
 use App\Http\Controllers\DonHangController;
 
 use App\Http\Controllers\SanPhamController;
 use App\Http\Controllers\ThongKeController;
-
 use App\Http\Controllers\HelperCommon\Helper;
 use App\Http\Controllers\ThuocTinhController;
 use App\Http\Controllers\Clients\ViController;
@@ -34,6 +34,7 @@ use App\Http\Controllers\Clients\ThanhToanController;
 use App\Http\Controllers\Clients\IndexClientController;
 use App\Http\Controllers\ClientDanhMucSanPhamController;
 use App\Http\Controllers\Clients\DanhGiaClientsController;
+use App\Http\Controllers\Admins\PhuongThucThanhToanController;
 use App\Http\Controllers\Admins\Responsibility\RoleController;
 use App\Http\Controllers\Admins\Responsibility\PermissionController;
 use App\Http\Controllers\Clients\UserController as ClientsUserController;
@@ -88,6 +89,7 @@ Route::prefix('admin')->middleware(['auth', 'checkStatus'])->group(function () {
 
 
     // Chức năng thì cho vào đây đánh tên route->name phải giống quyền lối bởi dấu . nếu là route resource
+    // Nếu là route thường thì chỉ cần ghi bình thường không có dấu -
     Route::middleware('dynamic')->group(function () {
         Route::resource('danhmucsanphams', DanhMucSanPhamController::class);
         Route::resource('sanphams', SanPhamController::class);
@@ -101,6 +103,10 @@ Route::prefix('admin')->middleware(['auth', 'checkStatus'])->group(function () {
         Route::resource('danhmucbaiviets', DanhMucBaiVietController::class);
         Route::resource('phieugiamgias', PhieuGiamGiaController::class);
         Route::resource("danhgias", DanhGiaController::class);
+
+        Route::get('phuongthucthanhtoans/search', [PhuongThucThanhToanController::class, 'search'])->name('phuongthucthanhtoans-search');
+        Route::resource("phuongthucthanhtoans", PhuongThucThanhToanController::class);
+
         Route::get('/gioi-thieu', [DanhGiaController::class, 'danhGiaNoiBat'])->name('gioithieu');
         Route::get('/chat', [ChatController::class, 'showAdminChat'])->name('admin-chat');
         Route::get('/chat-users', [ChatController::class, 'getChatUsers']);

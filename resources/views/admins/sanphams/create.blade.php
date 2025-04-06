@@ -156,7 +156,7 @@ Thêm mới sản phẩm
                                 </div>
 
                                 <div class="mb-4">
-                                    <label class="form-label-title">Giá cũ</label>
+                                    <label class="form-label-title">Giá gốc</label>
                                     <input type="number" name="gia_cu" class="form-control"
                                         value="{{ old('gia_cu') }}" >
                                     @error('gia_cu')
@@ -164,14 +164,7 @@ Thêm mới sản phẩm
                                     @enderror
                                 </div>
 
-                                <div class="mb-4">
-                                    <label class="form-label-title">Giá mới</label>
-                                    <input type="number" name="gia_moi" class="form-control"
-                                        value="{{ old('gia_moi') }}" >
-                                    @error('gia_moi')
-                                    <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
+
 
                                 <div class="mb-4">
                                     <label class="form-label-title">Danh mục</label>
@@ -256,7 +249,6 @@ Thêm mới sản phẩm
                                 <tr>
                                     <th>Ảnh</th>
                                     <th>Thuộc tính</th>
-                                    <th>Giá nhập</th>
                                     <th>Giá bán</th>
                                     <th>Kho hàng</th>
                                     {{-- <th>Hành động</th> --}}
@@ -264,12 +256,12 @@ Thêm mới sản phẩm
                             </thead>
 
                             <tbody id="variantTable">
-                                @if (old('gia_nhap'))
+                                @if (old('gia_ban'))
                                 @php
                                 $deletedVariants = json_decode(old('deleted_variants', '[]'), true);
                                 @endphp
 
-                                @foreach (old('gia_nhap', []) as $index => $gia_nhap)
+                                @foreach (old('gia_ban', []) as $index => $gia_ban)
                                 @php
                                 $selectedValues = implode(
                                 ', ',
@@ -285,13 +277,6 @@ Thêm mới sản phẩm
                                         @enderror
                                     </td>
                                     <td>{{ $selectedValues2[$index] ?? 'Không có dữ liệu' }}</td>
-                                    <td><input type="number" name="gia_nhap[]"
-                                            value="{{ old("gia_nhap.$index") }}"
-                                            class="form-control @error(" gia_nhap.$index") is-invalid @enderror">
-                                        @error("gia_nhap.$index")
-                                        <p class="text-danger">{{ $message }}</p>
-                                        @enderror
-                                    </td>
                                     <td><input type="number" name="gia_ban[]"
                                             value="{{ old("gia_ban.$index") }}"
                                             class="form-control @error(" gia_ban.$index") is-invalid @enderror">
@@ -382,7 +367,6 @@ Thêm mới sản phẩm
                 `<p class="text-danger">${window.oldErrors[key][0]}</p>`);
         }
     });
-    window.oldGiaNhap = @json(old('gia_nhap', []));
     window.oldGiaBan = @json(old('gia_ban', []));
     window.oldSoLuong = @json(old('so_luong', []));
 </script>
@@ -396,7 +380,6 @@ Thêm mới sản phẩm
 
         var deletedVariants = JSON.parse($("#deletedVariants").val() || "[]");
 
-        var oldGiaNhap = window.oldGiaNhap || [];
         var oldGiaBan = window.oldGiaBan || [];
         var oldSoLuong = window.oldSoLuong || [];
 
@@ -426,15 +409,11 @@ Thêm mới sản phẩm
             variants.forEach((variant, index) => {
                 let variantKey = variant.join(" - ");
 
-                let oldGiaNhapValue = oldGiaNhap[index] || "";
                 let oldGiaBanValue = oldGiaBan[index] || "";
                 let oldSoLuongValue = oldSoLuong[index] || "";
 
                 let errorImg = window.oldErrors?.[`anh_bien_the.${index}`] ?
                     `<p class="text-danger">${window.oldErrors[`anh_bien_the.${index}`][0]}</p>` : '';
-
-                let errorGiaNhap = window.oldErrors?.[`gia_nhap.${index}`] ?
-                    `<p class="text-danger">${window.oldErrors[`gia_nhap.${index}`][0]}</p>` : '';
                 let errorGiaBan = window.oldErrors?.[`gia_ban.${index}`] ?
                     `<p class="text-danger">${window.oldErrors[`gia_ban.${index}`][0]}</p>` : '';
                 let errorSoLuong = window.oldErrors?.[`so_luong.${index}`] ?
@@ -445,10 +424,6 @@ Thêm mới sản phẩm
                         ${errorImg}
                     </td>
                     <td><input type="hidden" name="selected_values[]" value="${variantKey}">${variantKey}</td>
-                    <td>
-                        <input type="number" class="form-control" name="gia_nhap[]" value="${oldGiaNhapValue}" placeholder="Giá nhập">
-                        ${errorGiaNhap}
-                    </td>
                     <td>
                         <input type="number" class="form-control" name="gia_ban[]" value="${oldGiaBanValue}" placeholder="Giá bán">
                         ${errorGiaBan}

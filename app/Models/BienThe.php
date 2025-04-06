@@ -15,7 +15,6 @@ class BienThe extends Model
         // 'gia_tri_thuoc_tinh_id',
         'ten_bien_the',
         'anh_bien_the',
-        'gia_nhap',
         'gia_ban',
         'so_luong'
     ];
