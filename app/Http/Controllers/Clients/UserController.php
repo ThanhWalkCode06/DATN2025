@@ -145,6 +145,7 @@ class UserController extends Controller
                     return redirect()->back()->with('error', 'Không thể hủy đơn hàng khi trạng thái không phù hợp');
                 }
             }
+            
             // trả hàng
             if ($request->trang_thai == 5) {
                 if ($donHang->trang_thai_don_hang >= 3) {
