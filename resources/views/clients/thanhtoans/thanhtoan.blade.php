@@ -141,7 +141,8 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                            
+                                                        
+
                                                         <!-- Hiển thị số dư ví khi phương thức thanh toán là ví (id = 3) -->
                                                         {{-- @if ($item['id'] == 3)
                                                             <div id="flush-collapse{{ $item['id'] }}" class="accordion-collapse collapse" aria-labelledby="flush-heading{{ $item['id'] }}" data-bs-parent="#accordionFlushExample">
@@ -531,8 +532,9 @@
                 const paymentMethod = $('#hiddenPaymentMethod').val();
                 // Nếu là thanh toán bằng ví (ID = 3)
                 if (paymentMethod === "3") {
-                    const confirmed = confirm("Xác nhận trừ tiền trong ví?");
-                    if (!confirmed) {
+                  
+                      const confirmed = confirm(`Xác nhận trừ tiền trong ví?`);
+                     if (!confirmed) {
                         // ❌ Nếu người dùng bấm Hủy thì dừng lại
                         return;
                     }
