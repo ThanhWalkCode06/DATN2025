@@ -100,143 +100,113 @@
                     </div>
 
                     <div class="blog-detail-contain mt-4">
-                        <p class="first-letter">{!!   nl2br(e($baiViet->noi_dung))  !!}</p>
+                        <p class="first-letter">{!! nl2br(e($baiViet->noi_dung)) !!}</p>
                     </div>
 
                 </div>
                 <div class="comment-box overflow-hidden">
                     <div class="leave-title">
-                        <h3>Comments</h3>
+                        <p><span class="fw-bold" style="font-size: 16px ">Bình luận : </span>{{ $countComment }} lượt</p>
                     </div>
 
-                    <div class="user-comment-box">
-                        <ul>
-                            <li>
-                                <div class="user-box border-color">
-                                    <div class="reply-button">
-                                        <i class="fa-solid fa-reply"></i>
-                                        <span class="theme-color">Reply</span>
+                    @foreach ($comments as $comment)
+                        <div class="card mb-4 shadow-sm p-3 border-0">
+                            <div class="d-flex">
+                                {{-- Avatar người bình luận --}}
+                                @if ($comment->user && $comment->user->avatar)
+                                    <img src="{{ env('VIEW_IMG') }}/{{ $comment->user->avatar }}"
+                                        class="rounded-circle me-3 border"
+                                        style="width: 60px; height: 60px; object-fit: cover;" alt="Avatar">
+                                @else
+                                    <img src="{{ env('APP_URL') }}/clients/img/avatar-default.jpg"
+                                        class="rounded-circle me-2 border"
+                                        style="width: 50px; height: 50px; object-fit: cover;" alt="Avatar">
+                                @endif
+
+
+                                <div class="flex-grow-1">
+                                    {{-- Tên người bình luận và thời gian --}}
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <h5 class="mb-1 text-primary">{{ $comment->user->name ?? 'Unknown' }}</h5>
+                                        <small class="text-muted">
+                                            {{ $comment->updated_at->format('d-m-Y') }} lúc
+                                            {{ $comment->updated_at->format('H:i') }}
+                                            @if ($comment->created_at != $comment->updated_at)
+                                                <span class="text-info">(Chỉnh sửa)</span>
+                                            @endif
+                                        </small>
                                     </div>
-                                    <div class="user-image">
-                                        <img src="../assets/images/inner-page/user/1.jpg"
-                                            class="img-fluid blur-up lazyload" alt="">
-                                        <div class="user-name">
-                                            <h6>30 Jan, 2022</h6>
-                                            <h5 class="text-content">Glenn Greer</h5>
+
+                                    {{-- Nội dung bình luận --}}
+                                    <div class="mt-2">
+                                        <strong class="text-secondary">Nội dung:</strong>
+                                        <p class="mb-1">{{ $comment->content }}</p>
+                                    </div>
+
+
+                                    {{-- Hiển thị các trả lời --}}
+                                    @php
+                                        $replies = $product
+                                            ->comments()
+                                            ->where('parent_user_id', $comment->user_id)
+                                            ->get();
+                                        // @dd($comment->id);
+                                    @endphp
+
+                                    @if ($replies->count() > 0)
+                                        <div class="mt-3 ps-3 border-start">
+                                            <h6 class="fw-bold text-secondary">Phản hồi:</h6>
+                                            @foreach ($replies as $rep)
+                                                <div class="d-flex mt-3 bg-light p-2 rounded-3 shadow-sm">
+                                                    {{-- Avatar người trả lời --}}
+                                                    @if ($rep->user && $rep->user->avatar)
+                                                        <img src="{{ env('VIEW_IMG') }}/{{ $rep->user->avatar }}"
+                                                            class="rounded-circle me-2 border"
+                                                            style="width: 50px; height: 50px; object-fit: cover;"
+                                                            alt="Avatar">
+                                                    @else
+                                                        <img src="{{ env('APP_URL') }}/clients/img/avatar-default.jpg"
+                                                            class="rounded-circle me-2 border"
+                                                            style="width: 50px; height: 50px; object-fit: cover;"
+                                                            alt="Avatar">
+                                                    @endif
+
+                                                    <div class="flex-grow-1">
+                                                        {{-- Tên người trả lời --}}
+                                                        <div class="d-flex justify-content-between align-items-center">
+                                                            <h6 class="mb-1 text-dark">
+                                                                {{ $rep->user->name ?? 'No name' }}
+                                                                <span class="badge bg-success">Admin</span>
+                                                            </h6>
+                                                            <small class="text-muted">
+                                                                {{ $rep->updated_at->format('d-m-Y') }} lúc
+                                                                {{ $rep->updated_at->format('H:i') }}
+                                                                @if ($rep->created_at != $rep->updated_at)
+                                                                    <span class="text-info">(Chỉnh sửa)</span>
+                                                                @endif
+                                                            </small>
+                                                        </div>
+
+                                                        {{-- Nội dung trả lời --}}
+                                                        <div class="mt-1">
+                                                            <strong class="text-secondary">Nội dung:</strong>
+                                                            <p class="mb-1">{{ $rep->content }}</p>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            @endforeach
                                         </div>
-                                    </div>
-
-                                    <div class="user-contain">
-                                        <p>"This proposal is a win-win situation which will cause a stellar paradigm
-                                            shift, and produce a multi-fold increase in deliverables a better
-                                            understanding"</p>
-                                    </div>
-                                </div>
-                            </li>
-
-                            <li>
-                                <div class="user-box border-color">
-                                    <div class="reply-button">
-                                        <i class="fa-solid fa-reply"></i>
-                                        <span class="theme-color">Reply</span>
-                                    </div>
-                                    <div class="user-image">
-                                        <img src="../assets/images/inner-page/user/2.jpg"
-                                            class="img-fluid blur-up lazyload" alt="">
-                                        <div class="user-name">
-                                            <h6>30 Jan, 2022</h6>
-                                            <h5 class="text-content">Glenn Greer</h5>
-                                        </div>
-                                    </div>
-
-                                    <div class="user-contain">
-                                        <p>"Yeah, I think maybe you do. Right, gimme a Pepsi free. Of course, the
-                                            Enchantment Under The Sea Dance they're supposed to go to this, that's
-                                            where they kiss for the first time. You'll find out. Are you sure about
-                                            this storm?"</p>
-                                    </div>
-                                </div>
-                            </li>
-
-                            <li class="li-padding">
-                                <div class="user-box">
-                                    <div class="reply-button">
-                                        <i class="fa-solid fa-reply"></i>
-                                        <span class="theme-color">Reply</span>
-                                    </div>
-                                    <div class="user-image">
-                                        <img src="../assets/images/inner-page/user/3.jpg"
-                                            class="img-fluid blur-up lazyload" alt="">
-                                        <div class="user-name">
-                                            <h6>30 Jan, 2022</h6>
-                                            <h5 class="text-content">Glenn Greer</h5>
-                                        </div>
-                                    </div>
-
-                                    <div class="user-contain">
-                                        <p>"Cheese slices goat cottage cheese roquefort cream cheese pecorino cheesy
-                                            feet when the cheese comes out everybody's happy"</p>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="leave-box">
-                    <div class="leave-title mt-0">
-                        <h3>Leave Comment</h3>
-                    </div>
-
-                    <div class="leave-comment">
-                        <div class="comment-notes">
-                            <p class="text-content mb-4">Your email address will not be published. Required fields
-                                are marked</p>
-                        </div>
-                        <div class="row g-3">
-                            <div class="col-xxl-4 col-lg-12 col-sm-6">
-                                <div class="blog-input">
-                                    <input type="text" class="form-control" id="exampleFormControlInput1"
-                                        placeholder="Full Name">
-                                </div>
-                            </div>
-
-                            <div class="col-xxl-4 col-lg-12 col-sm-6">
-                                <div class="blog-input">
-                                    <input type="email" class="form-control" id="exampleFormControlInput2"
-                                        placeholder="Enter Email Address">
-                                </div>
-                            </div>
-
-                            <div class="col-xxl-4 col-lg-12 col-sm-6">
-                                <div class="blog-input">
-                                    <input type="url" class="form-control" id="exampleFormControlInput3"
-                                        placeholder="Enter URL">
-                                </div>
-                            </div>
-
-                            <div class="col-12">
-                                <div class="blog-input">
-                                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="4" placeholder="Comments"></textarea>
+                                    @endif
                                 </div>
                             </div>
                         </div>
+                    @endforeach
 
-                        <div class="form-check d-flex mt-4 p-0">
-                            <input class="checkbox_animated" type="checkbox" value="" id="flexCheckDefault">
-                            <label class="form-check-label text-content" for="flexCheckDefault">
-                                <span class="color color-1"> Save my name, email, and website in this
-                                    browser for the next time I comment.</span>
-                            </label>
-                        </div>
-
-                        <button class="btn btn-animation ms-xxl-auto mt-xxl-0 mt-3 btn-md fw-bold">Post
-                            Comment</button>
-                    </div>
                 </div>
             </div>
-                @include('clients.baiviets.sidebar')
-            </div>
+            @include('clients.baiviets.sidebar')
+        </div>
         </div>
 
     </section>
