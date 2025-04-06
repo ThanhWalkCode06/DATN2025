@@ -89,5 +89,8 @@ class AppServiceProvider extends ServiceProvider
                 // Chia sẻ biến $phieuGiamGiaThanhToans cho tất cả các view
                 $view->with('phieuGiamGiaThanhToans', $phieuGiamGiaThanhToans);
             });
+
+
+        
     }
 }
