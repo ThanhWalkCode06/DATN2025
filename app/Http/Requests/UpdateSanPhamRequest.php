@@ -34,13 +34,10 @@ class UpdateSanPhamRequest extends FormRequest
 
 
             'gia_cu' => ['required', 'numeric','min:1'],
-            'gia_moi' => ['required', 'numeric','min:0','lt:gia_cu'],
             'anh_bien_the' => 'nullable|array',
             'anh_bien_the.*' => 'nullable|image',
-            'gia_nhap' => [ 'array'],
-            'gia_nhap.*' => ['required', 'numeric','min:0'],
             'gia_ban' => [ 'array'],
-            'gia_ban.*' => ['required', 'numeric','min:0'],
+            'gia_ban.*' => ['required', 'numeric','min:0','lt:gia_cu'],
             'so_luong' => [ 'array'],
             'so_luong.*' => ['required', 'integer','min:0'],
         ];
@@ -48,24 +45,7 @@ class UpdateSanPhamRequest extends FormRequest
 
     public function withValidator($validator)
     {
-        $validator->after(function ($validator) {
-            $gia_nhap = $this->input('gia_nhap', []);
-            $gia_ban = $this->input('gia_ban', []);
-            $gia_cu = $this->input('gia_cu');
-            // dd($gia_cu);
-            foreach ($gia_nhap as $index => $value) {
-                if (isset($gia_nhap[$index]) && $value >= $gia_ban[$index]) {
-                    $validator->errors()->add("gia_nhap.$index", "Giá nhập phải nhỏ hơn giá bán.");
-                }
-                if($value >= $gia_cu){
-                    $validator->errors()->add("gia_nhap.$index", "Giá nhập phải nhỏ hơn giá cũ.");
-                }
-                if($gia_ban[$index] >= $gia_cu){
-                    $validator->errors()->add("gia_ban.$index", "Giá bán phải nhỏ hơn giá cũ.");
-                }
-            }
-            // dd($validator->errors()->all());
-        });
+
         if ($this->hasFile('hinh_anh')) {
             $file = $this->file('hinh_anh');
             $fileName = time() . '_' . $file->getClientOriginalName();
@@ -99,16 +79,12 @@ class UpdateSanPhamRequest extends FormRequest
             'hinh_anh.mimes' => 'Hình ảnh phải có định dạng jpeg, png, jpg, hoặc gif.',
             'hinh_anh.max' => 'Hình ảnh không được vượt quá 2MB.',
 
-            'gia_nhap.*.required' => 'Bắt buộc phải nhập',
-            'gia_nhap.*.numeric' => 'Bắt buộc phải nhập số',
-            'gia_nhap.*.min' => 'Bắt buộc lớn hơn 0',
-            'gia_moi.lt' =>'Giá mới phải ít hơn giá cũ',
-            'gia_moi.required' =>'Bắt buộc phải nhập',
             'gia_cu.required' =>'Bắt buộc phải nhập',
 
             'gia_ban.*.required' => 'Bắt buộc phải nhập',
             'gia_ban.*.numeric' => 'Bắt buộc phải nhập số',
             'gia_ban.*.min' => 'Bắt buộc lớn hơn 0',
+            'gia_ban.*.lt' => "Giá bán phải nhỏ hơn giá gốc",
 
 
             'so_luong.*.required' => 'Bắt buộc phải nhập',

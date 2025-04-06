@@ -128,7 +128,6 @@
                                                                                 <td>#</td>
                                                                                 <td>Tên biến thể</td>
                                                                                 <td>Hình ảnh</td>
-                                                                                <td>Giá nhập</td>
                                                                                 <td>Giá bán</td>
                                                                                 <td>Số lượng</td>
                                                                             </tr>
@@ -154,9 +153,6 @@
                                                                                                 Không có ảnh
                                                                                             @endif
                                                                                         </td>
-
-                                                                                        <td>{{ number_format($bienThe->gia_nhap, 0, ',', '.') }}
-                                                                                            VNĐ</td>
                                                                                         <td>{{ number_format($bienThe->gia_ban, 0, ',', '.') }}
                                                                                             VNĐ</td>
                                                                                         <td>{{ $bienThe->so_luong }}</td>

@@ -64,20 +64,20 @@
 
 @section('content')
 <div class="container">
-    <h2 class="text-center text-primary mb-4">Chi Tiết Sản Phẩm</h2>
+    <h2 class="text-center text-success mb-4">Chi Tiết Sản Phẩm</h2>
     <div class="card card-custom shadow-lg border-0">
         <div class="row g-4 align-items-center">
             <div class="col-md-5 text-center">
-                <img src="{{ asset('storage/' . $sanPham->hinh_anh) }}" class="product-image" alt="{{ $sanPham->ten_san_pham }}">
+                <img width="200px" src="{{ asset('storage/' . $sanPham->hinh_anh) }}" class="product-image" alt="{{ $sanPham->ten_san_pham }}">
             </div>
             <div class="col-md-7 product-info">
-                <h3 class="text-primary">Tên sản phẩm: {{ $sanPham->ten_san_pham }}</h3><br>
-                <p class="text-danger">Giá: <strong>{{ number_format($sanPham->gia_moi) }} VNĐ</strong></p>
+                <p class="text-secondary">Tên sản phẩm: {{ $sanPham->ten_san_pham }}<p>
+                <p class="text-secondary">Giá: {{ number_format($sanPham->gia_cu) }} đ</p>
                 <p class="text-secondary">Mô tả: {!! nl2br(e($sanPham->mo_ta)) !!}</p>
             </div>
         </div>
     </div>
-    
+
     <div class="card card-custom mt-4 shadow-lg border-0">
         <div class="variant-container" onclick="toggleVariantTable()">
             <h4 class="text-success mb-0">Biến thể ▼</h4>
@@ -87,20 +87,16 @@
                 <table class="table table-bordered">
                     <thead>
                         <tr>
+                            <th>Ảnh</th>
                             <th>Tên biến thể</th>
-                            <th>Giá nhập</th>
                             <th>Giá bán</th>
                             <th>Số lượng</th>
-                            <th>Ảnh</th>
+
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($sanPham->bienThes as $bienThe)
                             <tr>
-                                <td>{{ $bienThe->ten_bien_the }}</td>
-                                <td>{{ number_format($bienThe->gia_nhap) }} VNĐ</td>
-                                <td>{{ number_format($bienThe->gia_ban) }} VNĐ</td>
-                                <td>{{ $bienThe->so_luong }}</td>
                                 <td class="text-center">
                                     @if($bienThe->anh_bien_the)
                                         <img src="{{ asset('storage/' . $bienThe->anh_bien_the) }}" alt="{{ $bienThe->ten_bien_the }}" class="img-thumbnail" width="80">
@@ -108,6 +104,10 @@
                                         <span class="text-muted">Không có ảnh</span>
                                     @endif
                                 </td>
+                                <td>{{ $bienThe->ten_bien_the }}</td>
+                                <td>{{ number_format($bienThe->gia_ban) }} VNĐ</td>
+                                <td>{{ $bienThe->so_luong }}</td>
+
                             </tr>
                         @endforeach
                     </tbody>

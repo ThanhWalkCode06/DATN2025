@@ -28,9 +28,8 @@ class StoreSanPhamRequest extends FormRequest
         'anh_bien_the.*' => 'nullable|image',
         'ten_san_pham' => 'required|string|max:255',
         'ma_san_pham' => 'required|string|unique:san_phams,ma_san_pham',
-        // 'khuyen_mai' => 'nullable|numeric|min:0',
+
         'gia_cu' => ['required', 'numeric','min:1'],
-        'gia_moi' => ['required', 'numeric','min:0','lt:gia_cu'],
         'mo_ta' => 'nullable|string',
 
         'hinh_anh' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
@@ -38,8 +37,6 @@ class StoreSanPhamRequest extends FormRequest
         'danh_muc_id' => 'required|exists:danh_muc_san_phams,id',
         'trang_thai' => 'required|boolean',
 
-        'gia_nhap' => [ 'array'],
-        'gia_nhap.*' => ['required', 'numeric','min:0','lt:gia_cu'],
         'gia_ban' => [ 'array'],
         'gia_ban.*' => ['required', 'numeric','min:0','lt:gia_cu'],
         'so_luong' => [ 'array'],
@@ -54,16 +51,7 @@ class StoreSanPhamRequest extends FormRequest
 
     public function withValidator($validator)
     {
-        $validator->after(function ($validator) {
-            $gia_nhap = $this->input('gia_nhap', []);
-            $gia_ban = $this->input('gia_ban', []);
 
-            foreach ($gia_nhap as $index => $value) {
-                if (isset($gia_nhap[$index]) && $value >= $gia_ban[$index]) {
-                    $validator->errors()->add("gia_nhap.$index", "Giá nhập phải nhỏ hơn giá bán.");
-                }
-            }
-        });
         if ($this->hasFile('hinh_anh')) {
             $file = $this->file('hinh_anh');
             $fileName = time() . '_' . $file->getClientOriginalName();
@@ -85,14 +73,7 @@ class StoreSanPhamRequest extends FormRequest
             'danh_muc_id.exists' => 'Danh mục sản phẩm không hợp lệ.',
             'trang_thai.boolean' => 'Trạng thái phải là còn hàng hoặc hết hàng.',
 
-            'gia_moi.required' =>'Bắt buộc phải nhập',
             'gia_cu.required' =>'Bắt buộc phải nhập',
-
-
-            'gia_nhap.*.required' => 'Bắt buộc phải nhập',
-            'gia_nhap.*.numeric' => 'Bắt buộc phải nhập số',
-            'gia_nhap.*.min' => 'Bắt buộc lớn hơn 0',
-            'gia_moi.lt' =>'Giá mới phải ít hơn giá cũ',
 
             'gia_ban.*.required' => 'Bắt buộc phải nhập',
             'gia_ban.*.numeric' => 'Bắt buộc phải nhập số',
@@ -105,9 +86,7 @@ class StoreSanPhamRequest extends FormRequest
             'anh_bien_the.required' => 'Bắt buộc phải nhập',
             'hinh_anh.required' => 'Bắt buộc phải nhập',
 
-            'gia_moi.lt' => "Giá mới phải nhỏ hơn giá cũ",
-            'gia_nhap.*.lt' => "Giá nhập phải nhỏ hơn giá cũ",
-            'gia_ban.*.lt' => "Giá bán phải nhỏ hơn giá cũ",
+            'gia_ban.*.lt' => "Giá bán phải nhỏ hơn giá gốc",
         ];
     }
 }

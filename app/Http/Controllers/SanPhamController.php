@@ -29,7 +29,7 @@ class SanPhamController extends Controller
     {
         $sanPhams = SanPham::with('danhMuc')
             ->with(['bienThes' => function ($query) {
-                $query->select('id', 'san_pham_id', 'ten_bien_the', 'anh_bien_the', 'gia_nhap', 'gia_ban', 'so_luong')
+                $query->select('id', 'san_pham_id', 'ten_bien_the', 'anh_bien_the', 'gia_ban', 'so_luong')
                     ->whereRaw('id IN (SELECT MAX(id) FROM bien_thes GROUP BY san_pham_id, ten_bien_the)'); // Lấy biến thể mới nhất theo `ten_bien_the`
             }])
             ->search($request->input('search'))
@@ -108,7 +108,6 @@ class SanPhamController extends Controller
             'ten_san_pham' => $request->ten_san_pham,
             'ma_san_pham' => $request->ma_san_pham,
             'gia_cu' => $request->gia_cu,
-            'gia_moi' => $request->gia_moi,
             'mo_ta' => $request->mo_ta,
             'danh_muc_id' => $request->danh_muc_id,
             'trang_thai' => $request->trang_thai,
@@ -155,7 +154,6 @@ class SanPhamController extends Controller
                             $bienTheData = [
                                 'san_pham_id' => $sanPham->id,
                                 'ten_bien_the' => $giaTriArray[$index],
-                                'gia_nhap' => $request->gia_nhap[$index],
                                 'gia_ban' => $request->gia_ban[$index],
                                 'so_luong' => $request->so_luong[$index],
                                 'thuoc_tinh_id' => $thuocTinhId,
@@ -191,7 +189,6 @@ class SanPhamController extends Controller
                     $bienThe = BienThe::create([
                         'san_pham_id' => $sanPham->id,
                         'ten_bien_the' => $tenBienThe,
-                        'gia_nhap' => $request->gia_nhap[$key],
                         'gia_ban' => $request->gia_ban[$key],
                         'so_luong' => $request->so_luong[$key],
                     ]);
@@ -292,7 +289,6 @@ class SanPhamController extends Controller
             'ten_san_pham' => $request->ten_san_pham,
             'ma_san_pham' => $request->ma_san_pham,
             'gia_cu' => $request->gia_cu,
-            'gia_moi' => $request->gia_moi,
             'mo_ta' => $request->mo_ta,
             'danh_muc_id' => $request->danh_muc_id,
             'trang_thai' => $request->trang_thai,
@@ -328,7 +324,6 @@ class SanPhamController extends Controller
                             $bienTheData = [
                                 'san_pham_id' => $sanPham->id,
                                 'ten_bien_the' => $giaTriArray[$index],
-                                'gia_nhap' => $request->gia_nhap[$index],
                                 'gia_ban' => $request->gia_ban[$index],
                                 'so_luong' => $request->so_luong[$index],
                                 'thuoc_tinh_id' => $thuocTinhId,
@@ -362,7 +357,6 @@ class SanPhamController extends Controller
                             'ten_bien_the' => $tenBienThe,
                         ],
                         [
-                            'gia_nhap' => $request->gia_nhap[$key] ?? 0,
                             'gia_ban' => $request->gia_ban[$key] ?? 0,
                             'so_luong' => $request->so_luong[$key] ?? 0,
                         ]

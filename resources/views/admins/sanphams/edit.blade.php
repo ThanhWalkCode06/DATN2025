@@ -144,15 +144,9 @@ tr{
                                     </div>
 
                                     <div class="mb-4">
-                                        <label class="form-label-title">Giá cũ</label>
+                                        <label class="form-label-title">Giá gốc</label>
                                         <input type="number" name="gia_cu" class="form-control" value="{{ $sanpham->gia_cu }}" >
                                         @error('gia_cu') <div class="text-danger">{{ $message }}</div> @enderror
-                                    </div>
-
-                                    <div class="mb-4">
-                                        <label class="form-label-title">Giá mới</label>
-                                        <input type="number" name="gia_moi" class="form-control" value="{{ $sanpham->gia_moi }}" >
-                                        @error('gia_moi') <div class="text-danger">{{ $message }}</div> @enderror
                                     </div>
 
                                     <div class="mb-4">
@@ -208,25 +202,31 @@ tr{
                         <h4>Thêm Thuộc Tính</h4>
                         <div class="mb-3">
                             @foreach ($thuocTinhs as $tt)
-                                <div class="mb-2">
-                                    <label>{{ $tt->ten_thuoc_tinh }}</label>
-                                    <select name="attribute_values[{{ $tt->id }}][]" class="form-control select2" multiple
-                                        data-placeholder="{{ $tt->ten_thuoc_tinh == 'Size' ? 'Chọn Size' : ($tt->ten_thuoc_tinh == 'Color' ? 'Chọn Color' : 'Chọn ' . $tt->ten_thuoc_tinh) }}">
-                                        @php
-                                            // Nếu có biến thể, lấy từ biến thể, nếu không lấy từ checkedTT
-                                            $selectedValues = isset($bienThe)
-                                                ? explode(' - ', $bienThe->ten_bien_the)
-                                                : array_unique(array_merge(...$checkedTT));
-                                        @endphp
-                                        @foreach ($tt->giaTriThuocTinhs as $value)
-                                            <option value="{{ $value->gia_tri }}"
-                                                {{ in_array($value->gia_tri, $selectedValues) ? 'selected' : '' }}>
-                                                {{ $value->gia_tri }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            @endforeach
+    <div class="mb-2">
+        <label>{{ $tt->ten_thuoc_tinh }}</label>
+
+        @php
+            // Ưu tiên lấy từ old input (khi submit lỗi)
+            if (old("attribute_values.{$tt->id}")) {
+                $selectedValues = old("attribute_values.{$tt->id}");
+            } elseif (isset($bienThe)) {
+                $selectedValues = explode(' - ', $bienThe->ten_bien_the);
+            } else {
+                $selectedValues = array_unique(array_merge(...$checkedTT));
+            }
+        @endphp
+
+        <select name="attribute_values[{{ $tt->id }}][]" class="form-control select2" multiple
+            data-placeholder="{{ $tt->ten_thuoc_tinh == 'Size' ? 'Chọn Size' : ($tt->ten_thuoc_tinh == 'Color' ? 'Chọn Color' : 'Chọn ' . $tt->ten_thuoc_tinh) }}">
+            @foreach ($tt->giaTriThuocTinhs as $value)
+                <option value="{{ $value->gia_tri }}"
+                    {{ in_array($value->gia_tri, $selectedValues) ? 'selected' : '' }}>
+                    {{ $value->gia_tri }}
+                </option>
+            @endforeach
+        </select>
+    </div>
+@endforeach
                         </div>
 
                             {{-- Danh sách biến thể --}}
@@ -236,7 +236,6 @@ tr{
                                     <tr>
                                         <th>Ảnh</th>
                                         <th>Thuộc tính</th>
-                                        <th>Giá nhập</th>
                                         <th>Giá bán</th>
                                         <th>Kho hàng</th>
                                         {{-- <th>Hành động</th> --}}
@@ -262,11 +261,6 @@ tr{
                                             <td>
                                                 <input type="hidden" name="selected_values[]" value="{{ $bienThe->ten_bien_the }}">
                                                 {{ $bienThe->ten_bien_the }}
-                                            </td>
-                                            <td><input type="number" name="gia_nhap[]" value="{{ $bienThe->gia_nhap }}" class="form-control">
-                                                @error("gia_nhap.$index")
-                                                <p class="text-danger">{{ $message }}</p>
-                                                @enderror
                                             </td>
                                             <td><input type="number" name="gia_ban[]" value="{{ $bienThe->gia_ban }}" class="form-control">
                                             @error("gia_ban.$index")
@@ -368,7 +362,6 @@ tr{
     if (oldValues['selected_values'] && oldValues['selected_values'].length > 0) {
         oldValues['selected_values'].forEach((variantKey, index) => {
             existingVariants[variantKey] = {
-                gia_nhap: oldValues['gia_nhap'] ? oldValues['gia_nhap'][index] || "" : "",
                 gia_ban: oldValues['gia_ban'] ? oldValues['gia_ban'][index] || "" : "",
                 so_luong: oldValues['so_luong'] ? oldValues['so_luong'][index] || "" : "",
                 anh_cu: oldValues['anh_cu'] ? oldValues['anh_cu'][index] || "" : ""
@@ -379,7 +372,6 @@ tr{
     else if (initialVariants.length > 0) {
         initialVariants.forEach(variant => {
             existingVariants[variant.key] = {
-                gia_nhap: variant.gia_nhap || "",
                 gia_ban: variant.gia_ban || "",
                 so_luong: variant.so_luong || "",
                 anh_cu: variant.anh_cu || ""
@@ -392,7 +384,6 @@ tr{
             let variantKey = $(this).data("variant");
             if (variantKey) {
                 existingVariants[variantKey] = {
-                    gia_nhap: $(this).find("input[name='gia_nhap[]']").val() || "",
                     gia_ban: $(this).find("input[name='gia_ban[]']").val() || "",
                     so_luong: $(this).find("input[name='so_luong[]']").val() || "",
                     anh_cu: $(this).find("input[name='anh_cu[]']").val() || ""
@@ -433,7 +424,7 @@ tr{
             if (existingVariants[variantKey]) {
                 newVariants[variantKey] = existingVariants[variantKey]; // Giữ lại dữ liệu cũ
             } else {
-                newVariants[variantKey] = { gia_nhap: "", gia_ban: "", so_luong: "", anh_cu: "" };
+                newVariants[variantKey] = { gia_ban: "", so_luong: "", anh_cu: "" };
             }
         });
 
@@ -451,8 +442,6 @@ tr{
 
         Object.keys(existingVariants).forEach((variantKey, index) => {
             let data = existingVariants[variantKey];
-
-            let error_gia_nhap = errors[`gia_nhap.${index}`] ? `<p class="text-danger">${errors[`gia_nhap.${index}`][0]}</p>` : '';
             let error_gia_ban = errors[`gia_ban.${index}`] ? `<p class="text-danger">${errors[`gia_ban.${index}`][0]}</p>` : '';
             let error_so_luong = errors[`so_luong.${index}`] ? `<p class="text-danger">${errors[`so_luong.${index}`][0]}</p>` : '';
 
@@ -463,10 +452,7 @@ tr{
                     ${data.anh_cu ? `<img src="/storage/${data.anh_cu}" width="50" class="preview-image">` : ""}
                 </td>
                 <td><input type="hidden" name="selected_values[]" value="${variantKey}">${variantKey}</td>
-                <td>
-                    <input type="number" name="gia_nhap[]" value="${data.gia_nhap}" class="form-control">
-                    ${error_gia_nhap}
-                </td>
+
                 <td>
                     <input type="number" name="gia_ban[]" value="${data.gia_ban}" class="form-control">
                     ${error_gia_ban}
