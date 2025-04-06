@@ -431,7 +431,7 @@
 
                                     <span id="default-price" class="theme-color price"
                                         style="font-size: 20px; font-weight: bold;">
-                                        {{ number_format($sanPhams->gia_moi, 0, ',', '.') }}₫
+                                        {{ number_format($sanPhams->giaThapNhatCuaSP(), 0, ',', '.') }}₫
                                     </span>
 
                                     <del id="default-old-price" class="text-content text-muted" style="font-size: 18px;">
@@ -852,9 +852,9 @@
                                 <div class="product-box-3 wow fadeInUp">
                                     <div class="product-header">
                                         <!-- Hiển thị % giảm giá nếu có -->
-                                        @if ($item->gia_cu > $item->gia_moi)
+                                        @if ($item->gia_cu > $item->giaThapNhatCuaSP())
                                             <span class="badge bg-danger">
-                                                -{{ round((($item->gia_cu - $item->gia_moi) / $item->gia_cu) * 100) }}%
+                                                -{{ round((($item->gia_cu - $item->giaThapNhatCuaSP()) / $item->gia_cu) * 100) }}%
                                             </span>
                                         @endif
                                         <div class="product-image">
@@ -887,7 +887,7 @@
                                             </div>
 
                                             <h5 class="price">
-                                                <span class="theme-color">{{ number_format($item->gia_moi, 0, ',', '.') }}
+                                                <span class="theme-color">{{ number_format($item->giaThapNhatCuaSP(), 0, ',', '.') }}
                                                     ₫</span>
                                                 <del>{{ number_format($item->gia_cu, 0, ',', '.') }} ₫</del>
                                             </h5>
@@ -959,7 +959,7 @@
                                 <h5 class="name">{{ $sanPhams->ten_san_pham }}</h5>
                                 <div class="product-review-rating">
                                     <div class="product-rating">
-                                        <span class="theme-color">{{ number_format($sanPhams->gia_moi, 0, ',', '.') }}
+                                        <span class="theme-color">{{ number_format($sanPhams->giaThapNhatCuaSP(), 0, ',', '.') }}
                                             ₫</span>
                                         <del>{{ number_format($sanPhams->gia_cu, 0, ',', '.') }} ₫</del>
                                     </div>
@@ -1015,6 +1015,7 @@
             let selectedColorText = document.querySelector("#selected-color");
             let productImage = document.querySelector("#main-image"); // Main image
             let discountLabel = document.querySelector(".offer-top");
+            let selectedSizeValue = null; // Biến lưu size đã chọn
 
             function formatCurrency(value) {
                 return new Intl.NumberFormat("vi-VN").format(value) + "₫";
@@ -1023,6 +1024,7 @@
             function updatePriceAndQuantity() {
                 let selectedSize = document.querySelector(".variant-size-selector:checked");
                 if (selectedSize) {
+                    selectedSizeValue = selectedSize.getAttribute("data-size"); // Lưu size đang chọn
                     let sizePrice = parseFloat(selectedSize.getAttribute("data-price"));
                     let oldPrice = parseFloat(defaultOldPrice.innerText.replace("₫", "").replace(/\./g, ""));
                     let variantImage = selectedSize.getAttribute("data-image");
@@ -1042,10 +1044,9 @@
                         discountLabel.style.visibility = "hidden";
                     }
 
-                    // Update main image when size is selected
                     if (variantImage && variantImage !== "null" && variantImage !== "undefined") {
-                        productImage.src = variantImage; // Update image to the selected variant
-                        productImage.style.display = "block"; // Show main image
+                        productImage.src = variantImage;
+                        productImage.style.display = "block";
                     }
                 }
             }
@@ -1060,9 +1061,16 @@
                     return;
                 }
 
-                let firstSizeInput = null;
+                const sizeOrder = {
+                    "S": 1,
+                    "M": 2,
+                    "L": 3,
+                    "XL": 4,
+                    "XXL": 5
+                };
+                bienThes.sort((a, b) => (sizeOrder[a.gia_tri] || 99) - (sizeOrder[b.gia_tri] || 99));
 
-                bienThes.forEach((size, index) => {
+                bienThes.forEach(size => {
                     let label = document.createElement("label");
                     label.classList.add("option", "size-option");
                     label.style.cursor = "pointer";
@@ -1070,22 +1078,23 @@
                 <input type="radio" name="size" class="d-none variant-size-selector"
                     value="${size.id}" data-price="${size.gia_ban}" 
                     data-quantity="${size.so_luong}" 
-                    data-image="${size.anh}">  
+                    data-image="${size.anh}" 
+                    data-size="${size.gia_tri}">  
                 <span class="option-box">${size.gia_tri}</span>
             `;
                     sizeContainer.appendChild(label);
-
-                    if (index === 0) {
-                        firstSizeInput = label.querySelector("input");
-                    }
                 });
 
                 attachSizeEvents();
 
-                // Set first size as selected
-                if (firstSizeInput) {
-                    firstSizeInput.checked = true;
-                    firstSizeInput.dispatchEvent(new Event("change"));
+                // Nếu đã chọn size trước đó, chọn lại size khi đổi màu
+                if (selectedSizeValue) {
+                    let previousSelectedSize = Array.from(document.querySelectorAll(".variant-size-selector"))
+                        .find(input => input.getAttribute("data-size") === selectedSizeValue);
+                    if (previousSelectedSize) {
+                        previousSelectedSize.checked = true;
+                        previousSelectedSize.dispatchEvent(new Event("change"));
+                    }
                 }
             }
 
@@ -1099,7 +1108,6 @@
                         });
 
                         this.closest("label").classList.add("selected");
-
                         updatePriceAndQuantity();
 
                         let addToCartBtn = document.querySelector(".btn-add-cart");
@@ -1123,7 +1131,6 @@
                 });
             });
 
-            // Hide 0 price initially
             priceDisplay.style.display = "none";
         });
     </script>
@@ -1200,9 +1207,47 @@
                             showConfirmButton: false,
                             timer: 1500
                         });
-                    } else {
-                        Swal.fire("Lỗi", response.message, "error");
                     }
+                    $(".header-wishlist .badge").text(response.cart.totalItem);
+                    $(".total-price").text(response.cart.totalPrice.toLocaleString(
+                        "vi-VN") + " đ");
+
+                    let cartListHtml = '';
+                    let itemsToShow = response.cart.items.slice(0,
+                        4); // Giới hạn chỉ lấy 4 sản phẩm đầu tiên
+
+                    itemsToShow.forEach(item => {
+                        cartListHtml += `
+                <li style="width: 100%" class="product-box-contain">
+                    <div class="drop-cart">
+                        <a href="/sanpham/${item.id}" class="drop-image">
+                            <img src="${item.image}" class="blur-up lazyload" alt="">
+                        </a>
+                        <div class="drop-contain">
+                            <a href="/sanpham/${item.id}">
+                                <h5>${item.name}</h5>
+                                <h6>${item.name_bienthe}</h6>
+                            </a>
+                            <h6><span>${item.quantity} x</span> ${item.price.toLocaleString("vi-VN")} đ</h6>
+                            <button class="close-button close_button delete-cart-item" data-id="${item.id_cart}">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+                    </div>
+                </li>`;
+                    });
+
+                    $(".cart-list").html(cartListHtml); // Cập nhật danh sách sản phẩm
+
+                    // Nếu số lượng sản phẩm lớn hơn 4, hiển thị "Xem thêm..."
+                    if (response.cart.items.length > 4) {
+                        $(".cart-list").append(
+                            '<li class="text-center"><a href="giohang">Xem thêm...</a></li>'
+                        );
+                    } 
+                    // else {
+                    //     Swal.fire("Lỗi", response.message, "error");
+                    // }
                 },
                 error: function(xhr) {
                     Swal.fire("Lỗi", "Có lỗi xảy ra khi thêm vào giỏ hàng!", "error");

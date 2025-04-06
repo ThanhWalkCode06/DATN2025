@@ -129,28 +129,69 @@
                                                 id="accordionFlushExample">
 
                                                 @foreach ($pttts as $item)
-                                                    @if ($item['trang_thai'] == 1)
-                                                        <div class="accordion-item">
-                                                            <div class="accordion-header" id="flush-headingOne">
-                                                                <div class="accordion-button collapsed"
-                                                                    data-bs-toggle="collapse"
-                                                                    data-bs-target="#flush-collapseOne">
-                                                                    <div class="custom-form-check form-check mb-0">
-                                                                        <label class="form-check-label"
-                                                                            for="{{ 'cash' . $item['id'] }}">
-                                                                            <input class="form-check-input mt-0"
-                                                                                type="radio" name="flexRadioDefault"
-                                                                                id="{{ 'cash' . $item['id'] }}"
-                                                                                data-id="{{ $item['id'] }}"
-                                                                                {{ $item['id'] == 1 ? 'checked' : '' }}>
-                                                                            {{ $item['ten_phuong_thuc'] }}
-                                                                        </label>
-                                                                    </div>
+                                                @if ($item['trang_thai'] == 1)
+                                                    <div class="accordion-item">
+                                                        <div class="accordion-header" id="flush-heading{{ $item['id'] }}">
+                                                            <div class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#flush-collapse{{ $item['id'] }}">
+                                                                <div class="custom-form-check form-check mb-0">
+                                                                    <label class="form-check-label" for="{{ 'payment_method_' . $item['id'] }}">
+                                                                        <input class="form-check-input mt-0" type="radio" name="flexRadioDefault" id="{{ 'payment_method_' . $item['id'] }}" data-id="{{ $item['id'] }}" {{ $item['id'] == 1 ? 'checked' : '' }}>
+                                                                        {{ $item['ten_phuong_thuc'] }}
+                                                                    </label>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    @endif
-                                                @endforeach
+                                                        
+
+                                                        <!-- Hiển thị số dư ví khi phương thức thanh toán là ví (id = 3) -->
+                                                        {{-- @if ($item['id'] == 3)
+                                                            <div id="flush-collapse{{ $item['id'] }}" class="accordion-collapse collapse" aria-labelledby="flush-heading{{ $item['id'] }}" data-bs-parent="#accordionFlushExample">
+                                                                <div class="accordion-body">
+                                                                    <p>Chọn phương thức thanh toán bằng ví để trừ số tiền trong tài khoản ví của bạn.</p>
+                                                                    <p class="text-success">
+                                                                        <!-- Hiển thị số dư ví -->
+                                                                        @if($soDu) <!-- Kiểm tra xem $soDu có tồn tại không -->
+                                                                            Số dư ví của bạn: {{ number_format($soDu->so_du, 0, ',', '.') }} VNĐ
+                                                                        @else
+                                                                            Số dư ví không có sẵn.
+                                                                        @endif
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                        @endif --}}
+
+                                                    </div>
+                                                @endif
+                                            @endforeach
+                                            
+                                                <!-- Modal Điều Khoản -->
+                                                <div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered">
+                                                    <div class="modal-content shadow">
+                                                        <div class="modal-header">
+                                                        <h5 class="modal-title" id="termsModalLabel">Điều khoản thanh toán</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                        <p>Khi thanh toán online bằng VNPAY hoặc bằng Ví, nếu quý khách huỷ hàng hoặc trả hàng thì tiền sẽ được trả về Ví của quý khách.</p>
+                                                        <p>Số tiền đó <strong>chỉ dùng để mua hàng</strong> trong cửa hàng của chúng tôi, Ví đó <strong>không thể nạp cũng như không thể rút tiền</strong> </p>
+                                                        <p>Nếu không đồng ý điều khoản bạn chỉ có thể mua hàng và thanh toán bằng tiền mặt. Trân trọng!</p>
+                                                        <div class="form-check mt-3">
+                                                            <input class="form-check-input" type="checkbox" id="agreeTerms">
+                                                            <label class="form-check-label" for="agreeTerms">
+                                                            Tôi đồng ý với điều khoản mua hàng
+                                                            </label>
+                                                        </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                                        <button type="button" class="btn btn-primary" id="acceptTerms" disabled>Chấp nhận</button>
+                                                        </div>
+                                                    </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                
                                             </div>
                                         </div>
                                     </div>
@@ -160,71 +201,133 @@
                     </div>
                 </div>
 
-                <div class="col-lg-4">
-                    <div class="right-side-summery-box">
-                        <div class="summery-box-2">
-                            <div class="summery-header">
-                                <h3>Chi tiết đơn hàng</h3>
-                            </div>
-                            <div class="coupon-cart">
-                                <h6 class="text-content mb-2">Phiếu giảm giá</h6>
-                                <form id="voucherForm" action="{{ route('voucher.giohang') }}" method="post">
-                                    @csrf
-                                    <div class="mb-3 coupon-box input-group">
-                                        <input style="border: 1px solid #0da487;" id="voucherCode" type="text"
-                                            class="form-control" id="exampleFormControlInput1"
-                                            placeholder="Nhập mã phiếu">
-                                        <button style="border: 1px solid #0da487;margin-top: 0px;" type="submit"
-                                            class="btn-apply">Xác nhận</button>
+                        <div class="col-lg-4">
+                            <div class="right-side-summery-box">
+                                <div class="summery-box-2">
+                                    <div class="summery-header">
+                                        <h3>Chi tiết đơn hàng</h3>
                                     </div>
-                                </form>
+                                    <a href="javascript:void(0);" id="btnMaGiamGia"
+                                        class="btn theme-bg-color text-white btn-md w-100 mt-3 fw-bold"
+                                        data-bs-toggle="modal" data-bs-target="#modalVoucher">
+                                        Phiếu giảm giá dành cho bạn
+                                    </a>
+
+                                    <br>
+                                    <div class="coupon-cart">
+                                        {{-- <h6 class="text-content mb-2">Phiếu giảm giá</h6> --}}
+                                        <form id="voucherForm" action="{{ route('voucher.giohang') }}" method="post">
+                                            @csrf
+                                            <div class="mb-3 coupon-box input-group">
+                                                <input style="border: 1px solid #0da487;" id="voucherCode" type="text"
+                                                    class="form-control" id="exampleFormControlInput1"
+                                                    placeholder="Nhập mã phiếu">
+                                                <button style="border: 1px solid #0da487;margin-top: 0px;" type="submit"
+                                                    class="btn-apply">Xác nhận</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <ul class="summery-contain">
+                                        @foreach ($chiTietGioHangs as $chiTietGioHang)
+                                            <li>
+                                                <img src="{{ Storage::url($chiTietGioHang->anh_bien_the) }}"
+                                                    class="img-fluid blur-up lazyloaded checkout-image" alt="">
+                                                <h4>{{ $chiTietGioHang->ten_san_pham }} x
+                                                    <span class="so-luong">{{ $chiTietGioHang->so_luong }}</span>
+                                                    <span>{{ $chiTietGioHang->bienThe->ten_bien_the }}</span>
+                                                </h4>
+
+                                                <h4 hidden><span class="gia-moi">{{ $chiTietGioHang->bienThe->gia_ban }}</span>đ
+                                                </h4>
+                                                <h4 class="price"><span class="tong"></span>đ</h4>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+
+                                    <ul class="summery-total">
+                                        <li>
+                                            <h4>Tổng tiền sản phẩm</h4>
+                                            <h4 class="price"><span id="tong-san-pham"></span>đ</h4>
+                                        </li>
+
+                                        <li>
+                                            <h4>Phí vận chuyển</h4>
+                                            <h4 class="price"><span id="phi-van-chuyen">10.000</span>đ</h4>
+                                        </li>
+
+                                        <li>
+                                            <h4>Giảm giá</h4>
+                                            <h4 class="price">- <span id="giam-gia">0</span>đ</h4>
+                                        </li>
+
+                                        <li class="list-total">
+                                            <h4>Tổng tiền</h4>
+                                            <h4 class="price"><span id="tong-tien"></span>đ</h4>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <a href="javascript:void(0);" id="btnDatHang"
+                                    class="btn theme-bg-color text-white btn-md w-100 mt-4 fw-bold">
+                                    Đặt hàng
+                                </a>
                             </div>
-                            <ul class="summery-contain">
-                                @foreach ($chiTietGioHangs as $chiTietGioHang)
-                                    <li>
-                                        <img src="{{ Storage::url($chiTietGioHang->anh_bien_the) }}"
-                                            class="img-fluid blur-up lazyloaded checkout-image" alt="">
-                                        <h4>{{ $chiTietGioHang->ten_san_pham }} x
-                                            <span class="so-luong">{{ $chiTietGioHang->so_luong }}</span>
-                                            <span>{{ $chiTietGioHang->bienThe->ten_bien_the }}</span>
-                                        </h4>
 
-                                        <h4 hidden><span class="gia-moi">{{ $chiTietGioHang->bienThe->gia_ban }}</span>đ
-                                        </h4>
-                                        <h4 class="price"><span class="tong"></span>đ</h4>
-                                    </li>
-                                @endforeach
-                            </ul>
+                            <!-- Modal Phiếu Giảm Giá -->
+                            <div id="modalVoucher" class="modal fade" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog" style="max-width: 600px;">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title">Danh sách phiếu giảm giá</h4>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body text-center p-4">
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>#</th>
+                                                            <th>Mã</th>
+                                                            <th>Tên Phiếu</th>
+                                                            <th>Giá Trị</th>
+                                                            <th>Thời Gian</th>
+                                                            <th>Mô Tả</th>
+                                                            <th>Trạng Thái</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                      
+                                                            @foreach ($phieuGiamGiaThanhToans as $key => $phieu)
+                                                                <tr>
+                                                                    <td>{{ $key + 1 }}</td>
+                                                                    <td>{{ $phieu->ma_phieu }}</td>
+                                                                    <td>{{ $phieu->ten_phieu }}</td>
+                                                                    <td>{{ number_format($phieu->gia_tri, 0, ',', '.') }} %</td>
+                                                                    <td>{{ date('d/m/Y', strtotime($phieu->ngay_bat_dau)) }} - {{ date('d/m/Y', strtotime($phieu->ngay_ket_thuc)) }}</td>
+                                                                    <td>{{ $phieu->mo_ta }}</td>
+                                                                    <td>
+                                                                        @if($phieu->trang_thai == 1)
+                                                                            <span class="badge bg-success">Hoạt động</span>
+                                                                        @else
+                                                                            <span class="badge bg-danger">Không hoạt động</span>
+                                                                        @endif
+                                                                    </td>
+                                                                </tr>
+                                                            @endforeach
+                                                        
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Đóng</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
 
-                            <ul class="summery-total">
-                                <li>
-                                    <h4>Tổng tiền sản phẩm</h4>
-                                    <h4 class="price"><span id="tong-san-pham"></span>đ</h4>
-                                </li>
-
-                                <li>
-                                    <h4>Phí vận chuyển</h4>
-                                    <h4 class="price"><span id="phi-van-chuyen">10.000</span>đ</h4>
-                                </li>
-
-                                <li>
-                                    <h4>Giảm giá</h4>
-                                    <h4 class="price">- <span id="giam-gia">0</span>đ</h4>
-                                </li>
-
-                                <li class="list-total">
-                                    <h4>Tổng tiền</h4>
-                                    <h4 class="price"><span id="tong-tien"></span>đ</h4>
-                                </li>
-                            </ul>
                         </div>
-
-                        <a href="javascript:void(0);" id="btnDatHang"
-                            class="btn theme-bg-color text-white btn-md w-100 mt-4 fw-bold">
-                            Đặt hàng
-                        </a>
-                    </div>
-                </div>
             </div>
         </div>
     </section>
@@ -232,7 +335,91 @@
 @endsection
 
 @section('js')
+{{-- điều khoản --}}
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    let accepted = false;
+    const acceptTermsButton = document.getElementById('acceptTerms');
+    const agreeCheckbox = document.getElementById('agreeTerms');
+    const termsModalEl = document.getElementById('termsModal');
+    const termsModal = new bootstrap.Modal(termsModalEl);
+    const form = document.querySelector('form');
+    const btnDatHang = document.getElementById('btnDatHang');
+
+    // Khi chọn VNPAY hoặc Ví
+    document.querySelectorAll('input[name="flexRadioDefault"]').forEach(input => {
+        input.addEventListener('change', function () {
+            if (this.dataset.id === '2' || this.dataset.id === '3') {
+                accepted = false;
+                agreeCheckbox.checked = false;
+                acceptTermsButton.disabled = true;
+                termsModal.show();
+            } else {
+                accepted = true;
+            }
+        });
+    });
+
+    // Tick checkbox thì bật nút chấp nhận
+    agreeCheckbox.addEventListener('change', function () {
+        acceptTermsButton.disabled = !this.checked;
+    });
+
+    // Bấm nút "Chấp nhận"
+    acceptTermsButton.addEventListener('click', function () {
+        accepted = true;
+        termsModal.hide();
+    });
+
+    // Nếu đóng modal mà chưa chấp nhận → bỏ chọn radio
+    termsModalEl.addEventListener('hidden.bs.modal', function () {
+        if (!accepted) {
+            document.querySelectorAll('input[name="flexRadioDefault"]').forEach(input => {
+                if (input.dataset.id === '2' || input.dataset.id === '3') {
+                    input.checked = false;
+                }
+            });
+        }
+    });
+
+    // Khi bấm nút Đặt hàng
+    btnDatHang.addEventListener('click', function (e) {
+        const selected = document.querySelector('input[name="flexRadioDefault"]:checked');
+        if ((selected && (selected.dataset.id === '2' || selected.dataset.id === '3')) && !accepted) {
+            e.preventDefault(); // Chặn gửi nếu chưa chấp nhận điều khoản
+            termsModal.show();
+            return;
+        }
+    });
+
+    // Nếu submit form mà chưa chấp nhận điều khoản → chặn luôn
+    form.addEventListener('submit', function (e) {
+        const selected = document.querySelector('input[name="flexRadioDefault"]:checked');
+        if ((selected && (selected.dataset.id === '2' || selected.dataset.id === '3')) && !accepted) {
+            e.preventDefault();
+            termsModal.show();
+        }
+    });
+});
+
+</script>
+
+{{-- điều khoản  --}}
+
+
+    
+
+
+
+
+
+
+   
+    
     <script>
+
+        
+
         let phiVanChuyen = document.getElementById("phi-van-chuyen");
 
 
@@ -389,9 +576,35 @@
             });
 
             $("#btnDatHang").click(function(e) {
+// xử lý điều khoản
+                const selected = document.querySelector('input[name="flexRadioDefault"]:checked');
+                    if (!selected) {
+                        e.preventDefault();
+                        Swal.fire({
+                            icon: "warning",
+                            title: "Chưa chọn phương thức thanh toán",
+                            text: "Vui lòng chọn phương thức thanh toán để tiếp tục.",
+                            confirmButtonText: "OK"
+                        });
+                        return;
+                    }
+// xử lý điều khoản
                 e.preventDefault(); // Ngăn chặn load lại trang
                 updateHiddenInputs();
 
+ //  confirm         
+                // Lấy giá trị phương thức thanh toán từ input hoặc hidden field
+                const paymentMethod = $('#hiddenPaymentMethod').val();
+                // Nếu là thanh toán bằng ví (ID = 3)
+                if (paymentMethod === "3") {
+                  
+                      const confirmed = confirm(`Xác nhận trừ tiền trong ví?`);
+                     if (!confirmed) {
+                        // ❌ Nếu người dùng bấm Hủy thì dừng lại
+                        return;
+                    }
+                }
+//  confirm   
                 // Lấy dữ liệu từ form
                 var formData = {
                     _token: $('meta[name="csrf-token"]').attr('content'), // Lấy CSRF token
@@ -411,12 +624,12 @@
                     type: "POST",
                     data: formData,
                     success: function(response) {
-                        console.log(response)
                         if (response.status === "vnpay") {
                             window.location.href = response.vnpay_url;
                         } else if (response.status === "success") {
                             window.location.href = `/dathangthanhcong/${response.id}`;
                         }
+
                     },
                     error: function(xhr) {
                         let response = xhr.responseJSON;

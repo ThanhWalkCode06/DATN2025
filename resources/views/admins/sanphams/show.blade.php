@@ -1,119 +1,126 @@
 @extends('layouts.admin')
 
-@section('title')
-    Sản phẩm
-@endsection
+@section('title', 'Chi Tiết Sản Phẩm')
 
 @section('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/themify.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/feather-icon.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/remixicon.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/datatables.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/scrollbar.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/animate.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/bootstrap.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css') }}">
+    <style>
+        .product-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .card-custom {
+            border-radius: 15px;
+            padding: 20px;
+        }
+        .product-info h3 {
+            font-size: 26px;
+            font-weight: 700;
+        }
+        .product-info p {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        .table thead {
+            background-color: #f8f9fa;
+            color: black;
+            font-weight: bold;
+        }
+        .table tbody tr {
+            background-color: #ffffff;
+            color: black;
+            font-weight: 600;
+        }
+        h2.text-primary {
+            font-weight: 800;
+        }
+        h4.text-success {
+            font-weight: 700;
+        }
+        .variant-container {
+            cursor: pointer;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+        }
+        .variant-container:hover {
+            background-color: #e9ecef;
+        }
+        .variant-table {
+            display: none;
+        }
+        .text-secondary {
+            color: black !important;
+        }
+    </style>
 @endsection
 
-<style>
-   ::selection {  
-      background-color: yellow !important;
-      color: black !important;
-   }
-   ::-moz-selection {
-      background-color: yellow !important;
-      color: black !important;
-   }
-</style>
-
 @section('content')
-<div class="col-sm-12">
-    <div class="card">
-        <div class="card-body">
-            <div class="bg-inner cart-section order-details-table">
-                <div class="row g-4">
-                    <div class="col-xl-8">
-                        <div class="table-responsive table-details">
-                            <table class="table cart-table table-borderless">
-                                <thead>
-                                    <tr>
-                                        <th colspan="2">Chi tiết sản phẩm</th>
-                                        <th class="text-end" colspan="2"></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr class="table-order">
-                                        <td>
-                                            <a href="javascript:void(0)">
-                                                <img src="{{ asset('storage/' . $sanPham->hinh_anh) }}" class="img-fluid blur-up lazyload" alt="{{ $sanPham->ten_san_pham }}">
-                                            </a>
-                                        </td>
-                                        <td>
-                                            <p>Tên sản phẩm</p>
-                                            <h5>{{ $sanPham->ten_san_pham }}</h5>
-                                        </td>
-                                        <td>
-                                            <p>Số lượng</p>
-                                            <h5>{{ $sanPham->so_luong }}</h5>
-                                        </td>
-                                        <td>
-                                            <p>Giá</p>
-                                            <h5>{{ number_format($sanPham->gia_moi) }} VNĐ</h5>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <div class="col-xl-4">
-                        <div class="order-success">
-                            <h4>Biến thể</h4>
-                            @if($sanPham->bienThes->isNotEmpty())
-                                @foreach($sanPham->bienThes as $bienThe)
-                                    <ul class="order-details">
-                                        <li><strong>Tên biến thể:</strong> {{ $bienThe->ten_bien_the }}</li>
-                                        <li><strong>Giá nhập:</strong> {{ number_format($bienThe->gia_nhap) }} VNĐ</li>
-                                        <li><strong>Giá bán:</strong> {{ number_format($bienThe->gia_ban) }} VNĐ</li>
-                                        <li><strong>Số lượng:</strong> {{ $bienThe->so_luong }}</li>
-                                        <li>
-                                            <strong>Ảnh:</strong>
-                                            @if($bienThe->anh_bien_the)
-                                                <img src="{{ asset('storage/' . $bienThe->anh_bien_the) }}" alt="{{ $bienThe->ten_bien_the }}" width="80">
-                                            @else
-                                                Không có ảnh
-                                            @endif
-                                        </li>
-                                    </ul>
-                                @endforeach
-                            @else
-                                <p>Không có biến thể nào cho sản phẩm này.</p>
-                            @endif
-                        </div>
-                    </div>
-                </div>
+<div class="container">
+    <h2 class="text-center text-success mb-4">Chi Tiết Sản Phẩm</h2>
+    <div class="card card-custom shadow-lg border-0">
+        <div class="row g-4 align-items-center">
+            <div class="col-md-5 text-center">
+                <img width="200px" src="{{ asset('storage/' . $sanPham->hinh_anh) }}" class="product-image" alt="{{ $sanPham->ten_san_pham }}">
             </div>
-
-            {{-- <div class="row mt-4">
-                <nav class="w-100">
-                    <div class="nav nav-tabs" id="product-tab" role="tablist">
-                        <a class="nav-item nav-link active" id="product-desc-tab" data-toggle="tab" href="#product-desc" role="tab" aria-controls="product-desc" aria-selected="true">Mô tả</a>
-                        <a class="nav-item nav-link" id="product-comments-tab" data-toggle="tab" href="#product-comments" role="tab" aria-controls="product-comments" aria-selected="false">Bình luận</a>
-                    </div>
-                </nav>
-                <div class="tab-content p-3" id="nav-tabContent">
-                    <div class="tab-pane fade active show" id="product-desc" role="tabpanel" aria-labelledby="product-desc-tab">
-                        {!! nl2br(e($sanPham->mo_ta)) !!}
-                    </div>
-                    <div class="tab-pane fade" id="product-comments" role="tabpanel" aria-labelledby="product-comments-tab">
-                        Chức năng bình luận sẽ được cập nhật sau.
-                    </div>
-                </div>
-            </div> --}}
+            <div class="col-md-7 product-info">
+                <p class="text-secondary">Tên sản phẩm: {{ $sanPham->ten_san_pham }}<p>
+                <p class="text-secondary">Giá: {{ number_format($sanPham->gia_cu) }} đ</p>
+                <p class="text-secondary">Mô tả: {!! nl2br(e($sanPham->mo_ta)) !!}</p>
+            </div>
         </div>
+    </div>
+
+    <div class="card card-custom mt-4 shadow-lg border-0">
+        <div class="variant-container" onclick="toggleVariantTable()">
+            <h4 class="text-success mb-0">Biến thể ▼</h4>
+        </div>
+        @if($sanPham->bienThes->isNotEmpty())
+            <div class="table-responsive variant-table">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Ảnh</th>
+                            <th>Tên biến thể</th>
+                            <th>Giá bán</th>
+                            <th>Số lượng</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($sanPham->bienThes as $bienThe)
+                            <tr>
+                                <td class="text-center">
+                                    @if($bienThe->anh_bien_the)
+                                        <img src="{{ asset('storage/' . $bienThe->anh_bien_the) }}" alt="{{ $bienThe->ten_bien_the }}" class="img-thumbnail" width="80">
+                                    @else
+                                        <span class="text-muted">Không có ảnh</span>
+                                    @endif
+                                </td>
+                                <td>{{ $bienThe->ten_bien_the }}</td>
+                                <td>{{ number_format($bienThe->gia_ban) }} VNĐ</td>
+                                <td>{{ $bienThe->so_luong }}</td>
+
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        @else
+            <p class="text-muted">Không có biến thể nào cho sản phẩm này.</p>
+        @endif
     </div>
 </div>
 @endsection
+
+
 
 @section('js')
 <script>
@@ -137,6 +144,12 @@
             });
         });
     });
+</script>
+<script>
+    function toggleVariantTable() {
+        const variantTable = document.querySelector(".variant-table");
+        variantTable.style.display = variantTable.style.display === "none" || variantTable.style.display === "" ? "block" : "none";
+    }
 </script>
 <script src="{{ asset('assets/js/config.js') }}"></script>
 <script src="{{ asset('assets/js/customizer.js') }}"></script>

@@ -41,6 +41,9 @@
     <!-- Template css -->
     <link id="color-link" rel="stylesheet" type="text/css" href="{{ asset('assets/client/css/style.css') }}">
 
+    <!-- Pusher -->
+    <script src="https://js.pusher.com/8.4.0/pusher.min.js"></script>
+
     @yield('css')
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/iconly@1.0.0/css/iconly.min.css">
 
@@ -192,7 +195,84 @@
         </script>
     @endif
 
+    @isset(Auth::user()->id)
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                var userId = {{ Auth::user()->id ?? 'null' }};
+                var nguoiNhanId = 1;
 
+                // Load tin nhắn
+                fetch(`/messages/${nguoiNhanId}`)
+                    .then(response => response.json())
+                    .then(messages => {
+                        var chatBox = document.getElementById("chat-box");
+                        chatBox.innerHTML = "";
+                        messages.forEach(chat => {
+                            var align = chat.nguoi_gui_id === userId ? "text-end" : "text-start";
+
+                            let chatMessage = document.createElement("p");
+                            chatMessage.classList.add(align);
+                            chatMessage.innerHTML =
+                                `<strong>${chat.ten_nguoi_gui}:</strong> ${chat.noi_dung}`;
+
+                            chatBox.appendChild(chatMessage);
+                        });
+                        chatBox.scrollTop = chatBox.scrollHeight;
+                    })
+                    .catch(error => console.error("Lỗi khi tải tin nhắn:", error));
+
+                document.getElementById("chat-form").addEventListener("submit", function(e) {
+                    e.preventDefault();
+
+                    let noiDungInput = document.getElementById("noi_dung");
+                    let noiDung = noiDungInput.value.trim();
+                    if (!noiDung) return;
+
+                    fetch('/send-chat', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                            },
+                            body: JSON.stringify({
+                                nguoi_gui_id: userId,
+                                nguoi_nhan_id: nguoiNhanId,
+                                noi_dung: noiDung,
+                                channel: userId
+                            })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            noiDungInput.value = ""; // Xóa input sau khi gửi
+                        })
+                        .catch(error => console.error("Lỗi:", error));
+                });
+
+                // Kết nối Pusher
+                Pusher.logToConsole = true;
+
+                var pusher = new Pusher("0ca5e8c271c25e1264d2", {
+                    cluster: "ap1"
+                });
+
+                var channel = pusher.subscribe("chat." + {{ Auth::user()->id }});
+
+                channel.bind("send-chat", function(data) {
+                    var chatBox = document.getElementById("chat-box");
+                    const chat = data.chat
+                    console.log(chat);
+
+                    var align = chat.nguoi_gui_id === userId ? "text-end" : "text-start";
+                    let chatMessage = document.createElement("p");
+                    chatMessage.classList.add(align);
+                    chatMessage.innerHTML = `<strong>${chat.ten_nguoi_gui}:</strong> ${chat.noi_dung}`;
+
+                    chatBox.appendChild(chatMessage);
+                    chatBox.scrollTop = chatBox.scrollHeight;
+                });
+            });
+        </script>
+    @endisset
 </body>
 <script>
     function Logout(ev) {

@@ -237,9 +237,19 @@
 
         var channel = pusher.subscribe("don-hang");
         channel.bind("dat-hang-thanh-cong", function(data) {
-            alert("Có đơn hàng mới! Tổng tiền: " + data.donHang.tong_tien + " VNĐ");
-            console.log(data.donHang)
-            console.log(data.donHang.tong_tien)
+            // alert("Có đơn hàng mới! Tổng tiền: " + data.donHang.tong_tien + " VNĐ");
+            // console.log(data.donHang)
+            // console.log(data.donHang.tong_tien)
+
+            $(window).ready(function() {
+                $.notify({
+                    title: "Có đơn hàng mới",
+                    message: "Mã đơn hàng: " + data.donHang.ma_don_hang
+                }, {
+                    type: "primary",
+                    delay: 5000
+                });
+            })
         });
     </script>
 

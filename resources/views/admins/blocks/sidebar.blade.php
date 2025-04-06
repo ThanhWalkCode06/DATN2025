@@ -116,6 +116,20 @@
                         </a>
                     </li>
 
+                    <li class="sidebar-list">
+                        <a class="sidebar-link sidebar-title link-nav" href="{{ route('phuongthucthanhtoans.index') }}">
+                            <i class="ri-wallet-3-line"></i>
+                            <span>Phương thức thanh toán</span>
+                        </a>
+                    </li>
+
+                    <li class="sidebar-list">
+                        <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin-chat') }}">
+                            <i class="ri-message-line"></i>
+                            <span>Chat với người dùng</span>
+                        </a>
+                    </li>
+
                     {{-- <li class="sidebar-list">
                         <a class="sidebar-link sidebar-title link-nav" href="{{ route('lienhe') }}">
                             <i class="ri-phone-line"></i>

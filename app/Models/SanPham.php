@@ -15,7 +15,6 @@ class SanPham extends Model
         'ma_san_pham',
         // 'khuyen_mai',
         'gia_cu',
-        'gia_moi',
         'hinh_anh',
         'mo_ta',
         'chat_lieu',
@@ -70,10 +69,17 @@ class SanPham extends Model
         return $this->danhGias->count(); // Đếm số lượt đánh giá
     }
 
+
+    public function giaThapNhatCuaSP()
+    {
+        return $this->bienThes->min('gia_ban') ?? 0;
+    }
+
     public function phanTramGiamGia()
     {
-        if ($this->gia_cu > 0) {
-            return round((($this->gia_cu - $this->gia_moi) / $this->gia_cu) * 100, 0);
+        $giaBan = $this->giaThapNhatCuaSP(); // Lấy giá bán thấp nhất từ biến thể
+        if ($this->gia_cu > 0 && $giaBan > 0 && $this->gia_cu > $giaBan) {
+            return round((($this->gia_cu - $giaBan) / $this->gia_cu) * 100, 0);
         }
         return 0;
     }

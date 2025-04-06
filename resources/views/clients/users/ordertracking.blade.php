@@ -88,41 +88,66 @@ Theo dõi đơn hàng
                         @php $trangThai = $donHang->trang_thai_don_hang; @endphp
 
                         @if ($trangThai == 0 || $trangThai == 1)
-                            <form style="margin-left: 10px" id="order-form-{{ $donHang->id }}" action="{{ route('order.updateTrangThai', $donHang->id) }}" method="POST" onsubmit="return false;">
+                            <form style="margin-left: 10px" id="cancel-form-{{ $donHang->id }}" action="{{ route('order.updateTrangThai', $donHang->id) }}" method="POST" onsubmit="return false;">
                                 @csrf
                                 <input type="hidden" name="trang_thai" value="-1">
                                 <button style="border: none" type="button" class="btn-danger btn-sm confirm-btn"
-                                    data-id="{{ $donHang->id }}"
-                                    data-action="{{ 'Hủy đơn'}}">
-                                    {{ 'Hủy đơn' }}
+                                    data-form-id="cancel-form-{{ $donHang->id }}"
+                                    data-title="Nhập lý do hủy đơn"
+                                    data-trang-thai="-1"
+                                    data-action="Hủy đơn">
+                                    Hủy đơn
                                 </button>
                             </form>
                         @endif
 
-                        @if ($trangThai == 3 || $trangThai == 4)
-                            <form style="margin-left: 10px" id="order-form-{{ $donHang->id }}" action="{{ route('order.updateTrangThai', $donHang->id) }}" method="POST" onsubmit="return false;">
+                        {{-- TRẢ HÀNG --}}
+                        @if ($trangThai == 3   )
+                            <form style="margin-left: 10px" id="return-form-{{ $donHang->id }}" action="{{ route('order.updateTrangThai', $donHang->id) }}" method="POST" onsubmit="return false;">
                                 @csrf
                                 <input type="hidden" name="trang_thai" value="5">
                                 <button style="border: none" type="button" class="btn-success btn-sm confirm-btn"
-                                    data-id="{{ $donHang->id }}"
-                                    data-action="{{ 'Trả hàng'  }}">
-                                    {{ 'Trả hàng'  }}
+                                    data-form-id="return-form-{{ $donHang->id }}"
+                                    data-title="Nhập lý do trả hàng"
+                                    data-trang-thai="5"
+                                    data-action="Trả hàng">
+                                    Trả hàng
                                 </button>
                             </form>
                         @endif
 
                         @if ($trangThai == 3)
-                            <form style="margin-left: 10px" id="order-form-{{ $donHang->id }}" action="{{ route('order.updateTrangThai', $donHang->id) }}" method="POST" onsubmit="return false;">
+                            <form style="margin-left: 10px" action="{{ route('order.updateTrangThai', $donHang->id) }}" method="POST" >
                                 @csrf
                                 <input type="hidden" name="trang_thai" value="4">
-                                <button style="border: none" type="button" class="btn-primary btn-sm confirm-btn"
-                                    data-id="{{ $donHang->id }}"
-                                    data-action="Hoàn thành">
-                                    Hoàn thành
+                                <button type="submit" style="border: none" type="button" class="btn-primary btn-sm">
+                                    Đã nhận hàng
                                 </button>
                             </form>
                         @endif
                     </div>
+                    <!-- Modal -->
+                <div class="modal fade" id="lyDoModal" tabindex="-1" aria-labelledby="lyDoModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                    <form id="ly-do-form" method="POST" action="{{ route('order.updateTrangThai', $donHang->id) }}">
+                        @csrf
+                        <input type="hidden" name="trang_thai" id="modal-trang-thai">
+                        <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="lyDoModalLabel">Nhập lý do</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                        </div>
+                        <div class="modal-body">
+                            <textarea class="form-control" name="ly_do" id="modal-ly-do" rows="4" placeholder="Nhập lý do tại đây..." ></textarea>
+                        </div>
+                        <div class="modal-footer">
+                            <button style="border:none" type="button" class="btn-secondary btn-sm" data-bs-dismiss="modal">Hủy</button>
+                            <button style="border:none" type="submit" class="btn-primary btn-sm">Xác nhận</button>
+                        </div>
+                        </div>
+                    </form>
+                    </div>
+                </div>
 
                 </div>
 
@@ -233,9 +258,19 @@ Theo dõi đơn hàng
                                 <li class="progtrckr-{{ $statusChart >= 3 ? 'done' : 'todo' }}">
                                     <h5>Đã giao</h5>
                                 </li>
-                                <li class="progtrckr-{{ $statusChart >= 4 ? 'done' : 'todo' }}">
-                                    <h5>Hoàn thành</h5>
+                                
+                                <li class="progtrckr-{{ $statusChart >= 4 && $statusChart != 5 ? 'done' : 'todo' }}">
+                                    <h5>Đã nhận hàng</h5>
                                 </li>
+                                
+                                <!-- Trạng thái trả hàng -->
+                                @if ($statusChart == 5)
+                                    <li class="progtrckr-done">
+                                        <h5>Trả hàng</h5>
+                                    </li>
+                                @endif
+                                
+                                
                                 {{-- <li class="progtrckr-todo">
                                     <h5>Shipped</h5>
                                     <h6>Pending</h6>
@@ -473,6 +508,7 @@ Theo dõi đơn hàng
                 </div>
             </div>
         </div>
+
     </div>
 </body>
 @endsection
@@ -481,7 +517,7 @@ Theo dõi đơn hàng
 @section('js')
 
 @endsection
-<script>
+{{-- <script>
     document.addEventListener("DOMContentLoaded", function () {
         document.querySelectorAll(".confirm-btn").forEach(button => {
             button.addEventListener("click", function () {
@@ -504,4 +540,54 @@ Theo dõi đơn hàng
             });
         });
     });
-</script>
+</script> --}}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        let currentForm = null;
+
+        document.querySelectorAll('.confirm-btn').forEach(button => {
+            button.addEventListener('click', function () {
+                const formId = this.dataset.formId;
+                const title = this.dataset.title;
+                const trangThai = this.dataset.trangThai;
+
+                currentForm = document.getElementById(formId);
+                document.getElementById('lyDoModalLabel').textContent = title;
+                document.getElementById('modal-trang-thai').value = trangThai;
+                document.getElementById('modal-ly-do').value = '';
+
+                const modal = new bootstrap.Modal(document.getElementById('lyDoModal'));
+                modal.show();
+            });
+        });
+
+        document.getElementById('ly-do-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const lyDo = document.getElementById('modal-ly-do').value.trim();
+            const trangThai = document.getElementById('modal-trang-thai').value;
+
+            if (!lyDo) {
+                Swal.fire("Lỗi", "Vui lòng nhập lý do!", "error");
+                return;
+            }
+
+            // Cập nhật trạng thái nếu form có sẵn input hidden
+            const trangThaiInput = currentForm.querySelector('input[name="trang_thai"]');
+            if (trangThaiInput) {
+                trangThaiInput.value = trangThai;
+            }
+
+            const hiddenInput = document.createElement('input');
+            hiddenInput.type = 'hidden';
+            hiddenInput.name = 'ly_do';
+            hiddenInput.value = lyDo;
+            currentForm.appendChild(hiddenInput);
+
+            currentForm.submit();
+        });
+    });
+    </script>
+
+
+

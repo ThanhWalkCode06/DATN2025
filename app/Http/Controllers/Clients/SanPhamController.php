@@ -14,115 +14,149 @@ use Illuminate\Support\Facades\Storage;
 
 class SanPhamController extends Controller
 {
-
     public function danhSach(Request $request)
-{
-    $query = SanPham::with(['danhMuc', 'bienThes'])
-        ->where('san_phams.trang_thai', 1)
-        ->select([
-            'san_phams.id', 
-            'san_phams.ten_san_pham', 
-            'san_phams.gia_cu', 
-            'san_phams.gia_moi', 
-            'san_phams.khuyen_mai',
-            'san_phams.hinh_anh', 
-            'san_phams.danh_muc_id',
-            'san_phams.trang_thai', 
-            'san_phams.created_at'
-        ]);
+    {
+        // Bắt đầu truy vấn chính
+        $query = SanPham::with(['danhMuc', 'bienThes'])
+            ->where('san_phams.trang_thai', 1)
+            ->select([
+                'san_phams.id',
+                'san_phams.ten_san_pham',
+                'san_phams.gia_cu',
+                'san_phams.khuyen_mai',
+                'san_phams.hinh_anh',
+                'san_phams.danh_muc_id',
+                'san_phams.trang_thai',
+                'san_phams.created_at'
+            ]);
 
-    // **Lọc theo từ khóa tìm kiếm**
-    if ($request->filled('query')) {
-        $query->where('san_phams.ten_san_pham', 'LIKE', '%' . $request->query('query') . '%');
-    }
+        // **Lọc theo từ khóa tìm kiếm**
+        if ($request->filled('query')) {
+            $query->where('san_phams.ten_san_pham', 'LIKE', '%' . $request->query('query') . '%');
+        }
 
-    // **Lọc theo danh mục**
-    if ($request->filled('danh_muc_id')) {
-        $query->where('san_phams.danh_muc_id', $request->danh_muc_id);
-    }
-    // Loc theo gia
-    if ($request->has('price_range')) {
-        $query->where(function ($q) use ($request) {
-            foreach ($request->price_range as $range) {
-                [$minPrice, $maxPrice] = explode(',', $range);
-                $q->orWhereBetween('san_phams.gia_moi', [(int)$minPrice, (int)$maxPrice]);
+        // **Lọc theo danh mục**
+        if ($request->filled('danh_muc_id')) {
+            $query->where('san_phams.danh_muc_id', $request->danh_muc_id);
+        }
+
+        // **Lọc theo khoảng giá**
+        if ($request->filled('price_range')) {
+            $ranges = explode(',', $request->price_range);
+
+            $query->where(function ($q) use ($ranges) {
+                foreach ($ranges as $range) {
+                    [$min, $max] = explode('-', $range);
+                    $q->orWhereHas('bienThes', function ($subQuery) use ($min, $max) {
+                        $subQuery->whereBetween('bien_thes.gia_ban', [(int)$min, (int)$max]);
+                    });
+                }
+            });
+        }
+
+        // **Lọc theo số sao**
+        if ($request->filled('so_sao')) {
+            $soSao = (int)$request->so_sao;
+            $query->leftJoin('danh_gias', 'san_phams.id', '=', 'danh_gias.san_pham_id');
+            $query->addSelect(\DB::raw('COALESCE(AVG(danh_gias.so_sao), 0) as avg_rating'))
+                ->groupBy('san_phams.id');
+
+            if ($soSao == 5) {
+                $query->havingRaw('AVG(danh_gias.so_sao) = 5.0');
+            } else {
+                $query->havingRaw('AVG(danh_gias.so_sao) BETWEEN ? AND ?', [$soSao, $soSao + 0.9]);
             }
-        });
-    }
-
-    // **Lọc theo danh mục**
-    if ($request->filled('danh_muc_id')) {
-        $query->where('san_phams.danh_muc_id', $request->danh_muc_id);
-    }
-
-    // **Lọc theo số sao**
-    if ($request->filled('so_sao')) {
-        $soSao = (int) $request->so_sao;
-        $query->leftJoin('danh_gias', 'san_phams.id', '=', 'danh_gias.san_pham_id');
-        $joinDanhGia = true;
-
-        $query->addSelect(\DB::raw('COALESCE(AVG(danh_gias.so_sao), 0) as avg_rating'))
-            ->groupBy('san_phams.id');
-
-        if ($soSao == 5) {
-            $query->havingRaw('AVG(danh_gias.so_sao) = 5.0');
-        } else {
-            $query->havingRaw('AVG(danh_gias.so_sao) BETWEEN ? AND ?', [$soSao, $soSao + 0.9]);
         }
-    }
 
-    
+        // **Bộ lọc sắp xếp**
+        if ($request->filled('sort')) {
+            switch ($request->sort) {
+                case 'Giá thấp - cao':
+                    // Lọc theo giá thấp nhất của biến thể
+                    $query->leftJoin('bien_thes', 'san_phams.id', '=', 'bien_thes.san_pham_id')
+                        ->select([
+                            'san_phams.id',
+                            'san_phams.ten_san_pham',
+                            'san_phams.gia_cu',
+                            'san_phams.khuyen_mai',
+                            'san_phams.hinh_anh',
+                            'san_phams.danh_muc_id',
+                            'san_phams.trang_thai',
+                            'san_phams.created_at',
+                            \DB::raw('MIN(bien_thes.gia_ban) as gia_ban') // Lấy giá thấp nhất của biến thể
+                        ])
+                        ->groupBy('san_phams.id')
+                        ->orderBy('gia_ban', 'asc'); // Sắp xếp theo giá thấp nhất
+                    break;
 
-    // **Bộ lọc sắp xếp**
-    if ($request->filled('sort')) {
-        switch ($request->sort) {
-            case 'pop': // Sản phẩm bán chạy
-                $query->leftJoin('chi_tiet_don_hangs', 'san_phams.id', '=', 'chi_tiet_don_hangs.san_pham_id')
-                    ->addSelect(\DB::raw('COALESCE(SUM(chi_tiet_don_hangs.so_luong), 0) as tong_so_luong'))
-                    ->groupBy('san_phams.id')
-                    ->orderByDesc('tong_so_luong');
-                break;
-            case 'low': // Giá thấp - cao
-                $query->orderBy('san_phams.gia_moi', 'asc');
-                break;
-            case 'high': // Giá cao - thấp
-                $query->orderBy('san_phams.gia_moi', 'desc');
-                break;
-            // case 'rating': // Đánh giá cao - thấp
-            //     if (!$joinDanhGia) {
-            //         $query->leftJoin('danh_gias', 'san_phams.id', '=', 'danh_gias.san_pham_id')
-            //               ->addSelect(\DB::raw('COALESCE(AVG(danh_gias.so_sao), 0) as avg_rating'))
-            //               ->groupBy('san_phams.id');
-            //     }
-            //     $query->orderByDesc('avg_rating');
-            //     break;
-                case 'off': // Giảm giá % từ cao đến thấp
+                    case 'Giá cao - thấp':
+                        $query->leftJoin('bien_thes', 'san_phams.id', '=', 'bien_thes.san_pham_id')
+                            ->select([
+                                'san_phams.id',
+                                'san_phams.ten_san_pham',
+                                'san_phams.gia_cu',
+                                'san_phams.khuyen_mai',
+                                'san_phams.hinh_anh',
+                                'san_phams.danh_muc_id',
+                                'san_phams.trang_thai',
+                                'san_phams.created_at',
+                                \DB::raw('MIN(bien_thes.gia_ban) as gia_ban')
+                            ])
+                            ->groupBy('san_phams.id')
+                            ->orderByDesc('gia_ban');
+                        break;
+
+
+
+
+
+                case 'Giảm giá % cao - thấp':
+                    // Sắp xếp theo giảm giá từ cao đến thấp
                     $query->whereNotNull('san_phams.gia_cu')
-                          ->where('san_phams.gia_cu', '>', 0)
-                          ->orderByRaw('((san_phams.gia_cu - san_phams.gia_moi) / san_phams.gia_cu) DESC');
-                    break;                
-            default:
-                $query->orderByDesc('san_phams.created_at'); // Giữ mặc định sắp xếp theo mới nhất
-                break;
+                        ->where('san_phams.gia_cu', '>', 0)
+                        ->leftJoin('bien_thes', 'san_phams.id', '=', 'bien_thes.san_pham_id')
+                        ->select([
+                            'san_phams.id',
+                            'san_phams.ten_san_pham',
+                            'san_phams.gia_cu',
+                            'san_phams.khuyen_mai',
+                            'san_phams.hinh_anh',
+                            'san_phams.danh_muc_id',
+                            'san_phams.trang_thai',
+                            'san_phams.created_at',
+                            \DB::raw('MAX((san_phams.gia_cu - bien_thes.gia_ban) / san_phams.gia_cu) as giam_gia')
+                        ])
+                        ->groupBy('san_phams.id')
+                        ->orderBy('giam_gia', 'desc');
+                    break;
+
+                default:
+                    // Sắp xếp theo ngày tạo mới nhất
+                    $query->orderByDesc('san_phams.created_at');
+                    break;
+            }
+        } else {
+            // Mặc định sắp xếp theo ngày tạo mới nhất
+            $query->orderByDesc('san_phams.created_at');
         }
-    } else {
-        $query->orderByDesc('san_phams.created_at'); // Nếu không có sort, sắp xếp theo mới nhất
+
+
+        // Thực hiện phân trang sau khi đã áp dụng bộ lọc và sắp xếp
+        $sanPhams = $query->paginate(8)->appends($request->except('page'));
+
+        // Lấy danh mục sản phẩm
+        $danhMucs = DanhMucSanPham::withCount([
+            'sanPhams' => function ($query) {
+                $query->where('trang_thai', 1);
+            }
+        ])->having('san_phams_count', '>', 0)
+            ->get();
+
+        // Trả về view với dữ liệu cần thiết
+        return view('clients.sanphams.danhsach', compact('sanPhams', 'danhMucs'));
     }
 
 
-    
-    $sanPhams = $query->paginate(20)->appends($request->query());
-
-    $danhMucs = DanhMucSanPham::withCount([
-        'sanPhams' => function ($query) {
-            $query->where('trang_thai', 1);
-        }
-    ])->having('san_phams_count', '>', 0)
-      ->get();
-      
-
-    return view('clients.sanphams.danhsach', compact('sanPhams', 'danhMucs'));
-}
 
 
 
@@ -149,7 +183,6 @@ class SanPhamController extends Controller
                 'san_phams.ma_san_pham',
                 'san_phams.san_pham_slug',
                 'san_phams.gia_cu',
-                'san_phams.gia_moi',
                 'san_phams.khuyen_mai',
                 'san_phams.hinh_anh',
                 'san_phams.mo_ta',
@@ -162,8 +195,10 @@ class SanPhamController extends Controller
             ->firstOrFail();
 
         // Tính phần trăm giảm giá
-        $phanTramGiamGia = ($sanPham->gia_cu > 0) ?
-            round((($sanPham->gia_cu - $sanPham->gia_moi) / $sanPham->gia_cu) * 100) : 0;
+        $phanTramGiamGia = ($sanPham->gia_cu > 0)
+        ? round((($sanPham->gia_cu - $sanPham->giaThapNhatCuaSP()) / $sanPham->gia_cu) * 100)
+        : 0;
+
 
         // Lấy sản phẩm cùng danh mục (loại trừ sản phẩm hiện tại)
         $sanPhamLienQuan = SanPham::where('danh_muc_id', $sanPham->danh_muc_id)
