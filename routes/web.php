@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\BinhLuanController as AdminBinhLuanController;
 use App\Models\User;
 use App\Models\DanhGia;
 use App\Models\SanPham;
@@ -12,6 +13,7 @@ use App\Http\Controllers\BaiVietController;
 use App\Http\Controllers\BienTheController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DanhGiaController;
+use App\Http\Controllers\BinhLuanController;
 
 use App\Http\Controllers\DonHangController;
 
@@ -231,6 +233,7 @@ Route::middleware(['auth'])->group(function () {
 });
 
 
-    // Route::get('/sodu', [App\Http\Controllers\ViController::class, 'soDuVi'])->name('soduvi');
-
-
+// Route::get('/sodu', [App\Http\Controllers\ViController::class, 'soDuVi'])->name('soduvi');
+Route::get('/binhluan', [BinhLuanController::class, 'index'])->name('binhluan.index');
+Route::get('/binhluan/{id}', [BinhLuanController::class, 'show'])->name('binhluan.show');
+Route::patch('/binhluan/{id}/toggle', [BinhLuanController::class, 'toggle'])->name('binhluan.toggle');
