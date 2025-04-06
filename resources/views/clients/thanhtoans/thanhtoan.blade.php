@@ -129,28 +129,40 @@
                                                 id="accordionFlushExample">
 
                                                 @foreach ($pttts as $item)
-                                                    @if ($item['trang_thai'] == 1)
-                                                        <div class="accordion-item">
-                                                            <div class="accordion-header" id="flush-headingOne">
-                                                                <div class="accordion-button collapsed"
-                                                                    data-bs-toggle="collapse"
-                                                                    data-bs-target="#flush-collapseOne">
-                                                                    <div class="custom-form-check form-check mb-0">
-                                                                        <label class="form-check-label"
-                                                                            for="{{ 'cash' . $item['id'] }}">
-                                                                            <input class="form-check-input mt-0"
-                                                                                type="radio" name="flexRadioDefault"
-                                                                                id="{{ 'cash' . $item['id'] }}"
-                                                                                data-id="{{ $item['id'] }}"
-                                                                                {{ $item['id'] == 1 ? 'checked' : '' }}>
-                                                                            {{ $item['ten_phuong_thuc'] }}
-                                                                        </label>
-                                                                    </div>
+                                                @if ($item['trang_thai'] == 1)
+                                                    <div class="accordion-item">
+                                                        <div class="accordion-header" id="flush-heading{{ $item['id'] }}">
+                                                            <div class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#flush-collapse{{ $item['id'] }}">
+                                                                <div class="custom-form-check form-check mb-0">
+                                                                    <label class="form-check-label" for="{{ 'payment_method_' . $item['id'] }}">
+                                                                        <input class="form-check-input mt-0" type="radio" name="flexRadioDefault" id="{{ 'payment_method_' . $item['id'] }}" data-id="{{ $item['id'] }}" {{ $item['id'] == 1 ? 'checked' : '' }}>
+                                                                        {{ $item['ten_phuong_thuc'] }}
+                                                                    </label>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    @endif
-                                                @endforeach
+                                            
+                                                        <!-- Hiển thị số dư ví khi phương thức thanh toán là ví (id = 3) -->
+                                                        {{-- @if ($item['id'] == 3)
+                                                            <div id="flush-collapse{{ $item['id'] }}" class="accordion-collapse collapse" aria-labelledby="flush-heading{{ $item['id'] }}" data-bs-parent="#accordionFlushExample">
+                                                                <div class="accordion-body">
+                                                                    <p>Chọn phương thức thanh toán bằng ví để trừ số tiền trong tài khoản ví của bạn.</p>
+                                                                    <p class="text-success">
+                                                                        <!-- Hiển thị số dư ví -->
+                                                                        @if($soDu) <!-- Kiểm tra xem $soDu có tồn tại không -->
+                                                                            Số dư ví của bạn: {{ number_format($soDu->so_du, 0, ',', '.') }} VNĐ
+                                                                        @else
+                                                                            Số dư ví không có sẵn.
+                                                                        @endif
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                        @endif --}}
+
+                                                    </div>
+                                                @endif
+                                            @endforeach
+                                            
                                                   <!-- Thêm phương thức thanh toán bằng ví -->
                                                   {{-- <div class="accordion-item">
                                                     <div class="accordion-header" id="flush-headingWallet">
@@ -315,26 +327,46 @@
 @endsection
 
 @section('js')
-    {{-- Thanh toán bằng ví
-    <script>
-      document.addEventListener('DOMContentLoaded', function () {
-    const radioButtons = document.querySelectorAll('input[name="flexRadioDefault"]');
-    const hiddenInput = document.getElementById('hiddenPaymentMethod');
-
-    radioButtons.forEach(function (radio) {
-        radio.addEventListener('change', function () {
-            const paymentId = this.getAttribute('data-id');
-            hiddenInput.value = paymentId;
+    Thanh toán bằng ví
+ 
+   
+    {{-- <script>
+        document.getElementById('btnDatHang').addEventListener('click', function () {
+            const selected = document.querySelector('input[name="flexRadioDefault"]:checked');
+    
+            if (!selected) {
+                alert('Vui lòng chọn phương thức thanh toán');
+                return;
+            }
+    
+            const idPhuongThuc = parseInt(selected.dataset.id);
+    
+            // Gán giá trị phương thức thanh toán đã chọn vào input hidden
+            document.getElementById('hiddenPaymentMethod').value = idPhuongThuc;
+    
+            if (idPhuongThuc === 3) {
+                const confirmed = confirm('Xác nhận trừ tiền trong ví?');
+                if (!confirmed) {
+                    // Nếu bấm Hủy, không submit form
+                    return;
+                }
+            }
+    
+            // Nếu không phải ví hoặc đã xác nhận ví, submit form
+            document.getElementById('checkoutForm').submit();
         });
-    });
-
-    document.getElementById('btnDatHang').addEventListener('click', function () {
-        document.getElementById('checkoutForm').submit();
-    });
-});
-
     </script>
+    
      --}}
+    
+
+
+
+
+
+
+   
+    
     <script>
         let phiVanChuyen = document.getElementById("phi-van-chuyen");
 
@@ -494,6 +526,17 @@
             $("#btnDatHang").click(function(e) {
                 e.preventDefault(); // Ngăn chặn load lại trang
                 updateHiddenInputs();
+
+                // Lấy giá trị phương thức thanh toán từ input hoặc hidden field
+                const paymentMethod = $('#hiddenPaymentMethod').val();
+                // Nếu là thanh toán bằng ví (ID = 3)
+                if (paymentMethod === "3") {
+                    const confirmed = confirm("Xác nhận trừ tiền trong ví?");
+                    if (!confirmed) {
+                        // ❌ Nếu người dùng bấm Hủy thì dừng lại
+                        return;
+                    }
+                }
 
                 // Lấy dữ liệu từ form
                 var formData = {

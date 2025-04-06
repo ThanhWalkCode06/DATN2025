@@ -16,4 +16,15 @@ class ViController extends Controller
 
         return view('clients.vis.index', compact('vi', 'giaodichs'));
     }
+
+    // public function soDuVi()
+    // {
+    //     $user = Auth::user();
+    //     $soDu = $user->layHoacTaoVi(); // Lấy ví của người dùng
+      
+    //     return view('clients.thanhtoans.thanhtoan', compact('soDu'));
+    // }
+    
+
+
 }

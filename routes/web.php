@@ -1,10 +1,11 @@
 <?php
 
+use App\Models\User;
 use App\Models\DanhGia;
 use App\Models\SanPham;
-use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\LienHeController;
 use App\Http\Controllers\VaiTroController;
 use App\Http\Controllers\BaiVietController;
@@ -12,20 +13,21 @@ use App\Http\Controllers\BienTheController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DanhGiaController;
 use App\Http\Controllers\DonHangController;
+
 use App\Http\Controllers\SanPhamController;
-
 use App\Http\Controllers\ThongKeController;
-use App\Http\Controllers\HelperCommon\Helper;
 
+use App\Http\Controllers\HelperCommon\Helper;
 use App\Http\Controllers\ThuocTinhController;
+use App\Http\Controllers\Clients\ViController;
 use App\Http\Controllers\Payment\PaymentVnPay;
 use App\Http\Controllers\Admins\UserController;
 use App\Http\Controllers\PhieuGiamGiaController;
 use App\Http\Controllers\Admins\SettingController;
+
+
 use App\Http\Controllers\DanhMucBaiVietController;
 use App\Http\Controllers\DanhMucSanPhamController;
-
-
 use App\Http\Controllers\GiaTriThuocTinhController;
 use App\Http\Controllers\Admins\Auth\AuthController;
 use App\Http\Controllers\Clients\ThanhToanController;
@@ -34,7 +36,6 @@ use App\Http\Controllers\ClientDanhMucSanPhamController;
 use App\Http\Controllers\Clients\DanhGiaClientsController;
 use App\Http\Controllers\Admins\Responsibility\RoleController;
 use App\Http\Controllers\Admins\Responsibility\PermissionController;
-use App\Http\Controllers\ChatController;
 use App\Http\Controllers\Clients\UserController as ClientsUserController;
 use App\Http\Controllers\Clients\Auth\AuthController as AuthAuthController;
 
@@ -222,4 +223,8 @@ Route::post('/send-chat', [ChatController::class, 'sendChat']);
 Route::middleware(['auth'])->group(function () {
     Route::get('/vi', [App\Http\Controllers\ViController::class, 'hienThi'])->name('vi');
 });
+
+
+    // Route::get('/sodu', [App\Http\Controllers\ViController::class, 'soDuVi'])->name('soduvi');
+
 
