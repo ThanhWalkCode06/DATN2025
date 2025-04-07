@@ -139,6 +139,12 @@ class ThanhToanController extends Controller
                     Session::put("voucher", $idVoucher->id);
                 }
             }
+
+            Session::put("ten_nguoi_nhan", $request->ten_nguoi_nhan);
+            Session::put("email_nguoi_nhan", $request->email_nguoi_nhan);
+            Session::put("sdt_nguoi_nhan", $request->sdt_nguoi_nhan);
+            Session::put("dia_chi_nguoi_nhan", $request->dia_chi_nguoi_nhan);
+
             $vnp_Url = config('services.vnpay.vnp_url');
             $vnp_TmnCode = config('services.vnpay.vnp_tmn_code');
             $vnp_HashSecret = config('services.vnpay.vnp_hash_secret');
@@ -280,11 +286,11 @@ class ThanhToanController extends Controller
             $donHang = DonHang::create([
                 'user_id' => $user->id,
                 'ma_don_hang' => $request->vnp_TxnRef,
-                'ten_nguoi_nhan' => $user->username,
+                'ten_nguoi_nhan' => Session::pull("ten_nguoi_nhan"),
                 'tong_tien' => $request->vnp_Amount / 100,
-                'email_nguoi_nhan' => $user->email,
-                'sdt_nguoi_nhan' => $user->so_dien_thoai,
-                'dia_chi_nguoi_nhan' => $user->dia_chi,
+                'email_nguoi_nhan' => Session::pull("email_nguoi_nhan"),
+                'sdt_nguoi_nhan' => Session::pull("sdt_nguoi_nhan"),
+                'dia_chi_nguoi_nhan' => Session::pull("dia_chi_nguoi_nhan"),
                 'phuong_thuc_thanh_toan_id' => 2,
                 'trang_thai_don_hang' => 0,
                 'trang_thai_thanh_toan' => 1, // Đã thanh toán

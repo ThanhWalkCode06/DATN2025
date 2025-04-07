@@ -43,15 +43,52 @@
                 </div>
 
                 <div class="table-responsive table-product">
-                    <form class="d-inline-flex col-4" method="get" action="{{ route('users-search') }}">
-                        <div style="margin-right: 10px" class=" col-7 ">
-                            <input class="form-control col-1" type="text" placeholder="Tìm kiếm" name="key" value="{{ request('key') }}">
+                    <form id="searchForm" class="row g-3 align-items-center" method="get" action="{{ route('users-search') }}">
+                        <!-- Phần tìm kiếm cơ bản -->
+                        <div class="col-md-5">
+                            <div class="input-group">
+                                <input class="form-control" type="text" placeholder="Tìm kiếm tên tài khoản" name="username" value="">
+                                <button type="submit" class="btn btn-theme btn-sm"><i data-feather="search"></i></button>
+                                <button class="btn btn-primary btn-sm ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#filterPanel">
+                                    Tìm kiếm nâng cao
+                                </button>
+                            </div>
                         </div>
-                            <button type="submit" class="btn btn-theme mr-1"><i data-feather="search"></i></button>
+
+                        <!-- Phần bộ lọc nâng cao -->
+                        <div class="col-12">
+                            <div class="collapse" id="filterPanel">
+                                <div class="card card-body mt-2">
+                                    <div class="row">
+                                        @include('admins.filter.name',['key' => 'email', 'label' => 'Email'])
+                                        @include('admins.filter.status',['key' => 'trang_thai', 'label' => 'Trạng thái'])
+                                        {{-- @include('admins.filter.select2', [
+                                            'key' => 'roles.id_in',
+                                            'label' => 'Vai trò',
+                                            'options' => $roles,
+                                            'multiple' => true,
+                                            'selected' => request('roles.id_in')
+                                            ? (array) request('roles.id_in')
+                                            : []
+                                        ]) --}}
+                                        {{-- @include('admins.filter.date',['key1' => null,'key2' => null, 'label1' => null, 'label2' => null]) --}}
+                                    </div>
+                                    <div class="row mt-3">
+                                        <div class="col-12 text-end">
+                                            <!-- Nút Reset Filter (chỉ reset các input filter) -->
+                                            <button type="button" id="resetFilter" class="btn btn-primary btn-sm">
+                                                <i data-feather="refresh-ccw"></i> Làm mới
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </form>
                     @if(session('error-key'))
                         <p class="text-danger">{{ session('error-key') }}</p>
                     @endif
+
                     <table class="table all-package theme-table" id="table_id">
                         <thead>
                             <tr>
@@ -72,8 +109,9 @@
                             </tr>
                         </thead>
 
-                        <tbody>
-                        @if(@$lists)
+                        <tbody id="user-list-body">
+                            @include('admins.taikhoans.partials.list_rows', ['lists' => $lists])
+                        {{-- @if(@$lists)
                             @foreach ( $lists as $key => $item)
                                 <tr class="justify-content-center">
                                     <td>
@@ -114,18 +152,6 @@
                                                 </a>
                                             </li>
                                             @endcan
-                                            {{-- @can('users-delete', $item->id)
-                                            <li>
-                                                <a href="#" onclick="confirmDelete(event, {{ $item->id }})">
-                                                    <i class="ri-delete-bin-line"></i>
-                                                </a>
-
-                                                <form id="delete-form-{{ $item->id }}" action="{{ route('users.destroy', $item->id) }}" method="POST" style="display: none;">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                </form>
-                                            </li>
-                                            @endcan --}}
 
                                             @can('users-view', $item->id)
                                             <li>
@@ -134,15 +160,13 @@
                                                 </a>
                                             </li>
                                             @endcan
-
                                             @endif
-
 
                                         </ul>
                                     </td>
                                 </tr>
                             @endforeach
-                        @endif
+                        @endif --}}
 
 
                         </tbody>
@@ -155,7 +179,9 @@
             </div>
         </div>
     </div>
+    <div class="d-flex justify-content-center mt-3 pagination-wrapper">
     {{ $lists->links("pagination::bootstrap-5") }}
+    </div>
 @endsection
 
 @section('js')
@@ -178,6 +204,49 @@
             }
         });
     }
+</script>
+
+<script>
+$(document).ready(function() {
+    // Hàm tải dữ liệu
+    function loadData(url) {
+        $.ajax({
+            url: url,
+            type: 'GET',
+            success: function(response) {
+                $('#user-list-body').html(response.html);
+                $('.pagination-wrapper').html(response.pagination);
+
+                // Cập nhật URL trình duyệt không reload
+                history.pushState(null, null, url);
+            },
+            error: function(xhr) {
+                console.error('Error:', xhr.responseText);
+            }
+        });
+    }
+
+    // Submit form lọc
+    $('#searchForm').submit(function(e) {
+        e.preventDefault();
+        let url = $(this).attr('action') + '?' + $(this).serialize();
+        loadData(url);
+    });
+
+    // Xử lý click phân trang
+    $(document).on('click', '.pagination a', function(e) {
+        e.preventDefault();
+        loadData($(this).attr('href'));
+    });
+
+    // Reset filter
+    $('#resetFilter').click(function() {
+        $('#filterPanel input').val('');
+        $('#filterPanel select').val('').trigger('change');
+        $('#searchForm').submit();
+    });
+});
+</script>
 </script>
     <!-- customizer js -->
     <script src="{{ asset('assets/js/customizer.js') }}"></script>
