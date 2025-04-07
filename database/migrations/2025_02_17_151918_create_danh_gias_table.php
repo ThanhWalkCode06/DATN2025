@@ -15,11 +15,14 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('san_pham_id');
+            $table->unsignedBigInteger('bien_the_id')->nullable(); // Thêm dòng này
             $table->tinyInteger('so_sao');
             $table->text('nhan_xet')->nullable();
             $table->boolean('trang_thai')->default(1);
             $table->timestamps();
             $table->softDeletes();
+
+            $table->foreign('bien_the_id')->references('id')->on('bien_thes')->onDelete('cascade'); // Thêm dòng này
         });
     }
 

@@ -78,12 +78,14 @@ class DanhGiaClientsController extends Controller
 
         // Đếm số lần sản phẩm đã được mua (qua biến thể) trong các đơn hàng hoàn tất
         $soLanMua = 0;
+        $bienTheId = null;
         foreach ($user->donHangs as $donHang) {
-            if ($donHang->trang_thai_don_hang >= 3) { // Từ trạng thái "đã giao" trở lên
+            if ($donHang->trang_thai_don_hang >= 4) { // Từ trạng thái "đã giao" trở lên
                 $coSanPhamTrongDonHang = false;
                 foreach ($donHang->chiTietDonHangs as $chiTiet) {
                     if (in_array($chiTiet->bien_the_id, $idBienThes)) {
                         $coSanPhamTrongDonHang = true;
+                        $bienTheId = $chiTiet->bien_the_id;
                         break;
                     }
                 }
@@ -111,6 +113,7 @@ class DanhGiaClientsController extends Controller
         DanhGia::create([
             'user_id' => Auth::id(),
             'san_pham_id' => $san_pham_id,
+            'bien_the_id' => $bienTheId,
             'so_sao' => $request->so_sao,
             'nhan_xet' => $request->nhan_xet ?? '',
             'trang_thai' => 1 // Đánh giá mới mặc định chưa duyệt
