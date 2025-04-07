@@ -44,16 +44,16 @@
         h4.text-success {
             font-weight: 700;
         }
-        .variant-container {
+        .variant-container, .review-container {
             cursor: pointer;
             padding: 10px;
             background-color: #f8f9fa;
             border-radius: 10px;
         }
-        .variant-container:hover {
+        .variant-container:hover, .review-container:hover {
             background-color: #e9ecef;
         }
-        .variant-table {
+        .variant-table, .review-table {
             display: none;
         }
         .text-secondary {
@@ -73,10 +73,7 @@
             <div class="col-md-7 product-info">
                 <p class="text-secondary">Tên sản phẩm: {{ $sanPham->ten_san_pham }}<p>
                 <p class="text-secondary">Giá: {{ number_format($sanPham->gia_cu) }} đ</p>
-                <p class="text-secondary">Mô tả: {!! $sanPham->mo_ta !!}</p>
-
-
-
+                <p class="text-secondary">Mô tả: {!! nl2br($sanPham->mo_ta) !!}</p>
             </div>
         </div>
     </div>
@@ -94,7 +91,6 @@
                             <th>Tên biến thể</th>
                             <th>Giá bán</th>
                             <th>Số lượng</th>
-
                         </tr>
                     </thead>
                     <tbody>
@@ -110,7 +106,6 @@
                                 <td>{{ $bienThe->ten_bien_the }}</td>
                                 <td>{{ number_format($bienThe->gia_ban) }} VNĐ</td>
                                 <td>{{ $bienThe->so_luong }}</td>
-
                             </tr>
                         @endforeach
                     </tbody>
@@ -121,16 +116,14 @@
         @endif
     </div>
 
-
     {{-- Đánh giá --}}
-
     <div class="card card-custom mt-4 shadow-lg border-0">
-        <div class="variant-container">
+        <div class="review-container" onclick="toggleReviewTable()">
             <h4 class="text-success mb-0">Đánh giá ▼</h4>
         </div>
     
         @if($sanPham->danhGias->isNotEmpty())
-            <div class="table-responsive p-3">
+            <div class="table-responsive review-table">
                 <table class="table table-bordered">
                     <thead>
                         <tr>
@@ -168,39 +161,21 @@
             <p class="text-muted px-3">Chưa có đánh giá nào cho sản phẩm này.</p>
         @endif
     </div>
-    
 </div>
 @endsection
 
-
-
 @section('js')
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const tabLinks = document.querySelectorAll(".nav-tabs .nav-link");
-        const tabContents = document.querySelectorAll(".tab-pane");
-
-        tabLinks.forEach(link => {
-            link.addEventListener("click", function (event) {
-                event.preventDefault();
-
-                tabLinks.forEach(tab => tab.classList.remove("active"));
-                tabContents.forEach(content => content.classList.remove("active", "show"));
-
-                this.classList.add("active");
-
-                const targetTab = document.querySelector(this.getAttribute("href"));
-                if (targetTab) {
-                    targetTab.classList.add("active", "show");
-                }
-            });
-        });
-    });
-</script>
-<script>
+    // JavaScript để thu gọn/hiển thị bảng biến thể
     function toggleVariantTable() {
         const variantTable = document.querySelector(".variant-table");
         variantTable.style.display = variantTable.style.display === "none" || variantTable.style.display === "" ? "block" : "none";
+    }
+
+    // JavaScript để thu gọn/hiển thị bảng đánh giá
+    function toggleReviewTable() {
+        const reviewTable = document.querySelector(".review-table");
+        reviewTable.style.display = reviewTable.style.display === "none" || reviewTable.style.display === "" ? "block" : "none";
     }
 </script>
 <script src="{{ asset('assets/js/config.js') }}"></script>
