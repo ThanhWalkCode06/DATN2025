@@ -239,6 +239,9 @@ class SanPhamController extends Controller
 {
     $sanPham = SanPham::with(['danhMuc', 'bienThes', 'danhGias.user', 'danhGias.bienThe'])->findOrFail($id);
 
+     // Sắp xếp đánh giá mới nhất lên đầu
+     $sanPham->danhGias = $sanPham->danhGias->sortByDesc('created_at');
+
     return view('admins.sanphams.show', compact('sanPham'));
 }
 

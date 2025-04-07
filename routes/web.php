@@ -231,6 +231,9 @@ Route::middleware(['auth'])->group(function () {
 });
 
 
-    // Route::get('/sodu', [App\Http\Controllers\ViController::class, 'soDuVi'])->name('soduvi');
+   
+Route::post('/danh-gia/update-status/{id}', [DanhGiaController::class, 'updateStatus']);
+
+
 
 
