@@ -73,7 +73,10 @@
             <div class="col-md-7 product-info">
                 <p class="text-secondary">Tên sản phẩm: {{ $sanPham->ten_san_pham }}<p>
                 <p class="text-secondary">Giá: {{ number_format($sanPham->gia_cu) }} đ</p>
-                <p class="text-secondary">Mô tả: {!! nl2br(e($sanPham->mo_ta)) !!}</p>
+                <p class="text-secondary">Mô tả: {!! $sanPham->mo_ta !!}</p>
+
+
+
             </div>
         </div>
     </div>

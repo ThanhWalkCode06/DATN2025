@@ -403,11 +403,11 @@ class SanPhamController extends Controller
                 $hasOrder = ChiTietDonHang::whereIn('bien_the_id', $bienTheIdsMoi)->exists();
 
                 if ($hasOrder) {
-                    return redirect()->back()->with('error', 'Sản phẩm không thể xóa do đã có đơn hàng!');
+                    return redirect()->back()->with('error', 'Sản phẩm không thể sửa do đã có đơn hàng!');
                 }
 
                 if ($hasCart) {
-                    return redirect()->back()->with('error', 'Sản phẩm không thể xóa do đã có trong giỏ hàng!');
+                    return redirect()->back()->with('error', 'Sản phẩm không thể sửa do đã có trong giỏ hàng!');
                 }
 
                 // Xóa các biến thể không có trong danh sách mới

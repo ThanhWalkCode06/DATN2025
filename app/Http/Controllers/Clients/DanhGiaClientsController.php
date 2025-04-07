@@ -80,7 +80,7 @@ class DanhGiaClientsController extends Controller
         $soLanMua = 0;
         $bienTheId = null;
         foreach ($user->donHangs as $donHang) {
-            if ($donHang->trang_thai_don_hang >= 3) { // Từ trạng thái "đã giao" trở lên
+            if ($donHang->trang_thai_don_hang >= 4) { // Từ trạng thái "đã giao" trở lên
                 $coSanPhamTrongDonHang = false;
                 foreach ($donHang->chiTietDonHangs as $chiTiet) {
                     if (in_array($chiTiet->bien_the_id, $idBienThes)) {
