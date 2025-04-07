@@ -3,7 +3,6 @@
 use App\Models\User;
 use App\Models\DanhGia;
 use App\Models\SanPham;
-use App\Models\PhuongThucThanhToan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ChatController;
@@ -15,11 +14,12 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DanhGiaController;
 
 use App\Http\Controllers\DonHangController;
-use App\Http\Controllers\SanPhamController;
 
+use App\Http\Controllers\SanPhamController;
 use App\Http\Controllers\ThongKeController;
 use App\Http\Controllers\HelperCommon\Helper;
 use App\Http\Controllers\ThuocTinhController;
+use App\Http\Controllers\Clients\ViController;
 use App\Http\Controllers\Payment\PaymentVnPay;
 use App\Http\Controllers\Admins\UserController;
 use App\Http\Controllers\PhieuGiamGiaController;
@@ -230,4 +230,8 @@ Route::post('/send-chat', [ChatController::class, 'sendChat']);
 Route::middleware(['auth'])->group(function () {
     Route::get('/vi', [App\Http\Controllers\ViController::class, 'hienThi'])->name('vi');
 });
+
+
+    // Route::get('/sodu', [App\Http\Controllers\ViController::class, 'soDuVi'])->name('soduvi');
+
 

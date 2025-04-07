@@ -374,4 +374,10 @@ class ThanhToanController extends Controller
         broadcast(new DatHangEvent($donHang))->toOthers();
         return response()->json(['message' => 'Đơn hàng đã đặt thành công!', 'order' => $donHang]);
     }
+
+    
+
+    
+    
+
 }

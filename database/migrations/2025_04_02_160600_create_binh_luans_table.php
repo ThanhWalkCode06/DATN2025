@@ -17,6 +17,7 @@ return new class extends Migration
                 $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); // Liên kết người dùng
                 $table->foreignId('parent_id')->nullable()->constrained('binh_luans')->onDelete('cascade'); // Bình luận cha
                 $table->text('noi_dung');
+                $table->boolean('trang_thai')->default(1);
                 $table->timestamps();
     });
     }
