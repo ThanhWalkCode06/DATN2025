@@ -237,7 +237,7 @@ class SanPhamController extends Controller
 
     public function show($id)
 {
-    $sanPham = SanPham::with(['danhMuc', 'bienThes', 'danhGias.user', 'danhGias.bienThe'])->findOrFail($id);
+    $sanPham = SanPham::with(['danhMuc', 'anhSP', 'bienThes', 'danhGias.user', 'danhGias.bienThe'])->findOrFail($id);
 
     return view('admins.sanphams.show', compact('sanPham'));
 }
