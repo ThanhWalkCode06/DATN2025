@@ -59,6 +59,13 @@
         .text-secondary {
             color: black !important;
         }
+        
+        .album-img {  
+            width: 100%; /* Đặt chiều rộng 100% */  
+            height: 150px; /* Đặt chiều cao cố định */  
+            object-fit: cover; /* Đảm bảo ảnh không bị biến dạng */  
+            border-radius: 10px; /* Để có góc bo tròn */  
+        }  
     </style>
 @endsection
 
@@ -69,6 +76,18 @@
         <div class="row g-4 align-items-center">
             <div class="col-md-5 text-center">
                 <img width="200px" src="{{ asset('storage/' . $sanPham->hinh_anh) }}" class="product-image" alt="{{ $sanPham->ten_san_pham }}">
+                @if($sanPham->anhSP->isNotEmpty())  
+                <div class="mt-4">  
+                
+                    <div class="row g-2 justify-content-center">  
+                        @foreach($sanPham->anhSP as $anh)  
+                            <div class="col-4 col-md-3 col-lg-3">  
+                                <img src="{{ asset('storage/' . $anh->link_anh_san_pham) }}" class="album-img rounded shadow-sm" alt="Ảnh phụ">  
+                            </div>  
+                        @endforeach  
+                    </div>  
+                </div>  
+            @endif  
             </div>
             <div class="col-md-7 product-info">
                 <p class="text-secondary">Tên sản phẩm: {{ $sanPham->ten_san_pham }}<p>
