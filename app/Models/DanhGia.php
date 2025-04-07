@@ -15,6 +15,7 @@ class DanhGia extends Model
     protected $fillable = [
         'user_id',
         'san_pham_id',
+        'bien_the_id',
         'so_sao',
         'nhan_xet',
         'trang_thai'
@@ -35,5 +36,10 @@ class DanhGia extends Model
     public function nguoiDung()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function bienThe()
+    {
+        return $this->belongsTo(BienThe::class, 'bien_the_id'); // nhớ đúng tên cột
     }
 }

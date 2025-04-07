@@ -228,12 +228,19 @@ class SanPhamController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($id)
-    {
-        $sanPham = SanPham::with(['danhMuc', 'bienThes'])->findOrFail($id);
+    // public function show($id)
+    // {
+    //     $sanPham = SanPham::with(['danhMuc', 'bienThes'])->findOrFail($id);
 
-        return view('admins.sanphams.show', compact('sanPham'));
-    }
+    //     return view('admins.sanphams.show', compact('sanPham'));
+    // }
+
+    public function show($id)
+{
+    $sanPham = SanPham::with(['danhMuc', 'bienThes', 'danhGias.user', 'danhGias.bienThe'])->findOrFail($id);
+
+    return view('admins.sanphams.show', compact('sanPham'));
+}
 
 
 

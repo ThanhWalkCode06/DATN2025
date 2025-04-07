@@ -117,6 +117,55 @@
             <p class="text-muted">Không có biến thể nào cho sản phẩm này.</p>
         @endif
     </div>
+
+
+    {{-- Đánh giá --}}
+
+    <div class="card card-custom mt-4 shadow-lg border-0">
+        <div class="variant-container">
+            <h4 class="text-success mb-0">Đánh giá ▼</h4>
+        </div>
+    
+        @if($sanPham->danhGias->isNotEmpty())
+            <div class="table-responsive p-3">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Người dùng</th>
+                            <th>Số sao</th>
+                            <th>Nhận xét</th>
+                            <th>Biến thể</th>
+                            <th>Trạng thái</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($sanPham->danhGias as $danhGia)
+                            <tr>
+                                <td>{{ $danhGia->user->username ?? 'Ẩn danh' }}</td>
+                                <td>
+                                    @for($i = 0; $i < $danhGia->so_sao; $i++)
+                                        ⭐
+                                    @endfor
+                                </td>
+                                <td>{!! nl2br(e($danhGia->nhan_xet)) !!}</td>
+                                <td>{{ $danhGia->bienThe->ten_bien_the ?? 'Không rõ biến thể' }}</td>
+                                <td>
+                                    @if($danhGia->trang_thai)
+                                        <span class="badge bg-success">Hiển thị</span>
+                                    @else
+                                        <span class="badge bg-secondary">Ẩn</span>
+                                    @endif
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        @else
+            <p class="text-muted px-3">Chưa có đánh giá nào cho sản phẩm này.</p>
+        @endif
+    </div>
+    
 </div>
 @endsection
 
