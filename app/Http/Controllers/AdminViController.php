@@ -22,15 +22,21 @@ public function show($id, Request $request)
 {
     $trangThai = $request->get('trang_thai');
 
-    $user = User::with(['vi.giaodichs' => function ($q) use ($trangThai) {
-        if ($trangThai !== null) {
-            $q->where('trang_thai', $trangThai);
-        }
-        $q->latest();
-    }])->findOrFail($id);
+    // Lấy user
+    $user = User::with('vi')->findOrFail($id);
 
-    return view('admins.vis.show', compact('user', 'trangThai'));
+    // Lấy giao dịch phân trang
+    $giaodichsQuery = $user->vi?->giaodichs()->latest();
+    
+    if ($trangThai !== null) {
+        $giaodichsQuery->where('trang_thai', $trangThai);
+    }
+
+    $giaodichs = $giaodichsQuery?->paginate(10);
+
+    return view('admins.vis.show', compact('user', 'trangThai', 'giaodichs'));
 }
+
 
 public function updateTrangThai(Request $request)
 {
