@@ -41,8 +41,12 @@
     <!-- Template css -->
     <link id="color-link" rel="stylesheet" type="text/css" href="{{ asset('assets/client/css/style.css') }}">
 
+    
+
     <!-- Pusher -->
     <script src="https://js.pusher.com/8.4.0/pusher.min.js"></script>
+
+
 
     @yield('css')
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/iconly@1.0.0/css/iconly.min.css">

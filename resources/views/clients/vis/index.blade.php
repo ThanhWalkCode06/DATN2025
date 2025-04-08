@@ -66,6 +66,7 @@
                             <th class="text-center">Ngày</th>
                             <th class="text-center">Loại</th>
                             <th class="text-center">Số tiền</th>
+                            <th class="text-center">Trạng thái</th>
                             <th class="text-start">Mô tả</th>
                         </tr>
                     </thead>
@@ -86,7 +87,17 @@
                                 @endif
                                 
                                 </td>
-                                <td>{{ $gd->mo_ta }}</td>
+                                <td class="text-center">
+                                    @if($gd->trang_thai ==1)
+                                        <span class="badge bg-success">Thành công</span>
+                                    @elseif($gd->trang_thai ==0)
+                                        <span class="badge bg-danger">Thất bại</span>
+                                    @else
+                                        <span class="badge bg-secondary">{{ $gd->trang_thai }}</span>
+                                    @endif
+                                </td>
+                                <td>{!! nl2br(e($gd->mo_ta)) !!}</td>
+
                             </tr>
                         @empty
                             <tr>
