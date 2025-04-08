@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\BinhLuanController as AdminBinhLuanController;
 use App\Models\User;
 use App\Models\DanhGia;
 use App\Models\SanPham;
@@ -12,6 +13,7 @@ use App\Http\Controllers\BaiVietController;
 use App\Http\Controllers\BienTheController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DanhGiaController;
+use App\Http\Controllers\BinhLuanController;
 
 use App\Http\Controllers\DonHangController;
 
@@ -232,6 +234,18 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/vi', [App\Http\Controllers\ViController::class, 'hienThi'])->name('vi');
 });
 
-
+// Route::get('/sodu', [App\Http\Controllers\ViController::class, 'soDuVi'])->name('soduvi');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/binhluan', [BinhLuanController::class, 'index'])->name('binhluans.index');
+    Route::get('/binhluan/{id}', [BinhLuanController::class, 'show'])->name('binhluans.show');
+    Route::patch('/binhluan/{id}/toggle', [BinhLuanController::class, 'toggle'])->name('binhluans.toggle');
+});
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::resource('binhluans', BinhLuanController::class);
+});
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::patch('binhluans/{id}/toggle', [BinhLuanController::class, 'toggle'])->name('binhluans.toggle');
+});
+Route::post('/admin/binhluan/{id}/reply', [BinhLuanController::class, 'store'])->name('admins.binhluan.store');
 
 Route::post('/danh-gia/update-status/{id}', [DanhGiaController::class, 'updateStatus']);
