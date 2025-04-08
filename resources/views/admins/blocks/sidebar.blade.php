@@ -99,9 +99,9 @@
                                 <a href="{{ route('danhmucbaiviets.index') }}">Danh mục bài viết</a>
                             </li>
 
-                            {{-- <li>
-                                <a href="{{ route('binhluanbaiviets.index') }}">Quản lý bình luận</a>
-                            </li> --}}
+                            <li>
+                                <a href="{{ route('binhluans.index') }}">Quản lý bình luận</a>
+                            </li>
                         </ul>
                     </li>
 

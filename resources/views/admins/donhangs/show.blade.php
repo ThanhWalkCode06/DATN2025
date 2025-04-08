@@ -119,9 +119,18 @@
                                     <h4>Thông tin đơn hàng</h4>
                                     <div class="tracker-number">
                                         <p>Mã đơn hàng : <span>{{ $donHang->ma_don_hang }}</span></p>
-                                        <p>Người đặt : <span>{{ $donHang->ten_nguoi_dung }}</span></p>
+                                        <p>Người đặt :
+                                            <span>
+                                                @if ($donHang->ten_nguoi_dung == '')
+                                                    {{ $donHang->username }}
+                                                @else
+                                                    {{ $donHang->ten_nguoi_dung }}
+                                                @endif
+                                            </span>
+                                        </p>
                                         <p>Ngày đặt : <span>{{ $donHang->created_at }}</span></p>
-                                        <p>Tổng tiền : <span>{{ $donHang->tong_tien }}</span></p>
+                                        <p>Tổng tiền : <span>{{ number_format($donHang->tong_tien, 0, '', '.') }}đ</span>
+                                        </p>
                                         <p>Phương thức thanh toán : <span>{{ $donHang->ten_phuong_thuc }}</span></p>
                                         <p>
                                             Trạng thái đơn hàng :
@@ -228,10 +237,10 @@
                             </select>
                             <input class="btn btn-primary me-3" type="submit" name="doi_trang_thai" value="Đổi trạng thái"
                                 onclick="return confirm('Xác nhận đổi trạng thái?');">
-                            @if ($donHang->trang_thai_thanh_toan == 0)
+                            {{-- @if ($donHang->trang_thai_thanh_toan == 0)
                                 <input class="btn btn-primary me-3" type="submit" name="xac_nhan_thanh_toan"
                                     value="Xác nhận thanh toán" onclick="return confirm('Xác nhận thanh toán?');">
-                            @endif
+                            @endif --}}
                             @if ($donHang->trang_thai_thanh_toan == 0 && $donHang->trang_thai_don_hang <= 1)
                                 <input class="btn btn-danger me-3" type="submit" name="huy_don_hang" value="Hủy đơn hàng"
                                     onclick="return confirm('Xác nhận hủy đơn hàng?');">
