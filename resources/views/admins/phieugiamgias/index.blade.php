@@ -290,6 +290,7 @@ $(document).ready(function() {
     $('#resetFilter').click(function() {
         $('#filterPanel input').val('');
         $('#filterPanel select').val('').trigger('change');
+        $('#filterPanel input[type="date"]').val('').trigger('change');
         $('#searchForm').submit();
     });
 });

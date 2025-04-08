@@ -92,6 +92,7 @@ Route::prefix('admin')->middleware(['auth', 'checkStatus'])->group(function () {
     // Nếu là route thường thì chỉ cần ghi bình thường không có dấu -
     Route::middleware('dynamic')->group(function () {
         Route::resource('danhmucsanphams', DanhMucSanPhamController::class);
+        Route::get('sanphams/search', [SanPhamController::class, 'search'])->name('sanphams-search');
         Route::resource('sanphams', SanPhamController::class);
 
         Route::get('users/search', [UserController::class, 'search'])->name('users-search');

@@ -45,6 +45,20 @@ class SanPhamController extends Controller
         return view('admins.sanphams.index', compact('sanPhams'));
     }
 
+    public function search(Request $request)
+    {
+
+        $sanPhams = SanPham::superFilter($request)->paginate(10);
+        if ($request->ajax()) {
+            return response()->json([
+                'html' => view('admins.sanphams.partials.list_rows', compact('sanPhams',))->render(),
+                // 'count' => $phieuGiamGias->total(),
+                'pagination' => $sanPhams->appends($request->except('page'))->links('pagination::bootstrap-5')->render()
+            ]);
+        }
+        return view('admins.sanphams.index', compact('sanPhams'));
+    }
+
     public function sanPhamTopDanhGia()
     {
         $sanPhams = SanPham::select('san_phams.*')

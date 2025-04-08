@@ -258,19 +258,19 @@ Theo dõi đơn hàng
                                 <li class="progtrckr-{{ $statusChart >= 3 ? 'done' : 'todo' }}">
                                     <h5>Đã giao</h5>
                                 </li>
-                                
+
                                 <li class="progtrckr-{{ $statusChart >= 4 && $statusChart != 5 ? 'done' : 'todo' }}">
                                     <h5>Đã nhận hàng</h5>
                                 </li>
-                                
+
                                 <!-- Trạng thái trả hàng -->
                                 @if ($statusChart == 5)
                                     <li class="progtrckr-done">
                                         <h5>Trả hàng</h5>
                                     </li>
                                 @endif
-                                
-                                
+
+
                                 {{-- <li class="progtrckr-todo">
                                     <h5>Shipped</h5>
                                     <h6>Pending</h6>
@@ -302,6 +302,7 @@ Theo dõi đơn hàng
                                     <th>Tên sản phẩm</th>
                                     <th>Giá sản phẩm</th>
                                     <th>Số lượng</th>
+                                    <th>Hành động</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -318,6 +319,13 @@ Theo dõi đơn hàng
                                     </td>
                                     <td style="color: #0da487;line-height: 126px">{{ number_format($item['gia_ban'],0,'','.') }} đ</td>
                                     <td style="line-height: 126px">{{ $item['so_luong'] }}</td>
+                                    <td style="line-height: 126px">
+                                        @if ($statusChart == 4)
+                                        <a style="width:100px;height:30px" href="{{ route('sanphams.chitiet',$item['id_san_pham']) }}" style="border: none" class="btn-primary btn-sm">
+                                            Đánh giá sản phẩm
+                                        </a>
+                                        @endif
+                                    </td>
                                 </tr>
                                 @endforeach
 
@@ -333,7 +341,7 @@ Theo dõi đơn hàng
 
 
     <!-- Location Modal Start -->
-    <div class="modal location-modal fade theme-modal" id="locationModal" tabindex="-1">
+    {{-- <div class="modal location-modal fade theme-modal" id="locationModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
             <div class="modal-content">
                 <div class="modal-header">
@@ -429,10 +437,10 @@ Theo dõi đơn hàng
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
     <!-- Location Modal End -->
 
-    <!-- Deal Box Modal Start -->
+    {{-- <!-- Deal Box Modal Start -->
     <div class="modal fade theme-modal deal-modal" id="deal-box" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
             <div class="modal-content">
@@ -509,7 +517,7 @@ Theo dõi đơn hàng
             </div>
         </div>
 
-    </div>
+    </div> --}}
 </body>
 @endsection
 
