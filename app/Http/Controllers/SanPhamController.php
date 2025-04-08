@@ -228,12 +228,23 @@ class SanPhamController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($id)
-    {
-        $sanPham = SanPham::with(['danhMuc', 'bienThes'])->findOrFail($id);
+    // public function show($id)
+    // {
+    //     $sanPham = SanPham::with(['danhMuc', 'bienThes'])->findOrFail($id);
 
-        return view('admins.sanphams.show', compact('sanPham'));
-    }
+    //     return view('admins.sanphams.show', compact('sanPham'));
+    // }
+
+    public function show($id)
+{
+    $sanPham = SanPham::with(['danhMuc', 'anhSP', 'bienThes', 'danhGias.user', 'danhGias.bienThe'])->findOrFail($id);
+
+    // Sắp xếp đánh giá theo thời gian (mới nhất lên đầu) và phân trang 5 đánh giá mỗi trang
+    $sanPham->danhGias = $sanPham->danhGias()->orderByDesc('created_at')->get();
+
+
+    return view('admins.sanphams.show', compact('sanPham'));
+}
 
 
 
@@ -274,6 +285,11 @@ class SanPhamController extends Controller
         //     dd($item->anh_bien_the);
         // }
         // dd(1);
+        $bienTheIds = $bienThes->pluck('id')->toArray();
+        $hasOrder = ChiTietDonHang::whereIn('bien_the_id', $bienTheIds)->exists();
+        if ($hasOrder) {
+            return redirect()->back()->with('error', 'Không thể cập nhật sản phẩm vì đã có đơn hàng.');
+        }
         $thuocTinhId = array_keys($request->input('attribute_values', []));
         $hinhAnhPath = null;
 
@@ -396,11 +412,11 @@ class SanPhamController extends Controller
                 $hasOrder = ChiTietDonHang::whereIn('bien_the_id', $bienTheIdsMoi)->exists();
 
                 if ($hasOrder) {
-                    return redirect()->back()->with('error', 'Sản phẩm không thể xóa do đã có đơn hàng!');
+                    return redirect()->back()->with('error', 'Sản phẩm không thể sửa do đã có đơn hàng!');
                 }
 
                 if ($hasCart) {
-                    return redirect()->back()->with('error', 'Sản phẩm không thể xóa do đã có trong giỏ hàng!');
+                    return redirect()->back()->with('error', 'Sản phẩm không thể sửa do đã có trong giỏ hàng!');
                 }
 
                 // Xóa các biến thể không có trong danh sách mới

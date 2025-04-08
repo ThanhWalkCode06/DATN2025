@@ -12505,12 +12505,28 @@ strong ~ p {
     white-space: nowrap;
     border: none;
     padding: 12px 15px !important;
-    background-color: #f3f3f3 !important;
+}
+.theme-table thead tr th span {
+    width: 100%;
+    padding: 4px;
+    color: #ffffff;
+    text-align: center;
+    border-radius: 4px;
+    font-size: 16px;
+}
+.order-success {
+    background-color: #50c878;
+}
+.order-danger {
+    background-color: #dc3545;
+}
+.order-primary {
+    background-color: #0d6efd;
 }
 .theme-table thead tr th:first-child {
     max-width: none !important;
-    border-top-left-radius: 9px;
-    border-bottom-left-radius: 9px;
+    /* border-top-left-radius: 9px;
+    border-bottom-left-radius: 9px; */
 }
 [dir="rtl"] .theme-table thead tr th:first-child {
     border-top-left-radius: unset;
@@ -12545,6 +12561,9 @@ strong ~ p {
 }
 .theme-table tbody tr:nth-child(even) {
     background-color: #f8f8f8;
+}
+.theme-table tbody tr:nth-child(4) {
+    background-color: #ffffff;
 }
 .theme-table tbody tr td {
     border: none;

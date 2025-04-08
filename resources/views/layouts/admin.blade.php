@@ -23,7 +23,7 @@
 
     <!-- Bootstrap css -->
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/bootstrap.css') }}">
-
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <!-- App css -->
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/themify.css') }}">
@@ -168,11 +168,7 @@
             });
         });
     </script>
-
-    <!-- Bootstrap js -->
     <script src="{{ asset('assets/js/jquery-3.6.0.min.js') }}"></script>
-
-
     {{-- <script src="{{ asset('assets/js/bootstrap/bootstrap.bundle.js') }}"></script> --}}
     <script src="{{ asset('assets/js/bootstrap/bootstrap.bundle.min.js') }}"></script>
 
@@ -213,6 +209,14 @@
 
     <!-- customizer js -->
     <script src="{{ asset('assets/js/customizer.js') }}"></script>
+
+    <!--Dropzon js -->
+    <script src="{{ asset('assets/js/dropzone/dropzone.js') }}"></script>
+    <script src="{{ asset('assets/js/dropzone/dropzone-script.js') }}"></script>
+
+    <!-- scrollbar simplebar js -->
+    <script src="{{ asset('assets/js/scrollbar/simplebar.js') }}"></script>
+    <script src="{{ asset('assets/js/scrollbar/custom.js') }}"></script>
 
     <!-- ratio js -->
     <script src="{{ asset('assets/js/ratio.js') }}"></script>
@@ -286,3 +290,14 @@
 </body>
 
 </html>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="{{ asset('assets/js/select2-custom.js') }}"></script>
+<script>
+    $(function () {
+        $('.super-select2').select2({
+            width: '50%',
+            placeholder: "-- Chọn --",
+            allowClear: true
+        });
+    });
+</script>

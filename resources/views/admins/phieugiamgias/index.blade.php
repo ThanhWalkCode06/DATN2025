@@ -65,6 +65,7 @@ Phiếu giảm giá
         font-weight: 600;
         /* Làm nổi bật tiêu đề */
     }
+
 </style>
 @endsection
 
@@ -82,6 +83,70 @@ Phiếu giảm giá
                     </a>
                 </form>
             </div>
+            <div class="table-responsive table-product">
+                <form id="searchForm" class="row g-3 align-items-center" method="get" action="{{ route('phieugiamgias-search') }}">
+                    <!-- Phần tìm kiếm cơ bản -->
+                    <div class="col-md-5">
+                        <div class="input-group">
+                            <input class="form-control" type="text" placeholder="Tìm kiếm tên phiếu" name="ten_phieu" value="">
+                            <button type="submit" class="btn btn-theme btn-sm"><i data-feather="search"></i></button>
+                            <button class="btn btn-primary btn-sm ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#filterPanel">
+                                Tìm kiếm nâng cao
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Phần bộ lọc nâng cao -->
+                    <div class="col-12">
+                        <div class="collapse" id="filterPanel">
+                            <div class="card card-body mt-2">
+                                <div class="row">
+
+                                    @include('admins.filter.name',[
+                                        'key1' => 'gia_tri_from',
+                                        'key2' => 'gia_tri_to',
+                                        'label1' => 'Giá trị từ',
+                                        'label2' => 'Giá trị đến',
+                                    ])
+
+                                    @include('admins.filter.date',[
+                                        'key1' => 'ngay_bat_dau_from',
+                                        'label1' => 'Ngày bắt đầu từ',
+                                    ])
+
+                                    @include('admins.filter.date',[
+                                        'key1' => 'ngay_ket_thuc_from',
+                                        'label1' => 'Ngày kết thúc từ',
+                                    ])
+
+                                    @include('admins.filter.status',[
+                                        'key' => 'trang_thai',
+                                        'label' => 'Trạng thái',
+                                        'options' =>
+                                            [
+                                                '' => '-- Tất cả --',
+                                                1 => 'Kích hoạt',
+                                                0 => 'Không Kích hoạt',
+                                            ]
+                                        ])
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-12 text-end">
+                                        <!-- Nút Reset Filter (chỉ reset các input filter) -->
+                                        <button type="button" id="resetFilter" class="btn btn-primary btn-sm">
+                                            <i data-feather="refresh-ccw"></i> Làm mới
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                @if(session('error-key'))
+                    <p class="text-danger">{{ session('error-key') }}</p>
+                @endif
+
+            </div>
 
             <div class="table-container">
                 <div class="table-responsive">
@@ -97,8 +162,10 @@ Phiếu giảm giá
                                 <th style="width: 15%;">Hành động</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            @foreach($phieuGiamGias as $phieuGiamGia)
+                        <tbody id="voucher-list-body">
+                            @include('admins.phieugiamgias.partials.list_rows', ['lists' => $phieuGiamGias])
+
+                            {{-- @foreach($phieuGiamGias as $phieuGiamGia)
                             <tr>
                                 <td>{{ $phieuGiamGia->ten_phieu }}</td>
                                 <td>{{ $phieuGiamGia->ma_phieu }}</td>
@@ -132,21 +199,22 @@ Phiếu giảm giá
                                     </ul>
                                 </td>
                             </tr>
-                            @endforeach
+                            @endforeach --}}
                         </tbody>
                     </table>
                 </div>
-            </div>
-            <div class="d-flex justify-content-center mt-3">
-                {{ $phieuGiamGias->links("pagination::bootstrap-5") }}
             </div>
 
 
         </div>
     </div>
 </div>
+<div class="d-flex justify-content-center mt-3 pagination-wrapper">
+    {{ $phieuGiamGias->links("pagination::bootstrap-5") }}
+</div>
 @endsection
 
+<script src="{{ asset('assets/js/jquery-3.6.0.min.js') }}"></script>
 @section('js')
 <script>
     function confirmDelete(event, id) {
@@ -185,3 +253,44 @@ Phiếu giảm giá
 <!-- all checkbox select js -->
 <script src="{{ asset('assets/js/checkbox-all-check.js') }}"></script>
 @endsection
+<script>
+$(document).ready(function() {
+    // Hàm tải dữ liệu
+    function loadData(url) {
+        $.ajax({
+            url: url,
+            type: 'GET',
+            success: function(response) {
+                $('#voucher-list-body').html(response.html);
+                $('.pagination-wrapper').html(response.pagination);
+
+                // Cập nhật URL trình duyệt không reload
+                history.pushState(null, null, url);
+            },
+            error: function(xhr) {
+                console.error('Error:', xhr.responseText);
+            }
+        });
+    }
+
+    // Submit form lọc
+    $('#searchForm').submit(function(e) {
+        e.preventDefault();
+        let url = $(this).attr('action') + '?' + $(this).serialize();
+        loadData(url);
+    });
+
+    // Xử lý click phân trang
+    $(document).on('click', '.pagination a', function(e) {
+        e.preventDefault();
+        loadData($(this).attr('href'));
+    });
+
+    // Reset filter
+    $('#resetFilter').click(function() {
+        $('#filterPanel input').val('');
+        $('#filterPanel select').val('').trigger('change');
+        $('#searchForm').submit();
+    });
+});
+</script>

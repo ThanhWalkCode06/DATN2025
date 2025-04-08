@@ -70,4 +70,10 @@ class BienThe extends Model
         return $this->belongsToMany(GiaTriThuocTinh::class, 'bien_the_thuoc_tinhs', 'bien_the_id', 'gia_tri_thuoc_tinh_id')
                     ->withTimestamps();
     }
+
+    public function danhGias()
+{
+    return $this->hasMany(DanhGia::class);
+}
+
 }

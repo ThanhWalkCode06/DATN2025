@@ -132,4 +132,15 @@ class DanhGiaController extends Controller
         }
         return response()->json(['success' => false, 'message' => 'Đánh giá không tồn tại.']);
     }
+
+
+    public function updateStatus(Request $request, $id)
+    {
+        $danhGia = DanhGia::findOrFail($id);
+        $danhGia->trang_thai = $request->input('trang_thai');
+        $danhGia->save();
+    
+        return response()->json(['success' => true]);
+    }
+    
 }

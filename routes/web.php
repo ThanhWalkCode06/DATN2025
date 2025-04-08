@@ -88,6 +88,7 @@ Route::prefix('admin')->middleware(['auth', 'checkStatus'])->group(function () {
     Route::get("/lienhe", [LienHeController::class, "index"])->name('lienhe');
     Route::get("/danhgias", [DanhGiaController::class, "index"])->name('danhgias');
     Route::post('/sanphams/upload/{sanPhamId}', [Helper::class, 'uploadAlbum'])->name('upload.album');
+    Route::get('donhangs/filter', [DonHangController::class, 'filter'])->name('donhangs.filter');
 
 
     // Chức năng thì cho vào đây đánh tên route->name phải giống quyền lối bởi dấu . nếu là route resource
@@ -103,6 +104,7 @@ Route::prefix('admin')->middleware(['auth', 'checkStatus'])->group(function () {
         Route::resource('donhangs', DonHangController::class);
         Route::resource('baiviets', BaiVietController::class);
         Route::resource('danhmucbaiviets', DanhMucBaiVietController::class);
+        Route::get('phieugiamgias/search', [PhieuGiamGiaController::class, 'search'])->name('phieugiamgias-search');
         Route::resource('phieugiamgias', PhieuGiamGiaController::class);
         Route::resource("danhgias", DanhGiaController::class);
 
@@ -232,7 +234,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/vi', [App\Http\Controllers\ViController::class, 'hienThi'])->name('vi');
 });
 
-
 // Route::get('/sodu', [App\Http\Controllers\ViController::class, 'soDuVi'])->name('soduvi');
 Route::middleware(['auth'])->group(function () {
     Route::get('/binhluan', [BinhLuanController::class, 'index'])->name('binhluans.index');
@@ -247,4 +248,4 @@ Route::prefix('admin')->name('admin.')->group(function () {
 });
 Route::post('/admin/binhluan/{id}/reply', [BinhLuanController::class, 'store'])->name('admins.binhluan.store');
 
-
+Route::post('/danh-gia/update-status/{id}', [DanhGiaController::class, 'updateStatus']);
