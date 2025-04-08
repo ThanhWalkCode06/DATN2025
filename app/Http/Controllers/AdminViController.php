@@ -1,0 +1,66 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Vi;
+use App\Models\User;
+use App\Models\GiaoDichVi;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class AdminViController extends Controller
+{
+    public function index()
+{
+    $users = \App\Models\User::orderBy('created_at', 'desc')->paginate(10); // Mới nhất trước
+
+    return view('admins.vis.index', compact('users'));
+}
+
+
+public function show($id, Request $request)
+{
+    $trangThai = $request->get('trang_thai');
+
+    $user = User::with(['vi.giaodichs' => function ($q) use ($trangThai) {
+        if ($trangThai !== null) {
+            $q->where('trang_thai', $trangThai);
+        }
+        $q->latest();
+    }])->findOrFail($id);
+
+    return view('admins.vis.show', compact('user', 'trangThai'));
+}
+
+public function updateTrangThai(Request $request)
+{
+    $ids = $request->input('ids', []);
+    $trangThai = $request->input('trang_thai');
+
+    foreach ($ids as $id) {
+        $giaoDich = GiaoDichVi::find($id);
+
+        // Chỉ xử lý khi là rút tiền và cập nhật sang trạng thái "thành công"
+        if ($giaoDich && $giaoDich->loai === 'Rút tiền' && $trangThai == 1 && $giaoDich->trang_thai != 1) {
+            $vi = $giaoDich->vi;
+
+            // Trừ tiền
+            $soDuTruoc = $vi->so_du;
+            $vi->so_du -= $giaoDich->so_tien;
+            $vi->save();
+
+            // Cập nhật mô tả và trạng thái
+            $giaoDich->mo_ta = "💸 Rút tiền từ ví\nSố dư: " . number_format($soDuTruoc, 0, ',', '.') . " ➝ " . number_format($vi->so_du, 0, ',', '.') . " VNĐ";
+
+            $giaoDich->trang_thai = 1;
+            $giaoDich->save();
+        } else {
+            // Cập nhật các loại giao dịch khác (không phải rút tiền)
+            $giaoDich?->update(['trang_thai' => $trangThai]);
+        }
+    }
+
+    return back()->with('success', 'Cập nhật trạng thái thành công');
+}
+
+}

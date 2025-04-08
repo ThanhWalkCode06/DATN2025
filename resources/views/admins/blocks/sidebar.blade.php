@@ -45,6 +45,9 @@
                                 <li>
                                     <a href="{{ route('users.index') }}">Danh sách</a>
                                 </li>
+                                <li>
+                                    <a href="{{ route('vis.index') }}">Ví người dùng</a>
+                                </li>
 
                                 @role('SuperAdmin')
                                     <li>
@@ -96,9 +99,9 @@
                                 <a href="{{ route('danhmucbaiviets.index') }}">Danh mục bài viết</a>
                             </li>
 
-                            {{-- <li>
-                                <a href="{{ route('binhluanbaiviets.index') }}">Quản lý bình luận</a>
-                            </li> --}}
+                            <li>
+                                <a href="{{ route('binhluans.index') }}">Quản lý bình luận</a>
+                            </li>
                         </ul>
                     </li>
 
