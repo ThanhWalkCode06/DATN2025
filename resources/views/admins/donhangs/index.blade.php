@@ -38,12 +38,33 @@
                 </div>
                 <div class="w-100">
                     <div class="table-responsive">
-                        <input type="text" class="form-control w-25 float-end mb-2" id="searchInput"
-                            placeholder="Tìm đơn hàng">
-                        <table style="table-layout: fixed; width: 100%;" class="table order-table theme-table"
-                            id="dataTable">
-                            @foreach ($donHangs as $donHang)
-                                <div>
+                        <div class="mb-3 col-4 float-end d-flex flex-row-reverse">
+                            <div class="col-6">
+                                <label for="trang_thai_thanh_toan">Trạng thái thanh toán</label>
+                                <select id="trang_thai_thanh_toan" class="form-control">
+                                    <option value="">Tất cả</option>
+                                    <option value="0">Chưa thanh toán</option>
+                                    <option value="1">Đã thanh toán</option>
+                                </select>
+                            </div>
+                            <div class="col-6 mx-2">
+                                <label for="trang_thai_don_hang">Trạng thái đơn hàng</label>
+                                <select id="trang_thai_don_hang" class="form-control">
+                                    <option value="">Tất cả</option>
+                                    <option value="-1">Đã hủy</option>
+                                    <option value="0">Chờ xác nhận</option>
+                                    <option value="1">Đang xử lý</option>
+                                    <option value="2">Đang giao</option>
+                                    <option value="3">Đã giao</option>
+                                    <option value="4">Hoàn thành</option>
+                                    <option value="5">Trả hàng</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div id="orderTableContainer">
+                            <table style="table-layout: fixed; width: 100%;" class="table order-table theme-table"
+                                id="dataTable">
+                                @foreach ($donHangs as $donHang)
                                     <thead>
                                         <tr>
                                             <th colspan="3">Mã đơn hàng: {{ $donHang->ma_don_hang }}</th>
@@ -93,14 +114,17 @@
                                             <td colspan="2">
                                                 <b>Tổng tiền: </b>{{ number_format($donHang->tong_tien, 0, '', '.') }}đ
                                             </td>
-                                            <td colspan="2"><b>Hình thức thanh toán: </b>{{ $donHang->ten_phuong_thuc }}
+                                            <td colspan="2"><b>Hình thức thanh toán:
+                                                </b>{{ $donHang->ten_phuong_thuc }}
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td colspan="2"><b>Tên người nhận: </b>{{ $donHang->ten_nguoi_nhan }}</td>
+                                            <td colspan="2"><b>Tên người nhận: </b>{{ $donHang->ten_nguoi_nhan }}
+                                            </td>
                                             <td colspan="2" class="text-truncate"><b>Email:
                                                 </b>{{ $donHang->email_nguoi_nhan }}</td>
-                                            <td colspan="2"><b>Số điện thoại: </b>{{ $donHang->sdt_nguoi_nhan }}</td>
+                                            <td colspan="2"><b>Số điện thoại: </b>{{ $donHang->sdt_nguoi_nhan }}
+                                            </td>
                                         </tr>
                                         <tr>
                                             <td colspan="2" class="text-truncate"><b>Địa chỉ người nhận:
@@ -119,9 +143,9 @@
                                             <td></td>
                                         </tr>
                                     </tbody>
-                                </div>
-                            @endforeach
-                        </table>
+                                @endforeach
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -131,14 +155,25 @@
 @endsection
 
 @section('js')
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        document.getElementById("searchInput").addEventListener("input", function() {
-            let input = this.value.toLowerCase();
-            let rows = document.querySelectorAll("#dataTable tbody tr");
+        $('#trang_thai_don_hang, #trang_thai_thanh_toan').on('change', function() {
+            let trangThaiDonHang = $('#trang_thai_don_hang').val();
+            let trangThaiThanhToan = $('#trang_thai_thanh_toan').val();
 
-            rows.forEach(row => {
-                let text = row.innerText.toLowerCase();
-                row.style.display = text.includes(input) ? "" : "none";
+            $.ajax({
+                url: "{{ route('donhangs.filter') }}",
+                method: 'GET',
+                data: {
+                    trang_thai: trangThaiDonHang,
+                    thanh_toan: trangThaiThanhToan
+                },
+                success: function(response) {
+                    $('#orderTableContainer').html(response.html);
+                },
+                error: function(xhr) {
+                    console.error(xhr.responseText);
+                }
             });
         });
     </script>
