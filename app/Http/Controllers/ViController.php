@@ -167,6 +167,12 @@ class ViController extends Controller
     public function xuLyRutTien(Request $request)
     {
         $user = Auth::user();
+        $user = Auth::user();
+
+if (!$user) {
+    return redirect()->route('login')->with('error', 'Bạn cần đăng nhập để sử dụng chức năng này.');
+}
+
         $soTienRut = (int) $request->so_tien;
 
         if ($soTienRut <= 0) {

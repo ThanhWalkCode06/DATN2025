@@ -45,6 +45,9 @@
                                 <li>
                                     <a href="{{ route('users.index') }}">Danh sách</a>
                                 </li>
+                                <li>
+                                    <a href="{{ route('vis.index') }}">Ví người dùng</a>
+                                </li>
 
                                 @role('SuperAdmin')
                                     <li>
