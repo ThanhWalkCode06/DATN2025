@@ -257,8 +257,11 @@ Route::get('/vi/nap-tien', [ViController::class, 'formNapTien'])->name('nap-tien
 Route::post('/vi/nap-tien', [ViController::class, 'xuLyNapTien'])->name('nap-tien.xuly');
 Route::get('/vnpay/return', [ViController::class, 'vnpayReturn'])->name('vi.napTienReturn');
 
+
 Route::get('/vi/rut-tien', [ViController::class, 'formRutTien'])->name('rut-tien.form');
 Route::post('/vi/rut-tien', [ViController::class, 'xuLyRutTien'])->name('rut-tien.xuly');
+Route::post('/admin/vi/xu-ly-nhieu', [AdminViController::class, 'updateTrangThai'])->name('admin.vis.xuLyRutNhieu');
+
 
 Route::get('/vi-nguoi-dung', [AdminViController::class, 'index'])->name('vis.index');
 Route::get('/admin/vi-nguoi-dung/{id}', [AdminViController::class, 'show'])->name('admin.vis.show');
