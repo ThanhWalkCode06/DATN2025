@@ -181,29 +181,23 @@
                                     <br>
                                     {{ $danhGia->bienThe->ten_bien_the ?? 'Không rõ biến thể' }}
                                 </td>
-                                <td>
-                                    <span id="badge-{{ $danhGia->id }}" class="badge"
-                                          style="color: white; background-color: {{ $danhGia->trang_thai === 1 ? '#28a745' : '#dc3545' }}">
-                                        {{ $danhGia->trang_thai === 1 ? 'Hiển thị' : 'Ẩn' }}
-                                    </span>
+                                <td class="status-icon">
+                                    @if ($danhGia->trang_thai == 1)
+                                        <i class="ri-checkbox-circle-line text-success"></i> {{-- ✔️ màu xanh --}}
+                                    @else
+                                        <i class="ri-close-circle-line text-danger"></i> {{-- ❌ màu đỏ --}}
+                                    @endif
                                 </td>
                                 <td>
-                                    <button id="toggle-btn-{{ $danhGia->id }}" class="btn btn-sm"
-                                            style="background-color: {{ $danhGia->trang_thai === 1 ? '#28a745' : '#dc3545' }}; color: white;"
-                                            onclick="toggleStatus({{ $danhGia->id }})">
-                                        {{ $danhGia->trang_thai === 1 ? 'Ẩn' : 'Hiển thị' }}
+                                    <button
+                                        class="toggleStatus btn btn-sm {{ $danhGia->trang_thai == 1 ? 'btn-danger' : 'btn-primary' }}"
+                                        data-id="{{ $danhGia->id }}">
+                                        {{ $danhGia->trang_thai == 1 ? 'Ẩn' : 'Hiện' }}
                                     </button>
                                 </td>
-                                
-                                
-                                
-                                
-                                </td>
-                                
                             </tr>
                         @endforeach
                     </tbody>
-                    
                 </table>
             </div>
         @else
@@ -215,45 +209,43 @@
 
 @section('js')
 <script>
-  function toggleStatus(id) {
-    const badge = document.getElementById(`badge-${id}`);
-    const button = document.getElementById(`toggle-btn-${id}`);
-    const currentText = badge.textContent.trim();
-    const newStatus = currentText === "Hiển thị" ? 0 : 1;
+$(document).ready(function() {
+    $('.toggleStatus').click(function() {
+        var danhGiaId = $(this).data('id');
+        var button = $(this);
+        var newStatus = button.hasClass('btn-danger') ? 0 : 1;
 
-    fetch('/danh-gia/update-status/' + id, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-        },
-        body: JSON.stringify({ trang_thai: newStatus })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            // Cập nhật lại UI
-            if (newStatus === 1) {
-                badge.textContent = 'Hiển thị';
-                badge.style.backgroundColor = '#28a745'; // Màu xanh cho "Hiển thị"
-                button.textContent = 'Ẩn';
-                button.style.backgroundColor = '#dc3545'; // Màu đỏ cho "Ẩn"
-            } else {
-                badge.textContent = 'Ẩn';
-                badge.style.backgroundColor = '#dc3545'; // Màu đỏ cho "Ẩn"
-                button.textContent = 'Hiển thị';
-                button.style.backgroundColor = '#28a745'; // Màu xanh cho "Hiển thị"
+        $.ajax({
+            url: '/danh-gia/update-status/' + danhGiaId,
+            method: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}',
+                trang_thai: newStatus
+            },
+            success: function(response) {
+                if (response.success) {
+                    // Cập nhật giao diện người dùng
+                    if (newStatus === 1) {
+                        button.removeClass('btn-primary').addClass('btn-danger').text('Ẩn');
+                        button.closest('tr').find('.status-icon i')
+                            .removeClass('ri-close-circle-line text-danger')
+                            .addClass('ri-checkbox-circle-line text-success');
+                    } else {
+                        button.removeClass('btn-danger').addClass('btn-primary').text('Hiện');
+                        button.closest('tr').find('.status-icon i')
+                            .removeClass('ri-checkbox-circle-line text-success')
+                            .addClass('ri-close-circle-line text-danger');
+                    }
+                } else {
+                    alert('Cập nhật trạng thái thất bại.');
+                }
+            },
+            error: function() {
+                alert('Đã xảy ra lỗi. Vui lòng thử lại.');
             }
-        } else {
-            alert("Cập nhật thất bại!");
-        }
-    })
-    .catch(error => {
-        console.error('Lỗi:', error);
+        });
     });
-}
-
-
+});
 </script>
 <script>
     function filterReviews() {

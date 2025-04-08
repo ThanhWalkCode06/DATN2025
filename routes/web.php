@@ -6,28 +6,30 @@ use App\Models\DanhGia;
 use App\Models\SanPham;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ViController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\LienHeController;
 use App\Http\Controllers\VaiTroController;
+use App\Http\Controllers\AdminViController;
 use App\Http\Controllers\BaiVietController;
 use App\Http\Controllers\BienTheController;
+
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DanhGiaController;
 use App\Http\Controllers\BinhLuanController;
 
+use App\Http\Controllers\DanhGiaController;
 use App\Http\Controllers\DonHangController;
-
 use App\Http\Controllers\SanPhamController;
 use App\Http\Controllers\ThongKeController;
 use App\Http\Controllers\HelperCommon\Helper;
 use App\Http\Controllers\ThuocTinhController;
-use App\Http\Controllers\Clients\ViController;
 use App\Http\Controllers\Payment\PaymentVnPay;
 use App\Http\Controllers\Admins\UserController;
 use App\Http\Controllers\PhieuGiamGiaController;
+
+
 use App\Http\Controllers\Admins\SettingController;
-
-
 use App\Http\Controllers\DanhMucBaiVietController;
 use App\Http\Controllers\DanhMucSanPhamController;
 use App\Http\Controllers\GiaTriThuocTinhController;
@@ -41,6 +43,7 @@ use App\Http\Controllers\Admins\Responsibility\RoleController;
 use App\Http\Controllers\Admins\Responsibility\PermissionController;
 use App\Http\Controllers\Clients\UserController as ClientsUserController;
 use App\Http\Controllers\Clients\Auth\AuthController as AuthAuthController;
+
 
 // Login Admin Controller
 Route::prefix('/admin')->controller(AuthController::class)->group(function () {
@@ -249,3 +252,14 @@ Route::prefix('admin')->name('admin.')->group(function () {
 Route::post('/admin/binhluan/{id}/reply', [BinhLuanController::class, 'store'])->name('admins.binhluan.store');
 
 Route::post('/danh-gia/update-status/{id}', [DanhGiaController::class, 'updateStatus']);
+
+Route::get('/vi/nap-tien', [ViController::class, 'formNapTien'])->name('nap-tien.form');
+Route::post('/vi/nap-tien', [ViController::class, 'xuLyNapTien'])->name('nap-tien.xuly');
+Route::get('/vnpay/return', [ViController::class, 'vnpayReturn'])->name('vi.napTienReturn');
+
+Route::get('/vi/rut-tien', [ViController::class, 'formRutTien'])->name('rut-tien.form');
+Route::post('/vi/rut-tien', [ViController::class, 'xuLyRutTien'])->name('rut-tien.xuly');
+
+Route::get('/vi-nguoi-dung', [AdminViController::class, 'index'])->name('vis.index');
+Route::get('/admin/vi-nguoi-dung/{id}', [AdminViController::class, 'show'])->name('admin.vis.show');
+Route::post('/admin/vi-nguoi-dung/update-trang-thai', [AdminViController::class, 'updateTrangThai'])->name('admin.vis.updateTrangThai');

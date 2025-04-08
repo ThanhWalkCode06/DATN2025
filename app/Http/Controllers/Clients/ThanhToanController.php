@@ -187,21 +187,22 @@ class ThanhToanController extends Controller
         if ($request->phuong_thuc_thanh_toan_id === "3") {
             $soDu = $user->vi->so_du ?? 0;
             $tongTien = $request->tong_tien;
-
+        
             if ($soDu < $tongTien) {
                 return response()->json([
                     'status' => 'error',
                     'message' => 'Số dư ví không đủ để thanh toán đơn hàng. Số dư hiện tại: ' . number_format($soDu, 0, ',', '.') . ' VNĐ.'
                 ], 400);
             }
-
-
+        
+            // Lưu số dư trước
+            $soDuTruoc = $soDu;
+            $soDuSau = $soDuTruoc - $tongTien;
+        
             // Trừ tiền trong ví
             $user->vi->decrement('so_du', $tongTien);
-
-
-
-            // Tạo đơn hàng với phương thức thanh toán ví (không cần tham chiếu bảng phương thức thanh toán)
+        
+            // Tạo đơn hàng
             $donHang = DonHang::create([
                 'user_id' => $user->id,
                 'ma_don_hang' => Helper::generateOrderCode(),
@@ -211,25 +212,27 @@ class ThanhToanController extends Controller
                 'dia_chi_nguoi_nhan' => $request->dia_chi_nguoi_nhan,
                 'tong_tien' => $tongTien,
                 'ghi_chu' => $request->ghi_chu,
-                'phuong_thuc_thanh_toan_id' => 3, // Giả sử 1 là ID cho tiền mặt (có thể tùy chỉnh lại)
+                'phuong_thuc_thanh_toan_id' => 3,
                 'trang_thai_don_hang' => 0,
-                'trang_thai_thanh_toan' => 1, // Đã thanh toán
+                'trang_thai_thanh_toan' => 1,
                 'created_at' => now()
             ]);
-
-
-            // Sau khi tạo đơn hàng, bạn có thể lấy ma_don_hang và lưu vào bảng giaodichvis
+        
+            // Lưu giao dịch ví
             DB::table('giaodichvis')->insert([
                 'vi_id' => $user->vi->id,
-                'so_tien' => $tongTien,
-                'loai' => 'Mua hàng', // Giao dịch chi tiền
-                'mo_ta' => 'Trừ tiền do mua đơn hàng ' . $donHang->ma_don_hang, // Thêm mã đơn hàng vào mô tả
+                'so_tien' => -$tongTien,
+                'loai' => 'Mua hàng',
+                'mo_ta' => '🛒 Mua hàng | Đơn #' . $donHang->ma_don_hang . ' | Số dư: '
+                    . number_format($soDuTruoc, 0, ',', '.') . ' ➝ ' . number_format($soDuSau, 0, ',', '.') . ' VNĐ',
+                'trang_thai' => 1, // Thành công
                 'created_at' => now(),
                 'updated_at' => now()
             ]);
-
+        
+            // Gửi thông báo
             $this->thongBaoDatHang($donHang);
-
+        
             // Lưu voucher nếu có
             if (!empty($request->voucher_code) && $request->giam_gia !== "0") {
                 $idVoucher = PhieuGiamGia::where('ma_phieu', $request->voucher_code)->first();
@@ -242,8 +245,8 @@ class ThanhToanController extends Controller
                     ]);
                 }
             }
-
-            // Di chuyển giỏ hàng vào chi tiết đơn hàng
+        
+            // Thêm chi tiết đơn hàng từ giỏ hàng
             $cart = ChiTietGioHang::with('user', 'bienThe')->where('user_id', $user->id)->get();
             foreach ($cart as $item) {
                 ChiTietDonHang::create([
@@ -252,22 +255,23 @@ class ThanhToanController extends Controller
                     'so_luong' => $item->so_luong,
                     'created_at' => now()
                 ]);
-
+        
                 BienThe::where('id', $item->bienThe->id)->update([
                     'so_luong' => DB::raw('so_luong - ' . $item->so_luong)
                 ]);
             }
-
+        
+            // Xóa giỏ hàng
             $cart->each->delete();
-
+        
             return response()->json([
                 'status' => 'success',
                 'id' => $donHang->id,
                 'message' => 'Thanh toán bằng ví thành công.',
                 'so_du_con_lai' => number_format($user->vi->fresh()->so_du, 0, ',', '.') . ' VNĐ'
             ], 200);
-
         }
+        
 
 
         return response()->json(['status' => 'error', 'message' => 'Lỗi phương thức'], 500);
