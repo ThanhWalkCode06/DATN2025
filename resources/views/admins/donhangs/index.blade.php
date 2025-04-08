@@ -39,14 +39,6 @@
                 <div class="w-100">
                     <div class="table-responsive">
                         <div class="mb-3 col-4 float-end d-flex flex-row-reverse">
-                            <div class="col-6">
-                                <label for="trang_thai_thanh_toan">Trạng thái thanh toán</label>
-                                <select id="trang_thai_thanh_toan" class="form-control">
-                                    <option value="">Tất cả</option>
-                                    <option value="0">Chưa thanh toán</option>
-                                    <option value="1">Đã thanh toán</option>
-                                </select>
-                            </div>
                             <div class="col-6 mx-2">
                                 <label for="trang_thai_don_hang">Trạng thái đơn hàng</label>
                                 <select id="trang_thai_don_hang" class="form-control">
@@ -58,6 +50,14 @@
                                     <option value="3">Đã giao</option>
                                     <option value="4">Hoàn thành</option>
                                     <option value="5">Trả hàng</option>
+                                </select>
+                            </div>
+                            <div class="col-6">
+                                <label for="trang_thai_thanh_toan">Trạng thái thanh toán</label>
+                                <select id="trang_thai_thanh_toan" class="form-control">
+                                    <option value="">Tất cả</option>
+                                    <option value="0">Chưa thanh toán</option>
+                                    <option value="1">Đã thanh toán</option>
                                 </select>
                             </div>
                         </div>
