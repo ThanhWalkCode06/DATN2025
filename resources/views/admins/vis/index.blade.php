@@ -15,6 +15,17 @@
                 <th style="color: white !important;">Lịch sử giao dịch</th>
             </tr>
         </thead>
+        <form method="GET" class="mb-4">
+            <div class="input-group" style="max-width: 400px;">
+                <input type="text" name="keyword" class="form-control"
+                autocomplete="off"
+                placeholder="Tìm theo tên hoặc username..." value="{{ request('keyword') }}">
+                <button type="submit" class="btn" style="background-color: #009688; color: white;">
+                    <i class="bi bi-search"></i> Tìm kiếm
+                </button>
+            </div>
+        </form>
+<br>        
         
         <tbody>
             @foreach ($users as $user)
@@ -35,7 +46,25 @@
     </table>
 
     <div class="d-flex justify-content-center">
-        {{ $users->links('pagination::bootstrap-5') }}
+        {{ $users->appends(request()->query())->links('pagination::bootstrap-5') }}
+
     </div>
 </div>
+@endsection
+@section('js')
+</script>
+<!-- customizer js -->
+<script src="{{ asset('assets/js/customizer.js') }}"></script>
+
+<!-- Sidebar js -->
+<script src="{{ asset('assets/js/config.js') }}"></script>
+
+<!-- Plugins JS -->
+<script src="{{ asset('assets/js/sidebar-menu.js') }}"></script>
+
+<!-- Data table js -->
+<script src="{{ asset('assets/js/jquery.dataTables.js') }}"></script>
+<script src="{{ asset('assets/js/custom-data-table.js') }}"></script>
+
+<script src="{{ asset('assets/js/checkbox-all-check.js') }}"></script>
 @endsection

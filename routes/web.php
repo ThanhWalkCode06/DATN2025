@@ -15,7 +15,7 @@ use App\Http\Controllers\BaiVietController;
 use App\Http\Controllers\BienTheController;
 
 use App\Http\Controllers\ContactController;
-use App\Http\Controllers\DanhGiaController;
+
 use App\Http\Controllers\BinhLuanController;
 
 use App\Http\Controllers\DanhGiaController;

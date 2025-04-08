@@ -86,7 +86,17 @@
                                 <td>
                                     <span class="badge bg-light border border-1 text-dark px-2">{{ $gd->loai }}</span>
                                 </td>
-                                <td>{{ $gd->mo_ta }}</td>
+                                <td>
+                                    {!! nl2br(e($gd->mo_ta)) !!}
+                                    
+                                    @if ($gd->trang_thai == 1 && $gd->updated_at)
+                                        <br>
+                                        <strong class="text-muted">
+                                            Thời gian xử lý {{ $gd->updated_at->format('d/m/Y H:i') }}
+                                        </strong>
+                                    @endif
+                                </td>
+                                
                                 <td>
                                     @if ($gd->trang_thai == 1)
                                     <span class="badge" style="background-color: #28a745; color: white;">Thành công</span>
@@ -120,4 +130,21 @@
         document.querySelectorAll('input[name="ids[]"]').forEach(el => el.checked = this.checked);
     });
 </script>
+@endsection
+@section('js')
+</script>
+<!-- customizer js -->
+<script src="{{ asset('assets/js/customizer.js') }}"></script>
+
+<!-- Sidebar js -->
+<script src="{{ asset('assets/js/config.js') }}"></script>
+
+<!-- Plugins JS -->
+<script src="{{ asset('assets/js/sidebar-menu.js') }}"></script>
+
+<!-- Data table js -->
+<script src="{{ asset('assets/js/jquery.dataTables.js') }}"></script>
+<script src="{{ asset('assets/js/custom-data-table.js') }}"></script>
+
+<script src="{{ asset('assets/js/checkbox-all-check.js') }}"></script>
 @endsection

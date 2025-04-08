@@ -63,7 +63,7 @@
                 <table class="table table-hover mb-0">
                     <thead style="background-color: #f1f1f1;">
                         <tr>
-                            <th class="text-center">Ngày</th>
+                            <th class="text-center">Thời gian</th>
                             <th class="text-center">Loại</th>
                             <th class="text-center">Số tiền</th>
                             <th class="text-center">Trạng thái</th>
@@ -76,22 +76,19 @@
                                 <td class="text-center">{{ $gd->created_at->format('H:i d/m/Y') }}</td>
                                 <td class="text-center">{{ ucfirst($gd->loai) }}</td>
                                 <td class="text-center">
-                                    @if($gd->loai === 'Rút tiền')
-                                        @if($gd->trang_thai == 0)
-                                            <span class="text-warning">{{ number_format($gd->so_tien, 0, ',', '.') }} VNĐ</span>
-                                        @else
+                                    @if(in_array($gd->loai, ['Rút tiền', 'Mua hàng', 'Thanh toán']))
+                                        @if($gd->trang_thai == 1)
                                             <span class="text-danger">-{{ number_format(abs($gd->so_tien), 0, ',', '.') }} VNĐ</span>
-                                        @endif
-                                    @elseif($gd->so_tien > 0)
-                                        @if($gd->loai == 'Hoàn tiền' || $gd->loai == 'Nạp tiền')
-                                            <span class="text-success">+{{ number_format($gd->so_tien, 0, ',', '.') }} VNĐ</span>
                                         @else
-                                            <span class="text-danger">-{{ number_format($gd->so_tien, 0, ',', '.') }} VNĐ</span>
+                                            <span class="text-warning">{{ number_format(abs($gd->so_tien), 0, ',', '.') }} VNĐ</span>
                                         @endif
+                                    @elseif(in_array($gd->loai, ['Nạp tiền', 'Hoàn tiền']))
+                                        <span class="text-success">+{{ number_format($gd->so_tien, 0, ',', '.') }} VNĐ</span>
                                     @else
-                                        <span class="text-danger">{{ number_format($gd->so_tien, 0, ',', '.') }} VNĐ</span>
+                                        <span class="text-dark">{{ number_format($gd->so_tien, 0, ',', '.') }} VNĐ</span>
                                     @endif
                                 </td>
+                                
                                 
                                 <td class="text-center">
                                     @if($gd->trang_thai ==1)
@@ -102,7 +99,17 @@
                                         <span class="badge bg-secondary">{{ $gd->trang_thai }}</span>
                                     @endif
                                 </td>
-                                <td>{!! nl2br(e($gd->mo_ta)) !!}</td>
+                                <td>
+                                    {!! nl2br(e($gd->mo_ta)) !!}
+                                    
+                                    @if ($gd->trang_thai == 1 && $gd->updated_at)
+                                        <br>
+                                        <strong class="text-muted">
+                                            Thời gian xử lý {{ $gd->updated_at->format('d/m/Y H:i') }}
+                                        </strong>
+                                    @endif
+                                </td>
+                                
 
                             </tr>
                         @empty

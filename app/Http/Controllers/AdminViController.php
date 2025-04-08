@@ -10,12 +10,24 @@ use Illuminate\Support\Facades\DB;
 
 class AdminViController extends Controller
 {
-    public function index()
+    public function index(Request $request)
 {
-    $users = \App\Models\User::orderBy('created_at', 'desc')->paginate(10); // Mới nhất trước
+    $keyword = $request->get('keyword');
 
-    return view('admins.vis.index', compact('users'));
+    $users = User::with('vi')
+        ->when(!empty($keyword), function ($query) use ($keyword) {
+            $query->where(function ($q) use ($keyword) {
+                $q->where('ten_nguoi_dung', 'like', '%' . $keyword . '%')
+                  ->orWhere('username', 'like', '%' . $keyword . '%');
+            });
+        })
+        ->paginate(10);
+
+    return view('admins.vis.index', compact('users', 'keyword'));
 }
+
+    
+    
 
 
 public function show($id, Request $request)
