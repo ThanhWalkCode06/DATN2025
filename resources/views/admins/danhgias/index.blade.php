@@ -46,7 +46,7 @@
                 </div>
                 
                 <!-- Form lọc theo sản phẩm -->
-                <form method="GET" action="{{ route('danhgias.index') }}" class="d-flex gap-2 mb-4">
+                <form method="GET" action="{{ route('danhgias.index') }}" class="d-flex gap-2 mb-3">
                     <input type="text" name="keyword" value="{{ request('keyword') }}" class="form-control" placeholder="Tìm theo tên người đặt hoặc sản phẩm">
                     <button type="submit" class="btn btn-success">Tìm Kiếm</button>
                 </form>
@@ -95,7 +95,7 @@
                                         </td>
                                         <td>
                                             <button
-                                                class="toggleStatus btn btn-sm {{ $danhGia->trang_thai == 1 ? 'btn-danger' : 'btn-primary' }}"
+                                                class="toggleStatus btn btn-sm d-block mx-auto {{ $danhGia->trang_thai == 1 ? 'btn-danger' : 'btn-primary' }}"
                                                 data-id="{{ $danhGia->id }}">
                                                 {{ $danhGia->trang_thai == 1 ? 'Ẩn' : 'Hiện' }}
                                             </button>
