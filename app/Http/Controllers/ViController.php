@@ -130,5 +130,42 @@ public function vnpayReturn(Request $request)
 
     
 
+public function formRutTien()
+{
+    return view('clients.vis.rut_tien');
+}
+
+public function xuLyRutTien(Request $request)
+{
+    $user = Auth::user();
+    $soTienRut = (int) $request->so_tien;
+
+    if ($soTienRut <= 0) {
+        return back()->with('error', 'Số tiền rút không hợp lệ.');
+    }
+
+    $vi = $user->layHoacTaoVi();
+
+    if ($vi->so_du < $soTienRut) {
+        return back()->with('error', 'Số dư không đủ để rút tiền.');
+    }
+
+    // Trừ tiền
+    $vi->decrement('so_du', $soTienRut);
+
+    // Ghi giao dịch
+    DB::table('giaodichvis')->insert([
+        'vi_id' => $vi->id,
+        'so_tien' => -$soTienRut,
+        'loai' => 'Rút tiền',
+        'mo_ta' => 'Rút tiền từ ví',
+        'created_at' => now(),
+        'updated_at' => now()
+    ]);
+
+    return redirect()->route('vi')->with('success', 'Rút tiền thành công!');
+}
+
+
 
 }
