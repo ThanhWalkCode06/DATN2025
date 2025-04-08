@@ -27,7 +27,15 @@
     <!-- App css -->
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css') }}">
 @endsection
+<style>
+    form.d-flex input {
+        max-width: 350px;
+    }
 
+    form.d-flex button {
+        white-space: nowrap;
+    }
+</style>
 @section('content')
     <div class="col-sm-12">
         <div class="card card-table">
@@ -38,24 +46,11 @@
                 </div>
                 
                 <!-- Form lọc theo sản phẩm -->
-                <form method="GET" action="{{ route('danhgias.index') }}" class="mb-3">
-                    <div class="row">
-                        <div class="col-md-4">
-                            <select name="san_pham_id" class="form-control">
-                                <option value="all">Tất cả sản phẩm</option>
-                                @foreach ($sanPhams as $sanPham)
-                                    <option value="{{ $sanPham->id }}"
-                                        {{ request('san_pham_id') == $sanPham->id ? 'selected' : '' }}>
-                                        {{ $sanPham->ten_san_pham }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-md-2">
-                            <button type="submit" class="btn btn-primary">Tìm Kiếm</button>
-                        </div>
-                    </div>
+                <form method="GET" action="{{ route('danhgias.index') }}" class="d-flex gap-2 mb-4">
+                    <input type="text" name="keyword" value="{{ request('keyword') }}" class="form-control" placeholder="Tìm theo tên người đặt hoặc sản phẩm">
+                    <button type="submit" class="btn btn-success">Tìm Kiếm</button>
                 </form>
+                
                 
                 <div>
                     <div class="table-responsive">
