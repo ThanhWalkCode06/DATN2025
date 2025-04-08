@@ -228,10 +228,10 @@
                             </select>
                             <input class="btn btn-primary me-3" type="submit" name="doi_trang_thai" value="Đổi trạng thái"
                                 onclick="return confirm('Xác nhận đổi trạng thái?');">
-                            @if ($donHang->trang_thai_thanh_toan == 0)
+                            {{-- @if ($donHang->trang_thai_thanh_toan == 0)
                                 <input class="btn btn-primary me-3" type="submit" name="xac_nhan_thanh_toan"
                                     value="Xác nhận thanh toán" onclick="return confirm('Xác nhận thanh toán?');">
-                            @endif
+                            @endif --}}
                             @if ($donHang->trang_thai_thanh_toan == 0 && $donHang->trang_thai_don_hang <= 1)
                                 <input class="btn btn-danger me-3" type="submit" name="huy_don_hang" value="Hủy đơn hàng"
                                     onclick="return confirm('Xác nhận hủy đơn hàng?');">

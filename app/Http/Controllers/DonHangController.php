@@ -83,9 +83,17 @@ class DonHangController extends Controller
     public function update(UpdateDonHangRequest $request, DonHang $donhang)
     {
         if ($request->doi_trang_thai) {
-            $data = [
-                'trang_thai_don_hang' => $request->trang_thai
-            ];
+            if ($request->trang_thai == 3) {
+                $data = [
+                    'trang_thai_don_hang' => $request->trang_thai,
+                    'trang_thai_thanh_toan' => 1
+                ];
+            } else {
+                $data = [
+                    'trang_thai_don_hang' => $request->trang_thai
+                ];
+            }
+
             DonHang::where("id", $donhang->id)->update($data);
         }
 
