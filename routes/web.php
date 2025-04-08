@@ -101,6 +101,7 @@ Route::prefix('admin')->middleware(['auth', 'checkStatus'])->group(function () {
         Route::resource('donhangs', DonHangController::class);
         Route::resource('baiviets', BaiVietController::class);
         Route::resource('danhmucbaiviets', DanhMucBaiVietController::class);
+        Route::get('phieugiamgias/search', [PhieuGiamGiaController::class, 'search'])->name('phieugiamgias-search');
         Route::resource('phieugiamgias', PhieuGiamGiaController::class);
         Route::resource("danhgias", DanhGiaController::class);
 

@@ -22,6 +22,20 @@ class PhieuGiamGiaController extends Controller
         return view('admins.phieugiamgias.index', compact('phieuGiamGias'));
     }
 
+    public function search(Request $request)
+    {
+
+        $phieuGiamGias = PhieuGiamGia::superFilter($request)->paginate(10);
+        if ($request->ajax()) {
+            return response()->json([
+                'html' => view('admins.phieugiamgias.partials.list_rows', compact('phieuGiamGias'))->render(),
+                // 'count' => $phieuGiamGias->total(),
+                'pagination' => $phieuGiamGias->appends($request->except('page'))->links('pagination::bootstrap-5')->render()
+            ]);
+        }
+        return view('admins.phieugiamgias.index', compact('phieuGiamGias'));
+    }
+
     /**
      * Hiển thị form tạo mới phiếu giảm giá.
      */

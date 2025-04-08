@@ -237,7 +237,7 @@ class SanPhamController extends Controller
 
     public function show($id)
 {
-    $sanPham = SanPham::with(['danhMuc', 'bienThes', 'danhGias.user', 'danhGias.bienThe'])->findOrFail($id);
+    $sanPham = SanPham::with(['danhMuc', 'anhSP', 'bienThes', 'danhGias.user', 'danhGias.bienThe'])->findOrFail($id);
 
     // Sắp xếp đánh giá theo thời gian (mới nhất lên đầu) và phân trang 5 đánh giá mỗi trang
     $sanPham->danhGias = $sanPham->danhGias()->orderByDesc('created_at')->get();
@@ -285,6 +285,11 @@ class SanPhamController extends Controller
         //     dd($item->anh_bien_the);
         // }
         // dd(1);
+        $bienTheIds = $bienThes->pluck('id')->toArray();
+        $hasOrder = ChiTietDonHang::whereIn('bien_the_id', $bienTheIds)->exists();
+        if ($hasOrder) {
+            return redirect()->back()->with('error', 'Không thể cập nhật sản phẩm vì đã có đơn hàng.');
+        }
         $thuocTinhId = array_keys($request->input('attribute_values', []));
         $hinhAnhPath = null;
 
