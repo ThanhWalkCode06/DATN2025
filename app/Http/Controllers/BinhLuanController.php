@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\BinhLuan;
@@ -20,14 +20,13 @@ class BinhLuanController extends Controller
 
         $binhLuans = $query->latest()->paginate(10);
 
-        return view('admins.binhluan.index', compact('binhLuans'));
+        return view('admins.binhluans.index', compact('binhLuans'));
     }
 
-    // Hiển thị chi tiết 1 bình luận
     public function show($id)
     {
         $binhLuan = BinhLuan::with(['baiViet', 'user', 'replies.user'])->findOrFail($id);
-        return view('admins.binhluan.show', compact('binhLuan'));
+        return view('admins.binhluans.show', compact('binhLuan'));
     }
 
     // Xóa bình luận
@@ -36,16 +35,17 @@ class BinhLuanController extends Controller
         $binhLuan = BinhLuan::findOrFail($id);
         $binhLuan->delete();
 
-        return redirect()->route('admin.binhluan.index')->with('success', 'Xóa bình luận thành công.');
+        return redirect()->route('admins.binhluans.index')->with('success', 'Xóa bình luận thành công.');
     }
 
     // Toggle trạng thái hiển thị / ẩn
     public function toggle($id)
-    {
-        $binhLuan = BinhLuan::findOrFail($id);
-        $binhLuan->trang_thai = !$binhLuan->trang_thai;
-        $binhLuan->save();
+{
+    $binhLuan = BinhLuan::findOrFail($id);
+    $binhLuan->trang_thai = !$binhLuan->trang_thai;
+    $binhLuan->save();
 
-        return redirect()->back()->with('success', 'Cập nhật trạng thái thành công.');
-    }
+    return redirect()->back()->with('success', 'Trạng thái đã được cập nhật!');
+}
+
 }

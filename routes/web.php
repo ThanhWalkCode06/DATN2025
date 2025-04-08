@@ -234,6 +234,16 @@ Route::middleware(['auth'])->group(function () {
 
 
 // Route::get('/sodu', [App\Http\Controllers\ViController::class, 'soDuVi'])->name('soduvi');
-Route::get('/binhluan', [BinhLuanController::class, 'index'])->name('binhluan.index');
-Route::get('/binhluan/{id}', [BinhLuanController::class, 'show'])->name('binhluan.show');
-Route::patch('/binhluan/{id}/toggle', [BinhLuanController::class, 'toggle'])->name('binhluan.toggle');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/binhluan', [BinhLuanController::class, 'index'])->name('binhluans.index');
+    Route::get('/binhluan/{id}', [BinhLuanController::class, 'show'])->name('binhluans.show');
+    Route::patch('/binhluan/{id}/toggle', [BinhLuanController::class, 'toggle'])->name('binhluans.toggle');
+});
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::resource('binhluans', BinhLuanController::class);
+});
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::patch('binhluans/{id}/toggle', [BinhLuanController::class, 'toggle'])->name('binhluans.toggle');
+});
+
+

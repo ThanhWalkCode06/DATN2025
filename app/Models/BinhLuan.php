@@ -18,6 +18,10 @@ class BinhLuan extends Model
         'noi_dung',
         'trang_thai',
     ];
+    protected $casts = [
+        'trang_thai' => 'boolean',
+    ];
+
 
     // Mối quan hệ với bài viết
     public function baiViet()
