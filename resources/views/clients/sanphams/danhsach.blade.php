@@ -281,31 +281,34 @@
 
 
                                             @if ($danhMucs->isNotEmpty())
-                                                <form method="GET" action="{{ route('sanphams.danhsach') }}">
-                                                    <ul class="category-list custom-padding custom-height"
-                                                        id="category-list">
-                                                        @foreach ($danhMucs as $danhMuc)
-                                                            <li>
-                                                                <div class="form-check ps-0 m-0 category-list-box">
-                                                                    <input class="checkbox_animated d-none" type="radio"
-                                                                        name="danh_muc_id" value="{{ $danhMuc->id }}"
-                                                                        id="danhmuc-{{ $danhMuc->id }}"
-                                                                        onchange="this.form.submit()"
-                                                                        {{ request('danh_muc_id') == $danhMuc->id ? 'checked' : '' }}>
-
-                                                                    <label class="form-check-label"
-                                                                        for="danhmuc-{{ $danhMuc->id }}"
-                                                                        style="cursor: pointer;">
-                                                                        {{ $danhMuc->ten_danh_muc }}
-                                                                        <span class="badge bg-success text-white ms-2">
-                                                                            {{ $danhMuc->san_phams_count }} sản phẩm
-                                                                        </span>
-                                                                    </label>
-                                                                </div>
-                                                            </li>
-                                                        @endforeach
-                                                    </ul>
-                                                </form>
+                                            <form method="GET" action="{{ route('sanphams.danhsach') }}">
+                                                {{-- Giữ lại các tham số khác ngoài "danh_muc_id" --}}
+                                                @foreach(request()->except('danh_muc_id') as $key => $value)
+                                                    <input type="hidden" name="{{ $key }}" value="{{ $value }}">
+                                                @endforeach
+                                            
+                                                <ul class="category-list custom-padding custom-height" id="category-list">
+                                                    @foreach ($danhMucs as $danhMuc)
+                                                        <li>
+                                                            <div class="form-check ps-0 m-0 category-list-box">
+                                                                <input class="checkbox_animated d-none" type="radio"
+                                                                    name="danh_muc_id" value="{{ $danhMuc->id }}"
+                                                                    id="danhmuc-{{ $danhMuc->id }}"
+                                                                    onchange="this.form.submit()"
+                                                                    {{ request('danh_muc_id') == $danhMuc->id ? 'checked' : '' }}>
+                                            
+                                                                <label class="form-check-label" for="danhmuc-{{ $danhMuc->id }}" style="cursor: pointer;">
+                                                                    {{ $danhMuc->ten_danh_muc }}
+                                                                    <span class="badge bg-success text-white ms-2">
+                                                                        {{ $danhMuc->san_phams_count }} sản phẩm
+                                                                    </span>
+                                                                </label>
+                                                            </div>
+                                                        </li>
+                                                    @endforeach
+                                                </ul>
+                                            </form>
+                                            
                                             @else
                                                 <p>Không có danh mục nào có sản phẩm.</p>
                                             @endif
@@ -492,7 +495,6 @@
 
                                     <ul class="dropdown-menu">
                                         <li><a class="dropdown-item"
-
                                                 href="{{ request()->fullUrlWithQuery(['sort' => 'Giá thấp - cao']) }}">Giá
                                                 thấp -
                                                 cao</a></li>
@@ -612,7 +614,7 @@
                                                         {{ number_format($sanPham->giaThapNhatCuaSP(), 0, ',', '.') }} ₫
                                                     </span>
                                                     <del>{{ number_format($sanPham->gia_cu, 0, ',', '.') }} ₫</del>
-
+                                                    
                                                 </h5>
                                                 <div class="add-to-cart-box bg-white">
                                                     <button class="btn btn-add-cart addcart-button">
@@ -715,7 +717,6 @@
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const selectedFiltersContainer = document.getElementById("selectedFilters");
-
             const clearAllFilters = document.getElementById("clearAllFilters");
 
             function formatCurrencyVND(value) {

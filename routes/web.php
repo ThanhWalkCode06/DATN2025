@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\BinhLuanController as AdminBinhLuanController;
 use App\Models\User;
 use App\Models\DanhGia;
 use App\Models\SanPham;
@@ -14,6 +15,8 @@ use App\Http\Controllers\BaiVietController;
 use App\Http\Controllers\BienTheController;
 
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\DanhGiaController;
+use App\Http\Controllers\BinhLuanController;
 
 use App\Http\Controllers\DanhGiaController;
 use App\Http\Controllers\DonHangController;
@@ -88,6 +91,7 @@ Route::prefix('admin')->middleware(['auth', 'checkStatus'])->group(function () {
     Route::get("/lienhe", [LienHeController::class, "index"])->name('lienhe');
     Route::get("/danhgias", [DanhGiaController::class, "index"])->name('danhgias');
     Route::post('/sanphams/upload/{sanPhamId}', [Helper::class, 'uploadAlbum'])->name('upload.album');
+    Route::get('donhangs/filter', [DonHangController::class, 'filter'])->name('donhangs.filter');
 
 
     // Chức năng thì cho vào đây đánh tên route->name phải giống quyền lối bởi dấu . nếu là route resource
@@ -233,7 +237,19 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/vi', [App\Http\Controllers\ViController::class, 'hienThi'])->name('vi');
 });
 
-
+// Route::get('/sodu', [App\Http\Controllers\ViController::class, 'soDuVi'])->name('soduvi');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/binhluan', [BinhLuanController::class, 'index'])->name('binhluans.index');
+    Route::get('/binhluan/{id}', [BinhLuanController::class, 'show'])->name('binhluans.show');
+    Route::patch('/binhluan/{id}/toggle', [BinhLuanController::class, 'toggle'])->name('binhluans.toggle');
+});
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::resource('binhluans', BinhLuanController::class);
+});
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::patch('binhluans/{id}/toggle', [BinhLuanController::class, 'toggle'])->name('binhluans.toggle');
+});
+Route::post('/admin/binhluan/{id}/reply', [BinhLuanController::class, 'store'])->name('admins.binhluan.store');
 
 Route::post('/danh-gia/update-status/{id}', [DanhGiaController::class, 'updateStatus']);
 
@@ -241,11 +257,8 @@ Route::get('/vi/nap-tien', [ViController::class, 'formNapTien'])->name('nap-tien
 Route::post('/vi/nap-tien', [ViController::class, 'xuLyNapTien'])->name('nap-tien.xuly');
 Route::get('/vnpay/return', [ViController::class, 'vnpayReturn'])->name('vi.napTienReturn');
 
-
 Route::get('/vi/rut-tien', [ViController::class, 'formRutTien'])->name('rut-tien.form');
 Route::post('/vi/rut-tien', [ViController::class, 'xuLyRutTien'])->name('rut-tien.xuly');
-
-
 
 Route::get('/vi-nguoi-dung', [AdminViController::class, 'index'])->name('vis.index');
 Route::get('/admin/vi-nguoi-dung/{id}', [AdminViController::class, 'show'])->name('admin.vis.show');

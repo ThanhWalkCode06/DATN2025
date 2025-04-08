@@ -19,7 +19,7 @@ class AuthController extends Controller
      */
     public function showLogin()
     {
-        if(Auth::user()){
+        if (Auth::user()) {
             return redirect()->back();
         }
         return view('clients.auth.login');
@@ -27,15 +27,17 @@ class AuthController extends Controller
 
     public function storeLogin(Request $request)
     {
-        $user = $request->validate([
-            'username' => 'required',
-            'password' => 'required',
-        ],
-        [
-        'username.required' => 'Vui lòng nhập tên đăng nhập',
-        'password.required' => 'Vui lòng nhập mật khẩu',
+        $user = $request->validate(
+            [
+                'username' => 'required',
+                'password' => 'required',
+            ],
+            [
+                'username.required' => 'Vui lòng nhập tên đăng nhập',
+                'password.required' => 'Vui lòng nhập mật khẩu',
 
-    ]);
+            ]
+        );
 
         if (Auth::attempt($user)) {
             if ($request->remember_token == true) {
@@ -55,31 +57,34 @@ class AuthController extends Controller
             return  redirect()->route('home');
         }
         return redirect()->back()->withErrors([
-            'error' => 'Tài khoản mật khẩu không đúng'
+            'error' => 'Tài khoản hoặc mật khẩu không đúng'
         ]);
     }
 
-    public function showRegister(){
+    public function showRegister()
+    {
         return view('clients.auth.register');
     }
 
     public function storeRegister(Request $request)
     {
-        $data = $request->validate([
-            'username' => 'required|unique:users,username',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:6',
-        ],
-        [
-        'username.required' => 'Vui lòng nhập tên đăng nhập',
-        'password.required' => 'Vui lòng nhập mật khẩu',
-        'password.required' => 'Vui lòng nhập mật khẩu dài ít nhất 6 kí tự',
-        'email.required' => 'Vui lòng nhập email',
-        'email.email' => 'Vui lòng nhập đúng định dạng email',
-        'email.unique' => 'Email đã tồn tại',
-        'username.unique' => 'Tên tài khoản đã tồn tại',
+        $data = $request->validate(
+            [
+                'username' => 'required|unique:users,username',
+                'email' => 'required|email|unique:users,email',
+                'password' => 'required|min:6',
+            ],
+            [
+                'username.required' => 'Vui lòng nhập tên đăng nhập',
+                'password.required' => 'Vui lòng nhập mật khẩu',
+                'password.required' => 'Vui lòng nhập mật khẩu dài ít nhất 6 kí tự',
+                'email.required' => 'Vui lòng nhập email',
+                'email.email' => 'Vui lòng nhập đúng định dạng email',
+                'email.unique' => 'Email đã tồn tại',
+                'username.unique' => 'Tên tài khoản đã tồn tại',
 
-    ]);
+            ]
+        );
 
         $user = User::create($data);
         return redirect()->route('login.client')->with('success', 'Đăng ký thành công!');
@@ -106,14 +111,16 @@ class AuthController extends Controller
         $user = User::query()->where('email', $request->email)->first();
         // dd($user,$request->email);
         $email = $request->email;
-        $request->validate([
-            'email' => 'required|email|exists:users,email',
-        ],
-    [
-        'email.required' => 'Vui lòng nhập email',
-        'email.email' => 'Vui lòng nhập đúng định dạng email',
-        'email.exists' => 'Email này không tồn tại trong hệ thống',
-    ]);
+        $request->validate(
+            [
+                'email' => 'required|email|exists:users,email',
+            ],
+            [
+                'email.required' => 'Vui lòng nhập email',
+                'email.email' => 'Vui lòng nhập đúng định dạng email',
+                'email.exists' => 'Email này không tồn tại trong hệ thống',
+            ]
+        );
         if ($user) {
             // // Tạo token
             $token = Str::random(60);
@@ -122,7 +129,7 @@ class AuthController extends Controller
                 ['email' => $email],
                 ['token' => $token, 'created_at' => now()]
             );
-            Mail::to($email)->send(new ResetPass($token,''));
+            Mail::to($email)->send(new ResetPass($token, ''));
             return redirect()->route('login.client')->with(['success' => 'Bạn đã có thể vào gmail để lấy đường link lấy lại mật khẩu!']);
         }
         return redirect()->back()->withErrors([
@@ -143,7 +150,7 @@ class AuthController extends Controller
         $request->validate([
             'password' => 'required',
             'confirm_password' => 'required|same:password',
-        ],[
+        ], [
             'password.required' => 'Mật khẩu không được để trống',
             'confirm_password.required' => 'Xác nhận mật khẩu không được để trống',
             'confirm_password.same' => 'Xác nhận mật khẩu không trùng với mật khẩu mới',
@@ -169,15 +176,17 @@ class AuthController extends Controller
     {
         if (Auth::user()) {
             $user = Auth::user();
-            $request->validate([
-                'password' => 'required',
-                'confirm_password' => 'required|same:password',
-            ],
-        [
-            'password.required' => 'Mật khẩu không được để trống',
-            'confirm_password.required' => 'Xác nhận mật khẩu không được để trống',
-            'confirm_password.same' => 'Xác nhận mật khẩu không trùng với mật khẩu mới',
-        ]);
+            $request->validate(
+                [
+                    'password' => 'required',
+                    'confirm_password' => 'required|same:password',
+                ],
+                [
+                    'password.required' => 'Mật khẩu không được để trống',
+                    'confirm_password.required' => 'Xác nhận mật khẩu không được để trống',
+                    'confirm_password.same' => 'Xác nhận mật khẩu không trùng với mật khẩu mới',
+                ]
+            );
             $pass = bcrypt($request->password);
             // dd($pass, $user->id);
             DB::table('users')->where('id', $user->id)->update(['password' => $pass]);

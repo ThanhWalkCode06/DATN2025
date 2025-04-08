@@ -195,17 +195,9 @@
                                         {{ $danhGia->trang_thai == 1 ? 'Ẩn' : 'Hiện' }}
                                     </button>
                                 </td>
-                                
-                                
-                                
-                                
-                                
-                                </td>
-                                
                             </tr>
                         @endforeach
                     </tbody>
-                    
                 </table>
             </div>
         @else
@@ -217,7 +209,6 @@
 
 @section('js')
 <script>
-
 $(document).ready(function() {
     $('.toggleStatus').click(function() {
         var danhGiaId = $(this).data('id');
@@ -255,8 +246,6 @@ $(document).ready(function() {
         });
     });
 });
-
-
 </script>
 <script>
     function filterReviews() {
