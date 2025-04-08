@@ -119,9 +119,18 @@
                                     <h4>Thông tin đơn hàng</h4>
                                     <div class="tracker-number">
                                         <p>Mã đơn hàng : <span>{{ $donHang->ma_don_hang }}</span></p>
-                                        <p>Người đặt : <span>{{ $donHang->ten_nguoi_dung }}</span></p>
+                                        <p>Người đặt :
+                                            <span>
+                                                @if ($donHang->ten_nguoi_dung == '')
+                                                    {{ $donHang->username }}
+                                                @else
+                                                    {{ $donHang->ten_nguoi_dung }}
+                                                @endif
+                                            </span>
+                                        </p>
                                         <p>Ngày đặt : <span>{{ $donHang->created_at }}</span></p>
-                                        <p>Tổng tiền : <span>{{ $donHang->tong_tien }}</span></p>
+                                        <p>Tổng tiền : <span>{{ number_format($donHang->tong_tien, 0, '', '.') }}đ</span>
+                                        </p>
                                         <p>Phương thức thanh toán : <span>{{ $donHang->ten_phuong_thuc }}</span></p>
                                         <p>
                                             Trạng thái đơn hàng :
