@@ -15,7 +15,7 @@ class DonHangController extends Controller
      */
     public function index()
     {
-        $donHangs = DonHang::select('don_hangs.*', 'users.ten_nguoi_dung', 'phuong_thuc_thanh_toans.ten_phuong_thuc')
+        $donHangs = DonHang::select('don_hangs.*', 'users.username', 'users.ten_nguoi_dung', 'phuong_thuc_thanh_toans.ten_phuong_thuc')
             ->join('users', 'users.id', '=', 'user_id')
             ->join('phuong_thuc_thanh_toans', 'phuong_thuc_thanh_toans.id', '=', 'phuong_thuc_thanh_toan_id')
             ->orderBy('created_at', 'desc')
