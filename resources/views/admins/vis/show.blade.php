@@ -53,6 +53,11 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @if (!$user->vi)
+                    <tr>
+                        <td colspan="6" class="text-center text-danger">Người dùng chưa có ví</td>
+                    </tr>
+                @else
                     @forelse ($user->vi->giaodichs->when(request('trang_thai') !== null, fn($q) => $q->where('trang_thai', request('trang_thai'))) as $gd)
                         <tr>
                             <td><input type="checkbox" name="ids[]" value="{{ $gd->id }}"></td>
@@ -73,6 +78,8 @@
                             <td colspan="6" class="text-center text-muted">Không có giao dịch nào</td>
                         </tr>
                     @endforelse
+                @endif
+                
                 </tbody>
             </table>
         </div>

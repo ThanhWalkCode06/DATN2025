@@ -37,8 +37,30 @@ public function updateTrangThai(Request $request)
     $ids = $request->input('ids', []);
     $trangThai = $request->input('trang_thai');
 
-    GiaoDichVi::whereIn('id', $ids)->update(['trang_thai' => $trangThai]);
+    foreach ($ids as $id) {
+        $giaoDich = GiaoDichVi::find($id);
+
+        // Chỉ xử lý khi là rút tiền và cập nhật sang trạng thái "thành công"
+        if ($giaoDich && $giaoDich->loai === 'Rút tiền' && $trangThai == 1 && $giaoDich->trang_thai != 1) {
+            $vi = $giaoDich->vi;
+
+            // Trừ tiền
+            $soDuTruoc = $vi->so_du;
+            $vi->so_du -= $giaoDich->so_tien;
+            $vi->save();
+
+            // Cập nhật mô tả và trạng thái
+            $giaoDich->mo_ta = "💸 Rút tiền từ ví\nSố dư: " . number_format($soDuTruoc, 0, ',', '.') . " ➝ " . number_format($vi->so_du, 0, ',', '.') . " VNĐ";
+
+            $giaoDich->trang_thai = 1;
+            $giaoDich->save();
+        } else {
+            // Cập nhật các loại giao dịch khác (không phải rút tiền)
+            $giaoDich?->update(['trang_thai' => $trangThai]);
+        }
+    }
 
     return back()->with('success', 'Cập nhật trạng thái thành công');
 }
+
 }

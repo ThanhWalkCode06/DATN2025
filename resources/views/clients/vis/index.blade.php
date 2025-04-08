@@ -76,22 +76,28 @@
                                 <td class="text-center">{{ $gd->created_at->format('H:i d/m/Y') }}</td>
                                 <td class="text-center">{{ ucfirst($gd->loai) }}</td>
                                 <td class="text-center">
-                                    @if($gd->so_tien > 0)
-                                    @if($gd->loai == 'Hoàn tiền' || $gd->loai == 'Nạp tiền')
-                                        <span class="text-success">+{{ number_format($gd->so_tien, 0, ',', '.') }} VNĐ</span>
+                                    @if($gd->loai === 'Rút tiền')
+                                        @if($gd->trang_thai == 0)
+                                            <span class="text-warning">{{ number_format($gd->so_tien, 0, ',', '.') }} VNĐ</span>
+                                        @else
+                                            <span class="text-danger">-{{ number_format(abs($gd->so_tien), 0, ',', '.') }} VNĐ</span>
+                                        @endif
+                                    @elseif($gd->so_tien > 0)
+                                        @if($gd->loai == 'Hoàn tiền' || $gd->loai == 'Nạp tiền')
+                                            <span class="text-success">+{{ number_format($gd->so_tien, 0, ',', '.') }} VNĐ</span>
+                                        @else
+                                            <span class="text-danger">-{{ number_format($gd->so_tien, 0, ',', '.') }} VNĐ</span>
+                                        @endif
                                     @else
-                                        <span class="text-danger">-{{ number_format($gd->so_tien, 0, ',', '.') }} VNĐ</span>
+                                        <span class="text-danger">{{ number_format($gd->so_tien, 0, ',', '.') }} VNĐ</span>
                                     @endif
-                                @else
-                                    <span class="text-danger">{{ number_format($gd->so_tien, 0, ',', '.') }} VNĐ</span>
-                                @endif
-                                
                                 </td>
+                                
                                 <td class="text-center">
                                     @if($gd->trang_thai ==1)
                                         <span class="badge bg-success">Thành công</span>
                                     @elseif($gd->trang_thai ==0)
-                                        <span class="badge bg-danger">Thất bại</span>
+                                        <span class="badge bg-danger">Chờ xử lý</span>
                                     @else
                                         <span class="badge bg-secondary">{{ $gd->trang_thai }}</span>
                                     @endif
