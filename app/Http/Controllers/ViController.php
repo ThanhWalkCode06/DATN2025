@@ -187,7 +187,7 @@ class ViController extends Controller
             ->exists();
     
         if ($dangCho) {
-            return back()->with('error', 'Bạn đã có yêu cầu rút tiền đang chờ xác nhận từ admin.');
+            return back()->with('error', 'Bạn đã có yêu cầu rút tiền đang chờ xác nhận .');
         }
     
         // Kiểm tra số dư (chỉ kiểm tra, chưa trừ)
@@ -208,7 +208,7 @@ class ViController extends Controller
             'updated_at' => now(),
         ]);
     
-        return redirect()->route('vi')->with('success', 'Yêu cầu rút tiền đã được gửi. Vui lòng chờ admin xác nhận.');
+        return redirect()->route('vi')->with('success', 'Yêu cầu rút tiền đã được gửi. Vui lòng chờ  xác nhận.');
     }
     
 }
