@@ -123,4 +123,7 @@ class DanhGiaClientsController extends Controller
         return redirect()->route('sanphams.chitiet', ['id' => $san_pham_id])
             ->with('success', 'Gửi đánh giá thành công.');
     }
+
+   
+    
 }

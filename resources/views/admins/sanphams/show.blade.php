@@ -161,12 +161,13 @@
                             <th>Nhận xét</th>
                             <th>Biến thể</th>
                             <th>Trạng thái</th>
+                            <th>Hành động</th>
                         </tr>
                     </thead>
                     <tbody id="review-table-body">
                         @foreach($sanPham->danhGias as $danhGia)
                             <tr data-sao="{{ $danhGia->so_sao }}">
-                                <td>{{ $danhGia->user->username ?? 'Ẩn danh' }}</td>
+                                <td>{{ $danhGia->user->ten_nguoi_dung ?? 'Ẩn danh' }}</td>
                                 <td>
                                     @for($i = 0; $i < $danhGia->so_sao; $i++)
                                         ⭐
@@ -181,14 +182,24 @@
                                     {{ $danhGia->bienThe->ten_bien_the ?? 'Không rõ biến thể' }}
                                 </td>
                                 <td>
-                                    @if($danhGia->trang_thai === 1)
-                                        <span class="badge bg-success">Hiển thị</span>
-                                    @elseif($danhGia->trang_thai === 0)
-                                        <span class="badge bg-secondary text-light">Ẩn</span>
-                                    @else
-                                        <span class="badge bg-warning text-dark">Không rõ</span>
-                                    @endif
+                                    <span id="badge-{{ $danhGia->id }}" class="badge"
+                                          style="color: white; background-color: {{ $danhGia->trang_thai === 1 ? '#28a745' : '#dc3545' }}">
+                                        {{ $danhGia->trang_thai === 1 ? 'Hiển thị' : 'Ẩn' }}
+                                    </span>
                                 </td>
+                                <td>
+                                    <button id="toggle-btn-{{ $danhGia->id }}" class="btn btn-sm"
+                                            style="background-color: {{ $danhGia->trang_thai === 1 ? '#28a745' : '#dc3545' }}; color: white;"
+                                            onclick="toggleStatus({{ $danhGia->id }})">
+                                        {{ $danhGia->trang_thai === 1 ? 'Ẩn' : 'Hiển thị' }}
+                                    </button>
+                                </td>
+                                
+                                
+                                
+                                
+                                </td>
+                                
                             </tr>
                         @endforeach
                     </tbody>
@@ -203,6 +214,47 @@
 @endsection
 
 @section('js')
+<script>
+  function toggleStatus(id) {
+    const badge = document.getElementById(`badge-${id}`);
+    const button = document.getElementById(`toggle-btn-${id}`);
+    const currentText = badge.textContent.trim();
+    const newStatus = currentText === "Hiển thị" ? 0 : 1;
+
+    fetch('/danh-gia/update-status/' + id, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        },
+        body: JSON.stringify({ trang_thai: newStatus })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Cập nhật lại UI
+            if (newStatus === 1) {
+                badge.textContent = 'Hiển thị';
+                badge.style.backgroundColor = '#28a745'; // Màu xanh cho "Hiển thị"
+                button.textContent = 'Ẩn';
+                button.style.backgroundColor = '#dc3545'; // Màu đỏ cho "Ẩn"
+            } else {
+                badge.textContent = 'Ẩn';
+                badge.style.backgroundColor = '#dc3545'; // Màu đỏ cho "Ẩn"
+                button.textContent = 'Hiển thị';
+                button.style.backgroundColor = '#28a745'; // Màu xanh cho "Hiển thị"
+            }
+        } else {
+            alert("Cập nhật thất bại!");
+        }
+    })
+    .catch(error => {
+        console.error('Lỗi:', error);
+    });
+}
+
+
+</script>
 <script>
     function filterReviews() {
         const selected = document.getElementById("filter-sao").value;
