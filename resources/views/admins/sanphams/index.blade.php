@@ -54,17 +54,79 @@
                             </li>
                         </ul>
                         <br>
-                        <form action="{{ route('sanphams.index') }}" method="GET">
+                        {{-- <form action="{{ route('sanphams.index') }}" method="GET">
                             <div class="input-group mb-3">
                                 <input type="text" name="search" class="form-control"
                                     placeholder="Tìm kiếm theo tên hoặc mã sản phẩm" value="{{ request('search') }}">
-                                <button class="btn btn-primary" type="submit">Tìm kiếm</button>
+                                <button class="btn btn-solid btn-sm" type="submit">Tìm kiếm</button>
                             </div>
-                        </form>
+                        </form> --}}
 
                     </div>
                 </div>
-                <div>
+                <div class="table-responsive table-product">
+                    <form id="searchForm" class="row g-3 align-items-center" method="get"
+                        action="{{ route('sanphams-search') }}">
+                        <!-- Phần tìm kiếm cơ bản -->
+                        <div class="col-md-5">
+                            <div class="input-group">
+                                <input class="form-control" type="text" placeholder="Tìm kiếm tên sản phẩm" name="ten_san_pham"
+                                    value="">
+                                <button type="submit" class="btn btn-theme btn-sm"><i data-feather="search"></i></button>
+                                <button class="btn btn-theme btn-sm ms-2" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#filterPanel">
+                                    Tìm kiếm nâng cao
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Phần bộ lọc nâng cao -->
+                        <div class="col-12">
+                            <div class="collapse" id="filterPanel">
+                                <div class="card card-body mt-2">
+                                    <div class="row">
+                                        @include('admins.filter.date', [
+                                            'key1' => 'created_at_from',
+                                            'key2' => 'created_at_to',
+                                            'label1' => 'Tạo từ ngày',
+                                            'label2' => 'Đến ngày',
+                                        ])
+                                        @include('admins.filter.relationship', [
+                                            'key' => 'danh_muc_id',
+                                            'label' => 'Danh mục',
+                                            'modelClass' => App\Models\SanPham::class,
+                                            'relation' => 'danhMuc',
+                                            'column' => 'ten_danh_muc'
+                                        ])
+
+                                        @include('admins.filter.status', [
+                                            'key' => 'trang_thai',
+                                            // 'label' => 'Trạng thái',
+                                            'options' => [
+                                                '' => '-- Tất cả --',
+                                                1 => 'Còn hàng',
+                                                0 => 'Hết hàng',
+                                            ],
+                                        ])
+                                    </div>
+                                    <div class="row mt-3">
+                                        <div class="col-12 text-end">
+                                            <!-- Nút Reset Filter (chỉ reset các input filter) -->
+                                            <button type="button" id="resetFilter" class="btn btn-theme btn-sm">
+                                                <i data-feather="refresh-ccw"></i> Làm mới
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    @if (session('error-key'))
+                        <p class="text-danger">{{ session('error-key') }}</p>
+                    @endif
+
+                </div>
+                <div class="table-container">
                     <div class="table-responsive">
                         <table class="table all-package theme-table table-product" id="table_id">
                             <thead>
@@ -78,162 +140,20 @@
                                     <th>Hành động</th>
                                 </tr>
                             </thead>
-
-                            @foreach ($sanPhams as $index => $sanpham)
-                                <tbody>
-
-                                    <tr>
-
-                                        <td>{{ $sanpham->ten_san_pham }}</td>
-
-                                        <td>{{ $sanpham->ma_san_pham }}</td>
-
-                                        <td>{{ $sanpham->danhMuc->ten_danh_muc ?? 'Không có danh mục' }}</td>
-
-                                        <td>
-                                            <div class="table-image">
-                                                <img src="{{ Storage::url($sanpham->hinh_anh) }}" class="img-thumbnail"
-                                                    alt="Hình ảnh" width="100px">
-                                            </div>
-                                        </td>
-                                        {{-- <td class="">{{ $sanpham->ngay_nhap->format('d/m/Y') }}</td> --}}
-
-                                        <td>
-                                            @if ($sanpham->trang_thai == 1)
-                                                <span class="badge bg-success-subtle text-success fs-6">Còn hàng</span>
-                                            @else
-                                                <span class="badge bg-danger-subtle text-danger fs-6">Hết hàng</span>
-                                            @endif
-                                        </td>
-
-                                        <td>
-                                            <button class="btn btn-info btn-sm" data-bs-toggle="modal"
-                                                data-bs-target="#variant_{{ $sanpham->id }}">
-                                                Xem biến thể
-                                            </button>
-
-                                            <!-- Modal hiển thị biến thể sản phẩm -->
-                                            <div id="variant_{{ $sanpham->id }}" class="modal fade fadeInLeft"
-                                                tabindex="-1" aria-hidden="true">
-                                                <div class="modal-dialog" style="max-width: 800px !important;">
-                                                    <div class="modal-content">
-                                                        <div class="modal-body text-center p-5">
-                                                            <div class="mt-4">
-                                                                <h4 class="mb-3">Thông tin biến thể của sản phẩm</h4>
-                                                                <h5 class="mb-3">'{{ $sanpham->ten_san_pham }}'</h5>
-                                                                <div class="hstack gap-2 justify-content-center">
-                                                                    <table class="table table-bordered">
-                                                                        <thead>
-                                                                            <tr>
-                                                                                <td>#</td>
-                                                                                <td>Tên biến thể</td>
-                                                                                <td>Hình ảnh</td>
-                                                                                <td>Giá bán</td>
-                                                                                <td>Số lượng</td>
-                                                                            </tr>
-                                                                        </thead>
-                                                                        <tbody>
-
-
-                                                                            @if ($sanpham->bienThes->isNotEmpty())
-                                                                                @php
-                                                                                    // dd($sanpham->bienThes);
-                                                                                @endphp
-                                                                                @foreach ($sanpham->bienThes as $key => $bienThe)
-                                                                                    <tr>
-                                                                                        <td>{{ $key + 1 }}</td>
-                                                                                        <td>{{ $bienThe->ten_bien_the }}
-                                                                                        </td>
-                                                                                        <td>
-                                                                                            @if ($bienThe->anh_bien_the)
-                                                                                                <img src="{{ Storage::url($bienThe->anh_bien_the) }}"
-                                                                                                    class="img-thumbnail"
-                                                                                                    width="80px">
-                                                                                            @else
-                                                                                                Không có ảnh
-                                                                                            @endif
-                                                                                        </td>
-                                                                                        <td>{{ number_format($bienThe->gia_ban, 0, ',', '.') }}
-                                                                                            VNĐ</td>
-                                                                                        <td>{{ $bienThe->so_luong }}</td>
-                                                                                    </tr>
-                                                                                @endforeach
-                                                                            @else
-                                                                                <tr>
-                                                                                    <td colspan="5" class="text-center">
-                                                                                        Không có biến thể nào</td>
-                                                                                </tr>
-                                                                            @endif
-                                                                        </tbody>
-                                                                    </table>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-light"
-                                                                data-bs-dismiss="modal">Đóng</button>
-                                                        </div>
-                                                    </div><!-- /.modal-content -->
-                                                </div><!-- /.modal-dialog -->
-                                            </div><!-- /.modal -->
-                                        </td>
-
-                                        <td>
-                                            <ul>
-                                                <li>
-                                                    <a href="{{ route('sanphams.show', $sanpham->id) }}">
-                                                        <i class="ri-eye-line"></i>
-                                                    </a>
-                                                </li>
-
-                                                <li>
-                                                    <a href="{{ route('sanphams.edit', $sanpham->id) }}">
-                                                        <i class="ri-pencil-line"></i>
-                                                    </a>
-                                                </li>
-
-                                                <li>
-                                                    <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                        data-bs-target="#deleteModal{{ $sanpham->id }}">
-                                                        <i class="ri-delete-bin-line"></i>
-                                                    </a>
-
-                                                    <div class="modal fade" id="deleteModal{{ $sanpham->id }}"
-                                                        tabindex="-1">
-                                                        <div class="modal-dialog">
-                                                            <div class="modal-content">
-                                                                <div class="modal-body">Bạn muốn xóa sản phẩm
-                                                                    {{ $sanpham->ten_san_pham }} đúng không ?</div>
-                                                                <div class="modal-footer">
-                                                                    <button type="button" class="btn btn-secondary"
-                                                                        data-bs-dismiss="modal">Hủy</button>
-                                                                    <form
-                                                                        action="{{ route('sanphams.destroy', $sanpham->id) }}"
-                                                                        method="POST">
-                                                                        @csrf @method('DELETE')
-                                                                        <button type="submit"
-                                                                            class="btn btn-danger">Xóa</button>
-                                                                    </form>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            @endforeach
+                            <tbody id="products-list-body">
+                                @include('admins.sanphams.partials.list_rows', ['lists' => $sanPhams])
+                            </tbody>
                         </table>
                     </div>
                 </div>
             </div>
         </div>
-        {{ $sanPhams->links('pagination::bootstrap-5') }}
-
+            <div class="d-flex justify-content-center mt-3 pagination-wrapper">
+            {{ $sanPhams->links('pagination::bootstrap-5') }}
+            </div>
     </div>
 @endsection
-
+<script src="{{ asset('assets/js/jquery-3.6.0.min.js') }}"></script>
 @section('js')
     <!-- Sidebar js -->
     <script src="{{ asset('assets/js/config.js') }}"></script>
@@ -248,3 +168,45 @@
     <script src="{{ asset('assets/js/jquery.dataTables.js') }}"></script>
     <script src="{{ asset('assets/js/custom-data-table.js') }}"></script>
 @endsection
+<script>
+    $(document).ready(function() {
+    // Hàm tải dữ liệu
+    function loadData(url) {
+        $.ajax({
+            url: url,
+            type: 'GET',
+            success: function(response) {
+                $('#products-list-body').html(response.html);
+                $('.pagination-wrapper').html(response.pagination);
+
+                // Cập nhật URL trình duyệt không reload
+                history.pushState(null, null, url);
+            },
+            error: function(xhr) {
+                console.error('Error:', xhr.responseText);
+            }
+        });
+    }
+
+    // Submit form lọc
+    $('#searchForm').submit(function(e) {
+        e.preventDefault();
+        let url = $(this).attr('action') + '?' + $(this).serialize();
+        loadData(url);
+    });
+
+    // Xử lý click phân trang
+    $(document).on('click', '.pagination a', function(e) {
+        e.preventDefault();
+        loadData($(this).attr('href'));
+    });
+
+    // Reset filter
+    $('#resetFilter').click(function() {
+        $('#filterPanel input').val('');
+        $('#filterPanel select').val('').trigger('change');
+        $('#filterPanel input[type="date"]').val('').trigger('change');
+        $('#searchForm').submit();
+    });
+});
+</script>

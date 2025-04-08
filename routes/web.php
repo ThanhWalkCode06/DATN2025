@@ -15,7 +15,6 @@ use App\Http\Controllers\BaiVietController;
 use App\Http\Controllers\BienTheController;
 
 use App\Http\Controllers\ContactController;
-use App\Http\Controllers\DanhGiaController;
 use App\Http\Controllers\BinhLuanController;
 
 use App\Http\Controllers\DanhGiaController;
@@ -98,6 +97,7 @@ Route::prefix('admin')->middleware(['auth', 'checkStatus'])->group(function () {
     // Nếu là route thường thì chỉ cần ghi bình thường không có dấu -
     Route::middleware('dynamic')->group(function () {
         Route::resource('danhmucsanphams', DanhMucSanPhamController::class);
+        Route::get('sanphams/search', [SanPhamController::class, 'search'])->name('sanphams-search');
         Route::resource('sanphams', SanPhamController::class);
 
         Route::get('users/search', [UserController::class, 'search'])->name('users-search');
