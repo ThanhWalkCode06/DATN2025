@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('sdt_nguoi_nhan');
             $table->text('dia_chi_nguoi_nhan');
             $table->double('tong_tien')->default(0);
-            $table->text('ghi_chu')->nullable();
+            $table->text('ghi_chu')->default("Không");
             $table->text('ly_do')->nullable();
             $table->unsignedBigInteger('phuong_thuc_thanh_toan_id');
             $table->tinyInteger('trang_thai_don_hang')->default(0);
