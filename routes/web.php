@@ -245,5 +245,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::patch('binhluans/{id}/toggle', [BinhLuanController::class, 'toggle'])->name('binhluans.toggle');
 });
+Route::post('/admin/binhluan/{id}/reply', [BinhLuanController::class, 'store'])->name('admins.binhluan.store');
 
 
