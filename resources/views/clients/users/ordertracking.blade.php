@@ -102,7 +102,7 @@ Theo dõi đơn hàng
                         @endif
 
                         {{-- TRẢ HÀNG --}}
-                        @if ($trangThai == 3 )
+                        @if ($trangThai == 3   )
                             <form style="margin-left: 10px" id="return-form-{{ $donHang->id }}" action="{{ route('order.updateTrangThai', $donHang->id) }}" method="POST" onsubmit="return false;">
                                 @csrf
                                 <input type="hidden" name="trang_thai" value="5">
@@ -258,9 +258,19 @@ Theo dõi đơn hàng
                                 <li class="progtrckr-{{ $statusChart >= 3 ? 'done' : 'todo' }}">
                                     <h5>Đã giao</h5>
                                 </li>
-                                <li class="progtrckr-{{ $statusChart >= 4 ? 'done' : 'todo' }}">
+                                
+                                <li class="progtrckr-{{ $statusChart >= 4 && $statusChart != 5 ? 'done' : 'todo' }}">
                                     <h5>Đã nhận hàng</h5>
                                 </li>
+                                
+                                <!-- Trạng thái trả hàng -->
+                                @if ($statusChart == 5)
+                                    <li class="progtrckr-done">
+                                        <h5>Trả hàng</h5>
+                                    </li>
+                                @endif
+                                
+                                
                                 {{-- <li class="progtrckr-todo">
                                     <h5>Shipped</h5>
                                     <h6>Pending</h6>

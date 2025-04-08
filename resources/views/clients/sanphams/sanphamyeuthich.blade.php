@@ -64,7 +64,7 @@
                                 </a>
                                 {{-- <h6 class="unit mt-1">{{ number_format($item->gia_cu,0,'.') }}</h6> --}}
                                 <h5 class="price">
-                                    <span class="theme-color">{{ number_format($item->gia_moi,0,'.') }} đ</span>
+                                    <span class="theme-color">{{ number_format($item->giaThapNhatCuaSP(),0,'.') }} đ</span>
                                     <del>{{ number_format($item->gia_cu,0,'.') }} đ</del>
                                 </h5>
 

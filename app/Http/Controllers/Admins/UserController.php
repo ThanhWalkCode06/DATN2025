@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admins\UserRequest;
+use App\Http\Controllers\HelperCommon\Helper;
 
 class UserController extends Controller
 {
@@ -18,24 +19,22 @@ class UserController extends Controller
         ->orderByDesc('id')
         ->paginate(10)
         ->onEachSide(5);
-
-
-        return view('admins.taikhoans.index', compact('lists'));
+        $roles = \Spatie\Permission\Models\Role::pluck('name', 'id')->toArray();
+        // dd($roles);
+        return view('admins.taikhoans.index', compact('lists','roles'));
     }
 
 
     public function search(Request $request)
     {
-        $key = trim($request->key);
-        if (empty($key)) {
-            return redirect()->route('users.index');
-        }
 
-        $lists = User::where('username', 'like', '%' . $request->key . '%')
-        ->orwhere('email', 'like', '%' . $request->key . '%')
-        ->orderBy('id', 'DESC')
-        ->paginate(10)
-        ->appends(['key' => $key]);
+        $lists = User::with('roles')->superFilter($request)->paginate();
+        if ($request->ajax()) {
+            return response()->json([
+                'html' => view('admins.taikhoans.partials.list_rows', compact('lists'))->render(),
+                'pagination' => $lists->appends($request->except('page'))->links('pagination::bootstrap-5')->render()
+            ]);
+        }
         return view('admins.taikhoans.index', compact('lists'));
     }
     /**
