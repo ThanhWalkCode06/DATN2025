@@ -104,7 +104,7 @@
                     </div>
 
                     {{-- BÌNH LUẬN --}}
-                    <div class="comment-box overflow-hidden mt-5">
+                    <div class="comment-box overflow-hidden mt-5 border rounded shadow-sm p-4 bg-white">
                         <div class="leave-title mb-3">
                             <p><span class="fw-bold" style="font-size: 16px">Bình luận:</span> {{ $binhLuans->count() }}
                                 lượt</p>
@@ -120,12 +120,13 @@
                                 </form>
                             </div>
                         @else
-                            <p class="text-center">Vui lòng <a href="{{ route('login.client') }}">đăng nhập</a> để bình luận.</p>
+                            <p class="text-center">Vui lòng <a href="{{ route('login.client') }}">đăng nhập</a> để bình luận.
+                            </p>
                         @endauth
 
                         {{-- DANH SÁCH BÌNH LUẬN --}}
-                        @foreach ($binhLuans as $binhLuan)
-                            <div class="card mb-4 shadow-sm p-3 border-0">
+                        @foreach ($binhLuans as $index => $binhLuan)
+                            <div class="card mb-4 shadow-sm p-3 border-0 binhluan-item {{ $index > 1 ? 'd-none' : '' }}">
                                 <div class="d-flex">
                                     <img src="{{ $binhLuan->user->anh_dai_dien
                                         ? Storage::url($binhLuan->user->anh_dai_dien)
@@ -207,6 +208,12 @@
                                 </div>
                             </div>
                         @endforeach
+                        @if ($binhLuans->count() > 2)
+                            <div class="text-center mt-3">
+                                <button id="btn-xem-them" class="btn btn-outline-primary btn-sm">Xem thêm bình luận</button>
+                            </div>
+                        @endif
+
                     </div>
                 </div>
 
@@ -227,4 +234,13 @@
             });
         </script>
     @endpush
+    <script>
+        document.getElementById('btn-xem-them')?.addEventListener('click', function () {
+            document.querySelectorAll('.binhluan-item.d-none').forEach(function (item) {
+                item.classList.remove('d-none');
+            });
+            this.style.display = 'none';
+        });
+    </script>
+
 @endsection
