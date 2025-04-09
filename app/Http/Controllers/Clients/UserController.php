@@ -130,7 +130,7 @@ class UserController extends Controller
                             'so_tien' => $donHang->tong_tien,
                             'loai' => 'Hoàn tiền',
                             'trang_thai' => 1,
-                            'mo_ta' => "↩️ Hoàn tiền do hủy đơn hàng {$donHang->ma_don_hang}\nSố dư: "
+                            'mo_ta' => "↩️ Hoàn tiền do hủy đơn hàng {$donHang->ma_don_hang}\n 💰 Số dư: "
                                 . number_format($soDuTruoc, 0, ',', '.')
                                 . " ➝ "
                                 . number_format($vi->so_du, 0, ',', '.')
@@ -157,7 +157,7 @@ class UserController extends Controller
                         $soDu = number_format($vi->so_du, 0, ',', '.');
 
                         // Thông báo cho người dùng về số dư hiện tại
-                        return redirect()->back()->with('success', 'Huỷ đơn hàng thành công. Số dư ví hiện tại của bạn là: ' . $soDu . ' VNĐ');
+                        return redirect()->back()->with('success', 'Huỷ đơn hàng thành công. Số dư ví hiện tại của bạn là: 💰' . $soDu . ' VNĐ');
                     }
                 } else {
                     return redirect()->back()->with('error', 'Không thể hủy đơn hàng khi trạng thái không phù hợp');
@@ -191,9 +191,9 @@ class UserController extends Controller
                             'so_tien' => $donHang->tong_tien,
                             'loai' => 'Hoàn tiền',
                             'trang_thai' => 1,
-                            'mo_ta' => "↩️ Hoàn tiền do trả đơn hàng {$donHang->ma_don_hang}\nSố dư: "
-                                . number_format($soDuTruoc, 0, ',', '.')
-                                . " ➝ "
+                            'mo_ta' => "↩️ Hoàn tiền do trả đơn hàng {$donHang->ma_don_hang}\n 💰 Số dư: "
+                                . number_format($soDuTruoc, 0, ',', '.') 
+                                . " ➝ " 
                                 . number_format($soDuMoi, 0, ',', '.')
                                 . " VNĐ",
                             'created_at' => now(),

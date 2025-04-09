@@ -91,14 +91,15 @@
                                 
                                 
                                 <td class="text-center">
-                                    @if($gd->trang_thai ==1)
+                                    @if($gd->trang_thai == 1)
                                         <span class="badge bg-success">Thành công</span>
-                                    @elseif($gd->trang_thai ==0)
-                                        <span class="badge bg-danger">Chờ xử lý</span>
-                                    @else
-                                        <span class="badge bg-secondary">{{ $gd->trang_thai }}</span>
+                                    @elseif($gd->trang_thai == 0)
+                                        <span class="badge bg-warning text-dark">Chờ xử lý</span>
+                                    @elseif($gd->trang_thai == 2)
+                                        <span class="badge bg-danger">Đã huỷ</span>
                                     @endif
                                 </td>
+                                
                                 <td>
                                     {!! nl2br(e($gd->mo_ta)) !!}
                                     
