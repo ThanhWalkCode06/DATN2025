@@ -18,6 +18,10 @@ return new class extends Migration
             $table->string('loai'); // 'hoan_tien', 'thanh_toan', 'nap_tien'
             $table->boolean('trang_thai')->default(1);
             $table->string('mo_ta')->nullable();
+            $table->string('ten_ngan_hang')->nullable();
+            $table->string('so_tai_khoan')->nullable();
+            $table->string('ten_nguoi_nhan')->nullable();
+
             $table->timestamps();
             $table->foreign('vi_id')->references('id')->on('vis')->onDelete('cascade');
         });
