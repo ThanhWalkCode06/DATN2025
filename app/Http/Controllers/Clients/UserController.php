@@ -39,7 +39,7 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         // dd(file_exists(storage_path("app/public/user".Auth::user()->anh_dai_dien)));
         if ($request->hasFile('anh_dai_dien')) {
-            if (Auth::user()->anh_dai_dien && file_exists(storage_path("app/public/" . Auth::user()->anh_dai_dien))) {
+            if (Auth::user()->anh_dai_dien && file_exists(storage_path("app/public/" . Auth::user()->anh_dai_dien)) && !file_exists(storage_path("app/public/images")) ) {
                 unlink(storage_path('app/public/' . Auth::user()->anh_dai_dien));
             }
             $fileName = time() . '_' . $request->file('anh_dai_dien')->getClientOriginalName();
@@ -192,8 +192,8 @@ class UserController extends Controller
                             'loai' => 'Hoàn tiền',
                             'trang_thai' => 1,
                             'mo_ta' => "↩️ Hoàn tiền do trả đơn hàng {$donHang->ma_don_hang}\n 💰 Số dư: "
-                                . number_format($soDuTruoc, 0, ',', '.') 
-                                . " ➝ " 
+                                . number_format($soDuTruoc, 0, ',', '.')
+                                . " ➝ "
                                 . number_format($soDuMoi, 0, ',', '.')
                                 . " VNĐ",
                             'created_at' => now(),

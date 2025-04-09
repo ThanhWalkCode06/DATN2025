@@ -47,8 +47,9 @@ class SanPhamController extends Controller
 
     public function search(Request $request)
     {
-
+        // dd($request->all());
         $sanPhams = SanPham::superFilter($request)->paginate(10);
+
         if ($request->ajax()) {
             return response()->json([
                 'html' => view('admins.sanphams.partials.list_rows', compact('sanPhams',))->render(),

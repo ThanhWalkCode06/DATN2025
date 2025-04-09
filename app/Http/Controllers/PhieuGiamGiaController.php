@@ -24,12 +24,11 @@ class PhieuGiamGiaController extends Controller
 
     public function search(Request $request)
     {
-
+// dd($request->all());
         $phieuGiamGias = PhieuGiamGia::superFilter($request)->paginate(10);
         if ($request->ajax()) {
             return response()->json([
                 'html' => view('admins.phieugiamgias.partials.list_rows', compact('phieuGiamGias'))->render(),
-                // 'count' => $phieuGiamGias->total(),
                 'pagination' => $phieuGiamGias->appends($request->except('page'))->links('pagination::bootstrap-5')->render()
             ]);
         }

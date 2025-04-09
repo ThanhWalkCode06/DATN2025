@@ -182,7 +182,7 @@ Route::post('/thanhtoan-xu-ly', [App\Http\Controllers\Clients\ThanhToanControlle
 Route::get('/dathangthanhcong/{id}', [App\Http\Controllers\Clients\ThanhToanController::class, 'datHangThanhCong'])->name('thanhtoans.dathangthanhcong');
 
 Route::get('/users', [App\Http\Controllers\Clients\UserController::class, 'chiTiet'])->name('users.chitiet');
-Route::put('/users/update-infor/{id}', [App\Http\Controllers\Clients\UserController::class, 'updateInfor'])->name('users.update');
+Route::put('/users/update-infor/{id}', [App\Http\Controllers\Clients\UserController::class, 'updateInfor'])->name('users.updateClient');
 Route::get('/order-tracking/{id}', [App\Http\Controllers\Clients\UserController::class, 'orderTracking'])->name('order-tracking.client');
 Route::post('/order/updateTrangThai/{id}', [App\Http\Controllers\Clients\UserController::class, 'updateTrangThai'])->name('order.updateTrangThai');
 

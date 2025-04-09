@@ -27,7 +27,7 @@ class UserController extends Controller
 
     public function search(Request $request)
     {
-
+        // dd(request()->all());
         $lists = User::with('roles')->superFilter($request)->paginate();
         if ($request->ajax()) {
             return response()->json([
@@ -107,39 +107,17 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update( string $id)
     {
         $itemId = User::find($id);
-        $data = $request->all();
-// dd($data);
-        // if ($request->hasFile('anh_dai_dien')) {
-        //     if($itemId->anh_dai_dien && file_exists(storage_path("app/public/".$itemId->anh_dai_dien))){
-        //         unlink(storage_path("app/public/".$itemId->anh_dai_dien));
-        //     }
-        //     $file = $request->file('anh_dai_dien');
-        //     $path = $file->store('uploads/user/img','public');
-        //     $data['anh_dai_dien'] = $path;
-        // } else {
-        //     $data['anh_dai_dien'] = $itemId->anh_dai_dien;
-        // }
-        // $data['gioi_tinh'] = $data['gioi_tinh'] == 'Nam' ? 1 : 0;
-
+        $data = request()->all();
         $itemId->update([
-            // "name" => $data['name'],
-            // "email" => $data['email'],
-            // "anh_dai_dien" => $data['anh_dai_dien'],
-            // "ten_nguoi_dung" => $data['ten_nguoi_dung'],
-            // "dia_chi" => $data['dia_chi'],
-            // "ngay_sinh" => $data['ngay_sinh'],
-            // "gioi_tinh" => $data['gioi_tinh'],
-            // "so_dien_thoai" => $data['so_dien_thoai'],
             "trang_thai" => $data['trang_thai'],
-            // "password" => bcrypt($data['password']),
         ]);
         if (!empty($data['role']) && $data['role'] != "[]") {
             $itemId->syncRoles($data['role']);
         }
-        session()->flash('success', 'Update thành công tài khoản');
+        session()->flash('success', 'Sửa thành công tài khoản');
         return redirect()->route('users.index');
     }
 

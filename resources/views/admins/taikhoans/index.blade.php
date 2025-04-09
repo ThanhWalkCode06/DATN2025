@@ -71,7 +71,13 @@
                                             ? (array) request('roles.id_in')
                                             : []
                                         ]) --}}
-                                        {{-- @include('admins.filter.date',['key1' => null,'key2' => null, 'label1' => null, 'label2' => null]) --}}
+                                        @include('admins.filter.relationship', [
+                                            'key' => 'role',
+                                            'label' => 'Vai trò',
+                                            'modelClass' => App\Models\User::class,
+                                            'relation' => 'roles',
+                                            'column' => 'name'
+                                        ])
                                     </div>
                                     <div class="row mt-3">
                                         <div class="col-12 text-end">
@@ -230,6 +236,7 @@ $(document).ready(function() {
     $('#searchForm').submit(function(e) {
         e.preventDefault();
         let url = $(this).attr('action') + '?' + $(this).serialize();
+        console.log('Sending URL:', url);
         loadData(url);
     });
 
