@@ -1258,10 +1258,10 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            var swiper = new Swiper('.swiper-container', {
-                slidesPerView: 6, // Hiển thị 6 sản phẩm cùng lúc
-                spaceBetween: 10, // Khoảng cách giữa các sản phẩm
-                loop: true, // Cho phép lặp vô hạn
+            const swiper = new Swiper('.swiper-container', {
+                slidesPerView: 6,
+                spaceBetween: 10,
+                loop: false, // ❌ KHÔNG sử dụng loop
                 navigation: {
                     nextEl: '.swiper-button-next',
                     prevEl: '.swiper-button-prev',
@@ -1269,7 +1269,7 @@
                 breakpoints: {
                     1200: {
                         slidesPerView: 6
-                    }, // Màn hình lớn
+                    },
                     1024: {
                         slidesPerView: 4
                     },
@@ -1282,10 +1282,38 @@
                     320: {
                         slidesPerView: 1
                     }
+                },
+                on: {
+                    init: function() {
+                        toggleNavButtons(this); // Gọi khi khởi tạo
+                    },
+                    slideChange: function() {
+                        toggleNavButtons(this); // Gọi khi chuyển slide
+                    }
                 }
             });
+
+            function toggleNavButtons(swiperInstance) {
+                const prevBtn = document.querySelector('.swiper-button-prev');
+                const nextBtn = document.querySelector('.swiper-button-next');
+
+                // Nếu đang ở slide đầu -> ẩn nút prev
+                if (swiperInstance.isBeginning) {
+                    prevBtn.style.display = 'none';
+                } else {
+                    prevBtn.style.display = 'flex';
+                }
+
+                // Nếu đang ở slide cuối -> ẩn nút next
+                if (swiperInstance.isEnd) {
+                    nextBtn.style.display = 'none';
+                } else {
+                    nextBtn.style.display = 'flex';
+                }
+            }
         });
     </script>
+
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
