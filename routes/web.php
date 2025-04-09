@@ -267,3 +267,6 @@ Route::post('/admin/vi/xu-ly-nhieu', [AdminViController::class, 'updateTrangThai
 Route::get('/vi-nguoi-dung', [AdminViController::class, 'index'])->name('vis.index');
 Route::get('/admin/vi-nguoi-dung/{id}', [AdminViController::class, 'show'])->name('admin.vis.show');
 Route::post('/admin/vi-nguoi-dung/update-trang-thai', [AdminViController::class, 'updateTrangThai'])->name('admin.vis.updateTrangThai');
+
+
+

@@ -29,24 +29,35 @@ class BinhLuanController extends Controller
         $binhLuan = BinhLuan::with(['baiViet', 'user', 'replies.user'])->findOrFail($id);
         return view('admins.binhluans.show', compact('binhLuan'));
     }
-    public function store(Request $request, $id)
+    public function store(Request $request, $id = null)
     {
         $request->validate([
             'content' => 'required|string|max:1000',
+            'bai_viet_id' => 'required|exists:bai_viets,id',
         ]);
 
-        $parent = BinhLuan::findOrFail($id);
+        // Nếu chưa đăng nhập thì redirect về trang đăng nhập
+        if (!Auth::check()) {
+            return redirect()->route('login')->with('error', 'Bạn cần đăng nhập để bình luận.');
+        }
 
-        $reply = new BinhLuan();
-        $reply->bai_viet_id = $parent->bai_viet_id; // gắn vào cùng bài viết
-        $reply->user_id = Auth::id(); // người trả lời là admin đang đăng nhập
-        $reply->parent_id = $parent->id; // gắn bình luận cha
-        $reply->noi_dung = $request->input('content');
-        $reply->trang_thai = 1; // mặc định hiển thị
-        $reply->save();
+        $binhLuan = new BinhLuan();
+        $binhLuan->bai_viet_id = $request->bai_viet_id;
+        $binhLuan->user_id = Auth::id();
+        $binhLuan->noi_dung = $request->input('content');
+        $binhLuan->trang_thai = 1;
 
-        return redirect()->back()->with('success', 'Phản hồi bình luận đã được gửi!');
+        // Nếu là trả lời bình luận
+        if ($id) {
+            $parent = BinhLuan::findOrFail($id);
+            $binhLuan->parent_id = $parent->id;
+        }
+
+        $binhLuan->save();
+
+        return redirect()->back()->with('success', $id ? 'Phản hồi đã được gửi!' : 'Bình luận đã được gửi!');
     }
+
     // Xóa bình luận
     public function destroy($id)
     {
