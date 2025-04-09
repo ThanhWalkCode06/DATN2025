@@ -33,7 +33,7 @@
 @endphp
 
 <div style="boder: 1px solid #ccc" class="col-md-3">
-  <label for="{{ $key }}" class="form-label">{{ $label }}</label>
+  <label style="display: block" for="{{ $key }}" class="form-label">{{ $label }}</label>
   <select name="{{ $key }}" id="{{ $key }}" class="form-control js-example-basic-single w-100">
     @foreach($options as $value => $text)
       <option value="{{ $value }}" {{ request($key) == (string)$value ? 'selected' : '' }}>

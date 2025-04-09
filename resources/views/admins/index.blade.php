@@ -6,11 +6,12 @@
 
 @section('css')
     <!-- Themify icon css-->
+    
 @endsection
 
 @section('content')
     <!-- chart caard section start -->
-    <form method="GET" action="{{ route('index') }}" class="mb-4">
+    <form method="GET" action="{{ route('index') }}" class="mb-4" style="margin-left: 20px;">
         <div class="row">
             <div class="col-md-4">
                 <label for="start_date">Từ ngày:</label>
@@ -27,6 +28,7 @@
             </div>
         </div>
     </form>
+    
 
 
 
@@ -41,15 +43,20 @@
                     <div class="media-body p-0">
                         <span class="m-0">Tổng doanh thu</span>
                         <h4 class="mb-0 counter">
-                            {{ number_format($tongDoanhThu, 0, ',', '.') }}
+                            {{ number_format($tongDoanhThu, 0, ',', '.') }} 
                             <span class="badge badge-light-primary grow">
-                                <i data-feather="dollar-sign"></i>
+                                <i class="fas fa-money-bill-wave"></i>
+                                @if ($phanTramTangGiamDoanhThu > 0)
+                                    <span class="text-success">+{{ number_format($phanTramTangGiamDoanhThu, 2) }}%</span>
+                                @elseif ($phanTramTangGiamDoanhThu < 0)
+                                    <span class="text-danger">{{ number_format($phanTramTangGiamDoanhThu, 2) }}%</span>
+                                @else
+                                    <span class="text-muted">0%</span>
+                                @endif
                             </span>
                         </h4>
                     </div>
-                    <div class="align-self-center text-center">
-                        <i class="ri-database-2-line"></i>
-                    </div>
+             
                 </div>
             </div>
         </div>
@@ -64,8 +71,9 @@
                         <span class="m-0">Số lượng đơn hàng</span>
                         <h4 class="mb-0 counter">
                             {{ $tongDonHang }}
-                            <span class="badge badge-light-danger grow">
-                                <i data-feather="trending-down"></i>8.5%
+                            <span class="badge {{ $phanTramThayDoiDonHang >= 0 ? 'badge-light-success' : 'badge-light-danger' }} grow">
+                                <i data-feather="{{ $phanTramThayDoiDonHang >= 0 ? 'trending-up' : 'trending-down' }}"></i>
+                                {{ number_format($phanTramThayDoiDonHang, 1) }}%
                             </span>
                         </h4>
                     </div>
@@ -85,14 +93,14 @@
                         <span class="m-0">Số lượng sản phẩm</span>
                         <h4 class="mb-0 counter">
                             {{ $tongSanPhamConHang }}
-                            <a href="" class="badge badge-light-secondary grow">
+                            <a href="{{ route('sanphams.create') }}" class="badge badge-light-secondary grow">
                                 ADD NEW
                             </a>
                         </h4>
                     </div>
 
                     <div class="align-self-center text-center">
-                        <i class="ri-chat-3-line"></i>
+                        <i class="ri-t-shirt-line"></i> 
                     </div>
                 </div>
             </div>
@@ -107,8 +115,9 @@
                         <span class="m-0">Tổng số lượng khách hàng</span>
                         <h4 class="mb-0 counter">
                             {{ $tongKhachHangHoatDong }}
-                            <span class="badge badge-light-success grow">
-                                <i data-feather="trending-down"></i>8.5%
+                            <span class="badge {{ $phanTramThayDoiKhachHang >= 0 ? 'badge-light-success' : 'badge-light-danger' }} grow">
+                                <i data-feather="{{ $phanTramThayDoiKhachHang >= 0 ? 'trending-up' : 'trending-down' }}"></i>
+                                {{ number_format($phanTramThayDoiKhachHang, 1) }}%
                             </span>
                         </h4>
                     </div>
@@ -143,31 +152,25 @@
 
     <div class="col-xl-12">
         <div class="card o-hidden card-hover">
-            <div class=" card-header-top card-header--2 px-0 pt-0">
+            <div class="card-header-top card-header--2 px-0 pt-0">
                 <div class="row">
-
-
-
-
-
-
+    
                     <!-- Top 5 Sản phẩm bán chạy -->
                     <div class="col-xl-4 col-md-12">
-                        <div class="card o-hidden card-hover">
+                        <div class="card o-hidden card-hover h-100 d-flex flex-column">
                             <div class="card-header card-header-top card-header--2 px-0 pt-0">
                                 <div class="card-header-title text-center w-100">
                                     <h4>Top 5 Sản phẩm bán chạy</h4>
                                 </div>
                             </div>
-                            <div class="card-body p-0">
-                                <div class="table-responsive">
-                                    <table class="best-selling-table w-image table border-0">
+                            <div class="card-body p-0 flex-grow-1">
+                                <div class="table-responsive h-100">
+                                    <table class="best-selling-table w-image table border-0 mb-0">
                                         <tbody>
                                             @if ($topBanChay->isEmpty())
                                                 <tr>
                                                     <td colspan="4" class="text-center text-muted">
-                                                        <span class="text-danger">Không có sản phẩm trong thời gian
-                                                            này.</span>
+                                                        <span class="text-danger">Không có sản phẩm trong thời gian này.</span>
                                                     </td>
                                                 </tr>
                                             @else
@@ -193,32 +196,29 @@
                                                     </tr>
                                                 @endforeach
                                             @endif
-
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-                    <!-- Top 5 Sản phẩm doanh thu cao nhất -->
+    
+                    <!-- Top 5 Sản phẩm doanh thu cao -->
                     <div class="col-xl-4 col-md-12">
-                        <div class="card o-hidden card-hover">
+                        <div class="card o-hidden card-hover h-100 d-flex flex-column">
                             <div class="card-header card-header-top card-header--2 px-0 pt-0">
                                 <div class="card-header-title text-center w-100">
                                     <h4>Top 5 Sản phẩm doanh thu cao</h4>
                                 </div>
                             </div>
-
-                            <div class="card-body p-0">
-                                <div class="table-responsive">
-                                    <table class="best-selling-table w-image table border-0">
+                            <div class="card-body p-0 flex-grow-1">
+                                <div class="table-responsive h-100">
+                                    <table class="best-selling-table w-image table border-0 mb-0">
                                         <tbody>
                                             @if ($topDoanhThu->isEmpty())
                                                 <tr>
                                                     <td colspan="4" class="text-center text-muted">
-                                                        <span class="text-danger">Không có sản phẩm trong thời gian
-                                                            này.</span>
+                                                        <span class="text-danger">Không có sản phẩm trong thời gian này.</span>
                                                     </td>
                                                 </tr>
                                             @else
@@ -238,8 +238,7 @@
                                                         <td>
                                                             <div class="product-detail-box">
                                                                 <h6>Doanh thu</h6>
-                                                                <h5>{{ number_format($sp->tong_doanh_thu, 0, ',', '.') }}
-                                                                    VNĐ</h5>
+                                                                <h5>{{ number_format($sp->tong_doanh_thu, 0, ',', '.') }} ₫</h5>
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -251,25 +250,23 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- Top 5 Sản phẩm lợi nhuận cao nhất -->
+    
+                    <!-- Top 5 Khách hàng thân thiết -->
                     <div class="col-xl-4 col-md-12">
-                        <div class="card o-hidden card-hover">
+                        <div class="card o-hidden card-hover h-100 d-flex flex-column">
                             <div class="card-header card-header-top card-header--2 px-0 pt-0">
                                 <div class="card-header-title text-center w-100">
-                                    <h4>Top 5 khách hàng thân thiết </h4>
+                                    <h4>Top 5 khách hàng thân thiết</h4>
                                 </div>
                             </div>
-
-                            <div class="card-body p-0">
-                                <div class="table-responsive">
-                                    <table class="best-selling-table w-image table border-0">
+                            <div class="card-body p-0 flex-grow-1">
+                                <div class="table-responsive h-100">
+                                    <table class="best-selling-table w-image table border-0 mb-0">
                                         <tbody>
                                             @if ($topKhachHang->isEmpty())
                                                 <tr>
                                                     <td colspan="4" class="text-center text-muted">
-                                                        <span class="text-danger">Không có khách hàng trong thời gian
-                                                            này.</span>
+                                                        <span class="text-danger">Không có khách hàng trong thời gian này.</span>
                                                     </td>
                                                 </tr>
                                             @else
@@ -281,8 +278,6 @@
                                                                     <img src="{{ asset($khachHang->anh_dai_dien ? 'storage/' . $khachHang->anh_dai_dien : 'assets/images/user-default.png') }}"
                                                                         class="img-fluid"
                                                                         alt="{{ $khachHang->ten_nguoi_dung }}">
-
-
                                                                 </div>
                                                                 <div class="product-name">
                                                                     <h5>{{ $khachHang->ten_nguoi_dung }}</h5>
@@ -302,13 +297,14 @@
                                     </table>
                                 </div>
                             </div>
-
                         </div>
                     </div>
-                </div>
+    
+                </div> <!-- /.row -->
             </div>
         </div>
     </div>
+    
 
 
     <!-- Best Selling Product End -->
@@ -446,37 +442,38 @@
                 const month = String(today.getMonth() + 1).padStart(2, '0');
                 const year = today.getFullYear();
                 const currentDate = `${year}-${month}-${day}`;
-
-                // Set the default start date to today when the page loads if it's not set by user
+        
+                // Đặt ngày bắt đầu mặc định là hôm nay khi trang được tải nếu người dùng chưa chọn
                 if (!document.getElementById('start_date').value) {
                     document.getElementById('start_date').value = currentDate;
                 }
                 if (!document.getElementById('end_date').value) {
                     document.getElementById('end_date').value = currentDate;
                 }
-
-                // Set the max attribute for both dates to ensure the user cannot select a future date
+        
+                // Thiết lập thuộc tính "max" cho cả hai ô nhập ngày để ngăn người dùng chọn ngày trong tương lai
                 document.getElementById('start_date').setAttribute('max', currentDate);
                 document.getElementById('end_date').setAttribute('max', currentDate);
-
+        
                 const startDate = document.getElementById('start_date');
                 const endDate = document.getElementById('end_date');
-
-                // Ensure start date is not later than end date
+        
+                // Đảm bảo ngày bắt đầu không lớn hơn ngày kết thúc
                 startDate.addEventListener('change', function() {
                     if (startDate.value > endDate.value) {
-                        endDate.value = startDate.value; // Adjust end date if start date is later
+                        endDate.value = startDate.value; // Điều chỉnh ngày kết thúc nếu ngày bắt đầu lớn hơn
                     }
                 });
-
-                // Ensure end date is not earlier than start date
+        
+                // Đảm bảo ngày kết thúc không nhỏ hơn ngày bắt đầu
                 endDate.addEventListener('change', function() {
                     if (endDate.value < startDate.value) {
-                        startDate.value = endDate.value; // Adjust start date if end date is earlier
+                        startDate.value = endDate.value; // Điều chỉnh ngày bắt đầu nếu ngày kết thúc nhỏ hơn
                     }
                 });
             }
         </script>
+        
 
         <script>
             // Khi người dùng chọn một trạng thái, giữ lại các tham số filter khác (start_date, end_date)

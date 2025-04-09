@@ -105,145 +105,6 @@
 @endsection
 
 @section('content')
-    <!-- Category Section Start -->
-    {{-- <section class="wow fadeInUp">
-        <div class="container-fluid-lg">
-            <div class="row">
-                <div class="col-12">
-                    <div class="slider-7_1 no-space shop-box no-arrow">
-                        <div>
-                            <div class="shop-category-box">
-                                <a href="shop-left-sidebar.html">
-                                    <div class="shop-category-image">
-                                        <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/vegetable.svg"
-                                            class="blur-up lazyload" alt="">
-                                    </div>
-                                    <div class="category-box-name">
-                                        <h6>Vegetables & Fruit</h6>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div>
-                            <div class="shop-category-box">
-                                <a href="shop-left-sidebar.html">
-                                    <div class="shop-category-image">
-                                        <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/cup.svg"
-                                            class="blur-up lazyload" alt="">
-                                    </div>
-                                    <div class="category-box-name">
-                                        <h6>Beverages</h6>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div>
-                            <div class="shop-category-box">
-                                <a href="shop-left-sidebar.html">
-                                    <div class="shop-category-image">
-                                        <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/meats.svg"
-                                            class="blur-up lazyload" alt="">
-                                    </div>
-                                    <div class="category-box-name">
-                                        <h6>Meats & Seafood</h6>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div>
-                            <div class="shop-category-box">
-                                <a href="shop-left-sidebar.html">
-                                    <div class="shop-category-image">
-                                        <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/breakfast.svg"
-                                            class="blur-up lazyload" alt="">
-                                    </div>
-                                    <div class="category-box-name">
-                                        <h6>Breakfast</h6>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div>
-                            <div class="shop-category-box">
-                                <a href="shop-left-sidebar.html">
-                                    <div class="shop-category-image">
-                                        <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/frozen.svg"
-                                            class="blur-up lazyload" alt="">
-                                    </div>
-                                    <div class="category-box-name">
-                                        <h6>Frozen Foods</h6>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div>
-                            <div class="shop-category-box">
-                                <a href="shop-left-sidebar.html">
-                                    <div class="shop-category-image">
-                                        <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/milk.svg"
-                                            class="blur-up lazyload" alt="">
-                                    </div>
-                                    <div class="category-box-name">
-                                        <h6>Milk & Dairies</h6>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div>
-                            <div class="shop-category-box">
-                                <a href="shop-left-sidebar.html">
-                                    <div class="shop-category-image">
-                                        <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/pet.svg"
-                                            class="blur-up lazyload" alt="">
-                                    </div>
-                                    <div class="category-box-name">
-                                        <h6>Pet Food</h6>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div>
-                            <div class="shop-category-box">
-                                <a href="shop-left-sidebar.html">
-                                    <div class="shop-category-image">
-                                        <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/biscuit.svg"
-                                            class="blur-up lazyload" alt="">
-                                    </div>
-                                    <div class="category-box-name">
-                                        <h6>Biscuits & Snacks</h6>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div>
-                            <div class="shop-category-box">
-                                <a href="shop-left-sidebar.html">
-                                    <div class="shop-category-image">
-                                        <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/grocery.svg"
-                                            class="blur-up lazyload" alt="">
-                                    </div>
-                                    <div class="category-box-name">
-                                        <h6>Grocery & Staples</h6>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section> --}}
-    <!-- Category Section End -->
-
-    <!-- Shop Section Start -->
     <section class="section-b-space shop-section">
         <div class="container-fluid-lg">
             <div class="row">
@@ -281,31 +142,34 @@
 
 
                                             @if ($danhMucs->isNotEmpty())
-                                                <form method="GET" action="{{ route('sanphams.danhsach') }}">
-                                                    <ul class="category-list custom-padding custom-height"
-                                                        id="category-list">
-                                                        @foreach ($danhMucs as $danhMuc)
-                                                            <li>
-                                                                <div class="form-check ps-0 m-0 category-list-box">
-                                                                    <input class="checkbox_animated d-none" type="radio"
-                                                                        name="danh_muc_id" value="{{ $danhMuc->id }}"
-                                                                        id="danhmuc-{{ $danhMuc->id }}"
-                                                                        onchange="this.form.submit()"
-                                                                        {{ request('danh_muc_id') == $danhMuc->id ? 'checked' : '' }}>
-
-                                                                    <label class="form-check-label"
-                                                                        for="danhmuc-{{ $danhMuc->id }}"
-                                                                        style="cursor: pointer;">
-                                                                        {{ $danhMuc->ten_danh_muc }}
-                                                                        <span class="badge bg-success text-white ms-2">
-                                                                            {{ $danhMuc->san_phams_count }} sản phẩm
-                                                                        </span>
-                                                                    </label>
-                                                                </div>
-                                                            </li>
-                                                        @endforeach
-                                                    </ul>
-                                                </form>
+                                            <form method="GET" action="{{ route('sanphams.danhsach') }}">
+                                                {{-- Giữ lại các tham số khác ngoài "danh_muc_id" --}}
+                                                @foreach(request()->except('danh_muc_id') as $key => $value)
+                                                    <input type="hidden" name="{{ $key }}" value="{{ $value }}">
+                                                @endforeach
+                                            
+                                                <ul class="category-list custom-padding custom-height" id="category-list">
+                                                    @foreach ($danhMucs as $danhMuc)
+                                                        <li>
+                                                            <div class="form-check ps-0 m-0 category-list-box">
+                                                                <input class="checkbox_animated d-none" type="radio"
+                                                                    name="danh_muc_id" value="{{ $danhMuc->id }}"
+                                                                    id="danhmuc-{{ $danhMuc->id }}"
+                                                                    onchange="this.form.submit()"
+                                                                    {{ request('danh_muc_id') == $danhMuc->id ? 'checked' : '' }}>
+                                            
+                                                                <label class="form-check-label" for="danhmuc-{{ $danhMuc->id }}" style="cursor: pointer;">
+                                                                    {{ $danhMuc->ten_danh_muc }}
+                                                                    <span class="badge bg-success text-white ms-2">
+                                                                        {{ $danhMuc->san_phams_count }} sản phẩm
+                                                                    </span>
+                                                                </label>
+                                                            </div>
+                                                        </li>
+                                                    @endforeach
+                                                </ul>
+                                            </form>
+                                            
                                             @else
                                                 <p>Không có danh mục nào có sản phẩm.</p>
                                             @endif
@@ -492,7 +356,6 @@
 
                                     <ul class="dropdown-menu">
                                         <li><a class="dropdown-item"
-
                                                 href="{{ request()->fullUrlWithQuery(['sort' => 'Giá thấp - cao']) }}">Giá
                                                 thấp -
                                                 cao</a></li>
@@ -612,7 +475,7 @@
                                                         {{ number_format($sanPham->giaThapNhatCuaSP(), 0, ',', '.') }} ₫
                                                     </span>
                                                     <del>{{ number_format($sanPham->gia_cu, 0, ',', '.') }} ₫</del>
-
+                                                    
                                                 </h5>
                                                 <div class="add-to-cart-box bg-white">
                                                     <button class="btn btn-add-cart addcart-button">
@@ -715,7 +578,6 @@
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const selectedFiltersContainer = document.getElementById("selectedFilters");
-
             const clearAllFilters = document.getElementById("clearAllFilters");
 
             function formatCurrencyVND(value) {

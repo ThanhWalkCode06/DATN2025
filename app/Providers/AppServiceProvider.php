@@ -90,7 +90,11 @@ class AppServiceProvider extends ServiceProvider
                 $view->with('phieuGiamGiaThanhToans', $phieuGiamGiaThanhToans);
             });
 
-
+            View::composer('*', function ($view) {
+                $user = Auth::user();
+                $soDuVi = $user?->vi?->so_du ?? 0;
+                $view->with('soDuVi', $soDuVi);
+            });
         
     }
 }

@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\Client\UserRequest;
+use App\Models\LichSuDonHang;
 
 class UserController extends Controller
 {
@@ -49,29 +50,29 @@ class UserController extends Controller
         return redirect()->back()->with('success', 'Cập nhật thành công');
     }
 
-    public function orderTracking(string $id){
-        if(Auth::user()){
-            $donHang = DonHang::where('id',$id)->first();
-                if($donHang){
-                    $checkVoucher = DB::table('phieu_giam_gia_tai_khoans')->where('order_id',$donHang->id)->first();
-                    // dd($donHang);
-                    $bienThes = DonHang::where('id', $id)->with('bienThes')->first();
-                    $bienThesPaginated = $bienThes->bienThes()->paginate(5);
+    public function orderTracking(string $id)
+    {
+        if (Auth::user()) {
+            $donHang = DonHang::where('id', $id)->first();
+            if ($donHang) {
+                $checkVoucher = DB::table('phieu_giam_gia_tai_khoans')->where('order_id', $donHang->id)->first();
+                // dd($donHang);
+                $bienThes = DonHang::where('id', $id)->with('bienThes')->first();
+                $bienThesPaginated = $bienThes->bienThes()->paginate(5);
 
-                    $bienThesList = $bienThesPaginated->map(fn($bienThe) => [
-                        'anh_bien_the' => $bienThe->anh_bien_the,
-                        'ten_bien_the' => $bienThe->sanPham->ten_san_pham . ' - ' . $bienThe->ten_bien_the,
-                        'gia_ban' => $bienThe->gia_ban,
-                        'so_luong' => $bienThe->pivot->so_luong,
-                        'id_san_pham' => $bienThe->san_pham_id,
-                    ]);
-                    // dd($bienThesList);
-                return view('clients.users.ordertracking', compact('donHang','bienThesList','bienThesPaginated','checkVoucher'));
-                }else{
-                    abort(404);
-                }
-
-        }else{
+                $bienThesList = $bienThesPaginated->map(fn($bienThe) => [
+                    'anh_bien_the' => $bienThe->anh_bien_the,
+                    'ten_bien_the' => $bienThe->sanPham->ten_san_pham . ' - ' . $bienThe->ten_bien_the,
+                    'gia_ban' => $bienThe->gia_ban,
+                    'so_luong' => $bienThe->pivot->so_luong,
+                    'id_san_pham' => $bienThe->san_pham_id,
+                ]);
+                // dd($bienThesList);
+                return view('clients.users.ordertracking', compact('donHang', 'bienThesList', 'bienThesPaginated', 'checkVoucher'));
+            } else {
+                abort(404);
+            }
+        } else {
             return redirect()->route('login.client');
         }
     }
@@ -103,6 +104,13 @@ class UserController extends Controller
                             "ly_do" => $request->ly_do
                         ]);
 
+                        $lichSuDonHang = [
+                            'don_hang_id' => $donHang->id,
+                            'trang_thai' => $request->trang_thai
+                        ];
+
+                        LichSuDonHang::create($lichSuDonHang);
+
                         return redirect()->back()->with('success', 'Huỷ đơn hàng thành công');
                     }
 
@@ -116,11 +124,17 @@ class UserController extends Controller
                         $vi->so_du += $donHang->tong_tien;
                         $vi->save();
 
-                        // Ghi log giao dịch hoàn tiền
+                        // Ghi log giao dịch hoàn tiền với mô tả đầy đủ
+                        $soDuTruoc = $vi->so_du - $donHang->tong_tien; // vì đã cộng tiền trước đó
                         $vi->giaodichs()->create([
                             'so_tien' => $donHang->tong_tien,
                             'loai' => 'Hoàn tiền',
-                            'mo_ta' => 'Hoàn tiền do hủy đơn hàng ' . $donHang->ma_don_hang,
+                            'trang_thai' => 1,
+                            'mo_ta' => "↩️ Hoàn tiền do hủy đơn hàng {$donHang->ma_don_hang}\n 💰 Số dư: "
+                                . number_format($soDuTruoc, 0, ',', '.')
+                                . " ➝ "
+                                . number_format($vi->so_du, 0, ',', '.')
+                                . " VNĐ",
                         ]);
 
                         // Hoàn lại số lượng sản phẩm trong kho
@@ -143,13 +157,13 @@ class UserController extends Controller
                         $soDu = number_format($vi->so_du, 0, ',', '.');
 
                         // Thông báo cho người dùng về số dư hiện tại
-                        return redirect()->back()->with('success', 'Huỷ đơn hàng thành công. Số dư ví hiện tại của bạn là: ' . $soDu . ' VNĐ');
+                        return redirect()->back()->with('success', 'Huỷ đơn hàng thành công. Số dư ví hiện tại của bạn là: 💰' . $soDu . ' VNĐ');
                     }
                 } else {
                     return redirect()->back()->with('error', 'Không thể hủy đơn hàng khi trạng thái không phù hợp');
                 }
             }
-            
+
             // trả hàng
             if ($request->trang_thai == 5) {
                 if ($donHang->trang_thai_don_hang >= 3) {
@@ -171,11 +185,17 @@ class UserController extends Controller
                         $soDuMoi = $user->vi->so_du;
 
                         // Ghi lịch sử hoàn tiền
+                        $soDuTruoc = $soDuMoi - $donHang->tong_tien;
                         DB::table('giaodichvis')->insert([
                             'vi_id' => $user->vi->id,
                             'so_tien' => $donHang->tong_tien,
                             'loai' => 'Hoàn tiền',
-                            'mo_ta' => 'Hoàn tiền do trả đơn hàng ' . $donHang->ma_don_hang,
+                            'trang_thai' => 1,
+                            'mo_ta' => "↩️ Hoàn tiền do trả đơn hàng {$donHang->ma_don_hang}\n 💰 Số dư: "
+                                . number_format($soDuTruoc, 0, ',', '.') 
+                                . " ➝ " 
+                                . number_format($soDuMoi, 0, ',', '.')
+                                . " VNĐ",
                             'created_at' => now(),
                             'updated_at' => now(),
                         ]);
@@ -192,6 +212,13 @@ class UserController extends Controller
                         "ly_do" => $request->ly_do,
                     ]);
 
+                    $lichSuDonHang = [
+                        'don_hang_id' => $donHang->id,
+                        'trang_thai' => $request->trang_thai
+                    ];
+
+                    LichSuDonHang::create($lichSuDonHang);
+
                     return redirect()->back();
                 }
             }
@@ -203,6 +230,13 @@ class UserController extends Controller
                     $donHang->update([
                         "trang_thai_don_hang" => $request->trang_thai
                     ]);
+
+                    $lichSuDonHang = [
+                        'don_hang_id' => $donHang->id,
+                        'trang_thai' => $request->trang_thai
+                    ];
+
+                    LichSuDonHang::create($lichSuDonHang);
                     return redirect()->back()->with('success', 'Cập nhật trạng thái đơn hàng thành công');
                 }
             }

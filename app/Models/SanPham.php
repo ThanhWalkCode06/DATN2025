@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\SuperFilterable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class SanPham extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes,SuperFilterable;
 
     protected $fillable = [
         'ten_san_pham',

@@ -1,31 +1,35 @@
 <?php
 
+use App\Http\Controllers\Admin\BinhLuanController as AdminBinhLuanController;
 use App\Models\User;
 use App\Models\DanhGia;
 use App\Models\SanPham;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ViController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\LienHeController;
 use App\Http\Controllers\VaiTroController;
+use App\Http\Controllers\AdminViController;
 use App\Http\Controllers\BaiVietController;
 use App\Http\Controllers\BienTheController;
+
 use App\Http\Controllers\ContactController;
+
+use App\Http\Controllers\BinhLuanController;
+
 use App\Http\Controllers\DanhGiaController;
-
 use App\Http\Controllers\DonHangController;
-
 use App\Http\Controllers\SanPhamController;
 use App\Http\Controllers\ThongKeController;
 use App\Http\Controllers\HelperCommon\Helper;
 use App\Http\Controllers\ThuocTinhController;
-use App\Http\Controllers\Clients\ViController;
 use App\Http\Controllers\Payment\PaymentVnPay;
 use App\Http\Controllers\Admins\UserController;
 use App\Http\Controllers\PhieuGiamGiaController;
+
+
 use App\Http\Controllers\Admins\SettingController;
-
-
 use App\Http\Controllers\DanhMucBaiVietController;
 use App\Http\Controllers\DanhMucSanPhamController;
 use App\Http\Controllers\GiaTriThuocTinhController;
@@ -39,6 +43,7 @@ use App\Http\Controllers\Admins\Responsibility\RoleController;
 use App\Http\Controllers\Admins\Responsibility\PermissionController;
 use App\Http\Controllers\Clients\UserController as ClientsUserController;
 use App\Http\Controllers\Clients\Auth\AuthController as AuthAuthController;
+
 
 // Login Admin Controller
 Route::prefix('/admin')->controller(AuthController::class)->group(function () {
@@ -93,6 +98,7 @@ Route::prefix('admin')->middleware(['auth', 'checkStatus'])->group(function () {
     // Nếu là route thường thì chỉ cần ghi bình thường không có dấu -
     Route::middleware('dynamic')->group(function () {
         Route::resource('danhmucsanphams', DanhMucSanPhamController::class);
+        Route::get('sanphams/search', [SanPhamController::class, 'search'])->name('sanphams-search');
         Route::resource('sanphams', SanPhamController::class);
 
         Route::get('users/search', [UserController::class, 'search'])->name('users-search');
@@ -232,6 +238,51 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/vi', [App\Http\Controllers\ViController::class, 'hienThi'])->name('vi');
 });
 
-
+// Route::get('/sodu', [App\Http\Controllers\ViController::class, 'soDuVi'])->name('soduvi');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/binhluan', [BinhLuanController::class, 'index'])->name('binhluans.index');
+    Route::get('/binhluan/{id}', [BinhLuanController::class, 'show'])->name('binhluans.show');
+    Route::patch('/binhluan/{id}/toggle', [BinhLuanController::class, 'toggle'])->name('binhluans.toggle');
+});
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::resource('binhluans', BinhLuanController::class);
+});
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::patch('binhluans/{id}/toggle', [BinhLuanController::class, 'toggle'])->name('binhluans.toggle');
+});
+Route::post('/admin/binhluan/{id}/reply', [BinhLuanController::class, 'store'])->name('admins.binhluan.store');
 
 Route::post('/danh-gia/update-status/{id}', [DanhGiaController::class, 'updateStatus']);
+
+Route::get('/vi/nap-tien', [ViController::class, 'formNapTien'])->name('nap-tien.form');
+Route::post('/vi/nap-tien', [ViController::class, 'xuLyNapTien'])->name('nap-tien.xuly');
+Route::get('/vnpay/return', [ViController::class, 'vnpayReturn'])->name('vi.napTienReturn');
+
+
+Route::get('/vi/rut-tien', [ViController::class, 'formRutTien'])->name('rut-tien.form');
+Route::post('/vi/rut-tien', [ViController::class, 'xuLyRutTien'])->name('rut-tien.xuly');
+Route::post('/admin/vi/xu-ly-nhieu', [AdminViController::class, 'updateTrangThai'])->name('admin.vis.xuLyRutNhieu');
+
+
+Route::get('/vi-nguoi-dung', [AdminViController::class, 'index'])->name('vis.index');
+Route::get('/admin/vi-nguoi-dung/{id}', [AdminViController::class, 'show'])->name('admin.vis.show');
+Route::post('/admin/vi-nguoi-dung/update-trang-thai', [AdminViController::class, 'updateTrangThai'])->name('admin.vis.updateTrangThai');
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/binhluan', [BinhLuanController::class, 'index'])->name('binhluans.index');
+    Route::get('/binhluan/{id}', [BinhLuanController::class, 'show'])->name('binhluans.show');
+    Route::patch('/binhluan/{id}/toggle', [BinhLuanController::class, 'toggle'])->name('binhluans.toggle');
+});
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::resource('binhluans', BinhLuanController::class);
+});
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::patch('binhluans/{id}/toggle', [BinhLuanController::class, 'toggle'])->name('binhluans.toggle');
+});
+Route::post('/admin/binhluan/{id}/reply', [BinhLuanController::class, 'store'])->name('admins.binhluan.store');
+
+Route::post('/danh-gia/update-status/{id}', [DanhGiaController::class, 'updateStatus']);
+Route::post('/binhluan/{id}/reply', [BinhLuanController::class, 'store'])->name('binhluan.reply')->middleware('auth');
+
+Route::post('/binhluan', [BinhLuanController::class, 'store'])->name('binhluan.store');
+
