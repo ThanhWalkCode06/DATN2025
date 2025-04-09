@@ -45,6 +45,20 @@ class SanPhamController extends Controller
         return view('admins.sanphams.index', compact('sanPhams'));
     }
 
+    public function search(Request $request)
+    {
+
+        $sanPhams = SanPham::superFilter($request)->paginate(10);
+        if ($request->ajax()) {
+            return response()->json([
+                'html' => view('admins.sanphams.partials.list_rows', compact('sanPhams',))->render(),
+                // 'count' => $phieuGiamGias->total(),
+                'pagination' => $sanPhams->appends($request->except('page'))->links('pagination::bootstrap-5')->render()
+            ]);
+        }
+        return view('admins.sanphams.index', compact('sanPhams'));
+    }
+
     public function sanPhamTopDanhGia()
     {
         $sanPhams = SanPham::select('san_phams.*')
@@ -228,23 +242,12 @@ class SanPhamController extends Controller
     /**
      * Display the specified resource.
      */
-    // public function show($id)
-    // {
-    //     $sanPham = SanPham::with(['danhMuc', 'bienThes'])->findOrFail($id);
-
-    //     return view('admins.sanphams.show', compact('sanPham'));
-    // }
-
     public function show($id)
-{
-    $sanPham = SanPham::with(['danhMuc', 'anhSP', 'bienThes', 'danhGias.user', 'danhGias.bienThe'])->findOrFail($id);
+    {
+        $sanPham = SanPham::with(['danhMuc', 'bienThes'])->findOrFail($id);
 
-    // Sắp xếp đánh giá theo thời gian (mới nhất lên đầu) và phân trang 5 đánh giá mỗi trang
-    $sanPham->danhGias = $sanPham->danhGias()->orderByDesc('created_at')->get();
-
-
-    return view('admins.sanphams.show', compact('sanPham'));
-}
+        return view('admins.sanphams.show', compact('sanPham'));
+    }
 
 
 
@@ -285,11 +288,6 @@ class SanPhamController extends Controller
         //     dd($item->anh_bien_the);
         // }
         // dd(1);
-        $bienTheIds = $bienThes->pluck('id')->toArray();
-        $hasOrder = ChiTietDonHang::whereIn('bien_the_id', $bienTheIds)->exists();
-        if ($hasOrder) {
-            return redirect()->back()->with('error', 'Không thể cập nhật sản phẩm vì đã có đơn hàng.');
-        }
         $thuocTinhId = array_keys($request->input('attribute_values', []));
         $hinhAnhPath = null;
 
@@ -320,40 +318,42 @@ class SanPhamController extends Controller
         if ($request->has('attribute_values')) {
 
             if (empty($selected_values)) {
-                if ($request->hasFile('anh_bien_the')) {
-                    $files = $request->file('anh_bien_the');
-                    if (isset($files) && $files->isValid()) {
-                        $fileName = time() . '_' . $files->getClientOriginalName();
-                        $files->storeAs("public/uploads/sanphams/", $fileName);
-                        $hinhAnhBienThe = 'uploads/sanphams/' . $fileName;
-                    }
-                }
+                return redirect()->back()->with('error', 'Bạn vui lòng chọn thuộc tính !');
+                // if ($request->hasFile('anh_bien_the')) {
+                //     $files = $request->file('anh_bien_the');
+                //     if (isset($files) && $files->isValid()) {
+                //         $fileName = time() . '_' . $files->getClientOriginalName();
+                //         $files->storeAs("public/uploads/sanphams/", $fileName);
+                //         $hinhAnhBienThe = 'uploads/sanphams/' . $fileName;
+                //     }
+                // }
 
-                foreach ($request->attribute_values as $thuocTinhId => $giaTriArray) {
-                    $index = 0;
-                    foreach ($giaTriArray as $giaTri) {
-                        $giaTriTT = GiaTriThuocTinh::where('gia_tri', $giaTri)
-                            ->where('thuoc_tinh_id', $thuocTinhId)
-                            ->first();
+                // foreach ($request->attribute_values as $thuocTinhId => $giaTriArray) {
+                //     $index = 0;
+                //     foreach ($giaTriArray as $giaTri) {
+                //         $giaTriTT = GiaTriThuocTinh::where('gia_tri', $giaTri)
+                //             ->where('thuoc_tinh_id', $thuocTinhId)
+                //             ->first();
 
-                        if ($giaTriTT) {
-                            $bienTheData = [
-                                'san_pham_id' => $sanPham->id,
-                                'ten_bien_the' => $giaTriArray[$index],
-                                'gia_ban' => $request->gia_ban[$index],
-                                'so_luong' => $request->so_luong[$index],
-                                'thuoc_tinh_id' => $thuocTinhId,
-                                'gia_tri_thuoc_tinh_id' => $giaTriTT->id,
-                                'anh_bien_the' => $hinhAnhBienThe ?? null,
-                            ];
+                //         if ($giaTriTT) {
+                //             $bienTheData = [
+                //                 'san_pham_id' => $sanPham->id,
+                //                 'ten_bien_the' => $giaTriArray[$index],
+                //                 'gia_ban' => $request->gia_ban[$index],
+                //                 'so_luong' => $request->so_luong[$index],
+                //                 'thuoc_tinh_id' => $thuocTinhId,
+                //                 'gia_tri_thuoc_tinh_id' => $giaTriTT->id,
+                //                 'anh_bien_the' => $hinhAnhBienThe ?? null,
+                //             ];
 
-                            BienThe::updateOrCreate($bienTheData);
-                            $index++;
-                        }
-                    }
-                }
+                //             BienThe::updateOrCreate($bienTheData);
+                //             $index++;
+                //         }
+                //     }
+                // }
             } else {
                 $bienTheIdsMoi = []; // Danh sách ID biến thể mới
+                $bienTheIdsCu = BienThe::where('san_pham_id', $sanPham->id)->pluck('id')->toArray();
 
                 foreach ($request->selected_values as $key => $tenBienThe) {
                     $hinhAnhBienThe = null;
@@ -408,30 +408,34 @@ class SanPhamController extends Controller
                     }
                 }
 
-                $hasCart = ChiTietGioHang::whereIn('bien_the_id', $bienTheIdsMoi)->exists();
-                $hasOrder = ChiTietDonHang::whereIn('bien_the_id', $bienTheIdsMoi)->exists();
+                $bienTheIdsBiXoa = array_diff($bienTheIdsCu, $bienTheIdsMoi);
 
-                if ($hasOrder) {
-                    return redirect()->back()->with('error', 'Sản phẩm không thể sửa do đã có đơn hàng!');
+                // Chỉ thực hiện kiểm tra giỏ hàng và đơn hàng nếu có biến thể bị xóa
+                if (!empty($bienTheIdsBiXoa)) {
+                    $hasCart = ChiTietGioHang::whereIn('bien_the_id', $bienTheIdsBiXoa)->exists();
+                    $hasOrder = ChiTietDonHang::whereIn('bien_the_id', $bienTheIdsBiXoa)->exists();
+
+                    if ($hasOrder) {
+                        return redirect()->back()->with('error', 'Sản phẩm không thể xóa do đã có đơn hàng!');
+                    }
+
+                    if ($hasCart) {
+                        return redirect()->back()->with('error', 'Sản phẩm không thể xóa do đã có trong giỏ hàng!');
+                    }
+
+                    // Xóa các biến thể không còn tồn tại trong danh sách mới
+                    BienThe::whereIn('id', $bienTheIdsBiXoa)->delete();
                 }
-
-                if ($hasCart) {
-                    return redirect()->back()->with('error', 'Sản phẩm không thể sửa do đã có trong giỏ hàng!');
-                }
-
-                // Xóa các biến thể không có trong danh sách mới
-                BienThe::where('san_pham_id', $sanPham->id)
-                    ->whereNotIn('id', $bienTheIdsMoi)
-                    ->delete();
             }
         } else {
-            $bienTheIds = $bienThes->pluck('id')->toArray(); // Lấy danh sách ID hợp lệ
+            return redirect()->back()->with('error', 'Vui lòng chọn thuộc tính !');
+            // $bienTheIds = $bienThes->pluck('id')->toArray(); // Lấy danh sách ID hợp lệ
 
-            $donhangChiTiet = ChiTietDonHang::whereIn('bien_the_id', $bienTheIds)->exists();
+            // $donhangChiTiet = ChiTietDonHang::whereIn('bien_the_id', $bienTheIds)->exists();
 
-            if (!$donhangChiTiet) { // Nếu không có đơn hàng nào chứa biến thể
-                $bienThes->each->delete(); // Xóa tất cả biến thể
-            }
+            // if (!$donhangChiTiet) { // Nếu không có đơn hàng nào chứa biến thể
+            //     $bienThes->each->delete(); // Xóa tất cả biến thể
+            // }
         }
 
 
