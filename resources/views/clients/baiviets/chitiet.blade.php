@@ -120,7 +120,7 @@
                                 </form>
                             </div>
                         @else
-                            <p class="text-center">Vui lòng <a href="{{ route('login') }}">đăng nhập</a> để bình luận.</p>
+                            <p class="text-center">Vui lòng <a href="{{ route('login.client') }}">đăng nhập</a> để bình luận.</p>
                         @endauth
 
                         {{-- DANH SÁCH BÌNH LUẬN --}}
