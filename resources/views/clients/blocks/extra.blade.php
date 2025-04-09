@@ -319,7 +319,7 @@
 
 <!-- Edit Profile Start -->
 @if (isset($user))
-    <form id="myForm" action="{{ route('users.update', $user->id) }}" method="post"
+    <form id="myForm" action="{{ route('users.updateClient', $user->id) }}" method="post"
         enctype="multipart/form-data">
         @csrf
         @method('PUT')
