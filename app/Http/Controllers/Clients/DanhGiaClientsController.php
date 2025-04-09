@@ -100,8 +100,9 @@ class DanhGiaClientsController extends Controller
 
         if ($soLanMua <= $soLanDanhGia) {
             return redirect()->route('sanphams.chitiet', ['id' => $san_pham_id])
-                ->with('error_binhluan', 'Bạn chỉ có thể đánh giá sản phẩm sau khi đã mua, và không vượt quá số lần mua.');
-        }
+                ->with('error_binhluan', 'Bạn chỉ có thể đánh giá sản phẩm sau khi đã mua, và không vượt quá số lần mua.')
+                ->with('daMuaHang', true);
+            }
 
         // Validate dữ liệu
         $request->validate([
@@ -121,7 +122,8 @@ class DanhGiaClientsController extends Controller
 
         // Redirect về chi tiết sản phẩm đúng route
         return redirect()->route('sanphams.chitiet', ['id' => $san_pham_id])
-            ->with('success', 'Gửi đánh giá thành công.');
+            ->with('success', 'Gửi đánh giá thành công.')
+            ->with('daMuaHang', true);
     }
 
    
