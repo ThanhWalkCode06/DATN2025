@@ -6,6 +6,7 @@
 
 @section('css')
     <!-- Themify icon css-->
+    
 @endsection
 
 @section('content')
@@ -153,31 +154,25 @@
 
     <div class="col-xl-12">
         <div class="card o-hidden card-hover">
-            <div class=" card-header-top card-header--2 px-0 pt-0">
+            <div class="card-header-top card-header--2 px-0 pt-0">
                 <div class="row">
-
-
-
-
-
-
+    
                     <!-- Top 5 Sản phẩm bán chạy -->
                     <div class="col-xl-4 col-md-12">
-                        <div class="card o-hidden card-hover">
+                        <div class="card o-hidden card-hover h-100 d-flex flex-column">
                             <div class="card-header card-header-top card-header--2 px-0 pt-0">
                                 <div class="card-header-title text-center w-100">
                                     <h4>Top 5 Sản phẩm bán chạy</h4>
                                 </div>
                             </div>
-                            <div class="card-body p-0">
-                                <div class="table-responsive">
-                                    <table class="best-selling-table w-image table border-0">
+                            <div class="card-body p-0 flex-grow-1">
+                                <div class="table-responsive h-100">
+                                    <table class="best-selling-table w-image table border-0 mb-0">
                                         <tbody>
                                             @if ($topBanChay->isEmpty())
                                                 <tr>
                                                     <td colspan="4" class="text-center text-muted">
-                                                        <span class="text-danger">Không có sản phẩm trong thời gian
-                                                            này.</span>
+                                                        <span class="text-danger">Không có sản phẩm trong thời gian này.</span>
                                                     </td>
                                                 </tr>
                                             @else
@@ -203,32 +198,29 @@
                                                     </tr>
                                                 @endforeach
                                             @endif
-
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-                    <!-- Top 5 Sản phẩm doanh thu cao nhất -->
+    
+                    <!-- Top 5 Sản phẩm doanh thu cao -->
                     <div class="col-xl-4 col-md-12">
-                        <div class="card o-hidden card-hover">
+                        <div class="card o-hidden card-hover h-100 d-flex flex-column">
                             <div class="card-header card-header-top card-header--2 px-0 pt-0">
                                 <div class="card-header-title text-center w-100">
                                     <h4>Top 5 Sản phẩm doanh thu cao</h4>
                                 </div>
                             </div>
-
-                            <div class="card-body p-0">
-                                <div class="table-responsive">
-                                    <table class="best-selling-table w-image table border-0">
+                            <div class="card-body p-0 flex-grow-1">
+                                <div class="table-responsive h-100">
+                                    <table class="best-selling-table w-image table border-0 mb-0">
                                         <tbody>
                                             @if ($topDoanhThu->isEmpty())
                                                 <tr>
                                                     <td colspan="4" class="text-center text-muted">
-                                                        <span class="text-danger">Không có sản phẩm trong thời gian
-                                                            này.</span>
+                                                        <span class="text-danger">Không có sản phẩm trong thời gian này.</span>
                                                     </td>
                                                 </tr>
                                             @else
@@ -248,8 +240,7 @@
                                                         <td>
                                                             <div class="product-detail-box">
                                                                 <h6>Doanh thu</h6>
-                                                                <h5>{{ number_format($sp->tong_doanh_thu, 0, ',', '.') }}
-                                                                    ₫</h5>
+                                                                <h5>{{ number_format($sp->tong_doanh_thu, 0, ',', '.') }} ₫</h5>
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -261,25 +252,23 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- Top 5 Sản phẩm lợi nhuận cao nhất -->
+    
+                    <!-- Top 5 Khách hàng thân thiết -->
                     <div class="col-xl-4 col-md-12">
-                        <div class="card o-hidden card-hover">
+                        <div class="card o-hidden card-hover h-100 d-flex flex-column">
                             <div class="card-header card-header-top card-header--2 px-0 pt-0">
                                 <div class="card-header-title text-center w-100">
-                                    <h4>Top 5 khách hàng thân thiết </h4>
+                                    <h4>Top 5 khách hàng thân thiết</h4>
                                 </div>
                             </div>
-
-                            <div class="card-body p-0">
-                                <div class="table-responsive">
-                                    <table class="best-selling-table w-image table border-0">
+                            <div class="card-body p-0 flex-grow-1">
+                                <div class="table-responsive h-100">
+                                    <table class="best-selling-table w-image table border-0 mb-0">
                                         <tbody>
                                             @if ($topKhachHang->isEmpty())
                                                 <tr>
                                                     <td colspan="4" class="text-center text-muted">
-                                                        <span class="text-danger">Không có khách hàng trong thời gian
-                                                            này.</span>
+                                                        <span class="text-danger">Không có khách hàng trong thời gian này.</span>
                                                     </td>
                                                 </tr>
                                             @else
@@ -291,8 +280,6 @@
                                                                     <img src="{{ asset($khachHang->anh_dai_dien ? 'storage/' . $khachHang->anh_dai_dien : 'assets/images/user-default.png') }}"
                                                                         class="img-fluid"
                                                                         alt="{{ $khachHang->ten_nguoi_dung }}">
-
-
                                                                 </div>
                                                                 <div class="product-name">
                                                                     <h5>{{ $khachHang->ten_nguoi_dung }}</h5>
@@ -312,13 +299,14 @@
                                     </table>
                                 </div>
                             </div>
-
                         </div>
                     </div>
-                </div>
+    
+                </div> <!-- /.row -->
             </div>
         </div>
     </div>
+    
 
 
     <!-- Best Selling Product End -->
