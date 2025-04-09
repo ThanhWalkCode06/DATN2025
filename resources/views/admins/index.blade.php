@@ -11,7 +11,7 @@
 
 @section('content')
     <!-- chart caard section start -->
-    <form method="GET" action="{{ route('index') }}" class="mb-4">
+    <form method="GET" action="{{ route('index') }}" class="mb-4" style="margin-left: 20px;">
         <div class="row">
             <div class="col-md-4">
                 <label for="start_date">Từ ngày:</label>
@@ -28,6 +28,7 @@
             </div>
         </div>
     </form>
+    
 
 
 
@@ -55,10 +56,7 @@
                             </span>
                         </h4>
                     </div>
-                    
-                    <div class="align-self-center text-center">
-                        <i class="ri-database-2-line"></i>
-                    </div>
+             
                 </div>
             </div>
         </div>
