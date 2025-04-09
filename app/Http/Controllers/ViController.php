@@ -124,7 +124,7 @@ class ViController extends Controller
                     'vi_id' => $vi->id,
                     'so_tien' => $soTienNap,
                     'loai' => 'Nạp tiền',
-                    'mo_ta' => "💸 Nạp tiền qua VNPAY\nSố dư: " . number_format($soDuTruoc, 0, ',', '.') . " ➝ " . number_format($soDuSau, 0, ',', '.') . " VNĐ",
+                    'mo_ta' => "💸 Nạp tiền qua VNPAY\n 💰 Số dư: " . number_format($soDuTruoc, 0, ',', '.') . " ➝ " . number_format($soDuSau, 0, ',', '.') . " VNĐ",
 
 
                     'trang_thai' => 1,
@@ -173,56 +173,6 @@ class ViController extends Controller
 
 
   
-// public function xuLyRutTien(Request $request)
-    // {
-    //     $user = Auth::user();
-    
-    //     if (!$user) {
-    //         return redirect()->route('login')->with('error', 'Bạn cần đăng nhập để sử dụng chức năng này.');
-    //     }
-    
-    //     $soTienRut = (int) $request->so_tien;
-    
-    //     if ($soTienRut <= 0) {
-    //         return back()->with('error', 'Số tiền rút không hợp lệ.');
-    //     }
-    
-    //     $vi = $user->layHoacTaoVi();
-    
-    //     // Kiểm tra nếu đã có giao dịch rút tiền đang chờ xử lý
-    //     $dangCho = $vi->giaodichs()
-    //         ->where('loai', 'Rút tiền')
-    //         ->where('trang_thai', 0)
-    //         ->exists();
-    
-    //     if ($dangCho) {
-    //         return back()->with('error', 'Bạn đã có yêu cầu rút tiền đang chờ xác nhận .');
-    //     }
-    
-    //     // Kiểm tra số dư (chỉ kiểm tra, chưa trừ)
-    //     if ($vi->so_du < $soTienRut) {
-    //         return back()->with('error', 'Số dư không đủ để rút tiền.');
-    //     }
-    
-    //     // Ghi nhận yêu cầu rút tiền - CHƯA TRỪ TIỀN
-    //     $soDuSau = $vi->so_du - $soTienRut;
-    
-    //     DB::table('giaodichvis')->insert([
-    //         'vi_id' => $vi->id,
-    //         'so_tien' => $soTienRut, // không trừ ở đây, admin xử lý sau
-    //         'loai' => 'Rút tiền',
-    //         'mo_ta' => "💸 Yêu cầu rút tiền\nSố dư hiện tại: " . number_format($vi->so_du, 0, ',', '.') . " VNĐ",
-    //         'trang_thai' => 0, // Chờ xử lý
-    //         'ten_ngan_hang' => $request->ten_ngan_hang,
-    //         'so_tai_khoan' => $request->so_tai_khoan,
-    //         'ten_nguoi_nhan' => $request->ten_nguoi_nhan,
-    //         'created_at' => now(),
-    //         'updated_at' => now(),
-    //     ]);
-    
-    //     return redirect()->route('vi')->with('success', 'Yêu cầu rút tiền đã được gửi. Vui lòng chờ  xác nhận.');
-    // }
-
 
 
     public function xuLyRutTien(Request $request)
@@ -261,7 +211,7 @@ class ViController extends Controller
         'loai' => 'Rút tiền',
         
         'mo_ta' => "💸 Yêu cầu rút tiền\n"
-        . "Số dư hiện tại: " . number_format($vi->so_du, 0, ',', '.') . " VNĐ\n"
+        . "💰 Số dư hiện tại: " . number_format($vi->so_du, 0, ',', '.') . " VNĐ\n"
         . "🏦 Ngân hàng: {$request->ten_ngan_hang}\n"
         . "🔢 Số tài khoản: {$request->so_tai_khoan}\n"
         . "👤 Người nhận: {$request->ten_nguoi_nhan}",

@@ -182,6 +182,22 @@
                             <li class="progtrckr-todo">
                         @endif
                         <h5>Đang xử lý</h5>
+                        <h6>
+                            @php
+                                $check = false;
+                            @endphp
+                            @foreach ($lichSuDonHangs as $lichSuDonHang)
+                                @if ($lichSuDonHang->trang_thai == 1)
+                                    {{ $lichSuDonHang->created_at }}
+                                    @php
+                                        $check = true;
+                                    @endphp
+                                @endif
+                            @endforeach
+                            @if ($check == false)
+                                Chưa xử lý
+                            @endif
+                        </h6>
                         </li>
 
                         @if ($donHang->trang_thai_don_hang >= 2)
@@ -190,6 +206,22 @@
                             <li class="progtrckr-todo">
                         @endif
                         <h5>Đang giao</h5>
+                        <h6>
+                            @php
+                                $check = false;
+                            @endphp
+                            @foreach ($lichSuDonHangs as $lichSuDonHang)
+                                @if ($lichSuDonHang->trang_thai == 2)
+                                    {{ $lichSuDonHang->created_at }}
+                                    @php
+                                        $check = true;
+                                    @endphp
+                                @endif
+                            @endforeach
+                            @if ($check == false)
+                                Chưa xử lý
+                            @endif
+                        </h6>
                         </li>
 
                         @if ($donHang->trang_thai_don_hang >= 3)
@@ -198,11 +230,43 @@
                             <li class="progtrckr-todo">
                         @endif
                         <h5>Đã giao</h5>
+                        <h6>
+                            @php
+                                $check = false;
+                            @endphp
+                            @foreach ($lichSuDonHangs as $lichSuDonHang)
+                                @if ($lichSuDonHang->trang_thai == 3)
+                                    {{ $lichSuDonHang->created_at }}
+                                    @php
+                                        $check = true;
+                                    @endphp
+                                @endif
+                            @endforeach
+                            @if ($check == false)
+                                Chưa xử lý
+                            @endif
+                        </h6>
                         </li>
 
                         @if ($donHang->trang_thai_don_hang == 5)
                             <li class="progtrckr-done">
                                 <h5>Trả hàng</h5>
+                                <h6>
+                                    @php
+                                        $check = false;
+                                    @endphp
+                                    @foreach ($lichSuDonHangs as $lichSuDonHang)
+                                        @if ($lichSuDonHang->trang_thai == 5)
+                                            {{ $lichSuDonHang->created_at }}
+                                            @php
+                                                $check = true;
+                                            @endphp
+                                        @endif
+                                    @endforeach
+                                    @if ($check == false)
+                                        Chưa xử lý
+                                    @endif
+                                </h6>
                             </li>
                         @endif
 
@@ -213,6 +277,22 @@
                                 <li class="progtrckr-todo">
                             @endif
                             <h5>Hoàn thành</h5>
+                            <h6>
+                                @php
+                                    $check = false;
+                                @endphp
+                                @foreach ($lichSuDonHangs as $lichSuDonHang)
+                                    @if ($lichSuDonHang->trang_thai == 4)
+                                        {{ $lichSuDonHang->created_at }}
+                                        @php
+                                            $check = true;
+                                        @endphp
+                                    @endif
+                                @endforeach
+                                @if ($check == false)
+                                    Chưa xử lý
+                                @endif
+                            </h6>
                             </li>
                         @endif
                     </ol>

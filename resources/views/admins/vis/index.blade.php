@@ -1,7 +1,22 @@
 @extends('layouts.admin')
 
 @section('title', 'Quản lý ví người dùng')
+@section('css')
+    <style>
+        .btn-huy-rut {
+            background-color: #dc3545;
+            /* Đỏ chuẩn Bootstrap */
+            color: white;
+            border: none;
+        }
 
+        .btn-huy-rut:hover {
+            background-color: #b02a37;
+            /* Đỏ đậm hơn khi hover */
+            color: white;
+        }
+    </style>
+@endsection
 @section('content')
     <div class="container mt-4">
         <h2 class="mb-4" style="color: #009688; font-weight: 700; font-size: 2.5rem;">Danh sách ví người dùng</h2>
@@ -106,9 +121,41 @@
                                             <input type="hidden" name="trang_thai" value="1">
                                             <button type="submit" class="btn btn-sm"
                                                 style="background-color: #009688; color: white; font-weight: 600;">
-                                                Duyệt rút tiền
+                                                ✔  Duyệt rút tiền
                                             </button>
                                         </form>
+                                        <br>
+                                        <!-- Nút Huỷ rút tiền -->
+                                        <button type="button" class="btn btn-sm btn-huy-rut" data-bs-toggle="modal"
+                                            data-bs-target="#huyRutModal-{{ $user->id }}">
+                                            ❌ Huỷ rút tiền
+                                        </button>
+
+                                        <!-- Modal nhập lý do huỷ -->
+                                        <div class="modal fade" id="huyRutModal-{{ $user->id }}" tabindex="-1">
+                                            <div class="modal-dialog">
+                                                <form method="POST" action="{{ route('admin.vis.xuLyRutNhieu') }}">
+                                                    @csrf
+                                                    <input type="hidden" name="trang_thai" value="2">
+                                                    @foreach ($rutChuaXuLy as $giaoDich)
+                                                        <input type="hidden" name="ids[]" value="{{ $giaoDich->id }}">
+                                                    @endforeach
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title">Nhập lý do huỷ yêu cầu rút tiền</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <textarea name="ly_do" class="form-control" rows="4"
+                                                                placeholder="Nhập lý do huỷ..." required></textarea>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="submit" class="btn btn-danger">Xác nhận huỷ</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
                                     @else
                                         <span class="text-muted">Không có yêu cầu</span>
                                     @endif
