@@ -211,6 +211,8 @@
                         @if ($binhLuans->count() > 2)
                             <div class="text-center mt-3">
                                 <button id="btn-xem-them" class="btn btn-outline-primary btn-sm">Xem thêm bình luận</button>
+                                <button id="btn-thu-gon" class="btn btn-outline-secondary btn-sm d-none mt-2">Thu gọn
+                                    lại</button>
                             </div>
                         @endif
 
@@ -235,12 +237,32 @@
         </script>
     @endpush
     <script>
-        document.getElementById('btn-xem-them')?.addEventListener('click', function () {
-            document.querySelectorAll('.binhluan-item.d-none').forEach(function (item) {
-                item.classList.remove('d-none');
+        const btnXemThem = document.getElementById('btn-xem-them');
+        const btnThuGon = document.getElementById('btn-thu-gon');
+        const binhLuans = document.querySelectorAll('.binhluan-item');
+
+        btnXemThem?.addEventListener('click', function() {
+            binhLuans.forEach(item => item.classList.remove('d-none'));
+            btnXemThem.classList.add('d-none');
+            btnThuGon.classList.remove('d-none');
+
+            // Scroll nhẹ xuống cuối
+            btnThuGon.scrollIntoView({
+                behavior: 'smooth'
             });
-            this.style.display = 'none';
+        });
+
+        btnThuGon?.addEventListener('click', function() {
+            binhLuans.forEach((item, index) => {
+                if (index > 1) item.classList.add('d-none');
+            });
+            btnThuGon.classList.add('d-none');
+            btnXemThem.classList.remove('d-none');
+
+            // Scroll về vị trí đầu bình luận
+            document.querySelector('.comment-box')?.scrollIntoView({
+                behavior: 'smooth'
+            });
         });
     </script>
-
 @endsection
