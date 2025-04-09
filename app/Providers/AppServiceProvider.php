@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\Log;
 use App\Models\BaiViet;
 use App\Models\Setting;
 use App\Models\PhieuGiamGia;
@@ -33,7 +34,7 @@ class AppServiceProvider extends ServiceProvider
         View::composer('*', function ($view) {
             $view->with('globalSetting', Setting::first());
         });
-       
+
         View::composer('*', function ($view) {
             $view->with('danhMucsp', ClientDanhMucSanPham::all());
         });
@@ -75,7 +76,7 @@ class AppServiceProvider extends ServiceProvider
             View::composer('*', function ($view) {
                 $userId = Auth::id();
                 $phieuGiamGiaThanhToans = collect(); // Khởi tạo Collection rỗng nếu user chưa đăng nhập
-        
+
                 if ($userId) {
                     $phieuGiamGiaThanhToans = PhieuGiamGia::where('trang_thai', 1)
                         ->where('ngay_bat_dau', '<=', now())
@@ -85,7 +86,7 @@ class AppServiceProvider extends ServiceProvider
                         // })
                         ->get();
                 }
-                
+
                 // Chia sẻ biến $phieuGiamGiaThanhToans cho tất cả các view
                 $view->with('phieuGiamGiaThanhToans', $phieuGiamGiaThanhToans);
             });
@@ -95,6 +96,6 @@ class AppServiceProvider extends ServiceProvider
                 $soDuVi = $user?->vi?->so_du ?? 0;
                 $view->with('soDuVi', $soDuVi);
             });
-        
+
     }
 }

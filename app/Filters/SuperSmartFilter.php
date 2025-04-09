@@ -73,6 +73,11 @@ class SuperSmartFilter
             $value = implode(',', $value);
         }
 
+        if ($key === 'role') {
+            $this->applyRoleFilter($value);
+            return;
+        }
+
         if (Str::contains($key, '.')) {
             $this->applyRelationshipFilter($key, $value);
             return;
@@ -192,6 +197,16 @@ class SuperSmartFilter
                     Log::info("Applying exact match: $baseField = $value");
                     $query->where($baseField, '=', $value);
                 }
+        }
+    }
+
+    protected function applyRoleFilter($value)
+    {
+        Log::info("Applying role filter: value=$value");
+        if ($value !== '') { // Bỏ qua nếu chọn "-- Tất cả --"
+            $this->builder->whereHas('roles', function ($query) use ($value) {
+                $query->where('id', $value); // Lọc theo role_id
+            });
         }
     }
 }

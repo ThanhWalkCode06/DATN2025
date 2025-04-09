@@ -27,7 +27,7 @@ class UserController extends Controller
 
     public function search(Request $request)
     {
-
+        // dd(request()->all());
         $lists = User::with('roles')->superFilter($request)->paginate();
         if ($request->ajax()) {
             return response()->json([

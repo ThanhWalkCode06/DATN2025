@@ -186,7 +186,7 @@
                                     </li>
 
                                     <li class="pb-0">
-                                        <h4>Ngày giao hàng dự kiến:</h4>
+                                        <h4>Ngày đặt hàng:</h4>
                                         <h4 class="price theme-color">
                                             <a href="{{ route('order-tracking.client', $donHang->id) }}"
                                                 class="text-danger">Kiểm tra đơn hàng</a>
