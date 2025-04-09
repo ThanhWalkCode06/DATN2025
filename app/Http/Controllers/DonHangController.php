@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\ChiTietDonHang;
 use App\Http\Requests\StoreDonHangRequest;
 use App\Http\Requests\UpdateDonHangRequest;
+use App\Models\LichSuDonHang;
 
 class DonHangController extends Controller
 {
@@ -82,13 +83,15 @@ class DonHangController extends Controller
             ->where('don_hang_id', '=', $donhang->id)
             ->get();
 
+        $lichSuDonHangs = LichSuDonHang::where('don_hang_id', '=', $donhang->id)->get();
+
         $tongGiaTri = 0;
 
         foreach ($chiTietDonHangs as $chiTietDonHang) {
             $tongGiaTri += $chiTietDonHang->gia_ban * $chiTietDonHang->so_luong;
         }
 
-        return view('admins.donhangs.show', compact('donHang', 'chiTietDonHangs', 'tongGiaTri'));
+        return view('admins.donhangs.show', compact('donHang', 'chiTietDonHangs', 'lichSuDonHangs', 'tongGiaTri'));
     }
 
     /**
@@ -109,26 +112,29 @@ class DonHangController extends Controller
     public function update(UpdateDonHangRequest $request, DonHang $donhang)
     {
         if ($request->doi_trang_thai) {
+            $data = [
+                'trang_thai_don_hang' => $request->trang_thai
+            ];
+
+            $lichSuDonHang = [
+                'don_hang_id' => $donhang->id,
+                'trang_thai' => $request->trang_thai
+            ];
+
             if ($request->trang_thai == 3) {
-                $data = [
-                    'trang_thai_don_hang' => $request->trang_thai,
-                    'trang_thai_thanh_toan' => 1
-                ];
-            } else {
-                $data = [
-                    'trang_thai_don_hang' => $request->trang_thai
-                ];
+                $data['trang_thai_thanh_toan'] = 1;
             }
 
             DonHang::where("id", $donhang->id)->update($data);
+            LichSuDonHang::create($lichSuDonHang);
         }
 
-        if ($request->xac_nhan_thanh_toan) {
-            $data = [
-                'trang_thai_thanh_toan' => 1
-            ];
-            DonHang::where("id", $donhang->id)->update($data);
-        }
+        // if ($request->xac_nhan_thanh_toan) {
+        //     $data = [
+        //         'trang_thai_thanh_toan' => 1
+        //     ];
+        //     DonHang::where("id", $donhang->id)->update($data);
+        // }
 
         if ($request->huy_don_hang) {
             $data = [
