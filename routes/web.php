@@ -268,5 +268,21 @@ Route::get('/vi-nguoi-dung', [AdminViController::class, 'index'])->name('vis.ind
 Route::get('/admin/vi-nguoi-dung/{id}', [AdminViController::class, 'show'])->name('admin.vis.show');
 Route::post('/admin/vi-nguoi-dung/update-trang-thai', [AdminViController::class, 'updateTrangThai'])->name('admin.vis.updateTrangThai');
 
+Route::middleware(['auth'])->group(function () {
+    Route::get('/binhluan', [BinhLuanController::class, 'index'])->name('binhluans.index');
+    Route::get('/binhluan/{id}', [BinhLuanController::class, 'show'])->name('binhluans.show');
+    Route::patch('/binhluan/{id}/toggle', [BinhLuanController::class, 'toggle'])->name('binhluans.toggle');
+});
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::resource('binhluans', BinhLuanController::class);
+});
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::patch('binhluans/{id}/toggle', [BinhLuanController::class, 'toggle'])->name('binhluans.toggle');
+});
+Route::post('/admin/binhluan/{id}/reply', [BinhLuanController::class, 'store'])->name('admins.binhluan.store');
 
+Route::post('/danh-gia/update-status/{id}', [DanhGiaController::class, 'updateStatus']);
+Route::post('/binhluan/{id}/reply', [BinhLuanController::class, 'store'])->name('binhluan.reply')->middleware('auth');
+
+Route::post('/binhluan', [BinhLuanController::class, 'store'])->name('binhluan.store');
 
