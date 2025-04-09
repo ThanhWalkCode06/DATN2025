@@ -14,7 +14,7 @@
         @csrf
         <div class="mb-3">
             <label for="so_tien" class="form-label">Số tiền muốn nạp (VNĐ)</label>
-            <input type="number" name="so_tien" id="so_tien" class="form-control" required min="1000">
+            <input type="number" name="so_tien" id="so_tien" class="form-control" required min="10000">
         </div>
 
         <button type="submit" class="btn btn-success w-100" style="background-color: #009688; border: none;">

@@ -223,7 +223,7 @@ class ThanhToanController extends Controller
                 'vi_id' => $user->vi->id,
                 'so_tien' => -$tongTien,
                 'loai' => 'Mua hàng',
-                'mo_ta' => '🛒 Mua hàng | Đơn #' . $donHang->ma_don_hang . ' | Số dư: '
+                'mo_ta' => '🛒 Mua hàng | Đơn #' . $donHang->ma_don_hang . ' |💰 Số dư: '
                     . number_format($soDuTruoc, 0, ',', '.') . ' ➝ ' . number_format($soDuSau, 0, ',', '.') . ' VNĐ',
                 'trang_thai' => 1, // Thành công
                 'created_at' => now(),
