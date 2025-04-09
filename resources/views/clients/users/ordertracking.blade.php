@@ -270,44 +270,37 @@
                                 </div>
                             </div>
 
-                            @php
-                                $statusChart = $donHang->trang_thai_don_hang;
-                            @endphp
-                            <div class="col-12 overflow-hidden">
-                                <ol class="progtrckr">
-                                    <li class="progtrckr-{{ $statusChart >= 0 ? 'done' : 'todo' }}">
-                                        <h5>Chờ xác nhận</h5>
-                                    </li>
-                                    <li class="progtrckr-{{ $statusChart >= 1 ? 'done' : 'todo' }}">
-                                        <h5>Đang xử lý</h5>
-                                    </li>
-                                    <li class="progtrckr-{{ $statusChart >= 2 ? 'done' : 'todo' }}">
-                                        <h5>Đang giao</h5>
-                                    </li>
-                                    <li class="progtrckr-{{ $statusChart >= 3 ? 'done' : 'todo' }}">
-                                        <h5>Đã giao</h5>
-                                    </li>
-
-                                    <li class="progtrckr-{{ $statusChart >= 4 && $statusChart != 5 ? 'done' : 'todo' }}">
-                                        <h5>Đã nhận hàng</h5>
-                                    </li>
-
-                                    <!-- Trạng thái trả hàng -->
-                                    @if ($statusChart == 5)
-                                        <li class="progtrckr-done">
-                                            <h5>Trả hàng</h5>
-                                        </li>
-                                    @endif
-
-
-                                    {{-- <li class="progtrckr-todo">
-                                    <h5>Shipped</h5>
-                                    <h6>Pending</h6>
+                        @php
+                        $statusChart = $donHang->trang_thai_don_hang;
+                        @endphp
+                        <div class="col-12 overflow-hidden">
+                            <ol class="progtrckr">
+                                <li class="progtrckr-{{ $statusChart >= 0 ? 'done' : 'todo' }}">
+                                    <h5>Chờ xác nhận</h5>
                                 </li>
-                                <li class="progtrckr-todo">
-                                    <h5>Delivered</h5>
-                                    <h6>Pending</h6>
-                                </li> --}}
+                                <li class="progtrckr-{{ $statusChart >= 1 ? 'done' : 'todo' }}">
+                                    <h5>Đang xử lý</h5>
+                                </li>
+                                <li class="progtrckr-{{ $statusChart >= 2 ? 'done' : 'todo' }}">
+                                    <h5>Đang giao</h5>
+                                </li>
+                                <li class="progtrckr-{{ $statusChart >= 3 ? 'done' : 'todo' }}">
+                                    <h5>Đã giao</h5>
+                                </li>
+
+                                <li class="progtrckr-{{ $statusChart >= 4 && $statusChart != 5 ? 'done' : 'todo' }}">
+                                    <h5>Đã nhận hàng</h5>
+                                </li>
+
+                                <!-- Trạng thái trả hàng -->
+                                @if ($statusChart == 5)
+                                    <li class="progtrckr-done">
+                                        <h5>Trả hàng</h5>
+                                    </li>
+                                @endif
+
+
+
                                 </ol>
                             </div>
                         </div>
@@ -331,25 +324,31 @@
                                         <th>Tên sản phẩm</th>
                                         <th>Giá sản phẩm</th>
                                         <th>Số lượng</th>
+                                        <th>Hành động</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach ($bienThesList as $index => $item)
-                                        <tr>
-                                            <td style="line-height: 126px">{{ $index++ }}</td>
-                                            <td>
-                                                <img style="width: 100px; height: 100px"
-                                                    src="{{ Storage::url($item['anh_bien_the']) }}" alt="">
-                                            </td>
-                                            <td style="line-height: 126px">
-                                                <a href="{{ route('sanphams.chitiet', $item['id_san_pham']) }}">
-                                                    {{ $item['ten_bien_the'] }}
-                                                </a>
-                                            </td>
-                                            <td style="color: #0da487;line-height: 126px">
-                                                {{ number_format($item['gia_ban'], 0, '', '.') }} đ</td>
-                                            <td style="line-height: 126px">{{ $item['so_luong'] }}</td>
-                                        </tr>
+                                    <tr>
+                                        <td style="line-height: 126px">{{ $index++ }}</td>
+                                        <td>
+                                            <img style="width: 100px; height: 100px" src="{{ Storage::url($item['anh_bien_the']) }}" alt="">
+                                        </td>
+                                        <td style="line-height: 126px">
+                                            <a href="{{ route('sanphams.chitiet',$item['id_san_pham']) }}">
+                                            {{ $item['ten_bien_the'] }}
+                                            </a>
+                                        </td>
+                                        <td style="color: #0da487;line-height: 126px">{{ number_format($item['gia_ban'],0,'','.') }} đ</td>
+                                        <td style="line-height: 126px">{{ $item['so_luong'] }}</td>
+                                        <td style="line-height: 126px">
+                                            @if ($statusChart == 4)
+                                            <a style="width:100px;height:30px" href="{{ route('sanphams.chitiet',$item['id_san_pham']) }}" style="border: none" class="btn-primary btn-sm">
+                                                Đánh giá sản phẩm
+                                            </a>
+                                            @endif
+                                        </td>
+                                    </tr>
                                     @endforeach
 
                                 </tbody>
@@ -362,186 +361,7 @@
         </section>
         <!-- Order Table Section End -->
 
-
-        <!-- Location Modal Start -->
-        <div class="modal location-modal fade theme-modal" id="locationModal" tabindex="-1">
-            <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Choose your Delivery Location</h5>
-                        <p class="mt-1 text-content">Enter your address and we will specify the offer for your area.</p>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal">
-                            <i class="fa-solid fa-xmark"></i>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="location-list">
-                            <div class="search-input">
-                                <input type="search" class="form-control" placeholder="Search Your Area">
-                                <i class="fa-solid fa-magnifying-glass"></i>
-                            </div>
-
-                            <div class="disabled-box">
-                                <h6>Select a Location</h6>
-                            </div>
-
-                            <ul class="location-select custom-height">
-                                <li>
-                                    <a href="javascript:void(0)">
-                                        <h6>Alabama</h6>
-                                        <span>Min: $130</span>
-                                    </a>
-                                </li>
-
-                                <li>
-                                    <a href="javascript:void(0)">
-                                        <h6>Arizona</h6>
-                                        <span>Min: $150</span>
-                                    </a>
-                                </li>
-
-                                <li>
-                                    <a href="javascript:void(0)">
-                                        <h6>California</h6>
-                                        <span>Min: $110</span>
-                                    </a>
-                                </li>
-
-                                <li>
-                                    <a href="javascript:void(0)">
-                                        <h6>Colorado</h6>
-                                        <span>Min: $140</span>
-                                    </a>
-                                </li>
-
-                                <li>
-                                    <a href="javascript:void(0)">
-                                        <h6>Florida</h6>
-                                        <span>Min: $160</span>
-                                    </a>
-                                </li>
-
-                                <li>
-                                    <a href="javascript:void(0)">
-                                        <h6>Georgia</h6>
-                                        <span>Min: $120</span>
-                                    </a>
-                                </li>
-
-                                <li>
-                                    <a href="javascript:void(0)">
-                                        <h6>Kansas</h6>
-                                        <span>Min: $170</span>
-                                    </a>
-                                </li>
-
-                                <li>
-                                    <a href="javascript:void(0)">
-                                        <h6>Minnesota</h6>
-                                        <span>Min: $120</span>
-                                    </a>
-                                </li>
-
-                                <li>
-                                    <a href="javascript:void(0)">
-                                        <h6>New York</h6>
-                                        <span>Min: $110</span>
-                                    </a>
-                                </li>
-
-                                <li>
-                                    <a href="javascript:void(0)">
-                                        <h6>Washington</h6>
-                                        <span>Min: $130</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Location Modal End -->
-
-        <!-- Deal Box Modal Start -->
-        <div class="modal fade theme-modal deal-modal" id="deal-box" tabindex="-1">
-            <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <div>
-                            <h5 class="modal-title w-100" id="deal_today">Deal Today</h5>
-                            <p class="mt-1 text-content">Recommended deals for you.</p>
-                        </div>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal">
-                            <i class="fa-solid fa-xmark"></i>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="deal-offer-box">
-                            <ul class="deal-offer-list">
-                                <li class="list-1">
-                                    <div class="deal-offer-contain">
-                                        <a href="shop-left-sidebar.html" class="deal-image">
-                                            <img src="{{ asset('assets/images/box.png') }}" class="blur-up lazyload"
-                                                alt="">
-                                        </a>
-
-                                        <a href="shop-left-sidebar.html" class="deal-contain">
-                                            <h5>Blended Instant Coffee 50 g Buy 1 Get 1 Free</h5>
-                                            <h6>$52.57 <del>57.62</del> <span>500 G</span></h6>
-                                        </a>
-                                    </div>
-                                </li>
-
-                                <li class="list-2">
-                                    <div class="deal-offer-contain">
-                                        <a href="shop-left-sidebar.html" class="deal-image">
-                                            <img src="../assets/images/vegetable/product/11.png" class="blur-up lazyload"
-                                                alt="">
-                                        </a>
-
-                                        <a href="shop-left-sidebar.html" class="deal-contain">
-                                            <h5>Blended Instant Coffee 50 g Buy 1 Get 1 Free</h5>
-                                            <h6>$52.57 <del>57.62</del> <span>500 G</span></h6>
-                                        </a>
-                                    </div>
-                                </li>
-
-                                <li class="list-3">
-                                    <div class="deal-offer-contain">
-                                        <a href="shop-left-sidebar.html" class="deal-image">
-                                            <img src="../assets/images/vegetable/product/12.png" class="blur-up lazyload"
-                                                alt="">
-                                        </a>
-
-                                        <a href="shop-left-sidebar.html" class="deal-contain">
-                                            <h5>Blended Instant Coffee 50 g Buy 1 Get 1 Free</h5>
-                                            <h6>$52.57 <del>57.62</del> <span>500 G</span></h6>
-                                        </a>
-                                    </div>
-                                </li>
-
-                                <li class="list-1">
-                                    <div class="deal-offer-contain">
-                                        <a href="shop-left-sidebar.html" class="deal-image">
-                                            <img src="../assets/images/vegetable/product/13.png" class="blur-up lazyload"
-                                                alt="">
-                                        </a>
-
-                                        <a href="shop-left-sidebar.html" class="deal-contain">
-                                            <h5>Blended Instant Coffee 50 g Buy 1 Get 1 Free</h5>
-                                            <h6>$52.57 <del>57.62</del> <span>500 G</span></h6>
-                                        </a>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </body>
+</body>
 @endsection
 
 

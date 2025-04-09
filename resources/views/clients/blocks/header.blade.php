@@ -134,7 +134,7 @@
                                                 @foreach ($gioHang->take(4) as $item)
                                                     <li style="width: 100%" class="product-box-contain">
                                                         <div class="drop-cart">
-                                                            <a href="{{ route('sanphams.chitiet', $item->id) }}"
+                                                            <a href="{{ route('sanphams.chitiet', $item->bienThe->SanPham->id) }}"
                                                                 class="drop-image">
                                                                 <img src="{{ Storage::url($item->bienThe->anh_bien_the) }}"
                                                                     class="blur-up lazyload" alt="">
@@ -143,7 +143,7 @@
                                                             <div class="drop-contain">
 
                                                                 <div class="drop-contain">
-                                                                    <a href="{{ route('sanphams.chitiet', $item->id) }}">
+                                                                    <a href="{{ route('sanphams.chitiet', $item->bienThe->SanPham->id) }}">
                                                                         <h5>{{ $item->bienThe->sanPham->ten_san_pham }}</h5>
                                                                         <h6>{{ $item->bienThe->ten_bien_the }}</h6>
                                                                     </a>
