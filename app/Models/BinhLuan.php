@@ -43,9 +43,9 @@ class BinhLuan extends Model
 
     // Mối quan hệ với các bình luận con (replies)
     public function replies()
-    {
-        return $this->hasMany(BinhLuan::class, 'parent_id');
-    }
+{
+    return $this->hasMany(BinhLuan::class, 'parent_id')->where('trang_thai', 1);
+}
 
     // Scope lọc bình luận hiển thị (trang_thai = 1)
     public function scopeHienThi($query)
