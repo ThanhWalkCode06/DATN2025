@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\Client\UserRequest;
+use App\Models\LichSuDonHang;
 
 class UserController extends Controller
 {
@@ -103,6 +104,13 @@ class UserController extends Controller
                             "ly_do" => $request->ly_do
                         ]);
 
+                        $lichSuDonHang = [
+                            'don_hang_id' => $donHang->id,
+                            'trang_thai' => $request->trang_thai
+                        ];
+
+                        LichSuDonHang::create($lichSuDonHang);
+
                         return redirect()->back()->with('success', 'Huỷ đơn hàng thành công');
                     }
 
@@ -186,12 +194,11 @@ class UserController extends Controller
                             'mo_ta' => "↩️ Hoàn tiền do trả đơn hàng {$donHang->ma_don_hang}\n 💰 Số dư: "
                                 . number_format($soDuTruoc, 0, ',', '.') 
                                 . " ➝ " 
-                                . number_format($soDuMoi, 0, ',', '.') 
+                                . number_format($soDuMoi, 0, ',', '.')
                                 . " VNĐ",
                             'created_at' => now(),
                             'updated_at' => now(),
                         ]);
-                        
 
                         // Gửi thông báo thành công và hiển thị số dư
                         session()->flash('success', 'Đơn hàng đã được trả và hoàn tiền thành công. Số dư ví hiện tại: ' . number_format($soDuMoi, 0, ',', '.') . ' VNĐ');
@@ -205,6 +212,13 @@ class UserController extends Controller
                         "ly_do" => $request->ly_do,
                     ]);
 
+                    $lichSuDonHang = [
+                        'don_hang_id' => $donHang->id,
+                        'trang_thai' => $request->trang_thai
+                    ];
+
+                    LichSuDonHang::create($lichSuDonHang);
+
                     return redirect()->back();
                 }
             }
@@ -216,6 +230,13 @@ class UserController extends Controller
                     $donHang->update([
                         "trang_thai_don_hang" => $request->trang_thai
                     ]);
+
+                    $lichSuDonHang = [
+                        'don_hang_id' => $donHang->id,
+                        'trang_thai' => $request->trang_thai
+                    ];
+
+                    LichSuDonHang::create($lichSuDonHang);
                     return redirect()->back()->with('success', 'Cập nhật trạng thái đơn hàng thành công');
                 }
             }
