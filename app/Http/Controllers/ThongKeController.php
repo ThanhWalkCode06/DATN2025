@@ -18,30 +18,50 @@ class ThongKeController extends Controller
     {
         // Kiểm tra xem có đang lọc không
         $hasDateFilter = $request->has('start_date') && $request->has('end_date');
-
+    
         if ($hasDateFilter) {
             $startDate = $request->input('start_date');
             $endDate = $request->input('end_date');
         } else {
-            // Nếu không có lọc, mặc định lấy ngày hiện tại
             $startDate = now()->format('Y-m-d');
             $endDate = now()->format('Y-m-d');
         }
-
+    
         // Ngăn chặn ngày tương lai
         $today = now()->format('Y-m-d');
         if ($startDate > $today) $startDate = $today;
         if ($endDate > $today) $endDate = $today;
-
-        // Chuyển sang Carbon để xử lý thời gian chính xác
+    
+        // Chuyển sang Carbon
         $startDate = Carbon::parse($startDate)->startOfDay();
         $endDate = Carbon::parse($endDate)->endOfDay();
-
-        // Thống kê
+    
+        // Tổng số lượng đơn hàng và khách hàng theo ngày lọc
         $tongDonHang = DonHang::whereBetween('created_at', [$startDate, $endDate])->count();
         $tongSanPhamConHang = SanPham::where('trang_thai', 1)->count();
         $tongKhachHangHoatDong = User::where('trang_thai', 1)->count();
-
+    
+        // Lấy thống kê ngày hôm qua
+        $yesterdayStart = Carbon::yesterday()->startOfDay();
+        $yesterdayEnd = Carbon::yesterday()->endOfDay();
+    
+        $tongDonHangHomQua = DonHang::whereBetween('created_at', [$yesterdayStart, $yesterdayEnd])->count();
+        $tongKhachHangHomQua = User::whereBetween('created_at', [$yesterdayStart, $yesterdayEnd])->count();
+    
+        // Tính phần trăm thay đổi đơn hàng
+        if ($tongDonHangHomQua == 0) {
+            $phanTramThayDoiDonHang = $tongDonHang > 0 ? 100 : 0;
+        } else {
+            $phanTramThayDoiDonHang = (($tongDonHang - $tongDonHangHomQua) / $tongDonHangHomQua) * 100;
+        }
+    
+        // Tính phần trăm thay đổi khách hàng
+        if ($tongKhachHangHomQua == 0) {
+            $phanTramThayDoiKhachHang = $tongKhachHangHoatDong > 0 ? 100 : 0;
+        } else {
+            $phanTramThayDoiKhachHang = (($tongKhachHangHoatDong - $tongKhachHangHomQua) / $tongKhachHangHomQua) * 100;
+        }
+    
         $trangThaiMapping = [
             'chua_xac_nhan' => 0,
             'dang_xu_ly' => 1,
@@ -51,22 +71,39 @@ class ThongKeController extends Controller
             'da_huy' => -1,
             'tra_hang' => 5
         ];
-
+    
         $query = DonHang::whereBetween('created_at', [$startDate, $endDate]);
-
+    
         if ($request->has('trang_thai') && array_key_exists($request->trang_thai, $trangThaiMapping)) {
             $query->where('trang_thai_don_hang', $trangThaiMapping[$request->trang_thai]);
         }
-
+    
         $donHangs = $query->orderBy('created_at', 'desc')->paginate(10);
-
+    
+        // Tổng doanh thu
         $tongDoanhThu = DB::table('chi_tiet_don_hangs')
             ->join('bien_thes', 'bien_thes.id', '=', 'chi_tiet_don_hangs.bien_the_id')
             ->join('don_hangs', 'don_hangs.id', '=', 'chi_tiet_don_hangs.don_hang_id')
             ->where('don_hangs.trang_thai_don_hang', 3)
             ->whereBetween('don_hangs.created_at', [$startDate, $endDate])
             ->sum(DB::raw('chi_tiet_don_hangs.so_luong * bien_thes.gia_ban'));
-
+    
+        // Tổng doanh thu hôm qua
+        $tongDoanhThuHomQua = DB::table('chi_tiet_don_hangs')
+            ->join('bien_thes', 'bien_thes.id', '=', 'chi_tiet_don_hangs.bien_the_id')
+            ->join('don_hangs', 'don_hangs.id', '=', 'chi_tiet_don_hangs.don_hang_id')
+            ->where('don_hangs.trang_thai_don_hang', 3)
+            ->whereBetween('don_hangs.created_at', [$yesterdayStart, $yesterdayEnd])
+            ->sum(DB::raw('chi_tiet_don_hangs.so_luong * bien_thes.gia_ban'));
+    
+        // Tính phần trăm tăng giảm doanh thu
+        if ($tongDoanhThuHomQua == 0) {
+            $phanTramTangGiamDoanhThu = $tongDoanhThu > 0 ? 100 : 0;
+        } else {
+            $phanTramTangGiamDoanhThu = (($tongDoanhThu - $tongDoanhThuHomQua) / $tongDoanhThuHomQua) * 100;
+        }
+    
+        // Top doanh thu
         $topDoanhThu = DB::table('chi_tiet_don_hangs')
             ->join('bien_thes', 'bien_thes.id', '=', 'chi_tiet_don_hangs.bien_the_id')
             ->join('san_phams', 'san_phams.id', '=', 'bien_thes.san_pham_id')
@@ -83,7 +120,8 @@ class ThongKeController extends Controller
             ->orderByDesc('tong_doanh_thu')
             ->take(5)
             ->get();
-
+    
+        // Top sản phẩm bán chạy
         $topBanChay = DB::table('chi_tiet_don_hangs')
             ->join('bien_thes', 'bien_thes.id', '=', 'chi_tiet_don_hangs.bien_the_id')
             ->join('san_phams', 'san_phams.id', '=', 'bien_thes.san_pham_id')
@@ -100,27 +138,24 @@ class ThongKeController extends Controller
             ->orderByDesc('tong_da_ban')
             ->take(5)
             ->get();
-
+    
+        // Top khách hàng
         $topKhachHang = DB::table('don_hangs')
-            ->join('users', 'users.id', '=', 'don_hangs.user_id') // Liên kết bảng 'users' với bảng 'don_hangs'
+            ->join('users', 'users.id', '=', 'don_hangs.user_id')
             ->select(
                 'users.id',
-                'users.ten_nguoi_dung', // Trường tên người dùng trong bảng 'users'
-                'users.anh_dai_dien', // Dùng trường 'anh_dai_dien' thay cho 'hinh_anh'
-                DB::raw('COUNT(don_hangs.id) as so_luong_don_hang') // Đếm số lượng đơn hàng của mỗi khách hàng
+                'users.ten_nguoi_dung',
+                'users.anh_dai_dien',
+                DB::raw('COUNT(don_hangs.id) as so_luong_don_hang')
             )
-            ->where('don_hangs.trang_thai_don_hang', 3) // Chỉ lấy đơn hàng đã giao
-            ->whereBetween('don_hangs.created_at', [$startDate, $endDate]) // Lọc theo thời gian
-            ->groupBy('users.id', 'users.ten_nguoi_dung', 'users.anh_dai_dien') // Nhóm theo người dùng
-            ->orderByDesc('so_luong_don_hang') // Sắp xếp theo số lượng đơn hàng giảm dần
-            ->take(5) // Lấy top 5 khách hàng
+            ->where('don_hangs.trang_thai_don_hang', 3)
+            ->whereBetween('don_hangs.created_at', [$startDate, $endDate])
+            ->groupBy('users.id', 'users.ten_nguoi_dung', 'users.anh_dai_dien')
+            ->orderByDesc('so_luong_don_hang')
+            ->take(5)
             ->get();
-
-
-
-
-
-        // Biểu đồ doanh thu theo tháng (năm hiện tại)
+    
+        // Biểu đồ doanh thu theo tháng
         $doanhThuTheoThang = DB::table('chi_tiet_don_hangs')
             ->join('bien_thes', 'bien_thes.id', '=', 'chi_tiet_don_hangs.bien_the_id')
             ->join('don_hangs', 'don_hangs.id', '=', 'chi_tiet_don_hangs.don_hang_id')
@@ -132,12 +167,12 @@ class ThongKeController extends Controller
             ->orderBy('thang')
             ->pluck('doanh_thu', 'thang')
             ->toArray();
-
+    
         $dataChart = array_fill(0, 12, 0);
         foreach ($doanhThuTheoThang as $thang => $doanhThu) {
             $dataChart[$thang - 1] = $doanhThu;
         }
-
+    
         return view('admins.index', compact(
             'tongDoanhThu',
             'tongDonHang',
@@ -147,7 +182,11 @@ class ThongKeController extends Controller
             'donHangs',
             'topBanChay',
             'topKhachHang',
-            'topDoanhThu'
+            'topDoanhThu',
+            'phanTramThayDoiDonHang',
+            'phanTramThayDoiKhachHang',
+            'phanTramTangGiamDoanhThu'
         ));
     }
+    
 }

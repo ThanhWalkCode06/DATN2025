@@ -41,12 +41,20 @@
                     <div class="media-body p-0">
                         <span class="m-0">Tổng doanh thu</span>
                         <h4 class="mb-0 counter">
-                            {{ number_format($tongDoanhThu, 0, ',', '.') }}
+                            {{ number_format($tongDoanhThu, 0, ',', '.') }} 
                             <span class="badge badge-light-primary grow">
-                                <i data-feather="dollar-sign"></i>
+                                <i class="fas fa-money-bill-wave"></i>
+                                @if ($phanTramTangGiamDoanhThu > 0)
+                                    <span class="text-success">+{{ number_format($phanTramTangGiamDoanhThu, 2) }}%</span>
+                                @elseif ($phanTramTangGiamDoanhThu < 0)
+                                    <span class="text-danger">{{ number_format($phanTramTangGiamDoanhThu, 2) }}%</span>
+                                @else
+                                    <span class="text-muted">0%</span>
+                                @endif
                             </span>
                         </h4>
                     </div>
+                    
                     <div class="align-self-center text-center">
                         <i class="ri-database-2-line"></i>
                     </div>
@@ -64,8 +72,9 @@
                         <span class="m-0">Số lượng đơn hàng</span>
                         <h4 class="mb-0 counter">
                             {{ $tongDonHang }}
-                            <span class="badge badge-light-danger grow">
-                                <i data-feather="trending-down"></i>8.5%
+                            <span class="badge {{ $phanTramThayDoiDonHang >= 0 ? 'badge-light-success' : 'badge-light-danger' }} grow">
+                                <i data-feather="{{ $phanTramThayDoiDonHang >= 0 ? 'trending-up' : 'trending-down' }}"></i>
+                                {{ number_format($phanTramThayDoiDonHang, 1) }}%
                             </span>
                         </h4>
                     </div>
@@ -85,14 +94,14 @@
                         <span class="m-0">Số lượng sản phẩm</span>
                         <h4 class="mb-0 counter">
                             {{ $tongSanPhamConHang }}
-                            <a href="" class="badge badge-light-secondary grow">
+                            <a href="{{ route('sanphams.create') }}" class="badge badge-light-secondary grow">
                                 ADD NEW
                             </a>
                         </h4>
                     </div>
 
                     <div class="align-self-center text-center">
-                        <i class="ri-chat-3-line"></i>
+                        <i class="ri-t-shirt-line"></i> 
                     </div>
                 </div>
             </div>
@@ -107,8 +116,9 @@
                         <span class="m-0">Tổng số lượng khách hàng</span>
                         <h4 class="mb-0 counter">
                             {{ $tongKhachHangHoatDong }}
-                            <span class="badge badge-light-success grow">
-                                <i data-feather="trending-down"></i>8.5%
+                            <span class="badge {{ $phanTramThayDoiKhachHang >= 0 ? 'badge-light-success' : 'badge-light-danger' }} grow">
+                                <i data-feather="{{ $phanTramThayDoiKhachHang >= 0 ? 'trending-up' : 'trending-down' }}"></i>
+                                {{ number_format($phanTramThayDoiKhachHang, 1) }}%
                             </span>
                         </h4>
                     </div>
@@ -239,7 +249,7 @@
                                                             <div class="product-detail-box">
                                                                 <h6>Doanh thu</h6>
                                                                 <h5>{{ number_format($sp->tong_doanh_thu, 0, ',', '.') }}
-                                                                    VNĐ</h5>
+                                                                    ₫</h5>
                                                             </div>
                                                         </td>
                                                     </tr>
