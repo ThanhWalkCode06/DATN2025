@@ -296,38 +296,33 @@
         }
 
 
-
-
         .product-main {
-            position: relative;
+            width: 100%;
+            max-width: 500px;
+            height: 500px;
+            margin: 0 auto;
             overflow: hidden;
-            /* Đảm bảo phần zoom không ra ngoài */
-            max-width: 100%;
-            height: auto;
+            position: relative;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fff;
         }
 
         .main-product-img {
-            width: 100%;
-            /* Ảnh chính chiếm 100% chiều rộng của container */
-            height: auto;
-            transition: transform 0.2s ease;
-            /* Hiệu ứng zoom ảnh chính khi di chuột */
-            max-width: 100%;
-            /* Đảm bảo ảnh không vượt quá container */
+            min-width: 100%;
+            min-height: 100%;
+            object-fit: cover;
+            display: block;
         }
 
-        .zoom-lens {
-            position: absolute;
-            border: 2px solid #000;
-            width: 100px;
-            height: 100px;
-            display: none;
-            cursor: zoom-in;
-            background: rgba(255, 255, 255, 0.5);
-            border-radius: 50%;
-            pointer-events: none;
-            /* Đảm bảo lens không gây cản trở chuột */
-        }
+
+
+
+
+
 
         .slick-slider .slick-slide {
             padding: 0 5px;
@@ -387,12 +382,11 @@
                                     <div class="col-12 text-center">
                                         <div class="product-main zoom-container">
                                             <img id="main-image" src="{{ asset('storage/' . $sanPhams->hinh_anh) }}"
-                                                class="img-fluid main-product-img" alt="">
-                                            <div class="zoom-lens"></div>
+                                                class="main-product-img" alt="Ảnh sản phẩm">
                                         </div>
                                     </div>
 
-                                    <!-- Slider ảnh thumbnail (ảnh chính + ảnh phụ) -->
+                                    <!-- Slider ảnh thumbnail -->
                                     <div class="col-12">
                                         <div class="left-slider-image slick-slider">
                                             <div class="thumbnail-item">
@@ -404,13 +398,16 @@
                                             @foreach ($sanPhams->anhSP as $anh)
                                                 <div class="thumbnail-item">
                                                     <img src="{{ asset('storage/' . $anh->link_anh_san_pham) }}"
-                                                        class="img-fluid image-thumbnail" alt=""
+                                                        class="img-fluid image-thumbnail" alt="Ảnh phụ"
                                                         data-large="{{ asset('storage/' . $anh->link_anh_san_pham) }}">
                                                 </div>
                                             @endforeach
                                         </div>
                                     </div>
                                 </div>
+
+
+
 
 
                             </div>
@@ -887,7 +884,8 @@
                                             </div>
 
                                             <h5 class="price">
-                                                <span class="theme-color">{{ number_format($item->giaThapNhatCuaSP(), 0, ',', '.') }}
+                                                <span
+                                                    class="theme-color">{{ number_format($item->giaThapNhatCuaSP(), 0, ',', '.') }}
                                                     ₫</span>
                                                 <del>{{ number_format($item->gia_cu, 0, ',', '.') }} ₫</del>
                                             </h5>
@@ -959,7 +957,8 @@
                                 <h5 class="name">{{ $sanPhams->ten_san_pham }}</h5>
                                 <div class="product-review-rating">
                                     <div class="product-rating">
-                                        <span class="theme-color">{{ number_format($sanPhams->giaThapNhatCuaSP(), 0, ',', '.') }}
+                                        <span
+                                            class="theme-color">{{ number_format($sanPhams->giaThapNhatCuaSP(), 0, ',', '.') }}
                                             ₫</span>
                                         <del>{{ number_format($sanPhams->gia_cu, 0, ',', '.') }} ₫</del>
                                     </div>
@@ -1244,7 +1243,7 @@
                         $(".cart-list").append(
                             '<li class="text-center"><a href="giohang">Xem thêm...</a></li>'
                         );
-                    } 
+                    }
                     // else {
                     //     Swal.fire("Lỗi", response.message, "error");
                     // }
@@ -1259,10 +1258,10 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            var swiper = new Swiper('.swiper-container', {
-                slidesPerView: 6, // Hiển thị 6 sản phẩm cùng lúc
-                spaceBetween: 10, // Khoảng cách giữa các sản phẩm
-                loop: true, // Cho phép lặp vô hạn
+            const swiper = new Swiper('.swiper-container', {
+                slidesPerView: 6,
+                spaceBetween: 10,
+                loop: false, // ❌ KHÔNG sử dụng loop
                 navigation: {
                     nextEl: '.swiper-button-next',
                     prevEl: '.swiper-button-prev',
@@ -1270,7 +1269,7 @@
                 breakpoints: {
                     1200: {
                         slidesPerView: 6
-                    }, // Màn hình lớn
+                    },
                     1024: {
                         slidesPerView: 4
                     },
@@ -1283,65 +1282,73 @@
                     320: {
                         slidesPerView: 1
                     }
+                },
+                on: {
+                    init: function() {
+                        toggleNavButtons(this); // Gọi khi khởi tạo
+                    },
+                    slideChange: function() {
+                        toggleNavButtons(this); // Gọi khi chuyển slide
+                    }
                 }
             });
+
+            function toggleNavButtons(swiperInstance) {
+                const prevBtn = document.querySelector('.swiper-button-prev');
+                const nextBtn = document.querySelector('.swiper-button-next');
+
+                // Nếu đang ở slide đầu -> ẩn nút prev
+                if (swiperInstance.isBeginning) {
+                    prevBtn.style.display = 'none';
+                } else {
+                    prevBtn.style.display = 'flex';
+                }
+
+                // Nếu đang ở slide cuối -> ẩn nút next
+                if (swiperInstance.isEnd) {
+                    nextBtn.style.display = 'none';
+                } else {
+                    nextBtn.style.display = 'flex';
+                }
+            }
         });
     </script>
+
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const mainImage = document.getElementById('main-image');
-            const zoomLens = document.querySelector('.zoom-lens');
 
+            // Đổi ảnh khi click thumbnail
             document.querySelectorAll('.image-thumbnail').forEach(thumbnail => {
                 thumbnail.addEventListener('click', function() {
                     const newImageSrc = this.getAttribute('data-large');
-
                     if (mainImage) {
                         mainImage.src = newImageSrc;
 
-                        // Xóa class active khỏi tất cả ảnh
                         document.querySelectorAll('.image-thumbnail').forEach(img => img.classList
                             .remove('active'));
-
-                        // Thêm class active vào ảnh đang chọn
                         this.classList.add('active');
                     }
                 });
             });
 
-            // Hiệu ứng zoom khi rê chuột vào ảnh chính
+            // Zoom theo vị trí chuột
             document.querySelector('.zoom-container').addEventListener("mousemove", function(e) {
-                const {
-                    left,
-                    top,
-                    width,
-                    height
-                } = mainImage.getBoundingClientRect();
-                const x = (e.pageX - left - window.scrollX) / width * 100;
-                const y = (e.pageY - top - window.scrollY) / height * 100;
+                const rect = mainImage.getBoundingClientRect();
+                const x = ((e.clientX - rect.left) / rect.width) * 100;
+                const y = ((e.clientY - rect.top) / rect.height) * 100;
 
-                // Cập nhật transform origin để điều chỉnh vị trí zoom
                 mainImage.style.transformOrigin = `${x}% ${y}%`;
-
-                // Sử dụng scale hợp lý để không làm phồng ảnh
-                mainImage.style.transform = "scale(1.5)"; // Điều chỉnh scale sao cho hợp lý
-
-                // Đảm bảo zoom lens không vượt quá ảnh chính
-                zoomLens.style.left =
-                    `${Math.min(Math.max(e.pageX - left - zoomLens.offsetWidth / 2, 0), width - zoomLens.offsetWidth)}px`;
-                zoomLens.style.top =
-                    `${Math.min(Math.max(e.pageY - top - zoomLens.offsetHeight / 2, 0), height - zoomLens.offsetHeight)}px`;
-                zoomLens.style.display = "block";
+                mainImage.style.transform = "scale(1.5)";
             });
 
-            // Reset khi rời chuột khỏi ảnh
+            // Reset khi rời chuột
             document.querySelector('.zoom-container').addEventListener("mouseleave", function() {
                 mainImage.style.transform = "scale(1)";
-                zoomLens.style.display = "none";
             });
 
-            // Khởi tạo slider ảnh thumbnail
+            // Khởi tạo slider thumbnail
             $('.left-slider-image').slick({
                 slidesToShow: 5,
                 slidesToScroll: 1,
@@ -1357,35 +1364,8 @@
 
 
 
-    {{-- <script>
-        $('.left-slider-image').slick({
-            slidesToShow: 4,
-            /
-            slidesToScroll: 1,
-            infinite: true,
-            arrows: true,
-            variableWidth: true,
-            adaptiveHeight: true,
-            fade: false,
-            centerMode: false
-        });
-    </script>
 
-    <script>
-        $('.left-slider-image').on('init reInit afterChange', function() {
-            $('.slick-slide').css('opacity', '1');
-        });
-    </script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            document.querySelectorAll(".sidebar-image img").forEach(img => {
-                img.addEventListener("click", function() {
-                    let mainImage = document.getElementById("main-image");
-                    mainImage.src = this.getAttribute("data-large");
-                });
-            });
-        });
-    </script> --}}
+
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
     <script>
