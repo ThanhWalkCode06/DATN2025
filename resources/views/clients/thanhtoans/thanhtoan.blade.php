@@ -103,10 +103,7 @@
                                                     @enderror
                                                 </div>
 
-                                                {{-- <div class="mt-3">
-                                                    <input style="border:#0da487" class="checkbox_animated checkall" type="checkbox" name="chinh_sach">
-                                                    <label for="">Đồng ý rằng khi hoàn hàng sẽ không được nhận lại tiền</label>
-                                                </div> --}}
+                                               
                                             </form>
                                         </div>
                                     </div>
@@ -143,29 +140,21 @@
                                                         </div>
                                                         
 
-                                                        <!-- Hiển thị số dư ví khi phương thức thanh toán là ví (id = 3) -->
-                                                        {{-- @if ($item['id'] == 3)
-                                                            <div id="flush-collapse{{ $item['id'] }}" class="accordion-collapse collapse" aria-labelledby="flush-heading{{ $item['id'] }}" data-bs-parent="#accordionFlushExample">
-                                                                <div class="accordion-body">
-                                                                    <p>Chọn phương thức thanh toán bằng ví để trừ số tiền trong tài khoản ví của bạn.</p>
-                                                                    <p class="text-success">
-                                                                        <!-- Hiển thị số dư ví -->
-                                                                        @if($soDu) <!-- Kiểm tra xem $soDu có tồn tại không -->
-                                                                            Số dư ví của bạn: {{ number_format($soDu->so_du, 0, ',', '.') }} VNĐ
-                                                                        @else
-                                                                            Số dư ví không có sẵn.
-                                                                        @endif
-                                                                    </p>
-                                                                </div>
-                                                            </div>
-                                                        @endif --}}
+                                                     
 
                                                     </div>
                                                 @endif
                                             @endforeach
+                                            {{-- Hiện số dư --}}
+                                            @if ($item['id'] == 3)
+                                                <div id="soDuViBox" class="mt-2 ms-4 text-success" style="display: none;">
+                                                    Số dư ví: <strong>{{ number_format($soDuVi ?? 0, 0, ',', '.') }} VNĐ</strong>
+                                                </div>
+                                            @endif
+                                                {{-- Hiện số dư --}}
                                             
                                                 <!-- Modal Điều Khoản -->
-                                                <div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
+                                                {{-- <div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
                                                     <div class="modal-dialog modal-dialog-centered">
                                                     <div class="modal-content shadow">
                                                         <div class="modal-header">
@@ -189,7 +178,7 @@
                                                         </div>
                                                     </div>
                                                     </div>
-                                                </div>
+                                                </div> --}}
                                                 
                                                 
                                             </div>
@@ -336,7 +325,7 @@
 
 @section('js')
 {{-- điều khoản --}}
-<script>
+{{-- <script>
   document.addEventListener('DOMContentLoaded', function () {
     let accepted = false;
     const acceptTermsButton = document.getElementById('acceptTerms');
@@ -402,16 +391,37 @@
     });
 });
 
-</script>
+</script> --}}
 
 {{-- điều khoản  --}}
 
 
     
+{{-- Hiện số dư --}}
 
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const radios = document.querySelectorAll('input[name="flexRadioDefault"]');
+        const soDuViBox = document.getElementById('soDuViBox');
 
+        radios.forEach(radio => {
+            radio.addEventListener('change', function () {
+                if (this.dataset.id == 3) {
+                    soDuViBox.style.display = 'block';
+                } else {
+                    soDuViBox.style.display = 'none';
+                }
+            });
 
+            // Kiểm tra mặc định khi load
+            if (radio.checked && radio.dataset.id == 3) {
+                soDuViBox.style.display = 'block';
+            }
+        });
+    });
+</script>
 
+{{-- Hiện số dư --}}
 
 
    
@@ -577,17 +587,17 @@
 
             $("#btnDatHang").click(function(e) {
 // xử lý điều khoản
-                const selected = document.querySelector('input[name="flexRadioDefault"]:checked');
-                    if (!selected) {
-                        e.preventDefault();
-                        Swal.fire({
-                            icon: "warning",
-                            title: "Chưa chọn phương thức thanh toán",
-                            text: "Vui lòng chọn phương thức thanh toán để tiếp tục.",
-                            confirmButtonText: "OK"
-                        });
-                        return;
-                    }
+                // const selected = document.querySelector('input[name="flexRadioDefault"]:checked');
+                //     if (!selected) {
+                //         e.preventDefault();
+                //         Swal.fire({
+                //             icon: "warning",
+                //             title: "Chưa chọn phương thức thanh toán",
+                //             text: "Vui lòng chọn phương thức thanh toán để tiếp tục.",
+                //             confirmButtonText: "OK"
+                //         });
+                //         return;
+                //     }
 // xử lý điều khoản
                 e.preventDefault(); // Ngăn chặn load lại trang
                 updateHiddenInputs();
