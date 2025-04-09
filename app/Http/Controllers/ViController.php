@@ -26,6 +26,10 @@ class ViController extends Controller
             $query->whereDate('created_at', '<=', $request->to);
         }
 
+          // Lọc theo trạng thái nếu có
+    if ($request->filled('trang_thai') && in_array($request->trang_thai, ['0', '1', '2'])) {
+        $query->where('trang_thai', $request->trang_thai);
+    }
         // Phân trang kết quả
         $giaodichs = $query->paginate(10);
 

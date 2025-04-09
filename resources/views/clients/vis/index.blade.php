@@ -35,23 +35,37 @@
     <!-- Form lọc giao dịch -->
     <div class="card shadow mb-4" style="border-radius: 16px;">
         <div class="card-body">
-            <form method="GET" action="{{ route('vi') }}" class="row g-3 align-items-end">
-                <div class="col-md-5">
-                    <label for="from" class="form-label">Từ ngày</label>
-                    <input type="date" name="from" id="from" class="form-control" value="{{ request('from') }}">
-                </div>
-                <div class="col-md-5">
-                    <label for="to" class="form-label">Đến ngày</label>
-                    <input type="date" name="to" id="to" class="form-control" value="{{ request('to') }}">
-                </div>
-                <div class="col-md-2 d-grid">
-                    <button type="submit" class="btn btn-success">
-                        Lọc
-                    </button>
+            <form method="GET" action="{{ route('vi') }}">
+                <div class="row gy-3 gx-4">
+                    <div class="col-md-4">
+                        <label for="from" class="form-label fw-bold">Từ ngày</label>
+                        <input type="date" name="from" id="from" class="form-control" value="{{ request('from') }}">
+                    </div>
+    
+                    <div class="col-md-4">
+                        <label for="to" class="form-label fw-bold">Đến ngày</label>
+                        <input type="date" name="to" id="to" class="form-control" value="{{ request('to') }}">
+                    </div>
+    
+                    <div class="col-md-4">
+                        <label for="trang_thai" class="form-label fw-bold">Trạng thái</label>
+                        <select name="trang_thai" id="trang_thai" class="form-select mb-2">
+                            <option value="">-- Tất cả --</option>
+                            <option value="0" {{ request('trang_thai') == '0' ? 'selected' : '' }}>⏳ Chờ xử lý</option>
+                            <option value="1" {{ request('trang_thai') == '1' ? 'selected' : '' }}>✔️ Thành công</option>
+                            <option value="2" {{ request('trang_thai') == '2' ? 'selected' : '' }}>❌ Đã huỷ</option>
+                        </select>
+                        <button type="submit" class="btn w-100 text-white" style="background-color: #009688;">
+                            <i class="fas fa-filter me-1"></i> Lọc giao dịch
+                        </button>
+                    </div>
                 </div>
             </form>
         </div>
     </div>
+    
+    
+    
 
     <!-- Lịch sử giao dịch -->
     <div class="card shadow" style="border-radius: 16px;">
@@ -88,21 +102,31 @@
                                         <span class="text-dark">{{ number_format($gd->so_tien, 0, ',', '.') }} VNĐ</span>
                                     @endif
                                 </td>
-                                
-                                
+                    
                                 <td class="text-center">
                                     @if($gd->trang_thai == 1)
                                         <span class="badge bg-success">Thành công</span>
                                     @elseif($gd->trang_thai == 0)
                                         <span class="badge bg-warning text-dark">Chờ xử lý</span>
+                                        <br>
+                                        <button 
+                                        class="mt-1 px-2 py-1 text-white fw-bold"
+                                        style="background-color: #d32f2f; border: none; border-radius: 6px; font-size: 14px;"
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#modalHuyGiaoDich{{ $gd->id }}">
+                                        Huỷ
+                                    </button>
+                                    
+                                  
+
+
                                     @elseif($gd->trang_thai == 2)
                                         <span class="badge bg-danger">Đã huỷ</span>
                                     @endif
                                 </td>
-                                
+                    
                                 <td>
                                     {!! nl2br(e($gd->mo_ta)) !!}
-                                    
                                     @if ($gd->trang_thai == 1 && $gd->updated_at)
                                         <br>
                                         <strong class="text-muted">
@@ -110,15 +134,41 @@
                                         </strong>
                                     @endif
                                 </td>
-                                
-
                             </tr>
+                    
+                            <!-- ✅ Modal nằm ngay sau mỗi dòng -->
+                            <div class="modal fade" id="modalHuyGiaoDich{{ $gd->id }}" tabindex="-1" aria-labelledby="modalLabel{{ $gd->id }}" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <form method="POST" action="{{ route('giao-dich.huy', $gd->id) }}">
+                                        @csrf
+                                        @method('PUT')
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="modalLabel{{ $gd->id }}">Huỷ giao dịch</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="mb-3">
+                                                    <label for="ly_do_{{ $gd->id }}" class="form-label">Lý do huỷ:</label>
+                                                    <textarea name="ly_do" id="ly_do_{{ $gd->id }}" class="form-control" rows="3" required></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                                                <button type="submit" class="btn btn-danger">Xác nhận huỷ</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                    
                         @empty
                             <tr>
-                                <td colspan="4" class="text-center text-muted py-4">Không có giao dịch nào.</td>
+                                <td colspan="5" class="text-center text-muted py-4">Không có giao dịch nào.</td>
                             </tr>
                         @endforelse
                     </tbody>
+                    
                 </table>
             </div>
 
