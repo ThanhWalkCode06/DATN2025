@@ -216,5 +216,15 @@
         </div>
     </section>
 
-
+    @push('scripts')
+        <script>
+            document.querySelectorAll('.reply-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = this.getAttribute('data-id');
+                    const form = document.getElementById(`reply-form-${id}`);
+                    form.classList.toggle('d-none');
+                });
+            });
+        </script>
+    @endpush
 @endsection

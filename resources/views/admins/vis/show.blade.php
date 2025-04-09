@@ -158,18 +158,57 @@
     </script>
 @endsection
 @section('js')
-    <script>
-        function toggleLyDo() {
-            const trangThai = document.getElementById('trang_thai_moi').value;
-            const lyDoWrapper = document.getElementById('ly_do_wrapper');
+<script>
+    function toggleLyDo() {
+        const trangThai = document.getElementById('trang_thai_moi').value;
+        const lyDoWrapper = document.getElementById('ly_do_wrapper');
+        const lyDoInput = document.getElementById('ly_do_chung');
 
-            if (trangThai == '2') {
-                lyDoWrapper.classList.remove('d-none');
-            } else {
-                lyDoWrapper.classList.add('d-none');
-            }
+        if (trangThai == '2') {
+            lyDoWrapper.classList.remove('d-none');
+            lyDoInput.setAttribute('required', 'required');
+        } else {
+            lyDoWrapper.classList.add('d-none');
+            lyDoInput.removeAttribute('required');
         }
-    </script>
+    }
+
+    document.getElementById('checkAll')?.addEventListener('click', function () {
+        const checkboxes = document.querySelectorAll('input.trang_thai_gd');
+        checkboxes.forEach(cb => cb.checked = this.checked);
+    });
+
+    document.querySelector('form').addEventListener('submit', function (e) {
+        const selected = document.querySelectorAll('input.trang_thai_gd:checked');
+        if (selected.length === 0) {
+            alert('Vui lòng chọn ít nhất một giao dịch.');
+            e.preventDefault();
+            return;
+        }
+
+        const trangThaiMoi = document.getElementById('trang_thai_moi').value;
+        if (!trangThaiMoi) {
+            alert('Vui lòng chọn trạng thái mới.');
+            e.preventDefault();
+            return;
+        }
+
+        let valid = true;
+        selected.forEach(cb => {
+            if (cb.dataset.trangThai !== '0') {
+                valid = false;
+            }
+        });
+
+        if (!valid) {
+            alert('Chỉ được cập nhật các giao dịch đang ở trạng thái chờ xác nhận.');
+            e.preventDefault();
+        }
+    });
+
+    document.addEventListener('DOMContentLoaded', toggleLyDo);
+</script>
+
 
 
 
