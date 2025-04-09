@@ -24,7 +24,7 @@
             <div class="mb-3">
                 <label class="form-label">Ngân hàng nhận tiền</label>
                 <div class="position-relative">
-                    <input type="hidden" name="ngan_hang" id="ngan_hang" required>
+                    <input type="hidden" name="ten_ngan_hang" id="ten_ngan_hang" required>
                     <input type="text" id="ngan_hang_label" class="form-control" placeholder="-- Chọn ngân hàng --" readonly required
                         data-bs-toggle="modal" data-bs-target="#bankModal" style="cursor: pointer;">
                     <span class="position-absolute top-50 end-0 translate-middle-y pe-3" style="pointer-events: none;">
@@ -70,7 +70,7 @@
             <!-- Số tài khoản -->
             <div class="mb-3">
                 <label for="so_tai_khoan" class="form-label">Số tài khoản ngân hàng</label>
-                <input type="text" name="so_tai_khoan" id="so_tai_khoan" class="form-control" required>
+                <input type="number" name="so_tai_khoan" id="so_tai_khoan" class="form-control" required>
             </div>
 
             <!-- Tên người nhận -->
@@ -116,25 +116,47 @@
     </script>
     
     <script>
+        // function selectBank(code, name, logo) {
+        //     // Gán giá trị vào input
+        //     // document.getElementById('ngan_hang').value = code;
+        //     document.getElementById('ngan_hang_label').value = name;
+        //     document.getElementById('ten_ngan_hang').value = name; // Gán tên vào input ẩn
+        //     // Lấy modal và ẩn nó đúng cách bằng Bootstrap 5
+        //     const modalElement = document.getElementById('bankModal');
+        //     const modal = bootstrap.Modal.getInstance(modalElement);
+        //     modal.hide();
+    
+        //     // Remove backdrop nếu cần
+        //     const backdrop = document.querySelector('.modal-backdrop');
+        //     if (backdrop) {
+        //         backdrop.remove();
+        //     }
+    
+        //     // Remove class 'modal-open' để body scroll lại
+        //     document.body.classList.remove('modal-open');
+        //     document.body.style.overflow = ''; // Cho phép scroll lại
+        // }
+
         function selectBank(code, name, logo) {
-            // Gán giá trị vào input
-            document.getElementById('ngan_hang').value = code;
-            document.getElementById('ngan_hang_label').value = name;
-    
-            // Lấy modal và ẩn nó đúng cách bằng Bootstrap 5
-            const modalElement = document.getElementById('bankModal');
-            const modal = bootstrap.Modal.getInstance(modalElement);
-            modal.hide();
-    
-            // Remove backdrop nếu cần
-            const backdrop = document.querySelector('.modal-backdrop');
-            if (backdrop) {
-                backdrop.remove();
-            }
-    
-            // Remove class 'modal-open' để body scroll lại
-            document.body.classList.remove('modal-open');
-            document.body.style.overflow = ''; // Cho phép scroll lại
-        }
+    // Gán tên ngân hàng
+    document.getElementById('ngan_hang_label').value = name;
+    document.getElementById('ten_ngan_hang').value = name;
+
+    // Lấy và ẩn modal đúng chuẩn Bootstrap
+    const modalElement = document.getElementById('bankModal');
+
+    // Kiểm tra nếu modal đang mở, mới gọi hide
+    const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+    modalInstance.hide();
+
+    // 🧼 Fix nếu Bootstrap không dọn sạch backdrop hoặc body
+    setTimeout(() => {
+        document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+        document.body.classList.remove('modal-open');
+        document.body.style.removeProperty('overflow');
+        document.body.style.removeProperty('padding-right');
+    }, 300); // đợi Bootstrap xử lý xong modal (animation 300ms)
+}
+
     </script>
 @endsection
