@@ -32,8 +32,6 @@ class User extends Authenticatable
         'trang_thai',
         'email',
         'username',
-
-
     ];
 
     public function sanPhamYeuThichs()
@@ -85,10 +83,8 @@ class User extends Authenticatable
         return $this->hasOne(Vi::class, 'nguoi_dung_id');
     }
 
-    public function layHoacTaoVi() {
+    public function layHoacTaoVi()
+    {
         return $this->vi ?? $this->vi()->create(['so_du' => 0]);
     }
-
-
-
 }
