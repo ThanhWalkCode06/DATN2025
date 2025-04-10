@@ -133,6 +133,14 @@
                                         </p>
                                         <p>Phương thức thanh toán : <span>{{ $donHang->ten_phuong_thuc }}</span></p>
                                         <p>
+                                            Trạng thái thanh toán :
+                                            @if ($donHang->trang_thai_thanh_toan == 0)
+                                                <span class="text-danger">Chưa thanh toán</span>
+                                            @else
+                                                <span class="text-success">Đã thanh toán</span>
+                                            @endif
+                                        </p>
+                                        <p>
                                             Trạng thái đơn hàng :
                                             @if ($donHang->trang_thai_don_hang == -1)
                                                 <span class="text-danger">Đã hủy</span>
@@ -152,14 +160,11 @@
                                                 <span>Trạng thái không hợp lệ</span>
                                             @endif
                                         </p>
-                                        <p>
-                                            Trạng thái thanh toán :
-                                            @if ($donHang->trang_thai_thanh_toan == 0)
-                                                <span class="text-danger">Chưa thanh toán</span>
-                                            @else
-                                                <span class="text-success">Đã thanh toán</span>
-                                            @endif
-                                        </p>
+                                        @if ($donHang->trang_thai_don_hang == 5)
+                                            <p>
+                                                Lý do trả hàng: {{ $donHang->ly_do }}
+                                            </p>
+                                        @endif
                                     </div>
 
                                     <h4>Địa chỉ giao hàng</h4>
