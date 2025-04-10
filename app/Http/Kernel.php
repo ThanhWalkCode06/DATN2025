@@ -64,6 +64,7 @@ class Kernel extends HttpKernel
 
         // 'auth.client' => \App\Http\Middleware\Authenticate::class,
         'checkStatus' => \App\Http\Middleware\CheckUserStatus::class,
+        'checkClientStatus' => \App\Http\Middleware\CheckUserClientStatus::class,
         'dynamic' => \App\Http\Middleware\DynamicPermissionMiddleware::class,
         // 'check.permission' => \App\Http\Middleware\CheckPermission::class,
 
