@@ -5917,10 +5917,10 @@ template {
     font-style: normal;
     font-weight: 400;
     font-display: block;
-    src: url("https://themes.pixelstrap.com/fastkart/assets/fonts/fa-regular-400.woff2")
+    /* src: url("https://themes.pixelstrap.com/fastkart/assets/fonts/fa-regular-400.woff2")
             format("woff2"),
         url("https://themes.pixelstrap.com/fastkart/assets/fonts/fa-regular-400.ttf")
-            format("truetype");
+            format("truetype"); */
 }
 .far,
 .fa-regular {
@@ -5940,10 +5940,10 @@ template {
     font-style: normal;
     font-weight: 400;
     font-display: block;
-    src: url("https://themes.pixelstrap.com/fastkart/assets/fonts/fa-brands-400.woff2")
+    /* src: url("https://themes.pixelstrap.com/fastkart/assets/fonts/fa-brands-400.woff2")
             format("woff2"),
         url("https://themes.pixelstrap.com/fastkart/assets/fonts/fa-brands-400.ttf")
-            format("truetype");
+            format("truetype"); */
 }
 .fab,
 .fa-brands {
@@ -7367,10 +7367,10 @@ template {
     font-style: normal;
     font-weight: 900;
     font-display: block;
-    src: url("https://themes.pixelstrap.com/fastkart/assets/fonts/fa-solid-900.woff2")
+    /* src: url("https://themes.pixelstrap.com/fastkart/assets/fonts/fa-solid-900.woff2")
             format("woff2"),
         url("https://themes.pixelstrap.com/fastkart/assets/fonts/fa-solid-900.ttf")
-            format("truetype");
+            format("truetype"); */
 }
 .fas,
 .fa-solid {

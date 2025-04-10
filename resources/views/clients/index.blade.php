@@ -124,8 +124,6 @@
 
                         <div class="ratio_medium section-t-space">
                             <div class="home-contain hover-effect">
-                                <img src="../assets/client/images/sports/banner/11.jpg" class="img-fluid blur-up lazyload"
-                                    alt="">
                                 <div class="home-detail p-top-left home-p-medium">
                                     <div>
                                         <h4 class="text-yellow text-exo home-banner">Thể Thao</h4>
@@ -173,10 +171,6 @@
                         <div>
                             <h2>Sản phẩm được nhiều người đánh giá cao</h2>
                             <span class="title-leaf">
-                                <svg class="icon-width">
-                                    <use xlink:href="https://themes.pixelstrap.com/fastkart/assets/svg/leaf.svg#leaf">
-                                    </use>
-                                </svg>
                             </span>
                             <p>Đừng bỏ lỡ cơ hội này với mức giá đặc biệt.</p>
                         </div>
@@ -189,9 +183,9 @@
 
                                     <div style="border-bottom: 1px solid #ccc; width: 889px" class="row">
                                         @foreach ($sanPhamFollowComments as $item)
-                                        @php
-                                            $giaThapNhat = collect($item['bien_thes'])->min('gia_ban') ?? 0;
-                                        @endphp
+                                            @php
+                                                $giaThapNhat = collect($item['bien_thes'])->min('gia_ban') ?? 0;
+                                            @endphp
                                             <div style=" border: 1px solid #ccc;width: 222px" class="col-md-3 px-0">
                                                 <div style="height: 327px" class="product-box">
                                                     <div style="position: relative; width: 100%">
@@ -214,7 +208,8 @@
                                                                     <a href="#" class="notifi-wishlist">
                                                                         <i data-feather="heart"></i>
                                                                     </a>
-                                                                    <form action="{{ route('add.wishlist', $item['id']) }}"
+                                                                    <form
+                                                                        action="{{ route('add.wishlist', $item['id']) }}"
                                                                         method="POST" class="wishlist-form">
                                                                         @csrf
                                                                     </form>
@@ -295,10 +290,6 @@
                     <div class="title">
                         <h2>Danh Mục Nổi Bật</h2>
                         <span class="title-leaf">
-                            <svg class="icon-width">
-                                <use xlink:href="https://themes.pixelstrap.com/fastkart/assets/svg/leaf.svg#leaf">
-                                </use>
-                            </svg>
                         </span>
                         <p>Danh mục hàng đầu</p>
                     </div>
@@ -306,8 +297,7 @@
                     <div class="category-slider-2 product-wrapper no-arrow">
                         @foreach ($danhMucAll as $item)
                             <div>
-                                <a href="{{ '/sanpham/?danh_muc_id=' . $item->id }}"
-                                    class="category-box category-dark">
+                                <a href="{{ '/sanpham/?danh_muc_id=' . $item->id }}" class="category-box category-dark">
                                     <div>
                                         <img src="{{ Storage::url($item->anh_danh_muc) }}" class="blur-up lazyload"
                                             alt="">
@@ -323,10 +313,6 @@
                         <div>
                             <h2>Sản phẩm bán chạy</h2>
                             <span class="title-leaf">
-                                <svg class="icon-width">
-                                    <use xlink:href="https://themes.pixelstrap.com/fastkart/assets/svg/leaf.svg#leaf">
-                                    </use>
-                                </svg>
                             </span>
                             <p>Những sản phẩm được mua nhiều nhất của chúng tôi</p>
                         </div>
@@ -336,9 +322,9 @@
                         <div>
                             <ul class="product-list">
                                 @foreach ($part1 as $item)
-                                @php
-                                    $giaThapNhat = collect($item['bien_thes'])->min('gia_ban') ?? 0;
-                                @endphp
+                                    @php
+                                        $giaThapNhat = collect($item['bien_thes'])->min('gia_ban') ?? 0;
+                                    @endphp
                                     <li>
                                         <div class="offer-product">
                                             <div>
@@ -409,9 +395,9 @@
                         <div>
                             <ul class="product-list">
                                 @foreach ($part2 as $item)
-                                @php
-                                $giaThapNhat = collect($item['bien_thes'])->min('gia_ban') ?? 0;
-                                @endphp
+                                    @php
+                                        $giaThapNhat = collect($item['bien_thes'])->min('gia_ban') ?? 0;
+                                    @endphp
                                     <li>
                                         <div class="offer-product">
                                             <div>
@@ -480,9 +466,9 @@
                         <div>
                             <ul class="product-list">
                                 @foreach ($part3 as $item)
-                                @php
-                                $giaThapNhat = collect($item['bien_thes'])->min('gia_ban') ?? 0;
-                                @endphp
+                                    @php
+                                        $giaThapNhat = collect($item['bien_thes'])->min('gia_ban') ?? 0;
+                                    @endphp
                                     <li>
                                         <div class="offer-product">
 
@@ -553,10 +539,6 @@
                     <div class="title section-t-space">
                         <h2>Bài viết</h2>
                         <span class="title-leaf">
-                            <svg class="icon-width">
-                                <use xlink:href="https://themes.pixelstrap.com/fastkart/assets/svg/leaf.svg#leaf">
-                                </use>
-                            </svg>
                         </span>
                         <p>Bài viết mới nhất</p>
                     </div>
