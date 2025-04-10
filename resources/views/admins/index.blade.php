@@ -442,37 +442,38 @@
                 const month = String(today.getMonth() + 1).padStart(2, '0');
                 const year = today.getFullYear();
                 const currentDate = `${year}-${month}-${day}`;
-
-                // Set the default start date to today when the page loads if it's not set by user
+        
+                // Đặt ngày bắt đầu mặc định là hôm nay khi trang được tải nếu người dùng chưa chọn
                 if (!document.getElementById('start_date').value) {
                     document.getElementById('start_date').value = currentDate;
                 }
                 if (!document.getElementById('end_date').value) {
                     document.getElementById('end_date').value = currentDate;
                 }
-
-                // Set the max attribute for both dates to ensure the user cannot select a future date
+        
+                // Thiết lập thuộc tính "max" cho cả hai ô nhập ngày để ngăn người dùng chọn ngày trong tương lai
                 document.getElementById('start_date').setAttribute('max', currentDate);
                 document.getElementById('end_date').setAttribute('max', currentDate);
-
+        
                 const startDate = document.getElementById('start_date');
                 const endDate = document.getElementById('end_date');
-
-                // Ensure start date is not later than end date
+        
+                // Đảm bảo ngày bắt đầu không lớn hơn ngày kết thúc
                 startDate.addEventListener('change', function() {
                     if (startDate.value > endDate.value) {
-                        endDate.value = startDate.value; // Adjust end date if start date is later
+                        endDate.value = startDate.value; // Điều chỉnh ngày kết thúc nếu ngày bắt đầu lớn hơn
                     }
                 });
-
-                // Ensure end date is not earlier than start date
+        
+                // Đảm bảo ngày kết thúc không nhỏ hơn ngày bắt đầu
                 endDate.addEventListener('change', function() {
                     if (endDate.value < startDate.value) {
-                        startDate.value = endDate.value; // Adjust start date if end date is earlier
+                        startDate.value = endDate.value; // Điều chỉnh ngày bắt đầu nếu ngày kết thúc nhỏ hơn
                     }
                 });
             }
         </script>
+        
 
         <script>
             // Khi người dùng chọn một trạng thái, giữ lại các tham số filter khác (start_date, end_date)
