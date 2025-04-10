@@ -263,7 +263,10 @@ $(document).ready(function() {
             success: function(response) {
                 $('#voucher-list-body').html(response.html);
                 $('.pagination-wrapper').html(response.pagination);
-
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'instant'
+                });
                 // Cập nhật URL trình duyệt không reload
                 history.pushState(null, null, url);
             },

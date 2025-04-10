@@ -102,6 +102,7 @@ Route::prefix('admin')->middleware(['auth', 'checkStatus'])->group(function () {
         Route::resource('sanphams', SanPhamController::class);
 
         Route::get('users/search', [UserController::class, 'search'])->name('users-search');
+        Route::post('users/quick-update', [UserController::class, 'quickUpdate'])->name('users.quick-update');
         Route::resource('users', UserController::class);
         Route::resource('thuoctinhs', ThuocTinhController::class);
         Route::resource('giatrithuoctinh', GiaTriThuocTinhController::class);
