@@ -56,6 +56,14 @@
     /* Hover vào x đổi màu nhẹ hoặc không đổi nếu không thích */
     .select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover {
         color: #ffc107;
+        z-index: 9999999999;
+    }
+    .select2-container {
+    position: relative; /* Đảm bảo container của select2 có position */
+    z-index: 10000; /* Cao hơn z-index của modal */
+}
+    .select2-search__field{
+        z-index: 9999999999;
     }
 </style>
 
@@ -70,7 +78,7 @@
             <div class="modal-body">
                 <div class="action-group">
                     <label>Vai trò</label>
-                    <select id="role-action" class="form-control js-example-basic-single w-100">
+                    <select id="role-action" class="form-control js-example-basic-single-sing w-100">
                         <option value="">Chọn vai trò</option>
                         <option value="[]">Khách hàng</option>
                         @foreach ($roles as $key => $item)
@@ -80,7 +88,7 @@
                 </div>
                 <div class="action-group">
                     <label>Trạng thái</label>
-                    <select id="status-action" class="form-control js-example-basic-single w-100">
+                    <select id="status-action" class="form-control js-example-basic-single-sing w-100">
                         <option value="">Chọn trạng thái</option>
                         <option value="1">Hoạt động</option>
                         <option value="0">Không hoạt động</option>
@@ -101,12 +109,11 @@
         // Khởi tạo Select2 khi modal được mở
         $('#actionModal').on('shown.bs.modal', function() {
             $(this).removeAttr('aria-hidden');
-            $('.js-example-basic-single').each(function() {
+            $('.js-example-basic-single-sing').each(function() {
                 $(this).select2({
                     dropdownParent: $('#actionModal'),
                     width: '100%',
                     placeholder: $(this).find('option:first').text(),
-                    minimumResultsForSearch: 1
                 });
             });
 
@@ -128,7 +135,6 @@
         // Hủy Select2 khi modal đóng
         $('#actionModal').on('hidden.bs.modal', function() {
             $('.js-example-basic-single').each(function() {
-                $(this).select2('destroy');
             });
         });
 
