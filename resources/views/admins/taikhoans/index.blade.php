@@ -26,6 +26,23 @@
 
     <!-- App css -->
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css') }}">
+    <style>
+
+    .all-package thead tr th {
+        font-size: calc(13px +(16 - 13)*((100vw - 320px) /(1920 - 320)));
+        background-color: #f9f9f6;
+        text-align: center;
+    }
+
+        .all-package thead tr th {
+        white-space: nowrap;
+        font-size: calc(13px +(16 - 13)*((100vw - 320px) /(1920 - 320)));
+        background-color: #f9f9f6;
+        text-align: center;
+        min-width: 0px;
+        padding: 15px !important;
+    }
+    </style>
 @endsection
 
 @section('content')
@@ -35,12 +52,24 @@
             <div class="card-body">
                 <div class="title-header option-title">
                     <h5>Danh sách người dùng </h5>
-                    <form class="d-inline-flex">
-                        <a href="{{route('users.create')}}" class="align-items-center btn btn-theme d-flex">
-                            <i data-feather="plus-square"></i>Thêm mới
-                        </a>
-                    </form>
+                    <div class="row">
+                        <div class="col-6">
+                            <button class="action-btn " data-bs-toggle="modal" data-bs-target="#actionModal">
+                                Hành động<i class="ri-arrow-down-s-line"></i>
+                            </button>
+                        </div>
+                        <div class="col-6">
+                            <a href="{{route('users.create')}}" class=" btn btn-theme d-flex ">
+                                Thêm mới
+                            </a>
+                        </div>
+
+                    </div>
+
+
                 </div>
+
+                @include('admins.taikhoans.partials.modalActions')
 
                 <div class="table-responsive table-product">
                     <form id="searchForm" class="row g-3 align-items-center" method="get" action="{{ route('users-search') }}">
@@ -62,15 +91,6 @@
                                     <div class="row">
                                         @include('admins.filter.name',['key' => 'email', 'label' => 'Email'])
                                         @include('admins.filter.status',['key' => 'trang_thai', 'label' => 'Trạng thái'])
-                                        {{-- @include('admins.filter.select2', [
-                                            'key' => 'roles.id_in',
-                                            'label' => 'Vai trò',
-                                            'options' => $roles,
-                                            'multiple' => true,
-                                            'selected' => request('roles.id_in')
-                                            ? (array) request('roles.id_in')
-                                            : []
-                                        ]) --}}
                                         @include('admins.filter.relationship', [
                                             'key' => 'role',
                                             'label' => 'Vai trò',
@@ -98,15 +118,15 @@
                     <table class="table all-package theme-table" id="table_id">
                         <thead>
                             <tr>
-                                <th>
+                                <th style="width: 10px !important">
                                     <div class="check-box-contain">
                                         <span class="form-check user-checkbox">
                                             <input class="checkbox_animated checkall"
                                                 type="checkbox" value="">
                                         </span>
-                                        <span>STT</span>
                                     </div>
                                 </th>
+                                <th style="width: 25px !important" >STT</th>
                                 <th>Tên tài khoản</th>
                                 <th>email</th>
                                 <th>Ảnh</th>
@@ -117,62 +137,6 @@
 
                         <tbody id="user-list-body">
                             @include('admins.taikhoans.partials.list_rows', ['lists' => $lists])
-                        {{-- @if(@$lists)
-                            @foreach ( $lists as $key => $item)
-                                <tr class="justify-content-center">
-                                    <td>
-                                        <div class="check-box-contain">
-                                            <span class="form-check user-checkbox">
-                                                <input class="checkbox_animated check-it"
-                                                    type="checkbox" value="">
-                                            </span>
-                                            <span>{{ ++$key }}</span>
-                                        </div>
-                                    </td>
-
-                                    <td>{{ $item->username }}</td>
-
-                                    <td>{{ $item->email }}</td>
-
-                                    <td>
-                                        <img style="width:100px;height:100px" src="{{ Storage::url($item->anh_dai_dien) }}" alt="">
-                                    </td>
-
-                                    <td class="{{ $item->trang_thai == 1 ? 'status-close' : 'status-danger' }}">
-                                        <span>{{ $item->trang_thai == 1 ? 'Hoạt động' : 'Không hoạt động' }}</span>
-                                    </td>
-
-                                    <td>
-                                        <ul>
-
-
-
-                                            @if ($item->roles->pluck('name')->first() == Auth()->user()->roles->pluck('name')->first()
-                                            || $item->roles->pluck('name')->first() == 'SuperAdmin')
-
-                                            @else
-                                            @can('users-update', $item->id)
-                                            <li>
-                                                <a href="{{ route('users.edit', $item->id) }}">
-                                                    <i class="ri-pencil-line"></i>
-                                                </a>
-                                            </li>
-                                            @endcan
-
-                                            @can('users-view', $item->id)
-                                            <li>
-                                                <a href="{{ route('users.show', $item->id) }}">
-                                                    <i class="ri-eye-line"></i>
-                                                </a>
-                                            </li>
-                                            @endcan
-                                            @endif
-
-                                        </ul>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        @endif --}}
 
 
                         </tbody>
@@ -222,7 +186,10 @@ $(document).ready(function() {
             success: function(response) {
                 $('#user-list-body').html(response.html);
                 $('.pagination-wrapper').html(response.pagination);
-
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'instant'
+                });
                 // Cập nhật URL trình duyệt không reload
                 history.pushState(null, null, url);
             },
@@ -244,6 +211,13 @@ $(document).ready(function() {
     $(document).on('click', '.pagination a', function(e) {
         e.preventDefault();
         loadData($(this).attr('href'));
+    });
+
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
+        window.scrollTo({
+            top: 0,
+            behavior: 'instant'
+        });
     });
 
     // Reset filter

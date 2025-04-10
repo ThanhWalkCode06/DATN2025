@@ -37,7 +37,12 @@ class SanPhamController extends Controller
             ->latest()
             ->paginate(10);
 
-
+        if ($request->ajax()) {
+            return response()->json([
+                'html' => view('admins.sanphams.partials.list_rows', compact('sanPhams',))->render(),
+                'pagination' => $sanPhams->appends($request->except('page'))->links('pagination::bootstrap-5')->render()
+            ]);
+        }
         // $bienThes = BienThe::select('san_pham_id','ten_bien_the')->where('san_pham_id',52)->distinct()->get();
 
         // $danhMucs = DanhMucSanPham::all();
@@ -53,7 +58,6 @@ class SanPhamController extends Controller
         if ($request->ajax()) {
             return response()->json([
                 'html' => view('admins.sanphams.partials.list_rows', compact('sanPhams',))->render(),
-                // 'count' => $phieuGiamGias->total(),
                 'pagination' => $sanPhams->appends($request->except('page'))->links('pagination::bootstrap-5')->render()
             ]);
         }

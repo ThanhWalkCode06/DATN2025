@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class CheckUserStatus
+class CheckUserClientStatus
 {
     /**
      * Handle an incoming request.
@@ -20,14 +20,8 @@ class CheckUserStatus
 
         if ($user && ($user->trang_thai === 0 )) {
             Auth::logout();
-            return redirect()->route('login')->withErrors(['error'=>'Tài khoản đã bị cấm']);
-        }if ($user->roles->isEmpty()) {
-            return response()->view('errors.403', [
-                'previousUrl' => url()->previous() !== url()->current() ? url()->previous() : route('index')
-            ], 403);
+            return redirect()->route('login.client')->withErrors(['error' =>'Tài khoản của bạn đã bị cấm']);
         }
-
-
         return $next($request);
     }
 }

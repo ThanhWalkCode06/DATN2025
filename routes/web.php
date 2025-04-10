@@ -102,6 +102,7 @@ Route::prefix('admin')->middleware(['auth', 'checkStatus'])->group(function () {
         Route::resource('sanphams', SanPhamController::class);
 
         Route::get('users/search', [UserController::class, 'search'])->name('users-search');
+        Route::post('users/quick-update', [UserController::class, 'quickUpdate'])->name('users.quick-update');
         Route::resource('users', UserController::class);
         Route::resource('thuoctinhs', ThuocTinhController::class);
         Route::resource('giatrithuoctinh', GiaTriThuocTinhController::class);
@@ -129,8 +130,6 @@ Route::prefix('admin')->middleware(['auth', 'checkStatus'])->group(function () {
 //     return view('admins.auth.mailForgetPass');
 // });
 
-Route::get('/', [IndexClientController::class, 'index'])->name('home');
-
 Route::controller(App\Http\Controllers\Clients\Auth\AuthController::class)->group(function () {
     Route::get('/login', 'showLogin')->name('login.client');
     Route::post('/login/store', 'storeLogin')->name('login.store.client');
@@ -149,6 +148,10 @@ Route::controller(App\Http\Controllers\Clients\Auth\AuthController::class)->grou
 
     Route::get('/logout', 'logout')->name('logout.client');
 });
+
+// Check xem tài khoản còn trong phạm vi hoạt động không
+Route::middleware('checkClientStatus')->group(function () {
+    Route::get('/', [IndexClientController::class, 'index'])->name('home');
 
 Route::get('/san-pham/{san_pham_id}/danh-gia', [DanhGiaClientsController::class, 'danhSachDanhGia']);
 Route::post('/san-pham/{san_pham_id}/danh-gia', [DanhGiaClientsController::class, 'themDanhGia'])->name('sanphams.themdanhgia');
@@ -286,3 +289,4 @@ Route::post('/binhluan/{id}/reply', [BinhLuanController::class, 'store'])->name(
 
 Route::post('/binhluan', [BinhLuanController::class, 'store'])->name('binhluan.store');
 
+});

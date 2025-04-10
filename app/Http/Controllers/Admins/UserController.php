@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Permission;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admins\UserRequest;
 use App\Http\Controllers\HelperCommon\Helper;
@@ -19,15 +20,24 @@ class UserController extends Controller
         ->orderByDesc('id')
         ->paginate(10)
         ->onEachSide(5);
-        $roles = \Spatie\Permission\Models\Role::pluck('name', 'id')->toArray();
-        // dd($roles);
+        $roles = \Spatie\Permission\Models\Role::where('name', '!=', 'SuperAdmin')->pluck('name', 'id')->toArray();
+        if (!$request->ajax()) {
+            session(['previous_url' => url()->previous()]);
+        }
+        if ($request->ajax()) {
+            return response()->json([
+                'html' => view('admins.taikhoans.partials.list_rows', compact('lists'))->render(),
+                'pagination' => $lists->appends($request->except('page'))->links('pagination::bootstrap-5')->render()
+            ]);
+        }
+
         return view('admins.taikhoans.index', compact('lists','roles'));
     }
 
 
     public function search(Request $request)
     {
-        // dd(request()->all());
+        $roles = \Spatie\Permission\Models\Role::where('name', '!=', 'SuperAdmin')->pluck('name', 'id')->toArray();
         $lists = User::with('roles')->superFilter($request)->paginate();
         if ($request->ajax()) {
             return response()->json([
@@ -35,7 +45,57 @@ class UserController extends Controller
                 'pagination' => $lists->appends($request->except('page'))->links('pagination::bootstrap-5')->render()
             ]);
         }
-        return view('admins.taikhoans.index', compact('lists'));
+        return redirect()->route('users.index');
+    }
+
+    public function quickUpdate(Request $request)
+    {
+        try {
+
+            $ids = $request->json('ids');
+            $roles = $request->json('roles');
+            $status = $request->json('status');
+
+            // return response()->json([ 'message' => $request->all()]);
+
+            if (!is_array($ids) || empty($ids)) {
+                return response()->json(['success' => false, 'message' => 'Không có IDs'], 400);
+            }
+
+
+            $users = User::whereIn('id', $ids)->get();
+
+            if ($users->isEmpty()) {
+                return response()->json(['success' => false, 'message' => 'Không tìm thấy user'], 404);
+            }
+
+            foreach ($users as $user) {
+                if(!$user->hasRole('SuperAdmin')){
+                    if($roles === '[]'){
+                        $user->syncRoles([]);
+                    }else if($roles && !empty($roles)) {
+                        $user->syncRoles($roles);
+                    }
+                    if ($status !== null) {
+                        $user->update(['trang_thai' => $status]);
+                    }
+                }
+            }
+            $lists = User::whereNull('deleted_at')
+            ->orderByDesc('id')
+            ->paginate(10)
+            ->onEachSide(5);
+            return response()->json([
+                'success' => true, // Thêm success để client dễ xử lý
+                'message' => 'Cập nhật thành công',
+                'html' => view('admins.taikhoans.partials.list_rows', compact('lists'))->render()
+            ]);
+
+            // return response()->json(['success' => true, 'message' => 'Cập nhật thành công']);
+        } catch (\Exception $e) {
+            Log::error('QuickUpdate Error: ' . $e->getMessage());
+            return response()->json(['success' => false, 'message' => 'Lỗi server: ' . $e->getMessage()], 500);
+        }
     }
     /**
      * Show the form for creating a new resource.
@@ -111,6 +171,7 @@ class UserController extends Controller
     {
         $itemId = User::find($id);
         $data = request()->all();
+        // dd($data);
         $itemId->update([
             "trang_thai" => $data['trang_thai'],
         ]);
