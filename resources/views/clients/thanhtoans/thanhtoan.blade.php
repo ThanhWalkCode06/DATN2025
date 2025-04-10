@@ -103,7 +103,7 @@
                                                     @enderror
                                                 </div>
 
-                                               
+
                                             </form>
                                         </div>
                                     </div>
@@ -138,9 +138,9 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        
 
-                                                     
+
+
 
                                                     </div>
                                                 @endif
@@ -152,7 +152,7 @@
                                                 </div>
                                             @endif
                                                 {{-- Hiện số dư --}}
-                                            
+
                                                 <!-- Modal Điều Khoản -->
                                                 {{-- <div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
                                                     <div class="modal-dialog modal-dialog-centered">
@@ -179,8 +179,8 @@
                                                     </div>
                                                     </div>
                                                 </div> --}}
-                                                
-                                                
+
+
                                             </div>
                                         </div>
                                     </div>
@@ -285,7 +285,7 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                      
+
                                                             @foreach ($phieuGiamGiaThanhToans as $key => $phieu)
                                                                 <tr>
                                                                     <td>{{ $key + 1 }}</td>
@@ -303,7 +303,7 @@
                                                                     </td>
                                                                 </tr>
                                                             @endforeach
-                                                        
+
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -314,7 +314,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
 
                         </div>
             </div>
@@ -396,7 +396,7 @@
 {{-- điều khoản  --}}
 
 
-    
+
 {{-- Hiện số dư --}}
 
 <script>
@@ -424,11 +424,11 @@
 {{-- Hiện số dư --}}
 
 
-   
-    
+
+
     <script>
 
-        
+
 
         let phiVanChuyen = document.getElementById("phi-van-chuyen");
 
@@ -602,19 +602,19 @@
                 e.preventDefault(); // Ngăn chặn load lại trang
                 updateHiddenInputs();
 
- //  confirm         
+ //  confirm
                 // Lấy giá trị phương thức thanh toán từ input hoặc hidden field
                 const paymentMethod = $('#hiddenPaymentMethod').val();
                 // Nếu là thanh toán bằng ví (ID = 3)
                 if (paymentMethod === "3") {
-                  
+
                       const confirmed = confirm(`Xác nhận trừ tiền trong ví?`);
                      if (!confirmed) {
                         // ❌ Nếu người dùng bấm Hủy thì dừng lại
                         return;
                     }
                 }
-//  confirm   
+//  confirm
                 // Lấy dữ liệu từ form
                 var formData = {
                     _token: $('meta[name="csrf-token"]').attr('content'), // Lấy CSRF token
@@ -634,6 +634,7 @@
                     type: "POST",
                     data: formData,
                     success: function(response) {
+                        console.log(response)
                         if (response.status === "vnpay") {
                             window.location.href = response.vnpay_url;
                         } else if (response.status === "success") {
