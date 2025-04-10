@@ -29,6 +29,15 @@ class DonHangController extends Controller
             $query->where('trang_thai_thanh_toan', $request->trang_thai_thanh_toan);
         }
 
+        if ($request->filled('keyword')) {
+            $keyword = $request->keyword;
+            $query->where(function ($q) use ($keyword) {
+                $q->where('ma_don_hang', 'like', "%$keyword%")
+                    ->orWhere('ten_nguoi_dung', 'like', "%$keyword%")
+                    ->orWhere('username', 'like', "%$keyword%");
+            });
+        }
+
         $donHangs = $query->orderBy('created_at', 'desc')->paginate(10);
 
         if ($request->ajax()) {
