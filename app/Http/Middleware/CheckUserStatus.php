@@ -22,7 +22,9 @@ class CheckUserStatus
             Auth::logout();
             return redirect()->route('login')->withErrors(['error'=>'Tài khoản đã bị cấm']);
         }if ($user->roles->isEmpty()) {
-            abort(403);
+            return response()->view('errors.403', [
+                'previousUrl' => url()->previous() !== url()->current() ? url()->previous() : route('index')
+            ], 403);
         }
 
 

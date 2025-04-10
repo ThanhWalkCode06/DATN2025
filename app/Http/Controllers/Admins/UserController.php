@@ -21,6 +21,9 @@ class UserController extends Controller
         ->paginate(10)
         ->onEachSide(5);
         $roles = \Spatie\Permission\Models\Role::where('name', '!=', 'SuperAdmin')->pluck('name', 'id')->toArray();
+        if (!$request->ajax()) {
+            session(['previous_url' => url()->previous()]);
+        }
         if ($request->ajax()) {
             return response()->json([
                 'html' => view('admins.taikhoans.partials.list_rows', compact('lists'))->render(),
