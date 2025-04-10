@@ -17,38 +17,25 @@ class DonHangController extends Controller
      */
     public function index(Request $request)
     {
-        $donHangs = DonHang::select('don_hangs.*', 'users.username', 'users.ten_nguoi_dung', 'phuong_thuc_thanh_toans.ten_phuong_thuc')
-            ->join('users', 'users.id', '=', 'user_id')
-            ->join('phuong_thuc_thanh_toans', 'phuong_thuc_thanh_toans.id', '=', 'phuong_thuc_thanh_toan_id')
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
-
-        if ($request->has('trang_thai') && $request->trang_thai !== '') {
-            $donHangs->where('trang_thai_don_hang', $request->trang_thai);
-        }
-
-        return view('admins.donhangs.index', compact('donHangs'));
-    }
-
-    public function filter(Request $request)
-    {
         $query = DonHang::select('don_hangs.*', 'users.username', 'users.ten_nguoi_dung', 'phuong_thuc_thanh_toans.ten_phuong_thuc')
             ->join('users', 'users.id', '=', 'user_id')
             ->join('phuong_thuc_thanh_toans', 'phuong_thuc_thanh_toans.id', '=', 'phuong_thuc_thanh_toan_id');
 
-        if ($request->filled('trang_thai')) {
-            $query->where('trang_thai_don_hang', $request->trang_thai);
+        if ($request->filled('trang_thai_don_hang')) {
+            $query->where('trang_thai_don_hang', $request->trang_thai_don_hang);
         }
 
-        if ($request->filled('thanh_toan')) {
-            $query->where('trang_thai_thanh_toan', $request->thanh_toan);
+        if ($request->filled('trang_thai_thanh_toan')) {
+            $query->where('trang_thai_thanh_toan', $request->trang_thai_thanh_toan);
         }
 
-        $donHangs = $query->orderBy('created_at', 'desc')->get();
+        $donHangs = $query->orderBy('created_at', 'desc')->paginate(10);
 
-        $html = view('admins.donhangs.donhang-table', compact('donHangs'))->render();
+        if ($request->ajax()) {
+            return view('admins.donhangs.donhang-table', compact('donHangs'))->render();
+        }
 
-        return response()->json(['html' => $html]);
+        return view('admins.donhangs.index', compact('donHangs'));
     }
 
     /**

@@ -1,4 +1,5 @@
-<table style="table-layout: fixed; width: 100%;" class="table order-table theme-table" id="dataTable">
+{{ $donHangs->appends(request()->query())->links('pagination::bootstrap-5') }}
+<table style="table-layout: fixed; width: 100%;" class="table order-table theme-table my-2">
     @foreach ($donHangs as $donHang)
         <thead>
             <tr>
@@ -80,3 +81,4 @@
         </tbody>
     @endforeach
 </table>
+{{ $donHangs->appends(request()->query())->links('pagination::bootstrap-5') }}
