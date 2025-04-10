@@ -39,7 +39,7 @@
                 <div class="w-100">
                     <div class="table-responsive">
                         <div class="mb-3 col-12 d-flex flex-row-reverse">
-                            <div class="col-2 mx-2">
+                            <div class="col-2">
                                 <label for="trang_thai_don_hang">Trạng thái đơn hàng</label>
                                 <select id="trang_thai_don_hang" class="form-control">
                                     <option value="">Tất cả</option>
@@ -52,13 +52,18 @@
                                     <option value="5">Trả hàng</option>
                                 </select>
                             </div>
-                            <div class="col-2">
+                            <div class="col-2 mx-2">
                                 <label for="trang_thai_thanh_toan">Trạng thái thanh toán</label>
                                 <select id="trang_thai_thanh_toan" class="form-control">
                                     <option value="">Tất cả</option>
                                     <option value="0">Chưa thanh toán</option>
                                     <option value="1">Đã thanh toán</option>
                                 </select>
+                            </div>
+                            <div class="col-3">
+                                <label for="searchDonHang">Tìm kiếm</label>
+                                <input type="text" id="searchDonHang" class="form-control"
+                                    placeholder="Tìm theo mã đơn, người đặt...">
                             </div>
                         </div>
                         <div id="orderTableContainer">
@@ -74,49 +79,48 @@
 @section('js')
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        function loadOrders(url = null) {
+        function fetchOrders(url = null) {
             let trangThaiDonHang = $('#trang_thai_don_hang').val();
             let trangThaiThanhToan = $('#trang_thai_thanh_toan').val();
+            let keyword = $('#searchDonHang').val();
 
             url = url || "{{ route('donhangs.index') }}";
 
             $.ajax({
                 url: url,
-                method: 'GET',
+                type: 'GET',
                 data: {
                     trang_thai_don_hang: trangThaiDonHang,
-                    trang_thai_thanh_toan: trangThaiThanhToan
+                    trang_thai_thanh_toan: trangThaiThanhToan,
+                    keyword: keyword
                 },
                 beforeSend: function() {
                     $('#orderTableContainer').html('<p>Đang tải...</p>');
                 },
-                success: function(response) {
-                    // Nếu bạn trả về JSON có thuộc tính "html", dùng response.html
-                    // Nếu chỉ trả về view thì dùng luôn response
-                    if (response.html) {
-                        $('#orderTableContainer').html(response.html);
-                    } else {
-                        $('#orderTableContainer').html(response);
-                    }
+                success: function(data) {
+                    $('#orderTableContainer').html(data);
                 },
-                error: function(xhr) {
-                    console.error(xhr.responseText);
+                error: function() {
                     alert('Không thể tải dữ liệu. Vui lòng thử lại!');
                 }
             });
         }
 
         $(document).ready(function() {
-            // Bắt sự kiện khi chọn lọc
+            // Lọc theo trạng thái hoặc tìm kiếm
             $('#trang_thai_don_hang, #trang_thai_thanh_toan').on('change', function() {
-                loadOrders(); // tải lại đơn hàng với bộ lọc hiện tại
+                fetchOrders();
             });
 
-            // Bắt sự kiện khi phân trang
+            $('#searchDonHang').on('input', function() {
+                fetchOrders();
+            });
+
+            // Phân trang
             $(document).on('click', '.pagination a', function(e) {
                 e.preventDefault();
                 let pageUrl = $(this).attr('href');
-                loadOrders(pageUrl); // tải dữ liệu trang được click, có kèm bộ lọc
+                fetchOrders(pageUrl);
             });
         });
     </script>
