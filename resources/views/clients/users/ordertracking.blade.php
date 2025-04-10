@@ -64,9 +64,10 @@
                                     <li class="breadcrumb-item">
                                         <a href="{{ route('users.chitiet') }}">
                                             <i class="fa-solid fa-house"></i>
+                                            <li class="breadcrumb-item active">Xem đơn hàng khác</li>
                                         </a>
                                     </li>
-                                    <li class="breadcrumb-item active">Xem đơn hàng khác</li>
+
                                 </ol>
                             </nav>
                         </div>
