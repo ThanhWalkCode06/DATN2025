@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\Client\UserRequest;
-use App\Models\LichSuDonHang;
 use App\Models\PhieuGiamGiaTaiKhoan;
 
 class UserController extends Controller
