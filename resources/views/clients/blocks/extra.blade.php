@@ -414,17 +414,31 @@
                                 </div>
                             @endif
 
+                            @if(empty($user->ngay_sinh))
+                                <div class="col-xxl-4">
+                                    <div class="form-floating theme-form-floating">
+                                        <input type="date"
+                                            class="form-control @error('ngay_sinh') is-invalid @enderror" id="address3"
+                                            value="{{ $user->ngay_sinh }}" name="ngay_sinh">
+                                        <label for="address3">Ngày sinh</label>
+                                    </div>
+
+                                    @error('ngay_sinh')
+                                        <p class="text-danger">{{ $message }}</p>
+                                    @enderror
+                                    <div class="text-danger">* Chỉ được nhập 1 lần</div>
+                                </div>
+                            @else
                             <div class="col-xxl-4">
                                 <div class="form-floating theme-form-floating">
                                     <input type="date"
                                         class="form-control @error('ngay_sinh') is-invalid @enderror" id="address3"
-                                        value="{{ $user->ngay_sinh }}" name="ngay_sinh">
+                                        value="{{ $user->ngay_sinh }}" name="ngay_sinh" readonly>
                                     <label for="address3">Ngày sinh</label>
                                 </div>
-                                @error('ngay_sinh')
-                                    <p class="text-danger">{{ $message }}</p>
-                                @enderror
                             </div>
+                            @endif
+
                             <div class="col-xxl-4">
                                 <div class="form-floating theme-form-floating">
                                     <input type="file"
