@@ -336,9 +336,7 @@ class ViController extends Controller
                         ], 400);
                     }
                 } elseif ($trangThai == 2) {
-                    if ($giaoDich->trang_thai != 0) {  // 0 là trạng thái "Chờ xử lý"
-                        return back()->with('error', 'Chỉ được huỷ đơn hàng khi đang chờ xử lý .');
-                    }
+
                     // Huỷ rút tiền
                     $vi->refresh();
                     $giaoDich->trang_thai = 2;
@@ -351,10 +349,13 @@ class ViController extends Controller
                         . "💰 Số dư hiện tại: " . number_format($vi->so_du, 0, ',', '.') . " VNĐ";
                     $giaoDich->save();
                     // Trả về thông báo huỷ giao dịch
-                    return back()->with('success', 'Cập nhật trạng thái thành công.');
-                    
+                    return response()->json([
+                        'success' => 'success',
+                        'message' => 'Huỷ giao dịch thành công.'
+                    ]);
                 }
             } else {
+                
                 // Giao dịch không phải rút tiền
                 $giaoDich->trang_thai = $trangThai;
                 $giaoDich->save();

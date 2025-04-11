@@ -3,6 +3,11 @@
 @section('title', 'Lịch sửví người dùng')
 
 @section('content')
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            {{ $errors->first() }}
+        </div>
+    @endif
     <div class="container mt-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h4 style="color: #009688; font-weight: 700;">Lịch sử ví -
@@ -53,12 +58,14 @@
 
 
                 <div class="col-auto">
-                    <button type="submit" class="btn btn-sm" style="background-color: #009688; color: white;">
+                    <button type="submit" class="btn btn-sm" style="background-color: #009688; color: white;"
+                        onclick="return handleCapNhat()">
                         <i class="bi bi-check-circle"></i> Cập nhật
                     </button>
                 </div>
             </div>
-            
+
+
             {{-- Bảng giao dịch --}}
             <div class="table-responsive">
                 <table class="table table-bordered table-hover align-middle">
@@ -171,183 +178,249 @@
                     </tbody>
                 </table>
             </div>
-            
+
             {{-- Phân trang --}}
             <div class="d-flex justify-content-center mt-3">
                 {{ $giaodichs->appends(request()->query())->links('pagination::bootstrap-5') }}
             </div>
         </form>
-         <!-- Modal huỷ từng giao dịch -->
-    <<!-- Modal huỷ -->
-    <div class="modal fade" id="huyModal" tabindex="-1" aria-labelledby="huyModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <form method="POST" action="{{ route('admin.vis.updateTrangThaiTungGiaoDich', ['id' => $gd->id]) }}">
-                @csrf
-                <input type="hidden" name="id" id="modal_gd_id">
-                <input type="hidden" name="trang_thai" value="2">
-                <div class="modal-content">
-                    <div class="modal-header bg-danger text-white">
-                        <h5 class="modal-title" id="huyModalLabel">Huỷ giao dịch</h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                            aria-label="Close"></button>
+        <!-- Modal huỷ từng giao dịch -->
+        <!-- Modal huỷ -->
+        <div class="modal fade" id="huyModal" tabindex="-1" aria-labelledby="huyModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <form method="POST" id="huyForm"
+                    action="{{ route('admin.vis.updateTrangThaiTungGiaoDich', ['id' => $gd->id]) }}">
+                    @csrf
+                    <input type="hidden" name="id" id="modal_gd_id">
+                    <input type="hidden" name="trang_thai" value="2">
+                    <div class="modal-content">
+                        <div class="modal-header bg-danger text-white">
+                            <h5 class="modal-title" id="huyModalLabel">Huỷ giao dịch</h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <label for="modal_ly_do" class="form-label">Lý do huỷ:</label>
+                            <textarea name="ly_do" id="modal_ly_do" rows="3" class="form-control" required></textarea>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                            <button type="submit" class="btn btn-danger">Xác nhận huỷ</button>
+                        </div>
                     </div>
-                    <div class="modal-body">
-                        <label for="modal_ly_do" class="form-label">Lý do huỷ:</label>
-                        <textarea name="ly_do" id="modal_ly_do" rows="3" class="form-control" required></textarea>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                        <button type="submit" class="btn btn-danger">Xác nhận huỷ</button>
-                    </div>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
     </div>
-    </div>
 
-   
+
 
 
 
 
 
 @endsection
-    @section('js')
+@section('js')
 
-        {{--
-        <script>
-            function duyetLe(id, ma_giao_dich) {
-                if (confirm('Bạn có chắc muốn duyệt giao dịch mã #' + ma_giao_dich + '?')) {
-                    document.getElementById('form-duyet-' + id).submit();
-                }
+    {{--
+    <script>
+        function duyetLe(id, ma_giao_dich) {
+            if (confirm('Bạn có chắc muốn duyệt giao dịch mã #' + ma_giao_dich + '?')) {
+                document.getElementById('form-duyet-' + id).submit();
             }
-        </script> --}}
-        <script>
-            function duyetLe(id, ma_giao_dich) {
-                if (!confirm(`Bạn có chắc muốn duyệt giao dịch ${ma_giao_dich}?`)) return;
+        }
+    </script> --}}
+    <script>
+        function duyetLe(id, ma_giao_dich) {
+            if (!confirm(`Bạn có chắc muốn duyệt giao dịch ${ma_giao_dich}?`)) return;
 
-                fetch(`/vi/cap-nhat-tung-giao-dich/${id}`, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "X-CSRF-TOKEN": "{{ csrf_token() }}"
-                    },
-                    body: JSON.stringify({
-                        id: id,
-                        trang_thai: 1
-                    })
+            fetch(`/vi/cap-nhat-tung-giao-dich/${id}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                },
+                body: JSON.stringify({
+                    id: id,
+                    trang_thai: 1
                 })
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data.status === 'success') {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Thành công!',
-                                text: data.message,
-                                confirmButtonColor: '#009688'
-                            }).then(() => location.reload());
-                        } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Lỗi!',
-                                text: data.message
-                            });
-                        }
-                    })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Thành công!',
+                            text: data.message,
+                            confirmButtonColor: '#009688'
+                        }).then(() => location.reload());
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Lỗi!',
+                            text: data.message
+                        });
+                    }
+                })
 
-            }
-        </script>
+        }
+    </script>
 
 
 
 
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                const huyModal = document.getElementById('huyModal');
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Khi modal mở, gán ID vào input ẩn
+            const huyModal = document.getElementById('huyModal');
+            if (huyModal) {
                 huyModal.addEventListener('show.bs.modal', function (event) {
                     const button = event.relatedTarget;
                     const giaoDichId = button.getAttribute('data-id');
                     document.getElementById('modal_gd_id').value = giaoDichId;
                 });
-            });
-        </script>
-
-
-        {{-- Check All --}}
-        <script>
-            document.getElementById('checkAll').addEventListener('click', function () {
-                document.querySelectorAll('input[name="ids[]"]').forEach(el => el.checked = this.checked);
-            });
-        </script>
-
-        <script>
-            function toggleLyDo() {
-                const trangThai = document.getElementById('trang_thai_moi').value;
-                const lyDoWrapper = document.getElementById('ly_do_wrapper');
-                const lyDoInput = document.getElementById('ly_do_chung');
-
-                if (trangThai == '2') {
-                    lyDoWrapper.classList.remove('d-none');
-                    lyDoInput.setAttribute('required', 'required');
-                } else {
-                    lyDoWrapper.classList.add('d-none');
-                    lyDoInput.removeAttribute('required');
-                }
             }
 
-            document.getElementById('checkAll')?.addEventListener('click', function () {
-                const checkboxes = document.querySelectorAll('input.trang_thai_gd');
-                checkboxes.forEach(cb => cb.checked = this.checked);
-            });
-
-            document.querySelector('form-cap-nhat-trang-thai').addEventListener('submit', function (e) {
-                const selected = document.querySelectorAll('input.trang_thai_gd:checked');
-                if (selected.length === 0) {
-                    alert('Vui lòng chọn ít nhất một giao dịch.');
+            // Bắt sự kiện submit form huỷ
+            const huyForm = document.getElementById('huyForm');
+            if (huyForm) {
+                huyForm.addEventListener('submit', function (e) {
                     e.preventDefault();
-                    return;
-                }
 
-                const trangThaiMoi = document.getElementById('trang_thai_moi').value;
-                if (!trangThaiMoi) {
-                    alert('Vui lòng chọn trạng thái mới.');
-                    e.preventDefault();
-                    return;
-                }
+                    const id = document.getElementById('modal_gd_id').value;
+                    const ly_do = document.getElementById('modal_ly_do').value;
 
-                let valid = true;
-                selected.forEach(cb => {
-                    if (cb.dataset.trangThai !== '0') {
-                        valid = false;
-                    }
+                    fetch(`/vi/cap-nhat-tung-giao-dich/${id}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify({
+                            id: id,
+                            trang_thai: 2,
+                            ly_do: ly_do
+                        })
+                    })
+                        .then(async res => {
+                            const data = await res.json().catch(() => ({})); // tránh lỗi khi không phải JSON
+                            if (res.ok && data.success === 'success') {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Huỷ thành công!',
+                                    text: data.message,
+                                    confirmButtonColor: '#009688'
+                                }).then(() => location.reload());
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Lỗi!',
+                                    text: data.message || 'Đã xảy ra lỗi.'
+                                });
+                            }
+                        })
+                        .catch(() => {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Lỗi!',
+                                text: 'Không thể kết nối tới máy chủ.'
+                            });
+                        });
+
                 });
+            }
+        });
+    </script>
 
-                if (!valid) {
-                    alert('Chỉ được cập nhật các giao dịch đang ở trạng thái chờ xác nhận.');
-                    e.preventDefault();
+
+
+    {{-- Check All --}}
+    <script>
+        document.getElementById('checkAll').addEventListener('click', function () {
+            document.querySelectorAll('input[name="ids[]"]').forEach(el => el.checked = this.checked);
+        });
+    </script>
+
+    <script>
+        function toggleLyDo() {
+            const trangThai = document.getElementById('trang_thai_moi').value;
+            const lyDoWrapper = document.getElementById('ly_do_wrapper');
+            const lyDoInput = document.getElementById('ly_do_chung');
+
+            if (trangThai == '2') {
+                lyDoWrapper.classList.remove('d-none');
+                lyDoInput.setAttribute('required', 'required');
+            } else {
+                lyDoWrapper.classList.add('d-none');
+                lyDoInput.removeAttribute('required');
+            }
+        }
+
+        function handleCapNhat() {
+            const trangThai = document.getElementById('trang_thai_moi').value;
+            if (trangThai === "1") {
+                const confirmed = confirm("Bạn có chắc chắn muốn duyệt yêu cầu này?");
+                if (!confirmed) {
+                    return false; // Ngăn submit
+                }
+            }
+            return true; // Cho phép submit
+        }
+
+
+        document.getElementById('checkAll')?.addEventListener('click', function () {
+            const checkboxes = document.querySelectorAll('input.trang_thai_gd');
+            checkboxes.forEach(cb => cb.checked = this.checked);
+        });
+
+        document.querySelector('form-cap-nhat-trang-thai').addEventListener('submit', function (e) {
+            const selected = document.querySelectorAll('input.trang_thai_gd:checked');
+            if (selected.length === 0) {
+                alert('Vui lòng chọn ít nhất một giao dịch.');
+                e.preventDefault();
+                return;
+            }
+
+            const trangThaiMoi = document.getElementById('trang_thai_moi').value;
+            if (!trangThaiMoi) {
+                alert('Vui lòng chọn trạng thái mới.');
+                e.preventDefault();
+                return;
+            }
+
+            let valid = true;
+            selected.forEach(cb => {
+                if (cb.dataset.trangThai !== '0') {
+                    valid = false;
                 }
             });
 
-            document.addEventListener('DOMContentLoaded', toggleLyDo);
-        </script>
+            if (!valid) {
+                alert('Chỉ được cập nhật các giao dịch đang ở trạng thái chờ xác nhận.');
+                e.preventDefault();
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', toggleLyDo);
+    </script>
 
 
 
 
 
-        </script>
-        <!-- customizer js -->
-        <script src="{{ asset('assets/js/customizer.js') }}"></script>
+    </script>
+    <!-- customizer js -->
+    <script src="{{ asset('assets/js/customizer.js') }}"></script>
 
-        <!-- Sidebar js -->
-        <script src="{{ asset('assets/js/config.js') }}"></script>
+    <!-- Sidebar js -->
+    <script src="{{ asset('assets/js/config.js') }}"></script>
 
-        <!-- Plugins JS -->
-        <script src="{{ asset('assets/js/sidebar-menu.js') }}"></script>
+    <!-- Plugins JS -->
+    <script src="{{ asset('assets/js/sidebar-menu.js') }}"></script>
 
-        <!-- Data table js -->
-        <script src="{{ asset('assets/js/jquery.dataTables.js') }}"></script>
-        <script src="{{ asset('assets/js/custom-data-table.js') }}"></script>
+    <!-- Data table js -->
+    <script src="{{ asset('assets/js/jquery.dataTables.js') }}"></script>
+    <script src="{{ asset('assets/js/custom-data-table.js') }}"></script>
 
-        <script src="{{ asset('assets/js/checkbox-all-check.js') }}"></script>
-    @endsection
+    <script src="{{ asset('assets/js/checkbox-all-check.js') }}"></script>
+@endsection
