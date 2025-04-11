@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Admin\BinhLuanController as AdminBinhLuanController;
 use App\Models\User;
 use App\Models\DanhGia;
 use App\Models\SanPham;
@@ -13,17 +12,18 @@ use App\Http\Controllers\VaiTroController;
 use App\Http\Controllers\AdminViController;
 use App\Http\Controllers\BaiVietController;
 use App\Http\Controllers\BienTheController;
-
 use App\Http\Controllers\ContactController;
 
-use App\Http\Controllers\BinhLuanController;
-
 use App\Http\Controllers\DanhGiaController;
+
 use App\Http\Controllers\DonHangController;
+
 use App\Http\Controllers\SanPhamController;
 use App\Http\Controllers\ThongKeController;
+use App\Http\Controllers\BinhLuanController;
 use App\Http\Controllers\HelperCommon\Helper;
 use App\Http\Controllers\ThuocTinhController;
+use App\Http\Controllers\GiaoDichViController;
 use App\Http\Controllers\Payment\PaymentVnPay;
 use App\Http\Controllers\Admins\UserController;
 use App\Http\Controllers\PhieuGiamGiaController;
@@ -43,6 +43,7 @@ use App\Http\Controllers\Admins\Responsibility\RoleController;
 use App\Http\Controllers\Admins\Responsibility\PermissionController;
 use App\Http\Controllers\Clients\UserController as ClientsUserController;
 use App\Http\Controllers\Clients\Auth\AuthController as AuthAuthController;
+use App\Http\Controllers\Admin\BinhLuanController as AdminBinhLuanController;
 
 
 // Login Admin Controller
@@ -270,6 +271,11 @@ Route::post('/admin/vi/xu-ly-nhieu', [AdminViController::class, 'updateTrangThai
 Route::get('/vi-nguoi-dung', [AdminViController::class, 'index'])->name('vis.index');
 Route::get('/admin/vi-nguoi-dung/{id}', [AdminViController::class, 'show'])->name('admin.vis.show');
 Route::post('/admin/vi-nguoi-dung/update-trang-thai', [AdminViController::class, 'updateTrangThai'])->name('admin.vis.updateTrangThai');
+Route::post('/vi/cap-nhat-tung-giao-dich/{id}', [ViController::class, 'updateTrangThaiTungGiaoDich'])->name('admin.vis.updateTrangThaiTungGiaoDich');
+
+
+
+Route::put('/giao-dich/{id}/huy', [GiaoDichViController::class, 'huy'])->name('giao-dich.huy');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/binhluan', [BinhLuanController::class, 'index'])->name('binhluans.index');
@@ -289,4 +295,3 @@ Route::post('/binhluan/{id}/reply', [BinhLuanController::class, 'store'])->name(
 
 Route::post('/binhluan', [BinhLuanController::class, 'store'])->name('binhluan.store');
 
-});

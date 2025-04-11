@@ -6,6 +6,7 @@ use App\Models\BienThe;
 use App\Models\DonHang;
 use App\Models\GioHang;
 use App\Models\SanPham;
+use Illuminate\Support\Str;
 use App\Events\DatHangEvent;
 use App\Models\PhieuGiamGia;
 use Illuminate\Http\Request;
@@ -236,15 +237,19 @@ class ThanhToanController extends Controller
                 'trang_thai_thanh_toan' => 1,
                 'created_at' => now()
             ]);
-
+          
+            $maGiaoDich = strtoupper(Str::random(10)); // Ví dụ: 9KJL0PX2QZ
+          
             // Lưu giao dịch ví
             DB::table('giaodichvis')->insert([
                 'vi_id' => $user->vi->id,
+                'ma_giao_dich' =>  $maGiaoDich,
                 'so_tien' => -$tongTien,
                 'loai' => 'Mua hàng',
-                'mo_ta' => '🛒 Mua hàng | Đơn #' . $donHang->ma_don_hang . ' |💰 Số dư: '
-                    . number_format($soDuTruoc, 0, ',', '.') . ' ➝ ' . number_format($soDuSau, 0, ',', '.') . ' VNĐ',
-                'trang_thai' => 1, // Thành công
+                'mo_ta' => '🛒 Mua hàng | Đơn #' . $donHang->ma_don_hang
+                    . "\n💰 Số dư: " . number_format($soDuTruoc, 0, ',', '.')
+                    . ' ➝ ' . number_format($soDuSau, 0, ',', '.') . ' VNĐ',
+
                 'created_at' => now(),
                 'updated_at' => now()
             ]);
@@ -432,10 +437,4 @@ class ThanhToanController extends Controller
         broadcast(new DatHangEvent($donHang))->toOthers();
         return response()->json(['message' => 'Đơn hàng đã đặt thành công!', 'order' => $donHang]);
     }
-
-
-
-
-
-
 }

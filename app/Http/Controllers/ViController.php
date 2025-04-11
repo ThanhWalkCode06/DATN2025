@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\GiaoDichVi;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -26,6 +28,10 @@ class ViController extends Controller
             $query->whereDate('created_at', '<=', $request->to);
         }
 
+        // Lọc theo trạng thái nếu có
+        if ($request->filled('trang_thai') && in_array($request->trang_thai, ['0', '1', '2'])) {
+            $query->where('trang_thai', $request->trang_thai);
+        }
         // Phân trang kết quả
         $giaodichs = $query->paginate(10);
 
@@ -122,6 +128,8 @@ class ViController extends Controller
                 // Ghi giao dịch
                 DB::table('giaodichvis')->insert([
                     'vi_id' => $vi->id,
+
+                    'ma_giao_dich' => $request->vnp_TxnRef,
                     'so_tien' => $soTienNap,
                     'loai' => 'Nạp tiền',
                     'mo_ta' => "💸 Nạp tiền qua VNPAY\n 💰 Số dư: " . number_format($soDuTruoc, 0, ',', '.') . " ➝ " . number_format($soDuSau, 0, ',', '.') . " VNĐ",
@@ -142,6 +150,7 @@ class ViController extends Controller
         if ($user && $soTienNap) {
             DB::table('giaodichvis')->insert([
                 'vi_id' => $user->vi->id,
+                'ma_giao_dich' => $request->vnp_TxnRef,
                 'so_tien' => $soTienNap,
                 'loai' => 'Nạp tiền',
                 'mo_ta' => 'Nạp tiền thất bại qua VNPAY',
@@ -158,74 +167,209 @@ class ViController extends Controller
 
 
     public function formRutTien(Request $request)
-{
-    $nganHangs = config('nganhang');
+    {
+        $nganHangs = config('nganhang');
 
-    // Nếu có truyền mã ngân hàng trong request thì tìm tên
-    $ten_ngan_hang = null;
-    if ($request->has('nganhang')) {
-        $ten_ngan_hang = collect($nganHangs)->firstWhere('code', $request->ngan_hang)['name'] ?? $request->ngan_hang;
+        // Nếu có truyền mã ngân hàng trong request thì tìm tên
+        $ten_ngan_hang = null;
+        if ($request->has('nganhang')) {
+            $ten_ngan_hang = collect($nganHangs)->firstWhere('code', $request->ngan_hang)['name'] ?? $request->ngan_hang;
+        }
+
+        return view('clients.vis.rut_tien', compact('nganHangs', 'ten_ngan_hang'));
     }
 
-    return view('clients.vis.rut_tien', compact('nganHangs', 'ten_ngan_hang'));
-}
 
 
 
-  
 
 
     public function xuLyRutTien(Request $request)
-{
-    $user = Auth::user();
+    {
+        $user = Auth::user();
 
-    if (!$user) {
-        return redirect()->route('login')->with('error', 'Bạn cần đăng nhập để sử dụng chức năng này.');
+        if (!$user) {
+            return redirect()->route('login')->with('error', 'Bạn cần đăng nhập để sử dụng chức năng này.');
+        }
+
+        $request->validate([
+            'so_tien' => 'required|numeric|min:10000',
+            'ten_ngan_hang' => 'required|string|max:255',
+            'so_tai_khoan' => 'required|string|max:255',
+            'ten_nguoi_nhan' => 'required|string|max:255',
+        ]);
+
+        $soTienRut = (int) $request->so_tien;
+        $vi = $user->layHoacTaoVi();
+
+        // Tính tổng số tiền của các giao dịch rút tiền đang chờ xử lý
+        $tongTienDangCho = $vi->giaodichs()
+            ->where('loai', 'Rút tiền')
+            ->where('trang_thai', 0)
+            ->sum('so_tien');
+
+        // Kiểm tra tổng số tiền chờ + mới có vượt quá số dư không
+        if (($tongTienDangCho + $soTienRut) > $vi->so_du) {
+            return back()->with('error', 'Tổng số tiền các yêu cầu rút đang chờ vượt quá số dư ví của bạn.');
+        }
+        $maGiaoDich = strtoupper(Str::random(10)); // Ví dụ: 9KJL0PX2QZ
+
+        // Ghi nhận yêu cầu rút tiền - CHƯA TRỪ TIỀN
+        DB::table('giaodichvis')->insert([
+            'vi_id' => $vi->id,
+            'ma_giao_dich' => $maGiaoDich,
+            'so_tien' => $soTienRut,
+            'loai' => 'Rút tiền',
+
+            'mo_ta' => "💸 Yêu cầu rút tiền\n"
+                . "💰 Số dư hiện tại: " . number_format($vi->so_du, 0, ',', '.') . " VNĐ\n"
+                . "🏦 Ngân hàng: {$request->ten_ngan_hang}\n"
+                . "🔢 Số tài khoản: {$request->so_tai_khoan}\n"
+                . "👤 Người nhận: {$request->ten_nguoi_nhan}",
+
+            'trang_thai' => 0,
+            'ten_ngan_hang' => $request->ten_ngan_hang,
+            'so_tai_khoan' => $request->so_tai_khoan,
+            'ten_nguoi_nhan' => $request->ten_nguoi_nhan,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        return redirect()->route('vi')->with('success', 'Yêu cầu rút tiền đã được gửi. Vui lòng chờ xác nhận.');
     }
 
-    $request->validate([
-        'so_tien' => 'required|numeric|min:10000',
-        'ten_ngan_hang' => 'required|string|max:255',
-        'so_tai_khoan' => 'required|string|max:255',
-        'ten_nguoi_nhan' => 'required|string|max:255',
-    ]);
+    // public function updateTrangThaiTungGiaoDich(Request $request)
+    // {
+    //     $giaoDich = GiaoDichVi::findOrFail($request->id);
+    //     $trangThai = $request->input('trang_thai');
+    //     $lyDoChung = $request->input('ly_do'); // lấy lý do nếu có
+    //     $daXuLy = 0;
+    //     if ($giaoDich->trang_thai != 0) {
+    //         return back()->with('error', 'Chỉ có thể cập nhật giao dịch đang chờ xử lý.');
+    //     }
 
-    $soTienRut = (int) $request->so_tien;
-    $vi = $user->layHoacTaoVi();
+    //     $giaoDich->trang_thai = $request->trang_thai;
 
-    // Tính tổng số tiền của các giao dịch rút tiền đang chờ xử lý
-    $tongTienDangCho = $vi->giaodichs()
-        ->where('loai', 'Rút tiền')
-        ->where('trang_thai', 0)
-        ->sum('so_tien');
+    //     if ($giaoDich->loai === 'Rút tiền') {
+    //         $vi = $giaoDich->vi;
+    //         $vi->refresh(); 
+    //         $soDuTruoc = $vi->so_du;
 
-    // Kiểm tra tổng số tiền chờ + mới có vượt quá số dư không
-    if (($tongTienDangCho + $soTienRut) > $vi->so_du) {
-        return back()->with('error', 'Tổng số tiền các yêu cầu rút đang chờ vượt quá số dư ví của bạn.');
+    //         if ($trangThai == 1) {
+    //             // Duyệt rút
+    //             if ($soDuTruoc >= $giaoDich->so_tien) {
+    //                 $vi->so_du -= $giaoDich->so_tien;
+    //                 $vi->save();
+    //                 // $vi->refresh(); // Đảm bảo lấy số dư mới nhất
+    //                 $giaoDich->mo_ta = "💸 Rút tiền từ ví\n"
+    //                     . "💰Số dư: " . number_format($soDuTruoc, 0, ',', '.') . " ➝ " . number_format($vi->so_du, 0, ',', '.') . " VNĐ\n"
+    //                     . "🏦 Ngân hàng: {$giaoDich->ten_ngan_hang}\n"
+    //                     . "🔢 Số tài khoản: {$giaoDich->so_tai_khoan}\n"
+    //                     . "👤 Người nhận: {$giaoDich->ten_nguoi_nhan}";
+    //                 $giaoDich->trang_thai = 1;
+    //                 $giaoDich->save();
+    //                 $daXuLy++;
+    //             } else {
+    //                 return back()->with('error', 'Ví không đủ số dư để duyệt rút tiền.');
+    //             }
+
+    //         } elseif ($trangThai == 2) {
+    //             // Huỷ rút
+    //             $vi->refresh(); // cập nhật lại số dư để hiển thị chính xác
+    //             $giaoDich->trang_thai = 2;
+    //             $giaoDich->mo_ta = "❌ Yêu cầu rút tiền đã bị huỷ\n"
+    //                 . "⏱ Thời gian: " . now()->format('d/m/Y H:i') . "\n"
+    //                 . "📝 Lý do: {$lyDoChung}\n"
+    //                 . "🏦 Ngân hàng: {$giaoDich->ten_ngan_hang}\n"
+    //                 . "🔢 Số tài khoản: {$giaoDich->so_tai_khoan}\n"
+    //                 . "👤 Người nhận: {$giaoDich->ten_nguoi_nhan}\n"
+    //                 . "💰 Số dư hiện tại: " . number_format($giaoDich->vi->so_du, 0, ',', '.') . " VNĐ";
+    //             $giaoDich->save();
+    //             $daXuLy++;
+    //         }
+    //     } else {
+    //         $giaoDich->trang_thai = $trangThai;
+    //         $giaoDich->save();
+    //         $daXuLy++;
+    //     }
+    //     $giaoDich->save();
+
+    //     return back()->with('success', 'Cập nhật trạng thái thành công.');
+    // }
+
+    public function updateTrangThaiTungGiaoDich(Request $request)
+    {
+        try {
+            $giaoDich = GiaoDichVi::findOrFail($request->id);
+            $trangThai = $request->input('trang_thai');
+            $lyDoChung = $request->input('ly_do'); // lấy lý do nếu có
+
+            if ($giaoDich->trang_thai != 0) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Chỉ có thể cập nhật giao dịch đang chờ xử lý.'
+                ], 400);
+            }
+
+            if ($giaoDich->loai === 'Rút tiền') {
+                $vi = $giaoDich->vi;
+                $vi->refresh();
+                $soDuTruoc = $vi->so_du;
+
+                if ($trangThai == 1) {
+                    // Duyệt rút tiền
+                    if ($soDuTruoc >= $giaoDich->so_tien) {
+                        $vi->so_du -= $giaoDich->so_tien;
+                        $vi->save();
+
+                        $giaoDich->mo_ta = "💸 Rút tiền từ ví\n"
+                            . "💰Số dư: " . number_format($soDuTruoc, 0, ',', '.') . " ➝ " . number_format($vi->so_du, 0, ',', '.') . " VNĐ\n"
+                            . "🏦 Ngân hàng: {$giaoDich->ten_ngan_hang}\n"
+                            . "🔢 Số tài khoản: {$giaoDich->so_tai_khoan}\n"
+                            . "👤 Người nhận: {$giaoDich->ten_nguoi_nhan}";
+                        $giaoDich->trang_thai = 1;
+                        $giaoDich->save();
+                    } else {
+                        return response()->json([
+                            'success' => false,
+                            'message' => 'Ví không đủ số dư để duyệt rút tiền.'
+                        ], 400);
+                    }
+                } elseif ($trangThai == 2) {
+
+                    // Huỷ rút tiền
+                    $vi->refresh();
+                    $giaoDich->trang_thai = 2;
+                    $giaoDich->mo_ta = "❌ Yêu cầu rút tiền đã bị huỷ\n"
+                        . "⏱ Thời gian: " . now()->format('d/m/Y H:i') . "\n"
+                        . "📝 Lý do: {$lyDoChung}\n"
+                        . "🏦 Ngân hàng: {$giaoDich->ten_ngan_hang}\n"
+                        . "🔢 Số tài khoản: {$giaoDich->so_tai_khoan}\n"
+                        . "👤 Người nhận: {$giaoDich->ten_nguoi_nhan}\n"
+                        . "💰 Số dư hiện tại: " . number_format($vi->so_du, 0, ',', '.') . " VNĐ";
+                    $giaoDich->save();
+                    // Trả về thông báo huỷ giao dịch
+                    return response()->json([
+                        'success' => 'success',
+                        'message' => 'Huỷ giao dịch thành công.'
+                    ]);
+                }
+            } else {
+                
+                // Giao dịch không phải rút tiền
+                $giaoDich->trang_thai = $trangThai;
+                $giaoDich->save();
+            }
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Cập nhật trạng thái thành công.'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Lỗi máy chủ: ' . $e->getMessage()
+            ], 500);
+        }
     }
-
-    // Ghi nhận yêu cầu rút tiền - CHƯA TRỪ TIỀN
-    DB::table('giaodichvis')->insert([
-        'vi_id' => $vi->id,
-        'so_tien' => $soTienRut,
-        'loai' => 'Rút tiền',
-        
-        'mo_ta' => "💸 Yêu cầu rút tiền\n"
-        . "💰 Số dư hiện tại: " . number_format($vi->so_du, 0, ',', '.') . " VNĐ\n"
-        . "🏦 Ngân hàng: {$request->ten_ngan_hang}\n"
-        . "🔢 Số tài khoản: {$request->so_tai_khoan}\n"
-        . "👤 Người nhận: {$request->ten_nguoi_nhan}",
-        
-        'trang_thai' => 0,
-        'ten_ngan_hang' => $request->ten_ngan_hang,
-        'so_tai_khoan' => $request->so_tai_khoan,
-        'ten_nguoi_nhan' => $request->ten_nguoi_nhan,
-        'created_at' => now(),
-        'updated_at' => now(),
-    ]);
-
-    return redirect()->route('vi')->with('success', 'Yêu cầu rút tiền đã được gửi. Vui lòng chờ xác nhận.');
-}
-
-    
 }

@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Clients;
 use App\Models\User;
 use App\Models\BienThe;
 use App\Models\DonHang;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\LichSuDonHang;
 use App\Models\ChiTietDonHang;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -127,8 +129,10 @@ class UserController extends Controller
 
                         // Ghi log giao dịch hoàn tiền với mô tả đầy đủ
                         $soDuTruoc = $vi->so_du - $donHang->tong_tien; // vì đã cộng tiền trước đó
+                        $maGiaoDich = strtoupper(Str::random(10)); // Ví dụ: 9KJL0PX2QZ
                         $vi->giaodichs()->create([
                             'so_tien' => $donHang->tong_tien,
+                            'ma_giao_dich' => $maGiaoDich,
                             'loai' => 'Hoàn tiền',
                             'trang_thai' => 1,
                             'mo_ta' => "↩️ Hoàn tiền do hủy đơn hàng {$donHang->ma_don_hang}\n 💰 Số dư: "
@@ -187,8 +191,10 @@ class UserController extends Controller
 
                         // Ghi lịch sử hoàn tiền
                         $soDuTruoc = $soDuMoi - $donHang->tong_tien;
+                        $maGiaoDich = strtoupper(Str::random(10)); // Ví dụ: 9KJL0PX2QZ
                         DB::table('giaodichvis')->insert([
                             'vi_id' => $user->vi->id,
+                            'ma_giao_dich' => $maGiaoDich,
                             'so_tien' => $donHang->tong_tien,
                             'loai' => 'Hoàn tiền',
                             'trang_thai' => 1,

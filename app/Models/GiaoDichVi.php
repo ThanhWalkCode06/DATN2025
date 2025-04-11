@@ -12,6 +12,7 @@ class GiaoDichVi extends Model
 
     protected $fillable = [
         'vi_id',
+        'ma_giao_dich',
         'so_tien',
         'loai',
         'mo_ta',
