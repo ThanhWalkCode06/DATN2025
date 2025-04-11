@@ -70,18 +70,28 @@
 
                                     </div>
 
+                                    @if(!empty($user->ngay_sinh))
+                                        <div class="mb-4 row align-items-center">
+                                            <label class="col-lg-2 col-md-3 col-form-label form-label-title">Ngày sinh
+                                            </label>
+                                            <div class="col-md-9 col-lg-8">
+                                                <input style="border: 1px solid #ced4da;" class="form-control " type="date" name="ngay_sinh"
+                                                value="{{ $user->ngay_sinh }}" readonly>
+                                                @error('ngay_sinh')
+                                            <p class="text-danger">{{ $message }}</p>
+                                            @enderror
+                                            </div>
+                                        </div>
+                                    @else
                                     <div class="mb-4 row align-items-center">
                                         <label class="col-lg-2 col-md-3 col-form-label form-label-title">Ngày sinh
-                                         </label>
+                                        </label>
                                         <div class="col-md-9 col-lg-8">
                                             <input style="border: 1px solid #ced4da;" class="form-control " type="date" name="ngay_sinh"
                                             value="{{ $user->ngay_sinh }}">
-                                            @error('ngay_sinh')
-                                        <p class="text-danger">{{ $message }}</p>
-                                        @enderror
                                         </div>
-
                                     </div>
+                                    @endif
 
                                     <div class="mb-4 row align-items-center">
                                         <label class="col-lg-2 col-md-3 col-form-label form-label-title">Địa chỉ

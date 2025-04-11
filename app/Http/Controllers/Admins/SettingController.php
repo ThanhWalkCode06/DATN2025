@@ -140,7 +140,7 @@ class SettingController extends Controller
         ]);
         // dd($data);
         if($request->hasFile('anh_dai_dien')){
-            if(Auth::user()->anh_dai_dien && file_exists(storage_path("app/public/".Auth::user()->anh_dai_dien))){
+            if(Auth::user()->anh_dai_dien && file_exists(storage_path("app/public/".Auth::user()->anh_dai_dien)) && !file_exists(storage_path("app/public/images")) ){
                 unlink(storage_path('app/public/'.Auth::user()->anh_dai_dien));
             }
             $fileName = time() . '_' . $request->file('anh_dai_dien')->getClientOriginalName();

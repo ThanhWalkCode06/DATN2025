@@ -83,14 +83,14 @@
                 <center>
                     <div style="margin: auto" class="col-12">
                         <div class="image-404">
-                            <img style="height: 500px; width: 100%; border-radius:24px" src="../assets/images/inner-page/403.webp" class="img-fluid blur-up lazyload" alt="">
+                            <img style="height: 500px; width: 100%; border-radius:24px" src="{{ asset('/assets/images/inner-page/403.webp') }}" class="img-fluid blur-up lazyload" alt="">
                         </div>
                     </div>
                 </center>
 
                 <div class="col-12">
                     <div class="contain-404">
-                            <button onclick="window.history.back();"
+                            <button id="back-btn" data-previous-url="{{ $previousUrl }}"
                             class="btn btn-md text-white theme-bg-color mt-4 mx-auto">Trở lại trang trước đó</button>
 
                     </div>
@@ -115,39 +115,21 @@
     <!-- Bg overlay End -->
 
     <!-- latest jquery-->
-    <script src="../assets/js/jquery-3.6.0.min.js"></script>
 
-    <!-- jquery ui-->
-    <script src="../assets/js/jquery-ui.min.js"></script>
-
-    <!-- Bootstrap js-->
-    <script src="../assets/js/bootstrap/bootstrap.bundle.min.js"></script>
-    <script src="../assets/js/bootstrap/popper.min.js"></script>
-    <script src="../assets/js/bootstrap/bootstrap-notify.min.js"></script>
-
-    <!-- Lazyload Js -->
-    <script src="../assets/js/lazysizes.min.js"></script>
-
-    <!-- Slick js-->
-    <script src="../assets/js/slick/slick.js"></script>
-    <script src="../assets/js/slick/slick-animation.min.js"></script>
-    <script src="../assets/js/slick/custom_slick.js"></script>
-
-    <!-- feather icon js-->
-    <script src="../assets/js/feather/feather.min.js"></script>
-    <script src="../assets/js/feather/feather-icon.js"></script>
-
-    <!-- script js -->
-    <script src="../assets/js/script.js"></script>
-
-    <!-- theme setting js -->
-    <script src="../assets/js/theme-setting.js"></script>
 </body>
 
 
 <!-- Mirrored from themes.pixelstrap.com/fastkart/front-end/404.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 11 Feb 2025 14:00:54 GMT -->
 </html>
 @endsection
-
+<script src="{{ asset('assets/js/jquery-3.6.0.min.js') }}"></script>
 @section('js')
 @endsection
+<script>
+    $(document).ready(function() {
+        document.getElementById('back-btn').addEventListener('click', function() {
+            let previousUrl = this.getAttribute('data-previous-url');
+            window.location.href = previousUrl || '{{ route("home") }}'; // Mặc định về home nếu không có
+        });
+    });
+</script>

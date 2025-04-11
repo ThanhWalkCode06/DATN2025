@@ -1,13 +1,18 @@
+
 @foreach ($lists as $key => $item)
     <tr class="justify-content-center">
         <td>
+            @if (!$item->hasRole('SuperAdmin'))
             <div class="check-box-contain">
                 <span class="form-check user-checkbox">
-                    <input class="checkbox_animated check-it" type="checkbox" value="">
+                    <input class="checkbox_animated check-it " type="checkbox" value="{{ $item->id }}">
                 </span>
-                <span>{{ ++$key }}</span>
             </div>
+            @endif
+
         </td>
+
+        <td>{{ ++$key }}</td>
 
         <td>{{ $item->username }}</td>
 

@@ -119,8 +119,9 @@
                                                 <input type="hidden" name="ids[]" value="{{ $giaoDich->id }}">
                                             @endforeach
                                             <input type="hidden" name="trang_thai" value="1">
-                                            <button type="submit" class="btn btn-sm"
-                                                style="background-color: #009688; color: white; font-weight: 600;">
+                                            <button type="submit" class="btn btn-sm "
+                                                style="background-color: #009688; color: white; font-weight: 600;"
+                                                onclick="return confirm('Bạn có chắc chắn muốn duyệt yêu cầu rút tiền?')">
                                                 ✔  Duyệt rút tiền
                                             </button>
                                         </form>

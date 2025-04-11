@@ -45,7 +45,9 @@ class DynamicPermissionMiddleware
         if (!$permission) {
             return $next($request);
         }else if( $permission && !$user->hasPermissionTo($permission)){
-            abort(403);
+            return response()->view('errors.403', [
+                'previousUrl' => url()->previous() !== url()->current() ? url()->previous() : route('index')
+            ], 403);
         }
 
         // Nếu là quyền xóa, kiểm tra xem user có phải là người tạo không

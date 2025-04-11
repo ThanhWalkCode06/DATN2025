@@ -836,9 +836,6 @@
             <div class="title">
                 <h2>Sản phẩm liên quan</h2>
                 <span class="title-leaf">
-                    <svg class="icon-width">
-                        <use xlink:href="https://themes.pixelstrap.com/fastkart/assets/svg/leaf.svg#leaf"></use>
-                    </svg>
                 </span>
             </div>
             <div class="row">
@@ -1080,10 +1077,10 @@
                     label.style.cursor = "pointer";
                     label.innerHTML = `
                 <input type="radio" name="size" class="d-none variant-size-selector"
-                    value="${size.id}" data-price="${size.gia_ban}" 
-                    data-quantity="${size.so_luong}" 
-                    data-image="${size.anh}" 
-                    data-size="${size.gia_tri}">  
+                    value="${size.id}" data-price="${size.gia_ban}"
+                    data-quantity="${size.so_luong}"
+                    data-image="${size.anh}"
+                    data-size="${size.gia_tri}">
                 <span class="option-box">${size.gia_tri}</span>
             `;
                     sizeContainer.appendChild(label);

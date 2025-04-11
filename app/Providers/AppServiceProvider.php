@@ -4,12 +4,14 @@ namespace App\Providers;
 
 use App\Models\BaiViet;
 use App\Models\Setting;
+use Illuminate\Support\Str;
 use App\Models\PhieuGiamGia;
 use App\Models\ChiTietDonHang;
 use App\Models\ChiTietGioHang;
 use App\Models\DanhMucSanPham;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Models\ClientDanhMucSanPham;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
@@ -33,7 +35,7 @@ class AppServiceProvider extends ServiceProvider
         View::composer('*', function ($view) {
             $view->with('globalSetting', Setting::first());
         });
-       
+
         View::composer('*', function ($view) {
             $view->with('danhMucsp', ClientDanhMucSanPham::all());
         });
@@ -73,19 +75,20 @@ class AppServiceProvider extends ServiceProvider
 
 
             View::composer('*', function ($view) {
-                $userId = Auth::id();
+                $userId = Auth::user();
                 $phieuGiamGiaThanhToans = collect(); // Khởi tạo Collection rỗng nếu user chưa đăng nhập
-        
+                // dd(Str::upper($userId->username));
                 if ($userId) {
                     $phieuGiamGiaThanhToans = PhieuGiamGia::where('trang_thai', 1)
                         ->where('ngay_bat_dau', '<=', now())
                         ->where('ngay_ket_thuc', '>=', now())
+                        ->where('ma_phieu', 'like', "BIRTHDAY" . Str::upper($userId->username) . "%")
                         // ->whereHas('phieu_giam_gia_tai_khoans', function ($query) use ($userId) {
                         //     $query->where('user_id', $userId);
                         // })
                         ->get();
                 }
-                
+
                 // Chia sẻ biến $phieuGiamGiaThanhToans cho tất cả các view
                 $view->with('phieuGiamGiaThanhToans', $phieuGiamGiaThanhToans);
             });
@@ -95,6 +98,6 @@ class AppServiceProvider extends ServiceProvider
                 $soDuVi = $user?->vi?->so_du ?? 0;
                 $view->with('soDuVi', $soDuVi);
             });
-        
+
     }
 }
