@@ -183,7 +183,7 @@
                                         @endif
                                     </li>
                                     @if (!empty($voucher))
-                                        <span class="ms-auto theme-color" style="color:">{{ $voucher->phieuGiamGia->ma_phieu ?? '' }} giảm {{ -$voucher->phieuGiamGia->gia_tri."%"  ?? '' }}</span>
+                                        <span class="ms-auto theme-color" style="color:">{{ $voucher->phieuGiamGia->ma_phieu ?? '' }} {{ -$voucher->phieuGiamGia->gia_tri."%"  ?? '' }}</span>
                                     @endif
 
 

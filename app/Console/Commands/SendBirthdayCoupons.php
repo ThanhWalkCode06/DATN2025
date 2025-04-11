@@ -47,7 +47,7 @@ class SendBirthdayCoupons extends Command
 
         foreach ($users as $user) {
             // Kiểm tra mã sinh nhật năm nay
-            $existingCoupon = PhieuGiamGia::where('ma_phieu', 'like', 'BIRTHDAY' . $user->id . '-' . $today->year . '%')
+            $existingCoupon = PhieuGiamGia::where('ma_phieu', 'like', 'BIRTHDAY' . $user->username . '-' . $today->year . '%')
                 ->whereYear('created_at', $today->year)
                 ->first();
 
@@ -58,12 +58,12 @@ class SendBirthdayCoupons extends Command
 
             // Tạo mã
             do {
-                $couponCode = Str::upper('BIRTHDAY' . $user->id . '-' . $today->year . '-' . Str::random(6));
+                $couponCode = Str::upper('BIRTHDAY' . $user->username . '-' . $today->year . '-' . Str::random(6));
             } while (PhieuGiamGia::where('ma_phieu', $couponCode)->exists());
 
             $coupon = PhieuGiamGia::create([
                 'ma_phieu' => $couponCode,
-                'ten_phieu' => "Mừng Sinh nhật ".$user->id." thời gian: . $today->year",
+                'ten_phieu' => "Mừng Sinh nhật ".$user->username.". $today->year",
                 'ngay_bat_dau' => now(),
                 'ngay_ket_thuc' => $today->copy()->addDays(7),
                 'gia_tri' => 30,

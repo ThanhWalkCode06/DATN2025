@@ -32,14 +32,19 @@ class UpdateOrderStatus extends Command
             ->where('updated_at', '<=', Carbon::now()->subWeeks(2))
             ->get();
 
-        foreach ($orders as $order) {
-            $order->trang_thai_don_hang = 4;
-            $order->trang_thai_thanh_toan = 1;
-            $order->updated_at = Carbon::now(); // Cập nhật thời gian
-            $order->save();
-            $this->info("Đã cập nhật đơn hàng ID {$order->id} lên  4.");
+        if($orders->isNotEmpty()){
+            foreach ($orders as $order) {
+                $order->trang_thai_don_hang = 4;
+                $order->trang_thai_thanh_toan = 1;
+                $order->updated_at = Carbon::now(); // Cập nhật thời gian
+                $order->save();
+                $this->info("Đã cập nhật đơn hàng ID {$order->id} lên  4.");
+            }
+            Log::info("Updated order ID {$order->id} to status 4.");
+            $this->info('Đơn hàng đã được cập nhật.');
+        }else{
+            Log::info("Không có đơn hàng nào cần cập nhật");
         }
-        Log::info("Updated order ID {$order->id} to status 4.");
-        $this->info('Đơn hàng đã được cập nhật.');
+
     }
 }
