@@ -96,6 +96,9 @@
                         <div class="table-responsive">
                             <table class="table mb-0">
                                 <tbody>
+                                    @php
+                                        $total = 0;
+                                    @endphp
                                     @foreach ($chiTietDonHangs as $chiTietDonHang)
                                         <tr>
                                             <td class="product-detail">
@@ -140,6 +143,9 @@
                                                 </h5>
                                             </td>
                                         </tr>
+                                        @php
+                                            $total += $chiTietDonHang->gia_ban * $chiTietDonHang->so_luong;
+                                        @endphp
                                     @endforeach
                                 </tbody>
                             </table>
@@ -149,7 +155,7 @@
 
                 <div class="col-xxl-3 col-lg-4">
                     <div class="row g-4">
-                        <div class="col-lg-12 col-sm-6">
+                        <div class="col-lg-12 col-sm-20">
                             <div class="summery-box">
                                 <div class="summery-header">
                                     <h3>Chi tiết đơn hàng</h3>
@@ -166,6 +172,25 @@
                                 </ul> --}}
 
                                 <ul class="summery-total">
+                                    @php
+                                        $countPrice = 0;
+                                        $countPrice= $total - $donHang->tong_tien + 10000;
+                                    @endphp
+                                    <li class="list-total">
+                                        <h6>Mã giảm giá:  </h6>
+                                        @if (!empty($voucher))
+                                        <h4 class="price"> {{ number_format(-$countPrice, 0, '', '.') }}đ</h4>
+                                        @endif
+                                    </li>
+                                    @if (!empty($voucher))
+                                        <span class="ms-auto theme-color" style="color:">{{ $voucher->phieuGiamGia->ma_phieu ?? '' }} giảm {{ -$voucher->phieuGiamGia->gia_tri."%"  ?? '' }}</span>
+                                    @endif
+
+
+                                    <li class="list-total">
+                                        <h6>Phí ship:</h6>
+                                        <h4 class="price">{{ number_format(10000, 0, '', '.') }}đ</h4>
+                                    </li>
                                     <li class="list-total">
                                         <h4>Tổng:</h4>
                                         <h4 class="price">{{ number_format($donHang->tong_tien, 0, '', '.') }}đ</h4>
