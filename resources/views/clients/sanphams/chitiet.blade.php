@@ -939,56 +939,61 @@
                     </script>
                 @endif
                 <div class="modal-body pt-0">
-                    <form id="reviewForm" method="POST"
-                        action="{{ route('sanphams.themdanhgia', ['san_pham_id' => $sanPhams->id]) }}">
-                        @csrf
-                        <input type="hidden" name="san_pham_id" value="{{ $sanPhams->id }}">
-                        <input type="hidden" name="so_sao" id="so_sao" value="5"> <!-- Giá trị mặc định -->
-
-                        <div class="product-wrapper">
-                            <div class="product-image">
-                                <img src="{{ Storage::url($sanPhams->hinh_anh) }}" class="img-fluid rounded shadow-sm"
-                                    style="witdh:100%; height:100%;" alt="{{ $sanPhams->ten_san_pham }}">
-                            </div>
-                            <div class="product-content">
-                                <h5 class="name">{{ $sanPhams->ten_san_pham }}</h5>
-                                <div class="product-review-rating">
-                                    <div class="product-rating">
-                                        <span
-                                            class="theme-color">{{ number_format($sanPhams->giaThapNhatCuaSP(), 0, ',', '.') }}
-                                            ₫</span>
-                                        <del>{{ number_format($sanPhams->gia_cu, 0, ',', '.') }} ₫</del>
+                    @if (Auth::check())
+                        @if (session('daMuaHang'))
+                            <form id="reviewForm" method="POST"
+                                action="{{ route('sanphams.themdanhgia', ['san_pham_id' => $sanPhams->id]) }}">
+                                @csrf
+                                <input type="hidden" name="san_pham_id" value="{{ $sanPhams->id }}">
+                                <input type="hidden" name="so_sao" id="so_sao" value="5"> <!-- Giá trị mặc định -->
+                
+                                <div class="product-wrapper">
+                                    <div class="product-image">
+                                        <img src="{{ Storage::url($sanPhams->hinh_anh) }}" class="img-fluid rounded shadow-sm"
+                                            style="witdh:100%; height:100%;" alt="{{ $sanPhams->ten_san_pham }}">
+                                    </div>
+                                    <div class="product-content">
+                                        <h5 class="name">{{ $sanPhams->ten_san_pham }}</h5>
+                                        <div class="product-review-rating">
+                                            <div class="product-rating">
+                                                <span
+                                                    class="theme-color">{{ number_format($sanPhams->giaThapNhatCuaSP(), 0, ',', '.') }}
+                                                    ₫</span>
+                                                <del>{{ number_format($sanPhams->gia_cu, 0, ',', '.') }} ₫</del>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-
-                        <div class="review-box">
-                            <label></label>
-                            <div class="rating" id="ratingStars">
-                                <i class="fa fa-star" data-value="1"></i>
-                                <i class="fa fa-star" data-value="2"></i>
-                                <i class="fa fa-star" data-value="3"></i>
-                                <i class="fa fa-star" data-value="4"></i>
-                                <i class="fa fa-star" data-value="5"></i>
-                            </div>
-                        </div>
-
-                        <div class="review-box">
-                            <label for="nhan_xet" class="form-label">Nhận xét của bạn *</label>
-                            <textarea id="nhan_xet" name="nhan_xet" rows="3" class="form-control"
-                                placeholder="Viết nhận xét của bạn..."></textarea>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-md btn-theme-outline fw-bold"
-                                data-bs-dismiss="modal">Đóng</button>
-                            <button type="submit" class="btn btn-md fw-bold text-light theme-bg-color">Gửi</button>
-                        </div>
-                        {{-- <button type="submit" class="btn btn-primary mt-3">Gửi đánh giá</button> --}}
-                    </form>
-
+                
+                                <div class="review-box">
+                                    <label></label>
+                                    <div class="rating" id="ratingStars">
+                                        <i class="fa fa-star" data-value="1"></i>
+                                        <i class="fa fa-star" data-value="2"></i>
+                                        <i class="fa fa-star" data-value="3"></i>
+                                        <i class="fa fa-star" data-value="4"></i>
+                                        <i class="fa fa-star" data-value="5"></i>
+                                    </div>
+                                </div>
+                
+                                <div class="review-box">
+                                    <label for="nhan_xet" class="form-label">Nhận xét của bạn *</label>
+                                    <textarea id="nhan_xet" name="nhan_xet" rows="3" class="form-control"
+                                        placeholder="Viết nhận xét của bạn..."></textarea>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-md btn-theme-outline fw-bold"
+                                        data-bs-dismiss="modal">Đóng</button>
+                                    <button type="submit" class="btn btn-md fw-bold text-light theme-bg-color">Gửi</button>
+                                </div>
+                            </form>
+                        @else
+                            <p class="text-warning">Bạn cần mua sản phẩm để đánh giá.</p>
+                        @endif
+                    @else
+                        <p class="text-danger">Vui lòng <a href="{{ route('login.client') }}">đăng nhập</a> để đánh giá.</p>
+                    @endif
                 </div>
-
             </div>
         </div>
     </div>
