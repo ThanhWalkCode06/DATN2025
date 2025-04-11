@@ -89,22 +89,22 @@ class SanPhamController extends Controller
                         ->orderBy('gia_ban', 'asc'); // Sắp xếp theo giá thấp nhất
                     break;
 
-                    case 'Giá cao - thấp':
-                        $query->leftJoin('bien_thes', 'san_phams.id', '=', 'bien_thes.san_pham_id')
-                            ->select([
-                                'san_phams.id',
-                                'san_phams.ten_san_pham',
-                                'san_phams.gia_cu',
-                                'san_phams.khuyen_mai',
-                                'san_phams.hinh_anh',
-                                'san_phams.danh_muc_id',
-                                'san_phams.trang_thai',
-                                'san_phams.created_at',
-                                \DB::raw('MIN(bien_thes.gia_ban) as gia_ban')
-                            ])
-                            ->groupBy('san_phams.id')
-                            ->orderByDesc('gia_ban');
-                        break;
+                case 'Giá cao - thấp':
+                    $query->leftJoin('bien_thes', 'san_phams.id', '=', 'bien_thes.san_pham_id')
+                        ->select([
+                            'san_phams.id',
+                            'san_phams.ten_san_pham',
+                            'san_phams.gia_cu',
+                            'san_phams.khuyen_mai',
+                            'san_phams.hinh_anh',
+                            'san_phams.danh_muc_id',
+                            'san_phams.trang_thai',
+                            'san_phams.created_at',
+                            \DB::raw('MIN(bien_thes.gia_ban) as gia_ban')
+                        ])
+                        ->groupBy('san_phams.id')
+                        ->orderByDesc('gia_ban');
+                    break;
 
 
 
@@ -152,6 +152,12 @@ class SanPhamController extends Controller
         ])->having('san_phams_count', '>', 0)
             ->get();
 
+
+        if ($request->ajax()) {
+            $html = view('clients.sanphams.sanpham_list', compact('sanPhams'))->render();
+            return response()->json(['html' => $html]);
+        }
+
         // Trả về view với dữ liệu cần thiết
         return view('clients.sanphams.danhsach', compact('sanPhams', 'danhMucs'));
     }
@@ -196,8 +202,8 @@ class SanPhamController extends Controller
 
         // Tính phần trăm giảm giá
         $phanTramGiamGia = ($sanPham->gia_cu > 0)
-        ? round((($sanPham->gia_cu - $sanPham->giaThapNhatCuaSP()) / $sanPham->gia_cu) * 100)
-        : 0;
+            ? round((($sanPham->gia_cu - $sanPham->giaThapNhatCuaSP()) / $sanPham->gia_cu) * 100)
+            : 0;
 
 
         // Lấy sản phẩm cùng danh mục (loại trừ sản phẩm hiện tại)
