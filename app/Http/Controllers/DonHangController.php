@@ -119,6 +119,7 @@ class DonHangController extends Controller
 
             if ($request->trang_thai == 3) {
                 $data['trang_thai_thanh_toan'] = 1;
+                $data['updated_at'] = now();
             }
 
             DonHang::where("id", $donhang->id)->update($data);

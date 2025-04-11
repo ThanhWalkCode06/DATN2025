@@ -153,6 +153,7 @@ Route::controller(App\Http\Controllers\Clients\Auth\AuthController::class)->grou
 // Check xem tài khoản còn trong phạm vi hoạt động không
 Route::middleware('checkClientStatus')->group(function () {
     Route::get('/', [IndexClientController::class, 'index'])->name('home');
+});
 
 Route::get('/san-pham/{san_pham_id}/danh-gia', [DanhGiaClientsController::class, 'danhSachDanhGia']);
 Route::post('/san-pham/{san_pham_id}/danh-gia', [DanhGiaClientsController::class, 'themDanhGia'])->name('sanphams.themdanhgia');
@@ -294,4 +295,3 @@ Route::post('/danh-gia/update-status/{id}', [DanhGiaController::class, 'updateSt
 Route::post('/binhluan/{id}/reply', [BinhLuanController::class, 'store'])->name('binhluan.reply')->middleware('auth');
 
 Route::post('/binhluan', [BinhLuanController::class, 'store'])->name('binhluan.store');
-
