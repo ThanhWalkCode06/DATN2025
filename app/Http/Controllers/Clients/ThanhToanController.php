@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Clients;
 
-use App\Events\DatHangEvent;
 use App\Models\BienThe;
 use App\Models\DonHang;
 use App\Models\GioHang;
+use App\Models\SanPham;
+use Illuminate\Support\Str;
+use App\Events\DatHangEvent;
 use App\Models\PhieuGiamGia;
 use Illuminate\Http\Request;
 use App\Models\ChiTietDonHang;
@@ -18,7 +20,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use App\Http\Controllers\HelperCommon\Helper;
 use App\Http\Requests\Client\ThanhToanRequest;
-use App\Models\SanPham;
 
 class ThanhToanController extends Controller
 {
@@ -187,21 +188,21 @@ class ThanhToanController extends Controller
         if ($request->phuong_thuc_thanh_toan_id === "3") {
             $soDu = $user->vi->so_du ?? 0;
             $tongTien = $request->tong_tien;
-        
+
             if ($soDu < $tongTien) {
                 return response()->json([
                     'status' => 'error',
                     'message' => 'Số dư ví không đủ để thanh toán đơn hàng. Số dư hiện tại: ' . number_format($soDu, 0, ',', '.') . ' VNĐ.'
                 ], 400);
             }
-        
+
             // Lưu số dư trước
             $soDuTruoc = $soDu;
             $soDuSau = $soDuTruoc - $tongTien;
-        
+
             // Trừ tiền trong ví
             $user->vi->decrement('so_du', $tongTien);
-        
+
             // Tạo đơn hàng
             $donHang = DonHang::create([
                 'user_id' => $user->id,
@@ -217,22 +218,24 @@ class ThanhToanController extends Controller
                 'trang_thai_thanh_toan' => 1,
                 'created_at' => now()
             ]);
-        
+            $maGiaoDich = strtoupper(Str::random(10)); // Ví dụ: 9KJL0PX2QZ
             // Lưu giao dịch ví
             DB::table('giaodichvis')->insert([
                 'vi_id' => $user->vi->id,
+                'ma_giao_dich' =>  $maGiaoDich,
                 'so_tien' => -$tongTien,
                 'loai' => 'Mua hàng',
-                'mo_ta' => '🛒 Mua hàng | Đơn #' . $donHang->ma_don_hang . ' |💰 Số dư: '
-                    . number_format($soDuTruoc, 0, ',', '.') . ' ➝ ' . number_format($soDuSau, 0, ',', '.') . ' VNĐ',
-                'trang_thai' => 1, // Thành công
+                'mo_ta' => '🛒 Mua hàng | Đơn #' . $donHang->ma_don_hang
+                    . "\n💰 Số dư: " . number_format($soDuTruoc, 0, ',', '.')
+                    . ' ➝ ' . number_format($soDuSau, 0, ',', '.') . ' VNĐ',
+
                 'created_at' => now(),
                 'updated_at' => now()
             ]);
-        
+
             // Gửi thông báo
             $this->thongBaoDatHang($donHang);
-        
+
             // Lưu voucher nếu có
             if (!empty($request->voucher_code) && $request->giam_gia !== "0") {
                 $idVoucher = PhieuGiamGia::where('ma_phieu', $request->voucher_code)->first();
@@ -245,7 +248,7 @@ class ThanhToanController extends Controller
                     ]);
                 }
             }
-        
+
             // Thêm chi tiết đơn hàng từ giỏ hàng
             $cart = ChiTietGioHang::with('user', 'bienThe')->where('user_id', $user->id)->get();
             foreach ($cart as $item) {
@@ -255,15 +258,15 @@ class ThanhToanController extends Controller
                     'so_luong' => $item->so_luong,
                     'created_at' => now()
                 ]);
-        
+
                 BienThe::where('id', $item->bienThe->id)->update([
                     'so_luong' => DB::raw('so_luong - ' . $item->so_luong)
                 ]);
             }
-        
+
             // Xóa giỏ hàng
             $cart->each->delete();
-        
+
             return response()->json([
                 'status' => 'success',
                 'id' => $donHang->id,
@@ -271,7 +274,7 @@ class ThanhToanController extends Controller
                 'so_du_con_lai' => number_format($user->vi->fresh()->so_du, 0, ',', '.') . ' VNĐ'
             ], 200);
         }
-        
+
 
 
         return response()->json(['status' => 'error', 'message' => 'Lỗi phương thức'], 500);
@@ -378,10 +381,4 @@ class ThanhToanController extends Controller
         broadcast(new DatHangEvent($donHang))->toOthers();
         return response()->json(['message' => 'Đơn hàng đã đặt thành công!', 'order' => $donHang]);
     }
-
-    
-
-    
-    
-
 }

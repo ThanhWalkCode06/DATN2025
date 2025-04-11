@@ -77,6 +77,7 @@
                 <table class="table table-hover mb-0">
                     <thead style="background-color: #f1f1f1;">
                         <tr>
+                            <th class="text-center">Mã giao dịch</th>
                             <th class="text-center">Thời gian</th>
                             <th class="text-center">Loại</th>
                             <th class="text-center">Số tiền</th>
@@ -87,6 +88,7 @@
                     <tbody>
                         @forelse ($giaodichs as $gd)
                             <tr>
+                                <td class="text-center">{{ $gd->ma_giao_dich }}</td>
                                 <td class="text-center">{{ $gd->created_at->format('H:i d/m/Y') }}</td>
                                 <td class="text-center">{{ ucfirst($gd->loai) }}</td>
                                 <td class="text-center">

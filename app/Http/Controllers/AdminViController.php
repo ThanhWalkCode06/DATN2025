@@ -113,7 +113,7 @@ class AdminViController extends Controller
                     $vi->save();
                     // $vi->refresh(); // Đảm bảo lấy số dư mới nhất
                     $giaoDich->mo_ta = "💸 Rút tiền từ ví\n"
-                        . "Số dư: " . number_format($soDuTruoc, 0, ',', '.') . " ➝ " . number_format($vi->so_du, 0, ',', '.') . " VNĐ\n"
+                        . "💰Số dư: " . number_format($soDuTruoc, 0, ',', '.') . " ➝ " . number_format($vi->so_du, 0, ',', '.') . " VNĐ\n"
                         . "🏦 Ngân hàng: {$giaoDich->ten_ngan_hang}\n"
                         . "🔢 Số tài khoản: {$giaoDich->so_tai_khoan}\n"
                         . "👤 Người nhận: {$giaoDich->ten_nguoi_nhan}";
@@ -150,6 +150,15 @@ class AdminViController extends Controller
     } else {
         return back()->with('error', 'Chỉ được cập nhật trạng thái đang chờ xử lý .');
     }
+}
+
+
+public function duyetGiaoDich($id) {
+    return $this->updateTrangThai(request()->merge(['ids' => [$id], 'trang_thai' => 1]));
+}
+
+public function huyGiaoDich(Request $request, $id) {
+    return $this->updateTrangThai($request->merge(['ids' => [$id], 'trang_thai' => 2]));
 }
 
     
