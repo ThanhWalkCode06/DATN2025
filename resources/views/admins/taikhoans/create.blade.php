@@ -119,6 +119,32 @@
                                             </div>
 
                                         </div>
+                                        <div class="mb-4 row align-items-center">
+                                            <label class="col-lg-2 col-md-3 col-form-label form-label-title">Trạng
+                                                thái</label>
+                                            <div class="col-lg-10 col-md-9 d-flex gap-3">
+                                                <div class="form-check">
+                                                    <input style="border: 1px solid #ced4da;" type="radio"
+                                                        class="form-check-input" id="trang_thai_1" name="trang_thai"
+                                                        value="1" checked>
+                                                    <div class="status-close">
+                                                        <span>Hoạt động</span>
+                                                    </div>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input style="border: 1px solid #ced4da;" type="radio"
+                                                        class="form-check-input" id="trang_thai_0" name="trang_thai"
+                                                        value="0">
+                                                    <div class="status-danger">
+                                                        <span>Không hoạt động</span>
+                                                    </div>
+                                                </div>
+                                                @error('trang_thai')
+                                                    <p class="text-danger">{{ $message }}</p>
+                                                @enderror
+                                            </div>
+
+                                        </div>
                                     </div>
                                     <div class="col-6">
                                         <div class="mb-4 row align-items-center">
@@ -220,33 +246,6 @@
                                                     type="password" name="password_verify"
                                                     value="{{ old('password_verify') }}">
                                                 @error('password_verify')
-                                                    <p class="text-danger">{{ $message }}</p>
-                                                @enderror
-                                            </div>
-
-                                        </div>
-
-                                        <div class="mb-4 row align-items-center">
-                                            <label class="col-lg-2 col-md-3 col-form-label form-label-title">Trạng
-                                                thái</label>
-                                            <div class="col-lg-10 col-md-9 d-flex gap-3">
-                                                <div class="form-check">
-                                                    <input style="border: 1px solid #ced4da;" type="radio"
-                                                        class="form-check-input" id="trang_thai_1" name="trang_thai"
-                                                        value="1" checked>
-                                                    <div class="status-close">
-                                                        <span>Hoạt động</span>
-                                                    </div>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input style="border: 1px solid #ced4da;" type="radio"
-                                                        class="form-check-input" id="trang_thai_0" name="trang_thai"
-                                                        value="0">
-                                                    <div class="status-danger">
-                                                        <span>Không hoạt động</span>
-                                                    </div>
-                                                </div>
-                                                @error('trang_thai')
                                                     <p class="text-danger">{{ $message }}</p>
                                                 @enderror
                                             </div>

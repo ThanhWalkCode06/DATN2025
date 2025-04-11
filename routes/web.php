@@ -103,6 +103,7 @@ Route::prefix('admin')->middleware(['auth', 'checkStatus'])->group(function () {
         Route::resource('sanphams', SanPhamController::class);
 
         Route::get('users/search', [UserController::class, 'search'])->name('users-search');
+        Route::post('users/quick-update', [UserController::class, 'quickUpdate'])->name('users.quick-update');
         Route::resource('users', UserController::class);
         Route::resource('thuoctinhs', ThuocTinhController::class);
         Route::resource('giatrithuoctinh', GiaTriThuocTinhController::class);
@@ -130,8 +131,6 @@ Route::prefix('admin')->middleware(['auth', 'checkStatus'])->group(function () {
 //     return view('admins.auth.mailForgetPass');
 // });
 
-Route::get('/', [IndexClientController::class, 'index'])->name('home');
-
 Route::controller(App\Http\Controllers\Clients\Auth\AuthController::class)->group(function () {
     Route::get('/login', 'showLogin')->name('login.client');
     Route::post('/login/store', 'storeLogin')->name('login.store.client');
@@ -150,6 +149,10 @@ Route::controller(App\Http\Controllers\Clients\Auth\AuthController::class)->grou
 
     Route::get('/logout', 'logout')->name('logout.client');
 });
+
+// Check xem tài khoản còn trong phạm vi hoạt động không
+Route::middleware('checkClientStatus')->group(function () {
+    Route::get('/', [IndexClientController::class, 'index'])->name('home');
 
 Route::get('/san-pham/{san_pham_id}/danh-gia', [DanhGiaClientsController::class, 'danhSachDanhGia']);
 Route::post('/san-pham/{san_pham_id}/danh-gia', [DanhGiaClientsController::class, 'themDanhGia'])->name('sanphams.themdanhgia');
@@ -183,7 +186,7 @@ Route::post('/thanhtoan-xu-ly', [App\Http\Controllers\Clients\ThanhToanControlle
 Route::get('/dathangthanhcong/{id}', [App\Http\Controllers\Clients\ThanhToanController::class, 'datHangThanhCong'])->name('thanhtoans.dathangthanhcong');
 
 Route::get('/users', [App\Http\Controllers\Clients\UserController::class, 'chiTiet'])->name('users.chitiet');
-Route::put('/users/update-infor/{id}', [App\Http\Controllers\Clients\UserController::class, 'updateInfor'])->name('users.update');
+Route::put('/users/update-infor/{id}', [App\Http\Controllers\Clients\UserController::class, 'updateInfor'])->name('users.updateClient');
 Route::get('/order-tracking/{id}', [App\Http\Controllers\Clients\UserController::class, 'orderTracking'])->name('order-tracking.client');
 Route::post('/order/updateTrangThai/{id}', [App\Http\Controllers\Clients\UserController::class, 'updateTrangThai'])->name('order.updateTrangThai');
 
@@ -291,5 +294,4 @@ Route::post('/danh-gia/update-status/{id}', [DanhGiaController::class, 'updateSt
 Route::post('/binhluan/{id}/reply', [BinhLuanController::class, 'store'])->name('binhluan.reply')->middleware('auth');
 
 Route::post('/binhluan', [BinhLuanController::class, 'store'])->name('binhluan.store');
-
 

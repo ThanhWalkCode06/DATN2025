@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\Client\UserRequest;
+use App\Models\LichSuDonHang;
+use App\Models\PhieuGiamGiaTaiKhoan;
 
 class UserController extends Controller
 {
@@ -40,7 +42,7 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         // dd(file_exists(storage_path("app/public/user".Auth::user()->anh_dai_dien)));
         if ($request->hasFile('anh_dai_dien')) {
-            if (Auth::user()->anh_dai_dien && file_exists(storage_path("app/public/" . Auth::user()->anh_dai_dien))) {
+            if (Auth::user()->anh_dai_dien && file_exists(storage_path("app/public/" . Auth::user()->anh_dai_dien)) && !file_exists(storage_path("app/public/images")) ) {
                 unlink(storage_path('app/public/' . Auth::user()->anh_dai_dien));
             }
             $fileName = time() . '_' . $request->file('anh_dai_dien')->getClientOriginalName();
@@ -56,7 +58,7 @@ class UserController extends Controller
         if (Auth::user()) {
             $donHang = DonHang::where('id', $id)->first();
             if ($donHang) {
-                $checkVoucher = DB::table('phieu_giam_gia_tai_khoans')->where('order_id', $donHang->id)->first();
+                $checkVoucher = PhieuGiamGiaTaiKhoan::with('phieuGiamGia')->where('order_id', $donHang->id)->first();
                 // dd($donHang);
                 $bienThes = DonHang::where('id', $id)->with('bienThes')->first();
                 $bienThesPaginated = $bienThes->bienThes()->paginate(5);
@@ -197,8 +199,8 @@ class UserController extends Controller
                             'loai' => 'Hoàn tiền',
                             'trang_thai' => 1,
                             'mo_ta' => "↩️ Hoàn tiền do trả đơn hàng {$donHang->ma_don_hang}\n 💰 Số dư: "
-                                . number_format($soDuTruoc, 0, ',', '.') 
-                                . " ➝ " 
+                                . number_format($soDuTruoc, 0, ',', '.')
+                                . " ➝ "
                                 . number_format($soDuMoi, 0, ',', '.')
                                 . " VNĐ",
                             'created_at' => now(),

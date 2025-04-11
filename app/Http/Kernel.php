@@ -42,7 +42,7 @@ class Kernel extends HttpKernel
         ],
 
         'api' => [
-            // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+            \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             \Illuminate\Routing\Middleware\ThrottleRequests::class . ':api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
@@ -64,6 +64,7 @@ class Kernel extends HttpKernel
 
         // 'auth.client' => \App\Http\Middleware\Authenticate::class,
         'checkStatus' => \App\Http\Middleware\CheckUserStatus::class,
+        'checkClientStatus' => \App\Http\Middleware\CheckUserClientStatus::class,
         'dynamic' => \App\Http\Middleware\DynamicPermissionMiddleware::class,
         // 'check.permission' => \App\Http\Middleware\CheckPermission::class,
 
