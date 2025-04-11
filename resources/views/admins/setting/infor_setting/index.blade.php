@@ -76,7 +76,7 @@
                                             </label>
                                             <div class="col-md-9 col-lg-8">
                                                 <input style="border: 1px solid #ced4da;" class="form-control " type="date" name="ngay_sinh"
-                                                value="{{ $user->ngay_sinh }}">
+                                                value="{{ $user->ngay_sinh }}" readonly>
                                                 @error('ngay_sinh')
                                             <p class="text-danger">{{ $message }}</p>
                                             @enderror
@@ -88,7 +88,7 @@
                                         </label>
                                         <div class="col-md-9 col-lg-8">
                                             <input style="border: 1px solid #ced4da;" class="form-control " type="date" name="ngay_sinh"
-                                            value="{{ $user->ngay_sinh }}" readonly>
+                                            value="{{ $user->ngay_sinh }}">
                                         </div>
                                     </div>
                                     @endif
