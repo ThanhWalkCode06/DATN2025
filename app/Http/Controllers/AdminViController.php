@@ -62,6 +62,9 @@ class AdminViController extends Controller
     public function show($id, Request $request)
     {
         $trangThai = $request->get('trang_thai');
+        $loai = $request->get('loai'); // nap, rut, mua, hoan
+        $tuNgay = $request->get('tu_ngay');
+        $denNgay = $request->get('den_ngay');
         $user = User::with('vi')->findOrFail($id);
 
         if ($user->vi) {
@@ -69,6 +72,18 @@ class AdminViController extends Controller
 
             if ($trangThai !== null) {
                 $giaodichsQuery->where('trang_thai', $trangThai);
+            }
+
+            if ($loai !== null) {
+                $giaodichsQuery->where('loai', $loai);
+            }
+
+            if ($tuNgay) {
+                $giaodichsQuery->whereDate('created_at', '>=', $tuNgay);
+            }
+            
+            if ($denNgay) {
+                $giaodichsQuery->whereDate('created_at', '<=', $denNgay);
             }
 
             $giaodichs = $giaodichsQuery->paginate(10);
@@ -80,87 +95,86 @@ class AdminViController extends Controller
             ]);
         }
 
-        return view('admins.vis.show', compact('user', 'trangThai', 'giaodichs'));
+        return view('admins.vis.show', compact('user', 'trangThai', 'loai', 'tuNgay', 'denNgay', 'giaodichs'));
     }
 
 
 
-    
+
     public function updateTrangThai(Request $request)
-{
-    $ids = $request->input('ids', []);
-    $trangThai = $request->input('trang_thai');
-    $lyDoChung = $request->input('ly_do'); // lấy lý do nếu có
+    {
+        $ids = $request->input('ids', []);
+        $trangThai = $request->input('trang_thai');
+        $lyDoChung = $request->input('ly_do'); // lấy lý do nếu có
 
-    $daXuLy = 0;
+        $daXuLy = 0;
 
-    foreach ($ids as $id) {
-        $giaoDich = GiaoDichVi::find($id);
+        foreach ($ids as $id) {
+            $giaoDich = GiaoDichVi::find($id);
 
-        if (!$giaoDich || $giaoDich->trang_thai == 1 || $giaoDich->trang_thai == 2) {
-            continue; // bỏ qua nếu đã duyệt hoặc huỷ
-        }
+            if (!$giaoDich || $giaoDich->trang_thai == 1 || $giaoDich->trang_thai == 2) {
+                continue; // bỏ qua nếu đã duyệt hoặc huỷ
+            }
 
-        if ($giaoDich->loai === 'Rút tiền') {
-            $vi = $giaoDich->vi;
-            $vi->refresh(); 
-            $soDuTruoc = $vi->so_du;
+            if ($giaoDich->loai === 'Rút tiền') {
+                $vi = $giaoDich->vi;
+                $vi->refresh();
+                $soDuTruoc = $vi->so_du;
 
-            if ($trangThai == 1) {
-                // Duyệt rút
-                if ($soDuTruoc >= $giaoDich->so_tien) {
-                    $vi->so_du -= $giaoDich->so_tien;
-                    $vi->save();
-                    // $vi->refresh(); // Đảm bảo lấy số dư mới nhất
-                    $giaoDich->mo_ta = "💸 Rút tiền từ ví\n"
-                        . "💰Số dư: " . number_format($soDuTruoc, 0, ',', '.') . " ➝ " . number_format($vi->so_du, 0, ',', '.') . " VNĐ\n"
+                if ($trangThai == 1) {
+                    // Duyệt rút
+                    if ($soDuTruoc >= $giaoDich->so_tien) {
+                        $vi->so_du -= $giaoDich->so_tien;
+                        $vi->save();
+                        // $vi->refresh(); // Đảm bảo lấy số dư mới nhất
+                        $giaoDich->mo_ta = "💸 Rút tiền từ ví\n"
+                            . "💰Số dư: " . number_format($soDuTruoc, 0, ',', '.') . " ➝ " . number_format($vi->so_du, 0, ',', '.') . " VNĐ\n"
+                            . "🏦 Ngân hàng: {$giaoDich->ten_ngan_hang}\n"
+                            . "🔢 Số tài khoản: {$giaoDich->so_tai_khoan}\n"
+                            . "👤 Người nhận: {$giaoDich->ten_nguoi_nhan}";
+                        $giaoDich->trang_thai = 1;
+                        $giaoDich->save();
+                        $daXuLy++;
+                    } else {
+                        return back()->with('error', 'Ví không đủ số dư để duyệt rút tiền.');
+                    }
+                } elseif ($trangThai == 2) {
+                    // Huỷ rút
+                    $vi->refresh(); // cập nhật lại số dư để hiển thị chính xác
+                    $giaoDich->trang_thai = 2;
+                    $giaoDich->mo_ta = "❌ Yêu cầu rút tiền đã bị huỷ\n"
+                        . "⏱ Thời gian: " . now()->format('d/m/Y H:i') . "\n"
+                        . "📝 Lý do: {$lyDoChung}\n"
                         . "🏦 Ngân hàng: {$giaoDich->ten_ngan_hang}\n"
                         . "🔢 Số tài khoản: {$giaoDich->so_tai_khoan}\n"
-                        . "👤 Người nhận: {$giaoDich->ten_nguoi_nhan}";
-                    $giaoDich->trang_thai = 1;
+                        . "👤 Người nhận: {$giaoDich->ten_nguoi_nhan}\n"
+                        . "💰 Số dư hiện tại: " . number_format($giaoDich->vi->so_du, 0, ',', '.') . " VNĐ";
                     $giaoDich->save();
                     $daXuLy++;
-                } else {
-                    return back()->with('error', 'Ví không đủ số dư để duyệt rút tiền.');
                 }
-
-            } elseif ($trangThai == 2) {
-                // Huỷ rút
-                $vi->refresh(); // cập nhật lại số dư để hiển thị chính xác
-                $giaoDich->trang_thai = 2;
-                $giaoDich->mo_ta = "❌ Yêu cầu rút tiền đã bị huỷ\n"
-                    . "⏱ Thời gian: " . now()->format('d/m/Y H:i') . "\n"
-                    . "📝 Lý do: {$lyDoChung}\n"
-                    . "🏦 Ngân hàng: {$giaoDich->ten_ngan_hang}\n"
-                    . "🔢 Số tài khoản: {$giaoDich->so_tai_khoan}\n"
-                    . "👤 Người nhận: {$giaoDich->ten_nguoi_nhan}\n"
-                    . "💰 Số dư hiện tại: " . number_format($giaoDich->vi->so_du, 0, ',', '.') . " VNĐ";
+            } else {
+                $giaoDich->trang_thai = $trangThai;
                 $giaoDich->save();
                 $daXuLy++;
             }
+        }
+
+        if ($daXuLy > 0) {
+            return back()->with('success', "Đã cập nhật trạng thái cho {$daXuLy} giao dịch thành công.");
         } else {
-            $giaoDich->trang_thai = $trangThai;
-            $giaoDich->save();
-            $daXuLy++;
+            return back()->with('error', 'Chỉ được cập nhật trạng thái đang chờ xử lý .');
         }
     }
 
-    if ($daXuLy > 0) {
-        return back()->with('success', "Đã cập nhật trạng thái cho {$daXuLy} giao dịch thành công.");
-    } else {
-        return back()->with('error', 'Chỉ được cập nhật trạng thái đang chờ xử lý .');
-    }
-}
+
+    // public function duyetGiaoDich($id) {
+    //     return $this->updateTrangThai(request()->merge(['ids' => [$id], 'trang_thai' => 1]));
+    // }
+
+    // public function huyGiaoDich(Request $request, $id) {
+    //     return $this->updateTrangThai($request->merge(['ids' => [$id], 'trang_thai' => 2]));
+    // }
 
 
-public function duyetGiaoDich($id) {
-    return $this->updateTrangThai(request()->merge(['ids' => [$id], 'trang_thai' => 1]));
-}
-
-public function huyGiaoDich(Request $request, $id) {
-    return $this->updateTrangThai($request->merge(['ids' => [$id], 'trang_thai' => 2]));
-}
-
-    
 
 }

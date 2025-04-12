@@ -20,50 +20,98 @@
         </div>
 
         {{-- Bộ lọc trạng thái --}}
-        <form method="GET" class="row g-2 align-items-center mb-4">
-            <div class="col-auto">
-                <label for="trang_thai" class="form-label fw-semibold">Lọc theo trạng thái:</label>
+        <div class="card shadow mb-4" style="border-radius: 16px;">
+            <div class="card-body">
+                <form method="GET" class="row g-3 align-items-end mb-4">
+
+                    <!-- Trạng thái -->
+                    <div class="col-md-3">
+                        <label for="trang_thai" class="form-label fw-semibold">Trạng thái:</label>
+                        <select name="trang_thai" id="trang_thai" class="form-select" onchange="this.form.submit()">
+                            <option value="">Tất cả</option>
+                            <option value="1" {{ request('trang_thai') === '1' ? 'selected' : '' }}>✅ Thành công</option>
+                            <option value="0" {{ request('trang_thai') === '0' ? 'selected' : '' }}>⏳ Chờ xử lý</option>
+                            <option value="2" {{ request('trang_thai') === '2' ? 'selected' : '' }}>❌ Huỷ</option>
+                        </select>
+                    </div>
+
+                    <!-- Loại giao dịch -->
+                    <div class="col-md-3">
+                        <label for="loai" class="form-label fw-semibold">Loại giao dịch:</label>
+                        <select name="loai" id="loai" class="form-select" onchange="this.form.submit()">
+                            <option value="">Tất cả</option>
+                            <option value="Nạp tiền" {{ request('loai') === 'Nạp tiền' ? 'selected' : '' }}>💰 Nạp tiền
+                            </option>
+                            <option value="Rút tiền" {{ request('loai') === 'Rút tiền' ? 'selected' : '' }}>🏧 Rút tiền
+                            </option>
+                            <option value="Hoàn tiền" {{ request('loai') === 'Hoàn tiền' ? 'selected' : '' }}>↩️ Hoàn tiền
+                            </option>
+                            <option value="Mua hàng" {{ request('loai') === 'Mua hàng' ? 'selected' : '' }}>🛒 Mua hàng
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- Từ ngày -->
+                    <div class="col-md-3">
+                        <label for="tu_ngay" class="form-label fw-semibold">Từ ngày:</label>
+                        <input type="date" name="tu_ngay" id="tu_ngay" class="form-control" value="{{ request('tu_ngay') }}"
+                            onchange="this.form.submit()">
+                    </div>
+
+                    <!-- Đến ngày -->
+                    <div class="col-md-3">
+                        <label for="den_ngay" class="form-label fw-semibold">Đến ngày:</label>
+                        <input type="date" name="den_ngay" id="den_ngay" class="form-control"
+                            value="{{ request('den_ngay') }}" onchange="this.form.submit()">
+                    </div>
+
+                </form>
+
             </div>
-            <div class="col-auto">
-                <select name="trang_thai" id="trang_thai" class="form-select" style="min-width: 160px;"
-                    onchange="this.form.submit()">
-                    <option value="">Tất cả</option>
-                    <option value="1" {{ request('trang_thai') === '1' ? 'selected' : '' }}>✅ Thành công</option>
-                    <option value="0" {{ request('trang_thai') === '0' ? 'selected' : '' }}>⏳ Chờ xử lý</option>
-                    <option value="2" {{ request('trang_thai') === '2' ? 'selected' : '' }}>❌ Huỷ</option>
-                </select>
-            </div>
-        </form>
+        </div>
+
+
 
         {{-- Cập nhật trạng thái --}}
         <form method="POST" id="form-cap-nhat-trang-thai" action="{{ route('admin.vis.updateTrangThai') }}">
             @csrf
-            <div class="row g-2 align-items-center mb-3">
-                <div class="col-auto">
-                    <select name="trang_thai" id="trang_thai_moi" class="form-select form-select-sm border border-1"
-                        style="min-width: 150px;" required onchange="toggleLyDo()">
+            <div class="card shadow mb-4" style="border-radius: 16px;">
+                <div class="card-body">
+                    <div class="row g-3 align-items-center">
+                        <!-- Select trạng thái -->
+                        <div class="col-auto">
+                            <label for="trang_thai_moi" class="form-label mb-0 fw-semibold">Trạng thái mới</label>
+                            <select name="trang_thai" id="trang_thai_moi"
+                                class="form-select form-select-sm border-0 rounded-3 shadow-sm" style="min-width: 180px;"
+                                required onchange="toggleLyDo()">
+                                <option value="">-- Chọn trạng thái --</option>
+                                <option value="1">✅ Duyệt yêu cầu</option>
+                                <option value="2">❌ Huỷ yêu cầu</option>
+                            </select>
+                        </div>
 
-                        <option value="">-- Chọn trạng thái mới --</option>
-                        <option value="1">✅ Duyệt yêu cầu</option>
-                        <option value="2">❌ Huỷ yêu cầu</option>
-                    </select>
-                </div>
-
-                {{-- Chú ý name và không có disabled --}}
-                <div class="col-auto d-none" id="ly_do_wrapper">
-                    <input type="text" name="ly_do" id="ly_do_chung" class="form-control form-control-sm"
-                        placeholder="Nhập lý do huỷ..." style="min-width: 250px;">
-
-                </div>
+                        <!-- Input lý do (ẩn/hiện) -->
+                        <div class="col-auto d-none" id="ly_do_wrapper">
+                            <label for="ly_do_chung" class="form-label mb-0 fw-semibold">Lý do huỷ</label>
+                            <input type="text" name="ly_do" id="ly_do_chung"
+                                class="form-control form-control-sm border-0 rounded-3 shadow-sm"
+                                placeholder="Nhập lý do huỷ..." style="min-width:800px; max-width: 100%;">
+                        </div>
 
 
-                <div class="col-auto">
-                    <button type="submit" class="btn btn-sm" style="background-color: #009688; color: white;"
-                        onclick="return handleCapNhat()">
-                        <i class="bi bi-check-circle"></i> Cập nhật
-                    </button>
+                        <!-- Nút cập nhật -->
+                        <div class="col-auto d-flex align-items-end">
+                            <button type="submit" class="btn btn-sm"
+                                style="background-color: #009688; color: white; border-radius: 20px; padding: 8px 20px;"
+                                onclick="return handleCapNhat()">
+                                <i class="bi bi-check-circle me-1"></i> Cập nhật
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
+
+
 
 
             {{-- Bảng giao dịch --}}
@@ -100,7 +148,11 @@
                                                 <span class="text-warning">{{ number_format(abs($gd->so_tien), 0, ',', '.') }} VNĐ</span>
                                             @endif
                                         @elseif(in_array($gd->loai, ['Nạp tiền', 'Hoàn tiền']))
-                                            <span class="text-success">+{{ number_format($gd->so_tien, 0, ',', '.') }} VNĐ</span>
+                                            @if($gd->trang_thai == 2)
+                                                <span class="text-warning">{{ number_format($gd->so_tien, 0, ',', '.') }} VNĐ</span>
+                                            @else
+                                                <span class="text-success">+{{ number_format($gd->so_tien, 0, ',', '.') }} VNĐ</span>
+                                            @endif
                                         @else
                                             <span class="text-dark">{{ number_format($gd->so_tien, 0, ',', '.') }} VNĐ</span>
                                         @endif
@@ -173,6 +225,7 @@
                                 <tr>
                                     <td colspan="6" class="text-center text-muted">Không có giao dịch nào</td>
                                 </tr>
+
                             @endforelse
                         @endif
                     </tbody>
@@ -188,8 +241,8 @@
         <!-- Modal huỷ -->
         <div class="modal fade" id="huyModal" tabindex="-1" aria-labelledby="huyModalLabel" aria-hidden="true">
             <div class="modal-dialog">
-                <form method="POST" id="huyForm"
-                    action="{{ route('admin.vis.updateTrangThaiTungGiaoDich', ['id' => $gd->id]) }}">
+                <form method="POST" id="huyForm" {{--
+                    action="{{ route('admin.vis.updateTrangThaiTungGiaoDich', ['id' => $gd->id]) }}" --}}>
                     @csrf
                     <input type="hidden" name="id" id="modal_gd_id">
                     <input type="hidden" name="trang_thai" value="2">
