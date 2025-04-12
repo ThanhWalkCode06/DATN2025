@@ -52,7 +52,7 @@ class IndexClientController extends Controller
             ->take(12) // Lấy 8 sản phẩm có nhiều đơn hàng nhất
             ->get()
             ->toArray();
-
+        // dd($sanPhamFollowTopOrders);
         $half = ceil(count($sanPhamFollowTopOrders) / 3);
         $part1 = array_slice($sanPhamFollowTopOrders, 0, $half); // Lấy nửa đầu
         $part2 = array_slice($sanPhamFollowTopOrders, 4, $half); // Lấy nửa sau

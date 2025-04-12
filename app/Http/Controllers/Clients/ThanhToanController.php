@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\PhuongThucThanhToan;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use App\Models\PhieuGiamGiaTaiKhoan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use App\Http\Controllers\HelperCommon\Helper;
@@ -100,13 +101,27 @@ class ThanhToanController extends Controller
             // Xử lý voucher nếu có
             if (!empty($request->voucher_code) && $request->giam_gia !== "0") {
                 $idVoucher = PhieuGiamGia::where('ma_phieu', $request->voucher_code)->first();
-                if ($idVoucher) {
+                if ($idVoucher && !str_starts_with($request->voucher_code, 'BIRTHDAY')) {
                     DB::table('phieu_giam_gia_tai_khoans')->insert([
                         'phieu_giam_gia_id' => $idVoucher->id,
                         'user_id' => $user->id,
                         'order_id' => $donHang->id,
                         'created_at' => now(),
                     ]);
+                }else if($idVoucher && str_starts_with($request->voucher_code, 'BIRTHDAY') && $idVoucher->trang_thai != 0){
+                    $idVoucher->trang_thai = 0;
+                    $idVoucher->save();
+                    DB::table('phieu_giam_gia_tai_khoans')->insert([
+                        'phieu_giam_gia_id' => $idVoucher->id,
+                        'user_id' => $user->id,
+                        'order_id' => $donHang->id,
+                        'created_at' => now(),
+                    ]);
+                }else{
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => 'Mã giảm giá đã được sử dụng hoặc hết hạn trước đó',
+                    ], 500);
                 }
             }
 
@@ -134,12 +149,16 @@ class ThanhToanController extends Controller
 
         // Thanh toán qua VNPAY
         if ($request->phuong_thuc_thanh_toan_id === "2") {
-            if (!empty($request->voucher) && $request->giam_gia !== "0") {
-                $idVoucher = PhieuGiamGia::where('ma_phieu', $request->voucher)->first();
+            if (!empty($request->voucher_code) && $request->giam_gia !== "0") {
+                $idVoucher = PhieuGiamGia::where('ma_phieu', $request->voucher_code)->first();
                 if ($idVoucher) {
                     Session::put("voucher", $idVoucher->id);
                 }
             }
+
+
+            // return response()->json(['status' => 'success', 'message' => $request->voucher], 200);
+            // dd($request->vourcher,1);
 
             Session::put("ten_nguoi_nhan", $request->ten_nguoi_nhan);
             Session::put("email_nguoi_nhan", $request->email_nguoi_nhan);
@@ -218,7 +237,9 @@ class ThanhToanController extends Controller
                 'trang_thai_thanh_toan' => 1,
                 'created_at' => now()
             ]);
+          
             $maGiaoDich = strtoupper(Str::random(10)); // Ví dụ: 9KJL0PX2QZ
+          
             // Lưu giao dịch ví
             DB::table('giaodichvis')->insert([
                 'vi_id' => $user->vi->id,
@@ -239,13 +260,27 @@ class ThanhToanController extends Controller
             // Lưu voucher nếu có
             if (!empty($request->voucher_code) && $request->giam_gia !== "0") {
                 $idVoucher = PhieuGiamGia::where('ma_phieu', $request->voucher_code)->first();
-                if ($idVoucher) {
+                if ($idVoucher && !str_starts_with($request->voucher_code, 'BIRTHDAY')) {
                     DB::table('phieu_giam_gia_tai_khoans')->insert([
                         'phieu_giam_gia_id' => $idVoucher->id,
                         'user_id' => $user->id,
                         'order_id' => $donHang->id,
                         'created_at' => now(),
                     ]);
+                }else if($idVoucher && str_starts_with($request->voucher_code, 'BIRTHDAY') && $idVoucher->trang_thai != 0){
+                    $idVoucher->trang_thai = 0;
+                    $idVoucher->save();
+                    DB::table('phieu_giam_gia_tai_khoans')->insert([
+                        'phieu_giam_gia_id' => $idVoucher->id,
+                        'user_id' => $user->id,
+                        'order_id' => $donHang->id,
+                        'created_at' => now(),
+                    ]);
+                }else{
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => 'Mã giảm giá đã được sử dụng hoặc hết hạn trước đó',
+                    ], 500);
                 }
             }
 
@@ -307,14 +342,33 @@ class ThanhToanController extends Controller
 
             if (Session::has('voucher')) {
                 $voucherId = Session::get('voucher');
-                DB::table('phieu_giam_gia_tai_khoans')->insert([
-                    'phieu_giam_gia_id' => $voucherId,
-                    'user_id' => $user->id,
-                    'order_id' => $donHang->id,
-                    'created_at' => now(),
-                ]);
+                $idVoucher = PhieuGiamGia::where('id', $voucherId)->first();
                 Session::forget("voucher");
+                if ($idVoucher && !str_starts_with($idVoucher->ma_phieu, 'BIRTHDAY')) {
+                    DB::table('phieu_giam_gia_tai_khoans')->insert([
+                        'phieu_giam_gia_id' => $idVoucher->id,
+                        'user_id' => $user->id,
+                        'order_id' => $donHang->id,
+                        'created_at' => now(),
+                    ]);
+                }else if($idVoucher && str_starts_with($idVoucher->ma_phieu, 'BIRTHDAY') && $idVoucher->trang_thai != 0){
+                    $idVoucher->trang_thai = 0;
+                    $idVoucher->save();
+                    DB::table('phieu_giam_gia_tai_khoans')->insert([
+                        'phieu_giam_gia_id' => $idVoucher->id,
+                        'user_id' => $user->id,
+                        'order_id' => $donHang->id,
+                        'created_at' => now(),
+                    ]);
+                }else{
+                    $donHang->delete();
+                    return redirect('/thanhtoan')->with('error', 'Voucher đã được áp dụng trước đó hoặc hết hạn!');
+                }
+
             }
+
+
+
 
             // Duyệt qua từng sản phẩm trong giỏ hàng để thêm vào chi tiết đơn hàng
             foreach ($cart as $item) {
@@ -354,7 +408,9 @@ class ThanhToanController extends Controller
             ->join('phuong_thuc_thanh_toans', 'phuong_thuc_thanh_toans.id', '=', 'phuong_thuc_thanh_toan_id')
             ->where('don_hangs.id', '=', $id)
             ->find($id);
-        // dd($id,$donHang);
+
+        $voucher = PhieuGiamGiaTaiKhoan::with('phieuGiamGia')->where('order_id',$id)->first();
+        // dd($voucher->phieuGiamGia->ma_phieu);
         $chiTietDonHangs = ChiTietDonHang::select(
             'chi_tiet_don_hangs.*',
             'san_phams.ten_san_pham',
@@ -373,7 +429,7 @@ class ThanhToanController extends Controller
             ->where('don_hang_id', '=', $donHang->id)
             ->get();
 
-        return view('clients.thanhtoans.dathangthanhcong', compact('donHang', 'chiTietDonHangs'));
+        return view('clients.thanhtoans.dathangthanhcong', compact('donHang', 'chiTietDonHangs','voucher'));
     }
 
     public function thongBaoDatHang($donHang)

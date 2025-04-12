@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             SettingSeeder::class,
             AddPermissionAndRoleSeeder::class,
             AdminSeeder::class,
+            AltUserSeeder::class,
             UserSeeder::class,
             DanhMucSanPhamSeeder::class,
             PhuongThucThanhToanSeeder::class,

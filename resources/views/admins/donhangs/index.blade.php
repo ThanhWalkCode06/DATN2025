@@ -38,143 +38,201 @@
                 </div>
                 <div class="w-100">
                     <div class="table-responsive">
-                        <div class="mb-3 col-4 float-end d-flex flex-row-reverse">
-                            <div class="col-6 mx-2">
-                                <label for="trang_thai_don_hang">Trạng thái đơn hàng</label>
-                                <select id="trang_thai_don_hang" class="form-control">
-                                    <option value="">Tất cả</option>
-                                    <option value="-1">Đã hủy</option>
-                                    <option value="0">Chờ xác nhận</option>
-                                    <option value="1">Đang xử lý</option>
-                                    <option value="2">Đang giao</option>
-                                    <option value="3">Đã giao</option>
-                                    <option value="4">Hoàn thành</option>
-                                    <option value="5">Trả hàng</option>
-                                </select>
+                        <div class="d-flex mb-3 col-12">
+                            <div class="col-4">
+                                <div id="bulk-action-wrapper" style="display: none;">
+                                    <label>Trạng thái đơn hàng</label>
+                                    <div class="d-flex">
+                                        <select id="bulkStatus" class="form-control col-8"
+                                            style="width: auto; display: inline-block;">
+                                            <option value="">-- Chọn trạng thái mới --</option>
+                                            <option value="1">Đang xử lý</option>
+                                            <option value="2">Đang giao</option>
+                                            <option value="3">Đã giao</option>
+                                        </select>
+                                        <button id="bulkUpdateBtn" class="btn btn-primary col-4 mx-2">Cập nhật</button>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-6">
-                                <label for="trang_thai_thanh_toan">Trạng thái thanh toán</label>
-                                <select id="trang_thai_thanh_toan" class="form-control">
-                                    <option value="">Tất cả</option>
-                                    <option value="0">Chưa thanh toán</option>
-                                    <option value="1">Đã thanh toán</option>
-                                </select>
+                            <div class="col-8 d-flex flex-row-reverse">
+                                <div class="col-3">
+                                    <label for="trang_thai_don_hang">Trạng thái đơn hàng</label>
+                                    <select id="trang_thai_don_hang" class="form-control">
+                                        <option value="">Tất cả</option>
+                                        <option value="0">Chờ xác nhận</option>
+                                        <option value="1">Đang xử lý</option>
+                                        <option value="2">Đang giao</option>
+                                        <option value="3">Đã giao</option>
+                                        <option value="4">Hoàn thành</option>
+                                        <option value="5">Trả hàng</option>
+                                        <option value="-1">Đã hủy</option>
+                                    </select>
+                                </div>
+                                <div class="col-3 mx-2">
+                                    <label for="trang_thai_thanh_toan">Trạng thái thanh toán</label>
+                                    <select id="trang_thai_thanh_toan" class="form-control">
+                                        <option value="">Tất cả</option>
+                                        <option value="0">Chưa thanh toán</option>
+                                        <option value="1">Đã thanh toán</option>
+                                    </select>
+                                </div>
+                                <div class="col-5">
+                                    <label for="searchDonHang">Tìm kiếm</label>
+                                    <input type="text" id="searchDonHang" class="form-control"
+                                        placeholder="Tìm theo mã đơn, người đặt...">
+                                </div>
                             </div>
+
                         </div>
                         <div id="orderTableContainer">
-                            <table style="table-layout: fixed; width: 100%;" class="table order-table theme-table"
-                                id="dataTable">
-                                @foreach ($donHangs as $donHang)
-                                    <thead>
-                                        <tr>
-                                            <th colspan="3">Mã đơn hàng: {{ $donHang->ma_don_hang }}</th>
-                                            <th>
-                                                @if ($donHang->trang_thai_thanh_toan == 0)
-                                                    <span class="order-danger">Chưa thanh toán</span>
-                                                @else
-                                                    <span class="order-success">Đã thanh toán</span>
-                                                @endif
-                                            </th>
-                                            <th>
-                                                @if ($donHang->trang_thai_don_hang == -1)
-                                                    <span class="order-danger">Đã hủy</span>
-                                                @elseif ($donHang->trang_thai_don_hang == 0)
-                                                    <span class="order-danger">Chờ xác nhận</span>
-                                                @elseif ($donHang->trang_thai_don_hang == 1)
-                                                    <span class="order-primary">Đang xử lý</span>
-                                                @elseif ($donHang->trang_thai_don_hang == 2)
-                                                    <span class="order-primary">Đang giao</span>
-                                                @elseif ($donHang->trang_thai_don_hang == 3)
-                                                    <span class="order-success">Đã giao</span>
-                                                @elseif ($donHang->trang_thai_don_hang == 4)
-                                                    <span class="order-success">Hoàn thành</span>
-                                                @elseif ($donHang->trang_thai_don_hang == 5)
-                                                    <span class="order-danger">Trả hàng</span>
-                                                @else
-                                                    <span>Trạng thái không hợp lệ</span>
-                                                @endif
-                                            </th>
-                                            <th class="float-end">
-                                                <a href="{{ route('donhangs.show', $donHang->id) }}">
-                                                    <i class="ri-eye-line"></i>
-                                                </a>
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td colspan="2">
-                                                <b>Người đặt: </b>
-                                                @if ($donHang->ten_nguoi_dung == '')
-                                                    {{ $donHang->username }}
-                                                @else
-                                                    {{ $donHang->ten_nguoi_dung }}
-                                                @endif
-                                            </td>
-                                            <td colspan="2">
-                                                <b>Tổng tiền: </b>{{ number_format($donHang->tong_tien, 0, '', '.') }}đ
-                                            </td>
-                                            <td colspan="2"><b>Hình thức thanh toán:
-                                                </b>{{ $donHang->ten_phuong_thuc }}
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="2"><b>Tên người nhận: </b>{{ $donHang->ten_nguoi_nhan }}
-                                            </td>
-                                            <td colspan="2" class="text-truncate"><b>Email:
-                                                </b>{{ $donHang->email_nguoi_nhan }}</td>
-                                            <td colspan="2"><b>Số điện thoại: </b>{{ $donHang->sdt_nguoi_nhan }}
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="2" class="text-truncate"><b>Địa chỉ người nhận:
-                                                </b>{{ $donHang->dia_chi_nguoi_nhan }}</td>
-                                            <td colspan="2" class="text-truncate">
-                                                <b>Ghi chú: </b>
-                                                @if ($donHang->ghi_chu == '')
-                                                    Không
-                                                @else
-                                                    {{ $donHang->ghi_chu }}
-                                                @endif
-                                            </td>
-                                            <td><b>Ngày đặt: </b>{{ $donHang->created_at }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td></td>
-                                        </tr>
-                                    </tbody>
-                                @endforeach
-                            </table>
+                            @include('admins.donhangs.donhang-table')
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        {{ $donHangs->links('pagination::bootstrap-5') }}
     </div>
 @endsection
 
 @section('js')
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        $('#trang_thai_don_hang, #trang_thai_thanh_toan').on('change', function() {
+        function fetchOrders(url = null) {
             let trangThaiDonHang = $('#trang_thai_don_hang').val();
             let trangThaiThanhToan = $('#trang_thai_thanh_toan').val();
+            let keyword = $('#searchDonHang').val();
+
+            url = url || "{{ route('donhangs.index') }}";
 
             $.ajax({
-                url: "{{ route('donhangs.filter') }}",
-                method: 'GET',
+                url: url,
+                type: 'GET',
                 data: {
-                    trang_thai: trangThaiDonHang,
-                    thanh_toan: trangThaiThanhToan
+                    trang_thai_don_hang: trangThaiDonHang,
+                    trang_thai_thanh_toan: trangThaiThanhToan,
+                    keyword: keyword
                 },
-                success: function(response) {
-                    $('#orderTableContainer').html(response.html);
+                beforeSend: function() {
+                    $('#orderTableContainer').html('<p>Đang tải...</p>');
                 },
-                error: function(xhr) {
-                    console.error(xhr.responseText);
+                success: function(data) {
+                    $('#orderTableContainer').html(data);
+
+                    if (trangThaiDonHang === '0' || trangThaiDonHang === '1' || trangThaiDonHang === '2') {
+                        $('.checkbox-wrapper').show();
+                    } else {
+                        $('.checkbox-wrapper').hide();
+                    }
+                },
+                error: function() {
+                    alert('Không thể tải dữ liệu. Vui lòng thử lại!');
                 }
             });
+        }
+
+        // Xử lý hiển thị nút bulk update khi checkbox được bật
+        $(document).on('change', '.donhang-checkbox, #checkAll', function() {
+            let anyChecked = $('.donhang-checkbox:checked').length > 0;
+            $('#bulk-action-wrapper').toggle(anyChecked);
+        });
+
+        // Bắt sự kiện click nút cập nhật hàng loạt
+        $(document).on('click', '#bulkUpdateBtn', function() {
+            let selectedIds = $('.donhang-checkbox:checked').map(function() {
+                return $(this).val();
+            }).get();
+
+            let newStatus = $('#bulkStatus').val();
+
+            if (selectedIds.length === 0) {
+                alert('Vui lòng chọn ít nhất một đơn hàng.');
+                return;
+            }
+
+            if (!newStatus) {
+                alert('Vui lòng chọn trạng thái mới.');
+                return;
+            }
+
+            // Gửi AJAX cập nhật
+            $.ajax({
+                url: "{{ route('donhangs.bulkUpdate') }}",
+                method: 'POST',
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    ids: selectedIds,
+                    trang_thai_don_hang: newStatus
+                },
+                success: function(res) {
+                    alert(res.message);
+                    fetchOrders(); // Tải lại danh sách
+                    $('#checkAll').prop('checked', false);
+                    $('#bulk-action-wrapper').hide();
+                },
+                error: function() {
+                    alert('Đã xảy ra lỗi. Vui lòng thử lại.');
+                }
+            });
+        });
+
+        $(document).ready(function() {
+            // Lọc theo trạng thái hoặc tìm kiếm
+            $('#trang_thai_don_hang, #trang_thai_thanh_toan').on('change', function() {
+                // Reset bulk update UI
+                $('#bulk-action-wrapper').hide();
+                $('#checkAll').prop('checked', false);
+
+                fetchOrders();
+            });
+
+            $('#searchDonHang').on('input', function() {
+                fetchOrders();
+            });
+
+            // Phân trang
+            $(document).on('click', '.pagination a', function(e) {
+                e.preventDefault();
+                let pageUrl = $(this).attr('href');
+                fetchOrders(pageUrl);
+            });
+        });
+
+        function updateBulkStatusOptions() {
+            const selectedStatus = $('#trang_thai_don_hang').val();
+            const $bulkSelect = $('#bulkStatus');
+
+            // Kích hoạt lại tất cả options trước
+            $bulkSelect.find('option').prop('disabled', false);
+
+            if (selectedStatus === '0') { // Chờ xác nhận
+                $bulkSelect.find('option:not([value="1"]):not([value=""])').prop('disabled', true);
+            } else if (selectedStatus === '1') { // Đang xử lý
+                $bulkSelect.find('option:not([value="2"]):not([value=""])').prop('disabled', true);
+            } else if (selectedStatus === '2') { // Đang giao
+                $bulkSelect.find('option:not([value="3"]):not([value=""])').prop('disabled', true);
+            } else {
+                // Nếu chọn các trạng thái khác (hoặc không chọn gì), disable tất cả (trừ placeholder)
+                $bulkSelect.find('option:not([value=""])').prop('disabled', true);
+            }
+
+            // Reset lại selection về placeholder
+            $bulkSelect.val('');
+        }
+
+        // Gọi khi thay đổi trạng thái lọc
+        $('#trang_thai_don_hang').on('change', function() {
+            updateBulkStatusOptions();
+
+            // Ẩn khu vực bulk nếu đang chọn checkbox
+            $('#bulk-action-wrapper').hide();
+            $('#checkAll').prop('checked', false);
+
+            fetchOrders();
+        });
+
+        // Gọi một lần khi trang tải (để khớp trạng thái nếu có preset sẵn)
+        $(document).ready(function() {
+            updateBulkStatusOptions();
         });
     </script>
 

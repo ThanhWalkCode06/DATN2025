@@ -38,7 +38,7 @@ class BinhLuanController extends Controller
 
         // Nếu chưa đăng nhập thì redirect về trang đăng nhập
         if (!Auth::check()) {
-            return redirect()->route('login')->with('error', 'Bạn cần đăng nhập để bình luận.');
+            return redirect()->route('login.client')->with('error', 'Bạn cần đăng nhập để bình luận.');
         }
 
         $binhLuan = new BinhLuan();

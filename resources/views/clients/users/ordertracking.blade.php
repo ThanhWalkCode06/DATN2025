@@ -64,9 +64,10 @@
                                     <li class="breadcrumb-item">
                                         <a href="{{ route('users.chitiet') }}">
                                             <i class="fa-solid fa-house"></i>
-                                        </a>
-                                    </li>
                                     <li class="breadcrumb-item active">Xem đơn hàng khác</li>
+                                    </a>
+                                    </li>
+
                                 </ol>
                             </nav>
                         </div>
@@ -177,14 +178,48 @@
                             <div class="col-xl-4 col-sm-6">
                                 <div class="order-details-contain">
                                     <div class="order-tracking-icon">
-                                        <i class="text-content" data-feather="crosshair"></i>
+                                        <i class="text-content" data-feather="credit-card"></i>
                                     </div>
 
                                     <div class="order-details-name">
                                         <h5 class="text-content">Tổng tiền</h5>
                                         <h4 style="color: #0da487; font-weight: bold">
-                                            {{ number_format($donHang->tong_tien, 0, '', '.') }} đ
-                                            {{ $checkVoucher ? '(Đã áp dụng mã giảm giá)' : '' }}</h4>
+                                            {{ number_format($donHang->tong_tien, 0, '', '.') }} đ</h4>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="col-xl-4 col-sm-6">
+                                <div class="order-details-contain">
+                                    <div class="order-tracking-icon">
+                                        <i class="text-content" data-feather="gift"></i>
+                                    </div>
+
+                                    @php
+                                        $total = 0;
+                                    @endphp
+                                    @foreach ($bienThesList as $chiTietDonHang)
+                                        @php
+                                            $total += $chiTietDonHang['gia_ban'] * $chiTietDonHang['so_luong'];
+                                        @endphp
+                                    @endforeach
+                                    @php
+                                        $countPrice = 0;
+                                        $countPrice = $total - $donHang->tong_tien + 10000;
+                                    @endphp
+
+                                    <div class="order-details-name">
+                                        <h5 class="text-content">Phiếu giảm giá áp dụng</h5>
+                                        <h5 style="color: #0da487; font-weight: bold">
+                                            @if (!empty($checkVoucher))
+                                                <span>Mã phiếu: {{ $checkVoucher->phieuGiamGia->ma_phieu ?? '' }}</span>
+                                                <span>Giá trị:
+                                                    {{ '-' . $checkVoucher->phieuGiamGia->gia_tri . '%' ?? '' }}</span>
+                                                <br>
+                                                <span>{{ $checkVoucher ? 'Đã giảm ' . number_format($countPrice, 0, '', '.') . ' đ' : '' }}</span>
+                                            @endif
+                                        </h5>
                                     </div>
                                 </div>
                             </div>
@@ -270,34 +305,34 @@
                                 </div>
                             </div>
 
-                        @php
-                        $statusChart = $donHang->trang_thai_don_hang;
-                        @endphp
-                        <div class="col-12 overflow-hidden">
-                            <ol class="progtrckr">
-                                <li class="progtrckr-{{ $statusChart >= 0 ? 'done' : 'todo' }}">
-                                    <h5>Chờ xác nhận</h5>
-                                </li>
-                                <li class="progtrckr-{{ $statusChart >= 1 ? 'done' : 'todo' }}">
-                                    <h5>Đang xử lý</h5>
-                                </li>
-                                <li class="progtrckr-{{ $statusChart >= 2 ? 'done' : 'todo' }}">
-                                    <h5>Đang giao</h5>
-                                </li>
-                                <li class="progtrckr-{{ $statusChart >= 3 ? 'done' : 'todo' }}">
-                                    <h5>Đã giao</h5>
-                                </li>
-
-                                <li class="progtrckr-{{ $statusChart >= 4 && $statusChart != 5 ? 'done' : 'todo' }}">
-                                    <h5>Đã nhận hàng</h5>
-                                </li>
-
-                                <!-- Trạng thái trả hàng -->
-                                @if ($statusChart == 5)
-                                    <li class="progtrckr-done">
-                                        <h5>Trả hàng</h5>
+                            @php
+                                $statusChart = $donHang->trang_thai_don_hang;
+                            @endphp
+                            <div class="col-12 overflow-hidden">
+                                <ol class="progtrckr">
+                                    <li class="progtrckr-{{ $statusChart >= 0 ? 'done' : 'todo' }}">
+                                        <h5>Chờ xác nhận</h5>
                                     </li>
-                                @endif
+                                    <li class="progtrckr-{{ $statusChart >= 1 ? 'done' : 'todo' }}">
+                                        <h5>Đang xử lý</h5>
+                                    </li>
+                                    <li class="progtrckr-{{ $statusChart >= 2 ? 'done' : 'todo' }}">
+                                        <h5>Đang giao</h5>
+                                    </li>
+                                    <li class="progtrckr-{{ $statusChart >= 3 ? 'done' : 'todo' }}">
+                                        <h5>Đã giao</h5>
+                                    </li>
+
+                                    <li class="progtrckr-{{ $statusChart >= 4 && $statusChart != 5 ? 'done' : 'todo' }}">
+                                        <h5>Đã nhận hàng</h5>
+                                    </li>
+
+                                    <!-- Trạng thái trả hàng -->
+                                    @if ($statusChart == 5)
+                                        <li class="progtrckr-done">
+                                            <h5>Trả hàng</h5>
+                                        </li>
+                                    @endif
 
 
 
@@ -329,26 +364,30 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($bienThesList as $index => $item)
-                                    <tr>
-                                        <td style="line-height: 126px">{{ $index++ }}</td>
-                                        <td>
-                                            <img style="width: 100px; height: 100px" src="{{ Storage::url($item['anh_bien_the']) }}" alt="">
-                                        </td>
-                                        <td style="line-height: 126px">
-                                            <a href="{{ route('sanphams.chitiet',$item['id_san_pham']) }}">
-                                            {{ $item['ten_bien_the'] }}
-                                            </a>
-                                        </td>
-                                        <td style="color: #0da487;line-height: 126px">{{ number_format($item['gia_ban'],0,'','.') }} đ</td>
-                                        <td style="line-height: 126px">{{ $item['so_luong'] }}</td>
-                                        <td style="line-height: 126px">
-                                            @if ($statusChart == 4)
-                                            <a style="width:100px;height:30px" href="{{ route('sanphams.chitiet',$item['id_san_pham']) }}" style="border: none" class="btn-primary btn-sm">
-                                                Đánh giá sản phẩm
-                                            </a>
-                                            @endif
-                                        </td>
-                                    </tr>
+                                        <tr>
+                                            <td style="line-height: 126px">{{ $index++ }}</td>
+                                            <td>
+                                                <img style="width: 100px; height: 100px"
+                                                    src="{{ Storage::url($item['anh_bien_the']) }}" alt="">
+                                            </td>
+                                            <td style="line-height: 126px">
+                                                <a href="{{ route('sanphams.chitiet', $item['id_san_pham']) }}">
+                                                    {{ $item['ten_bien_the'] }}
+                                                </a>
+                                            </td>
+                                            <td style="color: #0da487;line-height: 126px">
+                                                {{ number_format($item['gia_ban'], 0, '', '.') }} đ</td>
+                                            <td style="line-height: 126px">{{ $item['so_luong'] }}</td>
+                                            <td style="line-height: 126px">
+                                                @if ($statusChart == 4)
+                                                    <a style="width:100px;height:30px"
+                                                        href="{{ route('sanphams.chitiet', $item['id_san_pham']) }}"
+                                                        style="border: none" class="btn-primary btn-sm">
+                                                        Đánh giá sản phẩm
+                                                    </a>
+                                                @endif
+                                            </td>
+                                        </tr>
                                     @endforeach
 
                                 </tbody>
@@ -361,7 +400,7 @@
         </section>
         <!-- Order Table Section End -->
 
-</body>
+    </body>
 @endsection
 
 

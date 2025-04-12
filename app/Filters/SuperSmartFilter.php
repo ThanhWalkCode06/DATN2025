@@ -68,26 +68,27 @@ class SuperSmartFilter
 
     protected function handleFilter($key, $value)
     {
-        Log::info("Handling filter: key=$key, value=$value");
         if (is_array($value)) {
             $value = implode(',', $value);
         }
 
-        if (Str::contains($key, '.')) {
-            $this->applyRelationshipFilter($key, $value);
+        if ($key === 'role') {
+            $this->applyRoleFilter($value);
             return;
         }
 
-        $field = $this->getBaseField($key);
-
-        if (!in_array($field, $this->columns)) {
-            Log::warning("Field $field not found in columns of table $this->table");
+        // Kiểm tra cột cơ bản (không có hậu tố) cho whitelist/blacklist và columns
+        $baseField = $this->getBaseField($key);
+        if (!in_array($baseField, $this->columns)) {
+            Log::warning("Field $baseField not found in columns of table $this->table");
             return;
         }
-        if (!empty($this->whitelist) && !in_array($field, $this->whitelist)) return;
-        if (in_array($field, $this->blacklist)) return;
 
-        $this->applyWhereConditions($this->builder, $field, $value);
+        if (!empty($this->whitelist) && !in_array($baseField, $this->whitelist)) return;
+        if (in_array($baseField, $this->blacklist)) return;
+
+        // Truyền $key gốc (bao gồm hậu tố) vào applyWhereConditions
+        $this->applyWhereConditions($this->builder, $key, $value);
     }
 
     protected function handleSorting()
@@ -148,8 +149,6 @@ class SuperSmartFilter
     protected function applyWhereConditions($query, $field, $value)
     {
         $baseField = $this->getBaseField($field);
-        Log::info("Applying where condition: field=$field, value=$value, baseField=$baseField, columns=" . json_encode($this->columns));
-
         if (!in_array($baseField, $this->columns)) {
             Log::warning("Field $baseField not found in columns of table $this->table");
             return;
@@ -184,7 +183,6 @@ class SuperSmartFilter
                 $type = Schema::getColumnType($this->table, $baseField);
                 Log::info("Column type for $baseField: $type");
                 if (in_array($type, ['string', 'text', 'varchar'])) {
-                    Log::info("Applying LIKE condition: $baseField LIKE '%$value%'");
                     $query->where($baseField, 'like', "%$value%");
                 } elseif (in_array($type, ['date', 'datetime', 'timestamp']) && strtotime($value)) {
                     $query->whereDate($baseField, $value);
@@ -192,6 +190,16 @@ class SuperSmartFilter
                     Log::info("Applying exact match: $baseField = $value");
                     $query->where($baseField, '=', $value);
                 }
+        }
+    }
+
+    protected function applyRoleFilter($value)
+    {
+        Log::info("Applying role filter: value=$value");
+        if ($value !== '') { // Bỏ qua nếu chọn "-- Tất cả --"
+            $this->builder->whereHas('roles', function ($query) use ($value) {
+                $query->where('id', $value); // Lọc theo role_id
+            });
         }
     }
 }

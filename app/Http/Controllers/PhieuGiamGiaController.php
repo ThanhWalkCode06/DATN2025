@@ -13,23 +13,27 @@ class PhieuGiamGiaController extends Controller
     /**
      * Hiển thị danh sách phiếu giảm giá.
      */
-    public function index()
+    public function index(Request $request)
     {
         // Lấy danh sách phiếu giảm giá và phân trang (10 mục mỗi trang)
         $phieuGiamGias = PhieuGiamGia::orderBy('created_at', 'desc')->paginate(10);
-
+        if ($request->ajax()) {
+            return response()->json([
+                'html' => view('admins.phieugiamgias.partials.list_rows', compact('phieuGiamGias'))->render(),
+                'pagination' => $phieuGiamGias->appends($request->except('page'))->links('pagination::bootstrap-5')->render()
+            ]);
+        }
         // Trả về view với dữ liệu đã phân trang
         return view('admins.phieugiamgias.index', compact('phieuGiamGias'));
     }
 
     public function search(Request $request)
     {
-
+// dd($request->all());
         $phieuGiamGias = PhieuGiamGia::superFilter($request)->paginate(10);
         if ($request->ajax()) {
             return response()->json([
                 'html' => view('admins.phieugiamgias.partials.list_rows', compact('phieuGiamGias'))->render(),
-                // 'count' => $phieuGiamGias->total(),
                 'pagination' => $phieuGiamGias->appends($request->except('page'))->links('pagination::bootstrap-5')->render()
             ]);
         }
