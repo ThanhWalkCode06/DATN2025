@@ -47,9 +47,9 @@
                             <span class="badge badge-light-primary grow">
                                 <i class="fas fa-money-bill-wave"></i>
                                 @if ($phanTramTangGiamDoanhThu > 0)
-                                    <span class="text-success">+{{ number_format($phanTramTangGiamDoanhThu, 2) }}%</span>
+                                    <span class="text-success">+{{ number_format($phanTramTangGiamDoanhThu) }}%</span>
                                 @elseif ($phanTramTangGiamDoanhThu < 0)
-                                    <span class="text-danger">{{ number_format($phanTramTangGiamDoanhThu, 2) }}%</span>
+                                    <span class="text-danger">{{ number_format($phanTramTangGiamDoanhThu) }}%</span>
                                 @else
                                     <span class="text-muted">0%</span>
                                 @endif
@@ -73,7 +73,7 @@
                             {{ $tongDonHang }}
                             <span class="badge {{ $phanTramThayDoiDonHang >= 0 ? 'badge-light-success' : 'badge-light-danger' }} grow">
                                 <i data-feather="{{ $phanTramThayDoiDonHang >= 0 ? 'trending-up' : 'trending-down' }}"></i>
-                                {{ number_format($phanTramThayDoiDonHang, 1) }}%
+                                {{ number_format($phanTramThayDoiDonHang) }}%
                             </span>
                         </h4>
                     </div>
@@ -115,10 +115,7 @@
                         <span class="m-0">Tổng số lượng khách hàng</span>
                         <h4 class="mb-0 counter">
                             {{ $tongKhachHangHoatDong }}
-                            <span class="badge {{ $phanTramThayDoiKhachHang >= 0 ? 'badge-light-success' : 'badge-light-danger' }} grow">
-                                <i data-feather="{{ $phanTramThayDoiKhachHang >= 0 ? 'trending-up' : 'trending-down' }}"></i>
-                                {{ number_format($phanTramThayDoiKhachHang, 1) }}%
-                            </span>
+                        
                         </h4>
                     </div>
 
