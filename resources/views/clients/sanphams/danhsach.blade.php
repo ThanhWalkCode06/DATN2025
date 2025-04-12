@@ -278,7 +278,6 @@
                     <div id="product-list-container">
                         @include('clients.sanphams.sanpham_list', ['sanPhams' => $sanPhams])
 
-
                     </div>
                 </div>
             </div>
@@ -288,9 +287,6 @@
 
 
 @section('js')
-    
-
-
     <script>
         $(document).ready(function() {
             function formatCurrencyVND(value) {
@@ -340,12 +336,12 @@
                         displayName = filterNames[key]?.[params[key]] || params[key];
                     }
 
-                    const tag = $(`
-                    <span class="badge text-white px-3 py-2 d-flex align-items-center me-2 mb-2" style="background-color:#17a589;">
-                        <span class="me-2">${displayName}</span>
-                        <span class="remove-filter" data-key="${key}" style="cursor:pointer;">✖</span>
-                    </span>
-                `);
+                    const tag = $(` 
+                        <span class="badge text-white px-3 py-2 d-flex align-items-center me-2 mb-2" style="background-color:#17a589;">
+                            <span class="me-2">${displayName}</span>
+                            <span class="remove-filter" data-key="${key}" style="cursor:pointer;">✖</span>
+                        </span>
+                    `);
 
                     selectedFiltersContainer.append(tag);
                     hasFilter = true;
@@ -403,7 +399,7 @@
                 return url.pathname + '?' + url.searchParams.toString();
             }
 
-            // ===== Sự kiện lọc, phân trang =====
+            // ===== Xử lý lọc, phân trang =====
             $(document).on('click', '.sort-option', function() {
                 const sortValue = $(this).data('value');
                 $('#sort-hidden').val(sortValue);
@@ -455,25 +451,6 @@
                 fetchFilteredProducts(1);
             });
 
-            // ===== Xem nhanh sản phẩm (modal) =====
-            $(document).on('click', '.btn-quick-view', function() {
-                const id = $(this).data('id');
-                $("#modal-content-detail").html(
-                    '<div class="text-center text-muted">Đang tải dữ liệu...</div>');
-
-                $.ajax({
-                    url: "/sanpham/view/" + id,
-                    method: "GET",
-                    success: function(response) {
-                        $("#modal-content-detail").html(response);
-                    },
-                    error: function() {
-                        $("#modal-content-detail").html(
-                            '<div class="text-danger text-center">Lỗi khi tải dữ liệu sản phẩm!</div>'
-                            );
-                    }
-                });
-            });
 
             // ===== Khôi phục bộ lọc từ URL =====
             const urlParams = new URLSearchParams(window.location.search);
@@ -504,11 +481,7 @@
                     iconHtml = '<i class="fas fa-exclamation-triangle"></i>';
                 }
 
-                // Reset class và icon
-                toastInner
-                    .removeClass('alert-success alert-danger alert-warning')
-                    .addClass(bgClass);
-
+                toastInner.removeClass('alert-success alert-danger alert-warning').addClass(bgClass);
                 toastIcon.html(iconHtml);
                 toastMessage.text(message);
                 toast.fadeIn(200);
@@ -517,7 +490,6 @@
                     toast.fadeOut(400);
                 }, 3000);
             }
-
 
             $(document).on('click', '.notifi-wishlist', function(e) {
                 e.preventDefault();
@@ -552,4 +524,6 @@
             fetchFilteredProducts(1);
         });
     </script>
+
+    
 @endsection

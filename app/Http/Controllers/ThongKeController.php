@@ -55,13 +55,6 @@ class ThongKeController extends Controller
             $phanTramThayDoiDonHang = (($tongDonHang - $tongDonHangHomQua) / $tongDonHangHomQua) * 100;
         }
     
-        // Tính phần trăm thay đổi khách hàng
-        if ($tongKhachHangHomQua == 0) {
-            $phanTramThayDoiKhachHang = $tongKhachHangHoatDong > 0 ? 100 : 0;
-        } else {
-            $phanTramThayDoiKhachHang = (($tongKhachHangHoatDong - $tongKhachHangHomQua) / $tongKhachHangHomQua) * 100;
-        }
-    
         $trangThaiMapping = [
             'chua_xac_nhan' => 0,
             'dang_xu_ly' => 1,
@@ -184,8 +177,9 @@ class ThongKeController extends Controller
             'topKhachHang',
             'topDoanhThu',
             'phanTramThayDoiDonHang',
-            'phanTramThayDoiKhachHang',
-            'phanTramTangGiamDoanhThu'
+            'phanTramTangGiamDoanhThu',
+            'hasDateFilter'  // Thêm biến này để kiểm tra xem có lọc theo khoảng ngày hay không
+            
         ));
     }
     
