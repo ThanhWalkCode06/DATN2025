@@ -47,6 +47,40 @@ class DonHangController extends Controller
         return view('admins.donhangs.index', compact('donHangs'));
     }
 
+    public function bulkUpdate(Request $request)
+    {
+        $request->validate([
+            'ids' => 'required|array',
+            'trang_thai_don_hang' => 'required|in:-1,0,1,2,3,4,5'
+        ]);
+
+        $updatedCount = 0;
+
+        foreach ($request->ids as $id) {
+            $donHang = DonHang::find($id);
+            if ($donHang) {
+                $donHang->trang_thai_don_hang = $request->trang_thai_don_hang;
+
+                if ((int) $request->trang_thai_don_hang === 3) {
+                    $donHang->trang_thai_thanh_toan = 1;
+                }
+
+                $donHang->save();
+
+                LichSuDonHang::create([
+                    'don_hang_id' => $donHang->id,
+                    'trang_thai' => $request->trang_thai_don_hang,
+                ]);
+
+                $updatedCount++;
+            }
+        }
+
+        return response()->json([
+            'message' => "Đã cập nhật $updatedCount đơn hàng thành công."
+        ]);
+    }
+
     /**
      * Show the form for creating a new resource.
      */

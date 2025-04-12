@@ -92,7 +92,8 @@ Route::prefix('admin')->middleware(['auth', 'checkStatus'])->group(function () {
     Route::get("/lienhe", [LienHeController::class, "index"])->name('lienhe');
     Route::get("/danhgias", [DanhGiaController::class, "index"])->name('danhgias');
     Route::post('/sanphams/upload/{sanPhamId}', [Helper::class, 'uploadAlbum'])->name('upload.album');
-    Route::get('donhangs/filter', [DonHangController::class, 'filter'])->name('donhangs.filter');
+    // Route::get('donhangs/filter', [DonHangController::class, 'filter'])->name('donhangs.filter');
+    Route::post('/donhangs/bulk-update', [DonHangController::class, 'bulkUpdate'])->name('donhangs.bulkUpdate');
 
 
     // Chức năng thì cho vào đây đánh tên route->name phải giống quyền lối bởi dấu . nếu là route resource

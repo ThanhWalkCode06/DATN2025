@@ -4,7 +4,12 @@
         @foreach ($donHangs as $donHang)
             <thead>
                 <tr>
-                    <th colspan="3">Mã đơn hàng: {{ $donHang->ma_don_hang }}</th>
+                    <th colspan="3">
+                        <div class="checkbox-wrapper float-start ml-4" style="display: none;">
+                            <input type="checkbox" class="donhang-checkbox" value="{{ $donHang->id }}">
+                        </div>
+                        <div>Mã đơn hàng: {{ $donHang->ma_don_hang }}</div>
+                    </th>
                     <th>
                         @if ($donHang->trang_thai_thanh_toan == 0)
                             <span class="order-danger">Chưa thanh toán</span>
