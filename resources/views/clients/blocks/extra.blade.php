@@ -187,6 +187,7 @@
                 <div class="deal-offer-box">
                     <ul class="deal-offer-list">
                         @foreach ($topOrderProducts as $index => $item)
+                        {{-- {{ var_dump($item); }} --}}
                             <li class="list-{{ ++$index }}">
                                 <div class="deal-offer-contain">
                                     <div>

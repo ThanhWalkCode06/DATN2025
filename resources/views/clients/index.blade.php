@@ -185,7 +185,7 @@
                                             @php
                                                 $giaThapNhat = collect($item['bien_thes'])->min('gia_ban') ?? 0;
                                             @endphp
-                                            <div class="col-md-3 px-0">
+                                            <div style="border: 1px solid #ccc" class="col-md-3 px-0">
                                                 <div class="product-box">
                                                     <div style="position: relative; width: 100%">
                                                         @if ($item['gia_cu'] > $giaThapNhat)
