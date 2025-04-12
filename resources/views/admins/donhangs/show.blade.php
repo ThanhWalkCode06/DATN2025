@@ -160,7 +160,7 @@
                                                 <span>Trạng thái không hợp lệ</span>
                                             @endif
                                         </p>
-                                        @if ($donHang->trang_thai_don_hang == 5)
+                                        @if ($donHang->trang_thai_don_hang == -1 || $donHang->trang_thai_don_hang == 5)
                                             <p>
                                                 Lý do trả hàng: {{ $donHang->ly_do }}
                                             </p>
