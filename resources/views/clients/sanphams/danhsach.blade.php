@@ -115,7 +115,6 @@
                                 <h3><i class="fa-solid fa-arrow-left"></i> Back</h3>
                             </div>
 
-
                             <div class="accordion custom-accordion" id="accordionExample">
                                 <div class="selected-filters mt-4 text-center">
                                     <strong class="text-dark fs-4 d-block">Bộ lọc đã chọn</strong>
@@ -126,8 +125,7 @@
                                     </a>
                                 </div>
 
-
-
+                                {{-- DANH MỤC --}}
                                 <div class="accordion-item">
                                     <h2 class="accordion-header" id="panelsStayOpen-headingOne">
                                         <button class="accordion-button" type="button" data-bs-toggle="collapse"
@@ -137,28 +135,20 @@
                                     </h2>
                                     <div id="collapseOne" class="accordion-collapse collapse show">
                                         <div class="accordion-body">
-
-
-
-
                                             @if ($danhMucs->isNotEmpty())
-                                            <form method="GET" action="{{ route('sanphams.danhsach') }}">
-                                                {{-- Giữ lại các tham số khác ngoài "danh_muc_id" --}}
-                                                @foreach(request()->except('danh_muc_id') as $key => $value)
-                                                    <input type="hidden" name="{{ $key }}" value="{{ $value }}">
-                                                @endforeach
-                                            
                                                 <ul class="category-list custom-padding custom-height" id="category-list">
                                                     @foreach ($danhMucs as $danhMuc)
                                                         <li>
                                                             <div class="form-check ps-0 m-0 category-list-box">
-                                                                <input class="checkbox_animated d-none" type="radio"
-                                                                    name="danh_muc_id" value="{{ $danhMuc->id }}"
+                                                                <input class="checkbox_animated d-none filter-input"
+                                                                    type="radio" name="danh_muc_id"
+                                                                    value="{{ $danhMuc->id }}"
                                                                     id="danhmuc-{{ $danhMuc->id }}"
-                                                                    onchange="this.form.submit()"
                                                                     {{ request('danh_muc_id') == $danhMuc->id ? 'checked' : '' }}>
-                                            
-                                                                <label class="form-check-label" for="danhmuc-{{ $danhMuc->id }}" style="cursor: pointer;">
+
+                                                                <label class="form-check-label"
+                                                                    for="danhmuc-{{ $danhMuc->id }}"
+                                                                    style="cursor: pointer;">
                                                                     {{ $danhMuc->ten_danh_muc }}
                                                                     <span class="badge bg-success text-white ms-2">
                                                                         {{ $danhMuc->san_phams_count }} sản phẩm
@@ -168,25 +158,14 @@
                                                         </li>
                                                     @endforeach
                                                 </ul>
-                                            </form>
-                                            
                                             @else
                                                 <p>Không có danh mục nào có sản phẩm.</p>
                                             @endif
-
-
-
-
-
-
-
-
-
-
                                         </div>
                                     </div>
                                 </div>
 
+                                {{-- GIÁ --}}
                                 <div class="accordion-item">
                                     <h2 class="accordion-header" id="panelsStayOpen-headingThree">
                                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
@@ -196,151 +175,78 @@
                                     </h2>
                                     <div id="collapseThree" class="accordion-collapse collapse show">
                                         <div class="accordion-body">
-                                            <div class="form-check">
-                                                <input class="form-check-input price-filter" type="checkbox"
-                                                    value="0-100000" id="price1" data-value="0-100000">
-                                                <label class="form-check-label" for="price1">Giá dưới 100.000đ</label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input price-filter" type="checkbox"
-                                                    value="100000-200000" id="price2" data-value="100000-200000">
-                                                <label class="form-check-label" for="price2">100.000đ - 200.000đ</label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input price-filter" type="checkbox"
-                                                    value="200000-300000" id="price3" data-value="200000-300000">
-                                                <label class="form-check-label" for="price3">200.000đ - 300.000đ</label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input price-filter" type="checkbox"
-                                                    value="300000-500000" id="price4" data-value="300000-500000">
-                                                <label class="form-check-label" for="price4">300.000đ - 500.000đ</label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input price-filter" type="checkbox"
-                                                    value="500000-1000000" id="price5" data-value="500000-1000000">
-                                                <label class="form-check-label" for="price5">500.000đ -
-                                                    1.000.000đ</label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input price-filter" type="checkbox"
-                                                    value="1000000-999999999" id="price6"
-                                                    data-value="1000000-999999999">
-                                                <label class="form-check-label" for="price6">Giá trên 1.000.000đ</label>
-                                            </div>
+                                            @foreach ([['0-100000', 'Giá dưới 100.000đ'], ['100000-200000', '100.000đ - 200.000đ'], ['200000-300000', '200.000đ - 300.000đ'], ['300000-500000', '300.000đ - 500.000đ'], ['500000-1000000', '500.000đ - 1.000.000đ'], ['1000000-999999999', 'Giá trên 1.000.000đ']] as [$value, $label])
+                                                <div class="form-check">
+                                                    <input class="form-check-input filter-input" type="radio"
+                                                        name="price_range" value="{{ $value }}"
+                                                        id="price-{{ $loop->index }}">
+                                                    <label class="form-check-label" for="price-{{ $loop->index }}">
+                                                        {{ $label }}
+                                                    </label>
+                                                </div>
+                                            @endforeach
                                         </div>
                                     </div>
                                 </div>
 
 
 
+                                {{-- ĐÁNH GIÁ --}}
                                 <div class="accordion-item">
                                     <h2 class="accordion-header" id="panelsStayOpen-headingSix">
-                                        <button class="accordion-button collapsed" type="button"
-                                            data-bs-toggle="collapse" data-bs-target="#collapseSix">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#collapseSix">
                                             <span>Đánh giá</span>
                                         </button>
                                     </h2>
                                     <div id="collapseSix" class="accordion-collapse collapse show">
                                         <div class="accordion-body">
                                             <ul class="category-list custom-padding">
-                                                <form action="{{ route('sanphams.danhsach') }}" method="GET">
-                                                    <!-- Giữ lại các bộ lọc khác -->
-                                                    @foreach (request()->except('so_sao') as $key => $value)
-                                                        <input type="hidden" name="{{ $key }}"
-                                                            value="{{ $value }}">
-                                                    @endforeach
+                                                @foreach ([5, 4, 3, 2, 1] as $i)
+                                                    <li>
+                                                        <div class="form-check ps-0 m-0 category-list-box">
+                                                            <input class="checkbox_animated d-none filter-input"
+                                                                type="radio" name="so_sao" value="{{ $i }}"
+                                                                id="so_sao-{{ $i }}"
+                                                                {{ request('so_sao') == $i ? 'checked' : '' }}>
 
-                                                    <!-- Bộ lọc đánh giá -->
-                                                    <ul>
-                                                        @foreach ([5, 4, 3, 2, 1] as $i)
-                                                            <li>
-                                                                <div class="form-check ps-0 m-0 category-list-box">
-                                                                    <input class="checkbox_animated d-none" type="radio"
-                                                                        name="so_sao" value="{{ $i }}"
-                                                                        id="so_sao-{{ $i }}"
-                                                                        onchange="this.form.submit()"
-                                                                        {{ request('so_sao') == $i ? 'checked' : '' }}>
-
-                                                                    <label class="form-check-label"
-                                                                        for="so_sao-{{ $i }}"
-                                                                        style="cursor: pointer;">
-                                                                        <ul class="rating">
-                                                                            @for ($j = 1; $j <= 5; $j++)
-                                                                                <li>
-                                                                                    <i
-                                                                                        class="fa fa-star {{ $j <= $i ? 'text-warning' : 'text-secondary' }}"></i>
-                                                                                </li>
-                                                                            @endfor
-                                                                        </ul>
-                                                                        <span class="text-content">
-                                                                            ({{ $i == 5 ? '5 sao' : $i . '.0 - ' . $i . '.9 sao' }})
-                                                                        </span>
-                                                                    </label>
-                                                                </div>
-                                                            </li>
-                                                        @endforeach
-                                                    </ul>
-                                                </form>
+                                                            <label class="form-check-label"
+                                                                for="so_sao-{{ $i }}" style="cursor: pointer;">
+                                                                <ul class="rating">
+                                                                    @for ($j = 1; $j <= 5; $j++)
+                                                                        <li>
+                                                                            <i
+                                                                                class="fa fa-star {{ $j <= $i ? 'text-warning' : 'text-secondary' }}"></i>
+                                                                        </li>
+                                                                    @endfor
+                                                                </ul>
+                                                                <span class="text-content">
+                                                                    ({{ $i == 5 ? '5 sao' : $i . '.0 - ' . $i . '.9 sao' }})
+                                                                </span>
+                                                            </label>
+                                                        </div>
+                                                    </li>
+                                                @endforeach
                                             </ul>
                                         </div>
                                     </div>
                                 </div>
-
-                                {{-- <div class="accordion-item">
-                                    <h2 class="accordion-header" id="panelsStayOpen-headingFive">
-                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                            data-bs-target="#collapseFive">
-                                            <span>Kích cỡ & Màu sắc</span>
-                                        </button>
-                                    </h2>
-                                    <div id="collapseFive" class="accordion-collapse collapse show">
-                                        <div class="accordion-body">
-                                            <ul class="category-list custom-padding custom-height">
-                                                <li>
-                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox"
-                                                            id="flexCheckDefault5">
-                                                        <label class="form-check-label" for="flexCheckDefault5">
-                                                            <span class="name">400 to 500 g</span>
-                                                            <span class="number">(05)</span>
-                                                        </label>
-                                                    </div>
-                                                </li>
-
-
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div> --}}
-                                {{-- <div class="d-flex justify-content-center mt-3">
-                                    <button id="clearFilters"
-                                        class="btn btn-outline-danger px-4 py-2 fw-bold rounded-pill shadow">
-                                        <i class="fa fa-times-circle me-2"></i> Xóa bộ lọc
-                                    </button>
-                                </div> --}}
-
 
                             </div>
                         </div>
                     </div>
                 </div>
 
+                {{-- SẢN PHẨM + SẮP XẾP --}}
                 <div class="col-custom- wow fadeInUp">
                     <div class="show-button">
-                        <div class="filter-button-group mt-0">
-                            <div class="filter-button d-inline-block d-lg-none">
-                                <a><i class="fa-solid fa-filter"></i> Filter Menu</a>
-                            </div>
-                        </div>
-
                         <div class="top-filter-menu">
                             <div class="category-dropdown">
                                 <h5 class="text-content">Sắp xếp theo :</h5>
                                 <div class="dropdown">
                                     <button class="dropdown-toggle" type="button" id="dropdownMenuButton1"
                                         data-bs-toggle="dropdown">
-                                        <span>
+                                        <span id="sort-label">
                                             @php
                                                 $sortText = match (request('sort')) {
                                                     'Giá thấp - cao' => 'Giá thấp - cao',
@@ -353,233 +259,40 @@
                                         </span>
                                         <i class="fa-solid fa-angle-down"></i>
                                     </button>
-
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item"
-                                                href="{{ request()->fullUrlWithQuery(['sort' => 'Giá thấp - cao']) }}">Giá
-                                                thấp -
-                                                cao</a></li>
-                                        <li><a class="dropdown-item"
-                                                href="{{ request()->fullUrlWithQuery(['sort' => 'Giá cao - thấp']) }}">Giá
-                                                cao -
-                                                thấp</a></li>
-                                        <li><a class="dropdown-item"
-                                                href="{{ request()->fullUrlWithQuery(['sort' => 'Giảm giá % cao - thấp']) }}">Giảm
-                                                giá % cao
-                                                - thấp</a></li>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                        <li><a class="dropdown-item sort-option" href="javascript:void(0)"
+                                                data-value="Giá thấp - cao">Giá thấp - cao</a></li>
+                                        <li><a class="dropdown-item sort-option" href="javascript:void(0)"
+                                                data-value="Giá cao - thấp">Giá cao - thấp</a></li>
+                                        <li><a class="dropdown-item sort-option" href="javascript:void(0)"
+                                                data-value="Giảm giá % cao - thấp">Giảm giá % cao - thấp</a></li>
                                     </ul>
+                                    <input type="hidden" name="sort" id="sort-hidden" value="{{ request('sort') }}"
+                                        class="filter-input">
                                 </div>
-
-
-                            </div>
-
-
-                            <div class="grid-option d-none d-md-block">
-                                <ul>
-                                    <li class="three-grid">
-                                        <a href="javascript:void(0)">
-                                            <img src="https://themes.pixelstrap.com/fastkart/assets/svg/grid-3.svg"
-                                                class="blur-up lazyload" alt="">
-                                        </a>
-                                    </li>
-                                    <li class="grid-btn d-xxl-inline-block d-none active">
-                                        <a href="javascript:void(0)">
-                                            <img src="https://themes.pixelstrap.com/fastkart/assets/svg/grid-4.svg"
-                                                class="blur-up lazyload d-lg-inline-block d-none" alt="">
-                                            <img src="https://themes.pixelstrap.com/fastkart/assets/svg/grid.svg"
-                                                class="blur-up lazyload img-fluid d-lg-none d-inline-block"
-                                                alt="">
-                                        </a>
-                                    </li>
-                                    <li class="list-btn">
-                                        <a href="javascript:void(0)">
-                                            <img src="https://themes.pixelstrap.com/fastkart/assets/svg/list.svg"
-                                                class="blur-up lazyload" alt="">
-                                        </a>
-                                    </li>
-                                </ul>
                             </div>
                         </div>
                     </div>
 
-                    @if ($sanPhams->isEmpty())
-                        <div class="text-center mt-4">
-                            <h4 style="color: red">Không có sản phẩm nào phù hợp với bộ lọc</h4>
-                            <p>Hãy thử thay đổi tiêu chí lọc để tìm kiếm sản phẩm phù hợp.</p>
-                        </div>
-                    @else
-                        <div
-                            class="row g-sm-4 g-3 row-cols-xxl-4 row-cols-xl-3 row-cols-lg-2 row-cols-md-3 row-cols-2 product-list-section">
-                            @foreach ($sanPhams as $sanPham)
-                                <div>
-                                    <div class="product-box-3 h-100 wow fadeInUp">
-                                        <div class="product-header">
-                                            @if ($sanPham->gia_cu > $sanPham->giaThapNhatCuaSP())
-                                                <span class="badge bg-danger">
-                                                    -{{ $sanPham->phanTramGiamGia() }}%
-                                                </span>
-                                            @endif
-                                            <div class="product-image text-center" style="max-width: 250px;">
-                                                <a href="{{ route('sanphams.chitiet', $sanPham->id) }}">
-                                                    <img src="{{ Storage::url($sanPham->hinh_anh) }}"
-                                                        class="img-fluid rounded shadow-sm"
-                                                        alt="{{ $sanPham->ten_san_pham }}">
-                                                </a>
-                                                <ul class="product-option">
-                                                    <li data-bs-toggle="tooltip" data-bs-placement="top"
-                                                        title="Xem chi tiết">
-                                                        <a
-                                                            href="{{ route('sanphams.chitiet', ['id' => $sanPham['id']]) }}">
-                                                            <i data-feather="eye"></i>
-                                                        </a>
-                                                    </li>
-                                                    <li data-bs-toggle="tooltip" data-bs-placement="top"
-                                                        title="Wishlist">
-                                                        <a href="#" class="notifi-wishlist">
-                                                            <i data-feather="heart"></i>
-                                                        </a>
-                                                        <form action="{{ route('add.wishlist', $sanPham['id']) }}"
-                                                            method="POST" class="wishlist-form">
-                                                            @csrf
-                                                        </form>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div class="product-footer">
-                                            <div class="product-detail">
-                                                <span
-                                                    class="span-name">{{ $sanPham->danhMuc->ten_danh_muc ?? 'Không có danh mục' }}</span>
-                                                <a href="{{ route('sanphams.chitiet', $sanPham->id) }}">
-                                                    <h5 class="name">{{ $sanPham->ten_san_pham }}</h5>
-                                                </a>
-                                                <p class="text-content mt-1 mb-2 product-content">{{ $sanPham->mo_ta }}
-                                                </p>
-                                                <div class="product-rating mt-2">
-                                                    <ul class="rating">
-                                                        @for ($i = 1; $i <= 5; $i++)
-                                                            <li>
-                                                                <i data-feather="star"
-                                                                    class="{{ $i <= $sanPham->tinhDiemTrungBinh() ? 'fill' : '' }}"></i>
-                                                            </li>
-                                                        @endfor
-                                                    </ul>
-                                                    <span>({{ number_format($sanPham->tinhDiemTrungBinh(), 1) }} /
-                                                        5)</span>
-                                                    <span class="text-muted">({{ $sanPham->soLuongDanhGia() }} đánh
-                                                        giá)</span>
-                                                </div>
-                                                <h5 class="price">
-
-                                                    <span class="theme-color">
-                                                        {{ number_format($sanPham->giaThapNhatCuaSP(), 0, ',', '.') }} ₫
-                                                    </span>
-                                                    <del>{{ number_format($sanPham->gia_cu, 0, ',', '.') }} ₫</del>
-                                                    
-                                                </h5>
-                                                <div class="add-to-cart-box bg-white">
-                                                    <button class="btn btn-add-cart addcart-button">
-                                                        @if ($sanPham['trang_thai'] == 1)
-                                                            <a class="btn-quick-view" style="margin-right: 10px;"
-                                                                href="javascript:void(0)" data-bs-toggle="modal"
-                                                                data-bs-target="#view" data-id="{{ $sanPham['id'] }}">
-                                                                <span class="add-icon bg-light-gray">
-                                                                    <i class="fa-solid fa-cart-plus"></i>
-                                                                </span> Thêm vào giỏ hàng
-                                                            </a>
-                                                        @endif
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
-                    @endif
+                    {{-- PHẦN HIỂN THỊ SẢN PHẨM --}}
+                    <div id="product-list-container">
+                        @include('clients.sanphams.sanpham_list', ['sanPhams' => $sanPhams])
 
 
-                    @if ($sanPhams->hasPages())
-                        <nav class="custom-pagination">
-                            <ul class="pagination justify-content-center">
-                                {{-- Nút "Trang đầu" --}}
-                                <li class="page-item {{ $sanPhams->onFirstPage() ? 'disabled' : '' }}">
-                                    <a class="page-link" href="{{ $sanPhams->url(1) }}">
-                                        <i class="fa-solid fa-angles-left"></i>
-                                    </a>
-                                </li>
-
-                                {{-- Các trang --}}
-                                @foreach ($sanPhams->links()->elements[0] as $page => $url)
-                                    <li class="page-item {{ $sanPhams->currentPage() == $page ? 'active' : '' }}">
-                                        <a class="page-link" href="{{ $url }}">{{ $page }}</a>
-                                    </li>
-                                @endforeach
-
-                                {{-- Nút "Trang cuối" --}}
-                                <li class="page-item {{ $sanPhams->hasMorePages() ? '' : 'disabled' }}">
-                                    <a class="page-link" href="{{ $sanPhams->url($sanPhams->lastPage()) }}">
-                                        <i class="fa-solid fa-angles-right"></i>
-                                    </a>
-                                </li>
-                            </ul>
-                        </nav>
-                    @endif
-
+                    </div>
                 </div>
             </div>
         </div>
     </section>
-    <!-- Shop Section End -->
 @endsection
 
+
 @section('js')
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const priceFilters = document.querySelectorAll(".price-filter");
-
-            // Lấy khoảng giá từ URL
-            const urlParams = new URLSearchParams(window.location.search);
-            const selectedPrice = urlParams.get("price_range");
-
-            // Đánh dấu checkbox nếu có giá trị trong URL
-            if (selectedPrice) {
-                priceFilters.forEach(filter => {
-                    if (filter.dataset.value === selectedPrice) {
-                        filter.checked = true;
-                    }
-                });
-            }
-
-            // Khi chọn một checkbox, bỏ chọn các checkbox khác và cập nhật URL
-            priceFilters.forEach(filter => {
-                filter.addEventListener("change", function() {
-                    if (this.checked) {
-                        // Bỏ chọn tất cả checkbox khác
-                        priceFilters.forEach(f => {
-                            if (f !== this) f.checked = false;
-                        });
-
-                        // Cập nhật URL với giá trị mới
-                        urlParams.set("price_range", this.value);
-                    } else {
-                        // Nếu bỏ chọn thì xóa param
-                        urlParams.delete("price_range");
-                    }
-
-                    window.location.href = window.location.pathname + "?" + urlParams.toString();
-                });
-            });
-        });
-    </script>
-
+    
 
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const selectedFiltersContainer = document.getElementById("selectedFilters");
-            const clearAllFilters = document.getElementById("clearAllFilters");
-
+        $(document).ready(function() {
             function formatCurrencyVND(value) {
                 return new Intl.NumberFormat("vi-VN", {
                     style: "currency",
@@ -589,12 +302,8 @@
 
             function formatPriceRange(value) {
                 let [min, max] = value.split("-").map(Number);
-                if (max >= 999999999) {
-                    return `Giá trên ${formatCurrencyVND(min)}`;
-                }
-                if (min === 0) {
-                    return `Giá dưới ${formatCurrencyVND(max)}`;
-                }
+                if (max >= 999999999) return `Giá trên ${formatCurrencyVND(min)}`;
+                if (min === 0) return `Giá dưới ${formatCurrencyVND(max)}`;
                 return `${formatCurrencyVND(min)} - ${formatCurrencyVND(max)}`;
             }
 
@@ -614,46 +323,233 @@
                 }
             };
 
-            function updateSelectedFilters() {
-                selectedFiltersContainer.innerHTML = "";
-                const urlParams = new URLSearchParams(window.location.search);
+            function updateSelectedFiltersUI(params) {
+                const selectedFiltersContainer = $("#selectedFilters");
+                const clearAllFilters = $("#clearAllFilters");
+                selectedFiltersContainer.html("");
                 let hasFilter = false;
 
-                urlParams.forEach((value, key) => {
-                    let displayName;
+                for (const key in params) {
+                    if (!params[key]) continue;
+                    let displayName = "";
 
                     if (key === "price_range") {
-                        displayName = formatPriceRange(value);
+                        const ranges = params[key].split(',');
+                        displayName = ranges.map(r => formatPriceRange(r)).join(", ");
                     } else {
-                        displayName = filterNames[key] && filterNames[key][value] ? filterNames[key][
-                            value] : value;
+                        displayName = filterNames[key]?.[params[key]] || params[key];
                     }
 
-                    const filterTag = document.createElement("span");
-                    filterTag.className = "badge text-white px-3 py-2 d-flex align-items-center";
-                    filterTag.style.backgroundColor = "#17a589";
-                    filterTag.innerHTML = `
-                <span class="me-2">${displayName}</span>
-                <span style="cursor:pointer;" class="ms-2 remove-filter" data-key="${key}">✖</span>
-            `;
-                    selectedFiltersContainer.appendChild(filterTag);
+                    const tag = $(`
+                    <span class="badge text-white px-3 py-2 d-flex align-items-center me-2 mb-2" style="background-color:#17a589;">
+                        <span class="me-2">${displayName}</span>
+                        <span class="remove-filter" data-key="${key}" style="cursor:pointer;">✖</span>
+                    </span>
+                `);
+
+                    selectedFiltersContainer.append(tag);
                     hasFilter = true;
-                });
+                }
 
-                clearAllFilters.style.display = hasFilter ? "inline-block" : "none";
+                clearAllFilters.toggle(hasFilter);
+            }
 
-                document.querySelectorAll(".remove-filter").forEach((btn) => {
-                    btn.addEventListener("click", function() {
-                        let filterKey = this.getAttribute("data-key");
-                        let params = new URLSearchParams(window.location.search);
-                        params.delete(filterKey);
+            function fetchFilteredProducts(page = 1) {
+                let query = $('input[name="query"]').val();
+                let danh_muc_id = $('input[name="danh_muc_id"]:checked').val();
+                let price_range = $('input[name="price_range"]:checked').val();
+                let so_sao = $('input[name="so_sao"]:checked').val();
+                let sort = $('#sort-hidden').val();
 
-                        window.location.href = window.location.pathname + "?" + params.toString();
-                    });
+                let params = {
+                    query,
+                    danh_muc_id,
+                    price_range,
+                    so_sao,
+                    sort,
+                    page
+                };
+
+                $.ajax({
+                    url: "{{ route('sanphams.danhsach') }}?page=" + page,
+                    type: "GET",
+                    data: params,
+                    success: function(response) {
+                        $('#product-list-container').html(response.html);
+                        feather.replace();
+                        $('[data-bs-toggle="tooltip"]').tooltip();
+
+                        const cleanParams = {
+                            ...params
+                        };
+                        delete cleanParams.page;
+                        history.pushState(null, '', buildUrl(cleanParams));
+                        updateSelectedFiltersUI(cleanParams);
+                    },
+                    error: function() {
+                        alert("Lỗi khi tải sản phẩm!");
+                    }
                 });
             }
 
-            updateSelectedFilters();
+            function buildUrl(params) {
+                const url = new URL(window.location.href);
+                url.search = '';
+                for (const key in params) {
+                    if (params[key]) {
+                        url.searchParams.set(key, params[key]);
+                    }
+                }
+                return url.pathname + '?' + url.searchParams.toString();
+            }
+
+            // ===== Sự kiện lọc, phân trang =====
+            $(document).on('click', '.sort-option', function() {
+                const sortValue = $(this).data('value');
+                $('#sort-hidden').val(sortValue);
+                $('#sort-label').text(sortValue);
+                fetchFilteredProducts(1);
+            });
+
+            $(document).on('change', '.filter-input', function() {
+                fetchFilteredProducts(1);
+            });
+
+            $(document).on('input', 'input[name="query"]', function() {
+                fetchFilteredProducts(1);
+            });
+
+            $(document).on('click', '.pagination a', function(e) {
+                e.preventDefault();
+                const page = $(this).attr('href').split('page=')[1];
+                fetchFilteredProducts(page);
+            });
+
+            $('#clearAllFilters').on('click', function(e) {
+                e.preventDefault();
+                $('input[type=radio], input[type=checkbox]').prop('checked', false);
+                $('input[name="query"]').val('');
+                $('#sort-hidden').val('');
+                $('#sort-label').text('Sắp xếp');
+                fetchFilteredProducts(1);
+            });
+
+            $(document).on("click", ".remove-filter", function() {
+                const key = $(this).data("key");
+
+                if (key === "price_range") {
+                    $('input[name="price_range"]').prop('checked', false);
+                } else {
+                    $(`input[name="${key}"]`).prop('checked', false);
+                }
+
+                if (key === "query") {
+                    $('input[name="query"]').val('');
+                }
+
+                if (key === "sort") {
+                    $('#sort-hidden').val('');
+                    $('#sort-label').text('Sắp xếp');
+                }
+
+                fetchFilteredProducts(1);
+            });
+
+            // ===== Xem nhanh sản phẩm (modal) =====
+            $(document).on('click', '.btn-quick-view', function() {
+                const id = $(this).data('id');
+                $("#modal-content-detail").html(
+                    '<div class="text-center text-muted">Đang tải dữ liệu...</div>');
+
+                $.ajax({
+                    url: "/sanpham/view/" + id,
+                    method: "GET",
+                    success: function(response) {
+                        $("#modal-content-detail").html(response);
+                    },
+                    error: function() {
+                        $("#modal-content-detail").html(
+                            '<div class="text-danger text-center">Lỗi khi tải dữ liệu sản phẩm!</div>'
+                            );
+                    }
+                });
+            });
+
+            // ===== Khôi phục bộ lọc từ URL =====
+            const urlParams = new URLSearchParams(window.location.search);
+            const selectedPrice = urlParams.get("price_range");
+            if (selectedPrice) {
+                $('input[name="price_range"]').each(function() {
+                    if ($(this).val() === selectedPrice) {
+                        $(this).prop('checked', true);
+                    }
+                });
+            }
+
+            // ===== Xử lý wishlist =====
+            function showToast(message, type = 'success') {
+                const toast = $('#custom-toast');
+                const toastInner = $('#toast-inner');
+                const toastIcon = $('#toast-icon');
+                const toastMessage = $('#toast-message');
+
+                let bgClass = 'alert-success';
+                let iconHtml = '<i class="fas fa-check-circle"></i>';
+
+                if (type === 'error' || type === 'danger') {
+                    bgClass = 'alert-danger';
+                    iconHtml = '<i class="fas fa-exclamation-circle"></i>';
+                } else if (type === 'warning') {
+                    bgClass = 'alert-warning';
+                    iconHtml = '<i class="fas fa-exclamation-triangle"></i>';
+                }
+
+                // Reset class và icon
+                toastInner
+                    .removeClass('alert-success alert-danger alert-warning')
+                    .addClass(bgClass);
+
+                toastIcon.html(iconHtml);
+                toastMessage.text(message);
+                toast.fadeIn(200);
+
+                setTimeout(() => {
+                    toast.fadeOut(400);
+                }, 3000);
+            }
+
+
+            $(document).on('click', '.notifi-wishlist', function(e) {
+                e.preventDefault();
+
+                const $btn = $(this);
+                const $form = $btn.closest('li').find('.wishlist-form');
+                const action = $form.attr('action');
+                const token = $form.find('input[name="_token"]').val();
+
+                $.ajax({
+                    url: action,
+                    method: 'POST',
+                    data: {
+                        _token: token
+                    },
+                    success: function(res) {
+                        showToast(res.message || 'Đã thêm vào yêu thích!');
+                        $btn.find('i').addClass('text-danger');
+                    },
+                    error: function(xhr) {
+                        if (xhr.status === 401) {
+                            showToast("Bạn cần đăng nhập để sử dụng chức năng này!", 'error');
+                        } else {
+                            const res = xhr.responseJSON;
+                            showToast(res?.message || 'Đã xảy ra lỗi!', 'warning');
+                        }
+                    }
+                });
+            });
+
+            // ===== Load mặc định =====
+            fetchFilteredProducts(1);
         });
     </script>
 @endsection
