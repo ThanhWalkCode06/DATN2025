@@ -36,33 +36,59 @@
     <div class="card shadow mb-4" style="border-radius: 16px;">
         <div class="card-body">
             <form method="GET" action="{{ route('vi') }}">
-                <div class="row gy-3 gx-4">
-                    <div class="col-md-4">
+                {{-- Hàng 1: Từ ngày - Đến ngày --}}
+                <div class="row gy-3 gx-4 mb-2">
+                    <div class="col-md-6">
                         <label for="from" class="form-label fw-bold">Từ ngày</label>
-                        <input type="date" name="from" id="from" class="form-control" value="{{ request('from') }}">
+                        <input type="date" name="from" id="from" class="form-control" 
+                               value="{{ request('from') }}" onchange="this.form.submit()">
                     </div>
-    
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <label for="to" class="form-label fw-bold">Đến ngày</label>
-                        <input type="date" name="to" id="to" class="form-control" value="{{ request('to') }}">
+                        <input type="date" name="to" id="to" class="form-control" 
+                               value="{{ request('to') }}" onchange="this.form.submit()">
                     </div>
-    
-                    <div class="col-md-4">
+                </div>
+            
+                {{-- Hàng 2: Loại giao dịch - Trạng thái --}}
+                <div class="row gy-3 gx-4 mb-2">
+                    <div class="col-md-6">
+                        <label for="loai" class="form-label fw-bold">Loại giao dịch</label>
+                        <select name="loai" id="loai" class="form-select" onchange="this.form.submit()">
+                            <option value="">-- Tất cả --</option>
+                            <option value="Nạp tiền" {{ request('loai') == 'Nạp tiền' ? 'selected' : '' }}>💰 Nạp tiền</option>
+                            <option value="Rút tiền" {{ request('loai') == 'Rút tiền' ? 'selected' : '' }}>🏧 Rút tiền</option>
+                            <option value="Mua hàng" {{ request('loai') == 'Mua hàng' ? 'selected' : '' }}>🛒 Mua hàng</option>
+                            <option value="Hoàn tiền" {{ request('loai') == 'Hoàn tiền' ? 'selected' : '' }}>↩️ Hoàn tiền</option>
+                        </select>
+                    </div>
+            
+                    <div class="col-md-6">
                         <label for="trang_thai" class="form-label fw-bold">Trạng thái</label>
-                        <select name="trang_thai" id="trang_thai" class="form-select mb-2">
+                        <select name="trang_thai" id="trang_thai" class="form-select" onchange="this.form.submit()">
                             <option value="">-- Tất cả --</option>
                             <option value="0" {{ request('trang_thai') == '0' ? 'selected' : '' }}>⏳ Chờ xử lý</option>
                             <option value="1" {{ request('trang_thai') == '1' ? 'selected' : '' }}>✔️ Thành công</option>
                             <option value="2" {{ request('trang_thai') == '2' ? 'selected' : '' }}>❌ Đã huỷ</option>
                         </select>
-                        <button type="submit" class="btn w-100 text-white" style="background-color: #009688;">
+                    </div>
+                </div>
+            
+                {{-- Hàng 3: Nút lọc giao dịch (nếu bạn vẫn muốn giữ)
+                <div class="row">
+                    <div class="col-md-12 d-flex justify-content-end">
+                        <button type="submit" class="btn text-white px-4" style="background-color: #009688;">
                             <i class="fas fa-filter me-1"></i> Lọc giao dịch
                         </button>
                     </div>
-                </div>
+                </div> --}}
             </form>
+            
         </div>
     </div>
+    
+    
+    
     
     
     
@@ -99,7 +125,11 @@
                                             <span class="text-warning">{{ number_format(abs($gd->so_tien), 0, ',', '.') }} VNĐ</span>
                                         @endif
                                     @elseif(in_array($gd->loai, ['Nạp tiền', 'Hoàn tiền']))
-                                        <span class="text-success">+{{ number_format($gd->so_tien, 0, ',', '.') }} VNĐ</span>
+                                    @if($gd->trang_thai == 2)
+                                    <span class="text-warning">{{ number_format($gd->so_tien, 0, ',', '.') }} VNĐ</span>
+                                @else
+                                    <span class="text-success">+{{ number_format($gd->so_tien, 0, ',', '.') }} VNĐ</span>
+                                @endif
                                     @else
                                         <span class="text-dark">{{ number_format($gd->so_tien, 0, ',', '.') }} VNĐ</span>
                                     @endif

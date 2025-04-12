@@ -32,6 +32,10 @@ class ViController extends Controller
         if ($request->filled('trang_thai') && in_array($request->trang_thai, ['0', '1', '2'])) {
             $query->where('trang_thai', $request->trang_thai);
         }
+
+        if ($request->filled('loai')) {
+            $query->where('loai', $request->loai);
+        }
         // Phân trang kết quả
         $giaodichs = $query->paginate(10);
 
@@ -154,7 +158,7 @@ class ViController extends Controller
                 'so_tien' => $soTienNap,
                 'loai' => 'Nạp tiền',
                 'mo_ta' => 'Nạp tiền thất bại qua VNPAY',
-                'trang_thai' => '0',
+                'trang_thai' => '2',
                 'created_at' => now(),
                 'updated_at' => now()
             ]);
