@@ -56,6 +56,13 @@
             /* Đưa icon ra cuối */
             padding: 0 5px;
         }
+        .select2-container--open .select2-dropdown {
+            z-index: 7;
+
+        }
+        .select2-dropdown .select2-dropdown--below{
+            width: 100px;
+        }
 
         .select2-selection__choice__remove>span {
             float: right;
@@ -121,7 +128,7 @@
             display: inline-flex;
             align-items: center;
             width: 100%;
-            max-width: 100px;
+            max-width: 150px;
             /* Thu nhỏ để vừa cột */
             height: 50px;
             background-color: #f1f1f1;
@@ -177,14 +184,29 @@
         .preview-image[style*="display: block"] {
             display: block !important;
         }
+        .select2-container {
+            max-width: 100% !important;
+        }
+
+        .select2-dropdown {
+            max-width: 100% !important;
+        }
+        .selection{
+            width: 100% !important;
+        }
     </style>
 @endsection
 @section('content')
     <div class="col-12">
-        <a style="float: left" href="{{ route('sanphams.index') }}" class="btn btn-secondary col-1">Trở lại</a>
+
         <div class="row">
-            <div style="min-width: 1000px" class="col-sm-8 m-auto">
+
+            <div style="min-width: 1200px" class="col-sm-8 m-auto">
+
                 <div style="padding: 100px;" class="card">
+                    <div class="mb-3">
+                        <a style="float: left" href="{{ route('sanphams.index') }}" class="btn btn-secondary col-1">Trở lại</a>
+                    </div>
                     <div class="card-body">
                         <div class="card-header-2">
                             <h5>Thêm mới sản phẩm</h5>
@@ -243,6 +265,14 @@
                                             <div class="text-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
+
+                                    <div class="mb-4">
+                                        <label class="form-label-title">Trạng thái</label>
+                                        <select name="trang_thai" class="form-control">
+                                            <option value="1">Còn hàng</option>
+                                            <option value="0">Hết hàng</option>
+                                        </select>
+                                    </div>
                                 </div>
 
                                 <!-- Cột phải -->
@@ -267,21 +297,15 @@
 
                                     </div>
                                     <div class="mb-4">
-                                        <label class="form-label-title">Trạng thái</label>
-                                        <select name="trang_thai" class="form-control">
-                                            <option value="1">Còn hàng</option>
-                                            <option value="0">Hết hàng</option>
-                                        </select>
-                                    </div>
-
-                                    <div class="mb-4">
                                         <label class="form-label-title">Mô tả</label>
                                         <textarea id="mo_ta" name="mo_ta" class="form-control">{{ old('mo_ta') }}</textarea>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="mb-3">
+                            <div class="col-md-4">
+                            <h4 class="mb-3" >Thuộc tính</h4>
+                            <div  class="mb-3">
                                 @foreach ($thuocTinhs as $tt)
                                     <div class="mb-2">
                                         <label>{{ $tt->ten_thuoc_tinh }}</label>
@@ -302,81 +326,33 @@
                                     </div>
                                 @endforeach
                             </div>
-                            {{-- @dump(old('anh_bien_the.0')) --}}
-
-                            {{-- Danh sách biến thể --}}
-                            <h4>Danh sách biến thể:</h4>
-                            <table style="width: 70%" class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th style="width: 125px">Ảnh</th>
-                                        <th style="width: 125px">Thuộc tính</th>
-                                        <th style="width: 125px">Giá bán</th>
-                                        <th style="width: 125px">Kho hàng</th>
-                                        {{-- <th>Hành động</th> --}}
-                                    </tr>
-                                </thead>
-
-                                <tbody id="variantTable">
-                                    {{-- @if (old('gia_ban'))
-                                        @php
-                                            $deletedVariants = json_decode(old('deleted_variants', '[]'), true);
-                                        @endphp
-
-                                        @foreach (old('gia_ban', []) as $index => $gia_ban)
-                                            @php
-                                                $selectedValues = implode(
-                                                    ', ',
-                                                    array_merge(...array_values(old('attribute_values'))),
-                                                );
-                                                $selectedValues2 = explode(',', $selectedValues);
-                                            @endphp
-
+                            </div>
+                            <div>
+                            <center>
+                                <div>
+                                    <h4>Danh sách biến thể:</h4> <br>
+                                    <table style="width: 100%" class="table table-bordered">
+                                        <thead>
                                             <tr>
-                                                <td>
-                                                    <label class="custom-file-upload">
-                                                        <input type="file" class="file-input-bien-the" accept="image/*" name="anh_bien_the[]"/>
-                                                        <div class="upload-icon">
-                                                            <i class="fas fa-upload"></i>
-                                                        </div>
-                                                        <span class="upload-text">Tải ảnh lên</span>
-                                                        <img class="preview-image" src="" alt="Ảnh xem trước" style="display: none;" />
-                                                    </label>
-
-                                                    @error("anh_bien_the.$index")
-                                                        <p class="text-danger">{{ $message }}</p>
-                                                    @enderror
-                                                </td>
-                                                <td>{{ $selectedValues2[$index] ?? 'Không có dữ liệu' }}</td>
-                                                <td><input type="number" name="gia_ban[]"
-                                                        value="{{ old("gia_ban.$index") }}"
-                                                        class="form-control @error(" gia_ban.$index") is-invalid @enderror">
-                                                    @error("gia_ban.$index")
-                                                        <p class="text-danger">{{ $message }}</p>
-                                                    @enderror
-                                                </td>
-                                                <td><input type="number" name="so_luong[]"
-                                                        value="{{ old("so_luong.$index") }}"
-                                                        class="form-control @error(" so_luong.$index") is-invalid @enderror">
-                                                    @error("so_luong.$index")
-                                                        <p class="text-danger">{{ $message }}</p>
-                                                    @enderror
-                                                </td>
+                                                <th style="width: 125px">Ảnh</th>
+                                                <th style="width: 125px">Thuộc tính</th>
+                                                <th style="width: 125px">Giá bán</th>
+                                                <th style="width: 125px">Kho hàng</th>
+                                                {{-- <th>Hành động</th> --}}
                                             </tr>
-                                        @endforeach
-                                    @endif --}}
-                                </tbody>
-                            </table>
+                                        </thead>
+
+                                        <tbody id="variantTable">
+                                        </tbody>
+                                    </table>
+                                </div>
+                                </center>
                             <input type="hidden" name="deleted_variants" id="deletedVariants"
                                 value="{{ old('deleted_variants', '[]') }}">
 
                             <br>
                             <button type="submit" class="btn btn-primary">Lưu Sản Phẩm</button>
                         </form>
-                        {{-- <form id="uploadForm" action="{{ route('upload.album') }}" method="POST" enctype="multipart/form-data">
-                    @csrf
-                    <div id="multiFileUpload" class="dropzone"></div>
-                    </form> --}}
                     </div>
                 </div>
             </div>

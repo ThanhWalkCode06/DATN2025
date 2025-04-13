@@ -127,7 +127,7 @@
     display: inline-flex;
     align-items: center;
     width: 100%;
-    max-width: 100px; /* Thu nhỏ để vừa cột */
+    max-width: 150px; /* Thu nhỏ để vừa cột */
     height: 75px;
     background-color: #f1f1f1;
     border: 2px solid #0da487;
@@ -173,14 +173,27 @@ input[type="file"] {
     border-radius: 6px;
     display: none;
 }
+.select2-container {
+            max-width: 100% !important;
+        }
+
+        .select2-dropdown {
+            max-width: 100% !important;
+        }
+        .selection{
+            width: 100% !important;
+        }
     </style>
 @endsection
 @section('content')
     <div class="col-12">
-        <a style="float: left" href="{{ route('sanphams.index') }}" class="btn btn-secondary col-1">Trở lại</a>
+
         <div class="row">
-            <div style="min-width: 1000px" class="col-sm-8 m-auto">
+            <div style="min-width: 1200px" class="col-sm-8 m-auto">
                 <div style="padding: 100px;" class="card">
+                    <div class="mb-3">
+                    <a style="float: left" href="{{ route('sanphams.index') }}" class="btn btn-secondary col-1">Trở lại</a>
+                    </div>
                     <div class="card-body">
                         <div class="card-header-2">
                             <h5>Sửa sản phẩm</h5>
@@ -252,7 +265,7 @@ input[type="file"] {
                                     <div class="mb-4">
                                         <label class="form-label-title">Hình ảnh</label>
                                         <input style="display: block" type="file" name="hinh_anh" class="form-control">
-                                        <img src="{{ Storage::url($sanpham->hinh_anh) }}" width="150">
+                                        <img src="{{ Storage::url($sanpham->hinh_anh) }}" width="100">
                                         @error('hinh_anh')
                                             <div class="text-danger">{{ $message }}</div>
                                         @enderror
@@ -281,7 +294,9 @@ input[type="file"] {
                                     </div>
                                 </div>
                             </div>
-                            <h4 class="mb-3">Thêm Thuộc Tính</h4>
+
+                            <div class="col-md-4">
+                            <h4 class="mb-3" >Thuộc tính</h4>
                             <div class="mb-3">
                                 @foreach ($thuocTinhs as $tt)
                                     <div class="mb-2">
@@ -311,73 +326,78 @@ input[type="file"] {
                                     </div>
                                 @endforeach
                             </div>
+                            </div>
 
+                            <center>
+                                <div>
                             {{-- Danh sách biến thể --}}
-                            <label class="mt-3"><strong>Danh sách biến thể:</strong></label>
-                            <table style="width: 75%" class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th style="width: 125px">Ảnh</th>
-                                        <th style="width: 125px">Thuộc tính</th>
-                                        <th style="width: 125px">Giá bán</th>
-                                        <th style="width: 125px">Kho hàng</th>
-                                        {{-- <th>Hành động</th> --}}
-                                    </tr>
-                                </thead>
-
-
-                                <tbody id="variantTable">
-                                    @php
-                                        $uniqueBienThes = $sanpham->bienThes->unique('ten_bien_the');
-                                    @endphp
-                                    @foreach ($uniqueBienThes as $index => $bienThe)
-                                        <tr data-variant="{{ $bienThe->ten_bien_the }}">
-                                            {{-- <p>{{ $index }}</p> --}}
-                                            <td>
-                                                <label class="custom-file-upload">
-                                                    <input type="file" class="file-input-bien-the" accept="image/*" name="anh_bien_the[]"/>
-                                                    <div class="upload-icon">
-                                                        <i class="fas fa-upload"></i>
-                                                    </div>
-                                                    <span class="upload-text">Tải ảnh lên</span>
-                                                    <img class="preview-image"
-                                                         src="{{ $bienThe->anh_bien_the ? Storage::url($bienThe->anh_bien_the) : '' }}"
-                                                         alt="Ảnh xem trước"
-                                                         style="{{ $bienThe->anh_bien_the ? 'display: block;' : 'display: none;' }}" />
-                                                </label>
-                                                <input type="hidden" name="anh_cu[]" value="{{ $bienThe->anh_bien_the }}">
-                                                @error("anh_bien_the.$index")
-                                                    <p class="text-danger">{{ $message }}</p>
-                                                @enderror
-                                            </td>
-                                            <td>
-                                                <input type="hidden" name="selected_values[]"
-                                                    value="{{ $bienThe->ten_bien_the }}">
-                                                {{ $bienThe->ten_bien_the }}
-                                            </td>
-                                            <td><input type="number" name="gia_ban[]" value="{{ $bienThe->gia_ban }}"
-                                                    class="form-control">
-                                                @error("gia_ban.$index")
-                                                    <p class="text-danger">{{ $message }}</p>
-                                                @enderror
-                                            </td>
-                                            <td>
-                                                <input type="number" name="so_luong[]" value="{{ $bienThe->so_luong }}"
-                                                    class="form-control @error('so_luong.' . $index) is-invalid @enderror">
-                                                @error('so_luong.' . $index)
-                                                    <p class="text-danger">{{ $message }}</p>
-                                                @enderror
-                                            </td>
+                                <h4>Danh sách biến thể:</h4> <br>
+                                <table style="width: 100%" class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 125px">Ảnh</th>
+                                            <th style="width: 125px">Thuộc tính</th>
+                                            <th style="width: 125px">Giá bán</th>
+                                            <th style="width: 125px">Kho hàng</th>
+                                            {{-- <th>Hành động</th> --}}
                                         </tr>
-                                    @endforeach
-                                </tbody>
+                                    </thead>
 
 
-                                <!-- Lưu dữ liệu biến thể ban đầu vào hidden input -->
-                                <input type="hidden" id="existingVariantsData" value='@json($uniqueBienThes)'>
+                                    <tbody id="variantTable">
+                                        @php
+                                            $uniqueBienThes = $sanpham->bienThes->unique('ten_bien_the');
+                                        @endphp
+                                        @foreach ($uniqueBienThes as $index => $bienThe)
+                                            <tr data-variant="{{ $bienThe->ten_bien_the }}">
+                                                {{-- <p>{{ $index }}</p> --}}
+                                                <td>
+                                                    <label class="custom-file-upload">
+                                                        <input type="file" class="file-input-bien-the" accept="image/*" name="anh_bien_the[]"/>
+                                                        <div class="upload-icon">
+                                                            <i class="fas fa-upload"></i>
+                                                        </div>
+                                                        <span class="upload-text">Tải ảnh lên</span>
+                                                        <img class="preview-image"
+                                                            src="{{ $bienThe->anh_bien_the ? Storage::url($bienThe->anh_bien_the) : '' }}"
+                                                            alt="Ảnh xem trước"
+                                                            style="{{ $bienThe->anh_bien_the ? 'display: block;' : 'display: none;' }}" />
+                                                    </label>
+                                                    <input type="hidden" name="anh_cu[]" value="{{ $bienThe->anh_bien_the }}">
+                                                    @error("anh_bien_the.$index")
+                                                        <p class="text-danger">{{ $message }}</p>
+                                                    @enderror
+                                                </td>
+                                                <td>
+                                                    <input type="hidden" name="selected_values[]"
+                                                        value="{{ $bienThe->ten_bien_the }}">
+                                                    {{ $bienThe->ten_bien_the }}
+                                                </td>
+                                                <td><input type="number" name="gia_ban[]" value="{{ $bienThe->gia_ban }}"
+                                                        class="form-control">
+                                                    @error("gia_ban.$index")
+                                                        <p class="text-danger">{{ $message }}</p>
+                                                    @enderror
+                                                </td>
+                                                <td>
+                                                    <input type="number" name="so_luong[]" value="{{ $bienThe->so_luong }}"
+                                                        class="form-control @error('so_luong.' . $index) is-invalid @enderror">
+                                                    @error('so_luong.' . $index)
+                                                        <p class="text-danger">{{ $message }}</p>
+                                                    @enderror
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
 
-                            </table>
-                            <input type="hidden" name="deleted_variants" id="deletedVariants" value="{{ old('deleted_variants', '[]') }}">
+
+                                    <!-- Lưu dữ liệu biến thể ban đầu vào hidden input -->
+                                    <input type="hidden" id="existingVariantsData" value='@json($uniqueBienThes)'>
+
+                                </table>
+                                <input type="hidden" name="deleted_variants" id="deletedVariants" value="{{ old('deleted_variants', '[]') }}">
+                                </div>
+                            </center>
 
                             <br>
                             <button type="submit" class="btn btn-primary">Lưu Sản Phẩm</button>
