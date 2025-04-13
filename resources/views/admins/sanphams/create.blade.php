@@ -265,6 +265,14 @@
                                             <div class="text-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
+
+                                    <div class="mb-4">
+                                        <label class="form-label-title">Trạng thái</label>
+                                        <select name="trang_thai" class="form-control">
+                                            <option value="1">Còn hàng</option>
+                                            <option value="0">Hết hàng</option>
+                                        </select>
+                                    </div>
                                 </div>
 
                                 <!-- Cột phải -->
@@ -289,20 +297,14 @@
 
                                     </div>
                                     <div class="mb-4">
-                                        <label class="form-label-title">Trạng thái</label>
-                                        <select name="trang_thai" class="form-control">
-                                            <option value="1">Còn hàng</option>
-                                            <option value="0">Hết hàng</option>
-                                        </select>
-                                    </div>
-
-                                    <div class="mb-4">
                                         <label class="form-label-title">Mô tả</label>
                                         <textarea id="mo_ta" name="mo_ta" class="form-control">{{ old('mo_ta') }}</textarea>
                                     </div>
                                 </div>
                             </div>
+
                             <div class="col-md-4">
+                            <h4 class="mb-3" >Thuộc tính</h4>
                             <div  class="mb-3">
                                 @foreach ($thuocTinhs as $tt)
                                     <div class="mb-2">

@@ -265,7 +265,7 @@ input[type="file"] {
                                     <div class="mb-4">
                                         <label class="form-label-title">Hình ảnh</label>
                                         <input style="display: block" type="file" name="hinh_anh" class="form-control">
-                                        <img src="{{ Storage::url($sanpham->hinh_anh) }}" width="150">
+                                        <img src="{{ Storage::url($sanpham->hinh_anh) }}" width="100">
                                         @error('hinh_anh')
                                             <div class="text-danger">{{ $message }}</div>
                                         @enderror
@@ -296,6 +296,7 @@ input[type="file"] {
                             </div>
 
                             <div class="col-md-4">
+                            <h4 class="mb-3" >Thuộc tính</h4>
                             <div class="mb-3">
                                 @foreach ($thuocTinhs as $tt)
                                     <div class="mb-2">

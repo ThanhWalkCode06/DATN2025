@@ -270,12 +270,15 @@ class SanPhamController extends Controller
         foreach ($sanpham->bienThes->unique('ten_bien_the') as $ten) {
             $checkedTT[] = array_unique(explode(' - ', $ten->ten_bien_the));
         }
-        // foreach($sanpham->bienThe){
-
-        // }
-        // dd($sanpham->bienThes);
+        $attribute = [];
+        foreach($sanpham->bienThes as $item){
+            foreach($item->tt as $i){
+                $attribute[] = $i->id;
+            }
+        }
         $album = AnhSanPham::where('san_pham_id', $id)->get();
         $thuocTinhs = ThuocTinh::with('giaTriThuocTinhs')->get();
+
         $danhMucs = DanhMucSanPham::all();
         return view('admins.sanphams.edit', compact('sanpham', 'danhMucs', 'thuocTinhs', 'album', 'checkedTT'));
     }
@@ -287,161 +290,250 @@ class SanPhamController extends Controller
     {
         $sanPham = SanPham::findOrFail($id);
         $bienThes = BienThe::where('san_pham_id', $sanPham->id)->get();
-        // dd(request()->all(),$bienThes);
-
-        // foreach($bienThes as $item){
-        //     dd($item->anh_bien_the);
-        // }
-        // dd(1);
         $thuocTinhId = array_keys($request->input('attribute_values', []));
         $hinhAnhPath = null;
 
-        if ($request->hasFile('hinh_anh')) {
-            if ($sanPham->hinh_anh && Storage::exists('public', $sanPham->hinh_anh) && !Storage::exists('public/images')) {
-                Storage::delete('public/' . $sanPham->hinh_anh);
+        $bienThesId = BienThe::where('san_pham_id', $sanPham->id)->pluck('id')->toArray();
+        $hasCart = ChiTietGioHang::whereIn('bien_the_id', $bienThesId)->exists();
+        $hasOrder = ChiTietDonHang::whereIn('bien_the_id', $bienThesId)->exists();
+
+        // Lấy bien_the_id từ ChiTietGioHang
+        $cartBienTheIds = ChiTietGioHang::whereIn('bien_the_id', $bienThesId)
+        ->pluck('bien_the_id')
+        ->toArray();
+
+        // Lấy bien_the_id từ ChiTietDonHang
+        $orderBienTheIds = ChiTietDonHang::whereIn('bien_the_id', $bienThesId)
+        ->pluck('bien_the_id')
+        ->toArray();
+
+        $allBienTheIds = array_unique(array_merge($cartBienTheIds, $orderBienTheIds));
+
+        $checkBienThe = BienThe::whereIn('id',$allBienTheIds)->get();
+        // dd($allBienTheIds,$checkBienThe);
+
+        if ($hasOrder || $hasCart) {
+            foreach($sanPham->toArray() as $key => $item){
+                foreach($request->validated() as $k => $ex){
+                    if($k == $key && $item != $ex){
+                        return redirect()->back()->with('error', 'Thông tin sản phẩm không thể chỉnh sửa do đã có đơn hàng hoặc giỏ hàng!');
+                    }
+
+                }
             }
-            $file = $request->file('hinh_anh');
-            $fileName = time() . '.' . $file->getClientOriginalExtension();
-            $hinhAnhPath = $file->storeAs('uploads/sanphams', $fileName, 'public');
-        }
-        $data = [
-            'ten_san_pham' => $request->ten_san_pham,
-            'ma_san_pham' => $request->ma_san_pham,
-            'gia_cu' => $request->gia_cu,
-            'mo_ta' => $request->mo_ta,
-            'danh_muc_id' => $request->danh_muc_id,
-            'trang_thai' => $request->trang_thai,
-        ];
-        $data['hinh_anh'] = $hinhAnhPath ?? $sanPham->hinh_anh;
+            $selected_values = is_array($request->selected_values) ? $request->selected_values : json_decode($request->selected_values, true) ?? [];
+            if ($request->has('attribute_values')) {
 
+                if (empty($selected_values)) {
+                    return redirect()->back()->with('error', 'Bạn vui lòng chọn thuộc tính !');
+                } else {
+                    $bienTheIdsMoi = []; // Danh sách ID biến thể mới
+                    $error = [];
+                    $bienTheIdsCu = BienThe::where('san_pham_id', $sanPham->id)->pluck('id')->toArray();
 
-        $sanPham->update($data);
-        Helper::uploadAlbum($sanPham->id, $token = true,json_decode($request->input('deleted_images'), true));
-
-        $selected_values = is_array($request->selected_values) ? $request->selected_values : json_decode($request->selected_values, true) ?? [];
-        // dd($selected_values);
-        if ($request->has('attribute_values')) {
-
-            if (empty($selected_values)) {
-                return redirect()->back()->with('error', 'Bạn vui lòng chọn thuộc tính !');
-                // if ($request->hasFile('anh_bien_the')) {
-                //     $files = $request->file('anh_bien_the');
-                //     if (isset($files) && $files->isValid()) {
-                //         $fileName = time() . '_' . $files->getClientOriginalName();
-                //         $files->storeAs("public/uploads/sanphams/", $fileName);
-                //         $hinhAnhBienThe = 'uploads/sanphams/' . $fileName;
-                //     }
-                // }
-
-                // foreach ($request->attribute_values as $thuocTinhId => $giaTriArray) {
-                //     $index = 0;
-                //     foreach ($giaTriArray as $giaTri) {
-                //         $giaTriTT = GiaTriThuocTinh::where('gia_tri', $giaTri)
-                //             ->where('thuoc_tinh_id', $thuocTinhId)
-                //             ->first();
-
-                //         if ($giaTriTT) {
-                //             $bienTheData = [
-                //                 'san_pham_id' => $sanPham->id,
-                //                 'ten_bien_the' => $giaTriArray[$index],
-                //                 'gia_ban' => $request->gia_ban[$index],
-                //                 'so_luong' => $request->so_luong[$index],
-                //                 'thuoc_tinh_id' => $thuocTinhId,
-                //                 'gia_tri_thuoc_tinh_id' => $giaTriTT->id,
-                //                 'anh_bien_the' => $hinhAnhBienThe ?? null,
-                //             ];
-
-                //             BienThe::updateOrCreate($bienTheData);
-                //             $index++;
-                //         }
-                //     }
-                // }
-            } else {
-                $bienTheIdsMoi = []; // Danh sách ID biến thể mới
-                $bienTheIdsCu = BienThe::where('san_pham_id', $sanPham->id)->pluck('id')->toArray();
-
-                foreach ($request->selected_values as $key => $tenBienThe) {
-                    $hinhAnhBienThe = null;
-                    if ($request->hasFile('anh_bien_the')) {
-                        $files = $request->file('anh_bien_the');
-                        if (isset($files[$key]) && $files[$key]->isValid()) {
-                            $fileName = time() . '_' . $files[$key]->getClientOriginalName();
-                            $files[$key]->storeAs("public/uploads/sanphams/", $fileName);
-                            $hinhAnhBienThe = 'uploads/sanphams/' . $fileName;
+                    foreach ($request->selected_values as $key => $tenBienThe) {
+                        $hinhAnhBienThe = null;
+                        // dd($request->gia_ban,$request->so_luong);
+                        foreach($checkBienThe as $k => $item){
+                            if($tenBienThe == $item->ten_bien_the){
+                                if($request->gia_ban[$key] != $item->gia_ban || $request->so_luong[$key] != $item->so_luong){
+                                    $error[] = $item->ten_bien_the;
+                                    // return redirect()->back()->with('error', "Biến thể ".$item->ten_bien_the." không thể chỉnh sửa do đã có đơn hàng!");
+                                }
+                            }
                         }
-                    }
+                        // dd($error);
+                        if(!empty($error)){
+                            $errorMessage = "Biến thể " . implode(", ", $error) . " không thể chỉnh sửa do đã có đơn hàng hoặc giỏ hàng!";
+                            return redirect()->back()->with('error', $errorMessage);
+                        }
 
-                    // Tạo hoặc cập nhật biến thể
-                    $bienThe = BienThe::updateOrCreate(
-                        [
-                            'san_pham_id' => $sanPham->id,
-                            'ten_bien_the' => $tenBienThe,
-                        ],
-                        [
-                            'gia_ban' => $request->gia_ban[$key] ?? 0,
-                            'so_luong' => $request->so_luong[$key] ?? 0,
-                        ]
-                    );
 
-                    if ($hinhAnhBienThe) {
-                        $bienThe->anh_bien_the = $hinhAnhBienThe;
-                        $bienThe->save();
-                    }
+                        if ($request->hasFile('anh_bien_the')) {
+                            $files = $request->file('anh_bien_the');
+                            if (isset($files[$key]) && $files[$key]->isValid()) {
+                                $fileName = time() . '_' . $files[$key]->getClientOriginalName();
+                                $files[$key]->storeAs("public/uploads/sanphams/", $fileName);
+                                $hinhAnhBienThe = 'uploads/sanphams/' . $fileName;
+                            }
+                        }
 
-                    // Lưu lại ID biến thể mới
-                    $bienTheIdsMoi[] = $bienThe->id;
+                        // Tạo hoặc cập nhật biến thể
+                        $bienThe = BienThe::updateOrCreate(
+                            [
+                                'san_pham_id' => $sanPham->id,
+                                'ten_bien_the' => $tenBienThe,
+                            ],
+                            [
+                                'gia_ban' => $request->gia_ban[$key] ?? 0,
+                                'so_luong' => $request->so_luong[$key] ?? 0,
+                            ]
+                        );
 
-                    // Cập nhật bảng trung gian
-                    DB::table('bien_the_thuoc_tinhs')->where('bien_the_id', $bienThe->id)->delete();
-                    // dd($request->attribute_values);
-                    foreach ($request->attribute_values as $thuocTinhId => $giaTriArray) {
-                        foreach ($giaTriArray as $giaTri) {
-                            if (strpos($tenBienThe, $giaTri) !== false) {
-                                $giaTriTT = GiaTriThuocTinh::where('gia_tri', $giaTri)
-                                    ->where('thuoc_tinh_id', $thuocTinhId)
-                                    ->first();
+                        if ($hinhAnhBienThe) {
+                            $bienThe->anh_bien_the = $hinhAnhBienThe;
+                            $bienThe->save();
+                        }
 
-                                if ($giaTriTT) {
-                                    DB::table('bien_the_thuoc_tinhs')->insert([
-                                        'bien_the_id' => $bienThe->id,
-                                        'thuoc_tinh_id' => $thuocTinhId,
-                                        'gia_tri_thuoc_tinh_id' => $giaTriTT->id,
-                                    ]);
+                        // Lưu lại ID biến thể mới
+                        $bienTheIdsMoi[] = $bienThe->id;
+
+                        // Cập nhật bảng trung gian
+                        DB::table('bien_the_thuoc_tinhs')->where('bien_the_id', $bienThe->id)->delete();
+                        // dd($request->attribute_values);
+                        foreach ($request->attribute_values as $thuocTinhId => $giaTriArray) {
+                            foreach ($giaTriArray as $giaTri) {
+                                if (strpos($tenBienThe, $giaTri) !== false) {
+                                    $giaTriTT = GiaTriThuocTinh::where('gia_tri', $giaTri)
+                                        ->where('thuoc_tinh_id', $thuocTinhId)
+                                        ->first();
+
+                                    if ($giaTriTT) {
+                                        DB::table('bien_the_thuoc_tinhs')->insert([
+                                            'bien_the_id' => $bienThe->id,
+                                            'thuoc_tinh_id' => $thuocTinhId,
+                                            'gia_tri_thuoc_tinh_id' => $giaTriTT->id,
+                                        ]);
+                                    }
                                 }
                             }
                         }
                     }
-                }
 
-                $bienTheIdsBiXoa = array_diff($bienTheIdsCu, $bienTheIdsMoi);
+                    $bienTheIdsBiXoa = array_diff($bienTheIdsCu, $bienTheIdsMoi);
 
-                // Chỉ thực hiện kiểm tra giỏ hàng và đơn hàng nếu có biến thể bị xóa
-                if (!empty($bienTheIdsBiXoa)) {
-                    $hasCart = ChiTietGioHang::whereIn('bien_the_id', $bienTheIdsBiXoa)->exists();
-                    $hasOrder = ChiTietDonHang::whereIn('bien_the_id', $bienTheIdsBiXoa)->exists();
+                    // Chỉ thực hiện kiểm tra giỏ hàng và đơn hàng nếu có biến thể bị xóa
+                    if (!empty($bienTheIdsBiXoa)) {
+                        $hasCart = ChiTietGioHang::whereIn('bien_the_id', $bienTheIdsBiXoa)->exists();
+                        $hasOrder = ChiTietDonHang::whereIn('bien_the_id', $bienTheIdsBiXoa)->exists();
 
-                    if ($hasOrder) {
-                        return redirect()->back()->with('error', 'Sản phẩm không thể xóa do đã có đơn hàng!');
+                        if ($hasOrder) {
+                            return redirect()->back()->with('error', 'Biến thể không thể xóa do đã có đơn hàng!');
+                        }
+
+                        if ($hasCart) {
+                            return redirect()->back()->with('error', 'Biến thể không thể xóa do đã có trong giỏ hàng!');
+                        }
+
+                        // Xóa các biến thể không còn tồn tại trong danh sách mới
+                        BienThe::whereIn('id', $bienTheIdsBiXoa)->delete();
                     }
-
-                    if ($hasCart) {
-                        return redirect()->back()->with('error', 'Sản phẩm không thể xóa do đã có trong giỏ hàng!');
-                    }
-
-                    // Xóa các biến thể không còn tồn tại trong danh sách mới
-                    BienThe::whereIn('id', $bienTheIdsBiXoa)->delete();
                 }
+            } else {
+                return redirect()->back()->with('error', 'Vui lòng chọn thuộc tính !');
             }
-        } else {
-            return redirect()->back()->with('error', 'Vui lòng chọn thuộc tính !');
-            // $bienTheIds = $bienThes->pluck('id')->toArray(); // Lấy danh sách ID hợp lệ
+            // return redirect()->back()->with('error', 'Sản phẩm không thể sửa hoặc xóa do đã có đơn hàng!');
+        }else{
+            if ($request->hasFile('hinh_anh')) {
+                if ($sanPham->hinh_anh && Storage::exists('public', $sanPham->hinh_anh) && !Storage::exists('public/images')) {
+                    Storage::delete('public/' . $sanPham->hinh_anh);
+                }
+                $file = $request->file('hinh_anh');
+                $fileName = time() . '.' . $file->getClientOriginalExtension();
+                $hinhAnhPath = $file->storeAs('uploads/sanphams', $fileName, 'public');
+            }
+            $data = [
+                'ten_san_pham' => $request->ten_san_pham,
+                'ma_san_pham' => $request->ma_san_pham,
+                'gia_cu' => $request->gia_cu,
+                'mo_ta' => $request->mo_ta,
+                'danh_muc_id' => $request->danh_muc_id,
+                'trang_thai' => $request->trang_thai,
+            ];
+            $data['hinh_anh'] = $hinhAnhPath ?? $sanPham->hinh_anh;
 
-            // $donhangChiTiet = ChiTietDonHang::whereIn('bien_the_id', $bienTheIds)->exists();
 
-            // if (!$donhangChiTiet) { // Nếu không có đơn hàng nào chứa biến thể
-            //     $bienThes->each->delete(); // Xóa tất cả biến thể
-            // }
+            $sanPham->update($data);
+
+            $selected_values = is_array($request->selected_values) ? $request->selected_values : json_decode($request->selected_values, true) ?? [];
+            if ($request->has('attribute_values')) {
+
+                if (empty($selected_values)) {
+                    return redirect()->back()->with('error', 'Bạn vui lòng chọn thuộc tính !');
+                } else {
+                    $bienTheIdsMoi = []; // Danh sách ID biến thể mới
+                    $bienTheIdsCu = BienThe::where('san_pham_id', $sanPham->id)->pluck('id')->toArray();
+
+                    foreach ($request->selected_values as $key => $tenBienThe) {
+                        $hinhAnhBienThe = null;
+
+                        if ($request->hasFile('anh_bien_the')) {
+                            $files = $request->file('anh_bien_the');
+                            if (isset($files[$key]) && $files[$key]->isValid()) {
+                                $fileName = time() . '_' . $files[$key]->getClientOriginalName();
+                                $files[$key]->storeAs("public/uploads/sanphams/", $fileName);
+                                $hinhAnhBienThe = 'uploads/sanphams/' . $fileName;
+                            }
+                        }
+
+                        // Tạo hoặc cập nhật biến thể
+                        $bienThe = BienThe::updateOrCreate(
+                            [
+                                'san_pham_id' => $sanPham->id,
+                                'ten_bien_the' => $tenBienThe,
+                            ],
+                            [
+                                'gia_ban' => $request->gia_ban[$key] ?? 0,
+                                'so_luong' => $request->so_luong[$key] ?? 0,
+                            ]
+                        );
+
+                        if ($hinhAnhBienThe) {
+                            $bienThe->anh_bien_the = $hinhAnhBienThe;
+                            $bienThe->save();
+                        }
+
+                        // Lưu lại ID biến thể mới
+                        $bienTheIdsMoi[] = $bienThe->id;
+
+                        // Cập nhật bảng trung gian
+                        DB::table('bien_the_thuoc_tinhs')->where('bien_the_id', $bienThe->id)->delete();
+                        // dd($request->attribute_values);
+                        foreach ($request->attribute_values as $thuocTinhId => $giaTriArray) {
+                            foreach ($giaTriArray as $giaTri) {
+                                if (strpos($tenBienThe, $giaTri) !== false) {
+                                    $giaTriTT = GiaTriThuocTinh::where('gia_tri', $giaTri)
+                                        ->where('thuoc_tinh_id', $thuocTinhId)
+                                        ->first();
+
+                                    if ($giaTriTT) {
+                                        DB::table('bien_the_thuoc_tinhs')->insert([
+                                            'bien_the_id' => $bienThe->id,
+                                            'thuoc_tinh_id' => $thuocTinhId,
+                                            'gia_tri_thuoc_tinh_id' => $giaTriTT->id,
+                                        ]);
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    $bienTheIdsBiXoa = array_diff($bienTheIdsCu, $bienTheIdsMoi);
+
+                    // Chỉ thực hiện kiểm tra giỏ hàng và đơn hàng nếu có biến thể bị xóa
+                    if (!empty($bienTheIdsBiXoa)) {
+                        $hasCart = ChiTietGioHang::whereIn('bien_the_id', $bienTheIdsBiXoa)->exists();
+                        $hasOrder = ChiTietDonHang::whereIn('bien_the_id', $bienTheIdsBiXoa)->exists();
+
+                        if ($hasOrder) {
+                            return redirect()->back()->with('error', 'Biến thể không thể xóa do đã có đơn hàng!');
+                        }
+
+                        if ($hasCart) {
+                            return redirect()->back()->with('error', 'Biến thể không thể xóa do đã có trong giỏ hàng!');
+                        }
+
+                        // Xóa các biến thể không còn tồn tại trong danh sách mới
+                        BienThe::whereIn('id', $bienTheIdsBiXoa)->delete();
+                    }
+                }
+            } else {
+                return redirect()->back()->with('error', 'Vui lòng chọn thuộc tính !');
+            }
+
+            Helper::uploadAlbum($sanPham->id, $token = true,json_decode($request->input('deleted_images'), true));
         }
+
 
 
         return redirect()->route('sanphams.index')->with('success', 'Sản phẩm đã được cập nhật thành công.');
