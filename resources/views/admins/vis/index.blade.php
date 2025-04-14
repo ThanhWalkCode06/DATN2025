@@ -56,9 +56,9 @@
                     <th style="color: white !important;">Tên người dùng</th>
                     <th style="color: white !important;">Số dư ví</th>
                     <th style="color: white !important;">Số tiền rút chờ xử lý</th>
-                    <th style="color: white !important;">Thông tin rút tiền</th>
-                    <th style="color: white !important;">Hành động</th>
-                    {{-- <th style="color: white !important;">trạng thái</th> --}}
+                    {{-- <th style="color: white !important;">Thông tin rút tiền</th>
+                    <th style="color: white !important;">Hành động</th> --}}
+                    <th style="color: white !important;">Số yêu cầu rút</th>
                     <th style="color: white !important;">Lịch sử giao dịch</th>
 
                 </tr>
@@ -80,7 +80,7 @@
                             @endphp
 
                             <tr>
-                                <td>{{ $user->ten_nguoi_dung ?? $user->username }}</td>
+                                <td>{{  $user->username }}</td>
 
                                 <td style="color: #009688; font-weight: 600;">
                                     {{ number_format($user->vi->so_du ?? 0, 0, ',', '.') }} VNĐ
@@ -95,7 +95,7 @@
                                 </td>
 
                                 <!-- Cột thông tin rút tiền mới -->
-                                <td>
+                                {{-- <td>
                                     @if ($rutChuaXuLy->count())
                                         @foreach ($rutChuaXuLy as $giaoDich)
                                             <div class="mb-3 border p-2 rounded shadow-sm">
@@ -110,8 +110,8 @@
                                     @else
                                         <span class="text-muted">Không có yêu cầu</span>
                                     @endif
-                                </td>
-                                <td>
+                                </td> --}}
+                                {{-- <td>
                                     @if ($rutChuaXuLy->count() > 0)
                                         <form method="POST" action="{{ route('admin.vis.xuLyRutNhieu') }}">
                                             @csrf
@@ -160,8 +160,10 @@
                                     @else
                                         <span class="text-muted">Không có yêu cầu</span>
                                     @endif
+                                </td> --}}
+                                <td style="font-weight: 600; color: #dc3545;">
+                                    {{ $rutChuaXuLy->count() }} yêu cầu
                                 </td>
-
                                 <td>
                                     <a href="{{ route('admin.vis.show', $user->id) }}" class="btn btn-sm"
                                         style="background-color: #009688; color: white; font-weight: 600;">

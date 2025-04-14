@@ -3,89 +3,84 @@
 @section('content')
 <div class="container py-5">
 
-    <!-- Tiêu đề -->
-    <h2 class="text-center mb-4" style="color: #009688; font-weight: 700; font-size: 2.5rem;">
-        VÍ CỦA TÔI
-    </h2>
-
-    <!-- Hiển thị số dư -->
-    <div class="card shadow mb-5" style="border-radius: 16px; border: 2px solid #009688;">
-        <div class="card-body text-center py-4">
-            <h5 class="text-muted mb-2">Số dư hiện tại</h5>
-            <h2 style="color: #009688; font-size: 3rem; font-weight: bold;">
-                {{ number_format($vi->so_du, 0, ',', '.') }} VNĐ
-            </h2>
+   
+    
+    <div class="d-md-flex justify-content-between gap-3 mb-4 flex-wrap">
+        <!-- Cột trái: Số dư + nút -->
+        <div class="d-flex flex-column align-items-start gap-2" style="min-width: 270px;">
+            <h6 class="text-center mb-3" style="color: #009688; font-weight: 700; font-size: 2rem;">
+                VÍ CỦA TÔI
+            </h6>
+            <!-- Số dư gọn dạng nút -->
+            <div class="btn btn-light border d-flex align-items-center gap-2 px-3 py-2" 
+                 style="border-color: #009688; color: #009688; font-weight: 600; border-radius: 8px;">
+                <i class="fas fa-wallet"></i>
+                <span>Số dư: {{ number_format($vi->so_du, 0, ',', '.') }} VNĐ</span>
+            </div>
+    
+            <!-- Nút nạp & rút tiền -->
+            <div class="d-flex gap-2 flex-wrap">
+                <a href="{{ route('nap-tien.form') }}" class="btn btn-outline-success px-3 py-2" 
+                   style="border-color: #009688; color: #009688; font-weight: 600; border-radius: 8px; font-size: 0.9rem;">
+                    <i class="fas fa-wallet me-1"></i> Nạp tiền
+                </a>
+                <a href="{{ route('rut-tien.form') }}" class="btn btn-outline-success px-3 py-2" 
+                   style="border-color: #009688; color: #009688; font-weight: 600; border-radius: 8px; font-size: 0.9rem;">
+                    <i class="fas fa-money-bill-wave me-1"></i> Rút tiền
+                </a>
+            </div>
         </div>
+    
+      <!-- Cột phải: Lọc giao dịch -->
+<div class="card shadow-sm mt-3 mt-md-0" style="border-radius: 10px; flex: 1; max-height: 240px;">
+    <div class="card-body py-2 px-2">
+        <form method="GET" action="{{ route('vi') }}">
+            <div class="row gx-2 gy-1 mb-2">
+                <div class="col-md-6">
+                    <label for="from" class="form-label mb-1 fw-semibold" style="font-size: 0.8rem;">Từ ngày</label>
+                    <input type="date" name="from" id="from" class="form-control form-control-sm"
+                        style="font-size: 0.8rem; padding: 0.25rem 0.5rem;"
+                        value="{{ request('from') }}" onchange="this.form.submit()">
+                </div>
+                <div class="col-md-6">
+                    <label for="to" class="form-label mb-1 fw-semibold" style="font-size: 0.8rem;">Đến ngày</label>
+                    <input type="date" name="to" id="to" class="form-control form-control-sm"
+                        style="font-size: 0.8rem; padding: 0.25rem 0.5rem;"
+                        value="{{ request('to') }}" onchange="this.form.submit()">
+                </div>
+            </div>
+
+            <div class="row gx-2 gy-1">
+                <div class="col-md-6">
+                    <label for="loai" class="form-label mb-1 fw-semibold" style="font-size: 0.8rem;">Loại giao dịch</label>
+                    <select name="loai" id="loai" class="form-select form-select-sm" 
+                            style="font-size: 0.8rem; padding: 0.25rem 0.5rem;" onchange="this.form.submit()">
+                        <option value="">-- Tất cả --</option>
+                        <option value="Nạp tiền" {{ request('loai') == 'Nạp tiền' ? 'selected' : '' }}>💰 Nạp tiền</option>
+                        <option value="Rút tiền" {{ request('loai') == 'Rút tiền' ? 'selected' : '' }}>🏧 Rút tiền</option>
+                        <option value="Mua hàng" {{ request('loai') == 'Mua hàng' ? 'selected' : '' }}>🛒 Mua hàng</option>
+                        <option value="Hoàn tiền" {{ request('loai') == 'Hoàn tiền' ? 'selected' : '' }}>↩️ Hoàn tiền</option>
+                    </select>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="trang_thai" class="form-label mb-1 fw-semibold" style="font-size: 0.8rem;">Trạng thái</label>
+                    <select name="trang_thai" id="trang_thai" class="form-select form-select-sm"
+                            style="font-size: 0.8rem; padding: 0.25rem 0.5rem;" onchange="this.form.submit()">
+                        <option value="">-- Tất cả --</option>
+                        <option value="0" {{ request('trang_thai') == '0' ? 'selected' : '' }}>⏳ Chờ xử lý</option>
+                        <option value="1" {{ request('trang_thai') == '1' ? 'selected' : '' }}>✔️ Thành công</option>
+                        <option value="2" {{ request('trang_thai') == '2' ? 'selected' : '' }}>❌ Đã huỷ</option>
+                    </select>
+                </div>
+            </div>
+        </form>
     </div>
-
-   <!-- Nút nạp tiền và rút tiền -->
-<div class="d-flex justify-content-center gap-3 mb-5">
-    <!-- Nạp tiền -->
-    <a href="{{ route('nap-tien.form') }}" class="btn btn-outline-success px-5 py-2" style="border-color: #009688; color: #009688; font-weight: 600; border-radius: 10px;">
-        <i class="fas fa-wallet me-2" style="color: #009688;"></i> Nạp tiền qua VNPAY
-    </a>
-
-    <!-- Rút tiền -->
-    <a href="{{ route('rut-tien.form') }}" class="btn btn-outline-success px-5 py-2" style="border-color: #009688; color: #009688; font-weight: 600; border-radius: 10px;">
-        <i class="fas fa-money-bill-wave me-2" style="color: #009688;"></i> Rút tiền
-    </a>
 </div>
 
-
-    <!-- Form lọc giao dịch -->
-    <div class="card shadow mb-4" style="border-radius: 16px;">
-        <div class="card-body">
-            <form method="GET" action="{{ route('vi') }}">
-                {{-- Hàng 1: Từ ngày - Đến ngày --}}
-                <div class="row gy-3 gx-4 mb-2">
-                    <div class="col-md-6">
-                        <label for="from" class="form-label fw-bold">Từ ngày</label>
-                        <input type="date" name="from" id="from" class="form-control" 
-                               value="{{ request('from') }}" onchange="this.form.submit()">
-                    </div>
-                    <div class="col-md-6">
-                        <label for="to" class="form-label fw-bold">Đến ngày</label>
-                        <input type="date" name="to" id="to" class="form-control" 
-                               value="{{ request('to') }}" onchange="this.form.submit()">
-                    </div>
-                </div>
-            
-                {{-- Hàng 2: Loại giao dịch - Trạng thái --}}
-                <div class="row gy-3 gx-4 mb-2">
-                    <div class="col-md-6">
-                        <label for="loai" class="form-label fw-bold">Loại giao dịch</label>
-                        <select name="loai" id="loai" class="form-select" onchange="this.form.submit()">
-                            <option value="">-- Tất cả --</option>
-                            <option value="Nạp tiền" {{ request('loai') == 'Nạp tiền' ? 'selected' : '' }}>💰 Nạp tiền</option>
-                            <option value="Rút tiền" {{ request('loai') == 'Rút tiền' ? 'selected' : '' }}>🏧 Rút tiền</option>
-                            <option value="Mua hàng" {{ request('loai') == 'Mua hàng' ? 'selected' : '' }}>🛒 Mua hàng</option>
-                            <option value="Hoàn tiền" {{ request('loai') == 'Hoàn tiền' ? 'selected' : '' }}>↩️ Hoàn tiền</option>
-                        </select>
-                    </div>
-            
-                    <div class="col-md-6">
-                        <label for="trang_thai" class="form-label fw-bold">Trạng thái</label>
-                        <select name="trang_thai" id="trang_thai" class="form-select" onchange="this.form.submit()">
-                            <option value="">-- Tất cả --</option>
-                            <option value="0" {{ request('trang_thai') == '0' ? 'selected' : '' }}>⏳ Chờ xử lý</option>
-                            <option value="1" {{ request('trang_thai') == '1' ? 'selected' : '' }}>✔️ Thành công</option>
-                            <option value="2" {{ request('trang_thai') == '2' ? 'selected' : '' }}>❌ Đã huỷ</option>
-                        </select>
-                    </div>
-                </div>
-            
-                {{-- Hàng 3: Nút lọc giao dịch (nếu bạn vẫn muốn giữ)
-                <div class="row">
-                    <div class="col-md-12 d-flex justify-content-end">
-                        <button type="submit" class="btn text-white px-4" style="background-color: #009688;">
-                            <i class="fas fa-filter me-1"></i> Lọc giao dịch
-                        </button>
-                    </div>
-                </div> --}}
-            </form>
-            
-        </div>
     </div>
+    
+
     
     
     

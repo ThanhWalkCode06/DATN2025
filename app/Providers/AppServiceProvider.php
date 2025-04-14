@@ -81,7 +81,7 @@ class AppServiceProvider extends ServiceProvider
                     $phieuGiamGiaThanhToans = PhieuGiamGia::where('trang_thai', 1)
                         ->where('ngay_bat_dau', '<=', now())
                         ->where('ngay_ket_thuc', '>=', now())
-                        ->where('ma_phieu', 'like', "BIRTHDAY" . Str::upper($userId->username) . "%")
+                        // ->where('ma_phieu', 'like', "BIRTHDAY" . Str::upper($userId->username) . "%")
                         // ->whereHas('phieu_giam_gia_tai_khoans', function ($query) use ($userId) {
                         //     $query->where('user_id', $userId);
                         // })

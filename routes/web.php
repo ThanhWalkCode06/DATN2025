@@ -274,9 +274,6 @@ Route::get('/vi-nguoi-dung', [AdminViController::class, 'index'])->name('vis.ind
 Route::get('/admin/vi-nguoi-dung/{id}', [AdminViController::class, 'show'])->name('admin.vis.show');
 Route::post('/admin/vi-nguoi-dung/update-trang-thai', [AdminViController::class, 'updateTrangThai'])->name('admin.vis.updateTrangThai');
 Route::post('/vi/cap-nhat-tung-giao-dich/{id}', [ViController::class, 'updateTrangThaiTungGiaoDich'])->name('admin.vis.updateTrangThaiTungGiaoDich');
-
-
-
 Route::put('/giao-dich/{id}/huy', [GiaoDichViController::class, 'huy'])->name('giao-dich.huy');
 
 Route::middleware(['auth'])->group(function () {

@@ -68,7 +68,7 @@ class AdminViController extends Controller
         $user = User::with('vi')->findOrFail($id);
 
         if ($user->vi) {
-            $giaodichsQuery = $user->vi->giaodichs()->latest();
+            $giaodichsQuery = $user->vi->giaodichs();
 
             if ($trangThai !== null) {
                 $giaodichsQuery->where('trang_thai', $trangThai);
@@ -81,10 +81,15 @@ class AdminViController extends Controller
             if ($tuNgay) {
                 $giaodichsQuery->whereDate('created_at', '>=', $tuNgay);
             }
-            
+
             if ($denNgay) {
                 $giaodichsQuery->whereDate('created_at', '<=', $denNgay);
             }
+
+            // 👉 Ưu tiên trạng thái Chờ xử lý (0), sau đó theo thời gian
+            $giaodichsQuery->orderByRaw("trang_thai = 0 DESC")
+                ->orderBy('created_at', 'desc');
+
 
             $giaodichs = $giaodichsQuery->paginate(10);
         } else {
@@ -143,7 +148,7 @@ class AdminViController extends Controller
                     $vi->refresh(); // cập nhật lại số dư để hiển thị chính xác
                     $giaoDich->trang_thai = 2;
                     $giaoDich->mo_ta = "❌ Yêu cầu rút tiền đã bị huỷ\n"
-                        . "⏱ Thời gian: " . now()->format('d/m/Y H:i') . "\n"
+                        . "🕒 Thời gian: " . now()->format('d/m/Y H:i') . "\n"
                         . "📝 Lý do: {$lyDoChung}\n"
                         . "🏦 Ngân hàng: {$giaoDich->ten_ngan_hang}\n"
                         . "🔢 Số tài khoản: {$giaoDich->so_tai_khoan}\n"

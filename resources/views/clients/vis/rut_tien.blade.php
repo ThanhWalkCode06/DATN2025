@@ -85,6 +85,15 @@
                 <input type="number" name="so_tien" id="so_tien" class="form-control" required min="10000">
             </div>
 
+            <!-- Checkbox xác nhận -->
+            <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" id="xac_nhan" required>
+                <label class="form-check-label" for="xac_nhan">
+                    Tôi xác nhận thông tin đã nhập là chính xác.
+                </label>
+            </div>
+
+
             <!-- Nút xác nhận -->
             <button type="submit" class="btn btn-success w-100" style="background-color: #009688; border: none;">
                 <i class="fas fa-paper-plane me-2"></i> Gửi yêu cầu rút tiền
@@ -99,6 +108,18 @@
 
 @section('js')
     
+<script>
+    function validateForm() {
+        const checkbox = document.getElementById('xac_nhan');
+        if (!checkbox.checked) {
+            alert('⚠️ Vui lòng xác nhận thông tin trước khi gửi.');
+            return false;
+        }
+        return true;
+    }
+    </script>
+
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     {{-- tìm kiếm --}}
     <script>
@@ -116,26 +137,7 @@
     </script>
     
     <script>
-        // function selectBank(code, name, logo) {
-        //     // Gán giá trị vào input
-        //     // document.getElementById('ngan_hang').value = code;
-        //     document.getElementById('ngan_hang_label').value = name;
-        //     document.getElementById('ten_ngan_hang').value = name; // Gán tên vào input ẩn
-        //     // Lấy modal và ẩn nó đúng cách bằng Bootstrap 5
-        //     const modalElement = document.getElementById('bankModal');
-        //     const modal = bootstrap.Modal.getInstance(modalElement);
-        //     modal.hide();
-    
-        //     // Remove backdrop nếu cần
-        //     const backdrop = document.querySelector('.modal-backdrop');
-        //     if (backdrop) {
-        //         backdrop.remove();
-        //     }
-    
-        //     // Remove class 'modal-open' để body scroll lại
-        //     document.body.classList.remove('modal-open');
-        //     document.body.style.overflow = ''; // Cho phép scroll lại
-        // }
+       
 
         function selectBank(code, name, logo) {
     // Gán tên ngân hàng
