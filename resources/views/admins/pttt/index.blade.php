@@ -97,16 +97,18 @@
                                                     <i class="ri-pencil-line"></i>
                                                 </a>
                                             </li>
-                                            <li>
-                                                <a href="#" onclick="confirmDelete(event, {{ $item->id }})">
-                                                    <i class="ri-delete-bin-line"></i>
-                                                </a>
+                                            @if ($item->id > 3)
+                                                <li>
+                                                    <a href="#" onclick="confirmDelete(event, {{ $item->id }})">
+                                                        <i class="ri-delete-bin-line"></i>
+                                                    </a>
 
-                                                <form id="delete-form-{{ $item->id }}" action="{{ route('phuongthucthanhtoans.destroy', $item->id) }}" method="POST" style="display: none;">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                </form>
-                                            </li>
+                                                    <form id="delete-form-{{ $item->id }}" action="{{ route('phuongthucthanhtoans.destroy', $item->id) }}" method="POST" style="display: none;">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                    </form>
+                                                </li>
+                                            @endif
 
 
 
