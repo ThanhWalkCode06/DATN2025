@@ -80,7 +80,7 @@
                             @endphp
 
                             <tr>
-                                <td>{{ $user->ten_nguoi_dung ?? $user->username }}</td>
+                                <td>{{  $user->username }}</td>
 
                                 <td style="color: #009688; font-weight: 600;">
                                     {{ number_format($user->vi->so_du ?? 0, 0, ',', '.') }} VNĐ

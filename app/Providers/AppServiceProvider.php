@@ -68,7 +68,6 @@ class AppServiceProvider extends ServiceProvider
             ->with('bienThe.sanPham')
             ->get();
 
-
             $view->with(compact('topOrderProducts'));
         });
 

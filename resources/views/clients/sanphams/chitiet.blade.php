@@ -939,8 +939,8 @@
                     </script>
                 @endif
                 <div class="modal-body pt-0">
-                    @if (Auth::check())
-                        @if (session('daMuaHang'))
+                    {{-- @if (Auth::check()) --}}
+                        {{-- @if (session('daMuaHang')) --}}
                             <form id="reviewForm" method="POST"
                                 action="{{ route('sanphams.themdanhgia', ['san_pham_id' => $sanPhams->id]) }}">
                                 @csrf
@@ -987,12 +987,12 @@
                                     <button type="submit" class="btn btn-md fw-bold text-light theme-bg-color">Gửi</button>
                                 </div>
                             </form>
-                        @else
+                        {{-- @else
                             <p class="text-warning">Bạn cần mua sản phẩm để đánh giá.</p>
                         @endif
                     @else
                         <p class="text-danger">Vui lòng <a href="{{ route('login.client') }}">đăng nhập</a> để đánh giá.</p>
-                    @endif
+                    @endif --}}
                 </div>
             </div>
         </div>

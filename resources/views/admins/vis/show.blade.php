@@ -19,56 +19,48 @@
 
         </div>
 
-        {{-- Bộ lọc trạng thái --}}
-        <div class="card shadow mb-4" style="border-radius: 16px;">
-            <div class="card-body">
-                <form method="GET" class="row g-3 align-items-end mb-4">
-
-                    <!-- Trạng thái -->
-                    <div class="col-md-3">
-                        <label for="trang_thai" class="form-label fw-semibold">Trạng thái:</label>
-                        <select name="trang_thai" id="trang_thai" class="form-select" onchange="this.form.submit()">
-                            <option value="">Tất cả</option>
-                            <option value="1" {{ request('trang_thai') === '1' ? 'selected' : '' }}>✅ Thành công</option>
-                            <option value="0" {{ request('trang_thai') === '0' ? 'selected' : '' }}>⏳ Chờ xử lý</option>
-                            <option value="2" {{ request('trang_thai') === '2' ? 'selected' : '' }}>❌ Huỷ</option>
-                        </select>
-                    </div>
-
-                    <!-- Loại giao dịch -->
-                    <div class="col-md-3">
-                        <label for="loai" class="form-label fw-semibold">Loại giao dịch:</label>
-                        <select name="loai" id="loai" class="form-select" onchange="this.form.submit()">
-                            <option value="">Tất cả</option>
-                            <option value="Nạp tiền" {{ request('loai') === 'Nạp tiền' ? 'selected' : '' }}>💰 Nạp tiền
-                            </option>
-                            <option value="Rút tiền" {{ request('loai') === 'Rút tiền' ? 'selected' : '' }}>🏧 Rút tiền
-                            </option>
-                            <option value="Hoàn tiền" {{ request('loai') === 'Hoàn tiền' ? 'selected' : '' }}>↩️ Hoàn tiền
-                            </option>
-                            <option value="Mua hàng" {{ request('loai') === 'Mua hàng' ? 'selected' : '' }}>🛒 Mua hàng
-                            </option>
-                        </select>
-                    </div>
-
-                    <!-- Từ ngày -->
-                    <div class="col-md-3">
-                        <label for="tu_ngay" class="form-label fw-semibold">Từ ngày:</label>
-                        <input type="date" name="tu_ngay" id="tu_ngay" class="form-control" value="{{ request('tu_ngay') }}"
-                            onchange="this.form.submit()">
-                    </div>
-
-                    <!-- Đến ngày -->
-                    <div class="col-md-3">
-                        <label for="den_ngay" class="form-label fw-semibold">Đến ngày:</label>
-                        <input type="date" name="den_ngay" id="den_ngay" class="form-control"
-                            value="{{ request('den_ngay') }}" onchange="this.form.submit()">
-                    </div>
-
-                </form>
-
+       {{-- Bộ lọc trạng thái --}}
+<div class="card shadow mb-4 rounded-4">
+    <div class="card-body">
+        <form method="GET" class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-3 align-items-end">
+            {{-- Trạng thái --}}
+            <div>
+                <label for="trang_thai" class="form-label fw-semibold">Trạng thái</label>
+                <select name="trang_thai" id="trang_thai" class="form-select" onchange="this.form.submit()">
+                    <option value="">Tất cả</option>
+                    <option value="1" {{ request('trang_thai') === '1' ? 'selected' : '' }}>✅ Thành công</option>
+                    <option value="0" {{ request('trang_thai') === '0' ? 'selected' : '' }}>⏳ Chờ xử lý</option>
+                    <option value="2" {{ request('trang_thai') === '2' ? 'selected' : '' }}>❌ Huỷ</option>
+                </select>
             </div>
-        </div>
+
+            {{-- Loại giao dịch --}}
+            <div>
+                <label for="loai" class="form-label fw-semibold">Loại giao dịch</label>
+                <select name="loai" id="loai" class="form-select" onchange="this.form.submit()">
+                    <option value="">Tất cả</option>
+                    <option value="Nạp tiền" {{ request('loai') === 'Nạp tiền' ? 'selected' : '' }}>💰 Nạp tiền</option>
+                    <option value="Rút tiền" {{ request('loai') === 'Rút tiền' ? 'selected' : '' }}>🏧 Rút tiền</option>
+                    <option value="Hoàn tiền" {{ request('loai') === 'Hoàn tiền' ? 'selected' : '' }}>↩️ Hoàn tiền</option>
+                    <option value="Mua hàng" {{ request('loai') === 'Mua hàng' ? 'selected' : '' }}>🛒 Mua hàng</option>
+                </select>
+            </div>
+
+            {{-- Từ ngày --}}
+            <div>
+                <label for="tu_ngay" class="form-label fw-semibold">Từ ngày</label>
+                <input type="date" name="tu_ngay" id="tu_ngay" class="form-control" value="{{ request('tu_ngay') }}" onchange="this.form.submit()">
+            </div>
+
+            {{-- Đến ngày --}}
+            <div>
+                <label for="den_ngay" class="form-label fw-semibold">Đến ngày</label>
+                <input type="date" name="den_ngay" id="den_ngay" class="form-control" value="{{ request('den_ngay') }}" onchange="this.form.submit()">
+            </div>
+        </form>
+    </div>
+</div>
+
 
 
 

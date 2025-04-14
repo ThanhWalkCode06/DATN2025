@@ -17,7 +17,7 @@ class ViController extends Controller
         $vi = $user->layHoacTaoVi();
 
         // Khởi tạo query giao dịch
-        $query = $vi->giaodichs()->latest();
+        $query = $vi->giaodichs();
 
         // Lọc theo ngày nếu có
         if ($request->filled('from')) {
@@ -36,6 +36,9 @@ class ViController extends Controller
         if ($request->filled('loai')) {
             $query->where('loai', $request->loai);
         }
+        // 👉 Ưu tiên trạng thái Chờ xử lý (0), sau đó theo thời gian
+    $query->orderByRaw("trang_thai = 0 DESC")
+    ->orderBy('created_at', 'desc');
         // Phân trang kết quả
         $giaodichs = $query->paginate(10);
 
@@ -359,7 +362,7 @@ class ViController extends Controller
                     ]);
                 }
             } else {
-                
+
                 // Giao dịch không phải rút tiền
                 $giaoDich->trang_thai = $trangThai;
                 $giaoDich->save();
