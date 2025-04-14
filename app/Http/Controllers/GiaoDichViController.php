@@ -25,7 +25,8 @@ class GiaoDichViController extends Controller
     }
     
     $gd->trang_thai = 2; // Đã huỷ
-    $gd->mo_ta .= "\n❌ Yêu cầu huỷ bởi người dùng\n📝 Lý do: " . $request->ly_do;
+    $gd->mo_ta .= "\n❌ Yêu cầu huỷ bởi người dùng\n📝 Lý do: " . $request->ly_do. "\n"
+    . "🕒 Thời gian: " . now()->format('d/m/Y H:i') ;
     $gd->updated_at = now();
     $gd->save();
 

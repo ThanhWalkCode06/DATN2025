@@ -148,7 +148,7 @@ class AdminViController extends Controller
                     $vi->refresh(); // cập nhật lại số dư để hiển thị chính xác
                     $giaoDich->trang_thai = 2;
                     $giaoDich->mo_ta = "❌ Yêu cầu rút tiền đã bị huỷ\n"
-                        . "⏱ Thời gian: " . now()->format('d/m/Y H:i') . "\n"
+                        . "🕒 Thời gian: " . now()->format('d/m/Y H:i') . "\n"
                         . "📝 Lý do: {$lyDoChung}\n"
                         . "🏦 Ngân hàng: {$giaoDich->ten_ngan_hang}\n"
                         . "🔢 Số tài khoản: {$giaoDich->so_tai_khoan}\n"
