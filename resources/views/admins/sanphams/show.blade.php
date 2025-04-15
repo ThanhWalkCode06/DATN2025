@@ -195,7 +195,13 @@
                                         ⭐
                                     @endfor
                                 </td>
-                                <td>{!! nl2br(e($danhGia->nhan_xet)) !!}</td>
+                                <td>
+                                    <div style="max-width: 300px; word-wrap: break-word; white-space: pre-line;">
+                                        {!! nl2br(e($danhGia->nhan_xet)) !!}
+                                    </div>
+                                </td>
+                                
+                                
                                 <td>
                                     @if($danhGia->bienThe?->anh_bien_the)
                                         <img src="{{ asset('storage/' . $danhGia->bienThe->anh_bien_the) }}" width="60" class="img-thumbnail">
