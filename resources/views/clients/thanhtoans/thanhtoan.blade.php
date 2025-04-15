@@ -272,8 +272,8 @@
                                         </div>
                                         <div class="modal-body text-center p-4">
                                             <div class="table-responsive">
-                                                <table class="table table-bordered">
-                                                    <thead>
+                                                <table class="table table-striped table-bordered table-hover">
+                                                    <thead class="thead-dark">
                                                         <tr>
                                                             <th>#</th>
                                                             <th>Mã</th>
@@ -285,29 +285,37 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-
-                                                            @foreach ($phieuGiamGiaThanhToans as $key => $phieu)
-                                                                <tr>
-                                                                    <td>{{ $key + 1 }}</td>
-                                                                    <td>{{ $phieu->ma_phieu }}</td>
-                                                                    <td>{{ $phieu->ten_phieu }}</td>
-                                                                    <td>{{ number_format($phieu->gia_tri, 0, ',', '.') }} %</td>
-                                                                    <td>{{ date('d/m/Y', strtotime($phieu->ngay_bat_dau)) }} - {{ date('d/m/Y', strtotime($phieu->ngay_ket_thuc)) }}</td>
-                                                                    <td>{{ $phieu->mo_ta }}</td>
-                                                                    <td>
-                                                                        @if($phieu->trang_thai == 1)
-                                                                            <span class="badge bg-success">Hoạt động</span>
-                                                                        @else
-                                                                            <span class="badge bg-danger">Không hoạt động</span>
-                                                                        @endif
-                                                                    </td>
-                                                                </tr>
-                                                            @endforeach
-
+                                                        @foreach ($phieuGiamGiaThanhToans as $key => $phieu)
+                                                            <tr>
+                                                                <td>{{ $key + 1 }}</td>
+                                                                <td>{{ $phieu->ma_phieu }}</td>
+                                                                <td>{{ $phieu->ten_phieu }}</td>
+                                                                <td>{{ number_format($phieu->gia_tri, 0, ',', '.') }} %</td>
+                                                                <td>{{ date('d/m/Y', strtotime($phieu->ngay_bat_dau)) }} - {{ date('d/m/Y', strtotime($phieu->ngay_ket_thuc)) }}</td>
+                                                                <td>
+                                                                    <!-- Nút để mở mô tả -->
+                                                                    <button class="btn btn-info btn-sm" type="button" data-toggle="collapse" data-target="#description{{ $key }}" aria-expanded="false" aria-controls="description{{ $key }}">
+                                                                        Xem mô tả
+                                                                    </button>
+                                                                    <!-- Mô tả ẩn -->
+                                                                    <div class="collapse" id="description{{ $key }}">
+                                                                        <p class="mt-2">{{ $phieu->mo_ta }}</p>
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    @if($phieu->trang_thai == 1)
+                                                                        <span class="badge bg-success text-white">Hoạt động</span>
+                                                                    @else
+                                                                        <span class="badge bg-danger text-white">Không hoạt động</span>
+                                                                    @endif
+                                                                </td>
+                                                            </tr>
+                                                        @endforeach
                                                     </tbody>
                                                 </table>
                                             </div>
                                         </div>
+
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-light" data-bs-dismiss="modal">Đóng</button>
                                         </div>
