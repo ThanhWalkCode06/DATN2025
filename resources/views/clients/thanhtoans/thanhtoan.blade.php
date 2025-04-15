@@ -314,6 +314,33 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="modal-body text-start p-4 bg-gray-100">
+                                <div class="space-y-3">
+                                    @foreach ($phieuGiamGiaThanhToans as $phieu)
+                                        <div class="bg-white flex rounded-lg shadow-md overflow-hidden">
+                                            <div class="bg-orange-500 text-white flex items-center justify-center w-20 text-center px-2">
+                                                <span class="text-xs font-bold leading-tight break-words">VOUCHER</span>
+                                            </div>
+                                            <div class="p-3 flex-1 text-sm">
+                                                <p class="font-bold text-gray-800">{{ $phieu->ten_phieu }}</p>
+                                                <p class="text-gray-700">Giảm {{ number_format($phieu->gia_tri, 0, ',', '.') }}%</p>
+                                                <p class="text-gray-600 text-xs">
+                                                    🕒 Từ {{ date('d/m/Y', strtotime($phieu->ngay_bat_dau)) }} - {{ date('d/m/Y', strtotime($phieu->ngay_ket_thuc)) }}
+                                                </p>
+                                                <p class="text-xs text-gray-500 italic mt-1">{{ $phieu->mo_ta }}</p>
+                                            </div>
+                                            <div class="flex flex-col items-center justify-center px-2">
+                                                @if($phieu->trang_thai == 1)
+                                                    <span class="badge bg-success mb-2">Hoạt động</span>
+                                                @else
+                                                    <span class="badge bg-danger mb-2">Không hoạt động</span>
+                                                @endif
+                                                <button class="btn btn-outline-primary btn-sm">Dùng sau</button>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
 
 
                         </div>
