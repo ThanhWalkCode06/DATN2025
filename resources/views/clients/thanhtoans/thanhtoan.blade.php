@@ -263,57 +263,6 @@
                             </div>
 
                             <!-- Modal Phiếu Giảm Giá -->
-                            <div id="modalVoucher" class="modal fade" tabindex="-1" aria-hidden="true">
-                                <div class="modal-dialog" style="max-width: 600px;">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h4 class="modal-title">Danh sách phiếu giảm giá</h4>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body text-center p-4">
-                                            <div class="table-responsive">
-                                                <table class="table table-bordered">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>#</th>
-                                                            <th>Mã</th>
-                                                            <th>Tên Phiếu</th>
-                                                            <th>Giá Trị</th>
-                                                            <th>Thời Gian</th>
-                                                            <th>Mô Tả</th>
-                                                            <th>Trạng Thái</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-
-                                                            @foreach ($phieuGiamGiaThanhToans as $key => $phieu)
-                                                                <tr>
-                                                                    <td>{{ $key + 1 }}</td>
-                                                                    <td>{{ $phieu->ma_phieu }}</td>
-                                                                    <td>{{ $phieu->ten_phieu }}</td>
-                                                                    <td>{{ number_format($phieu->gia_tri, 0, ',', '.') }} %</td>
-                                                                    <td>{{ date('d/m/Y', strtotime($phieu->ngay_bat_dau)) }} - {{ date('d/m/Y', strtotime($phieu->ngay_ket_thuc)) }}</td>
-                                                                    <td>{{ $phieu->mo_ta }}</td>
-                                                                    <td>
-                                                                        @if($phieu->trang_thai == 1)
-                                                                            <span class="badge bg-success">Hoạt động</span>
-                                                                        @else
-                                                                            <span class="badge bg-danger">Không hoạt động</span>
-                                                                        @endif
-                                                                    </td>
-                                                                </tr>
-                                                            @endforeach
-
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Đóng</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                             <div class="modal-body text-start p-4 bg-gray-100">
                                 <div class="space-y-3">
                                     @foreach ($phieuGiamGiaThanhToans as $phieu)
@@ -327,7 +276,10 @@
                                                 <p class="text-gray-600 text-xs">
                                                     🕒 Từ {{ date('d/m/Y', strtotime($phieu->ngay_bat_dau)) }} - {{ date('d/m/Y', strtotime($phieu->ngay_ket_thuc)) }}
                                                 </p>
-                                                <p class="text-xs text-gray-500 italic mt-1">{{ $phieu->mo_ta }}</p>
+                                                <!-- Nút mở mô tả -->
+                                                <a href="#" class="text-blue-600 text-xs underline mt-1" data-bs-toggle="modal" data-bs-target="#moTaModal{{ $phieu->id }}">
+                                                    Điều kiện
+                                                </a>
                                             </div>
                                             <div class="flex flex-col items-center justify-center px-2">
                                                 @if($phieu->trang_thai == 1)
@@ -338,11 +290,27 @@
                                                 <button class="btn btn-outline-primary btn-sm">Dùng sau</button>
                                             </div>
                                         </div>
+
+                                        <!-- Modal mô tả điều kiện -->
+                                        <div class="modal fade" id="moTaModal{{ $phieu->id }}" tabindex="-1" aria-labelledby="moTaModalLabel{{ $phieu->id }}" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="moTaModalLabel{{ $phieu->id }}">Điều kiện - {{ $phieu->ten_phieu }}</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        {{ $phieu->mo_ta }}
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     @endforeach
                                 </div>
                             </div>
-
-
                         </div>
             </div>
         </div>
