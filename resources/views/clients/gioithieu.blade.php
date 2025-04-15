@@ -157,14 +157,14 @@
                         <!-- Member 1 -->
                         <div>
                             <div class="team-box">
-                                <div class="team-image">
+                                <!-- <div class="team-image">
                                     <img src="../assets/images/team/bach.jpg" class="img-fluid blur-up lazyload"
                                         alt="Lê Minh Bách">
-                                </div>
+                                </div> -->
                                 <div class="team-name">
                                     <h3>Lê Minh Bách</h3>
-                                    <h5>CEO & Founder</h5>
-                                    <p>Leading Seven Stars towards innovation in sports fashion.</p>
+                                    <h5>Leader</h5>
+                                    <!-- <p>Leading Seven Stars towards innovation in sports fashion.</p> -->
                                 </div>
                             </div>
                         </div>
@@ -172,14 +172,14 @@
                         <!-- Member 2 -->
                         <div>
                             <div class="team-box">
-                                <div class="team-image">
+                                <!-- <div class="team-image">
                                     <img src="../assets/images/team/duc.jpg" class="img-fluid blur-up lazyload"
                                         alt="Nguyễn Văn Đức">
-                                </div>
+                                </div> -->
                                 <div class="team-name">
                                     <h3>Nguyễn Văn Đức</h3>
-                                    <h5>Head of Design</h5>
-                                    <p>Creating stylish and functional sportswear.</p>
+                                    <!-- <h5>Head of Design</h5>
+                                    <p>Creating stylish and functional sportswear.</p> -->
                                 </div>
                             </div>
                         </div>
@@ -187,14 +187,14 @@
                         <!-- Member 3 -->
                         <div>
                             <div class="team-box">
-                                <div class="team-image">
+                                <!-- <div class="team-image">
                                     <img src="../assets/images/team/liem.jpg" class="img-fluid blur-up lazyload"
                                         alt="Nguyễn Văn Liêm">
-                                </div>
+                                </div> -->
                                 <div class="team-name">
                                     <h3>Nguyễn Văn Liêm</h3>
-                                    <h5>Marketing Director</h5>
-                                    <p>Spreading the Seven Stars brand worldwide.</p>
+                                    <!-- <h5>Marketing Director</h5>
+                                    <p>Spreading the Seven Stars brand worldwide.</p> -->
                                 </div>
                             </div>
                         </div>
@@ -202,14 +202,14 @@
                         <!-- Member 4 -->
                         <div>
                             <div class="team-box">
-                                <div class="team-image">
+                                <!-- <div class="team-image">
                                     <img src="../assets/images/team/binh.jpg" class="img-fluid blur-up lazyload"
                                         alt="Phan Xuân Bình">
-                                </div>
+                                </div> -->
                                 <div class="team-name">
                                     <h3>Phan Xuân Bình</h3>
-                                    <h5>Operations Manager</h5>
-                                    <p>Ensuring smooth production and delivery.</p>
+                                    <!-- <h5>Operations Manager</h5>
+                                    <p>Ensuring smooth production and delivery.</p> -->
                                 </div>
                             </div>
                         </div>
@@ -217,14 +217,14 @@
                         <!-- Member 5 -->
                         <div>
                             <div class="team-box">
-                                <div class="team-image">
+                                <!-- <div class="team-image">
                                     <img src="../assets/images/team/nhat.jpg" class="img-fluid blur-up lazyload"
                                         alt=" Minh Nhật">
-                                </div>
+                                </div> -->
                                 <div class="team-name">
-                                    <h3> Minh Nhật</h3>
-                                    <h5>Lead Developer</h5>
-                                    <p>Building the best online shopping experience.</p>
+                                    <h3> Trịnh Minh Nhật</h3>
+                                    <!-- <h5>Lead Developer</h5>
+                                    <p>Building the best online shopping experience.</p> -->
                                 </div>
                             </div>
                         </div>
@@ -232,14 +232,14 @@
                         <!-- Member 6 -->
                         <div>
                             <div class="team-box">
-                                <div class="team-image">
+                                <!-- <div class="team-image">
                                     <img src="../assets/images/team/thanh.jpg" class="img-fluid blur-up lazyload"
                                         alt="nguyễn Trọng Thanh">
-                                </div>
+                                </div> -->
                                 <div class="team-name">
                                     <h3>Nguyễn Trọng Thanh</h3>
-                                    <h5>Customer Support</h5>
-                                    <p>Ensuring the best service for our customers.</p>
+                                    <!-- <h5>Customer Support</h5>
+                                    <p>Ensuring the best service for our customers.</p> -->
                                 </div>
                             </div>
                         </div>
@@ -247,14 +247,14 @@
                         <!-- Member 7 -->
                         <div>
                             <div class="team-box">
-                                <div class="team-image">
+                                <!-- <div class="team-image">
                                     <img src="../assets/images/team/phuc.jpg" class="img-fluid blur-up lazyload"
                                         alt="Nguyễn Thọ Phúc">
-                                </div>
+                                </div> -->
                                 <div class="team-name">
                                     <h3>Nguyễn Thọ Phúc</h3>
-                                    <h5>Position</h5>
-                                    <p>Expanding our team for better services.</p>
+                                    <!-- <h5>Position</h5>
+                                    <p>Expanding our team for better services.</p> -->
                                 </div>
                             </div>
                         </div>

@@ -24,7 +24,7 @@ class DanhMucSanPhamController extends Controller
     {
         $request->validate([
             'ten_danh_muc' => 'required|string|max:255|unique:danh_muc_san_phams,ten_danh_muc',
-            'anh_danh_muc' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'anh_danh_muc' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             // 'mo_ta' => 'nullable|string',
         ], [
             'ten_danh_muc.required' => 'Tên danh mục không được để trống.',
@@ -33,6 +33,9 @@ class DanhMucSanPhamController extends Controller
             'anh_danh_muc.image' => 'File tải lên phải là hình ảnh.',
             'anh_danh_muc.mimes' => 'Ảnh danh mục chỉ chấp nhận định dạng: jpeg, png, jpg, gif.',
             'anh_danh_muc.max' => 'Ảnh danh mục không được vượt quá 2MB.',
+            'anh_danh_muc.required' => 'Ảnh danh mục không được để trống.',
+
+            
         ]);
 
         $anhDanhMuc = null;
