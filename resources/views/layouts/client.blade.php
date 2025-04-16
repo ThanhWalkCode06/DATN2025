@@ -210,32 +210,40 @@
         var channel = pusher.subscribe("comment-hidden-" + userId);
 
         channel.bind("hide-comment", function(data) {
-            const productText = data.product_name ? `<br><strong>Sản phẩm:</strong> ${data.product_name}` : '';
-            const reasonText = data.reasons ? `<br><strong>Lý do:</strong> ${data.reasons}` : '';
+    // Viết hoa chữ cái đầu tên sản phẩm (nếu có)
+    function capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
 
-            $.notify({
-                title: "<strong>Thông báo từ hệ thống:</strong><br>",
-                message: `${data.message}${productText}${reasonText}`
-            }, {
-                element: "body",
-                type: "danger",
-                allow_dismiss: true,
-                placement: {
-                    from: "top",
-                    align: "right"
-                },
-                delay: 5000,
-                z_index: 9999,
-                animate: {
-                    enter: "animated fadeInDown",
-                    exit: "animated fadeOutUp"
-                },
-                template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert notify-alert-custom" role="alert">' +
-                    '    <span data-notify="title">{1}</span>' +
-                    '    <span data-notify="message">{2}</span>' +
-                    '</div>'
-            });
-        });
+    const productName = data.product_name ? capitalizeFirstLetter(data.product_name) : '';
+    const productText = productName ? `<strong>Sản phẩm: ${productName}</strong>` : '';
+    const reasonText = data.reasons ? `<br><strong>Lý do:</strong> ${data.reasons}` : '';
+
+    $.notify({
+        title: "<strong>Thông báo từ hệ thống:</strong><br>",
+        message: `Bình luận ở ${productText} của bạn đã bị ẩn bởi quản trị viên.${reasonText}`
+    }, {
+        element: "body",
+        type: "danger",
+        allow_dismiss: true,
+        placement: {
+            from: "top",
+            align: "right"
+        },
+        delay: 5000,
+        z_index: 9999,
+        animate: {
+            enter: "animated fadeInDown",
+            exit: "animated fadeOutUp"
+        },
+        template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert notify-alert-custom" role="alert">' +
+            '    <span data-notify="title">{1}</span>' +
+            '    <span data-notify="message">{2}</span>' +
+            '</div>'
+    });
+});
+
+
     </script>
 
     @if (session('success'))
