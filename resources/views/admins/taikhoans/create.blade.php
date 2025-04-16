@@ -255,7 +255,7 @@
                                     </div>
                                     </div>
                                     <div class="mt-5 d-flex justify-content-between">
-                                        <button class="btn btn-primary" type="submit">Đăng ký</button>
+                                        <button class="btn btn-primary" type="submit">Tạo tài khoản</button>
                                     </div>
                                 </form>
 
