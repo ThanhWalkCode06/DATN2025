@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\DonHang;
 use App\Models\SanPham;
+use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
 use App\Models\ChiTietDonHang;
 use Illuminate\Support\Carbon;
@@ -38,8 +39,28 @@ class ThongKeController extends Controller
 
         // Tổng số lượng đơn hàng và khách hàng theo ngày lọc
         $tongDonHang = DonHang::whereBetween('created_at', [$startDate, $endDate])->count();
-        $tongSanPhamConHang = SanPham::where('trang_thai', 1)->count();
-        $tongKhachHangHoatDong = User::where('trang_thai', 1)->count();
+        // Tổng số lượng sản phẩm còn hàng (trạng thái còn hàng)
+        $tongSanPhamConHang = SanPham::where('trang_thai', 1) // Trạng thái còn hàng
+            ->whereBetween('created_at', [$startDate, $endDate]) // Áp dụng bộ lọc ngày
+            ->count();
+
+        // Tổng số lượng khách hàng hoạt động (trạng thái hoạt động)
+        $tongKhachHangHoatDong = User::where('trang_thai', 1) // Trạng thái hoạt động
+            ->whereBetween('created_at', [$startDate, $endDate]) // Áp dụng bộ lọc ngày
+            ->count();
+        // Lấy số lượng khách hàng hôm qua
+        $yesterdayStart = Carbon::yesterday()->startOfDay();
+        $yesterdayEnd = Carbon::yesterday()->endOfDay();
+        $tongKhachHangHomQua = User::where('trang_thai', 1)
+            ->whereBetween('created_at', [$yesterdayStart, $yesterdayEnd]) // Lọc theo ngày hôm qua
+            ->count();
+
+        // Tính phần trăm thay đổi số lượng khách hàng
+        if ($tongKhachHangHomQua == 0) {
+            $phanTramThayDoiKhachHang = $tongKhachHangHoatDong > 0 ? 100 : 0;
+        } else {
+            $phanTramThayDoiKhachHang = (($tongKhachHangHoatDong - $tongKhachHangHomQua) / $tongKhachHangHomQua) * 100;
+        }
 
         // Lấy thống kê ngày hôm qua
         $yesterdayStart = Carbon::yesterday()->startOfDay();
@@ -156,23 +177,59 @@ class ThongKeController extends Controller
             ->take(5)
             ->get();
 
-        // Biểu đồ doanh thu theo tháng
-        $doanhThuTheoThang = DB::table('chi_tiet_don_hangs')
-            ->join('bien_thes', 'bien_thes.id', '=', 'chi_tiet_don_hangs.bien_the_id')
-            ->join('don_hangs', 'don_hangs.id', '=', 'chi_tiet_don_hangs.don_hang_id')
-            ->select(DB::raw('MONTH(chi_tiet_don_hangs.created_at) as thang, 
-                               SUM(bien_thes.gia_ban * chi_tiet_don_hangs.so_luong) as doanh_thu'))
-            ->whereYear('chi_tiet_don_hangs.created_at', date('Y'))
-            ->where('don_hangs.trang_thai_thanh_toan', 1)
-            ->groupBy(DB::raw('MONTH(chi_tiet_don_hangs.created_at)'))
-            ->orderBy('thang')
-            ->pluck('doanh_thu', 'thang')
-            ->toArray();
-
-        $dataChart = array_fill(0, 12, 0);
-        foreach ($doanhThuTheoThang as $thang => $doanhThu) {
-            $dataChart[$thang - 1] = $doanhThu;
+        if ($startDate->toDateString() === $endDate->toDateString()) {
+            // Nếu lọc 1 ngày -> thống kê theo giờ
+            $doanhThuTheoGio = DB::table('chi_tiet_don_hangs')
+                ->join('bien_thes', 'bien_thes.id', '=', 'chi_tiet_don_hangs.bien_the_id')
+                ->join('don_hangs', 'don_hangs.id', '=', 'chi_tiet_don_hangs.don_hang_id')
+                ->select(
+                    DB::raw('HOUR(don_hangs.created_at) as gio'),
+                    DB::raw('SUM(bien_thes.gia_ban * chi_tiet_don_hangs.so_luong) as doanh_thu')
+                )
+                ->whereBetween('don_hangs.created_at', [$startDate, $endDate])
+                ->where('don_hangs.trang_thai_thanh_toan', 1)
+                ->groupBy(DB::raw('HOUR(don_hangs.created_at)'))
+                ->orderBy('gio')
+                ->pluck('doanh_thu', 'gio')
+                ->toArray();
+        
+            // Khởi tạo 24 giờ
+            $dataChart = array_fill(0, 24, 0);
+            foreach ($doanhThuTheoGio as $gio => $doanhThu) {
+                $dataChart[$gio] = $doanhThu;
+            }
+        
+            $categoriesChart = [];
+            for ($i = 0; $i < 24; $i++) {
+                $categoriesChart[] = "{$i}h";
+            }
+        } else {
+            // Nếu lọc nhiều ngày -> thống kê theo ngày
+            $doanhThuTheoNgay = DB::table('chi_tiet_don_hangs')
+                ->join('bien_thes', 'bien_thes.id', '=', 'chi_tiet_don_hangs.bien_the_id')
+                ->join('don_hangs', 'don_hangs.id', '=', 'chi_tiet_don_hangs.don_hang_id')
+                ->select(
+                    DB::raw('DATE(don_hangs.created_at) as ngay'),
+                    DB::raw('SUM(bien_thes.gia_ban * chi_tiet_don_hangs.so_luong) as doanh_thu')
+                )
+                ->whereBetween('don_hangs.created_at', [$startDate, $endDate])
+                ->where('don_hangs.trang_thai_thanh_toan', 1)
+                ->groupBy(DB::raw('DATE(don_hangs.created_at)'))
+                ->orderBy('ngay')
+                ->pluck('doanh_thu', 'ngay')
+                ->toArray();
+        
+            $period = CarbonPeriod::create($startDate, $endDate);
+            $dataChart = [];
+            $categoriesChart = [];
+        
+            foreach ($period as $date) {
+                $ngay = $date->format('Y-m-d');
+                $dataChart[] = $doanhThuTheoNgay[$ngay] ?? 0;
+                $categoriesChart[] = $date->format('d/m');
+            }
         }
+        
 
         return view('admins.index', compact(
             'tongDoanhThu',
@@ -180,12 +237,14 @@ class ThongKeController extends Controller
             'tongKhachHangHoatDong',
             'tongSanPhamConHang',
             'dataChart',
+            'categoriesChart',
             'donHangs',
             'topBanChay',
             'topKhachHang',
             'topDoanhThu',
             'phanTramThayDoiDonHang',
             'phanTramTangGiamDoanhThu',
+            'phanTramThayDoiKhachHang',
             'hasDateFilter'
         ));
     }
