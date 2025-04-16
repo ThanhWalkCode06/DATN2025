@@ -113,6 +113,8 @@
     <script src="{{ asset('assets/client/js/bootstrap/bootstrap-notify.min.js') }}"></script>
     <script src="{{ asset('assets/client/js/bootstrap/popper.min.js') }}"></script>
 
+    <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+    <script src="{{ asset('assets/js/notify/bootstrap-notify.min.js') }}"></script>
     <!-- Feather Icon JS -->
     <script src="{{ asset('assets/client/js/feather/feather.min.js') }}"></script>
     <script src="{{ asset('assets/client/js/feather/feather-icon.js') }}"></script>
@@ -165,6 +167,26 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     @yield('js')
+    <script>
+        var pusher = new Pusher("0ca5e8c271c25e1264d2", {
+            cluster: "ap1",
+            encrypted: true
+        });
+    
+        var userId = {{ Auth::id() }};
+        var channel = pusher.subscribe("comment-hidden-" + userId);
+    
+        channel.bind("hide-comment", function(data) {
+            $.notify({
+                title: "Thông báo từ hệ thống",
+                message: data.message + (data.reasons ? " Lý do: " + data.reasons : "")
+            }, {
+                type: "warning",
+                delay: 5000
+            });
+        });
+    </script>
+    
     @if (session('success'))
         <script>
             document.addEventListener("DOMContentLoaded", function() {

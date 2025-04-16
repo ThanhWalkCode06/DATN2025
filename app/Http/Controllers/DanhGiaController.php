@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\AnBinhLuan;
 use App\Models\DanhGia;
 use App\Models\SanPham;
 use Illuminate\Http\Request;
@@ -124,25 +125,32 @@ class DanhGiaController extends Controller
     // }
 
     public function trangThaiDanhGia(Request $request)
-    {
-        $danhGia = DanhGia::find($request->id);
-        if ($danhGia) {
-            $newStatus = $danhGia->trang_thai == 1 ? 0 : 1;
-            $danhGia->trang_thai = $newStatus;
+{
+    $danhGia = DanhGia::find($request->id);
+    if ($danhGia) {
+        $newStatus = $danhGia->trang_thai == 1 ? 0 : 1;
+        $danhGia->trang_thai = $newStatus;
 
-            // Nếu đang ẩn đánh giá (trang_thai = 0), lưu lý do ẩn
-            if ($newStatus == 0 && $request->has('reasons')) {
-                $reasons = $request->input('reasons');
-                $danhGia->ly_do_an = implode(', ', $reasons); // Ghép các lý do thành chuỗi
-            } else {
-                $danhGia->ly_do_an = null; // Nếu hiện đánh giá, xóa lý do ẩn
-            }
-
-            $danhGia->save();
-            return response()->json(['success' => true, 'status' => $danhGia->trang_thai]);
+        if ($newStatus == 0 && $request->has('reasons')) {
+            $danhGia->ly_do_an = implode(', ', $request->input('reasons'));
+        } else {
+            $danhGia->ly_do_an = null;
         }
-        return response()->json(['success' => false, 'message' => 'Đánh giá không tồn tại.']);
+
+        $danhGia->save();
+
+        // ✅ Thêm đoạn này để phát event real-time
+        if ($newStatus == 0) {
+            event(new \App\Events\AnBinhLuan($danhGia));
+        }
+
+        return response()->json(['success' => true, 'status' => $danhGia->trang_thai]);
     }
+
+    return response()->json(['success' => false, 'message' => 'Đánh giá không tồn tại.']);
+}
+
+    
 
 
     public function updateStatus(Request $request, $id)
