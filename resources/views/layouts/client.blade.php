@@ -69,6 +69,39 @@
             font-size: 16px;
             border-radius: 6px;
         }
+
+        .notify-alert-custom {
+            background-color: #e74c3c !important;
+            /* nền đỏ */
+            color: white !important;
+            /* chữ trắng */
+            border: 1px solid #c0392b !important;
+            border-radius: 6px;
+            padding: 15px 20px;
+            font-size: 15px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+
+        .notify-alert-custom .title {
+            font-weight: 600;
+            color: #c0392b;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .notify-alert-custom .message {
+            font-weight: 400;
+        }
+
+        /* Animate entry/exit giống admin */
+        .animated.fadeInDown {
+            animation: fadeInDown 0.5s;
+        }
+
+        .animated.fadeOutUp {
+            animation: fadeOutUp 0.5s;
+        }
     </style>
 </head>
 
@@ -172,21 +205,39 @@
             cluster: "ap1",
             encrypted: true
         });
-    
+
         var userId = {{ Auth::id() }};
         var channel = pusher.subscribe("comment-hidden-" + userId);
-    
+
         channel.bind("hide-comment", function(data) {
+            const productText = data.product_name ? `<br><strong>Sản phẩm:</strong> ${data.product_name}` : '';
+            const reasonText = data.reasons ? `<br><strong>Lý do:</strong> ${data.reasons}` : '';
+
             $.notify({
-                title: "Thông báo từ hệ thống",
-                message: data.message + (data.reasons ? " Lý do: " + data.reasons : "")
+                title: "<strong>Thông báo từ hệ thống:</strong><br>",
+                message: `${data.message}${productText}${reasonText}`
             }, {
-                type: "warning",
-                delay: 5000
+                element: "body",
+                type: "danger",
+                allow_dismiss: true,
+                placement: {
+                    from: "top",
+                    align: "right"
+                },
+                delay: 5000,
+                z_index: 9999,
+                animate: {
+                    enter: "animated fadeInDown",
+                    exit: "animated fadeOutUp"
+                },
+                template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert notify-alert-custom" role="alert">' +
+                    '    <span data-notify="title">{1}</span>' +
+                    '    <span data-notify="message">{2}</span>' +
+                    '</div>'
             });
         });
     </script>
-    
+
     @if (session('success'))
         <script>
             document.addEventListener("DOMContentLoaded", function() {

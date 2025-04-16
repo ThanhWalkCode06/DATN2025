@@ -35,7 +35,8 @@ class AnBinhLuan implements ShouldBroadcast
         return [
             'message' => 'Bình luận của bạn đã bị ẩn bởi quản trị viên.',
             'comment_id' => $this->danhGia->id,
-            'reasons' => $this->danhGia->ly_do_an
+            'reasons' => $this->danhGia->ly_do_an,
+            'product_name' => optional($this->danhGia->sanPham)->ten_san_pham ?? 'Không xác định'
         ];
     }
 }
