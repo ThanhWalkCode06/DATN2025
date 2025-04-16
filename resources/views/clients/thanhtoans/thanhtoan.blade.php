@@ -270,51 +270,56 @@
                                             <h4 class="modal-title">Danh sách phiếu giảm giá</h4>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
-                                        <div class="modal-body text-center p-4">
-                                            <div class="table-responsive">
-                                                <table class="table table-striped table-bordered table-hover">
-                                                    <thead class="thead-dark">
-                                                        <tr>
-                                                            <th>#</th>
-                                                            <th>Mã</th>
-                                                            <th>Tên Phiếu</th>
-                                                            <th>Giá Trị</th>
-                                                            <th>Thời Gian</th>
-                                                            <th>Mô Tả</th>
-                                                            <th>Trạng Thái</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        @foreach ($phieuGiamGiaThanhToans as $key => $phieu)
-                                                            <tr>
-                                                                <td>{{ $key + 1 }}</td>
-                                                                <td>{{ $phieu->ma_phieu }}</td>
-                                                                <td>{{ $phieu->ten_phieu }}</td>
-                                                                <td>{{ number_format($phieu->gia_tri, 0, ',', '.') }} %</td>
-                                                                <td>{{ date('d/m/Y', strtotime($phieu->ngay_bat_dau)) }} - {{ date('d/m/Y', strtotime($phieu->ngay_ket_thuc)) }}</td>
-                                                                <td>
-                                                                    <!-- Nút để mở mô tả -->
-                                                                    <button class="btn btn-info btn-sm" type="button" data-toggle="collapse" data-target="#description{{ $key }}" aria-expanded="false" aria-controls="description{{ $key }}">
-                                                                        Xem mô tả
-                                                                    </button>
-                                                                    <!-- Mô tả ẩn -->
-                                                                    <div class="collapse" id="description{{ $key }}">
-                                                                        <p class="mt-2">{{ $phieu->mo_ta }}</p>
+                                        <div class="modal-body p-4">
+                                            <div class="row">
+                                                @foreach ($phieuGiamGiaThanhToans as $key => $phieu)
+                                                    <div class="col-md-6 col-lg-4 mb-4">
+                                                        <div class="card shadow-sm border-0 h-100">
+                                                            <div class="card-body d-flex flex-column position-relative">
+                                                                <!-- % Giảm -->
+                                                                <div class="d-flex align-items-start">
+                                                                    <div class="bg-danger text-white rounded p-2 me-3">
+                                                                        <strong>{{ $phieu->gia_tri }}%</strong>
                                                                     </div>
-                                                                </td>
-                                                                <td>
+                                                                    <div>
+                                                                        <h5 class="card-title mb-1">{{ $phieu->ten_phieu }}</h5>
+                                                                        <small class="text-muted">Mã: <strong>{{ $phieu->ma_phieu }}</strong></small>
+                                                                    </div>
+                                                                </div>
+
+                                                                <!-- Thời gian -->
+                                                                <div class="mt-3">
+                                                                    <p class="mb-1 text-muted small">
+                                                                        <i class="bi bi-calendar-event me-1"></i>
+                                                                        {{ date('d/m/Y', strtotime($phieu->ngay_bat_dau)) }} - {{ date('d/m/Y', strtotime($phieu->ngay_ket_thuc)) }}
+                                                                    </p>
+
+                                                                    <!-- Nút Xem mô tả -->
+                                                                    <a class="text-primary small" data-bs-toggle="collapse" href="#description{{ $key }}" role="button" aria-expanded="false" aria-controls="description{{ $key }}">
+                                                                        Xem mô tả
+                                                                    </a>
+
+                                                                    <!-- Mô tả ẩn -->
+                                                                    <div class="collapse mt-2" id="description{{ $key }}">
+                                                                        <p class="small mb-0">{{ $phieu->mo_ta }}</p>
+                                                                    </div>
+                                                                </div>
+
+                                                                <!-- Trạng thái -->
+                                                                <div class="mt-auto text-end">
                                                                     @if($phieu->trang_thai == 1)
-                                                                        <span class="badge bg-success text-white">Hoạt động</span>
+                                                                        <span class="badge bg-success">Hoạt động</span>
                                                                     @else
-                                                                        <span class="badge bg-danger text-white">Không hoạt động</span>
+                                                                        <span class="badge bg-danger">Không hoạt động</span>
                                                                     @endif
-                                                                </td>
-                                                            </tr>
-                                                        @endforeach
-                                                    </tbody>
-                                                </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @endforeach
                                             </div>
                                         </div>
+
 
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-light" data-bs-dismiss="modal">Đóng</button>
