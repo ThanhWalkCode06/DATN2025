@@ -140,10 +140,13 @@ class DanhGiaController extends Controller
         $danhGia->save();
 
         // ✅ Thêm đoạn này để phát event real-time
+        // if ($newStatus == 0) {
+        //     event(new \App\Events\AnBinhLuan($danhGia));
+        // }
         if ($newStatus == 0) {
-            event(new \App\Events\AnBinhLuan($danhGia));
+            event(new AnBinhLuan($danhGia));
         }
-
+        
         return response()->json(['success' => true, 'status' => $danhGia->trang_thai]);
     }
 
