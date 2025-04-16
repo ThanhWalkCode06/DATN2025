@@ -17,6 +17,31 @@
             border: 1px solid #ccc;
             cursor: pointer;
         }
+
+        .ribbon-new {
+            width: 80px;
+            height: 80px;
+            overflow: hidden;
+            position: absolute;
+            top: -3px;
+            right: -3px;
+        }
+
+        .ribbon-new span {
+            position: absolute;
+            display: block;
+            width: 80px;
+            padding: 5px 0;
+            background: #f11b3f;
+            color: #fff;
+            font-size: 8px;
+            font-weight: bold;
+            text-align: center;
+            transform: rotate(45deg);
+            top: 9px;
+            right: -25px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        }
     </style>
 @endsection
 
@@ -126,31 +151,41 @@
                                                 id="accordionFlushExample">
 
                                                 @foreach ($pttts as $item)
-                                                @if ($item['trang_thai'] == 1)
-                                                    <div class="accordion-item">
-                                                        <div class="accordion-header" id="flush-heading{{ $item['id'] }}">
-                                                            <div class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#flush-collapse{{ $item['id'] }}">
-                                                                <div class="custom-form-check form-check mb-0">
-                                                                    <label class="form-check-label" for="{{ 'payment_method_' . $item['id'] }}">
-                                                                        <input class="form-check-input mt-0" type="radio" name="flexRadioDefault" id="{{ 'payment_method_' . $item['id'] }}" data-id="{{ $item['id'] }}" {{ $item['id'] == 1 ? 'checked' : '' }}>
-                                                                        {{ $item['ten_phuong_thuc'] }}
-                                                                    </label>
+                                                    @if ($item['trang_thai'] == 1)
+                                                        <div class="accordion-item">
+                                                            <div class="accordion-header"
+                                                                id="flush-heading{{ $item['id'] }}">
+                                                                <div class="accordion-button collapsed"
+                                                                    data-bs-toggle="collapse"
+                                                                    data-bs-target="#flush-collapse{{ $item['id'] }}">
+                                                                    <div class="custom-form-check form-check mb-0">
+                                                                        <label class="form-check-label"
+                                                                            for="{{ 'payment_method_' . $item['id'] }}">
+                                                                            <input class="form-check-input mt-0"
+                                                                                type="radio" name="flexRadioDefault"
+                                                                                id="{{ 'payment_method_' . $item['id'] }}"
+                                                                                data-id="{{ $item['id'] }}"
+                                                                                {{ $item['id'] == 1 ? 'checked' : '' }}>
+                                                                            {{ $item['ten_phuong_thuc'] }}
+                                                                        </label>
+                                                                    </div>
                                                                 </div>
                                                             </div>
+
+
+
+
                                                         </div>
-
-
-
-
+                                                    @endif
+                                                @endforeach
+                                                {{-- Hiện số dư --}}
+                                                @if ($item['id'] == 3)
+                                                    <div id="soDuViBox" class="mt-2 ms-4 text-success"
+                                                        style="display: none;">
+                                                        Số dư ví: <strong>{{ number_format($soDuVi ?? 0, 0, ',', '.') }}
+                                                            VNĐ</strong>
                                                     </div>
                                                 @endif
-                                            @endforeach
-                                            {{-- Hiện số dư --}}
-                                            @if ($item['id'] == 3)
-                                                <div id="soDuViBox" class="mt-2 ms-4 text-success" style="display: none;">
-                                                    Số dư ví: <strong>{{ number_format($soDuVi ?? 0, 0, ',', '.') }} VNĐ</strong>
-                                                </div>
-                                            @endif
                                                 {{-- Hiện số dư --}}
 
                                                 <!-- Modal Điều Khoản -->
@@ -190,141 +225,172 @@
                     </div>
                 </div>
 
-                        <div class="col-lg-4">
-                            <div class="right-side-summery-box">
-                                <div class="summery-box-2">
-                                    <div class="summery-header">
-                                        <h3>Chi tiết đơn hàng</h3>
-                                    </div>
-                                    <a href="javascript:void(0);" id="btnMaGiamGia"
-                                        class="btn theme-bg-color text-white btn-md w-100 mt-3 fw-bold"
-                                        data-bs-toggle="modal" data-bs-target="#modalVoucher">
-                                        Phiếu giảm giá dành cho bạn
-                                    </a>
-
-                                    <br>
-                                    <div class="coupon-cart">
-                                        {{-- <h6 class="text-content mb-2">Phiếu giảm giá</h6> --}}
-                                        <form id="voucherForm" action="{{ route('voucher.giohang') }}" method="post">
-                                            @csrf
-                                            <div class="mb-3 coupon-box input-group">
-                                                <input style="border: 1px solid #0da487;" id="voucherCode" type="text"
-                                                    class="form-control" id="exampleFormControlInput1"
-                                                    placeholder="Nhập mã phiếu">
-                                                <button style="border: 1px solid #0da487;margin-top: 0px;" type="submit"
-                                                    class="btn-apply">Xác nhận</button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <ul class="summery-contain">
-                                        @foreach ($chiTietGioHangs as $chiTietGioHang)
-                                            <li>
-                                                <img src="{{ Storage::url($chiTietGioHang->anh_bien_the) }}"
-                                                    class="img-fluid blur-up lazyloaded checkout-image" alt="">
-                                                <h4>{{ $chiTietGioHang->ten_san_pham }} x
-                                                    <span class="so-luong">{{ $chiTietGioHang->so_luong }}</span>
-                                                    <span>{{ $chiTietGioHang->bienThe->ten_bien_the }}</span>
-                                                </h4>
-
-                                                <h4 hidden><span class="gia-moi">{{ $chiTietGioHang->bienThe->gia_ban }}</span>đ
-                                                </h4>
-                                                <h4 class="price"><span class="tong"></span>đ</h4>
-                                            </li>
-                                        @endforeach
-                                    </ul>
-
-                                    <ul class="summery-total">
-                                        <li>
-                                            <h4>Tổng tiền sản phẩm</h4>
-                                            <h4 class="price"><span id="tong-san-pham"></span>đ</h4>
-                                        </li>
-
-                                        <li>
-                                            <h4>Phí vận chuyển</h4>
-                                            <h4 class="price"><span id="phi-van-chuyen">10.000</span>đ</h4>
-                                        </li>
-
-                                        <li>
-                                            <h4>Giảm giá</h4>
-                                            <h4 class="price">- <span id="giam-gia">0</span>đ</h4>
-                                        </li>
-
-                                        <li class="list-total">
-                                            <h4>Tổng tiền</h4>
-                                            <h4 class="price"><span id="tong-tien"></span>đ</h4>
-                                        </li>
-                                    </ul>
-                                </div>
-
-                                <a href="javascript:void(0);" id="btnDatHang"
-                                    class="btn theme-bg-color text-white btn-md w-100 mt-4 fw-bold">
-                                    Đặt hàng
-                                </a>
+                <div class="col-lg-4">
+                    <div class="right-side-summery-box">
+                        <div class="summery-box-2">
+                            <div class="summery-header">
+                                <h3>Chi tiết đơn hàng</h3>
                             </div>
+                            <a href="javascript:void(0);" id="btnMaGiamGia"
+                                class="btn theme-bg-color text-white btn-md w-100 mt-3 fw-bold" data-bs-toggle="modal"
+                                data-bs-target="#modalVoucher">
+                                Phiếu giảm giá dành cho bạn
+                            </a>
 
-                            <!-- Modal Phiếu Giảm Giá -->
-                            <div id="modalVoucher" class="modal fade" tabindex="-1" aria-hidden="true">
-                                <div class="modal-dialog" style="max-width: 600px;">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h4 class="modal-title">Danh sách phiếu giảm giá</h4>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body text-center p-4">
-                                            <div class="table-responsive">
-                                                <table class="table table-striped table-bordered table-hover">
-                                                    <thead class="thead-dark">
-                                                        <tr>
-                                                            <th>#</th>
-                                                            <th>Mã</th>
-                                                            <th>Tên Phiếu</th>
-                                                            <th>Giá Trị</th>
-                                                            <th>Thời Gian</th>
-                                                            <th>Mô Tả</th>
-                                                            <th>Trạng Thái</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        @foreach ($phieuGiamGiaThanhToans as $key => $phieu)
-                                                            <tr>
-                                                                <td>{{ $key + 1 }}</td>
-                                                                <td>{{ $phieu->ma_phieu }}</td>
-                                                                <td>{{ $phieu->ten_phieu }}</td>
-                                                                <td>{{ number_format($phieu->gia_tri, 0, ',', '.') }} %</td>
-                                                                <td>{{ date('d/m/Y', strtotime($phieu->ngay_bat_dau)) }} - {{ date('d/m/Y', strtotime($phieu->ngay_ket_thuc)) }}</td>
-                                                                <td>
-                                                                    <!-- Nút để mở mô tả -->
-                                                                    <button class="btn btn-info btn-sm" type="button" data-toggle="collapse" data-target="#description{{ $key }}" aria-expanded="false" aria-controls="description{{ $key }}">
-                                                                        Xem mô tả
-                                                                    </button>
-                                                                    <!-- Mô tả ẩn -->
-                                                                    <div class="collapse" id="description{{ $key }}">
-                                                                        <p class="mt-2">{{ $phieu->mo_ta }}</p>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    @if($phieu->trang_thai == 1)
-                                                                        <span class="badge bg-success text-white">Hoạt động</span>
-                                                                    @else
-                                                                        <span class="badge bg-danger text-white">Không hoạt động</span>
-                                                                    @endif
-                                                                </td>
-                                                            </tr>
-                                                        @endforeach
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Đóng</button>
-                                        </div>
+                            <br>
+                            <div class="coupon-cart">
+                                {{-- <h6 class="text-content mb-2">Phiếu giảm giá</h6> --}}
+                                <form id="voucherForm" action="{{ route('voucher.giohang') }}" method="post">
+                                    @csrf
+                                    <div class="mb-3 coupon-box input-group">
+                                        <input style="border: 1px solid #0da487;" id="voucherCode" type="text"
+                                            class="form-control" id="exampleFormControlInput1"
+                                            placeholder="Nhập mã phiếu">
+                                        <button style="border: 1px solid #0da487;margin-top: 0px;" type="submit"
+                                            class="btn-apply">Xác nhận</button>
                                     </div>
-                                </div>
+                                </form>
                             </div>
+                            <ul class="summery-contain">
+                                @foreach ($chiTietGioHangs as $chiTietGioHang)
+                                    <li>
+                                        <img src="{{ Storage::url($chiTietGioHang->anh_bien_the) }}"
+                                            class="img-fluid blur-up lazyloaded checkout-image" alt="">
+                                        <h4>{{ $chiTietGioHang->ten_san_pham }} x
+                                            <span class="so-luong">{{ $chiTietGioHang->so_luong }}</span>
+                                            <span>{{ $chiTietGioHang->bienThe->ten_bien_the }}</span>
+                                        </h4>
 
+                                        <h4 hidden><span class="gia-moi">{{ $chiTietGioHang->bienThe->gia_ban }}</span>đ
+                                        </h4>
+                                        <h4 class="price"><span class="tong"></span>đ</h4>
+                                    </li>
+                                @endforeach
+                            </ul>
 
+                            <ul class="summery-total">
+                                <li>
+                                    <h4>Tổng tiền sản phẩm</h4>
+                                    <h4 class="price"><span id="tong-san-pham"></span>đ</h4>
+                                </li>
+
+                                <li>
+                                    <h4>Phí vận chuyển</h4>
+                                    <h4 class="price"><span id="phi-van-chuyen">10.000</span>đ</h4>
+                                </li>
+
+                                <li>
+                                    <h4>Giảm giá</h4>
+                                    <h4 class="price">- <span id="giam-gia">0</span>đ</h4>
+                                </li>
+
+                                <li class="list-total">
+                                    <h4>Tổng tiền</h4>
+                                    <h4 class="price"><span id="tong-tien"></span>đ</h4>
+                                </li>
+                            </ul>
                         </div>
+
+                        <a href="javascript:void(0);" id="btnDatHang"
+                            class="btn theme-bg-color text-white btn-md w-100 mt-4 fw-bold">
+                            Đặt hàng
+                        </a>
+                    </div>
+
+                    <!-- Modal Phiếu Giảm Giá -->
+                    <div id="modalVoucher" class="modal fade" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog" style="max-width: 600px;">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Danh sách phiếu giảm giá</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body px-4 pt-2 pb-4">
+                                    <div class="d-flex flex-column gap-3">
+                                        @foreach ($phieuGiamGiaThanhToans->sortByDesc('ngay_bat_dau') as $key => $phieu)
+                                            @php
+                                                $laMoi = \Carbon\Carbon::parse($phieu->ngay_bat_dau)->gt(
+                                                    now()->subDays(3),
+                                                );
+                                            @endphp
+
+                                            <div class="card shadow-sm border-0 w-100 position-relative">
+                                                @if ($laMoi)
+                                                    <div class="ribbon-new">
+                                                        <span>Mới</span>
+                                                    </div>
+                                                @endif
+
+                                                <div
+                                                    class="card-body d-flex flex-column flex-md-row justify-content-between align-items-start">
+                                                    <!-- Cột trái: thông tin chính -->
+                                                    <div class="d-flex align-items-start flex-grow-1">
+                                                        <div class="bg-danger text-white rounded p-2 me-3 text-center"
+                                                            style="min-width: 55px;">
+                                                            <strong
+                                                                style="font-size: 1.2rem;">{{ $phieu->gia_tri }}%</strong>
+                                                        </div>
+
+                                                        <div>
+                                                            <h5 class="fw-bold mb-1" style="font-size: 1.1rem;">
+                                                                {{ $phieu->ten_phieu }}</h5>
+                                                            <div class="text-muted mb-1 fw-semibold">Mã: <span
+                                                                    class="text-dark">{{ $phieu->ma_phieu }}</span></div>
+                                                            <div class="text-muted small mb-1">
+                                                                {{ date('d/m/Y', strtotime($phieu->ngay_bat_dau)) }} -
+                                                                {{ date('d/m/Y', strtotime($phieu->ngay_ket_thuc)) }}
+                                                            </div>
+
+                                                            <div class="text-muted small mb-1">
+                                                                Đơn tối thiểu:
+                                                                <strong>{{ number_format($phieu->muc_gia_toi_thieu, 0, ',', '.') }}đ</strong><br>
+                                                                Giảm tối đa:
+                                                                <strong>{{ number_format($phieu->muc_giam_toi_da, 0, ',', '.') }}đ</strong>
+                                                            </div>
+
+                                                            <a class="text-primary small d-inline-block mt-1"
+                                                                data-bs-toggle="collapse"
+                                                                href="#description{{ $key }}" role="button"
+                                                                aria-expanded="false"
+                                                                aria-controls="description{{ $key }}">
+                                                                Xem mô tả
+                                                            </a>
+
+                                                            <div class="collapse mt-1"
+                                                                id="description{{ $key }}">
+                                                                <p class="small mb-0">{{ $phieu->mo_ta }}</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="d-flex flex-column justify-content-between align-items-end ms-md-3 mt-2 mt-md-0"
+                                                        style="min-width: 90px;">
+                                                        <div class="flex-grow-1">
+                                                            @if ($phieu->trang_thai == 1)
+                                                                <span class="badge bg-success">Hoạt động</span>
+                                                            @else
+                                                                <span class="badge bg-danger">Không hoạt động</span>
+                                                            @endif
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+
+
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Đóng</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
             </div>
         </div>
     </section>
@@ -332,8 +398,8 @@
 @endsection
 
 @section('js')
-{{-- điều khoản --}}
-{{-- <script>
+    {{-- điều khoản --}}
+    {{-- <script>
   document.addEventListener('DOMContentLoaded', function () {
     let accepted = false;
     const acceptTermsButton = document.getElementById('acceptTerms');
@@ -401,43 +467,40 @@
 
 </script> --}}
 
-{{-- điều khoản  --}}
+    {{-- điều khoản  --}}
 
 
 
-{{-- Hiện số dư --}}
+    {{-- Hiện số dư --}}
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const radios = document.querySelectorAll('input[name="flexRadioDefault"]');
-        const soDuViBox = document.getElementById('soDuViBox');
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const radios = document.querySelectorAll('input[name="flexRadioDefault"]');
+            const soDuViBox = document.getElementById('soDuViBox');
 
-        radios.forEach(radio => {
-            radio.addEventListener('change', function () {
-                if (this.dataset.id == 3) {
+            radios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    if (this.dataset.id == 3) {
+                        soDuViBox.style.display = 'block';
+                    } else {
+                        soDuViBox.style.display = 'none';
+                    }
+                });
+
+                // Kiểm tra mặc định khi load
+                if (radio.checked && radio.dataset.id == 3) {
                     soDuViBox.style.display = 'block';
-                } else {
-                    soDuViBox.style.display = 'none';
                 }
             });
-
-            // Kiểm tra mặc định khi load
-            if (radio.checked && radio.dataset.id == 3) {
-                soDuViBox.style.display = 'block';
-            }
         });
-    });
-</script>
+    </script>
 
-{{-- Hiện số dư --}}
+    {{-- Hiện số dư --}}
 
 
 
 
     <script>
-
-
-
         let phiVanChuyen = document.getElementById("phi-van-chuyen");
 
 
@@ -594,7 +657,7 @@
             });
 
             $("#btnDatHang").click(function(e) {
-// xử lý điều khoản
+                // xử lý điều khoản
                 // const selected = document.querySelector('input[name="flexRadioDefault"]:checked');
                 //     if (!selected) {
                 //         e.preventDefault();
@@ -606,23 +669,23 @@
                 //         });
                 //         return;
                 //     }
-// xử lý điều khoản
+                // xử lý điều khoản
                 e.preventDefault(); // Ngăn chặn load lại trang
                 updateHiddenInputs();
 
- //  confirm
+                //  confirm
                 // Lấy giá trị phương thức thanh toán từ input hoặc hidden field
                 const paymentMethod = $('#hiddenPaymentMethod').val();
                 // Nếu là thanh toán bằng ví (ID = 3)
                 if (paymentMethod === "3") {
 
-                      const confirmed = confirm(`Xác nhận trừ tiền trong ví?`);
-                     if (!confirmed) {
+                    const confirmed = confirm(`Xác nhận trừ tiền trong ví?`);
+                    if (!confirmed) {
                         // ❌ Nếu người dùng bấm Hủy thì dừng lại
                         return;
                     }
                 }
-//  confirm
+                //  confirm
                 // Lấy dữ liệu từ form
                 var formData = {
                     _token: $('meta[name="csrf-token"]').attr('content'), // Lấy CSRF token
