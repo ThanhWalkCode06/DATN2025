@@ -41,7 +41,7 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         // dd(file_exists(storage_path("app/public/user".Auth::user()->anh_dai_dien)));
         if ($request->hasFile('anh_dai_dien')) {
-            if (Auth::user()->anh_dai_dien && file_exists(storage_path("app/public/" . Auth::user()->anh_dai_dien)) && !file_exists(storage_path("app/public/images")) ) {
+            if (Auth::user()->anh_dai_dien && file_exists(storage_path("app/public/" . Auth::user()->anh_dai_dien)) && !file_exists(storage_path("app/public/images"))) {
                 unlink(storage_path('app/public/' . Auth::user()->anh_dai_dien));
             }
             $fileName = time() . '_' . $request->file('anh_dai_dien')->getClientOriginalName();
@@ -56,6 +56,7 @@ class UserController extends Controller
     {
         if (Auth::user()) {
             $donHang = DonHang::where('id', $id)->first();
+            $lichSuDonHangs = LichSuDonHang::where('don_hang_id', '=', $id)->get();
             if ($donHang) {
                 $checkVoucher = PhieuGiamGiaTaiKhoan::with('phieuGiamGia')->where('order_id', $donHang->id)->first();
                 // dd($donHang);
@@ -70,7 +71,7 @@ class UserController extends Controller
                     'id_san_pham' => $bienThe->san_pham_id,
                 ]);
                 // dd($bienThesList);
-                return view('clients.users.ordertracking', compact('donHang', 'bienThesList', 'bienThesPaginated', 'checkVoucher'));
+                return view('clients.users.ordertracking', compact('donHang', 'lichSuDonHangs', 'bienThesList', 'bienThesPaginated', 'checkVoucher'));
             } else {
                 abort(404);
             }
