@@ -169,7 +169,9 @@
 
                                     <div class="order-details-name">
                                         <h5 class="text-content">Mã đơn hàng</h5>
-                                        <h2 class="theme-color">{{ $donHang->ma_don_hang }}</h2>
+                                        <h4 class="theme-color fw-bold">
+                                            {{ $donHang->ma_don_hang }}
+                                        </h4>
                                     </div>
                                 </div>
                             </div>
@@ -183,10 +185,10 @@
 
                                     <div class="order-details-name">
                                         <h5 class="text-content">Tổng tiền</h5>
-                                        <h4 style="color: #0da487; font-weight: bold">
-                                            {{ number_format($donHang->tong_tien, 0, '', '.') }} đ</h4>
+                                        <h4 class="theme-color fw-bold">
+                                            {{ number_format($donHang->tong_tien, 0, '', '.') }} đ
+                                        </h4>
                                     </div>
-
                                 </div>
                             </div>
 
@@ -218,6 +220,8 @@
                                                     {{ '-' . $checkVoucher->phieuGiamGia->gia_tri . '%' ?? '' }}</span>
                                                 <br>
                                                 <span>{{ $checkVoucher ? 'Đã giảm ' . number_format($countPrice, 0, '', '.') . ' đ' : '' }}</span>
+                                            @else
+                                                <h4 class="theme-color fw-bold">Không</h4>
                                             @endif
                                         </h5>
                                     </div>
@@ -246,10 +250,19 @@
 
                                     <div class="order-details-name">
                                         <h5 class="text-content">Trạng thái thanh toán</h5>
-                                        <h4
-                                            style="color: {{ $donHang->trang_thai_thanh_toan == 1 ? '#0da487' : 'red' }}; font-weight: bold ">
-                                            {{ $donHang->trang_thai_thanh_toan == 1 ? 'Đã thanh toán' : 'Chưa thanh toán' }}
-                                        </h4>
+                                        @if ($donHang->trang_thai_thanh_toan == 0)
+                                            <h4 class="text-danger fw-bold">
+                                                Chưa thanh toán
+                                            </h4>
+                                        @elseif ($donHang->trang_thai_thanh_toan == 1)
+                                            <h4 class="theme-color fw-bold">
+                                                Đã thanh toán
+                                            </h4>
+                                        @else
+                                            <h4 class="theme-color fw-bold">
+                                                Đã hoàn tiền
+                                            </h4>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -269,21 +282,21 @@
 
                                     <div class="order-details-name">
                                         <h5 class="text-content">Trạng thái</h5>
-                                        <h4 style="color: red; font-weight: bold">
+                                        <h4 class="fw-bold">
                                             @if ($donHang->trang_thai_don_hang == -1)
-                                                <span class="order-danger">Đã hủy</span>
+                                                <span class="text-danger">Đã hủy</span>
                                             @elseif ($donHang->trang_thai_don_hang == 0)
-                                                <span class="order-danger">Chờ xác nhận</span>
+                                                <span class="text-danger">Chờ xác nhận</span>
                                             @elseif ($donHang->trang_thai_don_hang == 1)
-                                                <span class="order-primary">Đang xử lý</span>
+                                                <span class="text-primary">Đang xử lý</span>
                                             @elseif ($donHang->trang_thai_don_hang == 2)
-                                                <span class="order-primary">Đang giao</span>
+                                                <span class="text-primary">Đang giao</span>
                                             @elseif ($donHang->trang_thai_don_hang == 3)
-                                                <span class="order-success">Đã giao</span>
+                                                <span class="theme-color">Đã giao</span>
                                             @elseif ($donHang->trang_thai_don_hang == 4)
-                                                <span class="order-success">Hoàn thành</span>
+                                                <span class="theme-color">Hoàn thành</span>
                                             @elseif ($donHang->trang_thai_don_hang == 5)
-                                                <span class="order-danger">Trả hàng</span>
+                                                <span class="text-danger">Trả hàng</span>
                                             @else
                                                 <span>Trạng thái không hợp lệ</span>
                                             @endif
@@ -310,32 +323,125 @@
                             @endphp
                             <div class="col-12 overflow-hidden">
                                 <ol class="progtrckr">
-                                    <li class="progtrckr-{{ $statusChart >= 0 ? 'done' : 'todo' }}">
-                                        <h5>Chờ xác nhận</h5>
-                                    </li>
-                                    <li class="progtrckr-{{ $statusChart >= 1 ? 'done' : 'todo' }}">
-                                        <h5>Đang xử lý</h5>
-                                    </li>
-                                    <li class="progtrckr-{{ $statusChart >= 2 ? 'done' : 'todo' }}">
-                                        <h5>Đang giao</h5>
-                                    </li>
-                                    <li class="progtrckr-{{ $statusChart >= 3 ? 'done' : 'todo' }}">
-                                        <h5>Đã giao</h5>
+                                    @if ($donHang->trang_thai_don_hang >= 1)
+                                        <li class="progtrckr-done">
+                                        @else
+                                        <li class="progtrckr-todo">
+                                    @endif
+                                    <h5>Đang xử lý</h5>
+                                    <h6>
+                                        @php
+                                            $check = false;
+                                        @endphp
+                                        @foreach ($lichSuDonHangs as $lichSuDonHang)
+                                            @if ($lichSuDonHang->trang_thai == 1)
+                                                {{ $lichSuDonHang->created_at }}
+                                                @php
+                                                    $check = true;
+                                                @endphp
+                                            @endif
+                                        @endforeach
+                                        @if ($check == false)
+                                            Chưa xử lý
+                                        @endif
+                                    </h6>
                                     </li>
 
-                                    <li class="progtrckr-{{ $statusChart >= 4 && $statusChart != 5 ? 'done' : 'todo' }}">
-                                        <h5>Đã nhận hàng</h5>
+                                    @if ($donHang->trang_thai_don_hang >= 2)
+                                        <li class="progtrckr-done">
+                                        @else
+                                        <li class="progtrckr-todo">
+                                    @endif
+                                    <h5>Đang giao</h5>
+                                    <h6>
+                                        @php
+                                            $check = false;
+                                        @endphp
+                                        @foreach ($lichSuDonHangs as $lichSuDonHang)
+                                            @if ($lichSuDonHang->trang_thai == 2)
+                                                {{ $lichSuDonHang->created_at }}
+                                                @php
+                                                    $check = true;
+                                                @endphp
+                                            @endif
+                                        @endforeach
+                                        @if ($check == false)
+                                            Chưa xử lý
+                                        @endif
+                                    </h6>
                                     </li>
 
-                                    <!-- Trạng thái trả hàng -->
-                                    @if ($statusChart == 5)
+                                    @if ($donHang->trang_thai_don_hang >= 3)
+                                        <li class="progtrckr-done">
+                                        @else
+                                        <li class="progtrckr-todo">
+                                    @endif
+                                    <h5>Đã giao</h5>
+                                    <h6>
+                                        @php
+                                            $check = false;
+                                        @endphp
+                                        @foreach ($lichSuDonHangs as $lichSuDonHang)
+                                            @if ($lichSuDonHang->trang_thai == 3)
+                                                {{ $lichSuDonHang->created_at }}
+                                                @php
+                                                    $check = true;
+                                                @endphp
+                                            @endif
+                                        @endforeach
+                                        @if ($check == false)
+                                            Chưa xử lý
+                                        @endif
+                                    </h6>
+                                    </li>
+
+                                    @if ($donHang->trang_thai_don_hang == 5)
                                         <li class="progtrckr-done">
                                             <h5>Trả hàng</h5>
+                                            <h6>
+                                                @php
+                                                    $check = false;
+                                                @endphp
+                                                @foreach ($lichSuDonHangs as $lichSuDonHang)
+                                                    @if ($lichSuDonHang->trang_thai == 5)
+                                                        {{ $lichSuDonHang->created_at }}
+                                                        @php
+                                                            $check = true;
+                                                        @endphp
+                                                    @endif
+                                                @endforeach
+                                                @if ($check == false)
+                                                    Chưa xử lý
+                                                @endif
+                                            </h6>
                                         </li>
                                     @endif
 
-
-
+                                    @if ($donHang->trang_thai_don_hang != 5)
+                                        @if ($donHang->trang_thai_don_hang == 4)
+                                            <li class="progtrckr-done">
+                                            @else
+                                            <li class="progtrckr-todo">
+                                        @endif
+                                        <h5>Hoàn thành</h5>
+                                        <h6>
+                                            @php
+                                                $check = false;
+                                            @endphp
+                                            @foreach ($lichSuDonHangs as $lichSuDonHang)
+                                                @if ($lichSuDonHang->trang_thai == 4)
+                                                    {{ $lichSuDonHang->created_at }}
+                                                    @php
+                                                        $check = true;
+                                                    @endphp
+                                                @endif
+                                            @endforeach
+                                            @if ($check == false)
+                                                Chưa xử lý
+                                            @endif
+                                        </h6>
+                                        </li>
+                                    @endif
                                 </ol>
                             </div>
                         </div>
@@ -351,7 +457,7 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="table-responsive">
-                            <table class="table order-tab-table">
+                            <table class="table order-tab-table align-middle">
                                 <thead>
                                     <tr>
                                         <th>STT</th>
@@ -359,40 +465,39 @@
                                         <th>Tên sản phẩm</th>
                                         <th>Giá sản phẩm</th>
                                         <th>Số lượng</th>
-                                        <th>Hành động</th>
+                                        @if ($statusChart == 4)
+                                            <th>Hành động</th>
+                                        @endif
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach ($bienThesList as $index => $item)
                                         <tr>
-                                            <td style="line-height: 126px">{{ $index++ }}</td>
+                                            <td>{{ $index + 1 }}</td>
                                             <td>
-                                                <img style="width: 100px; height: 100px"
+                                                <img style="width: 100px;"
                                                     src="{{ Storage::url($item['anh_bien_the']) }}" alt="">
                                             </td>
-                                            <td style="line-height: 126px">
+                                            <td>
                                                 <a href="{{ route('sanphams.chitiet', $item['id_san_pham']) }}">
                                                     {{ $item['ten_bien_the'] }}
                                                 </a>
                                             </td>
-                                            <td style="color: #0da487;line-height: 126px">
+                                            <td>
                                                 {{ number_format($item['gia_ban'], 0, '', '.') }} đ</td>
-                                            <td style="line-height: 126px">{{ $item['so_luong'] }}</td>
-                                            <td style="line-height: 126px">
-                                                @if ($statusChart == 4)
-                                                    <a style="width:100px;height:30px"
-                                                        href="{{ route('sanphams.chitiet', $item['id_san_pham']) }}"
-                                                        style="border: none" class="btn-primary btn-sm">
+                                            <td>{{ $item['so_luong'] }}</td>
+                                            @if ($statusChart == 4)
+                                                <td>
+                                                    <a href="{{ route('sanphams.chitiet', $item['id_san_pham']) }}"
+                                                        class="btn-primary btn-sm">
                                                         Đánh giá sản phẩm
                                                     </a>
-                                                @endif
-                                            </td>
+                                                </td>
+                                            @endif
                                         </tr>
                                     @endforeach
-
                                 </tbody>
                             </table>
-                            {{ $bienThesPaginated->links('pagination::bootstrap-5') }}
                         </div>
                     </div>
                 </div>

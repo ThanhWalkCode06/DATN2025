@@ -293,3 +293,4 @@ Route::post('/danh-gia/update-status/{id}', [DanhGiaController::class, 'updateSt
 Route::post('/binhluan/{id}/reply', [BinhLuanController::class, 'store'])->name('binhluan.reply')->middleware('auth');
 
 Route::post('/binhluan', [BinhLuanController::class, 'store'])->name('binhluan.store');
+

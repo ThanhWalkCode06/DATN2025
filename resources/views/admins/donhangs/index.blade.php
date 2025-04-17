@@ -74,6 +74,7 @@
                                         <option value="">Tất cả</option>
                                         <option value="0">Chưa thanh toán</option>
                                         <option value="1">Đã thanh toán</option>
+                                        <option value="2">Đã hoàn tiền</option>
                                     </select>
                                 </div>
                                 <div class="col-5">

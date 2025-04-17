@@ -27,10 +27,12 @@ class DanhGiaClientsController extends Controller
     //     // Trả về view chitiet.blade.php và truyền dữ liệu
     //     return view('clients.sanphams.chitiet', compact('sanPham', 'danhGias'));
     // }
+
     public function danhSachDanhGia($san_pham_id)
     {
         $danhGias = DanhGia::where('san_pham_id', $san_pham_id)
             ->where('trang_thai', 1) // Chỉ lấy đánh giá có trạng thái hiển thị
+            // ->with(['nguoiDung', 'bienThe'])
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -40,92 +42,87 @@ class DanhGiaClientsController extends Controller
 
     public function themDanhGia(Request $request, $san_pham_id)
     {
-        // Kiểm tra nếu chưa đăng nhập thì chuyển hướng đến trang đăng nhập
         if (!Auth::check()) {
             return redirect()->route('login.client')->with('error', 'Vui lòng đăng nhập để đánh giá sản phẩm.');
         }
-
-        $daMuaHang = \App\Models\DonHang::where('user_id', Auth::id())
-            ->whereHas('bienThes', function ($query) use ($san_pham_id) {
-                $query->where('chi_tiet_don_hangs.san_pham_id', $san_pham_id);
-            })
-            ->exists();
-
-
-        // if (!$daMuaHang) {
-        //     return redirect()->route('sanphams.chitiet', ['id' => $san_pham_id])
-        //         ->with('error_binhluan', 'Bạn chỉ có thể đánh giá sản phẩm sau khi đã mua.');
-        // }
-
-        $user = User::with(['danhGias', 'donHangs.chiTietDonHangs'])
-            ->where('id', Auth::user()->id)
-            ->first();
-
-        // Kiểm tra nếu user không tồn tại
+    
+        $user = User::with(['danhGias', 'donHangs.chiTietDonHangs'])->find(Auth::id());
+    
         if (!$user) {
             return redirect()->route('sanphams.chitiet', ['id' => $san_pham_id])
                 ->with('error_binhluan', 'Người dùng không tồn tại.');
         }
-
-        // Lấy danh sách ID biến thể của sản phẩm
+    
+        // Lấy danh sách biến thể của sản phẩm hiện tại
         $idBienThes = BienThe::where('san_pham_id', $san_pham_id)->pluck('id')->toArray();
-
-        // Kiểm tra nếu sản phẩm không có biến thể nào
+    
         if (empty($idBienThes)) {
             return redirect()->route('sanphams.chitiet', ['id' => $san_pham_id])
                 ->with('error_binhluan', 'Sản phẩm này không có biến thể để đánh giá.');
         }
-
-        // Đếm số lần sản phẩm đã được mua (qua biến thể) trong các đơn hàng hoàn tất
-        $soLanMua = 0;
-        $bienTheId = null;
+    
+        // Tìm các biến thể đã mua
+        $bienTheDaMua = [];
         foreach ($user->donHangs as $donHang) {
-            if ($donHang->trang_thai_don_hang >= 4) { // Từ trạng thái "đã giao" trở lên
-                $coSanPhamTrongDonHang = false;
-                foreach ($donHang->chiTietDonHangs as $chiTiet) {
-                    if (in_array($chiTiet->bien_the_id, $idBienThes)) {
-                        $coSanPhamTrongDonHang = true;
-                        $bienTheId = $chiTiet->bien_the_id;
-                        break;
-                    }
-                }
-                if ($coSanPhamTrongDonHang) {
-                    $soLanMua++;
+            if ($donHang->trang_thai_don_hang >= 4) {
+                $bienTheTrongDon = $donHang->chiTietDonHangs
+                    ->whereIn('bien_the_id', $idBienThes)
+                    ->pluck('bien_the_id')
+                    ->unique();
+    
+                foreach ($bienTheTrongDon as $bienTheId) {
+                    $bienTheDaMua[$bienTheId] = ($bienTheDaMua[$bienTheId] ?? 0) + 1;
                 }
             }
         }
-
-        // Đếm số lượt đã đánh giá sản phẩm
-        $soLanDanhGia = $user->danhGias->where('san_pham_id', $san_pham_id)->count();
-
-        if ($soLanMua <= $soLanDanhGia) {
+    
+        // Nếu nhiều biến thể và chưa chọn → bắt chọn
+        if (count($bienTheDaMua) > 1 && !$request->filled('bien_the_id')) {
+            session()->put('bienTheDaMua_' . $san_pham_id, $bienTheDaMua);
             return redirect()->route('sanphams.chitiet', ['id' => $san_pham_id])
-                ->with('error_binhluan', 'Bạn chỉ có thể đánh giá sản phẩm sau khi đã mua, và không vượt quá số lần mua.')
-                ->with('daMuaHang', true);
-            }
-
-        // Validate dữ liệu
+                ->with('chophep_danhgia', true)
+                ->with('error_binhluan', 'Vui lòng chọn biến thể bạn muốn đánh giá.');
+        }
+    
+        // Nếu chỉ có 1 biến thể → tự động gán
+        $bienTheId = $request->input('bien_the_id') ?? array_key_first($bienTheDaMua);
+    
+        if (!$bienTheId || !isset($bienTheDaMua[$bienTheId])) {
+            return redirect()->route('sanphams.chitiet', ['id' => $san_pham_id])
+                ->with('error_binhluan', 'Bạn chưa mua biến thể này.');
+        }
+    
+        // Kiểm tra số lượt đã đánh giá
+        $soLuotDaDanhGia = DanhGia::where('user_id', $user->id)
+            ->where('san_pham_id', $san_pham_id)
+            ->where('bien_the_id', $bienTheId)
+            ->count();
+    
+        if ($soLuotDaDanhGia >= $bienTheDaMua[$bienTheId]) {
+            return redirect()->route('sanphams.chitiet', ['id' => $san_pham_id])
+                ->with('error_binhluan', 'Bạn đã đánh giá đủ số lượt cho biến thể này. Hãy mua thêm để tiếp tục đánh giá.');
+        }
+    
         $request->validate([
             'so_sao' => 'required|integer|min:1|max:5',
             'nhan_xet' => 'nullable|string'
         ]);
-
-        // Tạo đánh giá mới
+    
         DanhGia::create([
-            'user_id' => Auth::id(),
+            'user_id' => $user->id,
             'san_pham_id' => $san_pham_id,
             'bien_the_id' => $bienTheId,
             'so_sao' => $request->so_sao,
             'nhan_xet' => $request->nhan_xet ?? '',
-            'trang_thai' => 1 // Đánh giá mới mặc định chưa duyệt
+            'trang_thai' => 1
         ]);
-
-        // Redirect về chi tiết sản phẩm đúng route
+    
+        // Xoá session sau khi đánh giá xong để tránh lỗi khi chuyển sản phẩm
+        session()->forget('bienTheDaMua_' . $san_pham_id);
+    
         return redirect()->route('sanphams.chitiet', ['id' => $san_pham_id])
             ->with('success', 'Gửi đánh giá thành công.')
             ->with('daMuaHang', true);
     }
-
-   
     
 }

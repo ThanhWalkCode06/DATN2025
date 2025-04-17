@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\AnBinhLuan;
 use App\Models\DanhGia;
 use App\Models\SanPham;
 use Illuminate\Http\Request;
@@ -15,27 +16,27 @@ class DanhGiaController extends Controller
     public function index(Request $request)
     {
         $sanPhams = SanPham::all();
-    
+
         $query = DanhGia::select('danh_gias.*', 'users.ten_nguoi_dung', 'san_phams.ten_san_pham')
             ->join('users', 'users.id', '=', 'user_id')
             ->join('san_phams', 'san_phams.id', '=', 'san_pham_id');
-    
+
         // Lọc theo từ khoá chung: tên người dùng hoặc tên sản phẩm
         if ($request->has('keyword') && !empty($request->keyword)) {
             $keyword = $request->keyword;
             $query->where(function ($q) use ($keyword) {
                 $q->where('users.ten_nguoi_dung', 'like', "%$keyword%")
-                  ->orWhere('san_phams.ten_san_pham', 'like', "%$keyword%");
+                    ->orWhere('san_phams.ten_san_pham', 'like', "%$keyword%");
             });
         }
-    
+
         $query->orderBy('danh_gias.created_at', 'desc');
-    
+
         $danhGias = $query->paginate(10)->appends($request->all());
-    
+
         return view('admins.danhgias.index', compact('danhGias', 'sanPhams'));
     }
-    
+
 
     /**
      * Show the form for creating a new resource.
@@ -102,7 +103,10 @@ class DanhGiaController extends Controller
 
     public function showDanhGias()
     {
-        $danhGias = DanhGia::with(['user', 'sanPham'])->where('trang_thai', 1)->get();
+        $danhGias = DanhGia::with(['user', 'sanPham'])
+            ->where('trang_thai', 1)
+            ->get();
+
         return view('clients.gioithieu', compact('danhGias'));
     }
 
@@ -121,15 +125,35 @@ class DanhGiaController extends Controller
     // }
 
     public function trangThaiDanhGia(Request $request)
-    {
-        $danhGia = DanhGia::find($request->id);
-        if ($danhGia) {
-            $danhGia->trang_thai = $danhGia->trang_thai == 1 ? 0 : 1;
-            $danhGia->save();
-            return response()->json(['success' => true, 'status' => $danhGia->trang_thai]);
+{
+    $danhGia = DanhGia::find($request->id);
+    if ($danhGia) {
+        $newStatus = $danhGia->trang_thai == 1 ? 0 : 1;
+        $danhGia->trang_thai = $newStatus;
+
+        if ($newStatus == 0 && $request->has('reasons')) {
+            $danhGia->ly_do_an = implode(', ', $request->input('reasons'));
+        } else {
+            $danhGia->ly_do_an = null;
         }
-        return response()->json(['success' => false, 'message' => 'Đánh giá không tồn tại.']);
+
+        $danhGia->save();
+
+        // ✅ Thêm đoạn này để phát event real-time
+        // if ($newStatus == 0) {
+        //     event(new \App\Events\AnBinhLuan($danhGia));
+        // }
+        if ($newStatus == 0) {
+            event(new AnBinhLuan($danhGia));
+        }
+        
+        return response()->json(['success' => true, 'status' => $danhGia->trang_thai]);
     }
+
+    return response()->json(['success' => false, 'message' => 'Đánh giá không tồn tại.']);
+}
+
+    
 
 
     public function updateStatus(Request $request, $id)
@@ -137,8 +161,7 @@ class DanhGiaController extends Controller
         $danhGia = DanhGia::findOrFail($id);
         $danhGia->trang_thai = $request->input('trang_thai');
         $danhGia->save();
-    
+
         return response()->json(['success' => true]);
     }
-    
 }

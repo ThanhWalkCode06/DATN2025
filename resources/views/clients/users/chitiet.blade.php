@@ -189,10 +189,25 @@
                                                                 </div>
                                                                 <div>
                                                                     <h6 class="text-content mt-3">Trạng thái thanh toán:
-                                                                        <span
-                                                                            style="float: right; padding-top: 0px; padding-bottom: 0px; padding-left: 5px; padding-right: 0px "
-                                                                            class="{{ $item->trang_thai_thanh_toan == 0 ? 'btn bg-danger-subtle text-danger' : 'btn bg-success-subtle text-success' }}">
-                                                                            {{ $item->trang_thai_thanh_toan == 0 ? 'Chưa thanh toán' : 'Đã thanh toán' }}</span>
+                                                                        @if ($item->trang_thai_thanh_toan == 0)
+                                                                            <span
+                                                                                style="float: right; padding-top: 0px; padding-bottom: 0px; padding-left: 5px; padding-right: 0px "
+                                                                                class="btn bg-danger-subtle text-danger">
+                                                                                Chưa thanh toán
+                                                                            </span>
+                                                                        @elseif ($item->trang_thai_thanh_toan == 1)
+                                                                            <span
+                                                                                style="float: right; padding-top: 0px; padding-bottom: 0px; padding-left: 5px; padding-right: 0px "
+                                                                                class="btn bg-danger-subtle text-success">
+                                                                                Đã thanh toán
+                                                                            </span>
+                                                                        @else
+                                                                            <span
+                                                                                style="float: right; padding-top: 0px; padding-bottom: 0px; padding-left: 5px; padding-right: 0px "
+                                                                                class="btn bg-danger-subtle text-success">
+                                                                                Đã hoàn tiền
+                                                                            </span>
+                                                                        @endif
                                                                     </h6>
                                                                 </div>
                                                                 <h6 class="text-content mt-3">Địa chỉ nhận:
