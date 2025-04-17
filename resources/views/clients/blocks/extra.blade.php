@@ -55,6 +55,81 @@
         color: white;
         border-color: #0da487;
     }
+
+
+   /* Modal */
+.modal-dialog {
+    max-width: 90%;  /* Điều chỉnh kích thước modal */
+}
+
+.modal-content {
+    border-radius: 12px;  /* Góc bo tròn cho modal */
+}
+
+.modal-header {
+    background-color: #009688;  /* Màu nền header */
+    color: white;
+    border-radius: 12px 12px 0 0;
+    padding: 15px 20px;
+}
+
+.modal-header .btn-close {
+    filter: invert(1);
+}
+
+.chat-box {
+    background-color: #f4f4f4;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    height: 400px;  /* Tăng chiều cao của chat box */
+    max-height: 400px;
+    overflow-y: auto;
+    font-size: 1.1rem;  /* Tăng font size cho đoạn chat */
+    line-height: 1.6;  /* Tăng line height để dễ đọc */
+}
+
+input[type="text"] {
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+input[type="file"] {
+    max-width: 100px;  /* Giới hạn chiều rộng của input file */
+    padding: 0.4rem;
+}
+
+input[type="file"]:focus, input[type="text"]:focus {
+    border-color: #009688;  /* Tạo viền màu khi focus */
+}
+
+button {
+    border-radius: 8px;
+    padding: 0.6rem 1rem;
+    background-color: #009688;
+    border: none;
+    color: rgb(24, 72, 203);
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #00796b;  /* Thay đổi màu khi hover */
+}
+
+button:focus {
+    outline: none;
+}
+
+/* Thêm hiệu ứng cho media (ảnh và video) */
+.chat-box img, .chat-box video {
+    max-width: 100%;
+    max-height: 300px;  /* Giới hạn chiều cao của ảnh/video */
+    border-radius: 8px;
+    margin-top: 5px;
+}
+
+
 </style>
 <!-- Quick View Modal Box Start -->
 <div class="modal fade theme-modal view-modal" id="view" tabindex="-1">
@@ -224,19 +299,20 @@
 
 <!-- Message Modal Start -->
 <div class="modal fade" id="chat-box-modal" tabindex="-1" aria-labelledby="chatModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content rounded-4 shadow-lg">
+            <div class="modal-header border-bottom-0">
                 <h5 class="modal-title" id="chatModalLabel">💬 Chat với Admin</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div id="chat-box" style="height: 300px; overflow-y: auto; border: 1px solid #ddd; padding: 10px;">
+                <div id="chat-box" class="chat-box" style="height: 400px; overflow-y: auto; padding: 15px; background-color: #f9f9f9; border-radius: 8px;">
+                    <!-- Chat messages will be inserted here -->
                 </div>
-                <form id="chat-form">
-                    <div class="input-group mt-3">
-                        <input type="text" id="noi_dung" name="noi_dung" class="form-control"
-                            placeholder="Nhập tin nhắn..." autocomplete="off" required>
+                <form id="chat-form" enctype="multipart/form-data" class="mt-3">
+                    <div class="input-group mb-3">
+                        <input type="text" id="noi_dung" name="noi_dung" class="form-control" placeholder="Nhập tin nhắn..." autocomplete="off">
+                        <input type="file" id="media" name="media" accept="image/*,video/*" class="form-control" style="max-width: 180px;">
                         <button class="btn btn-primary" type="submit">Gửi</button>
                     </div>
                 </form>
@@ -244,6 +320,8 @@
         </div>
     </div>
 </div>
+
+
 <!-- Message Modal End -->
 
 <!-- Tap to top button start -->

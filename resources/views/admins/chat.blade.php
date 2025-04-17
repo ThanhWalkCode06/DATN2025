@@ -26,6 +26,9 @@
 
     <!-- App css -->
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css') }}">
+    <style>
+        
+    </style>
 @endsection
 
 @section('content')
@@ -44,14 +47,17 @@
                     <div class="card-body" id="chat-box" style="height: 400px; overflow-y: auto; background: #f9f9f9;">
                     </div>
                     <div class="card-footer">
-                        <form id="chat-form">
+                        <form id="chat-form" enctype="multipart/form-data">
                             <input type="hidden" id="receiver_id">
                             <div class="input-group">
                                 <input type="text" id="noi-dung" class="form-control" placeholder="Nhập tin nhắn..."
                                     autocomplete="off">
+                                    <input type="file" id="image" accept="image/*,video/*" class="form-control" style="max-width: 180px;">
+
                                 <button type="submit" class="btn btn-primary">Gửi</button>
                             </div>
                         </form>
+
                     </div>
                 </div>
             </div>
@@ -62,7 +68,7 @@
 @section('js')
     <script>
         let user_id = {{ Auth::user()->id }}
-        let receiver_id = null
+            let receiver_id = null
 
         fetch('/admin/chat-users')
             .then(response => response.json())
@@ -102,48 +108,74 @@
         function appendMessage(chat, nguoi_gui_id) {
             let chatBox = document.getElementById("chat-box");
             let align = chat.nguoi_gui_id === nguoi_gui_id ? "text-start" : "text-end";
-            let bgColor = chat.nguoi_gui_id === nguoi_gui_id ? "bg-primary text-white" : "bg-light text-dark";
-
-            let chatMessage = document.createElement("div");
-            chatMessage.style.maxWidth = "75%";
-            chatMessage.style.display = "inline-block";
-            chatMessage.innerHTML =
-                `<strong>${chat.nguoi_gui_id === nguoi_gui_id ? chat.ten_nguoi_gui : "Admin"}:</strong> ${chat.noi_dung}`;
 
             let wrapper = document.createElement("div");
             wrapper.classList.add("m-2", align);
-            wrapper.appendChild(chatMessage);
 
+            let content = `<strong>${chat.nguoi_gui_id === nguoi_gui_id ? chat.ten_nguoi_gui : "Admin"}:</strong>`;
+
+            if (chat.noi_dung) {
+                content += `<div>${chat.noi_dung}</div>`;
+            }
+
+            if (chat.hinh_anh) {
+                let fileUrl = chat.hinh_anh; // Đảm bảo đây là đường dẫn đến ảnh hoặc video
+
+                // Kiểm tra phần mở rộng file
+                const extension = fileUrl.split('.').pop().toLowerCase();
+
+                // Kiểm tra nếu là ảnh
+                if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(extension)) {
+                    content += `<div><img src="${fileUrl}" alt="Ảnh" style="max-width: 200px; border-radius: 8px; margin-top: 5px;"></div>`;
+                }
+                // Kiểm tra nếu là video
+                else if (['mp4', 'webm', 'ogg'].includes(extension)) {
+                    content += `
+                <div>
+                    <video controls style="max-width: 300px; border-radius: 8px; margin-top: 5px;">
+                        <source src="${fileUrl}" type="video/${extension}">
+                        Trình duyệt không hỗ trợ video.
+                    </video>
+                </div>`;
+                }
+            }
+
+
+            wrapper.innerHTML = content;
             chatBox.appendChild(wrapper);
             chatBox.scrollTop = chatBox.scrollHeight;
         }
 
-        document.getElementById("chat-form").addEventListener("submit", function(e) {
+        document.getElementById("chat-form").addEventListener("submit", function (e) {
             e.preventDefault();
 
-            let noiDungInput = document.getElementById("noi-dung");
-            let noiDung = noiDungInput.value.trim();
-            if (!noiDung) return;
+            let formData = new FormData();
+            formData.append('nguoi_gui_id', user_id);
+            formData.append('nguoi_nhan_id', receiver_id);
+            formData.append('noi_dung', document.getElementById("noi-dung").value);
+            formData.append('channel', receiver_id);
+
+            let imageInput = document.getElementById("image");
+            if (imageInput.files.length > 0) {
+                formData.append('media', imageInput.files[0]); // Sửa lại đúng tên
+            }
+
 
             fetch('/send-chat', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': "{{ csrf_token() }}"
-                    },
-                    body: JSON.stringify({
-                        nguoi_gui_id: user_id,
-                        nguoi_nhan_id: receiver_id,
-                        noi_dung: noiDung,
-                        channel: receiver_id
-                    })
-                })
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                },
+                body: formData
+            })
                 .then(response => response.json())
                 .then(data => {
-                    noiDungInput.value = ""; // Xóa input sau khi gửi
+                    document.getElementById("noi-dung").value = "";
+                    document.getElementById("image").value = "";
                 })
                 .catch(error => console.error("Lỗi:", error));
         });
+
 
         // Kết nối Pusher
         Pusher.logToConsole = true;
@@ -155,27 +187,35 @@
         function bindChannel(nguoi_gui_id, nguoi_nhan_id) {
             var channel = pusher.subscribe("chat." + nguoi_nhan_id);
 
-            channel.bind("send-chat", function(data) {
+            channel.bind("send-chat", function (data) {
                 let chatBox = document.getElementById("chat-box");
-                const chat = data.chat
-                console.log(chat);
+                const chat = data.chat;
 
-                var align = chat.nguoi_gui_id === nguoi_gui_id ? "text-end" : "text-start";
-                let bgColor = chat.nguoi_gui_id === nguoi_gui_id ? "bg-primary text-white" : "bg-light text-dark";
-
-                let chatMessage = document.createElement("div");
-                chatMessage.style.maxWidth = "75%";
-                chatMessage.style.display = "inline-block";
-                chatMessage.innerHTML =
-                    `<strong>${chat.ten_nguoi_gui}:</strong> ${chat.noi_dung}`;
-
+                let align = chat.nguoi_gui_id === user_id ? "text-end" : "text-start";
                 let wrapper = document.createElement("div");
                 wrapper.classList.add("m-2", align);
-                wrapper.appendChild(chatMessage);
 
+                let content = `<strong>${chat.ten_nguoi_gui}:</strong>`;
+
+                if (chat.noi_dung) {
+                    content += `<div>${chat.noi_dung}</div>`;
+                }
+
+                if (chat.hinh_anh) {
+                    const ext = chat.hinh_anh.split('.').pop().toLowerCase();
+                    if (['mp4', 'webm', 'ogg'].includes(ext)) {
+                        content += `<div><video src="${chat.hinh_anh}" controls style="max-width: 200px; margin-top: 5px; border-radius: 8px;"></video></div>`;
+                    } else {
+                        content += `<div><img src="${chat.hinh_anh}" alt="Ảnh" style="max-width: 200px; border-radius: 8px; margin-top: 5px;"></div>`;
+                    }
+                }
+
+
+                wrapper.innerHTML = content;
                 chatBox.appendChild(wrapper);
                 chatBox.scrollTop = chatBox.scrollHeight;
             });
+
         }
     </script>
 
