@@ -36,6 +36,12 @@
 
         }
 
+        .table-product td:nth-child(6) {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
         .btn-primary {
             background-color: purple !important;
             border-color: purple !important;
@@ -70,8 +76,8 @@
                         <!-- Phần tìm kiếm cơ bản -->
                         <div class="col-md-5">
                             <div class="input-group">
-                                <input class="form-control" type="text" placeholder="Tìm kiếm tên sản phẩm" name="ten_san_pham"
-                                    value="">
+                                <input class="form-control" type="text" placeholder="Tìm kiếm tên sản phẩm"
+                                    name="ten_san_pham" value="">
                                 <button type="submit" class="btn btn-theme btn-sm"><i data-feather="search"></i></button>
                                 <button class="btn btn-theme btn-sm ms-2" type="button" data-bs-toggle="collapse"
                                     data-bs-target="#filterPanel">
@@ -96,7 +102,7 @@
                                             'label' => 'Danh mục',
                                             'modelClass' => App\Models\SanPham::class,
                                             'relation' => 'danhMuc',
-                                            'column' => 'ten_danh_muc'
+                                            'column' => 'ten_danh_muc',
                                         ])
 
                                         @include('admins.filter.status', [
@@ -148,9 +154,9 @@
                 </div>
             </div>
         </div>
-            <div class="d-flex justify-content-center mt-3 pagination-wrapper">
+        <div class="d-flex justify-content-center mt-3 pagination-wrapper">
             {{ $sanPhams->links('pagination::bootstrap-5') }}
-            </div>
+        </div>
     </div>
 @endsection
 <script src="{{ asset('assets/js/jquery-3.6.0.min.js') }}"></script>
@@ -170,46 +176,46 @@
 @endsection
 <script>
     $(document).ready(function() {
-    // Hàm tải dữ liệu
-    function loadData(url) {
-        $.ajax({
-            url: url,
-            type: 'GET',
-            success: function(response) {
-                $('#products-list-body').html(response.html);
-                $('.pagination-wrapper').html(response.pagination);
-                window.scrollTo({
-                    top: 0,
-                    behavior: 'instant'
-                });
-                // Cập nhật URL trình duyệt không reload
-                history.pushState(null, null, url);
-            },
-            error: function(xhr) {
-                console.error('Error:', xhr.responseText);
-            }
+        // Hàm tải dữ liệu
+        function loadData(url) {
+            $.ajax({
+                url: url,
+                type: 'GET',
+                success: function(response) {
+                    $('#products-list-body').html(response.html);
+                    $('.pagination-wrapper').html(response.pagination);
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'instant'
+                    });
+                    // Cập nhật URL trình duyệt không reload
+                    history.pushState(null, null, url);
+                },
+                error: function(xhr) {
+                    console.error('Error:', xhr.responseText);
+                }
+            });
+        }
+
+        // Submit form lọc
+        $('#searchForm').submit(function(e) {
+            e.preventDefault();
+            let url = $(this).attr('action') + '?' + $(this).serialize();
+            loadData(url);
         });
-    }
 
-    // Submit form lọc
-    $('#searchForm').submit(function(e) {
-        e.preventDefault();
-        let url = $(this).attr('action') + '?' + $(this).serialize();
-        loadData(url);
-    });
+        // Xử lý click phân trang
+        $(document).on('click', '.pagination a', function(e) {
+            e.preventDefault();
+            loadData($(this).attr('href'));
+        });
 
-    // Xử lý click phân trang
-    $(document).on('click', '.pagination a', function(e) {
-        e.preventDefault();
-        loadData($(this).attr('href'));
+        // Reset filter
+        $('#resetFilter').click(function() {
+            $('#filterPanel input').val('');
+            $('#filterPanel select').val('').trigger('change');
+            $('#filterPanel input[type="date"]').val('').trigger('change');
+            $('#searchForm').submit();
+        });
     });
-
-    // Reset filter
-    $('#resetFilter').click(function() {
-        $('#filterPanel input').val('');
-        $('#filterPanel select').val('').trigger('change');
-        $('#filterPanel input[type="date"]').val('').trigger('change');
-        $('#searchForm').submit();
-    });
-});
 </script>
