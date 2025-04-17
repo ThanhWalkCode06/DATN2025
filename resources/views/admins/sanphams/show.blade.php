@@ -87,6 +87,12 @@
         .album-slider .slick-list {
             margin: 0 -5px;
         }
+        #hideReasonModal .modal-dialog {
+            display: flex;
+            align-items: center;
+            min-height: calc(100vh - 60px); /* Đảm bảo căn giữa theo chiều dọc */
+            margin: 0 auto; /* Căn giữa theo chiều ngang */
+        }
     </style>
 @endsection
 
