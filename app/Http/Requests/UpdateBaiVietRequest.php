@@ -36,6 +36,7 @@ class UpdateBaiVietRequest extends FormRequest
         'user_id.exists' => 'Tài khoản không tồn tại.',
         'tieu_de.required' => 'Tiêu đề bài viết là bắt buộc.',
         'tieu_de.unique' => 'Tiêu đề bài viết đã tồn tại. Vui lòng nhập tiêu đề khác.',
+        'tieu_de.max' => 'Tiêu đề bài viết chỉ được giới hạn 255 ký tự.',
         'danh_muc_id.required' => 'Danh mục bài viết là bắt buộc.',
         'danh_muc_id.exists' => 'Danh mục không tồn tại.',
         'noi_dung.required' => 'Nội dung bài viết không được để trống.',

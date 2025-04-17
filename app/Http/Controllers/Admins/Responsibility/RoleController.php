@@ -133,10 +133,11 @@ class RoleController extends Controller
         $itemId = Role::find($id);
         $role = Role::withTrashed()->where('name', $request->name)->whereNotNull('deleted_at')->first();
         $data = $request->validate([
-            'name' => ['required', Rule::unique('roles', 'name')->whereNull('deleted_at')->ignore($id)],
+            'name' => ['required','max:255', Rule::unique('roles', 'name')->whereNull('deleted_at')->ignore($id)],
         ],[
             'name.required' => 'Tên vai trò không được để trống',
             'name.unique' => 'Tên vai trò này đã tồn tại',
+            'name.max' => 'Tên vai trò chỉ được 255 ký tự',
         ]);
         // dd($role);
         if($role){

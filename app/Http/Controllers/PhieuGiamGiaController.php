@@ -68,13 +68,25 @@ class PhieuGiamGiaController extends Controller
             ],
             'ngay_bat_dau' => 'required|date|after_or_equal:today',
             'ngay_ket_thuc' => 'required|date|after:ngay_bat_dau',
+            'gia_tri' => 'required|numeric|min:0|min:0|max:100',
             'muc_giam_toi_da' => 'numeric|min:5000',
             'muc_gia_toi_thieu' => 'numeric|min:0',
         ], [
+            'ten_phieu.required' => 'Tên phiếu bắt buộc phải nhập.',
             'ten_phieu.unique' => 'Tên phiếu giảm giá đã tồn tại.',
+            'ten_phieu.max' => 'Tên phiếu giảm giá chỉ được dài 255 ký tự.',
+
+            'ma_phieu.required' => 'Mã giảm giá bắt buộc phải nhập.',
             'ma_phieu.unique' => 'Mã giảm giá đã tồn tại.',
+            'ma_phieu.max' => 'Mã giảm giá chỉ được dài 50 ký tự.',
+
+            'ngay_bat_dau.required' => 'Ngày bắt đầu bắt buộc phải nhập.',
             'ngay_bat_dau.after_or_equal' => 'Không được bắt đầu từ ngày trước hôm nay.',
+
+            'ngay_ket_thuc.required' => 'Ngày kết thúc bắt buộc phải nhập.',
             'ngay_ket_thuc.after' => 'Ngày kết thúc phải sau ngày bắt đầu.',
+
+            'gia_tri.required' => 'Giá trị giảm giá bắt buộc phải nhập.',
             'gia_tri.min' => 'Giá trị giảm giá phải lớn hơn 0.',
             'gia_tri.max' => 'Giá trị giảm giá phải dưới 100.',
 
@@ -138,6 +150,9 @@ class PhieuGiamGiaController extends Controller
                 'muc_gia_toi_thieu' => 'numeric|min:0',
             ],
             [
+                'ten_phieu.max' => 'Tên phiếu phải nhỏ hơn 255 ký tự.',
+                'ma_phieu.max' => 'mã phiếu phải nhỏ hơn 50 ký tự.',
+
                 'ngay_bat_dau.after_or_equal' => 'Ngày bắt đầu không được trước hôm nay.',
                 'ngay_ket_thuc.after' => 'Ngày kết thúc phải sau ngày bắt đầu.',
                 'gia_tri.min' => 'Giá trị giảm giá phải lớn hơn 0.',

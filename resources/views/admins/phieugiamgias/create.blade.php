@@ -24,7 +24,11 @@ Thêm mới sản phẩm
 <!-- App css -->
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css') }}">
 @endsection
-
+<style>
+    .form-control{
+        border: 1px solid #ccc !important;
+    }
+</style>
 
 
 @section('content')
@@ -56,7 +60,7 @@ Thêm mới sản phẩm
                                     <div class="mb-4 row align-items-center">
                                         <label class="col-lg-2 col-md-3 col-form-label form-label-title">Mã Giảm giá</label>
                                         <div class="col-md-9 col-lg-10">
-                                            <input class="form-control @error('ma_phieu')  @enderror" type="text" name="ma_phieu" value="{{ old('ma_phieu') }}">
+                                            <input class="form-control @error('ma_phieu') is-invalid @enderror" type="text" name="ma_phieu" value="{{ old('ma_phieu') }}">
                                             @error('ma_phieu')
                                             <div class="text-danger">{{ $message }}</div>
                                             @enderror
@@ -67,7 +71,7 @@ Thêm mới sản phẩm
                                     <div class="mb-4 row align-items-center">
                                         <label class="col-lg-2 col-md-3 col-form-label form-label-title">Ngày bắt đầu</label>
                                         <div class="col-md-9 col-lg-10">
-                                            <input class="form-control @error('ngay_bat_dau')  @enderror" type="date" name="ngay_bat_dau" value="{{ old('ngay_bat_dau') }}">
+                                            <input class="form-control @error('ngay_bat_dau') is-invalid @enderror" type="date" name="ngay_bat_dau" value="{{ old('ngay_bat_dau') }}">
                                             @error('ngay_bat_dau')
                                             <div class="text-danger">{{ $message }}</div>
                                             @enderror
@@ -78,7 +82,7 @@ Thêm mới sản phẩm
                                     <div class="mb-4 row align-items-center">
                                         <label class="col-lg-2 col-md-3 col-form-label form-label-title">Ngày kết thúc</label>
                                         <div class="col-md-9 col-lg-10">
-                                            <input class="form-control @error('ngay_ket_thuc')  @enderror" type="date" name="ngay_ket_thuc" value="{{ old('ngay_ket_thuc') }}">
+                                            <input class="form-control @error('ngay_ket_thuc') is-invalid  @enderror" type="date" name="ngay_ket_thuc" value="{{ old('ngay_ket_thuc') }}">
                                             @error('ngay_ket_thuc')
                                             <div class="text-danger">{{ $message }}</div>
                                             @enderror
@@ -89,7 +93,7 @@ Thêm mới sản phẩm
                                     <div class="mb-4 row align-items-center">
                                         <label class="col-lg-2 col-md-3 col-form-label form-label-title">Giá trị giảm giá</label>
                                         <div class="col-md-9 col-lg-10">
-                                            <input class="form-control @error('gia_tri')  @enderror" type="number" name="gia_tri" step="0.01" value="{{ old('gia_tri') }}">
+                                            <input class="form-control @error('gia_tri') is-invalid  @enderror" type="number" name="gia_tri" step="0.01" value="{{ old('gia_tri') }}">
                                             @error('gia_tri')
                                             <div class="text-danger">{{ $message }}</div>
                                             @enderror
@@ -100,7 +104,7 @@ Thêm mới sản phẩm
                                     <div class="mb-4 row align-items-center">
                                         <label class="col-lg-2 col-md-3 col-form-label form-label-title">Mức giảm tối đa:</label>
                                         <div class="col-md-9 col-lg-10">
-                                            <input class="form-control @error('muc_giam_toi_da')  @enderror" type="number" name="muc_giam_toi_da" step="0.01" value="{{ old('muc_giam_toi_da') }}">
+                                            <input class="form-control @error('muc_giam_toi_da') is-invalid  @enderror" type="number" name="muc_giam_toi_da" step="0.01" value="{{ old('muc_giam_toi_da') }}">
                                             @error('muc_giam_toi_da')
                                             <div class="text-danger">{{ $message }}</div>
                                             @enderror
@@ -111,7 +115,7 @@ Thêm mới sản phẩm
                                     <div class="mb-4 row align-items-center">
                                         <label class="col-lg-2 col-md-3 col-form-label form-label-title">Mức giá tối thiểu áp dụng:</label>
                                         <div class="col-md-9 col-lg-10">
-                                            <input class="form-control @error('muc_gia_toi_thieu')  @enderror" type="number" name="muc_gia_toi_thieu" step="0.01" value="{{ old('muc_gia_toi_thieu') }}">
+                                            <input class="form-control @error('muc_gia_toi_thieu') is-invalid  @enderror" type="number" name="muc_gia_toi_thieu" step="0.01" value="{{ old('muc_gia_toi_thieu') }}">
                                             @error('muc_gia_toi_thieu')
                                             <div class="text-danger">{{ $message }}</div>
                                             @enderror
@@ -121,7 +125,7 @@ Thêm mới sản phẩm
                                     <div class="mb-4 row align-items-center">
                                         <label class="col-lg-2 col-md-3 col-form-label form-label-title">Mô tả</label>
                                         <div class="col-md-9 col-lg-10">
-                                            <input class="form-control @error('mo_ta')  @enderror" type="text" name="mo_ta"  value="{{ old('mo_ta') }}">
+                                            <input class="form-control @error('mo_ta') is-invalid  @enderror" type="text" name="mo_ta"  value="{{ old('mo_ta') }}">
                                             @error('mo_ta')
                                             <div class="text-danger">{{ $message }}</div>
                                             @enderror
@@ -163,7 +167,7 @@ Thêm mới sản phẩm
 
 @section('js')
 
-<script>
+{{-- <script>
     document.addEventListener("DOMContentLoaded", function() {
         document.querySelector("form").addEventListener("submit", function(event) {
             let isValid = true;
@@ -215,7 +219,7 @@ Thêm mới sản phẩm
             }
         });
     });
-</script>
+</script> --}}
 
 
 <!-- customizer js -->
