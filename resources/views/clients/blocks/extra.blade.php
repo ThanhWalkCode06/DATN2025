@@ -306,6 +306,10 @@ button:focus {
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
+                 <!-- Thông báo lỗi -->
+                 <div id="chat-error" class="alert alert-danger d-none" role="alert">
+                    {{-- Vui lòng gửi tin nhắn hoặc hình ảnh/video không quá 20MB. --}}
+                </div>
                 <div id="chat-box" class="chat-box" style="height: 400px; overflow-y: auto; padding: 15px; background-color: #f9f9f9; border-radius: 8px;">
                     <!-- Chat messages will be inserted here -->
                 </div>

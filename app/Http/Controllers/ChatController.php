@@ -47,6 +47,9 @@ class ChatController extends Controller
 
     public function sendChat(Request $request)
 {
+
+   
+
     $nguoiGui = User::find($request->input('nguoi_gui_id'));
     $nguoiNhan = User::find($request->input('nguoi_nhan_id'));
 
