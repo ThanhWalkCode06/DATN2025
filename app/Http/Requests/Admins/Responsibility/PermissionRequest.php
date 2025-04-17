@@ -27,7 +27,7 @@ class PermissionRequest extends FormRequest
                 'required',
             ],
             'name.*' => [
-                'required',
+                'required','max:255',
                 // 'regex:/^[^-]*-[^-]*$/',
                 Rule::unique('permissions', 'name')->WhereNull('deleted_at')->ignore($this->route('permissions'))
             ],
@@ -41,11 +41,15 @@ class PermissionRequest extends FormRequest
         return [
             'name.required' => 'Tên quyền không được để trống.',
             'name.*.required' => 'Tên quyền không được để trống.',
+
             'description.required' => 'Mô tả quyền không được để trống.',
             'description.*.required' => 'Mô tả quyền không được để trống.',
+            'description.*.required' => 'Mô tả quyền không được để trống.',
+            'description.*.max' => 'Mô tả tên quyền phải ít hơn 255 ký tự',
+
+            'name.*.max' => 'Tên quyền phải ít hơn 255 ký tự',
             'name.*.unique' => 'Tên quyền này đã tồn tại',
             'name.unique' => 'Tên quyền này đã tồn tại',
-            // 'name.*.regex' => 'Phải chứa dấu gạch (-) + chức năng và không được quá 1 dấu (-).',
         ];
     }
 }

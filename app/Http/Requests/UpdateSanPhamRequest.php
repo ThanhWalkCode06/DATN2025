@@ -69,6 +69,8 @@ class UpdateSanPhamRequest extends FormRequest
             'ma_san_pham.required' => 'Mã sản phẩm không được để trống.',
             'ma_san_pham.string' => 'Mã sản phẩm phải là chuỗi.',
             'ma_san_pham.unique' => 'Mã sản phẩm ' . $this->ma_san_pham . ' đã tồn tại.',
+            'ma_san_pham.max' => 'Mã sản phẩm không được vượt quá 255 ký tự.',
+
             'khuyen_mai.numeric' => 'Khuyến mãi phải là một số.',
             'khuyen_mai.min' => 'Khuyến mãi phải lớn hơn hoặc bằng 0.',
             'danh_muc_id.required' => 'Danh mục không được để trống.',
