@@ -166,6 +166,99 @@ class SanPhamController extends Controller
 
 
 
+    // public function chiTiet($id)
+    // {
+    //     $sanPham = SanPham::with([
+    //         'bienThes',
+    //         'anhSP',
+    //         'danhGias',
+    //         'bienThes.giaTriThuocTinhs',
+    //         'bienThes.thuocTinh',
+    //         'danhGias.nguoiDung',
+    //         'danhMuc'
+    //     ])
+    //         ->where('san_phams.id', $id)
+    //         ->where('san_phams.trang_thai', 1)
+    //         ->selectRaw('san_phams.*,
+    //             COALESCE(AVG(danh_gias.so_sao), 0) as avg_rating,
+    //             COUNT(danh_gias.id) as total_reviews')
+    //         ->leftJoin('danh_gias', 'san_phams.id', '=', 'danh_gias.san_pham_id')
+    //         ->groupBy(
+    //             'san_phams.id',
+    //             'san_phams.ten_san_pham',
+    //             'san_phams.ma_san_pham',
+    //             'san_phams.san_pham_slug',
+    //             'san_phams.gia_cu',
+    //             'san_phams.khuyen_mai',
+    //             'san_phams.hinh_anh',
+    //             'san_phams.mo_ta',
+    //             'san_phams.danh_muc_id',
+    //             'san_phams.trang_thai',
+    //             'san_phams.created_at',
+    //             'san_phams.updated_at',
+    //             'san_phams.deleted_at',
+    //         )
+    //         ->firstOrFail();
+
+    //     // Tính phần trăm giảm giá
+    //     $phanTramGiamGia = ($sanPham->gia_cu > 0)
+    //         ? round((($sanPham->gia_cu - $sanPham->giaThapNhatCuaSP()) / $sanPham->gia_cu) * 100)
+    //         : 0;
+
+
+    //     // Lấy sản phẩm cùng danh mục (loại trừ sản phẩm hiện tại)
+    //     $sanPhamLienQuan = SanPham::where('danh_muc_id', $sanPham->danh_muc_id)
+    //         ->where('id', '!=', $sanPham->id) // Loại trừ sản phẩm hiện tại
+    //         ->where('trang_thai', 1) // Chỉ lấy sản phẩm đang hoạt động
+    //         ->limit(50)
+    //         ->get();
+
+
+
+    //     $bienThes = BienThe::where('san_pham_id', $id)->get();
+
+    //     $mauSac = $bienThes->groupBy(function ($bienThe) {
+    //         $thuocTinh = optional($bienThe->giaTriThuocTinhs)
+    //             ->where('thuocTinh.ten_thuoc_tinh', 'Color')->first();
+    //         return $thuocTinh ? $thuocTinh->gia_tri : 'Không xác định';
+    //     })->map(function ($items) {
+    //         $thuocTinh = optional($items->first()->giaTriThuocTinhs)
+    //             ->where('thuocTinh.ten_thuoc_tinh', 'Color')->first();
+
+    //         return [
+    //             'gia_tri' => $thuocTinh ? $thuocTinh->gia_tri : 'Không xác định',
+    //             'anh' => Storage::url(optional($items->first())->anh_bien_the ?? 'default.png'), // Ảnh mặc định của màu
+    //             'bien_thes' => $items->map(function ($bienThe) {
+    //                 $thuocTinhSize = optional($bienThe->giaTriThuocTinhs
+    //                     ->where('thuocTinh.ten_thuoc_tinh', 'Size')->first());
+    //                 return [
+    //                     'id' => $bienThe->id,
+    //                     'gia_tri' => $thuocTinhSize ? $thuocTinhSize->gia_tri : 'Không xác định',
+    //                     'gia_ban' => $bienThe->gia_ban,
+    //                     'so_luong' => $bienThe->so_luong,
+    //                     'anh' => Storage::url($bienThe->anh_bien_the ?? 'default.png') // Ảnh riêng của biến thể (màu + size)
+    //                 ];
+    //             })->unique('gia_tri')->values()
+    //         ];
+    //     })->values();
+
+    //     // dd($mauSac);
+
+
+    //     // Chuyển dữ liệu sang JSON để sử dụng trên giao diện
+    //     $mauSacJson = json_encode($mauSac);
+
+    //     return view('clients.sanphams.chitiet', [
+    //         'sanPhams' => $sanPham,
+    //         'bienThes' => $sanPham->bienThes,
+    //         'anhSPs' => $sanPham->anhSP,
+    //         'phanTramGiamGia' => $phanTramGiamGia,
+    //         'sanPhamLienQuan' => $sanPhamLienQuan,
+    //         'mauSac' => $mauSac,
+    //         'mauSacJson' => $mauSacJson
+    //     ]);
+    // }
+
     public function chiTiet($id)
     {
         $sanPham = SanPham::with([
@@ -199,24 +292,21 @@ class SanPhamController extends Controller
                 'san_phams.deleted_at',
             )
             ->firstOrFail();
-
+    
         // Tính phần trăm giảm giá
         $phanTramGiamGia = ($sanPham->gia_cu > 0)
             ? round((($sanPham->gia_cu - $sanPham->giaThapNhatCuaSP()) / $sanPham->gia_cu) * 100)
             : 0;
-
-
-        // Lấy sản phẩm cùng danh mục (loại trừ sản phẩm hiện tại)
+    
+        // Lấy sản phẩm liên quan
         $sanPhamLienQuan = SanPham::where('danh_muc_id', $sanPham->danh_muc_id)
-            ->where('id', '!=', $sanPham->id) // Loại trừ sản phẩm hiện tại
-            ->where('trang_thai', 1) // Chỉ lấy sản phẩm đang hoạt động
+            ->where('id', '!=', $sanPham->id)
+            ->where('trang_thai', 1)
             ->limit(50)
             ->get();
-
-
-
+    
         $bienThes = BienThe::where('san_pham_id', $id)->get();
-
+    
         $mauSac = $bienThes->groupBy(function ($bienThe) {
             $thuocTinh = optional($bienThe->giaTriThuocTinhs)
                 ->where('thuocTinh.ten_thuoc_tinh', 'Color')->first();
@@ -224,10 +314,10 @@ class SanPhamController extends Controller
         })->map(function ($items) {
             $thuocTinh = optional($items->first()->giaTriThuocTinhs)
                 ->where('thuocTinh.ten_thuoc_tinh', 'Color')->first();
-
+    
             return [
                 'gia_tri' => $thuocTinh ? $thuocTinh->gia_tri : 'Không xác định',
-                'anh' => Storage::url(optional($items->first())->anh_bien_the ?? 'default.png'), // Ảnh mặc định của màu
+                'anh' => Storage::url(optional($items->first())->anh_bien_the ?? 'default.png'),
                 'bien_thes' => $items->map(function ($bienThe) {
                     $thuocTinhSize = optional($bienThe->giaTriThuocTinhs
                         ->where('thuocTinh.ten_thuoc_tinh', 'Size')->first());
@@ -236,18 +326,18 @@ class SanPhamController extends Controller
                         'gia_tri' => $thuocTinhSize ? $thuocTinhSize->gia_tri : 'Không xác định',
                         'gia_ban' => $bienThe->gia_ban,
                         'so_luong' => $bienThe->so_luong,
-                        'anh' => Storage::url($bienThe->anh_bien_the ?? 'default.png') // Ảnh riêng của biến thể (màu + size)
+                        'anh' => Storage::url($bienThe->anh_bien_the ?? 'default.png')
                     ];
                 })->unique('gia_tri')->values()
             ];
         })->values();
-
-        // dd($mauSac);
-
-
-        // Chuyển dữ liệu sang JSON để sử dụng trên giao diện
+    
         $mauSacJson = json_encode($mauSac);
-
+    
+        // Kiểm tra quyền đánh giá
+        $danhGiaController = new DanhGiaClientsController();
+        $chophep_danhgia = $danhGiaController->kiemTraQuyenDanhGia($id);
+    
         return view('clients.sanphams.chitiet', [
             'sanPhams' => $sanPham,
             'bienThes' => $sanPham->bienThes,
@@ -255,11 +345,10 @@ class SanPhamController extends Controller
             'phanTramGiamGia' => $phanTramGiamGia,
             'sanPhamLienQuan' => $sanPhamLienQuan,
             'mauSac' => $mauSac,
-            'mauSacJson' => $mauSacJson
+            'mauSacJson' => $mauSacJson,
+            'chophep_danhgia' => $chophep_danhgia // Truyền biến vào view
         ]);
     }
-
-
 
 
 

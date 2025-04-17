@@ -756,10 +756,11 @@
                                                                 <div class="review-title-2">
                                                                     <h4 class="fw-bold">Đánh giá sản phẩm này</h4>
                                                                     <p>Hãy cho chúng tôi biết đánh giá của bạn</p>
-                                                                    <button class="btn" type="button"
-                                                                        data-bs-toggle="modal"
-                                                                        data-bs-target="#writereview">Viết đánh
-                                                                        giá</button>
+                                                                    @if($chophep_danhgia)
+                                                                        <button class="btn" type="button" data-bs-toggle="modal" data-bs-target="#writereview">Viết đánh giá</button>
+                                                                    @else
+                                                                        <p style="background-color: #fff3cd; color: #dc3545; padding: 10px; border-radius: 5px;">Vui lòng mua sản phẩm để đánh giá</p>
+                                                                    @endif
                                                                 </div>
                                                             </div>
 
@@ -1496,50 +1497,4 @@
         </script>
     @endif
 
-
-    {{-- <script>
-    function loadDanhGias() {
-        let sanPhamId = document.getElementById("san_pham_id").value;
-
-        fetch(`/san-pham/${sanPhamId}/danh-gia`)
-            .then(response => response.json())
-            .then(data => {
-                let danhGiaHtml = "";
-                data.forEach(danhGia => {
-                    danhGiaHtml +=
-                        `<p><strong>${danhGia.nguoi_dung.ten_nguoi_dung}</strong> (${danhGia.so_sao}⭐): ${danhGia.nhan_xet}</p>`;
-                });
-                document.getElementById("danhGias").innerHTML = danhGiaHtml;
-            });
-    }
-</script> --}}
-
-    {{-- <script>
-    function themDanhGia() {
-        let sanPhamId = document.getElementById("san_pham_id").value;
-        let soSao = document.getElementById("so_sao").value;
-        let nhanXet = document.getElementById("nhan_xet").value;
-
-        fetch(`/san-pham/${sanPhamId}/danh-gia`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content")
-                },
-                body: JSON.stringify({
-                    so_sao: soSao,
-                    nhan_xet: nhanXet
-                })
-            })
-            .then(response => response.json())
-            .then(() => {
-                var myModal = bootstrap.Modal.getInstance(document.getElementById('writereview'));
-                myModal.hide();
-
-                document.getElementById("nhan_xet").value = "";
-
-                loadDanhGias();
-            });
-    }
-</script> --}}
 @endsection
