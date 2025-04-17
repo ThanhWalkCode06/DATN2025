@@ -39,7 +39,7 @@
                         <i class="ri-search-line"></i>
                     </span>
                 </li>
-                <li class="onhover-dropdown">
+                {{-- <li class="onhover-dropdown">
                     <div class="notification-box">
                         <i class="ri-notification-line"></i>
                         <span class="badge rounded-pill badge-theme">4</span>
@@ -77,7 +77,7 @@
                             <a class="btn btn-primary" href="javascript:void(0)">Xem toàn bộ</a>
                         </li>
                     </ul>
-                </li>
+                </li> --}}
 
                 <li>
                     <div class="mode">
