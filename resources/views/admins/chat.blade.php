@@ -26,9 +26,7 @@
 
     <!-- App css -->
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css') }}">
-    <style>
-        
-    </style>
+
 @endsection
 
 @section('content')
@@ -47,12 +45,15 @@
                     <div class="card-body" id="chat-box" style="height: 400px; overflow-y: auto; background: #f9f9f9;">
                     </div>
                     <div class="card-footer">
+                        <!-- Thêm thông báo lỗi ở đây -->
+                        <div id="error-message" class="alert alert-danger mt-3" style="display: none;"></div>
                         <form id="chat-form" enctype="multipart/form-data">
                             <input type="hidden" id="receiver_id">
                             <div class="input-group">
                                 <input type="text" id="noi-dung" class="form-control" placeholder="Nhập tin nhắn..."
                                     autocomplete="off">
-                                    <input type="file" id="image" accept="image/*,video/*" class="form-control" style="max-width: 180px;">
+                                <input type="file" id="image" accept="image/*,video/*" class="form-control"
+                                    style="max-width: 180px;">
 
                                 <button type="submit" class="btn btn-primary">Gửi</button>
                             </div>
@@ -131,12 +132,12 @@
                 // Kiểm tra nếu là video
                 else if (['mp4', 'webm', 'ogg'].includes(extension)) {
                     content += `
-                <div>
-                    <video controls style="max-width: 300px; border-radius: 8px; margin-top: 5px;">
-                        <source src="${fileUrl}" type="video/${extension}">
-                        Trình duyệt không hỗ trợ video.
-                    </video>
-                </div>`;
+                                                <div>
+                                                    <video controls style="max-width: 300px; border-radius: 8px; margin-top: 5px;">
+                                                        <source src="${fileUrl}" type="video/${extension}">
+                                                        Trình duyệt không hỗ trợ video.
+                                                    </video>
+                                                </div>`;
                 }
             }
 
@@ -159,6 +160,32 @@
             if (imageInput.files.length > 0) {
                 formData.append('media', imageInput.files[0]); // Sửa lại đúng tên
             }
+
+            let file = imageInput.files.length > 0 ? imageInput.files[0] : null;
+
+            let noiDung = document.getElementById("noi-dung").value.trim();
+            // Nếu không có nội dung và không có file, không gửi
+            if (!noiDung && !file) {
+                document.getElementById("error-message").style.display = "block";
+                document.getElementById("error-message").innerHTML = "Vui lòng gửi tin nhắn hoặc hình ảnh/video!";
+                return;
+            }
+
+
+            // Kiểm tra nếu file là video và dung lượng vượt quá 20MB
+            if (file && file.type.startsWith("video/") && file.size > 20 * 1024 * 1024) {
+                // Nếu dung lượng video vượt quá 20MB, hiển thị thông báo lỗi
+                document.getElementById("error-message").style.display = "block";
+                document.getElementById("error-message").innerHTML = "Video không được vượt quá 20MB!";
+                return;
+            }
+
+
+
+
+            // Ẩn thông báo lỗi nếu dung lượng video hợp lệ
+            document.getElementById("error-message").style.display = "none";
+
 
 
             fetch('/send-chat', {

@@ -360,9 +360,22 @@
             const file = fileInput.files[0];
             const noiDung = noiDungInput.value.trim();
 
-            // Nếu không có nội dung và không có file, không gửi
-            if (!noiDung && !file) return;
+               // Nếu không có nội dung và không có file, không gửi
+            if (!noiDung && !file) {
+            document.getElementById("chat-error").classList.remove("d-none");
+            document.getElementById("chat-error").innerText = "Vui lòng gửi tin nhắn hoặc hình ảnh/video!";
+            return;
+        }
+            // Kiểm tra dung lượng video (20MB)
+        if (file && file.type.startsWith("video/") && file.size > 20 * 1024 * 1024) {
+            document.getElementById("chat-error").classList.remove("d-none");
+            document.getElementById("chat-error").innerText = "Video không được vượt quá 20MB!";
+            return;
+        }
 
+
+          // Nếu không có lỗi, ẩn thông báo lỗi
+          document.getElementById("chat-error").classList.add("d-none");
             // Tạo form data để gửi
             const formData = new FormData();
             formData.append("nguoi_gui_id", userId);
