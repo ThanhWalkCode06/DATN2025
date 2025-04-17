@@ -18,11 +18,12 @@ class ChatController extends Controller
     public function getChatUsers()
     {
         $user_id = Auth::user()->id;
-        $users = Chat::select('users.id', 'users.ten_nguoi_dung')
+        $users = Chat::select('users.id', 'users.username')
             ->where('nguoi_nhan_id', '=', $user_id)
             ->join('users', 'nguoi_gui_id', '=', 'users.id')
             ->distinct()
             ->get();
+            
 
         return response()->json($users);
     }
@@ -79,8 +80,8 @@ class ChatController extends Controller
     $chat = Chat::create([
         'nguoi_gui_id' => $nguoiGui->id,
         'nguoi_nhan_id' => $nguoiNhan->id,
-        'ten_nguoi_gui' => $nguoiGui->ten_nguoi_dung,
-        'ten_nguoi_nhan' => $nguoiNhan->ten_nguoi_dung,
+        'ten_nguoi_gui' => $nguoiGui->username,
+        'ten_nguoi_nhan' => $nguoiNhan->username,
         'noi_dung' => $request->noi_dung ?? '',
         'hinh_anh' => $hinhAnh,
         'channel' => $request->input('channel'),

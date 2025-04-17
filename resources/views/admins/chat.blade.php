@@ -89,10 +89,10 @@
                 users.forEach(user => {
                     let li = document.createElement("li");
                     li.classList.add("list-group-item", "user-item");
-                    li.innerText = user.ten_nguoi_dung;
+                    li.innerText = user.username;
                     li.dataset.id = user.id;
 
-                    li.addEventListener("click", () => loadChat(user.id, user.ten_nguoi_dung));
+                    li.addEventListener("click", () => loadChat(user.id, user.username));
                     userList.appendChild(li);
                 });
             });
