@@ -13,8 +13,10 @@
                     <th>
                         @if ($donHang->trang_thai_thanh_toan == 0)
                             <span class="order-danger">Chưa thanh toán</span>
-                        @else
+                        @elseif ($donHang->trang_thai_thanh_toan == 1)
                             <span class="order-success">Đã thanh toán</span>
+                        @else
+                            <span class="order-success">Đã hoàn tiền</span>
                         @endif
                     </th>
                     <th>

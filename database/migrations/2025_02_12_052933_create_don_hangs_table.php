@@ -24,7 +24,7 @@ return new class extends Migration
             $table->text('ly_do')->nullable();
             $table->unsignedBigInteger('phuong_thuc_thanh_toan_id');
             $table->tinyInteger('trang_thai_don_hang')->default(0);
-            $table->boolean('trang_thai_thanh_toan')->default(0);
+            $table->tinyInteger('trang_thai_thanh_toan')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });
