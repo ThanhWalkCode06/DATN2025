@@ -456,8 +456,8 @@
             <div class="container-fluid-lg">
                 <div class="row">
                     <div class="col-12">
-                        <div class="table-responsive table-product">
-                            <table class="table all-package theme-table">
+                        <div class="table-responsive">
+                            <table class="table order-tab-table align-middle">
                                 <thead>
                                     <tr>
                                         <th>STT</th>
@@ -470,13 +470,12 @@
                                         @endif
                                     </tr>
                                 </thead>
-
                                 <tbody>
                                     @foreach ($bienThesList as $index => $item)
                                         <tr>
                                             <td>{{ $index + 1 }}</td>
                                             <td>
-                                                <img style="width: 100px; height: 100px"
+                                                <img style="width: 100px;"
                                                     src="{{ Storage::url($item['anh_bien_the']) }}" alt="">
                                             </td>
                                             <td>
@@ -489,9 +488,8 @@
                                             <td>{{ $item['so_luong'] }}</td>
                                             @if ($statusChart == 4)
                                                 <td>
-                                                    <a style="width:100px;height:30px"
-                                                        href="{{ route('sanphams.chitiet', $item['id_san_pham']) }}"
-                                                        style="border: none" class="btn-primary btn-sm">
+                                                    <a href="{{ route('sanphams.chitiet', $item['id_san_pham']) }}"
+                                                        class="btn-primary btn-sm">
                                                         Đánh giá sản phẩm
                                                     </a>
                                                 </td>
@@ -500,7 +498,6 @@
                                     @endforeach
                                 </tbody>
                             </table>
-                            {{ $bienThesPaginated->links('pagination::bootstrap-5') }}
                         </div>
                     </div>
                 </div>
