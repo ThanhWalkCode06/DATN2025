@@ -26,6 +26,9 @@
 
     <!-- App css -->
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css') }}">
+    <style>
+        
+    </style>
 @endsection
 
 @section('content')
@@ -49,8 +52,8 @@
                             <div class="input-group">
                                 <input type="text" id="noi-dung" class="form-control" placeholder="Nhập tin nhắn..."
                                     autocomplete="off">
-                                <input type="file" id="image" accept="image/*" class="form-control"
-                                    style="max-width: 180px;">
+                                    <input type="file" id="image" accept="image/*,video/*" class="form-control" style="max-width: 180px;">
+
                                 <button type="submit" class="btn btn-primary">Gửi</button>
                             </div>
                         </form>
@@ -116,9 +119,27 @@
             }
 
             if (chat.hinh_anh) {
-                let imageUrl = chat.hinh_anh; // ← Đây là fix quan trọng
-                content += `<div><img src="${imageUrl}" alt="Ảnh" style="max-width: 200px; border-radius: 8px; margin-top: 5px;"></div>`;
+                let fileUrl = chat.hinh_anh; // Đảm bảo đây là đường dẫn đến ảnh hoặc video
+
+                // Kiểm tra phần mở rộng file
+                const extension = fileUrl.split('.').pop().toLowerCase();
+
+                // Kiểm tra nếu là ảnh
+                if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(extension)) {
+                    content += `<div><img src="${fileUrl}" alt="Ảnh" style="max-width: 200px; border-radius: 8px; margin-top: 5px;"></div>`;
+                }
+                // Kiểm tra nếu là video
+                else if (['mp4', 'webm', 'ogg'].includes(extension)) {
+                    content += `
+                <div>
+                    <video controls style="max-width: 300px; border-radius: 8px; margin-top: 5px;">
+                        <source src="${fileUrl}" type="video/${extension}">
+                        Trình duyệt không hỗ trợ video.
+                    </video>
+                </div>`;
+                }
             }
+
 
             wrapper.innerHTML = content;
             chatBox.appendChild(wrapper);
