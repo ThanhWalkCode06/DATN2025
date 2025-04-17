@@ -34,7 +34,8 @@
     <link rel="stylesheet" href="{{ asset('assets/client/css/animate.min.css') }}">
 
     <!-- Iconly css -->
-    {{-- <link rel="stylesheet" type="text/css" href="{{ asset('assets/client/css/bulk-style.css') }}"> --}}
+    {{--
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/client/css/bulk-style.css') }}"> --}}
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/client/css/vendors/animate.css') }}">
 
     <!-- Template css -->
@@ -167,7 +168,7 @@
     @yield('js')
     @if (session('success'))
         <script>
-            document.addEventListener("DOMContentLoaded", function() {
+            document.addEventListener("DOMContentLoaded", function () {
                 Swal.fire({
                     title: "Thành công!",
                     text: "{{ session('success') }}",
@@ -179,7 +180,7 @@
     @endif
     @if (session('error'))
         <script>
-            document.addEventListener("DOMContentLoaded", function() {
+            document.addEventListener("DOMContentLoaded", function () {
                 Swal.fire({
                     title: "Thất bại",
                     text: "{{ session('error') }}",
@@ -190,84 +191,126 @@
         </script>
     @endif
 
-    @isset(Auth::user()->id)
-        <script>
-            document.addEventListener("DOMContentLoaded", function() {
-                var userId = {{ Auth::user()->id ?? 'null' }};
-                var nguoiNhanId = 1;
 
-                // Load tin nhắn
-                fetch(`/messages/${nguoiNhanId}`)
-                    .then(response => response.json())
-                    .then(messages => {
-                        var chatBox = document.getElementById("chat-box");
-                        chatBox.innerHTML = "";
-                        messages.forEach(chat => {
-                            var align = chat.nguoi_gui_id === userId ? "text-end" : "text-start";
+   @isset(Auth::user()->id)
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const userId = {{ Auth::user()->id ?? 'null' }}; // Lấy id người dùng
+        const nguoiNhanId = 1; // ID người nhận (ví dụ là 1, có thể thay đổi tùy theo hệ thống của bạn)
 
-                            let chatMessage = document.createElement("p");
-                            chatMessage.classList.add(align);
-                            chatMessage.innerHTML =
-                                `<strong>${chat.ten_nguoi_gui}:</strong> ${chat.noi_dung}`;
-
-                            chatBox.appendChild(chatMessage);
-                        });
-                        chatBox.scrollTop = chatBox.scrollHeight;
-                    })
-                    .catch(error => console.error("Lỗi khi tải tin nhắn:", error));
-
-                document.getElementById("chat-form").addEventListener("submit", function(e) {
-                    e.preventDefault();
-
-                    let noiDungInput = document.getElementById("noi_dung");
-                    let noiDung = noiDungInput.value.trim();
-                    if (!noiDung) return;
-
-                    fetch('/send-chat', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': "{{ csrf_token() }}"
-                            },
-                            body: JSON.stringify({
-                                nguoi_gui_id: userId,
-                                nguoi_nhan_id: nguoiNhanId,
-                                noi_dung: noiDung,
-                                channel: userId
-                            })
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            noiDungInput.value = ""; // Xóa input sau khi gửi
-                        })
-                        .catch(error => console.error("Lỗi:", error));
-                });
-
-                // Kết nối Pusher
-                Pusher.logToConsole = true;
-
-                var pusher = new Pusher("0ca5e8c271c25e1264d2", {
-                    cluster: "ap1"
-                });
-
-                var channel = pusher.subscribe("chat." + {{ Auth::user()->id }});
-
-                channel.bind("send-chat", function(data) {
-                    var chatBox = document.getElementById("chat-box");
-                    const chat = data.chat
-                    console.log(chat);
-
-                    var align = chat.nguoi_gui_id === userId ? "text-end" : "text-start";
+        // Load tin nhắn khi trang được tải
+        fetch(`/messages/${nguoiNhanId}`)
+            .then(response => response.json())
+            .then(messages => {
+                const chatBox = document.getElementById("chat-box");
+                chatBox.innerHTML = "";
+                messages.forEach(chat => {
+                    let align = chat.nguoi_gui_id === userId ? "text-end" : "text-start";
                     let chatMessage = document.createElement("p");
                     chatMessage.classList.add(align);
-                    chatMessage.innerHTML = `<strong>${chat.ten_nguoi_gui}:</strong> ${chat.noi_dung}`;
+                    chatMessage.innerHTML = `<strong>${chat.ten_nguoi_gui}:</strong> ${chat.noi_dung || ''}`;
+
+                    // Thêm ảnh/video nếu có
+                    if (chat.hinh_anh) {
+                        if (chat.hinh_anh.match(/\.(jpg|jpeg|png|gif)$/)) {
+                            chatMessage.innerHTML += `<br><img src="${chat.hinh_anh}" style="max-width: 100%; height: auto;">`;
+                        } else if (chat.hinh_anh.match(/\.(mp4|webm|ogg)$/)) {
+                            chatMessage.innerHTML += `
+                                <br><video controls style="max-width: 100%; height: auto;">
+                                    <source src="${chat.hinh_anh}">
+                                    Trình duyệt không hỗ trợ video.
+                                </video>`;
+                        }
+                    }
 
                     chatBox.appendChild(chatMessage);
-                    chatBox.scrollTop = chatBox.scrollHeight;
                 });
-            });
-        </script>
-    @endisset
+                chatBox.scrollTop = chatBox.scrollHeight; // Cuộn xuống tin nhắn mới nhất
+            })
+            .catch(error => console.error("Lỗi khi tải tin nhắn:", error));
+
+        // Gửi tin nhắn khi form được submit
+        document.getElementById("chat-form").addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            const noiDungInput = document.getElementById("noi_dung");
+            const fileInput = document.getElementById("media");
+            const file = fileInput.files[0];
+            const noiDung = noiDungInput.value.trim();
+
+            // Nếu không có nội dung và không có file, không gửi
+            if (!noiDung && !file) return;
+
+            // Tạo form data để gửi
+            const formData = new FormData();
+            formData.append("nguoi_gui_id", userId);
+            formData.append("nguoi_nhan_id", nguoiNhanId);
+            formData.append("channel", userId);
+
+            // Nếu có nội dung
+            if (noiDung) formData.append("noi_dung", noiDung);
+
+            // Nếu có file media (hình ảnh/video)
+            if (file) {
+                formData.append("media", file);
+            }
+
+            // Gửi yêu cầu tới server
+            fetch('/send-chat', {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                },
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    noiDungInput.value = "";
+                    fileInput.value = "";
+                })
+                .catch(error => console.error("Lỗi khi gửi tin nhắn:", error));
+        });
+
+        // Kết nối Pusher và nhận tin nhắn realtime
+        Pusher.logToConsole = true;
+
+        const pusher = new Pusher("0ca5e8c271c25e1264d2", {
+            cluster: "ap1"
+        });
+
+        const channel = pusher.subscribe("chat." + {{ Auth::user()->id }});
+
+        channel.bind("send-chat", function (data) {
+            const chatBox = document.getElementById("chat-box");
+            const chat = data.chat;
+            let align = chat.nguoi_gui_id === userId ? "text-end" : "text-start";
+
+            let chatMessage = document.createElement("p");
+            chatMessage.classList.add(align);
+            chatMessage.innerHTML = `<strong>${chat.ten_nguoi_gui}:</strong> ${chat.noi_dung || ''}`;
+
+            // Thêm ảnh/video nếu có
+            if (chat.hinh_anh) {
+                if (chat.hinh_anh.match(/\.(jpg|jpeg|png|gif)$/)) {
+                    chatMessage.innerHTML += `<br><img src="${chat.hinh_anh}" style="max-width: 100%; height: auto;">`;
+                } else if (chat.hinh_anh.match(/\.(mp4|webm|ogg)$/)) {
+                    chatMessage.innerHTML += `
+                        <br><video controls style="max-width: 100%; height: auto;">
+                            <source src="${chat.hinh_anh}">
+                            Trình duyệt không hỗ trợ video.
+                        </video>`;
+                }
+            }
+
+            chatBox.appendChild(chatMessage);
+            chatBox.scrollTop = chatBox.scrollHeight; // Cuộn xuống tin nhắn mới nhất
+        });
+    });
+</script>
+@endisset
+
+
+
 </body>
 <script>
     function Logout(ev) {
@@ -298,8 +341,8 @@
     }
 </script>
 <script>
-    $(document).ready(function() {
-        $(".notifi-wishlist").on("click", function(e) {
+    $(document).ready(function () {
+        $(".notifi-wishlist").on("click", function (e) {
             e.preventDefault(); // Ngăn chặn load lại trang
 
             var button = $(this); // Lưu nút đang bấm
@@ -310,7 +353,7 @@
                 url: form.attr("action"),
                 type: "POST",
                 data: formData,
-                success: function(response) {
+                success: function (response) {
                     $.notify({
                         icon: "fa fa-check",
                         title: "Sản phẩm đã được thêm vào danh sách yêu thích.",
@@ -335,7 +378,7 @@
                     // Đổi màu icon thành đỏ (đã yêu thích)
                     button.find("i").css("color", "red");
                 },
-                error: function(xhr) {
+                error: function (xhr) {
                     if (xhr.status === 401) {
                         Swal.fire({
                             icon: "error",
@@ -376,48 +419,49 @@
 
 </html>
 
-{{-- <script>
- $(".delete-cart-item").click(function () {
-    console.log('hi')
-    let itemId = $(this).data("id");
-    let button = $(this);
+{{--
+<script>
+    $(".delete-cart-item").click(function () {
+        console.log('hi')
+        let itemId = $(this).data("id");
+        let button = $(this);
 
-    $.ajax({
-        url: "/xoa-gio-hang",
-        method: "POST",
-        data: { id: itemId },
-        headers: {
-            "X-CSRF-TOKEN": $("meta[name='csrf-token']").attr("content")
-        },
-        success: function (response) {
-            console.log("Response từ server:", response);
+        $.ajax({
+            url: "/xoa-gio-hang",
+            method: "POST",
+            data: { id: itemId },
+            headers: {
+                "X-CSRF-TOKEN": $("meta[name='csrf-token']").attr("content")
+            },
+            success: function (response) {
+                console.log("Response từ server:", response);
 
-            // Xóa sản phẩm khỏi giao diện
-            button.closest("li.product-box-contain").remove();
+                // Xóa sản phẩm khỏi giao diện
+                button.closest("li.product-box-contain").remove();
 
-            // Tính lại tổng tiền
-            let total = 0;
-            let totalItem = response.totalItem;
-            $(".cart-list li").each(function () {
-                let text = $(this).find("h6").text();
-                let matches = text.match(/(\d+)\s*x\s*([\d\.]+)/);
+                // Tính lại tổng tiền
+                let total = 0;
+                let totalItem = response.totalItem;
+                $(".cart-list li").each(function () {
+                    let text = $(this).find("h6").text();
+                    let matches = text.match(/(\d+)\s*x\s*([\d\.]+)/);
 
-                if (matches) {
-                    let soLuong = parseInt(matches[1]);  // Số lượng
-                    let giaBan = parseInt(matches[2].replace(/\./g, "")); // Giá (loại bỏ dấu chấm)
+                    if (matches) {
+                        let soLuong = parseInt(matches[1]);  // Số lượng
+                        let giaBan = parseInt(matches[2].replace(/\./g, "")); // Giá (loại bỏ dấu chấm)
 
-                    total += soLuong * giaBan;
-                }
-            });
+                        total += soLuong * giaBan;
+                    }
+                });
 
-            $(".header-wishlist .badge").text(totalItem);
-            // Cập nhật tổng tiền
-            $(".total-price").text(total.toLocaleString("vi-VN") + " đ");
-        },
-        error: function (xhr) {
-            console.log("Lỗi:", xhr.responseText);
-        }
+                $(".header-wishlist .badge").text(totalItem);
+                // Cập nhật tổng tiền
+                $(".total-price").text(total.toLocaleString("vi-VN") + " đ");
+            },
+            error: function (xhr) {
+                console.log("Lỗi:", xhr.responseText);
+            }
+        });
     });
-});
 
 </script> --}}

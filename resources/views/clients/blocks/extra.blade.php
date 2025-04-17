@@ -233,13 +233,14 @@
             <div class="modal-body">
                 <div id="chat-box" style="height: 300px; overflow-y: auto; border: 1px solid #ddd; padding: 10px;">
                 </div>
-                <form id="chat-form">
+                <form id="chat-form" enctype="multipart/form-data">
                     <div class="input-group mt-3">
-                        <input type="text" id="noi_dung" name="noi_dung" class="form-control"
-                            placeholder="Nhập tin nhắn..." autocomplete="off" required>
+                        <input type="text" id="noi_dung" name="noi_dung" class="form-control" placeholder="Nhập tin nhắn..." autocomplete="off">
+                        <input type="file" id="media" name="media" accept="image/*,video/*" class="form-control">
                         <button class="btn btn-primary" type="submit">Gửi</button>
                     </div>
                 </form>
+                
             </div>
         </div>
     </div>

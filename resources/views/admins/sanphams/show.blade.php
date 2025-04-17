@@ -204,7 +204,7 @@
                                 
                                 <td>
                                     @if($danhGia->bienThe?->anh_bien_the)
-                                        <img src="{{ asset('storage/' . $danhGia->bienThe->anh_bien_the) }}" width="60" class="img-thumbnail">
+                                        <img src="{{ asset('storage/' . $danhGia->bienThe->anh_bien_the) }}" width="100" class="img-thumbnail">
                                     @endif
                                     <br>
                                     {{ $danhGia->bienThe->ten_bien_the ?? 'Không rõ biến thể' }}
