@@ -71,10 +71,8 @@
         }
 
         .notify-alert-custom {
-            background-color: #e74c3c !important;
-            /* nền đỏ */
+            background-color: #e74c3c !important; /* Màu đỏ cho ẩn bình luận */
             color: white !important;
-            /* chữ trắng */
             border: 1px solid #c0392b !important;
             border-radius: 6px;
             padding: 15px 20px;
@@ -82,19 +80,26 @@
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
         }
 
+        .notify-alert-custom.success {
+            background-color: #28a745 !important; /* Màu xanh lá cây cho hiển thị bình luận */
+            border: 1px solid #218838 !important; /* Viền xanh đậm hơn */
+        }
 
         .notify-alert-custom .title {
             font-weight: 600;
-            color: #c0392b;
+            color: #c0392b; /* Màu tiêu đề cho ẩn bình luận */
             font-size: 16px;
             margin-bottom: 5px;
+        }
+
+        .notify-alert-custom.success .title {
+            color: #218838; /* Màu tiêu đề xanh đậm cho hiển thị bình luận */
         }
 
         .notify-alert-custom .message {
             font-weight: 400;
         }
 
-        /* Animate entry/exit giống admin */
         .animated.fadeInDown {
             animation: fadeInDown 0.5s;
         }
@@ -201,49 +206,85 @@
 
     @yield('js')
     <script>
+        // Pusher.logToConsole = true; // Bật debug Pusher
+    
         var pusher = new Pusher("0ca5e8c271c25e1264d2", {
             cluster: "ap1",
             encrypted: true
         });
-
-        var userId = {{ Auth::id() }};
-        var channel = pusher.subscribe("comment-hidden-" + userId);
-
-        channel.bind("hide-comment", function(data) {
-    // Viết hoa chữ cái đầu tên sản phẩm (nếu có)
-    function capitalizeFirstLetter(string) {
-        return string.charAt(0).toUpperCase() + string.slice(1);
-    }
-
-    const productName = data.product_name ? capitalizeFirstLetter(data.product_name) : '';
-    const productText = productName ? `<strong>Sản phẩm: ${productName}</strong>` : '';
-    const reasonText = data.reasons ? `<br><strong>Lý do:</strong> ${data.reasons}` : '';
-
-    $.notify({
-        title: "<strong>Thông báo từ hệ thống:</strong><br>",
-        message: `Bình luận ở ${productText} của bạn đã bị ẩn bởi quản trị viên.${reasonText}`
-    }, {
-        element: "body",
-        type: "danger",
-        allow_dismiss: true,
-        placement: {
-            from: "top",
-            align: "right"
-        },
-        delay: 5000,
-        z_index: 9999,
-        animate: {
-            enter: "animated fadeInDown",
-            exit: "animated fadeOutUp"
-        },
-        template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert notify-alert-custom" role="alert">' +
-            '    <span data-notify="title">{1}</span>' +
-            '    <span data-notify="message">{2}</span>' +
-            '</div>'
-    });
-});
-
-
+    
+        var userId = {{ Auth::id() ?? 'null' }};
+        if (userId !== 'null') {
+            var channel = pusher.subscribe("comment-hidden-" + userId);
+    
+            // Hàm hỗ trợ viết hoa chữ cái đầu
+            function capitalizeFirstLetter(string) {
+                return string.charAt(0).toUpperCase() + string.slice(1);
+            }
+    
+            // Xử lý sự kiện hide-comment
+            channel.bind("hide-comment", function(data) {
+                console.log('Nhận sự kiện hide-comment:', data);
+                const productName = data.product_name ? capitalizeFirstLetter(data.product_name) : '';
+                const productText = productName ? `<strong>Sản phẩm: ${productName}</strong>` : '';
+                const reasonText = data.reasons ? `<br><strong>Lý do:</strong> ${data.reasons}` : '';
+    
+                $.notify({
+                    title: "<strong>Thông báo từ hệ thống:</strong><br>",
+                    message: `Bình luận ở ${productText} của bạn đã bị ẩn bởi quản trị viên.${reasonText}`
+                }, {
+                    element: "body",
+                    type: "danger",
+                    allow_dismiss: true,
+                    placement: {
+                        from: "top",
+                        align: "right"
+                    },
+                    delay: 5000,
+                    z_index: 9999,
+                    animate: {
+                        enter: "animated fadeInDown",
+                        exit: "animated fadeOutUp"
+                    },
+                    template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert notify-alert-custom" role="alert">' +
+                        '    <span data-notify="title">{1}</span>' +
+                        '    <span data-notify="message">{2}</span>' +
+                        '</div>'
+                });
+            });
+    
+            // Xử lý sự kiện show-comment
+            channel.bind("show-comment", function(data) {
+                console.log('Nhận sự kiện show-comment:', data);
+                const productName = data.product_name ? capitalizeFirstLetter(data.product_name) : '';
+                const productText = productName ? `<strong>Sản phẩm: ${productName}</strong>` : '';
+    
+                $.notify({
+                    title: "<strong>Thông báo từ hệ thống:</strong><br>",
+                    message: `Bình luận ở ${productText} của bạn đã được hiển thị lại bởi quản trị viên.`
+                }, {
+                    element: "body",
+                    type: "success",
+                    allow_dismiss: true,
+                    placement: {
+                        from: "top",
+                        align: "right"
+                    },
+                    delay: 5000,
+                    z_index: 9999,
+                    animate: {
+                        enter: "animated fadeInDown",
+                        exit: "animated fadeOutUp"
+                    },
+                    template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert notify-alert-custom success" role="alert">' +
+                        '    <span data-notify="title">{1}</span>' +
+                        '    <span data-notify="message">{2}</span>' +
+                        '</div>'
+                });
+            });
+        } else {
+            console.log('Người dùng chưa đăng nhập, không thể đăng ký kênh Pusher');
+        }
     </script>
 
     @if (session('success'))

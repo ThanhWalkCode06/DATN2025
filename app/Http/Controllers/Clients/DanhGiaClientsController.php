@@ -38,7 +38,41 @@ class DanhGiaClientsController extends Controller
 
         return response()->json($danhGias);
     }
-
+    
+    public function kiemTraQuyenDanhGia($san_pham_id)
+    {
+        if (!Auth::check()) {
+            return false; // Chưa đăng nhập, không được đánh giá
+        }
+    
+        $user = User::with(['donHangs.chiTietDonHangs'])->find(Auth::id());
+        if (!$user) {
+            return false; // Người dùng không tồn tại
+        }
+    
+        // Lấy danh sách biến thể của sản phẩm
+        $idBienThes = BienThe::where('san_pham_id', $san_pham_id)->pluck('id')->toArray();
+        if (empty($idBienThes)) {
+            return false; // Không có biến thể
+        }
+    
+        // Kiểm tra các biến thể đã mua
+        $bienTheDaMua = [];
+        foreach ($user->donHangs as $donHang) {
+            if ($donHang->trang_thai_don_hang >= 4) { // Đơn hàng đã hoàn thành hoặc giao hàng thành công
+                $bienTheTrongDon = $donHang->chiTietDonHangs
+                    ->whereIn('bien_the_id', $idBienThes)
+                    ->pluck('bien_the_id')
+                    ->unique();
+    
+                foreach ($bienTheTrongDon as $bienTheId) {
+                    $bienTheDaMua[$bienTheId] = ($bienTheDaMua[$bienTheId] ?? 0) + 1;
+                }
+            }
+        }
+    
+        return !empty($bienTheDaMua); // Trả về true nếu có ít nhất một biến thể đã mua
+    }
 
     public function themDanhGia(Request $request, $san_pham_id)
     {
