@@ -26,6 +26,17 @@
 
     <!-- App css -->
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css') }}">
+    {{-- <style>
+        /* Giảm khoảng cách giữa tin nhắn và thời gian */
+        .small-time {
+            font-size: 0.8em;
+            margin-top: -5px;
+            display: inline-block;
+            color: #888;
+        }
+
+        /* Nếu cần căn chỉnh thêm, bạn có thể thêm các thuộc tính khác */
+    </style> --}}
 
 @endsection
 
@@ -116,8 +127,10 @@
             let content = `<strong>${chat.nguoi_gui_id === nguoi_gui_id ? chat.ten_nguoi_gui : "Admin"}:</strong>`;
 
             if (chat.noi_dung) {
-                content += `<div>${chat.noi_dung}</div>`;
+                content += `${chat.noi_dung}`;
             }
+
+            content += `</span>`;
 
             if (chat.hinh_anh) {
                 let fileUrl = chat.hinh_anh; // Đảm bảo đây là đường dẫn đến ảnh hoặc video
@@ -126,21 +139,35 @@
                 const extension = fileUrl.split('.').pop().toLowerCase();
 
                 // Kiểm tra nếu là ảnh
-                if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(extension)) {
+                if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'jfif'].includes(extension)) {
                     content += `<div><img src="${fileUrl}" alt="Ảnh" style="max-width: 200px; border-radius: 8px; margin-top: 5px;"></div>`;
                 }
                 // Kiểm tra nếu là video
                 else if (['mp4', 'webm', 'ogg'].includes(extension)) {
                     content += `
-                                                <div>
-                                                    <video controls style="max-width: 300px; border-radius: 8px; margin-top: 5px;">
-                                                        <source src="${fileUrl}" type="video/${extension}">
-                                                        Trình duyệt không hỗ trợ video.
-                                                    </video>
-                                                </div>`;
+                                        <div>
+                                            <video controls style="max-width: 300px; border-radius: 8px; margin-top: 5px;">
+                                                <source src="${fileUrl}" type="video/${extension}">
+                                                Trình duyệt không hỗ trợ video.
+                                            </video>
+                                        </div>`;
                 }
             }
 
+
+            // Thêm thời gian gửi tin nhắn
+            const timeSent = new Date(chat.created_at);
+            const timeString = timeSent.toLocaleString('vi-VN', {
+                weekday: 'short',
+                year: 'numeric',
+                month: 'numeric',
+                day: 'numeric',
+                hour: 'numeric',
+                minute: 'numeric',
+            });
+         
+             // Chỉnh sửa để thời gian và tin nhắn nằm gần nhau
+    content += `<div><small class="text-muted" style="font-size: 0.8em; margin-top: 5px;">${timeString}</small></div>`;
 
             wrapper.innerHTML = content;
             chatBox.appendChild(wrapper);
@@ -171,7 +198,19 @@
                 return;
             }
 
+            // Kiểm tra nếu file không đúng định dạng
+            if (file) {
+                const validImageTypes = ['image/jpg', 'image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/jfif'];
+                const validVideoTypes = ['video/mp4', 'video/webm', 'video/ogg'];
 
+                // Kiểm tra xem file có phải là hình ảnh hoặc video hợp lệ không
+                if (!validImageTypes.includes(file.type) && !validVideoTypes.includes(file.type)) {
+                    document.getElementById("error-message").style.display = "block";
+                    document.getElementById("error-message").innerHTML = "Định dạng file không hợp lệ! Chỉ hỗ trợ hình ảnh (JPG, JPEG, PNG, GIF, WEBP) và video (MP4, WEBM, OGG).";
+                    return;
+                }
+
+            }
             // Kiểm tra nếu file là video và dung lượng vượt quá 20MB
             if (file && file.type.startsWith("video/") && file.size > 20 * 1024 * 1024) {
                 // Nếu dung lượng video vượt quá 20MB, hiển thị thông báo lỗi
@@ -225,7 +264,7 @@
                 let content = `<strong>${chat.ten_nguoi_gui}:</strong>`;
 
                 if (chat.noi_dung) {
-                    content += `<div>${chat.noi_dung}</div>`;
+                    content += `${chat.noi_dung}`;
                 }
 
                 if (chat.hinh_anh) {
@@ -236,6 +275,18 @@
                         content += `<div><img src="${chat.hinh_anh}" alt="Ảnh" style="max-width: 200px; border-radius: 8px; margin-top: 5px;"></div>`;
                     }
                 }
+
+                // Thêm thời gian gửi tin nhắn
+                const timeSent = new Date(chat.created_at);
+                const timeString = timeSent.toLocaleString('vi-VN', {
+                    weekday: 'short',
+                    year: 'numeric',
+                    month: 'numeric',
+                    day: 'numeric',
+                    hour: 'numeric',
+                    minute: 'numeric',
+                });
+                 content += `<div><small class="text-muted" style="font-size: 0.8em; margin-top: 5px;">${timeString}</small></div>`;
 
 
                 wrapper.innerHTML = content;

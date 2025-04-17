@@ -90,7 +90,12 @@ class ChatController extends Controller
     // Phát sự kiện chat cho các client khác
     broadcast(new ChatEvent($chat))->toOthers();
 
-    return response()->json(['message' => 'Gửi tin nhắn thành công!', 'chat' => $chat]);
+    // return response()->json(['message' => 'Gửi tin nhắn thành công!', 'chat' => $chat]);
+      // Trả về tin nhắn và thời gian gửi
+    return response()->json([
+        'chat' => $chat,
+        'created_at' => $chat->created_at->toDateTimeString(),
+    ]);
 }
 
     
