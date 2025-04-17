@@ -216,6 +216,7 @@ class UserController extends Controller
                     // Cập nhật trạng thái đơn hàng
                     $donHang->update([
                         "trang_thai_don_hang" => $request->trang_thai,
+                        "trang_thai_thanh_toan" => 2,
                         "ly_do" => $request->ly_do,
                     ]);
 
