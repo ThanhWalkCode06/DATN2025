@@ -955,17 +955,14 @@
                 @endif
                 <div class="modal-body pt-0">
                     <form id="reviewForm" method="POST"
-                        action="{{ route('sanphams.themdanhgia', ['san_pham_id' => $sanPhams->id]) }}">
+                          action="{{ route('sanphams.themdanhgia', ['san_pham_id' => $sanPhams->id]) }}">
                         @csrf
                         <input type="hidden" name="san_pham_id" id="san_pham_id" value="{{ $sanPhams->id }}">
                         <input type="hidden" name="so_sao" id="so_sao" value="5">
-
-                        {{-- Nếu có nhiều biến thể đã mua, bắt chọn --}}
-                        @php
-                            $bienTheDaMua = session('bienTheDaMua_' . $sanPhams->id);
-                        @endphp
-
-                        @if ($bienTheDaMua && count($bienTheDaMua) > 0)
+    
+                        {{-- Nếu có biến thể đã mua, hiển thị danh sách để chọn --}}
+                        @if ($chophep_danhgia && !empty($bienTheDaMua))
+                        @if (count($bienTheDaMua) > 1)
                             <div class="review-box mt-3">
                                 <label for="bien_the_id" class="form-label">Chọn biến thể đã mua *</label>
                                 <select name="bien_the_id" id="bien_the_id" class="form-select" required>
@@ -980,29 +977,28 @@
                                 </select>
                             </div>
                         @else
-                            <p>Không có biến thể đã mua để đánh giá.</p>
+                            <input type="hidden" name="bien_the_id" value="{{ array_key_first($bienTheDaMua) }}">
                         @endif
-
-
-
+                    @else
+                        <p style="background-color: #fff3cd; color: #dc3545; padding: 10px; border-radius: 5px;">Vui lòng mua sản phẩm để đánh giá.</p>
+                    @endif
+    
                         <div class="product-wrapper">
                             <div class="product-image">
                                 <img src="{{ Storage::url($sanPhams->hinh_anh) }}" class="img-fluid rounded shadow-sm"
-                                    style="width:100%; height:100%;" alt="{{ $sanPhams->ten_san_pham }}">
+                                     style="width:100%; height:100%;" alt="{{ $sanPhams->ten_san_pham }}">
                             </div>
                             <div class="product-content">
                                 <h5 class="name">{{ $sanPhams->ten_san_pham }}</h5>
                                 <div class="product-review-rating">
                                     <div class="product-rating">
-                                        <span
-                                            class="theme-color">{{ number_format($sanPhams->giaThapNhatCuaSP(), 0, ',', '.') }}
-                                            ₫</span>
+                                        <span class="theme-color">{{ number_format($sanPhams->giaThapNhatCuaSP(), 0, ',', '.') }} ₫</span>
                                         <del>{{ number_format($sanPhams->gia_cu, 0, ',', '.') }} ₫</del>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
+    
                         <div class="review-box">
                             <label>Đánh giá của bạn *</label>
                             <div class="rating" id="ratingStars">
@@ -1013,21 +1009,20 @@
                                 <i class="fa fa-star" data-value="5"></i>
                             </div>
                         </div>
-
+    
                         <div class="review-box">
                             <label for="nhan_xet" class="form-label">Nhận xét của bạn *</label>
                             <textarea id="nhan_xet" name="nhan_xet" rows="3" class="form-control"
-                                placeholder="Viết nhận xét của bạn..."></textarea>
+                                      placeholder="Viết nhận xét của bạn..."></textarea>
                         </div>
-
+    
                         <div class="modal-footer">
                             <button type="button" class="btn btn-md btn-theme-outline fw-bold"
-                                data-bs-dismiss="modal">Đóng</button>
+                                    data-bs-dismiss="modal">Đóng</button>
                             <button type="submit" class="btn btn-md fw-bold text-light theme-bg-color">Gửi</button>
                         </div>
                     </form>
                 </div>
-
             </div>
         </div>
     </div>
