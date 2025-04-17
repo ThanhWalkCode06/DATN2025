@@ -71,24 +71,22 @@ class AppServiceProvider extends ServiceProvider
             $view->with(compact('topOrderProducts'));
         });
 
-
-
-        View::composer('*', function ($view) {
-            $userId = Auth::user();
-            $phieuGiamGiaThanhToans = collect();
-            if($userId){
-                $phieuGiamGiaThanhToans = PhieuGiamGia::where('trang_thai', 1)
-                ->where(function ($query) use ($userId) {
-                    $query->where(function ($q) {
-                        $q->where('ngay_bat_dau', '<=', now())
-                            ->where('ngay_ket_thuc', '>=', now())
-                            ->where('ma_phieu', 'not like', 'BIRTHDAY%'); // Loại trừ phiếu sinh nhật
-                    })->orWhere('ma_phieu', 'like', "BIRTHDAY" . Str::upper($userId->username) . "%");
-                })
-                ->get();
-            }
-            $view->with('phieuGiamGiaThanhToans', $phieuGiamGiaThanhToans);
-        });
+            View::composer('*', function ($view) {
+                $userId = Auth::user();
+                $phieuGiamGiaThanhToans = collect();
+                if($userId){
+                    $phieuGiamGiaThanhToans = PhieuGiamGia::where('trang_thai', 1)
+                    ->where(function ($query) use ($userId) {
+                        $query->where(function ($q) {
+                            $q->where('ngay_bat_dau', '<=', now())
+                                ->where('ngay_ket_thuc', '>=', now())
+                                ->where('ma_phieu', 'not like', 'BIRTHDAY%'); // Loại trừ phiếu sinh nhật
+                        })->orWhere('ma_phieu', 'like', "BIRTHDAY" . Str::upper($userId->username) . "%");
+                    })
+                    ->get();
+                }
+                $view->with('phieuGiamGiaThanhToans', $phieuGiamGiaThanhToans);
+            });
 
             View::composer('*', function ($view) {
                 $user = Auth::user();

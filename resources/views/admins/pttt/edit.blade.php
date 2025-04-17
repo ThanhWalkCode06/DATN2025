@@ -88,7 +88,7 @@
 
                                     </div>
                                     <div class="mt-5 d-flex justify-content-between">
-                                        <button class="btn btn-primary" type="submit">Update</button>
+                                        <button class="btn btn-primary" type="submit">Cập nhật</button>
                                     </div>
                                 </form>
 

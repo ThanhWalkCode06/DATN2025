@@ -24,7 +24,7 @@ class RoleRequest extends FormRequest
     {
         return [
             'name' => [
-                'required',
+                'required','max:255',
                 Rule::unique('roles', 'name')->whereNull('deleted_at')->ignore($this->route('roles'))
             ],
 
@@ -36,6 +36,7 @@ class RoleRequest extends FormRequest
         return [
             'name.required' => 'Tên vai trò không được để trống.',
             'name.unique' => 'Tên vai trò này đã tồn tại',
+            'name.max' => 'Tên vai trò chỉ được 255 ký tự',
         ];
     }
 }

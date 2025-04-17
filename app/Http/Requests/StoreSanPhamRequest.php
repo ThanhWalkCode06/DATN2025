@@ -27,7 +27,7 @@ class StoreSanPhamRequest extends FormRequest
         'anh_bien_the' => 'nullable|array',
         'anh_bien_the.*' => 'nullable|image',
         'ten_san_pham' => 'required|string|max:255',
-        'ma_san_pham' => 'required|string|unique:san_phams,ma_san_pham',
+        'ma_san_pham' => 'required|string|max:255|unique:san_phams,ma_san_pham',
 
         'gia_cu' => ['required', 'numeric','min:1'],
         'mo_ta' => 'nullable|string',
@@ -67,8 +67,12 @@ class StoreSanPhamRequest extends FormRequest
     {
         return [
             'ten_san_pham.required' => 'Tên sản phẩm không được để trống.',
+            'ten_san_pham.max' => 'Tên sản phẩm chỉ được giới hạn 255 ký tự.',
+
             'ma_san_pham.required' => 'Mã sản phẩm không được để trống.',
             'ma_san_pham.unique' => 'Mã sản phẩm đã tồn tại.',
+            'ma_san_pham.max' => 'Mã sản phẩm chỉ được giới hạn 255 ký tự.',
+
             'danh_muc_id.required' => 'Danh mục sản phẩm không được để trống.',
             'danh_muc_id.exists' => 'Danh mục sản phẩm không hợp lệ.',
             'trang_thai.boolean' => 'Trạng thái phải là còn hàng hoặc hết hàng.',

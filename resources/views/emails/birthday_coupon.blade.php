@@ -4,7 +4,6 @@
     <title>Chúc mừng sinh nhật!</title>
 </head>
 <body>
-    <h1>Chúc mừng sinh nhật, {{ $user->username }}!</h1>
     <p>Để cảm ơn bạn, chúng tôi tặng bạn mã giảm giá đặc biệt:</p>
     <h2>{{ $coupon->code }}</h2>
     <p>Giảm: {{ $coupon->gia_tri }}%</p>
