@@ -50,7 +50,7 @@ class AppServiceProvider extends ServiceProvider
         });
         View::composer('clients.blocks.footer', function ($view) {
             $user = Auth::user();
-            $baivietSupport = BaiViet::orderBy('id','asc')->limit(2)->get();
+            $baivietSupport = BaiViet::orderBy('id', 'asc')->limit(2)->get();
 
             // dd($total); // Debug để kiểm tra tổng
             $view->with(compact('baivietSupport'));
@@ -60,22 +60,22 @@ class AppServiceProvider extends ServiceProvider
                 'bien_thes.san_pham_id',
                 DB::raw('SUM(chi_tiet_don_hangs.so_luong) as total_quantity')
             )
-            ->join('bien_thes', 'chi_tiet_don_hangs.bien_the_id', '=', 'bien_thes.id')
-            ->whereDate('chi_tiet_don_hangs.created_at', Carbon::today()) // Chỉ lấy đơn hàng hôm nay
-            ->groupBy('bien_thes.san_pham_id')
-            ->orderByDesc('total_quantity')
-            ->take(4)
-            ->with('bienThe.sanPham')
-            ->get();
+                ->join('bien_thes', 'chi_tiet_don_hangs.bien_the_id', '=', 'bien_thes.id')
+                ->whereDate('chi_tiet_don_hangs.created_at', Carbon::today()) // Chỉ lấy đơn hàng hôm nay
+                ->groupBy('bien_thes.san_pham_id')
+                ->orderByDesc('total_quantity')
+                ->take(4)
+                ->with('bienThe.sanPham')
+                ->get();
 
             $view->with(compact('topOrderProducts'));
         });
 
-            View::composer('*', function ($view) {
-                $userId = Auth::user();
-                $phieuGiamGiaThanhToans = collect();
-                if($userId){
-                    $phieuGiamGiaThanhToans = PhieuGiamGia::where('trang_thai', 1)
+        View::composer('*', function ($view) {
+            $userId = Auth::user();
+            $phieuGiamGiaThanhToans = collect();
+            if ($userId) {
+                $phieuGiamGiaThanhToans = PhieuGiamGia::where('trang_thai', 1)
                     ->where(function ($query) use ($userId) {
                         $query->where(function ($q) {
                             $q->where('ngay_bat_dau', '<=', now())
@@ -84,15 +84,15 @@ class AppServiceProvider extends ServiceProvider
                         })->orWhere('ma_phieu', 'like', "BIRTHDAY" . Str::upper($userId->username) . "%");
                     })
                     ->get();
-                }
-                $view->with('phieuGiamGiaThanhToans', $phieuGiamGiaThanhToans);
-            });
+            }
+            $view->with('phieuGiamGiaThanhToans', $phieuGiamGiaThanhToans);
+        });
 
-            View::composer('*', function ($view) {
-                $user = Auth::user();
-                $soDuVi = $user?->vi?->so_du ?? 0;
-                $view->with('soDuVi', $soDuVi);
-            });
 
+        View::composer('*', function ($view) {
+            $user = Auth::user();
+            $soDuVi = $user?->vi?->so_du ?? 0;
+            $view->with('soDuVi', $soDuVi);
+        });
     }
 }

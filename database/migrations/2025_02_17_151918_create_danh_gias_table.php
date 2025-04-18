@@ -19,6 +19,7 @@ return new class extends Migration
             $table->tinyInteger('so_sao');
             $table->text('nhan_xet')->nullable();
             $table->boolean('trang_thai')->default(1);
+            $table->text('ly_do_an')->nullable();
             $table->timestamps();
             $table->softDeletes();
 

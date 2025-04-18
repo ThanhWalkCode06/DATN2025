@@ -11,7 +11,7 @@
     <div class="container mt-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h4 style="color: #009688; font-weight: 700;">Lịch sử ví -
-                <span class="text-dark">{{ $user->ten_nguoi_dung ?? $user->username }}</span>
+                <span class="text-dark">{{  $user->username }}</span>
             </h4>
             <span class="badge rounded-pill px-3 py-2 fs-6" style="background-color: #009688; color: white;">
                 💰 Số dư: {{ number_format($user->vi->so_du ?? 0, 0, ',', '.') }} VNĐ

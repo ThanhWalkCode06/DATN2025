@@ -799,9 +799,24 @@
                                                                                                         </i>
                                                                                                     </li>
                                                                                                 @endfor
+
+                                                                                            </ul>
+                                                                                            <ul>
+                                                                                                @if ($danhGia->bienThe)
+                                                                                                    <p
+                                                                                                        class="text-muted mb-1">
+                                                                                                        <small>
+                                                                                                            Biến thể:
+                                                                                                            {{ $danhGia->bienThe->ten_bien_the ?? 'Không rõ' }}
+                                                                                                            <br>
+                                                                                                        </small>
+                                                                                                    </p>
+                                                                                                @endif
                                                                                             </ul>
                                                                                         </div>
+
                                                                                     </div>
+
                                                                                 </div>
                                                                                 <div class="reply">
                                                                                     <p>{{ $danhGia->nhan_xet }}</p>
@@ -916,7 +931,6 @@
     <!-- Related Product Section End -->
 
     <!-- Review Modal Start -->
-
     <div class="modal fade theme-modal question-modal" id="writereview" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -939,61 +953,80 @@
                     </script>
                 @endif
                 <div class="modal-body pt-0">
-                    {{-- @if (Auth::check()) --}}
-                        {{-- @if (session('daMuaHang')) --}}
-                            <form id="reviewForm" method="POST"
-                                action="{{ route('sanphams.themdanhgia', ['san_pham_id' => $sanPhams->id]) }}">
-                                @csrf
-                                <input type="hidden" name="san_pham_id" value="{{ $sanPhams->id }}">
-                                <input type="hidden" name="so_sao" id="so_sao" value="5"> <!-- Giá trị mặc định -->
-                
-                                <div class="product-wrapper">
-                                    <div class="product-image">
-                                        <img src="{{ Storage::url($sanPhams->hinh_anh) }}" class="img-fluid rounded shadow-sm"
-                                            style="witdh:100%; height:100%;" alt="{{ $sanPhams->ten_san_pham }}">
-                                    </div>
-                                    <div class="product-content">
-                                        <h5 class="name">{{ $sanPhams->ten_san_pham }}</h5>
-                                        <div class="product-review-rating">
-                                            <div class="product-rating">
-                                                <span
-                                                    class="theme-color">{{ number_format($sanPhams->giaThapNhatCuaSP(), 0, ',', '.') }}
-                                                    ₫</span>
-                                                <del>{{ number_format($sanPhams->gia_cu, 0, ',', '.') }} ₫</del>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                
-                                <div class="review-box">
-                                    <label></label>
-                                    <div class="rating" id="ratingStars">
-                                        <i class="fa fa-star" data-value="1"></i>
-                                        <i class="fa fa-star" data-value="2"></i>
-                                        <i class="fa fa-star" data-value="3"></i>
-                                        <i class="fa fa-star" data-value="4"></i>
-                                        <i class="fa fa-star" data-value="5"></i>
-                                    </div>
-                                </div>
-                
-                                <div class="review-box">
-                                    <label for="nhan_xet" class="form-label">Nhận xét của bạn *</label>
-                                    <textarea id="nhan_xet" name="nhan_xet" rows="3" class="form-control"
-                                        placeholder="Viết nhận xét của bạn..."></textarea>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-md btn-theme-outline fw-bold"
-                                        data-bs-dismiss="modal">Đóng</button>
-                                    <button type="submit" class="btn btn-md fw-bold text-light theme-bg-color">Gửi</button>
-                                </div>
-                            </form>
-                        {{-- @else
-                            <p class="text-warning">Bạn cần mua sản phẩm để đánh giá.</p>
+                    <form id="reviewForm" method="POST"
+                        action="{{ route('sanphams.themdanhgia', ['san_pham_id' => $sanPhams->id]) }}">
+                        @csrf
+                        <input type="hidden" name="san_pham_id" id="san_pham_id" value="{{ $sanPhams->id }}">
+                        <input type="hidden" name="so_sao" id="so_sao" value="5">
+
+                        {{-- Nếu có nhiều biến thể đã mua, bắt chọn --}}
+                        @php
+                            $bienTheDaMua = session('bienTheDaMua_' . $sanPhams->id);
+                        @endphp
+
+                        @if ($bienTheDaMua && count($bienTheDaMua) > 0)
+                            <div class="review-box mt-3">
+                                <label for="bien_the_id" class="form-label">Chọn biến thể đã mua *</label>
+                                <select name="bien_the_id" id="bien_the_id" class="form-select" required>
+                                    @foreach ($bienTheDaMua as $bienTheId => $soLanMua)
+                                        @php
+                                            $bienThe = App\Models\BienThe::find($bienTheId);
+                                        @endphp
+                                        @if ($bienThe)
+                                            <option value="{{ $bienTheId }}">{{ $bienThe->ten_bien_the }}</option>
+                                        @endif
+                                    @endforeach
+                                </select>
+                            </div>
+                        @else
+                            <p>Không có biến thể đã mua để đánh giá.</p>
                         @endif
-                    @else
-                        <p class="text-danger">Vui lòng <a href="{{ route('login.client') }}">đăng nhập</a> để đánh giá.</p>
-                    @endif --}}
+
+
+
+                        <div class="product-wrapper">
+                            <div class="product-image">
+                                <img src="{{ Storage::url($sanPhams->hinh_anh) }}" class="img-fluid rounded shadow-sm"
+                                    style="width:100%; height:100%;" alt="{{ $sanPhams->ten_san_pham }}">
+                            </div>
+                            <div class="product-content">
+                                <h5 class="name">{{ $sanPhams->ten_san_pham }}</h5>
+                                <div class="product-review-rating">
+                                    <div class="product-rating">
+                                        <span
+                                            class="theme-color">{{ number_format($sanPhams->giaThapNhatCuaSP(), 0, ',', '.') }}
+                                            ₫</span>
+                                        <del>{{ number_format($sanPhams->gia_cu, 0, ',', '.') }} ₫</del>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="review-box">
+                            <label>Đánh giá của bạn *</label>
+                            <div class="rating" id="ratingStars">
+                                <i class="fa fa-star" data-value="1"></i>
+                                <i class="fa fa-star" data-value="2"></i>
+                                <i class="fa fa-star" data-value="3"></i>
+                                <i class="fa fa-star" data-value="4"></i>
+                                <i class="fa fa-star" data-value="5"></i>
+                            </div>
+                        </div>
+
+                        <div class="review-box">
+                            <label for="nhan_xet" class="form-label">Nhận xét của bạn *</label>
+                            <textarea id="nhan_xet" name="nhan_xet" rows="3" class="form-control"
+                                placeholder="Viết nhận xét của bạn..."></textarea>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-md btn-theme-outline fw-bold"
+                                data-bs-dismiss="modal">Đóng</button>
+                            <button type="submit" class="btn btn-md fw-bold text-light theme-bg-color">Gửi</button>
+                        </div>
+                    </form>
                 </div>
+
             </div>
         </div>
     </div>
@@ -1424,9 +1457,8 @@
             stars.forEach(star => {
                 star.addEventListener("click", function() {
                     let rating = this.getAttribute("data-value");
-                    soSaoInput.value = rating; // Cập nhật giá trị sao
+                    soSaoInput.value = rating;
 
-                    // Cập nhật hiển thị sao
                     stars.forEach(s => {
                         if (s.getAttribute("data-value") <= rating) {
                             s.classList.add("selected");
@@ -1438,6 +1470,32 @@
             });
         });
     </script>
+    @if (session('error_binhluan'))
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                Swal.fire({
+                    title: "Lỗi!",
+                    text: "{{ session('error_binhluan') }}",
+                    icon: "error",
+                    confirmButtonText: "OK"
+                });
+            });
+        </script>
+    @endif
+
+    @if (session('success'))
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                Swal.fire({
+                    title: "Thành công!",
+                    text: "{{ session('success') }}",
+                    icon: "success",
+                    confirmButtonText: "OK"
+                });
+            });
+        </script>
+    @endif
+
 
     {{-- <script>
     function loadDanhGias() {
