@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\DanhGia;
 use App\Models\SanPham;
+use App\Models\ThongBao;
 use App\Events\AnBinhLuan;
 use App\Events\HienBinhLuan;
 use Illuminate\Http\Request;
@@ -114,6 +115,43 @@ class DanhGiaController extends Controller
 
     
 
+   public function trangThaiDanhGia(Request $request)
+    {
+        $danhGia = DanhGia::find($request->id);
+        if ($danhGia) {
+            $newStatus = $danhGia->trang_thai == 1 ? 0 : 1;
+            $danhGia->trang_thai = $newStatus;
+
+            if ($newStatus == 0 && $request->has('reasons')) {
+                $danhGia->ly_do_an = implode(', ', $request->input('reasons'));
+            } else {
+                $danhGia->ly_do_an = null;
+            }
+
+            $danhGia->save();
+
+            // Lưu thông báo vào bảng thong_baos
+            $noiDung = $newStatus == 0
+                ? 'Bình luận của bạn đã bị ẩn bởi quản trị viên.'
+                : 'Bình luận của bạn đã được hiển thị lại bởi quản trị viên.';
+            ThongBao::create([
+                'user_id' => $danhGia->user_id,
+                'id_dinh_kem' => $danhGia->id,
+                'noi_dung' => $noiDung,
+                'trang_thai' => 0, // 0: chưa đọc
+            ]);
+
+            if ($newStatus == 0) {
+                event(new AnBinhLuan($danhGia));
+            } else {
+                event(new HienBinhLuan($danhGia));
+            }
+
+            return response()->json(['success' => true, 'status' => $danhGia->trang_thai]);
+        }
+
+        return response()->json(['success' => false, 'message' => 'Đánh giá không tồn tại.']);
+    }
     // public function trangThaiDanhGia(Request $request)
     // {
     //     $danhGia = DanhGia::find($request->id);
@@ -130,11 +168,9 @@ class DanhGiaController extends Controller
     //         $danhGia->save();
 
     //         if ($newStatus == 0) {
-    //             Log::info('Kích hoạt sự kiện AnBinhLuan cho bình luận ID: ' . $danhGia->id);
     //             event(new AnBinhLuan($danhGia));
     //         } else {
-    //             Log::info('Kích hoạt sự kiện HienBinhLuan cho bình luận ID: ' . $danhGia->id);
-    //             event(new HienBinhLuan($danhGia));
+    //             event(new HienBinhLuan($danhGia)); // Trigger HienBinhLuan event
     //         }
             
     //         return response()->json(['success' => true, 'status' => $danhGia->trang_thai]);
@@ -142,32 +178,6 @@ class DanhGiaController extends Controller
 
     //     return response()->json(['success' => false, 'message' => 'Đánh giá không tồn tại.']);
     // }
-    public function trangThaiDanhGia(Request $request)
-    {
-        $danhGia = DanhGia::find($request->id);
-        if ($danhGia) {
-            $newStatus = $danhGia->trang_thai == 1 ? 0 : 1;
-            $danhGia->trang_thai = $newStatus;
-
-            if ($newStatus == 0 && $request->has('reasons')) {
-                $danhGia->ly_do_an = implode(', ', $request->input('reasons'));
-            } else {
-                $danhGia->ly_do_an = null;
-            }
-
-            $danhGia->save();
-
-            if ($newStatus == 0) {
-                event(new AnBinhLuan($danhGia));
-            } else {
-                event(new HienBinhLuan($danhGia)); // Trigger HienBinhLuan event
-            }
-            
-            return response()->json(['success' => true, 'status' => $danhGia->trang_thai]);
-        }
-
-        return response()->json(['success' => false, 'message' => 'Đánh giá không tồn tại.']);
-    }
     
 
 

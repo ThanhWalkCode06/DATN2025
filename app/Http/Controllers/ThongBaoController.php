@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ThongBao;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ThongBaoController extends Controller
 {
@@ -16,5 +17,13 @@ class ThongBaoController extends Controller
             ->get();
 
         return response()->json($notifications);
+    }
+    public function daDoc(Request $request, $id)
+    {
+        $thongBao = ThongBao::where('id', $id)->where('user_id', Auth::id())->firstOrFail();
+        $thongBao->trang_thai = 1; // 1: đã đọc
+        $thongBao->save();
+
+        return response()->json(['success' => true]);
     }
 }

@@ -29,7 +29,7 @@
 @endsection
 <style>
         form.d-flex input {
-            max-width: 350px;
+            max-width: 400px;
         }
 
         form.d-flex button {
@@ -55,7 +55,7 @@
                 
                 <!-- Form lọc theo sản phẩm -->
                 <form method="GET" action="{{ route('danhgias.index') }}" class="d-flex gap-2 mb-3">
-                    <input type="text" name="keyword" value="{{ request('keyword') }}" class="form-control" placeholder="Tìm theo tên người đặt hoặc sản phẩm">
+                    <input type="text" name="keyword" value="{{ request('keyword') }}" class="form-control" placeholder="Tìm theo tên người người dùng hoặc sản phẩm">
                     <button type="submit" class="btn btn-success">Tìm Kiếm</button>
                 </form>
                 
