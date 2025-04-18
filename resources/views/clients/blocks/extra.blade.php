@@ -885,6 +885,7 @@ button:focus {
 
         // Reset dữ liệu khi đóng modal để tránh lỗi hiển thị sai
         $("#view").on("hidden.bs.modal", function() {
+            $("#addToCartBtn").prop("disabled", true);
             selectedAttributes = {}; // Xóa thuộc tính đã chọn
             bienTheList = []; // Xóa danh sách biến thể
             matchedVariant = null; // Reset biến thể

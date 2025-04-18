@@ -208,28 +208,28 @@
     @yield('js')
     <script>
         // Pusher.logToConsole = true; // Bật debug Pusher
-    
+
         var pusher = new Pusher("0ca5e8c271c25e1264d2", {
             cluster: "ap1",
             encrypted: true
         });
-    
+
         var userId = {{ Auth::id() ?? 'null' }};
         if (userId !== 'null') {
             var channel = pusher.subscribe("comment-hidden-" + userId);
-    
+
             // Hàm hỗ trợ viết hoa chữ cái đầu
             function capitalizeFirstLetter(string) {
                 return string.charAt(0).toUpperCase() + string.slice(1);
             }
-    
+
             // Xử lý sự kiện hide-comment
             channel.bind("hide-comment", function(data) {
                 console.log('Nhận sự kiện hide-comment:', data);
                 const productName = data.product_name ? capitalizeFirstLetter(data.product_name) : '';
                 const productText = productName ? `<strong>Sản phẩm: ${productName}</strong>` : '';
                 const reasonText = data.reasons ? `<br><strong>Lý do:</strong> ${data.reasons}` : '';
-    
+
                 $.notify({
                     title: "<strong>Thông báo từ hệ thống:</strong><br>",
                     message: `Bình luận ở ${productText} của bạn đã bị ẩn bởi quản trị viên.${reasonText}`
@@ -253,13 +253,13 @@
                         '</div>'
                 });
             });
-    
+
             // Xử lý sự kiện show-comment
             channel.bind("show-comment", function(data) {
                 console.log('Nhận sự kiện show-comment:', data);
                 const productName = data.product_name ? capitalizeFirstLetter(data.product_name) : '';
                 const productText = productName ? `<strong>Sản phẩm: ${productName}</strong>` : '';
-    
+
                 $.notify({
                     title: "<strong>Thông báo từ hệ thống:</strong><br>",
                     message: `Bình luận ở ${productText} của bạn đã được hiển thị lại bởi quản trị viên.`
