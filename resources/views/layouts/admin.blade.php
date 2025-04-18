@@ -286,6 +286,45 @@
         </script>
     @endif
 
+    <script>
+        function loadNotifications() {
+            $.ajax({
+                url: "{{ route('thongbao.fetch') }}",
+                type: "GET",
+                success: function(data) {
+                    let html =
+                        '<li><i class="ri-notification-line"></i><h6 class="f-18 mb-0">Thông báo</h6></li>';
+                    if (data.length > 0) {
+                        data.forEach(function(item) {
+                            html += `<li>
+                        <a href="/admin/donhangs/${item.id_dinh_kem}" class="d-flex" style="font-size:12px">
+                            <span class="col-8">${item.noi_dung}</span>
+                            <span class="col-4">
+                                <div class="float-end">${new Date(item.created_at).toLocaleTimeString()}</div>
+                            </span>
+                        </a>
+                    </li>`;
+                        });
+                    } else {
+                        html += '<li><a href="#">Không có thông báo mới</a></li>';
+                    }
+
+                    html += '<li><a class="btn btn-primary" href="/thong-bao">Xem toàn bộ</a></li>';
+
+                    $('.notification-dropdown').html(html);
+                    if (data.length > 0) {
+                        $('.notification-box .badge').text(data.length);
+                    }
+                }
+            });
+        }
+
+        $(document).ready(function() {
+            loadNotifications();
+            setInterval(loadNotifications, 5000);
+        });
+    </script>
+
     <script src="{{ asset('assets/js/alert/confirmalert.js') }}"></script>
     @yield('js')
 </body>
@@ -294,7 +333,7 @@
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script src="{{ asset('assets/js/select2-custom.js') }}"></script>
 <script>
-    $(function () {
+    $(function() {
         $('.super-select2').select2({
             width: '50%',
             placeholder: "-- Chọn --",
