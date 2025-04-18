@@ -754,13 +754,15 @@
                                                                 </ul>
 
                                                                 <div class="review-title-2">
-                                                                    <h4 class="fw-bold">Đánh giá sản phẩm này</h4>
-                                                                    <p>Hãy cho chúng tôi biết đánh giá của bạn</p>
+                                                                    {{-- <h4 class="fw-bold">Đánh giá sản phẩm này</h4> --}}
+                                                                    {{-- <p>Hãy cho chúng tôi biết đánh giá của bạn</p> --}}
                                                                     @if($chophep_danhgia)
-                                                                        <button class="btn" type="button" data-bs-toggle="modal" data-bs-target="#writereview">Viết đánh giá</button>
-                                                                    @else
-                                                                        <p style="background-color: #fff3cd; color: #dc3545; padding: 10px; border-radius: 5px;">Vui lòng mua sản phẩm để đánh giá</p>
-                                                                    @endif
+                                                                    <button class="btn" type="button" data-bs-toggle="modal" data-bs-target="#writereview">Viết đánh giá</button>
+                                                                @else
+                                                                    <p style="background-color: #fff3cd; color: #dc3545; padding: 10px; border-radius: 5px; text-align: center;">
+                                                                        Vui lòng mua sản phẩm để đánh giá
+                                                                    </p>
+                                                                @endif
                                                                 </div>
                                                             </div>
 

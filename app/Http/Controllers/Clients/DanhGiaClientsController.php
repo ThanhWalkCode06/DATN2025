@@ -59,7 +59,7 @@ class DanhGiaClientsController extends Controller
         // Kiểm tra các biến thể đã mua
         $bienTheDaMua = [];
         foreach ($user->donHangs as $donHang) {
-            if ($donHang->trang_thai_don_hang >= 4) { // Đơn hàng đã hoàn thành hoặc giao hàng thành công
+            if ($donHang->trang_thai_don_hang == 4) { // Đơn hàng đã hoàn thành hoặc giao hàng thành công
                 $bienTheTrongDon = $donHang->chiTietDonHangs
                     ->whereIn('bien_the_id', $idBienThes)
                     ->pluck('bien_the_id')
@@ -98,7 +98,7 @@ class DanhGiaClientsController extends Controller
         // Tìm các biến thể đã mua
         $bienTheDaMua = [];
         foreach ($user->donHangs as $donHang) {
-            if ($donHang->trang_thai_don_hang >= 4) {
+            if ($donHang->trang_thai_don_hang == 4) {
                 $bienTheTrongDon = $donHang->chiTietDonHangs
                     ->whereIn('bien_the_id', $idBienThes)
                     ->pluck('bien_the_id')
