@@ -42,6 +42,23 @@
             right: -25px;
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
         }
+
+        .btn-dung-ngay {
+            transition: all 0.2s ease;
+            background-color: #198754;
+            /* màu bg-success */
+        }
+
+        .btn-dung-ngay:hover {
+            background-color: #157347;
+            /* xanh đậm hơn khi hover */
+            text-decoration: none;
+        }
+
+        .btn-dung-ngay:active {
+            transform: scale(0.95);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3) inset;
+        }
     </style>
 @endsection
 
@@ -321,58 +338,70 @@
                                                         <span>Mới</span>
                                                     </div>
                                                 @endif
-
                                                 <div
-                                                    class="card-body d-flex flex-column flex-md-row justify-content-between align-items-start">
-                                                    <!-- Cột trái: thông tin chính -->
-                                                    <div class="d-flex align-items-start flex-grow-1">
-                                                        <div class="bg-danger text-white rounded p-2 me-3 text-center"
-                                                            style="min-width: 55px;">
-                                                            <strong
-                                                                style="font-size: 1.2rem;">{{ $phieu->gia_tri }}%</strong>
-                                                        </div>
-
-                                                        <div>
-                                                            <h5 class="fw-bold mb-1" style="font-size: 1.1rem;">
-                                                                {{ $phieu->ten_phieu }}</h5>
-                                                            <div class="text-muted mb-1 fw-semibold">Mã: <span
-                                                                    class="text-dark">{{ $phieu->ma_phieu }}</span></div>
-                                                            <div class="text-muted small mb-1">
-                                                                {{ date('d/m/Y', strtotime($phieu->ngay_bat_dau)) }} -
-                                                                {{ date('d/m/Y', strtotime($phieu->ngay_ket_thuc)) }}
+                                                    class="card-body d-flex flex-column flex-md-row justify-content-between align-items-start position-relative">
+                                                    <div
+                                                        class="card-body d-flex flex-column flex-md-row justify-content-between align-items-start">
+                                                        <!-- Cột trái: thông tin chính -->
+                                                        <div class="d-flex align-items-start flex-grow-1">
+                                                            <div class="bg-danger text-white rounded p-2 me-3 text-center"
+                                                                style="min-width: 55px;">
+                                                                <strong
+                                                                    style="font-size: 1.2rem;">{{ $phieu->gia_tri }}%</strong>
                                                             </div>
 
-                                                            <div class="text-muted small mb-1">
-                                                                Đơn tối thiểu:
-                                                                <strong>{{ number_format($phieu->muc_gia_toi_thieu, 0, ',', '.') }}đ</strong><br>
-                                                                Giảm tối đa:
-                                                                <strong>{{ number_format($phieu->muc_giam_toi_da, 0, ',', '.') }}đ</strong>
-                                                            </div>
+                                                            <div>
+                                                                <h5 class="fw-bold mb-1" style="font-size: 1.1rem;">
+                                                                    {{ $phieu->ten_phieu }}</h5>
+                                                                <div class="text-muted mb-1 fw-semibold">Mã: <span
+                                                                        class="text-dark">{{ $phieu->ma_phieu }}</span>
+                                                                </div>
+                                                                <div class="text-muted small mb-1">
+                                                                    {{ date('d/m/Y', strtotime($phieu->ngay_bat_dau)) }} -
+                                                                    {{ date('d/m/Y', strtotime($phieu->ngay_ket_thuc)) }}
+                                                                </div>
 
-                                                            <a class="text-primary small d-inline-block mt-1"
-                                                                data-bs-toggle="collapse"
-                                                                href="#description{{ $key }}" role="button"
-                                                                aria-expanded="false"
-                                                                aria-controls="description{{ $key }}">
-                                                                Xem mô tả
-                                                            </a>
+                                                                <div class="text-muted small mb-1">
+                                                                    Đơn tối thiểu:
+                                                                    <strong>{{ number_format($phieu->muc_gia_toi_thieu, 0, ',', '.') }}đ</strong><br>
+                                                                    Giảm tối đa:
+                                                                    <strong>{{ number_format($phieu->muc_giam_toi_da, 0, ',', '.') }}đ</strong>
+                                                                </div>
 
-                                                            <div class="collapse mt-1"
-                                                                id="description{{ $key }}">
-                                                                <p class="small mb-0">{{ $phieu->mo_ta }}</p>
+                                                                <a class="text-primary small d-inline-block mt-1"
+                                                                    data-bs-toggle="collapse"
+                                                                    href="#description{{ $key }}" role="button"
+                                                                    aria-expanded="false"
+                                                                    aria-controls="description{{ $key }}">
+                                                                    Xem mô tả
+                                                                </a>
+
+                                                                <div class="collapse mt-1"
+                                                                    id="description{{ $key }}">
+                                                                    <p class="small mb-0">{{ $phieu->mo_ta }}</p>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
 
-                                                    <div class="d-flex flex-column justify-content-between align-items-end ms-md-3 mt-2 mt-md-0"
-                                                        style="min-width: 90px;">
-                                                        <div class="flex-grow-1">
-                                                            @if ($phieu->trang_thai == 1)
-                                                                <span class="badge bg-success">Hoạt động</span>
-                                                            @else
-                                                                <span class="badge bg-danger">Không hoạt động</span>
-                                                            @endif
+                                                        <div class="d-flex flex-column justify-content-between align-items-end ms-md-3 mt-2 mt-md-0"
+                                                            style="min-width: 90px;">
+                                                            <div class="flex-grow-1">
+                                                                @if ($phieu->trang_thai == 1)
+                                                                    <span class="badge bg-success">Hoạt động</span>
+                                                                @else
+                                                                    <span class="badge bg-danger">Không hoạt động</span>
+                                                                @endif
+                                                            </div>
                                                         </div>
+                                                        <button type="button"
+                                                            class="badge bg-success d-inline-block py-2 px-4 fw-bold text-white position-absolute btn-dung-ngay"
+                                                            style="bottom: 1rem; right: 1rem; font-size: 0.95rem; border-radius: 20px;"
+                                                            onclick="chonMaPhieu('{{ $phieu->ma_phieu }}')">
+                                                            Dùng Ngay
+                                                        </button>
+
+
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -809,5 +838,17 @@
                 return re.test(email);
             }
         });
+    </script>
+    <script>
+        function chonMaPhieu(maPhieu) {
+            document.getElementById('voucherCode').value = maPhieu;
+
+            // Tự động submit form
+            document.getElementById('voucherForm').submit();
+
+            // Đóng modal (nếu bạn dùng Bootstrap 5)
+            var modal = bootstrap.Modal.getInstance(document.getElementById('modalVoucher'));
+            modal.hide();
+        }
     </script>
 @endsection
