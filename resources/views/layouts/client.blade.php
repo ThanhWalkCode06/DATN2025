@@ -213,10 +213,10 @@
                             // Thêm ảnh/video nếu có
                             if (chat.hinh_anh) {
                                 if (chat.hinh_anh.match(/\.(jpg|jpeg|png|gif|jfif)$/)) {
-                                    chatMessage.innerHTML += `<br><img src="${chat.hinh_anh}" style="max-width: 100%; height: auto;">`;
+                                    chatMessage.innerHTML += `<br><img src="${chat.hinh_anh}" style="max-width: 200px; height: auto; border-radius: 8px; margin-top: 5px;">`;
                                 } else if (chat.hinh_anh.match(/\.(mp4|webm|ogg)$/)) {
                                     chatMessage.innerHTML += `
-                                    <br><video controls style="max-width: 100%; height: auto;">
+                                    <br><video controls style="max-width: 200px; height: auto; border-radius: 8px; margin-top: 5px;">
                                         <source src="${chat.hinh_anh}">
                                         Trình duyệt không hỗ trợ video.
                                     </video>`;
@@ -331,10 +331,10 @@
                     // Thêm ảnh/video nếu có
                     if (chat.hinh_anh) {
                         if (chat.hinh_anh.match(/\.(jpg|jpeg|png|gif|jfif)$/)) {
-                            chatMessage.innerHTML += `<br><img src="${chat.hinh_anh}" style="max-width: 100%; height: auto;">`;
+                            chatMessage.innerHTML += `<br><img src="${chat.hinh_anh}" style="max-width: 200px; height: auto; border-radius: 8px; margin-top: 5px;">`;
                         } else if (chat.hinh_anh.match(/\.(mp4|webm|ogg)$/)) {
                             chatMessage.innerHTML += `
-                            <br><video controls style="max-width: 100%; height: auto;">
+                            <br><video controls style="max-width: 200px; height: auto; border-radius: 8px; margin-top: 5px;">
                                 <source src="${chat.hinh_anh}">
                                 Trình duyệt không hỗ trợ video.
                             </video>`;
