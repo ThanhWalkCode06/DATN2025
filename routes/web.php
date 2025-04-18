@@ -21,14 +21,15 @@ use App\Http\Controllers\DonHangController;
 use App\Http\Controllers\SanPhamController;
 use App\Http\Controllers\ThongKeController;
 use App\Http\Controllers\BinhLuanController;
+use App\Http\Controllers\ThongBaoController;
 use App\Http\Controllers\HelperCommon\Helper;
 use App\Http\Controllers\ThuocTinhController;
 use App\Http\Controllers\GiaoDichViController;
 use App\Http\Controllers\Payment\PaymentVnPay;
 use App\Http\Controllers\Admins\UserController;
+
+
 use App\Http\Controllers\PhieuGiamGiaController;
-
-
 use App\Http\Controllers\Admins\SettingController;
 use App\Http\Controllers\DanhMucBaiVietController;
 use App\Http\Controllers\DanhMucSanPhamController;
@@ -94,7 +95,7 @@ Route::prefix('admin')->middleware(['auth', 'checkStatus'])->group(function () {
     Route::post('/sanphams/upload/{sanPhamId}', [Helper::class, 'uploadAlbum'])->name('upload.album');
     // Route::get('donhangs/filter', [DonHangController::class, 'filter'])->name('donhangs.filter');
     Route::post('/donhangs/bulk-update', [DonHangController::class, 'bulkUpdate'])->name('donhangs.bulkUpdate');
-
+    Route::get('/thong-bao/fetch', [ThongBaoController::class, 'fetch'])->name('thongbao.fetch');
 
     // Chức năng thì cho vào đây đánh tên route->name phải giống quyền lối bởi dấu . nếu là route resource
     // Nếu là route thường thì chỉ cần ghi bình thường không có dấu -
@@ -121,6 +122,7 @@ Route::prefix('admin')->middleware(['auth', 'checkStatus'])->group(function () {
         Route::get('/gioi-thieu', [DanhGiaController::class, 'danhGiaNoiBat'])->name('gioithieu');
         Route::get('/chat', [ChatController::class, 'showAdminChat'])->name('admin-chat');
         Route::get('/chat-users', [ChatController::class, 'getChatUsers']);
+
         Route::get('/test', function () {
             dd(1);
         })->name('hihi');
@@ -293,4 +295,3 @@ Route::post('/danh-gia/update-status/{id}', [DanhGiaController::class, 'updateSt
 Route::post('/binhluan/{id}/reply', [BinhLuanController::class, 'store'])->name('binhluan.reply')->middleware('auth');
 
 Route::post('/binhluan', [BinhLuanController::class, 'store'])->name('binhluan.store');
-

@@ -16,7 +16,7 @@
             <div class="alert alert-success text-center">{{ session('success') }}</div>
         @endif
 
-        <form method="POST" action="{{ route('rut-tien.xuly') }}" class="card p-4 shadow"
+        <form method="POST" onsubmit="return validateForm()" action="{{ route('rut-tien.xuly') }}" class="card p-4 shadow"
             style="max-width: 600px; margin: 0 auto; border-radius: 16px;">
             @csrf
 
@@ -31,6 +31,8 @@
                         <i class="fas fa-chevron-down text-muted"></i>
                     </span>
                 </div>
+                  <!-- Thêm thông báo lỗi ở đây -->
+    <div id="ngan_hang_error" class="invalid-feedback" style="display: none;"></div>
             </div>
             
             <!-- Modal popup chọn ngân hàng -->
@@ -70,27 +72,31 @@
             <!-- Số tài khoản -->
             <div class="mb-3">
                 <label for="so_tai_khoan" class="form-label">Số tài khoản ngân hàng</label>
-                <input type="number" name="so_tai_khoan" id="so_tai_khoan" class="form-control" required>
+                <input type="number" name="so_tai_khoan" id="so_tai_khoan" class="form-control" >
+                <div class="invalid-feedback" id="so_tai_khoan_error"></div> <!-- Thông báo lỗi -->
             </div>
 
             <!-- Tên người nhận -->
             <div class="mb-3">
                 <label for="ten_nguoi_nhan" class="form-label">Tên người nhận</label>
-                <input type="text" name="ten_nguoi_nhan" id="ten_nguoi_nhan" class="form-control" required>
+                <input type="text" name="ten_nguoi_nhan" id="ten_nguoi_nhan" class="form-control" >
+                <div class="invalid-feedback" id="ten_nguoi_nhan_error"></div> <!-- Thông báo lỗi -->
             </div>
 
             <!-- Số tiền -->
             <div class="mb-3">
                 <label for="so_tien" class="form-label">Số tiền muốn rút (VNĐ)</label>
-                <input type="number" name="so_tien" id="so_tien" class="form-control" required min="10000">
+                <input type="number" name="so_tien" id="so_tien" class="form-control"  min="10000">
+                <div class="invalid-feedback" id="so_tien_error"></div> <!-- Thông báo lỗi -->
             </div>
 
             <!-- Checkbox xác nhận -->
             <div class="form-check mb-3">
-                <input class="form-check-input" type="checkbox" id="xac_nhan" required>
+                <input class="form-check-input" type="checkbox" id="xac_nhan" >
                 <label class="form-check-label" for="xac_nhan">
                     Tôi xác nhận thông tin đã nhập là chính xác.
                 </label>
+                <div class="invalid-feedback" id="xac_nhan_error"></div> <!-- Thông báo lỗi -->
             </div>
 
 
@@ -109,15 +115,78 @@
 @section('js')
     
 <script>
-    function validateForm() {
-        const checkbox = document.getElementById('xac_nhan');
-        if (!checkbox.checked) {
-            alert('⚠️ Vui lòng xác nhận thông tin trước khi gửi.');
-            return false;
-        }
-        return true;
+   function validateForm() {
+    let isValid = true;
+
+    // Reset thông báo lỗi cũ
+    document.querySelectorAll('.invalid-feedback').forEach(element => {
+        element.textContent = '';
+        element.style.display = 'none';
+    });
+
+    // Kiểm tra chọn ngân hàng
+const tenNganHang = document.getElementById('ten_ngan_hang').value.trim();
+if (tenNganHang === '') {
+    document.getElementById('ngan_hang_label').classList.add('is-invalid');
+    document.getElementById('ngan_hang_error').textContent = 'Vui lòng chọn ngân hàng.';
+    document.getElementById('ngan_hang_error').style.display = 'block';
+    isValid = false;
+} else {
+    document.getElementById('ngan_hang_label').classList.remove('is-invalid');
+    document.getElementById('ngan_hang_error').style.display = 'none';
+}
+
+
+    // Kiểm tra số tài khoản
+    const soTaiKhoan = document.getElementById('so_tai_khoan').value.trim();
+    const stkRegex = /^\d{8,16}$/;
+    if (!stkRegex.test(soTaiKhoan)) {
+        document.getElementById('so_tai_khoan_error').textContent = 'Số tài khoản phải từ 8 đến 16 chữ số.';
+        document.getElementById('so_tai_khoan_error').style.display = 'block';
+        document.getElementById('so_tai_khoan').classList.add('is-invalid');
+        isValid = false;
+    } else {
+        document.getElementById('so_tai_khoan').classList.remove('is-invalid');
     }
-    </script>
+
+    // Kiểm tra tên người nhận
+    const tenNguoiNhan = document.getElementById('ten_nguoi_nhan').value.trim();
+    if (tenNguoiNhan === '') {
+        document.getElementById('ten_nguoi_nhan_error').textContent = 'Vui lòng nhập tên người nhận.';
+        document.getElementById('ten_nguoi_nhan_error').style.display = 'block';
+        document.getElementById('ten_nguoi_nhan').classList.add('is-invalid');
+        isValid = false;
+    } else {
+        document.getElementById('ten_nguoi_nhan').classList.remove('is-invalid');
+    }
+
+    // Kiểm tra số tiền
+    const soTien = document.getElementById('so_tien').value.trim();
+    if (soTien < 10000) {
+        document.getElementById('so_tien_error').textContent = 'Số tiền rút phải tối thiểu 10,000 VNĐ.';
+        document.getElementById('so_tien_error').style.display = 'block';
+        document.getElementById('so_tien').classList.add('is-invalid');
+        isValid = false;
+    } else {
+        document.getElementById('so_tien').classList.remove('is-invalid');
+    }
+
+    // Kiểm tra checkbox xác nhận
+    const checkbox = document.getElementById('xac_nhan');
+    if (!checkbox.checked) {
+        document.getElementById('xac_nhan_error').textContent = 'Vui lòng xác nhận thông tin trước khi gửi.';
+        document.getElementById('xac_nhan_error').style.display = 'block';
+        document.getElementById('xac_nhan').classList.add('is-invalid');
+        isValid = false;
+    } else {
+        document.getElementById('xac_nhan').classList.remove('is-invalid');
+    }
+
+    return isValid;
+}
+
+</script>
+
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

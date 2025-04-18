@@ -3,15 +3,18 @@
         <div class="header-logo-wrapper p-0">
             <div class="logo-wrapper">
                 <a href="index.html">
-                    <img class="img-fluid main-logo" src="{{ Storage::url(Auth::user()->anh_dai_dien) ?? 'images/logo.jpg' }}" alt="logo">
-                    <img class="img-fluid white-logo" src="{{ Storage::url(Auth::user()->anh_dai_dien) ?? 'images/logo.jpg' }}" alt="logo">
+                    <img class="img-fluid main-logo"
+                        src="{{ Storage::url(Auth::user()->anh_dai_dien) ?? 'images/logo.jpg' }}" alt="logo">
+                    <img class="img-fluid white-logo"
+                        src="{{ Storage::url(Auth::user()->anh_dai_dien) ?? 'images/logo.jpg' }}" alt="logo">
 
                 </a>
             </div>
             <div class="toggle-sidebar">
                 <i class="status_toggle middle sidebar-toggle" data-feather="align-center"></i>
                 <a href="index.html">
-                    <img src="{{ Storage::url(Auth::user()->anh_dai_dien) ?? 'images/logo.jpg' }}" class="img-fluid" alt="">
+                    <img src="{{ Storage::url(Auth::user()->anh_dai_dien) ?? 'images/logo.jpg' }}" class="img-fluid"
+                        alt="">
 
                 </a>
             </div>
@@ -42,43 +45,26 @@
                 <li class="onhover-dropdown">
                     <div class="notification-box">
                         <i class="ri-notification-line"></i>
-                        <span class="badge rounded-pill badge-theme">4</span>
+                        <span class="badge rounded-pill badge-theme"></span>
                     </div>
                     <ul class="notification-dropdown onhover-show-div">
                         <li>
                             <i class="ri-notification-line"></i>
                             <h6 class="f-18 mb-0">Thông báo</h6>
                         </li>
-                        <li>
-                            <p>
-                                <i class="fa fa-circle me-2 font-primary"></i>Delivery processing <span
-                                    class="pull-right">10 min.</span>
-                            </p>
-                        </li>
-                        <li>
-                            <p>
-                                <i class="fa fa-circle me-2 font-success"></i>Order Complete<span class="pull-right">1
-                                    hr</span>
-                            </p>
-                        </li>
-                        <li>
-                            <p>
-                                <i class="fa fa-circle me-2 font-info"></i>Tickets Generated<span class="pull-right">3
-                                    hr</span>
-                            </p>
-                        </li>
-                        <li>
-                            <p>
-                                <i class="fa fa-circle me-2 font-danger"></i>Delivery Complete<span class="pull-right">6
-                                    hr</span>
-                            </p>
-                        </li>
-                        <li>
+                        {{-- <li>
+                            <a href="#" class="d-flex">
+                                <span class="col-8">Thông báo 1</span>
+                                <span class="col-4">
+                                    <div class="float-end">10 min.</div>
+                                </span>
+                            </a>
+                        </li> --}}
+                        {{-- <li>
                             <a class="btn btn-primary" href="javascript:void(0)">Xem toàn bộ</a>
-                        </li>
+                        </li> --}}
                     </ul>
-                </li>
-
+                </li> 
                 <li>
                     <div class="mode">
                         <i class="ri-moon-line"></i>
@@ -86,16 +72,12 @@
                 </li>
                 <li class="profile-nav onhover-dropdown pe-0 me-0">
                     <div class="media profile-media">
-                        <img class="user-profile rounded-circle" src="{{ Storage::url(Auth::user()->anh_dai_dien ?? 'images/logo.jpg')  }}"
-                            alt="">
+                        <img class="user-profile rounded-circle"
+                            src="{{ Storage::url(Auth::user()->anh_dai_dien ?? 'images/logo.jpg') }}" alt="">
                         <div class="user-name-hide media-body">
                             <span>{{ Auth::user()->ten_nguoi_dung }}</span>
                             <p class="mb-0 font-roboto">{{ Auth::user()->roles->pluck('name')->first() }}<i
                                     class="middle ri-arrow-down-s-line"></i></p>
-
-                            {{-- <span>{{ Auth::user()->name }}</span>
-                            <p class="mb-0 font-roboto">Admin<i class="middle ri-arrow-down-s-line"></i></p> --}}
-
                         </div>
                     </div>
                     <ul class="profile-dropdown onhover-show-div">

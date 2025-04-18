@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\GiaoDichVi;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
@@ -37,8 +38,8 @@ class ViController extends Controller
             $query->where('loai', $request->loai);
         }
         // 👉 Ưu tiên trạng thái Chờ xử lý (0), sau đó theo thời gian
-    $query->orderByRaw("trang_thai = 0 DESC")
-    ->orderBy('created_at', 'desc');
+        $query->orderByRaw("trang_thai = 0 DESC")
+            ->orderBy('created_at', 'desc');
         // Phân trang kết quả
         $giaodichs = $query->paginate(10);
 
@@ -58,6 +59,40 @@ class ViController extends Controller
 
         if ($sotien <= 0) {
             return response()->json(['status' => 'error', 'message' => 'Số tiền không hợp lệ'], 400);
+        }
+
+
+        if ($sotien > 10000000) {
+            return response()->json(['status' => 'error', 'message' => 'Bạn chỉ có thể nạp tối đa 10 triệu mỗi lần'], 400);
+        }
+    
+        // Lấy id ví
+        $vi = $user->vi; // giả sử user có quan hệ 1-1 với bảng ví
+        if (!$vi) {
+            return response()->json(['status' => 'error', 'message' => 'Không tìm thấy ví'], 404);
+        }
+    
+        // Tổng tiền đã nạp trong ngày
+        $tongTrongNgay = GiaoDichVi::where('vi_id', $vi->id)
+            ->where('loai', 'Nạp tiền')
+            ->where('trang_thai', 1)
+            ->whereDate('created_at', Carbon::today())
+            ->sum('so_tien');
+    
+        if ($tongTrongNgay + $sotien > 10000000) {
+            return response()->json(['status' => 'error', 'message' => 'Bạn chỉ được nạp tối đa 10 triệu mỗi ngày'], 400);
+        }
+    
+        // Tổng tiền đã nạp trong tháng
+        $tongTrongThang = GiaoDichVi::where('vi_id', $vi->id)
+            ->where('loai', 'Nạp tiền')
+            ->where('trang_thai', 1)
+            ->whereMonth('created_at', Carbon::now()->month)
+            ->whereYear('created_at', Carbon::now()->year)
+            ->sum('so_tien');
+    
+        if ($tongTrongThang + $sotien > 30000000) {
+            return response()->json(['status' => 'error', 'message' => 'Bạn chỉ được nạp tối đa 30 triệu mỗi tháng'], 400);
         }
 
         // Lưu tạm số tiền nạp để xử lý sau khi thanh toán
