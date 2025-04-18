@@ -15,4 +15,13 @@ class ThongBao extends Model
         "id_dinh_kem",
         "trang_thai"
     ];
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function danhGia()
+    {
+        return $this->belongsTo(DanhGia::class, 'id_dinh_kem');
+    }
 }
