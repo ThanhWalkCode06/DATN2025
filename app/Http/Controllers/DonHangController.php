@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\DonHang;
 use Illuminate\Http\Request;
+use App\Models\LichSuDonHang;
 use App\Models\ChiTietDonHang;
+use Illuminate\Support\Facades\Mail;
 use App\Http\Requests\StoreDonHangRequest;
 use App\Http\Requests\UpdateDonHangRequest;
-use App\Models\LichSuDonHang;
+use App\Mail\UpdateTrangThaiDonHangMail;
+use App\Models\User;
 
 class DonHangController extends Controller
 {
@@ -158,14 +161,23 @@ class DonHangController extends Controller
 
             DonHang::where("id", $donhang->id)->update($data);
             LichSuDonHang::create($lichSuDonHang);
-        }
 
-        // if ($request->xac_nhan_thanh_toan) {
-        //     $data = [
-        //         'trang_thai_thanh_toan' => 1
-        //     ];
-        //     DonHang::where("id", $donhang->id)->update($data);
-        // }
+            // Gửi email
+            if (in_array($request->trang_thai, [1, 2, 3])) {
+                $trangThai = (int) $request->trang_thai;
+
+                $trangThaiText = match ($trangThai) {
+                    1 => 'Đang xử lý',
+                    2 => 'Đang giao',
+                    3 => 'Đã giao',
+                    default => 'Đã cập nhật'
+                };
+
+                $user = User::find($donhang->user_id);
+
+                Mail::to($user->email)->send(new UpdateTrangThaiDonHangMail($donhang, $trangThaiText, $user));
+            }
+        }
 
         if ($request->huy_don_hang) {
             $data = [
