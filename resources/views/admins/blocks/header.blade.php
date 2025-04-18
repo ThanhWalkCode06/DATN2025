@@ -64,8 +64,7 @@
                             <a class="btn btn-primary" href="javascript:void(0)">Xem toàn bộ</a>
                         </li> --}}
                     </ul>
-                </li>
-
+                </li> 
                 <li>
                     <div class="mode">
                         <i class="ri-moon-line"></i>

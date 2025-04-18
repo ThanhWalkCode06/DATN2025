@@ -347,7 +347,7 @@ class SanPhamController extends Controller
             $idBienThes = BienThe::where('san_pham_id', $id)->pluck('id')->toArray();
             if (!empty($idBienThes)) {
                 foreach ($user->donHangs as $donHang) {
-                    if ($donHang->trang_thai_don_hang >= 4) {
+                    if ($donHang->trang_thai_don_hang == 4) {
                         $bienTheTrongDon = $donHang->chiTietDonHangs
                             ->whereIn('bien_the_id', $idBienThes)
                             ->pluck('bien_the_id')

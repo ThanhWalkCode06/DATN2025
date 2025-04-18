@@ -336,7 +336,7 @@
                 $('#main-product-image').attr('src', imageSrc);
             });
         
-            // Logic xử lý ẩn/hiện đánh giá với modal (từ đoạn script đầu tiên)
+            // Logic xử lý ẩn/hiện đánh giá với modal
             let currentDanhGiaId = null;
         
             // Hàm reset trạng thái modal
@@ -427,7 +427,7 @@
                     success: function(response) {
                         if (response.success) {
                             let statusCell = button.closest("tr").find(".status-icon");
-                            let lyDoAnCell = button.closest("tr").find("td:nth-child(6)"); // Cột lý do ẩn
+                            let lyDoAnCell = button.closest("tr").find("td:nth-child(6)");
         
                             if (response.status == 1) {
                                 button.removeClass('btn-primary').addClass('btn-danger').text('Ẩn');
@@ -446,6 +446,83 @@
                         alert("Lỗi khi cập nhật trạng thái.");
                     }
                 });
+            }
+
+            // Xử lý thông báo Pusher cho ẩn và hiển thị bình luận
+            var pusher = new Pusher("0ca5e8c271c25e1264d2", {
+                cluster: "ap1",
+                encrypted: true
+            });
+
+            var userId = {{ Auth::id() ?? 'null' }};
+            if (userId !== 'null') {
+                var channel = pusher.subscribe("comment-hidden-" + userId);
+
+                // Hàm viết hoa chữ cái đầu
+                function capitalizeFirstLetter(string) {
+                    return string.charAt(0).toUpperCase() + string.slice(1);
+                }
+
+                // Xử lý sự kiện hide-comment (ẩn bình luận)
+                channel.bind("hide-comment", function(data) {
+                    const productName = data.product_name ? capitalizeFirstLetter(data.product_name) : '';
+                    const productText = productName ? `<strong>Sản phẩm: ${productName}</strong>` : '';
+                    const reasonText = data.reasons ? `<br><strong>Lý do:</strong> ${data.reasons}` : '';
+
+                    $.notify({
+                        title: "<strong>Thông báo từ hệ thống:</strong><br>",
+                        message: `Bình luận ở ${productText} của bạn đã bị ẩn bởi quản trị viên.${reasonText}`
+                    }, {
+                        element: "body",
+                        type: "danger",
+                        allow_dismiss: true,
+                        placement: {
+                            from: "top",
+                            align: "right"
+                        },
+                        delay: 5000,
+                        z_index: 9999,
+                        animate: {
+                            enter: "animated fadeInDown",
+                            exit: "animated fadeOutUp"
+                        },
+                        template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert notify-alert-custom" role="alert">' +
+                            '    <span data-notify="title">{1}</span>' +
+                            '    <span data-notify="message">{2}</span>' +
+                            '</div>'
+                    });
+                });
+
+                // Xử lý sự kiện show-comment (hiển thị bình luận)
+                channel.bind("show-comment", function(data) {
+                    const productName = data.product_name ? capitalizeFirstLetter(data.product_name) : '';
+                    const productText = productName ? `<strong>Sản phẩm: ${productName}</strong>` : '';
+
+                    $.notify({
+                        title: "<strong>Thông báo từ hệ thống:</strong><br>",
+                        message: `Bình luận ở ${productText} của bạn đã được hiển thị lại bởi quản trị viên.`
+                    }, {
+                        element: "body",
+                        type: "success",
+                        allow_dismiss: true,
+                        placement: {
+                            from: "top",
+                            align: "right"
+                        },
+                        delay: 5000,
+                        z_index: 9999,
+                        animate: {
+                            enter: "animated fadeInDown",
+                            exit: "animated fadeOutUp"
+                        },
+                        template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert notify-alert-custom success" role="alert">' +
+                            '    <span data-notify="title">{1}</span>' +
+                            '    <span data-notify="message">{2}</span>' +
+                            '</div>'
+                    });
+                });
+            } else {
+                console.log('Người dùng chưa đăng nhập, không thể đăng ký kênh Pusher');
             }
         });
         
@@ -475,7 +552,7 @@
             const reviewTable = document.querySelector(".review-table");
             reviewTable.style.display = reviewTable.style.display === "none" || reviewTable.style.display === "" ? "block" : "none";
         }
-        </script>
+    </script>
     <script src="{{ asset('assets/js/config.js') }}"></script>
     <script src="{{ asset('assets/js/customizer.js') }}"></script>
     <script src="{{ asset('assets/js/sidebar-menu.js') }}"></script>
