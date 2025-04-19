@@ -56,80 +56,81 @@
         border-color: #0da487;
     }
 
+    /* Modal Chat Styling */
+    #chat-box-modal .modal-dialog {
+        max-width: 90%;
+    }
 
-   /* Modal */
-.modal-dialog {
-    max-width: 90%;  /* Điều chỉnh kích thước modal */
-}
+    #chat-box-modal .modal-content {
+        border-radius: 12px;
+    }
 
-.modal-content {
-    border-radius: 12px;  /* Góc bo tròn cho modal */
-}
+    #chat-box-modal .modal-header {
+        background-color: #009688;
+        color: white;
+        border-radius: 12px 12px 0 0;
+        padding: 15px 20px;
+    }
 
-.modal-header {
-    background-color: #009688;  /* Màu nền header */
-    color: white;
-    border-radius: 12px 12px 0 0;
-    padding: 15px 20px;
-}
+    #chat-box-modal .modal-header .btn-close {
+        filter: invert(1);
+    }
 
-.modal-header .btn-close {
-    filter: invert(1);
-}
+    #chat-box-modal .chat-box {
+        background-color: #f4f4f4;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 15px;
+        height: 400px;
+        max-height: 400px;
+        overflow-y: auto;
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
 
-.chat-box {
-    background-color: #f4f4f4;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 15px;
-    height: 400px;  /* Tăng chiều cao của chat box */
-    max-height: 400px;
-    overflow-y: auto;
-    font-size: 1.1rem;  /* Tăng font size cho đoạn chat */
-    line-height: 1.6;  /* Tăng line height để dễ đọc */
-}
+    /* Chỉ áp dụng cho input và button trong form chat */
+    #chat-box-modal input[type="text"] {
+        border-radius: 8px;
+        font-size: 1rem;
+    }
 
-input[type="text"] {
-    border-radius: 8px;
-    font-size: 1rem;
-}
+    #chat-box-modal input[type="file"] {
+        max-width: 100px;
+        padding: 0.4rem;
+    }
 
-input[type="file"] {
-    max-width: 100px;  /* Giới hạn chiều rộng của input file */
-    padding: 0.4rem;
-}
+    #chat-box-modal input[type="file"]:focus,
+    #chat-box-modal input[type="text"]:focus {
+        border-color: #009688;
+    }
 
-input[type="file"]:focus, input[type="text"]:focus {
-    border-color: #009688;  /* Tạo viền màu khi focus */
-}
+    /* Chỉ style cho nút trong modal */
+    #chat-box-modal button {
+        border-radius: 8px;
+        padding: 0.6rem 1rem;
+        background-color: #009688;
+        border: none;
+        color: rgb(24, 72, 203);
+        font-size: 1rem;
+        transition: background-color 0.3s ease;
+    }
 
-button {
-    border-radius: 8px;
-    padding: 0.6rem 1rem;
-    background-color: #009688;
-    border: none;
-    color: rgb(24, 72, 203);
-    font-size: 1rem;
-    transition: background-color 0.3s ease;
-}
+    #chat-box-modal button:hover {
+        background-color: #00796b;
+    }
 
-button:hover {
-    background-color: #00796b;  /* Thay đổi màu khi hover */
-}
+    #chat-box-modal button:focus {
+        outline: none;
+    }
 
-button:focus {
-    outline: none;
-}
-
-/* Thêm hiệu ứng cho media (ảnh và video) */
-.chat-box img, .chat-box video {
-    max-width: 100%;
-    max-height: 300px;  /* Giới hạn chiều cao của ảnh/video */
-    border-radius: 8px;
-    margin-top: 5px;
-}
-
-
+    /* Media trong chat */
+    #chat-box-modal .chat-box img,
+    #chat-box-modal .chat-box video {
+        max-width: 100%;
+        max-height: 300px;
+        border-radius: 8px;
+        margin-top: 5px;
+    }
 </style>
 <!-- Quick View Modal Box Start -->
 <div class="modal fade theme-modal view-modal" id="view" tabindex="-1">
@@ -262,20 +263,18 @@ button:focus {
                 <div class="deal-offer-box">
                     <ul class="deal-offer-list">
                         @foreach ($topOrderProducts as $index => $item)
-                        {{-- {{ var_dump($item); }} --}}
+                            {{-- {{ var_dump($item); }} --}}
                             <li class="list-{{ ++$index }}">
                                 <div class="deal-offer-contain">
                                     <div>
-                                        <a href="{{ route('sanphams.chitiet', $item->sanPham->id) }}"
-                                            class="deal-image">
+                                        <a href="{{ route('sanphams.chitiet', $item->sanPham->id) }}" class="deal-image">
                                             <img src="{{ Storage::url($item->sanPham->hinh_anh) ?? 'images/sanpham-default.png' }}"
                                                 class="blur-up lazyload" alt="">
                                         </a>
                                     </div>
 
                                     <div style="min-width: 220px">
-                                        <a href="{{ route('sanphams.chitiet', $item->sanPham->id) }}"
-                                            class="deal-contain">
+                                        <a href="{{ route('sanphams.chitiet', $item->sanPham->id) }}" class="deal-contain">
                                             <h5>{{ $item->sanPham->ten_san_pham }}</h5>
                                             <h6>{{ number_format($item->sanPham->giaThapNhatCuaSP(), 0, '', '.') }}đ
                                                 <del>{{ number_format($item->sanPham->gia_cu, 0, '', '.') }}đ</del>
@@ -306,17 +305,20 @@ button:focus {
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                 <!-- Thông báo lỗi -->
-                 <div id="chat-error" class="alert alert-danger d-none" role="alert">
+                <!-- Thông báo lỗi -->
+                <div id="chat-error" class="alert alert-danger d-none" role="alert">
                     {{-- Vui lòng gửi tin nhắn hoặc hình ảnh/video không quá 20MB. --}}
                 </div>
-                <div id="chat-box" class="chat-box" style="height: 400px; overflow-y: auto; padding: 15px; background-color: #f9f9f9; border-radius: 8px;">
+                <div id="chat-box" class="chat-box"
+                    style="height: 400px; overflow-y: auto; padding: 15px; background-color: #f9f9f9; border-radius: 8px;">
                     <!-- Chat messages will be inserted here -->
                 </div>
                 <form id="chat-form" enctype="multipart/form-data" class="mt-3">
                     <div class="input-group mb-3">
-                        <input type="text" id="noi_dung" name="noi_dung" class="form-control" placeholder="Nhập tin nhắn..." autocomplete="off">
-                        <input type="file" id="media" name="media" accept="image/*,video/*" class="form-control" style="max-width: 180px;">
+                        <input type="text" id="noi_dung" name="noi_dung" class="form-control"
+                            placeholder="Nhập tin nhắn..." autocomplete="off">
+                        <input type="file" id="media" name="media" accept="image/*,video/*" class="form-control"
+                            style="max-width: 180px;">
                         <button class="btn btn-primary" type="submit">Gửi</button>
                     </div>
                 </form>
@@ -332,13 +334,13 @@ button:focus {
 <div class="theme-option">
     @isset(Auth::user()->id)
         <button class="btn setting-button bg-theme" data-bs-toggle="modal" data-bs-target="#chat-box-modal">
-            <i style = "color:white;" class="fa-solid fa-message"></i>
+            <i style="color:white;" class="fa-solid fa-message"></i>
         </button>
     @endisset
 
     <div class="back-to-top">
         <button class="btn setting-button bg-theme" id="back-to-top">
-            <i style = "color:white;" class="fas fa-chevron-up"></i>
+            <i style="color:white;" class="fas fa-chevron-up"></i>
         </button>
     </div>
 </div>
@@ -378,7 +380,8 @@ button:focus {
 
                 <form>
                     <div class="form-floating mb-4 theme-form-floating">
-                        <textarea class="form-control" placeholder="Leave a comment here" id="address" style="height: 100px"></textarea>
+                        <textarea class="form-control" placeholder="Leave a comment here" id="address"
+                            style="height: 100px"></textarea>
                         <label for="address">Enter Address</label>
                     </div>
                 </form>
@@ -402,8 +405,7 @@ button:focus {
 
 <!-- Edit Profile Start -->
 @if (isset($user))
-    <form id="myForm" action="{{ route('users.updateClient', $user->id) }}" method="post"
-        enctype="multipart/form-data">
+    <form id="myForm" action="{{ route('users.updateClient', $user->id) }}" method="post" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         <div class="modal fade theme-modal" id="editProfile" tabindex="-1">
@@ -420,10 +422,8 @@ button:focus {
                             <div class="col-xxl-12">
 
                                 <div class="form-floating theme-form-floating">
-                                    <input type="text"
-                                        class="form-control @error('ten_nguoi_dung') is-invalid @enderror"
-                                        name="ten_nguoi_dung" id="pname"
-                                        value="{{ $user->ten_nguoi_dung ?? '' }}">
+                                    <input type="text" class="form-control @error('ten_nguoi_dung') is-invalid @enderror"
+                                        name="ten_nguoi_dung" id="pname" value="{{ $user->ten_nguoi_dung ?? '' }}">
                                     <label for="pname">Họ và tên</label>
                                 </div>
                                 @error('ten_nguoi_dung')
@@ -447,11 +447,10 @@ button:focus {
                             <div class="col-xxl-6">
 
                                 <div class="form-floating theme-form-floating">
-                                    <input class="form-control @error('so_dien_thoai') is-invalid @enderror"
-                                        type="tel" value="{{ $user->so_dien_thoai ?? '' }}" name="so_dien_thoai"
-                                        id="mobile" maxlength="10"
-                                        oninput="javascript: if (this.value.length > this.maxLength) this.value =
-                                            this.value.slice(0, this.maxLength);">
+                                    <input class="form-control @error('so_dien_thoai') is-invalid @enderror" type="tel"
+                                        value="{{ $user->so_dien_thoai ?? '' }}" name="so_dien_thoai" id="mobile"
+                                        maxlength="10" oninput="javascript: if (this.value.length > this.maxLength) this.value =
+                                                this.value.slice(0, this.maxLength);">
                                     <label for="mobile">Số điện thoại</label>
                                 </div>
                                 @error('so_dien_thoai')
@@ -479,7 +478,7 @@ button:focus {
                                     <label for="address2">Add Address 2</label>
                                 </div>
 
-                        </div> --}}
+                            </div> --}}
                             @if (isset($user))
                                 <div class="col-xxl-4">
 
@@ -500,9 +499,8 @@ button:focus {
                             @if(empty($user->ngay_sinh))
                                 <div class="col-xxl-4">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="date"
-                                            class="form-control @error('ngay_sinh') is-invalid @enderror" id="address3"
-                                            value="{{ $user->ngay_sinh }}" name="ngay_sinh">
+                                        <input type="date" class="form-control @error('ngay_sinh') is-invalid @enderror"
+                                            id="address3" value="{{ $user->ngay_sinh }}" name="ngay_sinh">
                                         <label for="address3">Ngày sinh</label>
                                     </div>
 
@@ -512,20 +510,18 @@ button:focus {
                                     <div class="text-danger">* Chỉ được nhập 1 lần</div>
                                 </div>
                             @else
-                            <div class="col-xxl-4">
-                                <div class="form-floating theme-form-floating">
-                                    <input type="date"
-                                        class="form-control @error('ngay_sinh') is-invalid @enderror" id="address3"
-                                        value="{{ $user->ngay_sinh }}" name="ngay_sinh" readonly>
-                                    <label for="address3">Ngày sinh</label>
+                                <div class="col-xxl-4">
+                                    <div class="form-floating theme-form-floating">
+                                        <input type="date" class="form-control @error('ngay_sinh') is-invalid @enderror"
+                                            id="address3" value="{{ $user->ngay_sinh }}" name="ngay_sinh" readonly>
+                                        <label for="address3">Ngày sinh</label>
+                                    </div>
                                 </div>
-                            </div>
                             @endif
 
                             <div class="col-xxl-4">
                                 <div class="form-floating theme-form-floating">
-                                    <input type="file"
-                                        class="form-control @error('anh_dai_dien') is-invalid @enderror"
+                                    <input type="file" class="form-control @error('anh_dai_dien') is-invalid @enderror"
                                         id="address3" name="anh_dai_dien">
                                     <label for="address3">Ảnh đại diện</label>
                                 </div>
@@ -536,8 +532,7 @@ button:focus {
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-animation btn-md fw-bold"
-                            data-bs-dismiss="modal">Đóng</button>
+                        <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">Đóng</button>
                         <button type="submit" class="btn theme-bg-color btn-md fw-bold text-light">Lưu thay
                             đổi</button>
 
@@ -599,8 +594,7 @@ button:focus {
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-animation btn-md fw-bold"
-                    data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">Cancel</button>
                 <button type="button" class="btn theme-bg-color btn-md fw-bold text-light">Update Card</button>
             </div>
         </div>
@@ -656,8 +650,8 @@ button:focus {
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-    $(document).ready(function() {
-        $("#myForm").submit(function(e) {
+    $(document).ready(function () {
+        $("#myForm").submit(function (e) {
             e.preventDefault(); // Ngăn reload trang
 
             let formData = new FormData(this);
@@ -669,17 +663,17 @@ button:focus {
                 data: formData,
                 processData: false,
                 contentType: false,
-                success: function(response) {
+                success: function (response) {
                     $(".text-danger").remove(); // Xóa lỗi cũ
                     $("#editProfile").modal("hide"); // Đóng modal
                     location.reload(); // Tải lại trang để thấy cập nhật mới
                 },
-                error: function(xhr) {
+                error: function (xhr) {
                     $(".text-danger").remove(); // Xóa lỗi cũ
 
                     let errors = xhr.responseJSON.errors;
                     if (errors) {
-                        $.each(errors, function(field, messages) {
+                        $.each(errors, function (field, messages) {
                             let input = $(`[name="${field}"]`);
                             let errorHtml =
                                 `<p class="text-danger">${messages[0]}</p>`;
@@ -694,19 +688,19 @@ button:focus {
 </script>
 
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
         let selectedAttributes = {}; // Lưu thuộc tính đã chọn
         let bienTheList = []; // Lưu danh sách biến thể
         let matchedVariant = null; // Biến toàn cục để lưu biến thể phù hợp
 
         // Xử lý khi bấm vào nút "Xem nhanh"
-        $(".btn-quick-view").click(function() {
+        $(".btn-quick-view").click(function () {
             let productId = $(this).data("id");
 
             $.ajax({
                 url: 'http://127.0.0.1:8000/quick-view?id=' + productId,
                 method: 'GET',
-                success: function(response) {
+                success: function (response) {
                     // Reset dữ liệu khi mở modal mới
                     selectedAttributes = {};
                     bienTheList = response.bien_the;
@@ -723,7 +717,7 @@ button:focus {
                     $('#view .gia_cu').text(response.gia_cu + ' đ');
 
                     document.getElementById("btnChiTiet").addEventListener("click",
-                        function() {
+                        function () {
                             location.href = '/sanpham/' + response.id;
                         });
 
@@ -733,7 +727,7 @@ button:focus {
                         'fill': 'none',
                         'stroke': '#ffc107'
                     });
-                    $('#view .rating li').each(function(index) {
+                    $('#view .rating li').each(function (index) {
                         if (index < so_sao) {
                             $(this).find('svg').css({
                                 'fill': '#ffc107',
@@ -772,14 +766,14 @@ button:focus {
 
                     $('.variant-section').html(thuocTinhHtml); // Thêm thuộc tính vào UI
                 },
-                error: function() {
+                error: function () {
                     // alert('Không tìm thấy sản phẩm!');
                 }
             });
         });
 
         // Xử lý khi chọn thuộc tính
-        $(document).on("click", ".option", function() {
+        $(document).on("click", ".option", function () {
             let thuocTinh = $(this).data("thuoc-tinh");
             let giaTri = $(this).data("gia-tri");
 
@@ -843,7 +837,7 @@ button:focus {
 
 
         // Chặn nhập số vượt quá tồn kho
-        $("#quantity").on("input", function() {
+        $("#quantity").on("input", function () {
             let input = $(this);
             let value = parseInt(input.val(), 10) || 1;
 
@@ -884,7 +878,7 @@ button:focus {
         $(document).on("click", ".number-input button:last-child", increaseValue);
 
         // Reset dữ liệu khi đóng modal để tránh lỗi hiển thị sai
-        $("#view").on("hidden.bs.modal", function() {
+        $("#view").on("hidden.bs.modal", function () {
             selectedAttributes = {}; // Xóa thuộc tính đã chọn
             bienTheList = []; // Xóa danh sách biến thể
             matchedVariant = null; // Reset biến thể
@@ -902,8 +896,8 @@ button:focus {
     // add-cart-button
 </script>
 <script>
-    $(document).ready(function() {
-        $("#form-cart-post").submit(function(event) {
+    $(document).ready(function () {
+        $("#form-cart-post").submit(function (event) {
             event.preventDefault();
 
             let bienTheId = $("#id_bienthe").val();
@@ -922,7 +916,7 @@ button:focus {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
                     'Accept': 'application/json'
                 },
-                success: function(response) {
+                success: function (response) {
                     console.log("Cart response:", response); // Kiểm tra dữ liệu
 
                     if (response.cart) {
@@ -988,7 +982,7 @@ button:focus {
                             '</div>'
                     });
                 },
-                error: function(xhr) {
+                error: function (xhr) {
                     if (xhr.status === 403 && xhr.responseJSON && xhr.responseJSON
                         .message) {
                         errorMessage = xhr.responseJSON.message;
@@ -1003,7 +997,7 @@ button:focus {
 
         });
     });
-    $(document).on("click", ".delete-cart-item", function() {
+    $(document).on("click", ".delete-cart-item", function () {
         let cartItemId = $(this).data("id"); // Lấy ID sản phẩm trong giỏ hàng
 
         $.ajax({
@@ -1015,7 +1009,7 @@ button:focus {
             headers: {
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
             },
-            success: function(response) {
+            success: function (response) {
                 console.log("Response từ server:", response); // Debug dữ liệu
                 if (response.status === "success") {
                     $(".header-wishlist .badge").text(response.totalItem); // Cập nhật số sản phẩm
@@ -1027,7 +1021,7 @@ button:focus {
                     let total = 0;
                     let totalItem = response.totalItem;
                     let totalPrice = response.totalPrice;
-                    $(".cart-list li").each(function() {
+                    $(".cart-list li").each(function () {
                         let text = $(this).find("h6").text();
                         let matches = text.match(/(\d+)\s*x\s*([\d\.]+)/);
 
@@ -1047,7 +1041,7 @@ button:focus {
                     Swal.fire("Lỗi", "Không thể xóa sản phẩm", "error");
                 }
             },
-            error: function() {
+            error: function () {
                 Swal.fire("Lỗi", "Bạn chưa đăng nhập!", "error");
             },
         });
