@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\DanhGia;
 use App\Models\SanPham;
 use App\Models\ThongBao;
-use App\Events\AnBinhLuan;
-use App\Events\HienBinhLuan;
+use App\Events\AnDanhGia;
+use App\Events\HienDanhGia;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
@@ -142,9 +142,9 @@ class DanhGiaController extends Controller
             event(new \App\Events\LuuThongBaoDanhGia($thongBao));
 
             if ($newStatus == 0) {
-                event(new AnBinhLuan($danhGia));
+                event(new AnDanhGia($danhGia));
             } else {
-                event(new HienBinhLuan($danhGia));
+                event(new HienDanhGia($danhGia));
             }
 
             return response()->json(['success' => true, 'status' => $danhGia->trang_thai]);

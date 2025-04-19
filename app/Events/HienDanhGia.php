@@ -9,7 +9,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class AnBinhLuan implements ShouldBroadcast
+class HienDanhGia implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -27,15 +27,14 @@ class AnBinhLuan implements ShouldBroadcast
 
     public function broadcastAs()
     {
-        return 'hide-comment';
+        return 'show-comment';
     }
 
     public function broadcastWith()
     {
         return [
-            'message' => 'Bình luận của bạn đã bị ẩn bởi quản trị viên.',
+            'message' => 'Bình luận của bạn đã được hiển thị lại bởi quản trị viên.',
             'comment_id' => $this->danhGia->id,
-            'reasons' => $this->danhGia->ly_do_an,
             'product_name' => optional($this->danhGia->sanPham)->ten_san_pham ?? 'Không xác định'
         ];
     }
