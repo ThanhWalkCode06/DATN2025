@@ -134,10 +134,7 @@
                                         <div class="onhover-dropdown">
                                             <a href="#" class="btn p-0 position-relative header-notification">
                                                 <i data-feather="bell"></i>
-                                                @php
-                                                    $count = Auth::check() ? App\Models\ThongBao::where('user_id', Auth::id())->where('trang_thai', 0)->count() : 0;
-                                                @endphp
-                                                <span class="position-absolute top-0 start-100 translate-middle badge notification-count" style="{{ $count > 0 ? 'display: inline;' : 'display: none;' }}">{{ $count }}
+                                                <span class="position-absolute top-0 start-100 translate-middle badge notification-count" style="display: none;">0
                                                     <span class="visually-hidden">unread notifications</span>
                                                 </span>
                                             </a>
@@ -400,4 +397,165 @@
         });
     });
     </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Cấu hình Pusher
+            const pusher = new Pusher("0ca5e8c271c25e1264d2", {
+                cluster: "ap1",
+                encrypted: true
+            });
+        
+            let userId = {{ Auth::id() ?? 'null' }};
+            let channel = null;
+        
+            // Hàm khởi tạo Pusher channel
+            function initializePusher(userId) {
+                if (channel) {
+                    pusher.unsubscribe('notifications-' + userId);
+                }
+                channel = pusher.subscribe('notifications-' + userId);
+        
+                channel.bind('new-notification', function (data) {
+                    console.log('Nhận thông báo mới:', data);
+        
+                    // Cập nhật số lượng thông báo
+                    const badge = document.querySelector('.notification-count');
+                    let count = parseInt(badge.textContent || 0) + 1;
+                    badge.textContent = count;
+                    badge.style.display = 'inline';
+        
+                    // Thêm thông báo mới vào danh sách
+                    const notificationList = document.querySelector('.notification-list');
+                    if (notificationList.querySelector('p')?.textContent === 'Không có thông báo mới.') {
+                        notificationList.innerHTML = '';
+                    }
+        
+                    const notificationItem = document.createElement('li');
+                    notificationItem.classList.add('notification-box');
+                    notificationItem.id = 'notification-' + data.id;
+                    notificationItem.innerHTML = `
+                        <div class="notification-content">
+                            <h6>${data.noi_dung}</h6>
+                            <p>Sản phẩm: ${data.product_name}</p>
+                            ${data.ly_do_an ? `<p>Lý do: ${data.ly_do_an}</p>` : ''}
+                            <small>${data.created_at}</small>
+                            <small class="d-block">${data.created_at_full}</small>
+                            <button class="btn btn-sm btn-link mark-as-read" data-id="${data.id}" data-url="/thongbao/${data.id}/da-doc">Đánh dấu đã đọc</button>
+                        </div>
+                    `;
+                    notificationList.prepend(notificationItem);
+        
+                    attachMarkAsReadEvent(notificationItem.querySelector('.mark-as-read'));
+                });
+            }
+        
+            // Hàm gắn sự kiện cho nút "Đánh dấu đã đọc"
+            function attachMarkAsReadEvent(button) {
+                button.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const notificationId = this.getAttribute('data-id');
+                    const url = this.getAttribute('data-url');
+                    const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        
+                    fetch(url, {
+                        method: 'PATCH',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': token
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            const notificationElement = document.getElementById('notification-' + notificationId);
+                            if (notificationElement) {
+                                notificationElement.remove();
+                            }
+        
+                            const badge = document.querySelector('.notification-count');
+                            if (badge) {
+                                let count = parseInt(badge.textContent) - 1;
+                                if (count > 0) {
+                                    badge.textContent = count;
+                                    badge.style.display = 'inline';
+                                } else {
+                                    badge.style.display = 'none';
+                                }
+                            }
+        
+                            const notificationList = document.querySelector('.notification-list');
+                            if (notificationList.children.length === 0) {
+                                notificationList.innerHTML = '<li class="notification-box"><p>Không có thông báo mới.</p></li>';
+                            }
+                        } else {
+                            console.error('Lỗi khi đánh dấu thông báo đã đọc:', data.message);
+                        }
+                    })
+                    .catch(error => console.error('Lỗi:', error));
+                });
+            }
+        
+            // Hàm tải số lượng thông báo qua AJAX
+            function loadNotificationCount() {
+                if (userId === 'null') return;
+        
+                fetch('/thong-bao/fetch', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    }
+                })
+                .then(response => response.json())
+                .then(notifications => {
+                    const badge = document.querySelector('.notification-count');
+                    badge.textContent = notifications.length;
+                    badge.style.display = notifications.length > 0 ? 'inline' : 'none';
+                })
+                .catch(error => console.error('Lỗi khi tải số lượng thông báo:', error));
+            }
+        
+            // Khởi tạo Pusher và tải số lượng thông báo ban đầu
+            if (userId !== 'null') {
+                initializePusher(userId);
+                loadNotificationCount();
+            }
+        
+            // Xử lý các nút "Đánh dấu đã đọc" hiện có
+            document.querySelectorAll('.mark-as-read').forEach(button => {
+                attachMarkAsReadEvent(button);
+            });
+        
+            // Lắng nghe sự kiện đăng nhập/đăng xuất qua meta tag
+            const observer = new MutationObserver((mutations) => {
+                mutations.forEach(mutation => {
+                    if (mutation.target.getAttribute('name') === 'user-logged-in') {
+                        const isLoggedIn = mutation.target.getAttribute('content') === 'true';
+                        if (isLoggedIn) {
+                            // Giả lập userId sau khi đăng nhập (thực tế nên lấy từ server)
+                            userId = document.querySelector('meta[name="user-logged-in"]').getAttribute('content') === 'true' ? 1 : 'null'; // Thay bằng cách lấy userId thực tế nếu cần
+                            if (userId !== 'null') {
+                                initializePusher(userId);
+                                loadNotificationCount();
+                            }
+                        } else {
+                            userId = 'null';
+                            if (channel) {
+                                pusher.unsubscribe('notifications-' + userId);
+                                channel = null;
+                            }
+                            const badge = document.querySelector('.notification-count');
+                            badge.textContent = '0';
+                            badge.style.display = 'none';
+                        }
+                    }
+                });
+            });
+        
+            const metaTag = document.querySelector('meta[name="user-logged-in"]');
+            if (metaTag) {
+                observer.observe(metaTag, { attributes: true });
+            }
+        });
+        </script>
     </header>
