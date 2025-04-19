@@ -59,6 +59,17 @@
             transform: scale(0.95);
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3) inset;
         }
+
+        .btn-apply {
+            background-color: #0da487;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+    </style>
+
     </style>
 @endsection
 
@@ -387,19 +398,22 @@
                                                             style="min-width: 90px;">
                                                             <div class="flex-grow-1">
                                                                 @if ($phieu->trang_thai == 1)
-                                                                    <span class="badge bg-success">Hoạt động</span>
+                                                                    <span class="badge bg-success"
+                                                                        style="border-radius: 0%;">Hoạt động</span>
                                                                 @else
-                                                                    <span class="badge bg-danger">Không hoạt động</span>
+                                                                    <span class="badge bg-danger"
+                                                                        style="border-radius: 0%;">Không hoạt động</span>
                                                                 @endif
                                                             </div>
                                                         </div>
+
+
                                                         <button type="button"
                                                             class="badge bg-success d-inline-block py-2 px-4 fw-bold text-white position-absolute btn-dung-ngay"
                                                             style="bottom: 1rem; right: 1rem; font-size: 0.95rem; border-radius: 20px;"
-                                                            onclick="chonMaPhieu('{{ $phieu->ma_phieu }}')">
-                                                            Dùng Ngay
+                                                            onclick="copyMaPhieu('{{ $phieu->ma_phieu }}')">
+                                                            Sao chép mã
                                                         </button>
-
 
 
                                                     </div>
@@ -849,6 +863,17 @@
             // Đóng modal (nếu bạn dùng Bootstrap 5)
             var modal = bootstrap.Modal.getInstance(document.getElementById('modalVoucher'));
             modal.hide();
+        }
+    </script>
+    <script>
+        function copyMaPhieu(maPhieu) {
+            navigator.clipboard.writeText(maPhieu)
+                .then(function() {
+                    alert('Đã sao chép mã: ' + maPhieu);
+                })
+                .catch(function(error) {
+                    console.error('Lỗi sao chép: ', error);
+                });
         }
     </script>
 @endsection
