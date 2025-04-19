@@ -297,3 +297,4 @@ Route::post('/binhluan/{id}/reply', [BinhLuanController::class, 'store'])->name(
 Route::post('/binhluan', [BinhLuanController::class, 'store'])->name('binhluan.store');
 
 Route::patch('/thongbao/{id}/da-doc', [ThongBaoController::class, 'daDoc'])->name('thongbao.da_doc');
+Route::get('/thong-bao/fetchAll', [ThongBaoController::class, 'fetchAll'])->name('thongbao.fetchAll');
