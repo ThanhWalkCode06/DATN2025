@@ -152,7 +152,7 @@
                                     </div>
 
 
-                                    <div style="width: 115%;" class="order-contain">
+                                    <div style="width: 112%;" class="order-contain">
                                         @php
                                             $orderStatus = [
                                                 -1 => 'Đã hủy',
@@ -165,72 +165,131 @@
                                             ];
                                         @endphp
                                         @if ($donHangsPaginate->isNotEmpty())
-                                        <div class="row mt-4">
-                                        @foreach($donHangsPaginate->chunk(ceil(count($donHangsPaginate) / 2)) as $chunk)
-                                        <div class="col-md-6">
-                                            @foreach ($chunk as $item)
-                                                <div class="order-box dashboard-bg-box">
-                                                    <a href="{{ route('order-tracking.client', $item->id) }}">
-                                                        <div class="order-container">
-                                                            <div class="order-icon">
-                                                                <i data-feather="box"></i>
+                                            <div class="row mt-1">
+                                                @if ($donHangsPaginate->count() == 1)
+                                                    <div class="col-md-12">
+                                                        <!-- Chiếm toàn bộ chiều rộng nếu chỉ có 1 item -->
+                                                        @foreach ($donHangsPaginate as $item)
+                                                            <div style="padding: 0px;" class="order-box dashboard-bg-box">
+                                                                <a href="{{ route('order-tracking.client', $item->id) }}">
+                                                                    <div style="width: 99%;" class="order-container mt-1">
+                                                                        <div class="order-icon">
+                                                                            <i data-feather="box"></i>
+                                                                        </div>
+                                                                        <div style="" class="order-detail">
+                                                                            <div
+                                                                                style="position: relative; display:flex; justify-content: space-between">
+                                                                                <h4>Đơn Hàng <span
+                                                                                        class="{{ in_array($item->trang_thai_don_hang, [-1, 0]) ? '' : 'success-bg' }}">{{ $orderStatus[$item->trang_thai_don_hang] }}</span>
+                                                                                </h4>
+                                                                                <span
+                                                                                    style="border:none; background: none; color:#4a5568; margin-left: 35px">Ngày
+                                                                                    đặt: {{ $item->created_at }}</span>
+                                                                            </div>
+                                                                            <div>
+                                                                                <h6 class="text-content mt-2">Mã đơn hàng:
+                                                                                    {{ $item->ma_don_hang }}</h6>
+                                                                            </div>
+                                                                            <div
+                                                                                style="position: relative; display: flex; justify-content: space-between">
+                                                                                <h6 class="text-content mt-2">Trạng thái
+                                                                                    thanh toán:
+                                                                                    @if ($item->trang_thai_thanh_toan == 0)
+                                                                                        <span
+                                                                                            style="float: right; padding-top: 0px; padding-bottom: 0px; padding-left: 5px; padding-right: 0px"
+                                                                                            class="btn bg-danger-subtle text-danger">Chưa
+                                                                                            thanh toán</span>
+                                                                                    @elseif($item->trang_thai_thanh_toan == 1)
+                                                                                        <span
+                                                                                            style="float: right; padding-top: 0px; padding-bottom: 0px; padding-left: 5px; padding-right: 0px "
+                                                                                            class="btn bg-danger-subtle text-success">Đã
+                                                                                            thanh toán</span>
+                                                                                    @else
+                                                                                        <span
+                                                                                            style="float: right; padding-top: 0px; padding-bottom: 0px; padding-left: 5px; padding-right: 0px "
+                                                                                            class="btn bg-danger-subtle text-success">Đã
+                                                                                            hoàn tiền</span>
+                                                                                    @endif
+                                                                                </h6>
+                                                                            </div>
+                                                                            <h6 class="text-content mt-2">Địa chỉ nhận:
+                                                                                {{ $item->dia_chi_nguoi_nhan }}</h6>
+                                                                            <h6 class="text-content mt-2">Tổng tiền:
+                                                                                <strong style="font-weight: bold"
+                                                                                    class="text-success">{{ number_format($item->tong_tien, 0, '.', '.') }}
+                                                                                    đ</strong></h6>
+                                                                        </div>
+                                                                    </div>
+                                                                </a>
                                                             </div>
+                                                        @endforeach
+                                                    </div>
+                                                @else
+                                                    @foreach ($donHangsPaginate->chunk(ceil(count($donHangsPaginate) / 2)) as $chunk)
+                                                        <div style="width: 46%" class="col-md-6">
+                                                            @foreach ($chunk as $item)
+                                                                <div style="padding: 0px;"
+                                                                    class="order-box dashboard-bg-box">
+                                                                    <a
+                                                                        href="{{ route('order-tracking.client', $item->id) }}">
+                                                                        <div class="order-container mt-3">
+                                                                            <div class="order-icon">
+                                                                                <i data-feather="box"></i>
+                                                                            </div>
+                                                                            <div class="order-detail">
+                                                                                <div
+                                                                                    style="position: relative; display:flex; justify-content: space-between">
+                                                                                    <h4>Đơn Hàng <span
+                                                                                            class="{{ in_array($item->trang_thai_don_hang, [-1, 0]) ? '' : 'success-bg' }}">{{ $orderStatus[$item->trang_thai_don_hang] }}</span>
+                                                                                    </h4>
+                                                                                    <span
+                                                                                        style="border:none; background: none; color:#4a5568; margin-left: 35px">Ngày
+                                                                                        đặt: {{ $item->created_at }}</span>
+                                                                                </div>
+                                                                                <div>
 
-                                                            <div style="max-width: 450px" class="order-detail">
-                                                                {{-- {{ dd($item->trang_thai) }} --}}
-                                                                <div style="position: relative; display:flex; justify-content: space-between">
-                                                                    <h4>Đơn Hàng <span
-                                                                            class="{{ in_array($item->trang_thai_don_hang, [-1, 0]) ? '' : 'success-bg' }}">{{ $orderStatus[$item->trang_thai_don_hang] }}</span>
-
-                                                                    </h4>
-                                                                    <span
-                                                                            style="border:none; background: none; color:#4a5568; margin-left: 35px">Ngày
-                                                                            đặt: {{ $item->created_at }}</span>
+                                                                                </div>
+                                                                                <div>
+                                                                                    <h6 class="text-content mt-2">Mã đơn
+                                                                                        hàng: {{ $item->ma_don_hang }}</h6>
+                                                                                </div>
+                                                                                <div
+                                                                                    style="position: relative; display: flex; justify-content: space-between">
+                                                                                    <h6 class="text-content mt-2">Trạng
+                                                                                        thái thanh toán:
+                                                                                        @if ($item->trang_thai_thanh_toan == 0)
+                                                                                            <span
+                                                                                                style="float: right; padding-top: 0px; padding-bottom: 0px; padding-left: 5px; padding-right: 0px; left: 0 "
+                                                                                                class="btn bg-danger-subtle text-danger">Chưa
+                                                                                                thanh toán</span>
+                                                                                            @elseif($item->trang_thai_thanh_toan == 1)
+                                                                                            <span
+                                                                                                style="float: right; padding-top: 0px; padding-bottom: 0px; padding-left: 5px; padding-right: 0px "
+                                                                                                class="btn bg-danger-subtle text-success">Đã
+                                                                                                thanh toán</span>
+                                                                                        @else
+                                                                                            <span
+                                                                                                style="float: right; padding-top: 0px; padding-bottom: 0px; padding-left: 5px; padding-right: 0px "
+                                                                                                class="btn bg-danger-subtle text-success">Đã
+                                                                                                hoàn tiền</span>
+                                                                                        @endif
+                                                                                    </h6>
+                                                                                </div>
+                                                                                <h6 class="text-content mt-2">Địa chỉ nhận:
+                                                                                    {{ $item->dia_chi_nguoi_nhan }}</h6>
+                                                                                <h6 class="text-content mt-2">Tổng tiền:
+                                                                                    <strong style="font-weight: bold"
+                                                                                        class="text-success">{{ number_format($item->tong_tien, 0, '.', '.') }}
+                                                                                        đ</strong></h6>
+                                                                            </div>
+                                                                        </div>
+                                                                    </a>
                                                                 </div>
-                                                                <div>
-                                                                    <h6 class="text-content mt-2">Mã đơn hàng:
-                                                                        {{ $item->ma_don_hang }}
-                                                                </div>
-                                                                <div style="position: relative;display: flex; justify-content: space-between">
-                                                                    <h6 class="text-content mt-2">Trạng thái thanh toán:
-                                                                        @if ($item->trang_thai_thanh_toan == 0)
-                                                                            <span
-                                                                                style="float: right; padding-top: 0px; padding-bottom: 0px; padding-left: 5px; padding-right: 0px; left: 0 "
-                                                                                class="btn bg-danger-subtle text-danger">
-                                                                                Chưa thanh toán
-                                                                            </span>
-                                                                        @elseif ($item->trang_thai_thanh_toan == 1)
-                                                                            <span
-                                                                                style="float: right; padding-top: 0px; padding-bottom: 0px; padding-left: 5px; padding-right: 0px "
-                                                                                class="btn bg-danger-subtle text-success">
-                                                                                Đã thanh toán
-                                                                            </span>
-                                                                        @else
-                                                                            <span
-                                                                                style="float: right; padding-top: 0px; padding-bottom: 0px; padding-left: 5px; padding-right: 0px "
-                                                                                class="btn bg-danger-subtle text-success">
-                                                                                Đã hoàn tiền
-                                                                            </span>
-                                                                        @endif
-                                                                    </h6>
-                                                                </div>
-                                                                <h6 class="text-content mt-2">Địa chỉ nhận:
-                                                                    {{ $item->dia_chi_nguoi_nhan }}
-                                                                </h6>
-                                                                <h6 class="text-content mt-2">Tổng tiền: <strong
-                                                                        style="font-weight: bold" class="text-success">
-                                                                        {{ number_format($item->tong_tien, 0, '.', '.') }}
-                                                                        đ</strong>
-                                                                </h6>
-                                                            </div>
+                                                            @endforeach
                                                         </div>
-                                                    </a>
-                                                </div>
-                                            @endforeach
-                                        </div>
-                                        @endforeach
-                                        </div>
-
+                                                    @endforeach
+                                                @endif
+                                            </div>
                                         @else
                                             <center>
                                                 <h2 style="color: #ccc">Bạn không có đơn hàng nào</h2>
@@ -243,7 +302,9 @@
                                     </div>
 
                                 </div>
-                                {{ $donHangsPaginate->links('pagination::bootstrap-5') }}
+                                <div class="mt-4">
+                                    {{ $donHangsPaginate->links('pagination::bootstrap-5') }}
+                                </div>
                             </div>
 
                             <div class="tab-pane fade" id="pills-address" role="tabpanel">
