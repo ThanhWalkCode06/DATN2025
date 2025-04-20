@@ -24,6 +24,7 @@ class UserController extends Controller
         $donHangsPaginate = $user->donHangs()
             ->orderBy('id', 'desc')
             ->paginate(5);
+
         $i = 0;
         if ($user) {
             foreach ($donHangsPaginate as $item) {
@@ -213,7 +214,7 @@ class UserController extends Controller
                     } else {
                         session()->flash('success', 'Đơn hàng đã được trả thành công.');
                     }
-                    
+
 
                     // Cập nhật trạng thái đơn hàng
                     $donHang->update([

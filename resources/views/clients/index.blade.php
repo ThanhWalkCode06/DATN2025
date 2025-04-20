@@ -180,7 +180,7 @@
                         <div class="product-border border-row overflow-hidden">
                             <div class="product-box-slider no-arrow">
                                 <div>
-                                    <div style="border-bottom: 1px solid #ccc;" class="row">
+                                    <div class="row">
                                         @foreach ($sanPhamFollowComments as $item)
                                             @php
                                                 $giaThapNhat = collect($item['bien_thes'])->min('gia_ban') ?? 0;

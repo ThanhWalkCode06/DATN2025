@@ -24,7 +24,7 @@ class UserRequest extends FormRequest
     {
         return [
             'name' => [
-                'required',
+                'required','string','max:255',
                 Rule::unique('users', 'username')->ignore($this->route('user'))
             ],
             'email' => [
@@ -33,8 +33,8 @@ class UserRequest extends FormRequest
             ],
             'anh_dai_dien' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'role' => '',
-            'ten_nguoi_dung' => 'required',
-            'dia_chi' => 'required',
+            'ten_nguoi_dung' => 'required','string','max:255',
+            'dia_chi' => 'required','string','max:255',
             'ngay_sinh' => ['required','date'
                 ,'before_or_equal:' .  now()->subYear(18)->format('Y-m-d')
             ],
@@ -53,6 +53,7 @@ class UserRequest extends FormRequest
     {
         return [
             'name.required' => 'Vui lòng nhập tên tài khoản',
+            'name.max' => 'Chỉ được tối đa 255 ký tự',
             'name.unique' => 'Tên tài khoản này đã tồn tại vui lòng nhập khác',
 
             'email.required' => 'Vui lòng nhập email',
@@ -63,7 +64,11 @@ class UserRequest extends FormRequest
             'anh_dai_dien.required' => 'Vui lòng chọn hình ảnh',
 
             'ten_nguoi_dung.required' => 'Vui lòng nhập tên ',
+            'ten_nguoi_dung.max' => 'Chỉ được tối đa 255 ký tự',
+
             'dia_chi.required' => 'Vui lòng nhập địa chỉ dùng',
+            'dia_chi.max' => 'Chỉ được tối đa 255 ký tự',
+
             'ngay_sinh.required' => 'Vui lòng nhập ngày sinh ',
             'ngay_sinh.before_or_equal' => 'Chưa đủ 18 tuổi',
             'gioi_tinh.required' => 'Vui lòng chọn giới tính ',

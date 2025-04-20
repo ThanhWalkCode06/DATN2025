@@ -130,10 +130,13 @@ class AuthController extends Controller
     public function storeResetPass(Request $request, $token)
     {
         $request->validate([
-            'password' => 'required',
+            'password' => 'required|string|min:6|max:255',
             'confirm_password' => 'required|same:password',
         ], [
             'password.required' => 'Mật khẩu không được để trống',
+            'password.min' => 'Mật khẩu không được ít hơn 6 ký tự',
+            'password.max' => 'Mật khẩu không được hơn 255 ký tự',
+
             'confirm_password.required' => 'Xác nhận mật khẩu không được để trống',
             'confirm_password.same' => 'Xác nhận mật khẩu không trùng với mật khẩu mới',
         ]);
@@ -161,11 +164,14 @@ class AuthController extends Controller
             $user = Auth::user();
             $request->validate(
                 [
-                    'password' => 'required',
+                    'password' => 'required|string|min:6|max:255',
                     'confirm_password' => 'required|same:password',
                 ],
                 [
                     'password.required' => 'Mật khẩu không được để trống',
+                    'password.min' => 'Mật khẩu không được ít hơn 6 ký tự',
+                    'password.max' => 'Mật khẩu không được hơn 255 ký tự',
+
                     'confirm_password.required' => 'Xác nhận mật khẩu không được để trống',
                     'confirm_password.same' => 'Xác nhận mật khẩu không trùng với mật khẩu mới',
                 ]

@@ -145,11 +145,11 @@
                             @endif
 
                             @if ($trangThai == 3)
-                                <form style="margin-left: 10px" action="{{ route('order.updateTrangThai', $donHang->id) }}"
+                                <form id="formXacNhan" style="margin-left: 10px" action="{{ route('order.updateTrangThai', $donHang->id) }}"
                                     method="POST">
                                     @csrf
                                     <input type="hidden" name="trang_thai" value="4">
-                                    <button type="submit" style="border: none" type="button" class="btn-primary btn-sm">
+                                    <button style="border: none" type="button" class="btn-primary btn-sm" id="xacNhanDon">
                                         Đã nhận hàng
                                     </button>
                                 </form>
@@ -490,7 +490,7 @@
             });
         </script>
     @endif
-    
+
     @if (session('error_binhluan'))
     <script>
         document.addEventListener("DOMContentLoaded", function() {
@@ -560,7 +560,7 @@
 
         </section>
         <!-- Order Table Section End -->
-       
+
 <!-- Review Modal -->
 @foreach ($bienThesList as $item)
     <div class="modal fade theme-modal" id="reviewModal{{ $item['bien_the_id'] }}" tabindex="-1">
@@ -652,30 +652,27 @@
     });
 </script>
 @endsection
-{{-- <script>
+<script>
     document.addEventListener("DOMContentLoaded", function () {
-        document.querySelectorAll(".confirm-btn").forEach(button => {
-            button.addEventListener("click", function () {
-                let orderId = this.dataset.id;
-                let actionText = this.dataset.action;
+        let btnxacNhan = document.querySelector("#xacNhanDon");
+            btnxacNhan.addEventListener("click", function () {
                 Swal.fire({
-                    title: `Bạn có chắc muốn ${actionText.toLowerCase()} không?`,
+                    title: `Bạn đã nhận được hàng chưa ?`,
                     text: "Hành động này không thể hoàn tác!",
                     icon: "warning",
                     showCancelButton: true,
                     confirmButtonColor: "#3085d6",
                     cancelButtonColor: "#d33",
-                    confirmButtonText: "Có, tiếp tục!",
-                    cancelButtonText: "Hủy"
+                    confirmButtonText: "Tôi đã nhận được",
+                    cancelButtonText: "Chưa"
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        document.getElementById('order-form-' + orderId).submit();
+                        document.getElementById('formXacNhan').submit();
                     }
                 });
             });
         });
-    });
-</script> --}}
+</script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         let currentForm = null;
