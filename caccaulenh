@@ -44,3 +44,4 @@
 
 - php artisan make:resource TenResource -> tạo 1 file để hiện thị dữ liệu API
 - php artisan schedule:work : tự động hạy command theo lịch hẹn
+- php artisan queue:work: chạy queue

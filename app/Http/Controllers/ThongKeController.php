@@ -178,7 +178,6 @@ class ThongKeController extends Controller
             ->get();
 
         if ($startDate->toDateString() === $endDate->toDateString()) {
-            // Nếu lọc 1 ngày -> thống kê theo giờ
             $doanhThuTheoGio = DB::table('chi_tiet_don_hangs')
                 ->join('bien_thes', 'bien_thes.id', '=', 'chi_tiet_don_hangs.bien_the_id')
                 ->join('don_hangs', 'don_hangs.id', '=', 'chi_tiet_don_hangs.don_hang_id')
@@ -192,44 +191,65 @@ class ThongKeController extends Controller
                 ->orderBy('gio')
                 ->pluck('doanh_thu', 'gio')
                 ->toArray();
-        
-            // Khởi tạo 24 giờ
+
             $dataChart = array_fill(0, 24, 0);
             foreach ($doanhThuTheoGio as $gio => $doanhThu) {
                 $dataChart[$gio] = $doanhThu;
             }
-        
-            $categoriesChart = [];
-            for ($i = 0; $i < 24; $i++) {
-                $categoriesChart[] = "{$i}h";
-            }
+            $categoriesChart = array_map(fn($i) => "$i" . 'h', range(0, 23));
         } else {
-            // Nếu lọc nhiều ngày -> thống kê theo ngày
-            $doanhThuTheoNgay = DB::table('chi_tiet_don_hangs')
-                ->join('bien_thes', 'bien_thes.id', '=', 'chi_tiet_don_hangs.bien_the_id')
-                ->join('don_hangs', 'don_hangs.id', '=', 'chi_tiet_don_hangs.don_hang_id')
-                ->select(
-                    DB::raw('DATE(don_hangs.created_at) as ngay'),
-                    DB::raw('SUM(bien_thes.gia_ban * chi_tiet_don_hangs.so_luong) as doanh_thu')
-                )
-                ->whereBetween('don_hangs.created_at', [$startDate, $endDate])
-                ->where('don_hangs.trang_thai_thanh_toan', 1)
-                ->groupBy(DB::raw('DATE(don_hangs.created_at)'))
-                ->orderBy('ngay')
-                ->pluck('doanh_thu', 'ngay')
-                ->toArray();
-        
-            $period = CarbonPeriod::create($startDate, $endDate);
-            $dataChart = [];
-            $categoriesChart = [];
-        
-            foreach ($period as $date) {
-                $ngay = $date->format('Y-m-d');
-                $dataChart[] = $doanhThuTheoNgay[$ngay] ?? 0;
-                $categoriesChart[] = $date->format('d/m');
+            $soNgay = $startDate->diffInDays($endDate);
+            if ($soNgay > 31) {
+                $doanhThuTheoThang = DB::table('chi_tiet_don_hangs')
+                    ->join('bien_thes', 'bien_thes.id', '=', 'chi_tiet_don_hangs.bien_the_id')
+                    ->join('don_hangs', 'don_hangs.id', '=', 'chi_tiet_don_hangs.don_hang_id')
+                    ->select(
+                        DB::raw('DATE_FORMAT(don_hangs.created_at, "%Y-%m") as thang'),
+                        DB::raw('SUM(bien_thes.gia_ban * chi_tiet_don_hangs.so_luong) as doanh_thu')
+                    )
+                    ->whereBetween('don_hangs.created_at', [$startDate, $endDate])
+                    ->where('don_hangs.trang_thai_thanh_toan', 1)
+                    ->groupBy(DB::raw('DATE_FORMAT(don_hangs.created_at, "%Y-%m")'))
+                    ->orderBy('thang')
+                    ->pluck('doanh_thu', 'thang')
+                    ->toArray();
+
+                $period = CarbonPeriod::create($startDate->copy()->startOfMonth(), '1 month', $endDate->copy()->startOfMonth());
+                $dataChart = [];
+                $categoriesChart = [];
+
+                foreach ($period as $month) {
+                    $thang = $month->format('Y-m');
+                    $dataChart[] = $doanhThuTheoThang[$thang] ?? 0;
+                    $categoriesChart[] = $month->format('m/Y');
+                }
+            } else {
+                $doanhThuTheoNgay = DB::table('chi_tiet_don_hangs')
+                    ->join('bien_thes', 'bien_thes.id', '=', 'chi_tiet_don_hangs.bien_the_id')
+                    ->join('don_hangs', 'don_hangs.id', '=', 'chi_tiet_don_hangs.don_hang_id')
+                    ->select(
+                        DB::raw('DATE(don_hangs.created_at) as ngay'),
+                        DB::raw('SUM(bien_thes.gia_ban * chi_tiet_don_hangs.so_luong) as doanh_thu')
+                    )
+                    ->whereBetween('don_hangs.created_at', [$startDate, $endDate])
+                    ->where('don_hangs.trang_thai_thanh_toan', 1)
+                    ->groupBy(DB::raw('DATE(don_hangs.created_at)'))
+                    ->orderBy('ngay')
+                    ->pluck('doanh_thu', 'ngay')
+                    ->toArray();
+
+                $period = CarbonPeriod::create($startDate, $endDate);
+                $dataChart = [];
+                $categoriesChart = [];
+
+                foreach ($period as $date) {
+                    $ngay = $date->format('Y-m-d');
+                    $dataChart[] = $doanhThuTheoNgay[$ngay] ?? 0;
+                    $categoriesChart[] = $date->format('d/m');
+                }
             }
         }
-        
+
 
         return view('admins.index', compact(
             'tongDoanhThu',
