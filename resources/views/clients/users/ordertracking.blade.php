@@ -13,6 +13,22 @@
     .rating i.selected {
         color: #f39c12;
     }
+    .alert {
+        margin-bottom: 20px;
+        padding: 15px;
+        border-radius: 5px;
+        font-size: 16px;
+    }
+    .alert-success {
+        background-color: #d4edda;
+        color: #155724;
+        border-color: #c3e6cb;
+    }
+    .alert-danger {
+        background-color: #f8d7da;
+        color: #721c24;
+        border-color: #f5c6cb;
+    }
 </style>
 @endsection
 
@@ -462,6 +478,24 @@
         <!-- Order Detail Section End -->
 
         <!-- Order Table Section Start -->
+        @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+    
+    @if (session('error_binhluan'))
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            Swal.fire({
+                title: "Lỗi!",
+                text: "{{ session('error_binhluan') }}",
+                icon: "error",
+                confirmButtonText: "OK"
+            });
+        });
+    </script>
+@endif
         <section class="order-table-section section-b-space">
             <div class="container-fluid-lg">
                 <div class="row">
@@ -519,17 +553,7 @@
 
         </section>
         <!-- Order Table Section End -->
-        @if (session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
-@endif
-
-@if (session('error_binhluan'))
-    <div class="alert alert-danger">
-        {{ session('error_binhluan') }}
-    </div>
-@endif
+       
 <!-- Review Modal -->
 @foreach ($bienThesList as $item)
     <div class="modal fade theme-modal" id="reviewModal{{ $item['bien_the_id'] }}" tabindex="-1">
