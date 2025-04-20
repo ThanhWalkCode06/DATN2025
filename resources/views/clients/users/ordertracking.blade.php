@@ -4,6 +4,16 @@
 @endsection
 
 @section('css')
+<style>
+    .rating i {
+        font-size: 24px;
+        cursor: pointer;
+        color: #ccc;
+    }
+    .rating i.selected {
+        color: #f39c12;
+    }
+</style>
 @endsection
 
 @section('content')
@@ -487,13 +497,17 @@
                                                 {{ number_format($item['gia_ban'], 0, '', '.') }} đ</td>
                                             <td>{{ $item['so_luong'] }}</td>
                                             @if ($statusChart == 4)
-                                                <td>
-                                                    <a href="{{ route('sanphams.chitiet', $item['id_san_pham']) }}"
-                                                        class="btn-primary btn-sm">
-                                                        Đánh giá sản phẩm
-                                                    </a>
-                                                </td>
-                                            @endif
+                                            <td>
+                                                <button type="button" class="btn-primary btn-sm btn-review-product"
+                                                        data-bs-toggle="modal" data-bs-target="#reviewModal{{ $item['bien_the_id'] }}"
+                                                        data-product-id="{{ $item['id_san_pham'] }}"
+                                                        data-variant-id="{{ $item['bien_the_id'] }}"
+                                                        data-product-name="{{ $item['ten_bien_the'] }}"
+                                                        data-product-image="{{ Storage::url($item['anh_bien_the']) }}">
+                                                    Đánh giá sản phẩm
+                                                </button>
+                                            </td>
+                                        @endif
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -502,14 +516,110 @@
                     </div>
                 </div>
             </div>
+
         </section>
         <!-- Order Table Section End -->
+        @if (session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
 
+@if (session('error_binhluan'))
+    <div class="alert alert-danger">
+        {{ session('error_binhluan') }}
+    </div>
+@endif
+<!-- Review Modal -->
+@foreach ($bienThesList as $item)
+    <div class="modal fade theme-modal" id="reviewModal{{ $item['bien_the_id'] }}" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Viết đánh giá sản phẩm</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <div class="modal-body pt-0">
+                    <form class="review-form" method="POST" action="{{ route('sanphams.themdanhgiadonhang') }}">
+                        @csrf
+                        <input type="hidden" name="san_pham_id" value="{{ $item['id_san_pham'] }}">
+                        <input type="hidden" name="bien_the_id" value="{{ $item['bien_the_id'] }}">
+                        <input type="hidden" name="so_sao" class="so_sao" value="5">
+
+                        <div class="product-wrapper">
+                            <div class="product-image">
+                                <img src="{{ Storage::url($item['anh_bien_the']) }}" class="img-fluid rounded shadow-sm"
+                                     style="width:100%; height:100%;" alt="{{ $item['ten_bien_the'] }}">
+                            </div>
+                            <div class="product-content">
+                                <h5 class="name">{{ $item['ten_bien_the'] }}</h5>
+                                <div class="product-review-rating">
+                                    <div class="product-rating">
+                                        <span class="theme-color">{{ number_format($item['gia_ban'], 0, ',', '.') }} ₫</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="review-box mt-3">
+                            <label>Đánh giá của bạn *</label>
+                            <div class="rating" data-variant-id="{{ $item['bien_the_id'] }}">
+                                <i class="fa fa-star selected" data-value="1"></i>
+                                <i class="fa fa-star selected" data-value="2"></i>
+                                <i class="fa fa-star selected" data-value="3"></i>
+                                <i class="fa fa-star selected" data-value="4"></i>
+                                <i class="fa fa-star selected" data-value="5"></i>
+                            </div>
+                        </div>
+
+                        <div class="review-box">
+                            <label for="nhan_xet_{{ $item['bien_the_id'] }}" class="form-label">Nhận xét của bạn *</label>
+                            <textarea id="nhan_xet_{{ $item['bien_the_id'] }}" name="nhan_xet" rows="3" class="form-control"
+                                      placeholder="Viết nhận xét của bạn..."></textarea>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-md btn-theme-outline fw-bold" data-bs-dismiss="modal">Đóng</button>
+                            <button type="submit" class="btn btn-md fw-bold text-light theme-bg-color">Gửi</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+@endforeach
+
+<!-- End Review Modal -->
     </body>
 @endsection
 
 
 @section('js')
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        document.querySelectorAll('.rating').forEach(ratingContainer => {
+            const stars = ratingContainer.querySelectorAll('i');
+            const soSaoInput = ratingContainer.closest('form').querySelector('.so_sao');
+
+            stars.forEach(star => {
+                star.addEventListener('click', function() {
+                    const rating = this.getAttribute('data-value');
+                    soSaoInput.value = rating;
+
+                    stars.forEach(s => {
+                        if (s.getAttribute('data-value') <= rating) {
+                            s.classList.add('selected');
+                        } else {
+                            s.classList.remove('selected');
+                        }
+                    });
+                });
+            });
+        });
+    });
+</script>
 @endsection
 {{-- <script>
     document.addEventListener("DOMContentLoaded", function () {
