@@ -42,7 +42,7 @@
             color: white;
             font-size: 12px;
             padding: 4px 8px;
-            border-radius: 50%;
+         
         }
     </style>
     <div class="header-top">

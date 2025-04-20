@@ -239,6 +239,8 @@ Route::get('/vnpay-return', [ThanhToanController::class, 'vnpayReturn'])->name('
 
 // })->name('vnpay.return');
 
+// Route::get('/order-tracking/{id}', [App\Http\Controllers\Clients\UserController::class, 'orderTracking'])->name('order-tracking.client');
+
 Route::get('/messages/{receiverId}', [ChatController::class, 'getMessages']);
 Route::post('/send-chat', [ChatController::class, 'sendChat']);
 
@@ -298,3 +300,5 @@ Route::post('/binhluan', [BinhLuanController::class, 'store'])->name('binhluan.s
 
 Route::patch('/thongbao/{id}/da-doc', [ThongBaoController::class, 'daDoc'])->name('thongbao.da_doc');
 Route::get('/thong-bao/fetchAll', [ThongBaoController::class, 'fetchAll'])->name('thongbao.fetchAll');
+
+Route::post('/san-pham/them-danh-gia-don-hang', [DanhGiaClientsController::class, 'themDanhGiaDonHang'])->name('sanphams.themdanhgiadonhang');
