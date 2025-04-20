@@ -232,7 +232,7 @@
 
                 $.notify({
                     title: "<strong>Thông báo từ hệ thống:</strong><br>",
-                    message: `Bình luận ở ${productText} của bạn đã bị ẩn bởi quản trị viên.${reasonText}`
+                    message: `Đánh giá ở ${productText} của bạn đã bị ẩn bởi quản trị viên.${reasonText}`
                 }, {
                     element: "body",
                     type: "danger",
@@ -262,7 +262,7 @@
 
                 $.notify({
                     title: "<strong>Thông báo từ hệ thống:</strong><br>",
-                    message: `Bình luận ở ${productText} của bạn đã được hiển thị lại bởi quản trị viên.`
+                    message: `Đánh giá ở ${productText} của bạn đã được hiển thị lại bởi quản trị viên.`
                 }, {
                     element: "body",
                     type: "success",

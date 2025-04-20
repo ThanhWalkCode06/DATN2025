@@ -42,7 +42,6 @@
             color: white;
             font-size: 12px;
             padding: 4px 8px;
-         
         }
     </style>
     <div class="header-top">
@@ -155,6 +154,7 @@
                                                         ? App\Models\ThongBao::with('danhGia.sanPham')
                                                             ->where('user_id', Auth::id())
                                                             ->where('trang_thai', 0)
+                                                            ->orderBy('created_at', 'desc')
                                                             ->get()
                                                         : collect([]);
                                                 @endphp
@@ -169,6 +169,9 @@
                                                                 </p>
                                                                 @if ($thongBao->danhGia && $thongBao->danhGia->ly_do_an)
                                                                     <p>Lý do: {{ $thongBao->danhGia->ly_do_an }}</p>
+                                                                @endif
+                                                                @if ($thongBao->danhGia && $thongBao->danhGia->nhan_xet)
+                                                                    <p>Nhận xét: {{ $thongBao->danhGia->nhan_xet }}</p>
                                                                 @endif
                                                                 <small>{{ $thongBao->created_at->diffForHumans() }}</small>
                                                                 <button class="btn btn-sm btn-link mark-as-read"
@@ -463,7 +466,7 @@
                     badge.textContent = count;
                     badge.style.display = 'inline';
 
-                    // Thêm thông báo mới vào danh sách
+                    // Thêm thông báo mới vào đầu danh sách
                     const notificationList = document.querySelector('.notification-list');
                     if (notificationList.querySelector('p')?.textContent === 'Không có thông báo mới.') {
                         notificationList.innerHTML = '';
@@ -477,6 +480,7 @@
                         <h6>${data.noi_dung}</h6>
                         <p>Sản phẩm: ${data.product_name}</p>
                         ${data.ly_do_an ? `<p>Lý do: ${data.ly_do_an}</p>` : ''}
+                        ${data.nhan_xet ? `<p>Nhận xét: ${data.nhan_xet}</p>` : ''}
                         <small>${data.created_at}</small>
                         <small class="d-block">${data.created_at_full}</small>
                         <button class="btn btn-sm btn-link mark-as-read" data-id="${data.id}" data-url="/thongbao/${data.id}/da-doc">Đánh dấu đã đọc</button>
@@ -556,6 +560,8 @@
                         const notificationList = document.querySelector('.notification-list');
                         if (notifications.length > 0) {
                             notificationList.innerHTML = '';
+                            // Sắp xếp thông báo theo created_at giảm dần
+                            notifications.sort((a, b) => new Date(b.created_at_full) - new Date(a.created_at_full));
                             notifications.forEach(thongBao => {
                                 const notificationItem = document.createElement('li');
                                 notificationItem.classList.add('notification-box');
@@ -565,6 +571,7 @@
                                 <h6>${thongBao.noi_dung}</h6>
                                 <p>Sản phẩm: ${thongBao.danh_gia?.san_pham?.ten_san_pham ?? 'Không xác định'}</p>
                                 ${thongBao.danh_gia?.ly_do_an ? `<p>Lý do: ${thongBao.danh_gia.ly_do_an}</p>` : ''}
+                                ${thongBao.nhan_xet ? `<p>Nhận xét: ${thongBao.nhan_xet}</p>` : ''}
                                 <small>${thongBao.created_at}</small>
                                 <small class="d-block">${thongBao.created_at_full}</small>
                                 <button class="btn btn-sm btn-link mark-as-read" data-id="${thongBao.id}" data-url="/thongbao/${thongBao.id}/da-doc">Đánh dấu đã đọc</button>

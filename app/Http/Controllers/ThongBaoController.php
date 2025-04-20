@@ -36,11 +36,13 @@ class ThongBaoController extends Controller
     $thongBaos = ThongBao::with('danhGia.sanPham')
         ->where('user_id', $userId)
         ->where('trang_thai', 0)
+        ->orderBy('created_at', 'desc')
         ->get()
         ->map(function ($thongBao) {
             return [
                 'id' => $thongBao->id,
                 'noi_dung' => $thongBao->noi_dung,
+                'nhan_xet' => $thongBao->danhGia->nhan_xet ?? null,
                 'created_at' => $thongBao->created_at->diffForHumans(), // "1 giờ trước"
                 'created_at_full' => $thongBao->created_at->format('d/m/Y H:i'), // "19/04/2025 14:30"
                 'danh_gia' => $thongBao->danhGia ? [
