@@ -135,3 +135,4 @@
     <script src="{{ asset('assets/js/jquery.dataTables.js') }}"></script>
     <script src="{{ asset('assets/js/custom-data-table.js') }}"></script>
 @endsection
+{{--  --}}

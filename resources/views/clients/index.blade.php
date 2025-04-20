@@ -180,13 +180,13 @@
                         <div class="product-border border-row overflow-hidden">
                             <div class="product-box-slider no-arrow">
                                 <div>
-                                    <div style="border-bottom: 1px solid #ccc; width: 889px" class="row">
+                                    <div class="row">
                                         @foreach ($sanPhamFollowComments as $item)
                                             @php
                                                 $giaThapNhat = collect($item['bien_thes'])->min('gia_ban') ?? 0;
                                             @endphp
-                                            <div style="border: 1px solid #ccc" class="col-md-3 px-0">
-                                                <div class="product-box">
+                                            <div class="col-md-3 p-1">
+                                                <div style="border: 1px solid #ccc" class="product-box">
                                                     <div style="position: relative; width: 100%">
                                                         @if ($item['gia_cu'] > $giaThapNhat)
                                                             <span style="position: absolute; top: 0; right: 0;"
@@ -260,16 +260,14 @@
 
                                                         <div class="add-to-cart-box bg-white">
                                                             <button class="btn btn-add-cart addcart-button">
-                                                                @if ($item['trang_thai'] == 1)
-                                                                    <a class="btn-quick-view" style="margin-right: 10px;"
-                                                                        href="javascript:void(0)" data-bs-toggle="modal"
-                                                                        data-bs-target="#view"
-                                                                        data-id="{{ $item['id'] }}">
-                                                                        <span class="add-icon bg-light-gray">
-                                                                            <i class="fa-solid fa-cart-plus"></i>
-                                                                        </span> Thêm vào giỏ hàng
-                                                                    </a>
-                                                                @endif
+                                                                <a class="btn-quick-view @if ($item['trang_thai'] == 0) invisible @endif"
+                                                                    style="margin-right: 10px;" href="javascript:void(0)"
+                                                                    data-bs-toggle="modal" data-bs-target="#view"
+                                                                    data-id="{{ $item['id'] }}">
+                                                                    <span class="add-icon bg-light-gray">
+                                                                        <i class="fa-solid fa-cart-plus"></i>
+                                                                    </span> Thêm vào giỏ hàng
+                                                                </a>
                                                             </button>
                                                         </div>
 

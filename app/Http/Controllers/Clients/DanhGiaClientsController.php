@@ -38,24 +38,24 @@ class DanhGiaClientsController extends Controller
 
         return response()->json($danhGias);
     }
-    
+
     public function kiemTraQuyenDanhGia($san_pham_id)
     {
         if (!Auth::check()) {
             return false; // Chưa đăng nhập, không được đánh giá
         }
-    
+
         $user = User::with(['donHangs.chiTietDonHangs'])->find(Auth::id());
         if (!$user) {
             return false; // Người dùng không tồn tại
         }
-    
+
         // Lấy danh sách biến thể của sản phẩm
         $idBienThes = BienThe::where('san_pham_id', $san_pham_id)->pluck('id')->toArray();
         if (empty($idBienThes)) {
             return false; // Không có biến thể
         }
-    
+
         // Kiểm tra các biến thể đã mua
         $bienTheDaMua = [];
         foreach ($user->donHangs as $donHang) {
@@ -64,13 +64,13 @@ class DanhGiaClientsController extends Controller
                     ->whereIn('bien_the_id', $idBienThes)
                     ->pluck('bien_the_id')
                     ->unique();
-    
+
                 foreach ($bienTheTrongDon as $bienTheId) {
                     $bienTheDaMua[$bienTheId] = ($bienTheDaMua[$bienTheId] ?? 0) + 1;
                 }
             }
         }
-    
+
         return !empty($bienTheDaMua); // Trả về true nếu có ít nhất một biến thể đã mua
     }
 
@@ -79,22 +79,22 @@ class DanhGiaClientsController extends Controller
         if (!Auth::check()) {
             return redirect()->route('login.client')->with('error', 'Vui lòng đăng nhập để đánh giá sản phẩm.');
         }
-    
+
         $user = User::with(['danhGias', 'donHangs.chiTietDonHangs'])->find(Auth::id());
-    
+
         if (!$user) {
             return redirect()->route('sanphams.chitiet', ['id' => $san_pham_id])
                 ->with('error_binhluan', 'Người dùng không tồn tại.');
         }
-    
+
         // Lấy danh sách biến thể của sản phẩm hiện tại
         $idBienThes = BienThe::where('san_pham_id', $san_pham_id)->pluck('id')->toArray();
-    
+
         if (empty($idBienThes)) {
             return redirect()->route('sanphams.chitiet', ['id' => $san_pham_id])
                 ->with('error_binhluan', 'Sản phẩm này không có biến thể để đánh giá.');
         }
-    
+
         // Tìm các biến thể đã mua
         $bienTheDaMua = [];
         foreach ($user->donHangs as $donHang) {
@@ -103,13 +103,13 @@ class DanhGiaClientsController extends Controller
                     ->whereIn('bien_the_id', $idBienThes)
                     ->pluck('bien_the_id')
                     ->unique();
-    
+
                 foreach ($bienTheTrongDon as $bienTheId) {
                     $bienTheDaMua[$bienTheId] = ($bienTheDaMua[$bienTheId] ?? 0) + 1;
                 }
             }
         }
-    
+
         // Nếu nhiều biến thể và chưa chọn → bắt chọn
         if (count($bienTheDaMua) > 1 && !$request->filled('bien_the_id')) {
             session()->put('bienTheDaMua_' . $san_pham_id, $bienTheDaMua);
@@ -117,31 +117,31 @@ class DanhGiaClientsController extends Controller
                 ->with('chophep_danhgia', true)
                 ->with('error_binhluan', 'Vui lòng chọn biến thể bạn muốn đánh giá.');
         }
-    
+
         // Nếu chỉ có 1 biến thể → tự động gán
         $bienTheId = $request->input('bien_the_id') ?? array_key_first($bienTheDaMua);
-    
+
         if (!$bienTheId || !isset($bienTheDaMua[$bienTheId])) {
             return redirect()->route('sanphams.chitiet', ['id' => $san_pham_id])
                 ->with('error_binhluan', 'Bạn chưa mua biến thể này.');
         }
-    
+
         // Kiểm tra số lượt đã đánh giá
         $soLuotDaDanhGia = DanhGia::where('user_id', $user->id)
             ->where('san_pham_id', $san_pham_id)
             ->where('bien_the_id', $bienTheId)
             ->count();
-    
+
         if ($soLuotDaDanhGia >= $bienTheDaMua[$bienTheId]) {
             return redirect()->route('sanphams.chitiet', ['id' => $san_pham_id])
                 ->with('error_binhluan', 'Bạn đã đánh giá đủ số lượt cho biến thể này. Hãy mua thêm để tiếp tục đánh giá.');
         }
-    
+
         $request->validate([
             'so_sao' => 'required|integer|min:1|max:5',
             'nhan_xet' => 'nullable|string'
         ]);
-    
+
         DanhGia::create([
             'user_id' => $user->id,
             'san_pham_id' => $san_pham_id,
@@ -150,13 +150,83 @@ class DanhGiaClientsController extends Controller
             'nhan_xet' => $request->nhan_xet ?? '',
             'trang_thai' => 1
         ]);
-    
+
         // Xoá session sau khi đánh giá xong để tránh lỗi khi chuyển sản phẩm
         session()->forget('bienTheDaMua_' . $san_pham_id);
-    
+
         return redirect()->route('sanphams.chitiet', ['id' => $san_pham_id])
             ->with('success', 'Gửi đánh giá thành công.')
             ->with('daMuaHang', true);
     }
-    
+
+    public function themDanhGiaDonHang(Request $request)
+    {
+        if (!Auth::check()) {
+            return redirect()->route('login.client')->with('error', 'Vui lòng đăng nhập để đánh giá sản phẩm.');
+        }
+
+        $user = User::with(['danhGias', 'donHangs.chiTietDonHangs'])->find(Auth::id());
+
+        if (!$user) {
+            return redirect()->back()->with('error_binhluan', 'Người dùng không tồn tại.');
+        }
+
+        $sanPhamId = $request->input('san_pham_id');
+        $bienTheId = $request->input('bien_the_id');
+
+        // Kiểm tra sản phẩm và biến thể có tồn tại
+        $sanPham = SanPham::find($sanPhamId);
+        $bienThe = BienThe::find($bienTheId);
+
+        if (!$sanPham || !$bienThe || $bienThe->san_pham_id != $sanPhamId) {
+            return redirect()->back()->with('error_binhluan', 'Sản phẩm hoặc biến thể không hợp lệ.');
+        }
+
+        // Kiểm tra đơn hàng đã mua biến thể này
+        $bienTheDaMua = [];
+        foreach ($user->donHangs as $donHang) {
+            if ($donHang->trang_thai_don_hang == 4) { // Đơn hàng hoàn thành
+                $bienTheTrongDon = $donHang->chiTietDonHangs
+                    ->where('bien_the_id', $bienTheId)
+                    ->pluck('bien_the_id')
+                    ->unique();
+
+                foreach ($bienTheTrongDon as $id) {
+                    $bienTheDaMua[$id] = ($bienTheDaMua[$id] ?? 0) + 1;
+                }
+            }
+        }
+
+        if (!isset($bienTheDaMua[$bienTheId])) {
+            return redirect()->back()->with('error_binhluan', 'Bạn chưa mua biến thể này.');
+        }
+
+        // Kiểm tra số lượt đã đánh giá
+        $soLuotDaDanhGia = DanhGia::where('user_id', $user->id)
+            ->where('san_pham_id', $sanPhamId)
+            ->where('bien_the_id', $bienTheId)
+            ->count();
+
+        if ($soLuotDaDanhGia >= $bienTheDaMua[$bienTheId]) {
+            return redirect()->back()->with('error_binhluan', 'Bạn đã đánh giá đủ số lượt cho biến thể này. Hãy mua thêm để tiếp tục đánh giá.');
+        }
+
+        // Xác thực dữ liệu
+        $request->validate([
+            'so_sao' => 'required|integer|min:1|max:5',
+            'nhan_xet' => 'nullable|string'
+        ]);
+
+        // Tạo đánh giá
+        DanhGia::create([
+            'user_id' => $user->id,
+            'san_pham_id' => $sanPhamId,
+            'bien_the_id' => $bienTheId,
+            'so_sao' => $request->so_sao,
+            'nhan_xet' => $request->nhan_xet ?? '',
+            'trang_thai' => 1
+        ]);
+
+        return redirect()->back()->with('success', 'Gửi đánh giá thành công.');
+    }
 }
