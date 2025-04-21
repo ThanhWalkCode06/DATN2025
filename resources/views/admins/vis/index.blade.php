@@ -64,6 +64,23 @@
                 </tr>
             </thead>
             <tbody>
+
+                @if ($users->count() > 0)
+                    @foreach ($users as $user)
+                        {{-- nội dung như bạn đã có --}}
+                    @endforeach
+                @else
+                    <tr>
+                        <td colspan="5" class="text-center text-danger py-4">
+                            <i class="bi bi-emoji-frown" style="font-size: 2rem;"></i><br>
+                            Không tìm thấy kết quả nào phù hợp
+                            @if ($keyword)
+                                cho từ khóa "<strong>{{ $keyword }}</strong>"
+                            @endif
+                        </td>
+                    </tr>
+                @endif
+
                 @foreach ($users as $user)
                             @php
                                 $tongTienRut = 0;
@@ -97,68 +114,68 @@
                                 <!-- Cột thông tin rút tiền mới -->
                                 {{-- <td>
                                     @if ($rutChuaXuLy->count())
-                                        @foreach ($rutChuaXuLy as $giaoDich)
-                                            <div class="mb-3 border p-2 rounded shadow-sm">
-                                                <ul class="list-unstyled mb-0">
-                                                    <li><strong>Ngân hàng:</strong> {{ $giaoDich->ten_ngan_hang ?? 'Không có' }}</li>
-                                                    <li><strong>Số tài khoản:</strong> {{ $giaoDich->so_tai_khoan ?? 'Không có' }}</li>
-                                                    <li><strong>Tên người nhận:</strong> {{ $giaoDich->ten_nguoi_nhan ?? 'Không có' }}</li>
-                                                    <li><strong>Số tiền:</strong> {{ number_format($giaoDich->so_tien) }} VNĐ</li>
-                                                </ul>
-                                            </div>
-                                        @endforeach
+                                    @foreach ($rutChuaXuLy as $giaoDich)
+                                    <div class="mb-3 border p-2 rounded shadow-sm">
+                                        <ul class="list-unstyled mb-0">
+                                            <li><strong>Ngân hàng:</strong> {{ $giaoDich->ten_ngan_hang ?? 'Không có' }}</li>
+                                            <li><strong>Số tài khoản:</strong> {{ $giaoDich->so_tai_khoan ?? 'Không có' }}</li>
+                                            <li><strong>Tên người nhận:</strong> {{ $giaoDich->ten_nguoi_nhan ?? 'Không có' }}</li>
+                                            <li><strong>Số tiền:</strong> {{ number_format($giaoDich->so_tien) }} VNĐ</li>
+                                        </ul>
+                                    </div>
+                                    @endforeach
                                     @else
-                                        <span class="text-muted">Không có yêu cầu</span>
+                                    <span class="text-muted">Không có yêu cầu</span>
                                     @endif
                                 </td> --}}
                                 {{-- <td>
                                     @if ($rutChuaXuLy->count() > 0)
-                                        <form method="POST" action="{{ route('admin.vis.xuLyRutNhieu') }}">
-                                            @csrf
-                                            @foreach ($rutChuaXuLy as $giaoDich)
-                                                <input type="hidden" name="ids[]" value="{{ $giaoDich->id }}">
-                                            @endforeach
-                                            <input type="hidden" name="trang_thai" value="1">
-                                            <button type="submit" class="btn btn-sm "
-                                                style="background-color: #009688; color: white; font-weight: 600;"
-                                                onclick="return confirm('Bạn có chắc chắn muốn duyệt yêu cầu rút tiền?')">
-                                                ✔  Duyệt rút tiền
-                                            </button>
-                                        </form>
-                                        <br>
-                                        <!-- Nút Huỷ rút tiền -->
-                                        <button type="button" class="btn btn-sm btn-huy-rut" data-bs-toggle="modal"
-                                            data-bs-target="#huyRutModal-{{ $user->id }}">
-                                            ❌ Huỷ rút tiền
+                                    <form method="POST" action="{{ route('admin.vis.xuLyRutNhieu') }}">
+                                        @csrf
+                                        @foreach ($rutChuaXuLy as $giaoDich)
+                                        <input type="hidden" name="ids[]" value="{{ $giaoDich->id }}">
+                                        @endforeach
+                                        <input type="hidden" name="trang_thai" value="1">
+                                        <button type="submit" class="btn btn-sm "
+                                            style="background-color: #009688; color: white; font-weight: 600;"
+                                            onclick="return confirm('Bạn có chắc chắn muốn duyệt yêu cầu rút tiền?')">
+                                            ✔ Duyệt rút tiền
                                         </button>
+                                    </form>
+                                    <br>
+                                    <!-- Nút Huỷ rút tiền -->
+                                    <button type="button" class="btn btn-sm btn-huy-rut" data-bs-toggle="modal"
+                                        data-bs-target="#huyRutModal-{{ $user->id }}">
+                                        ❌ Huỷ rút tiền
+                                    </button>
 
-                                        <!-- Modal nhập lý do huỷ -->
-                                        <div class="modal fade" id="huyRutModal-{{ $user->id }}" tabindex="-1">
-                                            <div class="modal-dialog">
-                                                <form method="POST" action="{{ route('admin.vis.xuLyRutNhieu') }}">
-                                                    @csrf
-                                                    <input type="hidden" name="trang_thai" value="2">
-                                                    @foreach ($rutChuaXuLy as $giaoDich)
-                                                        <input type="hidden" name="ids[]" value="{{ $giaoDich->id }}">
-                                                    @endforeach
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title">Nhập lý do huỷ yêu cầu rút tiền</h5>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <textarea name="ly_do" class="form-control" rows="4"
-                                                                placeholder="Nhập lý do huỷ..." required></textarea>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="submit" class="btn btn-danger">Xác nhận huỷ</button>
-                                                        </div>
+                                    <!-- Modal nhập lý do huỷ -->
+                                    <div class="modal fade" id="huyRutModal-{{ $user->id }}" tabindex="-1">
+                                        <div class="modal-dialog">
+                                            <form method="POST" action="{{ route('admin.vis.xuLyRutNhieu') }}">
+                                                @csrf
+                                                <input type="hidden" name="trang_thai" value="2">
+                                                @foreach ($rutChuaXuLy as $giaoDich)
+                                                <input type="hidden" name="ids[]" value="{{ $giaoDich->id }}">
+                                                @endforeach
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Nhập lý do huỷ yêu cầu rút tiền</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                                     </div>
-                                                </form>
-                                            </div>
+                                                    <div class="modal-body">
+                                                        <textarea name="ly_do" class="form-control" rows="4"
+                                                            placeholder="Nhập lý do huỷ..." required></textarea>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="submit" class="btn btn-danger">Xác nhận huỷ</button>
+                                                    </div>
+                                                </div>
+                                            </form>
                                         </div>
+                                    </div>
                                     @else
-                                        <span class="text-muted">Không có yêu cầu</span>
+                                    <span class="text-muted">Không có yêu cầu</span>
                                     @endif
                                 </td> --}}
                                 <td style="font-weight: 600; color: #dc3545;">
