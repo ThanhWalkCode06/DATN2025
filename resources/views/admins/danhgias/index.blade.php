@@ -28,82 +28,95 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css') }}">
 @endsection
 <style>
-        form.d-flex input {
-            max-width: 400px;
-        }
+    form.d-flex input {
+        max-width: 400px;
+    }
 
-        form.d-flex button {
-            white-space: nowrap;
-        }
-
-        /* Thêm CSS để căn giữa modal */
-        #hideReasonModal .modal-dialog {
+    form.d-flex button {
+        white-space: nowrap;
+    }
+    #hideReasonModal .modal-dialog {
             display: flex;
             align-items: center;
             min-height: calc(100vh - 60px); /* Đảm bảo căn giữa theo chiều dọc */
             margin: 0 auto; /* Căn giữa theo chiều ngang */
         }
-    </style>
+   
+</style>
 @section('content')
     <div class="col-sm-12">
-        <div class="card card-table">   
+        <div class="card card-table">
             <!-- Table Start -->
             <div class="card-body">
                 <div class="title-header option-title">
                     <h5>Đánh giá sản phẩm</h5>
                 </div>
-                
+
                 <!-- Form lọc theo sản phẩm -->
                 <form method="GET" action="{{ route('danhgias.index') }}" class="d-flex gap-2 mb-3">
-                    <input type="text" name="keyword" value="{{ request('keyword') }}" class="form-control" placeholder="Tìm theo tên người người dùng hoặc sản phẩm">
+                    <input type="text" name="keyword" value="{{ request('keyword') }}" class="form-control"
+                        placeholder="Tìm theo tên người người dùng hoặc sản phẩm">
                     <button type="submit" class="btn btn-success">Tìm Kiếm</button>
+                    <a href="{{ route('danhgias.index') }}" class="btn btn-secondary" id="resetButton">Làm mới</a>
                 </form>
-                
-                <div class="modal fade" id="hideReasonModal" tabindex="-1" aria-labelledby="hideReasonModalLabel" aria-hidden="true">
+
+                <div class="modal fade" id="hideReasonModal" tabindex="-1" aria-labelledby="hideReasonModalLabel"
+                    aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="hideReasonModalLabel">Chọn lý do ẩn đánh giá</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
                                 <form id="hideReasonForm">
                                     <div class="mb-3">
                                         <label class="form-label">Vui lòng chọn ít nhất một lý do:</label>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="reasons[]" value="Nội dung không phù hợp">
+                                            <input class="form-check-input" type="checkbox" name="reasons[]"
+                                                value="Nội dung không phù hợp">
                                             <label class="form-check-label">Nội dung không phù hợp</label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="reasons[]" value="Ngôn ngữ xúc phạm">
+                                            <input class="form-check-input" type="checkbox" name="reasons[]"
+                                                value="Ngôn ngữ xúc phạm">
                                             <label class="form-check-label">Ngôn ngữ xúc phạm</label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="reasons[]" value="Thông tin sai lệch">
+                                            <input class="form-check-input" type="checkbox" name="reasons[]"
+                                                value="Thông tin sai lệch">
                                             <label class="form-check-label">Thông tin sai lệch</label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="reasons[]" value="Đánh giá không liên quan đến sản phẩm">
+                                            <input class="form-check-input" type="checkbox" name="reasons[]"
+                                                value="Đánh giá không liên quan đến sản phẩm">
                                             <label class="form-check-label">Đánh giá không liên quan đến sản phẩm</label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="reasons[]" value="Nghi ngờ đánh giá giả mạo">
+                                            <input class="form-check-input" type="checkbox" name="reasons[]"
+                                                value="Nghi ngờ đánh giá giả mạo">
                                             <label class="form-check-label">Nghi ngờ đánh giá giả mạo</label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="reasons[]" value="Vi phạm chính sách cộng đồng">
+                                            <input class="form-check-input" type="checkbox" name="reasons[]"
+                                                value="Vi phạm chính sách cộng đồng">
                                             <label class="form-check-label">Vi phạm chính sách cộng đồng</label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="reasons[]" value="Khác" id="otherReasonCheckbox">
+                                            <input class="form-check-input" type="checkbox" name="reasons[]" value="Khác"
+                                                id="otherReasonCheckbox">
                                             <label class="form-check-label">Khác</label>
                                         </div>
                                         <div id="otherReasonContainer" style="display: none;">
-                                            <textarea id="otherReasonText" class="form-control mt-2" placeholder="Vui lòng nhập lý do cụ thể (tối đa 150 ký tự)" maxlength="150" rows="3"></textarea>
-                                            <small class="text-muted">Còn lại <span id="charCount">150</span> ký tự</small>
+                                            <textarea id="otherReasonText" class="form-control mt-2" placeholder="Vui lòng nhập lý do cụ thể (tối đa 150 ký tự)"
+                                                maxlength="150" rows="3"></textarea>
+                                            <small class="text-muted">Còn lại <span id="charCount">150</span> ký
+                                                tự</small>
                                         </div>
                                     </div>
-                                    <div id="reasonError" class="text-danger" style="display: none;">Vui lòng chọn ít nhất một lý do!</div>
+                                    <div id="reasonError" class="text-danger" style="display: none;">Vui lòng chọn ít
+                                        nhất một lý do!</div>
                                 </form>
                             </div>
                             <div class="modal-footer">
@@ -116,8 +129,8 @@
                 <div>
                     <div class="table-responsive">
                         <table class="user-table ticket-table review-table theme-table table" id="table_id">
-                            <thead>
-                                <tr>
+                            <thead>          
+                                <tr>               
                                     <th>Tên khách hàng</th>
                                     <th>Tên sản phẩm</th>
                                     <th>Đánh giá</th>
@@ -128,47 +141,53 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($danhGias as $danhGia)
+                                @if ($danhGias->isEmpty() && !is_null($message))
                                     <tr>
-                                        <td>{{ $danhGia->ten_nguoi_dung }}</td>
-                                        <td>{{ $danhGia->ten_san_pham }}</td>
-                                        <td>
-                                            <ul class="rating">
-                                                @for ($i = 0; $i < $danhGia->so_sao; $i++)
-                                                    <li>
-                                                        <i class="fas fa-star theme-color"></i>
-                                                    </li>
-                                                @endfor
-                                                @for ($i = 0; $i < 5 - $danhGia->so_sao; $i++)
-                                                    <li>
-                                                        <i class="fas fa-star"></i>
-                                                    </li>
-                                                @endfor
-                                            </ul>
-                                        </td>
-                                        <td class="text-wrap">{{ $danhGia->nhan_xet }}</td>
-                                        <td class="status-icon">
-                                            @if ($danhGia->trang_thai == 1)
-                                                <i class="ri-checkbox-circle-line text-success"></i>
-                                            @else
-                                                <i class="ri-close-circle-line text-danger"></i>
-                                            @endif
-                                        </td>
-                                        <td>{{ $danhGia->ly_do_an ?? 'Không có' }}</td> <!-- Hiển thị lý do ẩn -->
-                                        <td>
-                                            <button
-                                                class="toggleStatus btn btn-sm d-block mx-auto {{ $danhGia->trang_thai == 1 ? 'btn-danger' : 'btn-primary' }}"
-                                                data-id="{{ $danhGia->id }}">
-                                                {{ $danhGia->trang_thai == 1 ? 'Ẩn' : 'Hiện' }}
-                                            </button>
-                                        </td>
+                                        <td colspan="7" class="text-center" style="color: red;">{{ $message }}</td>
                                     </tr>
-                                @endforeach
+                                @else
+                                    @foreach ($danhGias as $danhGia)
+                                        <tr>
+                                            <td>{{ $danhGia->ten_nguoi_dung }}</td>
+                                            <td>{{ $danhGia->ten_san_pham }}</td>
+                                            <td>
+                                                <ul class="rating">
+                                                    @for ($i = 0; $i < $danhGia->so_sao; $i++)
+                                                        <li>
+                                                            <i class="fas fa-star theme-color"></i>
+                                                        </li>
+                                                    @endfor
+                                                    @for ($i = 0; $i < 5 - $danhGia->so_sao; $i++)
+                                                        <li>
+                                                            <i class="fas fa-star"></i>
+                                                        </li>
+                                                    @endfor
+                                                </ul>
+                                            </td>
+                                            <td class="text-wrap">{{ $danhGia->nhan_xet }}</td>
+                                            <td class="status-icon">
+                                                @if ($danhGia->trang_thai == 1)
+                                                    <i class="ri-checkbox-circle-line text-success"></i>
+                                                @else
+                                                    <i class="ri-close-circle-line text-danger"></i>
+                                                @endif
+                                            </td>
+                                            <td>{{ $danhGia->ly_do_an ?? 'Không có' }} <br></td>
+                                            <td> 
+                                                <button
+                                                    class="toggleStatus btn btn-sm d-block mx-auto {{ $danhGia->trang_thai == 1 ? 'btn-danger' : 'btn-primary' }}"
+                                                    data-id="{{ $danhGia->id }}">
+                                                    {{ $danhGia->trang_thai == 1 ? 'Ẩn' : 'Hiện' }}
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @endif
                             </tbody>
                         </table>
                     </div>
                 </div>
-                
+
                 <!-- Phân trang -->
                 <div class="pagination-wrapper">
                     {{ $danhGias->links('pagination::bootstrap-5') }}
@@ -177,7 +196,6 @@
             <!-- Table End -->
         </div>
     </div>
-   
 @endsection
 
 @section('js')
@@ -283,7 +301,8 @@
                     success: function(response) {
                         if (response.success) {
                             let statusCell = button.closest("tr").find(".status-icon");
-                            let lyDoAnCell = button.closest("tr").find("td:nth-child(6)"); // Cột lý do ẩn
+                            let lyDoAnCell = button.closest("tr").find(
+                            "td:nth-child(6)"); // Cột lý do ẩn
 
                             if (response.status == 1) {
                                 button.removeClass('btn-primary').addClass('btn-danger').text('Ẩn');

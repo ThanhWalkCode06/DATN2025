@@ -37,7 +37,12 @@ class DanhGiaController extends Controller
 
         $danhGias = $query->paginate(10)->appends($request->all());
 
-        return view('admins.danhgias.index', compact('danhGias', 'sanPhams'));
+        $message = null;
+        if ($request->has('keyword') && !empty($keyword) && $danhGias->isEmpty()) {
+            $message = 'Không có người dùng hoặc sản phẩm bạn đang tìm';
+        }
+
+        return view('admins.danhgias.index', compact('danhGias', 'sanPhams', 'message'));
     }
 
     /**
