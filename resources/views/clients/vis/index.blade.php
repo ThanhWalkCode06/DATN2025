@@ -1,5 +1,5 @@
 @extends('layouts.client')
-
+@section('title', 'Ví người dùng')
 @section('content')
 <div class="container py-5">
 

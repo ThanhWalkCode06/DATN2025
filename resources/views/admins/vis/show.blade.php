@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Lịch sửví người dùng')
+@section('title', 'Lịch sử ví người dùng')
 
 @section('content')
     @if ($errors->any())
@@ -19,53 +19,59 @@
 
         </div>
 
-       {{-- Bộ lọc trạng thái --}}
-<div class="card shadow mb-4 rounded-4">
-    <div class="card-body">
-        <form method="GET" class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-3 align-items-end">
-            {{-- Trạng thái --}}
-            <div>
-                <label for="trang_thai" class="form-label fw-semibold">Trạng thái</label>
-                <select name="trang_thai" id="trang_thai" class="form-select" onchange="this.form.submit()">
-                    <option value="">Tất cả</option>
-                    <option value="1" {{ request('trang_thai') === '1' ? 'selected' : '' }}>✅ Thành công</option>
-                    <option value="0" {{ request('trang_thai') === '0' ? 'selected' : '' }}>⏳ Chờ xử lý</option>
-                    <option value="2" {{ request('trang_thai') === '2' ? 'selected' : '' }}>❌ Huỷ</option>
-                </select>
-            </div>
+        {{-- Bộ lọc trạng thái --}}
+        <div class="card shadow mb-4 rounded-4">
+            <div class="card-body">
+                <form method="GET" class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-3 align-items-end">
+                    {{-- Trạng thái --}}
+                    <div>
+                        <label for="trang_thai" class="form-label fw-semibold">Trạng thái</label>
+                        <select name="trang_thai" id="trang_thai" class="form-select" onchange="this.form.submit()">
+                            <option value="">Tất cả</option>
+                            <option value="1" {{ request('trang_thai') === '1' ? 'selected' : '' }}>✅ Thành công</option>
+                            <option value="0" {{ request('trang_thai') === '0' ? 'selected' : '' }}>⏳ Chờ xử lý</option>
+                            <option value="2" {{ request('trang_thai') === '2' ? 'selected' : '' }}>❌ Huỷ</option>
+                        </select>
+                    </div>
 
-            {{-- Loại giao dịch --}}
-            <div>
-                <label for="loai" class="form-label fw-semibold">Loại giao dịch</label>
-                <select name="loai" id="loai" class="form-select" onchange="this.form.submit()">
-                    <option value="">Tất cả</option>
-                    <option value="Nạp tiền" {{ request('loai') === 'Nạp tiền' ? 'selected' : '' }}>💰 Nạp tiền</option>
-                    <option value="Rút tiền" {{ request('loai') === 'Rút tiền' ? 'selected' : '' }}>🏧 Rút tiền</option>
-                    <option value="Hoàn tiền" {{ request('loai') === 'Hoàn tiền' ? 'selected' : '' }}>↩️ Hoàn tiền</option>
-                    <option value="Mua hàng" {{ request('loai') === 'Mua hàng' ? 'selected' : '' }}>🛒 Mua hàng</option>
-                </select>
-            </div>
+                    {{-- Loại giao dịch --}}
+                    <div>
+                        <label for="loai" class="form-label fw-semibold">Loại giao dịch</label>
+                        <select name="loai" id="loai" class="form-select" onchange="this.form.submit()">
+                            <option value="">Tất cả</option>
+                            <option value="Nạp tiền" {{ request('loai') === 'Nạp tiền' ? 'selected' : '' }}>💰 Nạp tiền
+                            </option>
+                            <option value="Rút tiền" {{ request('loai') === 'Rút tiền' ? 'selected' : '' }}>🏧 Rút tiền
+                            </option>
+                            <option value="Hoàn tiền" {{ request('loai') === 'Hoàn tiền' ? 'selected' : '' }}>↩️ Hoàn tiền
+                            </option>
+                            <option value="Mua hàng" {{ request('loai') === 'Mua hàng' ? 'selected' : '' }}>🛒 Mua hàng
+                            </option>
+                        </select>
+                    </div>
 
-            {{-- Từ ngày --}}
-            <div>
-                <label for="tu_ngay" class="form-label fw-semibold">Từ ngày</label>
-                <input type="date" name="tu_ngay" id="tu_ngay" class="form-control" value="{{ request('tu_ngay') }}" onchange="this.form.submit()">
-            </div>
+                    {{-- Từ ngày --}}
+                    <div>
+                        <label for="tu_ngay" class="form-label fw-semibold">Từ ngày</label>
+                        <input type="date" name="tu_ngay" id="tu_ngay" class="form-control" value="{{ request('tu_ngay') }}"
+                            onchange="this.form.submit()">
+                    </div>
 
-            {{-- Đến ngày --}}
-            <div>
-                <label for="den_ngay" class="form-label fw-semibold">Đến ngày</label>
-                <input type="date" name="den_ngay" id="den_ngay" class="form-control" value="{{ request('den_ngay') }}" onchange="this.form.submit()">
+                    {{-- Đến ngày --}}
+                    <div>
+                        <label for="den_ngay" class="form-label fw-semibold">Đến ngày</label>
+                        <input type="date" name="den_ngay" id="den_ngay" class="form-control"
+                            value="{{ request('den_ngay') }}" onchange="this.form.submit()">
+                    </div>
+                </form>
             </div>
-        </form>
-    </div>
-</div>
+        </div>
 
 
 
 
         {{-- Cập nhật trạng thái --}}
-        <form method="POST" id="form-cap-nhat-trang-thai" action="{{ route('admin.vis.updateTrangThai') }}">
+        <form method="POST" id="form-cap-nhat-trang-thai" action="{{ route('admin.vis.updateTrangThai') }}" onsubmit="return handleCapNhat(event)">
             @csrf
             <div class="card shadow mb-4" style="border-radius: 16px;">
                 <div class="card-body">
@@ -277,38 +283,49 @@
     </script> --}}
     <script>
         function duyetLe(id, ma_giao_dich) {
-            if (!confirm(`Bạn có chắc muốn duyệt giao dịch ${ma_giao_dich}?`)) return;
-
-            fetch(`/vi/cap-nhat-tung-giao-dich/${id}`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
-                },
-                body: JSON.stringify({
-                    id: id,
-                    trang_thai: 1
-                })
-            })
-                .then(res => res.json())
-                .then(data => {
-                    if (data.status === 'success') {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Thành công!',
-                            text: data.message,
-                            confirmButtonColor: '#009688'
-                        }).then(() => location.reload());
-                    } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Lỗi!',
-                            text: data.message
+            Swal.fire({
+                title: `Xác nhận duyệt giao dịch`,
+                text: `Bạn có chắc muốn duyệt giao dịch ${ma_giao_dich}?`,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: '✔ Duyệt',
+                cancelButtonText: 'Huỷ',
+                confirmButtonColor: '#009688',
+                cancelButtonColor: '#dc3545'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch(`/vi/cap-nhat-tung-giao-dich/${id}`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                        },
+                        body: JSON.stringify({
+                            id: id,
+                            trang_thai: 1
+                        })
+                    })
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.status === 'success') {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Thành công!',
+                                    text: data.message,
+                                    confirmButtonColor: '#009688'
+                                }).then(() => location.reload());
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Lỗi!',
+                                    text: data.message
+                                }).then(() => location.reload());
+                            }
                         });
-                    }
-                })
-
+                }
+            });
         }
+
     </script>
 
 
@@ -361,7 +378,7 @@
                                     icon: 'error',
                                     title: 'Lỗi!',
                                     text: data.message || 'Đã xảy ra lỗi.'
-                                });
+                                }).then(() => location.reload()); // ⚠️ Reload trang ngay cả khi lỗi
                             }
                         })
                         .catch(() => {
@@ -401,16 +418,33 @@
             }
         }
 
-        function handleCapNhat() {
-            const trangThai = document.getElementById('trang_thai_moi').value;
-            if (trangThai === "1") {
-                const confirmed = confirm("Bạn có chắc chắn muốn duyệt yêu cầu này?");
-                if (!confirmed) {
-                    return false; // Ngăn submit
+        function handleCapNhat(e) {
+        const trangThai = document.getElementById('trang_thai_moi').value;
+
+        if (trangThai === "1") {
+            e.preventDefault(); // Ngăn form gửi đi
+
+            Swal.fire({
+                title: 'Xác nhận duyệt yêu cầu',
+                text: 'Bạn có chắc chắn muốn duyệt yêu cầu này?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: '✔ Duyệt',
+                cancelButtonText: 'Huỷ',
+                confirmButtonColor: '#009688',
+                cancelButtonColor: '#dc3545'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('form-cap-nhat-trang-thai').submit(); // Submit lại form thủ công
                 }
-            }
-            return true; // Cho phép submit
+            });
+
+            return false; // Không cho submit ngay lập tức
         }
+
+        return true; // Nếu trạng thái khác, cho submit bình thường
+    }
+
 
 
         document.getElementById('checkAll')?.addEventListener('click', function () {
