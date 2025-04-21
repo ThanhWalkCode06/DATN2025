@@ -201,6 +201,10 @@
 @endsection
 
 @section('js')
+
+   
+
+
     <!-- customizer js -->
     <script src="{{ asset('assets/js/customizer.js') }}"></script>
 
