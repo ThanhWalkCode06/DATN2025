@@ -45,7 +45,8 @@
             padding: 4px 8px;
         }
 
-        .mark-all-read, .delete-all {
+        .mark-all-read,
+        .delete-all {
             display: inline-block;
             margin-bottom: 10px;
             margin-right: 10px;
@@ -53,8 +54,9 @@
 
         .delete-button {
             position: absolute;
-            top: -2px; /* Adjusted from 10px to 14px to move the "x" down */
-            right: 10px;
+            top: -2px;
+            /* Adjusted from 10px to 14px to move the "x" down */
+            right: -3px;
             background: none;
             border: none;
             cursor: pointer;
@@ -166,14 +168,25 @@
                                             </span>
                                         </a>
                                         <div class="onhover-div">
-                                            <button class="btn btn-sm btn-link mark-all-read" data-url="{{ route('thongbao.da_doc', 0) }}">Đánh dấu tất cả đã đọc</button>
-                                            <button class="btn btn-sm btn-link delete-all" data-url="{{ route('thongbao.delete_all') }}">Xóa tất cả</button>
+                                            <button class="btn btn-sm btn-link mark-all-read"
+                                                data-url="{{ route('thongbao.da_doc', 0) }}">Đánh dấu tất cả đã
+                                                đọc</button>
+                                            <button class="btn btn-sm btn-link delete-all"
+                                                data-url="{{ route('thongbao.delete_all') }}">Xóa tất cả</button>
                                             <ul class="notification-list">
-                                                @php
+                                                {{-- @php
                                                     $thongBaos = Auth::check()
                                                         ? App\Models\ThongBao::with('danhGia.sanPham')
                                                             ->where('user_id', Auth::id())
                                                             ->where('trang_thai', 0)
+                                                            ->orderBy('created_at', 'desc')
+                                                            ->get()
+                                                        : collect([]);
+                                                @endphp --}}
+                                                @php
+                                                    $thongBaos = Auth::check()
+                                                        ? App\Models\ThongBao::with('danhGia.sanPham')
+                                                            ->where('user_id', Auth::id())
                                                             ->orderBy('created_at', 'desc')
                                                             ->get()
                                                         : collect([]);
@@ -187,13 +200,14 @@
                                                                 <p>Sản phẩm:
                                                                     {{ $thongBao->danhGia->sanPham->ten_san_pham ?? 'Không xác định' }}
                                                                 </p>
-                                                                @if ($thongBao->danhGia && $thongBao->danhGia->ly_do_an)
-                                                                    <p>Lý do: {{ $thongBao->danhGia->ly_do_an }}</p>
-                                                                @endif
                                                                 @if ($thongBao->danhGia && $thongBao->danhGia->nhan_xet)
                                                                     <p>Nhận xét: {{ $thongBao->danhGia->nhan_xet }}</p>
                                                                 @endif
-                                                                <small>{{ $thongBao->created_at->diffForHumans() }}</small>
+                                                                @if ($thongBao->danhGia && $thongBao->danhGia->ly_do_an)
+                                                                    <p>Lý do: {{ $thongBao->danhGia->ly_do_an }}</p>
+                                                                @endif
+
+                                                                {{-- <small>{{ $thongBao->created_at->diffForHumans() }}</small> --}}
                                                             </div>
                                                             <button class="delete-button" data-id="{{ $thongBao->id }}"
                                                                 data-url="{{ route('thongbao.delete', $thongBao->id) }}">
@@ -402,321 +416,240 @@
             </div>
         </div>
     </div>
+    <!-- Thay phần JavaScript -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Xử lý nút "Đánh dấu tất cả đã đọc"
-            const markAllReadButton = document.querySelector('.mark-all-read');
-            if (markAllReadButton) {
-                markAllReadButton.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const url = this.getAttribute('data-url');
-                    const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
-                    fetch(url, {
-                            method: 'PATCH',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': token
-                            }
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success) {
-                                // Cập nhật badge
-                                const badge = document.querySelector('.notification-count');
-                                if (badge) {
-                                    badge.textContent = '0';
-                                    badge.style.display = 'none';
-                                }
-                            } else {
-                                console.error('Lỗi khi đánh dấu tất cả thông báo đã đọc:', data.message);
-                            }
-                        })
-                        .catch(error => console.error('Lỗi:', error));
-                });
-            }
-
-            // Xử lý nút "Xóa tất cả"
-            const deleteAllButton = document.querySelector('.delete-all');
-            if (deleteAllButton) {
-                deleteAllButton.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const url = this.getAttribute('data-url');
-                    const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
-                    fetch(url, {
-                            method: 'DELETE',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': token
-                            }
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success) {
-                                // Xóa tất cả thông báo khỏi DOM
-                                const notificationList = document.querySelector('.notification-list');
-                                notificationList.innerHTML = '<li class="notification-box"><p>Không có thông báo mới.</p></li>';
-
-                                // Cập nhật badge
-                                const badge = document.querySelector('.notification-count');
-                                if (badge) {
-                                    badge.textContent = '0';
-                                    badge.style.display = 'none';
-                                }
-                            } else {
-                                console.error('Lỗi khi xóa tất cả thông báo:', data.message);
-                            }
-                        })
-                        .catch(error => console.error('Lỗi:', error));
-                });
-            }
-
-            // Xử lý nút xóa từng thông báo
-            document.querySelectorAll('.delete-button').forEach(button => {
-                button.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const notificationId = this.getAttribute('data-id');
-                    const url = this.getAttribute('data-url');
-                    const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
-                    fetch(url, {
-                            method: 'DELETE',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': token
-                            }
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success) {
-                                // Xóa thông báo khỏi DOM
-                                const notificationElement = document.getElementById('notification-' + notificationId);
-                                if (notificationElement) {
-                                    notificationElement.remove();
-                                }
-
-                                // Cập nhật số lượng thông báo
-                                const badge = document.querySelector('.notification-count');
-                                if (badge) {
-                                    let count = parseInt(badge.textContent) - 1;
-                                    if (count > 0) {
-                                        badge.textContent = count;
-                                        badge.style.display = 'inline';
-                                    } else {
-                                        badge.style.display = 'none';
-                                    }
-                                }
-
-                                // Hiển thị thông báo "Không có thông báo mới" nếu danh sách rỗng
-                                const notificationList = document.querySelector('.notification-list');
-                                if (notificationList.children.length === 0) {
-                                    notificationList.innerHTML = '<li class="notification-box"><p>Không có thông báo mới.</p></li>';
-                                }
-                            } else {
-                                console.error('Lỗi khi xóa thông báo:', data.message);
-                            }
-                        })
-                        .catch(error => console.error('Lỗi:', error));
-                });
-            });
-
-            // Cấu hình Pusher
-            const pusher = new Pusher("0ca5e8c271c25e1264d2", {
-                cluster: "ap1",
-                encrypted: true
-            });
-
-            let userId = {{ Auth::id() ?? 'null' }};
-            let channel = null;
-
-            // Hàm khởi tạo Pusher channel
-            function initializePusher(userId) {
-                if (channel) {
-                    pusher.unsubscribe('notifications-' + userId);
+      document.addEventListener('DOMContentLoaded', function() {
+    // Hàm cập nhật số lượng thông báo chưa đọc
+    function updateNotificationCount() {
+        const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        fetch('/thong-bao/countUnread', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': token
                 }
-                channel = pusher.subscribe('notifications-' + userId);
+            })
+            .then(response => response.json())
+            .then(data => {
+                const badge = document.querySelector('.notification-count');
+                badge.textContent = data.count;
+                badge.style.display = data.count > 0 ? 'inline' : 'none';
+            })
+            .catch(error => console.error('Lỗi khi tải số lượng thông báo:', error));
+    }
 
-                channel.bind('new-notification', function(data) {
-                    console.log('Nhận thông báo mới:', data);
+    // Xử lý nút "Đánh dấu tất cả đã đọc"
+    const markAllReadButton = document.querySelector('.mark-all-read');
+    if (markAllReadButton) {
+        markAllReadButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            const url = this.getAttribute('data-url');
+            const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-                    // Cập nhật số lượng thông báo
-                    const badge = document.querySelector('.notification-count');
-                    let count = parseInt(badge.textContent || 0) + 1;
-                    badge.textContent = count;
-                    badge.style.display = 'inline';
-
-                    // Thêm thông báo mới vào đầu danh sách
-                    const notificationList = document.querySelector('.notification-list');
-                    if (notificationList.querySelector('p')?.textContent === 'Không có thông báo mới.') {
-                        notificationList.innerHTML = '';
+            fetch(url, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': token
                     }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        updateNotificationCount(); // Cập nhật badge
+                        document.querySelectorAll('.notification-box').forEach(item => {
+                            item.classList.add('read');
+                        });
+                    } else {
+                        console.error('Lỗi khi đánh dấu tất cả thông báo đã đọc:', data.message);
+                    }
+                })
+                .catch(error => console.error('Lỗi:', error));
+        });
+    }
 
-                    const notificationItem = document.createElement('li');
-                    notificationItem.classList.add('notification-box');
-                    notificationItem.id = 'notification-' + data.id;
-                    notificationItem.innerHTML = `
-                    <div class="notification-content">
-                        <h6>${data.noi_dung}</h6>
-                        <p>Sản phẩm: ${data.product_name}</p>
-                        ${data.ly_do_an ? `<p>Lý do: ${data.ly_do_an}</p>` : ''}
-                        ${data.nhan_xet ? `<p>Nhận xét: ${data.nhan_xet}</p>` : ''}
-                        <small>${data.created_at}</small>
-                        <small class="d-block">${data.created_at_full}</small>
-                    </div>
-                    <button class="delete-button" data-id="${data.id}" data-url="/thongbao/${data.id}/delete">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
-                `;
-                    notificationList.prepend(notificationItem);
+    // Xử lý nút "Xóa tất cả"
+    const deleteAllButton = document.querySelector('.delete-all');
+    if (deleteAllButton) {
+        deleteAllButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            const url = this.getAttribute('data-url');
+            const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-                    // Gắn sự kiện cho nút xóa mới
-                    const newDeleteButton = notificationItem.querySelector('.delete-button');
-                    newDeleteButton.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        const notificationId = this.getAttribute('data-id');
-                        const url = this.getAttribute('data-url');
-                        const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            fetch(url, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': token
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const notificationList = document.querySelector('.notification-list');
+                        notificationList.innerHTML =
+                            '<li class="notification-box"><p>Không có thông báo mới.</p></li>';
+                        updateNotificationCount(); // Cập nhật badge
+                    } else {
+                        console.error('Lỗi khi xóa tất cả thông báo:', data.message);
+                    }
+                })
+                .catch(error => console.error('Lỗi:', error));
+        });
+    }
 
-                        fetch(url, {
-                                method: 'DELETE',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                    'X-CSRF-TOKEN': token
-                                }
-                            })
-                            .then(response => response.json())
-                            .then(data => {
-                                if (data.success) {
-                                    const notificationElement = document.getElementById('notification-' + notificationId);
-                                    if (notificationElement) {
-                                        notificationElement.remove();
-                                    }
+    // Xử lý nút xóa từng thông báo
+    function attachDeleteButtonListeners() {
+        document.querySelectorAll('.delete-button').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                const notificationId = this.getAttribute('data-id');
+                const url = this.getAttribute('data-url');
+                const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-                                    const badge = document.querySelector('.notification-count');
-                                    if (badge) {
-                                        let count = parseInt(badge.textContent) - 1;
-                                        if (count > 0) {
-                                            badge.textContent = count;
-                                            badge.style.display = 'inline';
-                                        } else {
-                                            badge.style.display = 'none';
-                                        }
-                                    }
-
-                                    const notificationList = document.querySelector('.notification-list');
-                                    if (notificationList.children.length === 0) {
-                                        notificationList.innerHTML = '<li class="notification-box"><p>Không có thông báo mới.</p></li>';
-                                    }
-                                } else {
-                                    console.error('Lỗi khi xóa thông báo:', data.message);
-                                }
-                            })
-                            .catch(error => console.error('Lỗi:', error));
-                    });
-                });
-            }
-
-            // Hàm tải số lượng thông báo qua AJAX
-            window.loadNotificationCount = function() {
-                fetch('/thong-bao/fetchAll', {
-                        method: 'GET',
+                fetch(url, {
+                        method: 'DELETE',
                         headers: {
                             'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
-                                'content')
+                            'X-CSRF-TOKEN': token
                         }
                     })
                     .then(response => response.json())
-                    .then(notifications => {
-                        const badge = document.querySelector('.notification-count');
-                        badge.textContent = notifications.length;
-                        badge.style.display = notifications.length > 0 ? 'inline' : 'none';
+                    .then(data => {
+                        if (data.success) {
+                            // Xóa thông báo khỏi DOM
+                            const notificationElement = document.getElementById('notification-' + notificationId);
+                            if (notificationElement) {
+                                notificationElement.remove();
+                            }
 
-                        // Cập nhật danh sách thông báo
-                        const notificationList = document.querySelector('.notification-list');
-                        if (notifications.length > 0) {
-                            notificationList.innerHTML = '';
-                            // Sắp xếp thông báo theo created_at giảm dần
-                            notifications.sort((a, b) => new Date(b.created_at_full) - new Date(a.created_at_full));
-                            notifications.forEach(thongBao => {
-                                const notificationItem = document.createElement('li');
-                                notificationItem.classList.add('notification-box');
-                                notificationItem.id = 'notification-' + thongBao.id;
-                                notificationItem.innerHTML = `
+                            // Cập nhật số lượng thông báo chưa đọc
+                            updateNotificationCount();
+
+                            // Hiển thị thông báo mặc định nếu danh sách rỗng
+                            const notificationList = document.querySelector('.notification-list');
+                            if (notificationList.children.length === 0) {
+                                notificationList.innerHTML =
+                                    '<li class="notification-box"><p>Không có thông báo mới.</p></li>';
+                            }
+                        } else {
+                            console.error('Lỗi khi xóa thông báo:', data.message);
+                        }
+                    })
+                    .catch(error => console.error('Lỗi:', error));
+            });
+        });
+    }
+
+    // Gắn sự kiện cho các nút xóa ban đầu
+    attachDeleteButtonListeners();
+
+    // Cấu hình Pusher
+    const pusher = new Pusher("0ca5e8c271c25e1264d2", {
+        cluster: "ap1",
+        encrypted: true
+    });
+
+    let userId = {{ Auth::id() ?? 'null' }};
+    let channel = null;
+
+    // Hàm khởi tạo Pusher channel
+    function initializePusher(userId) {
+        if (channel) {
+            pusher.unsubscribe('notifications-' + userId);
+        }
+        channel = pusher.subscribe('notifications-' + userId);
+
+        channel.bind('new-notification', function(data) {
+            console.log('Nhận thông báo mới:', data);
+
+            // Cập nhật số lượng thông báo
+            updateNotificationCount();
+
+            // Thêm thông báo mới vào đầu danh sách
+            const notificationList = document.querySelector('.notification-list');
+            if (notificationList.querySelector('p')?.textContent === 'Không có thông báo mới.') {
+                notificationList.innerHTML = '';
+            }
+
+            const notificationItem = document.createElement('li');
+            notificationItem.classList.add('notification-box');
+            notificationItem.id = 'notification-' + data.id;
+            notificationItem.innerHTML = `
+                <div class="notification-content">
+                    <h6>${data.noi_dung}</h6>
+                    <p>Sản phẩm: ${data.product_name}</p>
+                    ${data.nhan_xet ? `<p>Nhận xét: ${data.nhan_xet}</p>` : ''}
+                    ${data.ly_do_an ? `<p>Lý do: ${data.ly_do_an}</p>` : ''}
+                    
+                    <small class="d-block">${data.created_at_full}</small>
+                </div>
+                <button class="delete-button" data-id="${data.id}" data-url="/thongbao/${data.id}/delete">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            `;
+            notificationList.prepend(notificationItem);
+
+            // Gắn sự kiện cho nút xóa mới
+            attachDeleteButtonListeners();
+        });
+    }
+
+    // Hàm tải danh sách thông báo
+    window.loadNotificationCount = function() {
+        const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        fetch('/thong-bao/fetchAll', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': token
+                }
+            })
+            .then(response => response.json())
+            .then(notifications => {
+                updateNotificationCount(); // Cập nhật badge
+
+                const notificationList = document.querySelector('.notification-list');
+                if (notifications.length > 0) {
+                    notificationList.innerHTML = '';
+                    notifications.sort((a, b) => new Date(b.created_at_full) - new Date(a.created_at_full));
+                    notifications.forEach(thongBao => {
+                        const notificationItem = document.createElement('li');
+                        notificationItem.classList.add('notification-box');
+                        if (thongBao.trang_thai === 1) {
+                            notificationItem.classList.add('read');
+                        }
+                        notificationItem.id = 'notification-' + thongBao.id;
+                        notificationItem.innerHTML = `
                             <div class="notification-content">
                                 <h6>${thongBao.noi_dung}</h6>
                                 <p>Sản phẩm: ${thongBao.danh_gia?.san_pham?.ten_san_pham ?? 'Không xác định'}</p>
                                 ${thongBao.danh_gia?.ly_do_an ? `<p>Lý do: ${thongBao.danh_gia.ly_do_an}</p>` : ''}
                                 ${thongBao.nhan_xet ? `<p>Nhận xét: ${thongBao.nhan_xet}</p>` : ''}
-                                <small>${thongBao.created_at}</small>
+                                
                                 <small class="d-block">${thongBao.created_at_full}</small>
                             </div>
                             <button class="delete-button" data-id="${thongBao.id}" data-url="/thongbao/${thongBao.id}/delete">
                                 <i class="fa-solid fa-xmark"></i>
                             </button>
                         `;
-                                notificationList.appendChild(notificationItem);
-                            });
-                        } else {
-                            notificationList.innerHTML =
-                                '<li class="notification-box"><p>Không có thông báo mới.</p></li>';
-                        }
+                        notificationList.appendChild(notificationItem);
+                    });
+                } else {
+                    notificationList.innerHTML =
+                        '<li class="notification-box"><p>Không có thông báo mới.</p></li>';
+                }
 
-                        // Gắn sự kiện cho các nút xóa
-                        document.querySelectorAll('.delete-button').forEach(button => {
-                            button.addEventListener('click', function(e) {
-                                e.preventDefault();
-                                const notificationId = this.getAttribute('data-id');
-                                const url = this.getAttribute('data-url');
-                                const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                attachDeleteButtonListeners();
+            })
+            .catch(error => console.error('Lỗi khi tải danh sách thông báo:', error));
+    };
 
-                                fetch(url, {
-                                        method: 'DELETE',
-                                        headers: {
-                                            'Content-Type': 'application/json',
-                                            'X-CSRF-TOKEN': token
-                                        }
-                                    })
-                                    .then(response => response.json())
-                                    .then(data => {
-                                        if (data.success) {
-                                            const notificationElement = document.getElementById('notification-' + notificationId);
-                                            if (notificationElement) {
-                                                notificationElement.remove();
-                                            }
-
-                                            const badge = document.querySelector('.notification-count');
-                                            if (badge) {
-                                                let count = parseInt(badge.textContent) - 1;
-                                                if (count > 0) {
-                                                    badge.textContent = count;
-                                                    badge.style.display = 'inline';
-                                                } else {
-                                                    badge.style.display = 'none';
-                                                }
-                                            }
-
-                                            const notificationList = document.querySelector('.notification-list');
-                                            if (notificationList.children.length === 0) {
-                                                notificationList.innerHTML = '<li class="notification-box"><p>Không có thông báo mới.</p></li>';
-                                            }
-                                        } else {
-                                            console.error('Lỗi khi xóa thông báo:', data.message);
-                                        }
-                                    })
-                                    .catch(error => console.error('Lỗi:', error));
-                            });
-                        });
-                    })
-                    .catch(error => console.error('Lỗi khi tải số lượng thông báo:', error));
-            };
-
-            // Khởi tạo Pusher ban đầu nếu đã đăng nhập
-            if (userId !== 'null') {
-                initializePusher(userId);
-                window.loadNotificationCount();
-            }
-        });
+    // Khởi tạo Pusher và tải thông báo nếu đã đăng nhập
+    if (userId !== 'null') {
+        initializePusher(userId);
+        window.loadNotificationCount();
+    }
+});
     </script>
 </header>
