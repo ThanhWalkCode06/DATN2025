@@ -29,6 +29,104 @@
         color: #721c24;
         border-color: #f5c6cb;
     }
+    .product-wrapper {
+        /* display: flex; */
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+    }
+    .product-image img {
+        width: 500px !important;
+        height: 300px !important;
+        object-fit: cover;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .product-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+    }
+    .product-content .name {
+        font-size: 16px;
+        font-weight: bold;
+        margin: 0;
+        color: #333;
+    }
+    .product-review-rating {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 5px;
+    }
+    .product-rating {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        text-align: left;
+        gap: 5px;
+    }
+    .theme-color {
+        color: #009970;
+        font-weight: bold;
+        font-size: 16px;
+    }
+    .review-box {
+        margin: 15px 0;
+    }
+    .review-box label {
+        font-size: 14px;
+        font-weight: 500;
+        color: #333;
+    }
+    .form-control {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 10px;
+        font-size: 14px;
+    }
+    .modal-content {
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    .modal-header {
+        border-bottom: 1px solid #ddd;
+        padding: 15px 20px;
+    }
+    .modal-title {
+        font-size: 18px;
+        font-weight: bold;
+        color: #333;
+    }
+    .modal-footer {
+        border-top: 1px solid #ddd;
+        padding: 15px 20px;
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+    }
+    .btn-theme-outline {
+        border: 1px solid #1abc9c;
+        color: #1abc9c;
+        background: transparent;
+        padding: 8px 20px;
+        border-radius: 5px;
+        font-weight: bold;
+    }
+    .theme-bg-color {
+        background: #1abc9c;
+        color: #fff;
+        padding: 8px 20px;
+        border-radius: 5px;
+        font-weight: bold;
+        border: none;
+    }
 </style>
 @endsection
 
@@ -584,13 +682,14 @@
                                 <img src="{{ Storage::url($item['anh_bien_the']) }}" class="img-fluid rounded shadow-sm"
                                      style="width:100%; height:100%;" alt="{{ $item['ten_bien_the'] }}">
                             </div>
+                            <br>
                             <div class="product-content">
-                                <h5 class="name">{{ $item['ten_bien_the'] }}</h5>
-                                <div class="product-review-rating">
+                                <h5 class="name">Sản phẩm: {{ $item['ten_bien_the'] }}</h5>
+                                {{-- <div class="product-review-rating">
                                     <div class="product-rating">
-                                        <span class="theme-color">{{ number_format($item['gia_ban'], 0, ',', '.') }} ₫</span>
+                                        <span class="theme-color">Giá: {{ number_format($item['gia_ban'], 0, ',', '.') }} ₫</span>
                                     </div>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
 
