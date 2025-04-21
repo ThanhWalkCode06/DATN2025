@@ -72,7 +72,8 @@
         }
 
         .notify-alert-custom {
-            background-color: #e74c3c !important; /* Màu đỏ cho ẩn bình luận */
+            background-color: #e74c3c !important;
+            /* Màu đỏ cho ẩn bình luận */
             color: white !important;
             border: 1px solid #c0392b !important;
             border-radius: 6px;
@@ -82,19 +83,23 @@
         }
 
         .notify-alert-custom.success {
-            background-color: #28a745 !important; /* Màu xanh lá cây cho hiển thị bình luận */
-            border: 1px solid #218838 !important; /* Viền xanh đậm hơn */
+            background-color: #28a745 !important;
+            /* Màu xanh lá cây cho hiển thị bình luận */
+            border: 1px solid #218838 !important;
+            /* Viền xanh đậm hơn */
         }
 
         .notify-alert-custom .title {
             font-weight: 600;
-            color: #c0392b; /* Màu tiêu đề cho ẩn bình luận */
+            color: #c0392b;
+            /* Màu tiêu đề cho ẩn bình luận */
             font-size: 16px;
             margin-bottom: 5px;
         }
 
         .notify-alert-custom.success .title {
-            color: #218838; /* Màu tiêu đề xanh đậm cho hiển thị bình luận */
+            color: #218838;
+            /* Màu tiêu đề xanh đậm cho hiển thị bình luận */
         }
 
         .notify-alert-custom .message {
@@ -107,6 +112,16 @@
 
         .animated.fadeOutUp {
             animation: fadeOutUp 0.5s;
+        }
+
+        .notify-alert-custom .close {
+            color: #fff;
+            opacity: 0.8;
+            transition: opacity 0.2s;
+        }
+
+        .notify-alert-custom .close:hover {
+            opacity: 1;
         }
     </style>
 </head>
@@ -218,7 +233,7 @@
         if (userId !== 'null') {
             var channel = pusher.subscribe("comment-hidden-" + userId);
 
-            // Hàm hỗ trợ viết hoa chữ cái đầu
+            // Hàm hỗ \n hỗ trợ viết hoa chữ cái đầu
             function capitalizeFirstLetter(string) {
                 return string.charAt(0).toUpperCase() + string.slice(1);
             }
@@ -248,8 +263,9 @@
                         exit: "animated fadeOutUp"
                     },
                     template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert notify-alert-custom" role="alert">' +
-                        '    <span data-notify="title">{1}</span>' +
-                        '    <span data-notify="message">{2}</span>' +
+                        '<button type="button" class="close" data-notify="dismiss" style="position: absolute; top: 5px; right: 5px; background: none; border: none; font-size: 16px; cursor: pointer;">&times;</button>' +
+                        '<span data-notify="title">{1}</span>' +
+                        '<span data-notify="message">{2}</span>' +
                         '</div>'
                 });
             });
@@ -278,8 +294,9 @@
                         exit: "animated fadeOutUp"
                     },
                     template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert notify-alert-custom success" role="alert">' +
-                        '    <span data-notify="title">{1}</span>' +
-                        '    <span data-notify="message">{2}</span>' +
+                        '<button type="button" class="close" data-notify="dismiss" style="position: absolute; top: 5px; right: 5px; background: none; border: none; font-size: 16px; cursor: pointer;">&times;</button>' +
+                        '<span data-notify="title">{1}</span>' +
+                        '<span data-notify="message">{2}</span>' +
                         '</div>'
                 });
             });
@@ -290,7 +307,7 @@
 
     @if (session('success'))
         <script>
-            document.addEventListener("DOMContentLoaded", function () {
+            document.addEventListener("DOMContentLoaded", function() {
                 Swal.fire({
                     title: "Thành công!",
                     text: "{{ session('success') }}",
@@ -302,7 +319,7 @@
     @endif
     @if (session('error'))
         <script>
-            document.addEventListener("DOMContentLoaded", function () {
+            document.addEventListener("DOMContentLoaded", function() {
                 Swal.fire({
                     title: "Thất bại",
                     text: "{{ session('error') }}",
@@ -316,7 +333,7 @@
 
     @isset(Auth::user()->id)
         <script>
-            document.addEventListener("DOMContentLoaded", function () {
+            document.addEventListener("DOMContentLoaded", function() {
                 const userId = {{ Auth::user()->id ?? 'null' }}; // Lấy id người dùng
                 const nguoiNhanId = 1; // ID người nhận (ví dụ là 1, có thể thay đổi tùy theo hệ thống của bạn)
 
@@ -330,12 +347,14 @@
                             let align = chat.nguoi_gui_id === userId ? "text-end" : "text-start";
                             let chatMessage = document.createElement("p");
                             chatMessage.classList.add(align);
-                            chatMessage.innerHTML = `<strong>${chat.ten_nguoi_gui}:</strong> ${chat.noi_dung || ''}`;
+                            chatMessage.innerHTML =
+                                `<strong>${chat.ten_nguoi_gui}:</strong> ${chat.noi_dung || ''}`;
 
                             // Thêm ảnh/video nếu có
                             if (chat.hinh_anh) {
                                 if (chat.hinh_anh.match(/\.(jpg|jpeg|png|gif|jfif)$/)) {
-                                    chatMessage.innerHTML += `<br><img src="${chat.hinh_anh}" style="max-width: 200px; height: auto; border-radius: 8px; margin-top: 5px;">`;
+                                    chatMessage.innerHTML +=
+                                        `<br><img src="${chat.hinh_anh}" style="max-width: 200px; height: auto; border-radius: 8px; margin-top: 5px;">`;
                                 } else if (chat.hinh_anh.match(/\.(mp4|webm|ogg)$/)) {
                                     chatMessage.innerHTML += `
                                     <br><video controls style="max-width: 200px; height: auto; border-radius: 8px; margin-top: 5px;">
@@ -346,7 +365,8 @@
                             }
 
                             // Thêm thời gian gửi tin nhắn
-                            const timeSent = new Date(chat.created_at); // Chuyển thời gian từ string sang Date
+                            const timeSent = new Date(chat
+                            .created_at); // Chuyển thời gian từ string sang Date
                             const timeString = timeSent.toLocaleString('vi-VN', {
                                 weekday: 'short', // Thứ (T2, T3, ...)
                                 year: 'numeric',
@@ -364,7 +384,7 @@
                     .catch(error => console.error("Lỗi khi tải tin nhắn:", error));
 
                 // Gửi tin nhắn khi form được submit
-                document.getElementById("chat-form").addEventListener("submit", function (e) {
+                document.getElementById("chat-form").addEventListener("submit", function(e) {
                     e.preventDefault();
 
                     const noiDungInput = document.getElementById("noi_dung");
@@ -375,19 +395,23 @@
                     // Nếu không có nội dung và không có file, không gửi
                     if (!noiDung && !file) {
                         document.getElementById("chat-error").classList.remove("d-none");
-                        document.getElementById("chat-error").innerText = "Vui lòng gửi tin nhắn hoặc hình ảnh/video!";
+                        document.getElementById("chat-error").innerText =
+                            "Vui lòng gửi tin nhắn hoặc hình ảnh/video!";
                         return;
                     }
 
                     // Kiểm tra nếu file không đúng định dạng
                     if (file) {
-                        const validImageTypes = ['image/jpg', 'image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/jfif'];
+                        const validImageTypes = ['image/jpg', 'image/jpeg', 'image/png', 'image/gif',
+                            'image/webp', 'image/jfif'
+                        ];
                         const validVideoTypes = ['video/mp4', 'video/webm', 'video/ogg'];
 
                         // Kiểm tra xem file có phải là hình ảnh hoặc video hợp lệ không
                         if (!validImageTypes.includes(file.type) && !validVideoTypes.includes(file.type)) {
                             document.getElementById("chat-error").classList.remove("d-none");
-                            document.getElementById("chat-error").innerText = "Định dạng file không hợp lệ! Chỉ hỗ trợ hình ảnh (JPG, JPEG, PNG, GIF, WEBP) và video (MP4, WEBM, OGG).";
+                            document.getElementById("chat-error").innerText =
+                                "Định dạng file không hợp lệ! Chỉ hỗ trợ hình ảnh (JPG, JPEG, PNG, GIF, WEBP) và video (MP4, WEBM, OGG).";
                             return;
                         }
 
@@ -418,12 +442,12 @@
 
                     // Gửi yêu cầu tới server
                     fetch('/send-chat', {
-                        method: 'POST',
-                        headers: {
-                            'X-CSRF-TOKEN': "{{ csrf_token() }}"
-                        },
-                        body: formData
-                    })
+                            method: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                            },
+                            body: formData
+                        })
                         .then(response => response.json())
                         .then(data => {
                             noiDungInput.value = "";
@@ -441,7 +465,7 @@
 
                 const channel = pusher.subscribe("chat." + {{ Auth::user()->id }});
 
-                channel.bind("send-chat", function (data) {
+                channel.bind("send-chat", function(data) {
                     const chatBox = document.getElementById("chat-box");
                     const chat = data.chat;
                     let align = chat.nguoi_gui_id === userId ? "text-end" : "text-start";
@@ -453,7 +477,8 @@
                     // Thêm ảnh/video nếu có
                     if (chat.hinh_anh) {
                         if (chat.hinh_anh.match(/\.(jpg|jpeg|png|gif|jfif)$/)) {
-                            chatMessage.innerHTML += `<br><img src="${chat.hinh_anh}" style="max-width: 200px; height: auto; border-radius: 8px; margin-top: 5px;">`;
+                            chatMessage.innerHTML +=
+                                `<br><img src="${chat.hinh_anh}" style="max-width: 200px; height: auto; border-radius: 8px; margin-top: 5px;">`;
                         } else if (chat.hinh_anh.match(/\.(mp4|webm|ogg)$/)) {
                             chatMessage.innerHTML += `
                             <br><video controls style="max-width: 200px; height: auto; border-radius: 8px; margin-top: 5px;">
@@ -514,8 +539,8 @@
     }
 </script>
 <script>
-    $(document).ready(function () {
-        $(".notifi-wishlist").on("click", function (e) {
+    $(document).ready(function() {
+        $(".notifi-wishlist").on("click", function(e) {
             e.preventDefault(); // Ngăn chặn load lại trang
 
             var button = $(this); // Lưu nút đang bấm
@@ -526,7 +551,7 @@
                 url: form.attr("action"),
                 type: "POST",
                 data: formData,
-                success: function (response) {
+                success: function(response) {
                     $.notify({
                         icon: "fa fa-check",
                         title: "Sản phẩm đã được thêm vào danh sách yêu thích.",
@@ -551,7 +576,7 @@
                     // Đổi màu icon thành đỏ (đã yêu thích)
                     button.find("i").css("color", "red");
                 },
-                error: function (xhr) {
+                error: function(xhr) {
                     if (xhr.status === 401) {
                         Swal.fire({
                             icon: "error",
