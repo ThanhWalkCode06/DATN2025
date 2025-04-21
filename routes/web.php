@@ -302,3 +302,5 @@ Route::patch('/thongbao/{id}/da-doc', [ThongBaoController::class, 'daDoc'])->nam
 Route::get('/thong-bao/fetchAll', [ThongBaoController::class, 'fetchAll'])->name('thongbao.fetchAll');
 
 Route::post('/san-pham/them-danh-gia-don-hang', [DanhGiaClientsController::class, 'themDanhGiaDonHang'])->name('sanphams.themdanhgiadonhang');
+Route::delete('/thongbao/delete-all', [ThongBaoController::class, 'deleteAll'])->name('thongbao.delete_all');
+Route::delete('/thongbao/{id}/delete', [ThongBaoController::class, 'delete'])->name('thongbao.delete');

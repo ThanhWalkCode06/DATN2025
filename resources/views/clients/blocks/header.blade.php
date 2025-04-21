@@ -14,6 +14,7 @@
         .notification-box {
             border-bottom: 1px solid #eee;
             padding: 10px 0;
+            position: relative;
         }
 
         .notification-content h6 {
@@ -42,6 +43,23 @@
             color: white;
             font-size: 12px;
             padding: 4px 8px;
+        }
+
+        .mark-all-read, .delete-all {
+            display: inline-block;
+            margin-bottom: 10px;
+            margin-right: 10px;
+        }
+
+        .delete-button {
+            position: absolute;
+            top: -2px; /* Adjusted from 10px to 14px to move the "x" down */
+            right: 10px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #ff4c3b;
+            font-size: 14px;
         }
     </style>
     <div class="header-top">
@@ -148,6 +166,8 @@
                                             </span>
                                         </a>
                                         <div class="onhover-div">
+                                            <button class="btn btn-sm btn-link mark-all-read" data-url="{{ route('thongbao.da_doc', 0) }}">Đánh dấu tất cả đã đọc</button>
+                                            <button class="btn btn-sm btn-link delete-all" data-url="{{ route('thongbao.delete_all') }}">Xóa tất cả</button>
                                             <ul class="notification-list">
                                                 @php
                                                     $thongBaos = Auth::check()
@@ -174,11 +194,11 @@
                                                                     <p>Nhận xét: {{ $thongBao->danhGia->nhan_xet }}</p>
                                                                 @endif
                                                                 <small>{{ $thongBao->created_at->diffForHumans() }}</small>
-                                                                <button class="btn btn-sm btn-link mark-as-read"
-                                                                    data-id="{{ $thongBao->id }}"
-                                                                    data-url="{{ route('thongbao.da_doc', $thongBao->id) }}">Đánh
-                                                                    dấu đã đọc</button>
                                                             </div>
+                                                            <button class="delete-button" data-id="{{ $thongBao->id }}"
+                                                                data-url="{{ route('thongbao.delete', $thongBao->id) }}">
+                                                                <i class="fa-solid fa-xmark"></i>
+                                                            </button>
                                                         </li>
                                                     @endforeach
                                                 @else
@@ -384,13 +404,13 @@
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('.mark-as-read').forEach(button => {
-                button.addEventListener('click', function(e) {
+            // Xử lý nút "Đánh dấu tất cả đã đọc"
+            const markAllReadButton = document.querySelector('.mark-all-read');
+            if (markAllReadButton) {
+                markAllReadButton.addEventListener('click', function(e) {
                     e.preventDefault();
-                    const notificationId = this.getAttribute('data-id');
                     const url = this.getAttribute('data-url');
-                    const token = document.querySelector('meta[name="csrf-token"]').getAttribute(
-                        'content');
+                    const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
                     fetch(url, {
                             method: 'PATCH',
@@ -402,9 +422,76 @@
                         .then(response => response.json())
                         .then(data => {
                             if (data.success) {
+                                // Cập nhật badge
+                                const badge = document.querySelector('.notification-count');
+                                if (badge) {
+                                    badge.textContent = '0';
+                                    badge.style.display = 'none';
+                                }
+                            } else {
+                                console.error('Lỗi khi đánh dấu tất cả thông báo đã đọc:', data.message);
+                            }
+                        })
+                        .catch(error => console.error('Lỗi:', error));
+                });
+            }
+
+            // Xử lý nút "Xóa tất cả"
+            const deleteAllButton = document.querySelector('.delete-all');
+            if (deleteAllButton) {
+                deleteAllButton.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const url = this.getAttribute('data-url');
+                    const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+                    fetch(url, {
+                            method: 'DELETE',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': token
+                            }
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                // Xóa tất cả thông báo khỏi DOM
+                                const notificationList = document.querySelector('.notification-list');
+                                notificationList.innerHTML = '<li class="notification-box"><p>Không có thông báo mới.</p></li>';
+
+                                // Cập nhật badge
+                                const badge = document.querySelector('.notification-count');
+                                if (badge) {
+                                    badge.textContent = '0';
+                                    badge.style.display = 'none';
+                                }
+                            } else {
+                                console.error('Lỗi khi xóa tất cả thông báo:', data.message);
+                            }
+                        })
+                        .catch(error => console.error('Lỗi:', error));
+                });
+            }
+
+            // Xử lý nút xóa từng thông báo
+            document.querySelectorAll('.delete-button').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const notificationId = this.getAttribute('data-id');
+                    const url = this.getAttribute('data-url');
+                    const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+                    fetch(url, {
+                            method: 'DELETE',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': token
+                            }
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
                                 // Xóa thông báo khỏi DOM
-                                const notificationElement = document.getElementById(
-                                    'notification-' + notificationId);
+                                const notificationElement = document.getElementById('notification-' + notificationId);
                                 if (notificationElement) {
                                     notificationElement.remove();
                                 }
@@ -417,30 +504,23 @@
                                         badge.textContent = count;
                                         badge.style.display = 'inline';
                                     } else {
-                                        badge.style.display =
-                                            'none'; // Ẩn số lượng, giữ icon chuông
+                                        badge.style.display = 'none';
                                     }
                                 }
 
                                 // Hiển thị thông báo "Không có thông báo mới" nếu danh sách rỗng
-                                const notificationList = document.querySelector(
-                                    '.notification-list');
+                                const notificationList = document.querySelector('.notification-list');
                                 if (notificationList.children.length === 0) {
-                                    notificationList.innerHTML =
-                                        '<li class="notification-box"><p>Không có thông báo mới.</p></li>';
+                                    notificationList.innerHTML = '<li class="notification-box"><p>Không có thông báo mới.</p></li>';
                                 }
                             } else {
-                                console.error('Lỗi khi đánh dấu thông báo đã đọc:', data
-                                    .message);
+                                console.error('Lỗi khi xóa thông báo:', data.message);
                             }
                         })
                         .catch(error => console.error('Lỗi:', error));
                 });
             });
-        });
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
+
             // Cấu hình Pusher
             const pusher = new Pusher("0ca5e8c271c25e1264d2", {
                 cluster: "ap1",
@@ -483,60 +563,57 @@
                         ${data.nhan_xet ? `<p>Nhận xét: ${data.nhan_xet}</p>` : ''}
                         <small>${data.created_at}</small>
                         <small class="d-block">${data.created_at_full}</small>
-                        <button class="btn btn-sm btn-link mark-as-read" data-id="${data.id}" data-url="/thongbao/${data.id}/da-doc">Đánh dấu đã đọc</button>
                     </div>
+                    <button class="delete-button" data-id="${data.id}" data-url="/thongbao/${data.id}/delete">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
                 `;
                     notificationList.prepend(notificationItem);
 
-                    attachMarkAsReadEvent(notificationItem.querySelector('.mark-as-read'));
-                });
-            }
+                    // Gắn sự kiện cho nút xóa mới
+                    const newDeleteButton = notificationItem.querySelector('.delete-button');
+                    newDeleteButton.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const notificationId = this.getAttribute('data-id');
+                        const url = this.getAttribute('data-url');
+                        const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-            // Hàm gắn sự kiện cho nút "Đánh dấu đã đọc"
-            function attachMarkAsReadEvent(button) {
-                button.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const notificationId = this.getAttribute('data-id');
-                    const url = this.getAttribute('data-url');
-                    const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
-                    fetch(url, {
-                            method: 'PATCH',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': token
-                            }
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success) {
-                                const notificationElement = document.getElementById('notification-' +
-                                    notificationId);
-                                if (notificationElement) {
-                                    notificationElement.remove();
+                        fetch(url, {
+                                method: 'DELETE',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': token
                                 }
-
-                                const badge = document.querySelector('.notification-count');
-                                if (badge) {
-                                    let count = parseInt(badge.textContent) - 1;
-                                    if (count > 0) {
-                                        badge.textContent = count;
-                                        badge.style.display = 'inline';
-                                    } else {
-                                        badge.style.display = 'none';
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    const notificationElement = document.getElementById('notification-' + notificationId);
+                                    if (notificationElement) {
+                                        notificationElement.remove();
                                     }
-                                }
 
-                                const notificationList = document.querySelector('.notification-list');
-                                if (notificationList.children.length === 0) {
-                                    notificationList.innerHTML =
-                                        '<li class="notification-box"><p>Không có thông báo mới.</p></li>';
+                                    const badge = document.querySelector('.notification-count');
+                                    if (badge) {
+                                        let count = parseInt(badge.textContent) - 1;
+                                        if (count > 0) {
+                                            badge.textContent = count;
+                                            badge.style.display = 'inline';
+                                        } else {
+                                            badge.style.display = 'none';
+                                        }
+                                    }
+
+                                    const notificationList = document.querySelector('.notification-list');
+                                    if (notificationList.children.length === 0) {
+                                        notificationList.innerHTML = '<li class="notification-box"><p>Không có thông báo mới.</p></li>';
+                                    }
+                                } else {
+                                    console.error('Lỗi khi xóa thông báo:', data.message);
                                 }
-                            } else {
-                                console.error('Lỗi khi đánh dấu thông báo đã đọc:', data.message);
-                            }
-                        })
-                        .catch(error => console.error('Lỗi:', error));
+                            })
+                            .catch(error => console.error('Lỗi:', error));
+                    });
                 });
             }
 
@@ -574,17 +651,63 @@
                                 ${thongBao.nhan_xet ? `<p>Nhận xét: ${thongBao.nhan_xet}</p>` : ''}
                                 <small>${thongBao.created_at}</small>
                                 <small class="d-block">${thongBao.created_at_full}</small>
-                                <button class="btn btn-sm btn-link mark-as-read" data-id="${thongBao.id}" data-url="/thongbao/${thongBao.id}/da-doc">Đánh dấu đã đọc</button>
                             </div>
+                            <button class="delete-button" data-id="${thongBao.id}" data-url="/thongbao/${thongBao.id}/delete">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
                         `;
                                 notificationList.appendChild(notificationItem);
-                                attachMarkAsReadEvent(notificationItem.querySelector(
-                                    '.mark-as-read'));
                             });
                         } else {
                             notificationList.innerHTML =
                                 '<li class="notification-box"><p>Không có thông báo mới.</p></li>';
                         }
+
+                        // Gắn sự kiện cho các nút xóa
+                        document.querySelectorAll('.delete-button').forEach(button => {
+                            button.addEventListener('click', function(e) {
+                                e.preventDefault();
+                                const notificationId = this.getAttribute('data-id');
+                                const url = this.getAttribute('data-url');
+                                const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+                                fetch(url, {
+                                        method: 'DELETE',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                            'X-CSRF-TOKEN': token
+                                        }
+                                    })
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        if (data.success) {
+                                            const notificationElement = document.getElementById('notification-' + notificationId);
+                                            if (notificationElement) {
+                                                notificationElement.remove();
+                                            }
+
+                                            const badge = document.querySelector('.notification-count');
+                                            if (badge) {
+                                                let count = parseInt(badge.textContent) - 1;
+                                                if (count > 0) {
+                                                    badge.textContent = count;
+                                                    badge.style.display = 'inline';
+                                                } else {
+                                                    badge.style.display = 'none';
+                                                }
+                                            }
+
+                                            const notificationList = document.querySelector('.notification-list');
+                                            if (notificationList.children.length === 0) {
+                                                notificationList.innerHTML = '<li class="notification-box"><p>Không có thông báo mới.</p></li>';
+                                            }
+                                        } else {
+                                            console.error('Lỗi khi xóa thông báo:', data.message);
+                                        }
+                                    })
+                                    .catch(error => console.error('Lỗi:', error));
+                            });
+                        });
                     })
                     .catch(error => console.error('Lỗi khi tải số lượng thông báo:', error));
             };
@@ -594,11 +717,6 @@
                 initializePusher(userId);
                 window.loadNotificationCount();
             }
-
-            // Xử lý các nút "Đánh dấu đã đọc" hiện có
-            document.querySelectorAll('.mark-as-read').forEach(button => {
-                attachMarkAsReadEvent(button);
-            });
         });
     </script>
 </header>

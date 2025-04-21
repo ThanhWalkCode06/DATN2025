@@ -18,14 +18,53 @@ class ThongBaoController extends Controller
 
         return response()->json($notifications);
     }
+    // public function daDoc(Request $request, $id)
+    // {
+    //     $thongBao = ThongBao::where('id', $id)->where('user_id', Auth::id())->firstOrFail();
+    //     $thongBao->trang_thai = 1; // 1: đã đọc
+    //     $thongBao->save();
+
+    //     return response()->json(['success' => true]);
+    // }
     public function daDoc(Request $request, $id)
     {
-        $thongBao = ThongBao::where('id', $id)->where('user_id', Auth::id())->firstOrFail();
-        $thongBao->trang_thai = 1; // 1: đã đọc
-        $thongBao->save();
+        $userId = Auth::id();
+        if (!$userId) {
+            return response()->json(['success' => false, 'message' => 'Unauthorized'], 401);
+        }
+
+        ThongBao::where('user_id', $userId)
+            ->where('trang_thai', 0)
+            ->update(['trang_thai' => 1]);
 
         return response()->json(['success' => true]);
     }
+
+    public function deleteAll(Request $request)
+    {
+        $userId = Auth::id();
+        if (!$userId) {
+            return response()->json(['success' => false, 'message' => 'Unauthorized'], 401);
+        }
+
+        ThongBao::where('user_id', $userId)->delete();
+
+        return response()->json(['success' => true]);
+    }
+
+    public function delete(Request $request, $id)
+    {
+        $userId = Auth::id();
+        if (!$userId) {
+            return response()->json(['success' => false, 'message' => 'Unauthorized'], 401);
+        }
+
+        $thongBao = ThongBao::where('id', $id)->where('user_id', $userId)->firstOrFail();
+        $thongBao->delete();
+
+        return response()->json(['success' => true]);
+    }
+    
     public function fetchAll()
 {
     $userId = Auth::id();
