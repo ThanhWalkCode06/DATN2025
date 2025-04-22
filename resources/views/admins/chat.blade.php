@@ -275,38 +275,68 @@
             cluster: "ap1"
         });
 
-        // Lắng nghe tin nhắn mới trên kênh của admin
-        var adminChannel = pusher.subscribe("chat." + user_id);
-        adminChannel.bind("send-chat", function (data) {
-            console.log("Received new message on admin channel:", data);
-            const chat = data.chat;
+       // Lắng nghe tin nhắn mới trên kênh của admin
+var adminChannel = pusher.subscribe("chat." + user_id);
+adminChannel.bind("send-chat", function (data) {
+    console.log("Received new message on admin channel:", data);
+    const chat = data.chat;
 
-            // Hiển thị tin nhắn nếu nó thuộc về cuộc trò chuyện hiện tại
-            if (chat.nguoi_gui_id === receiver_id) {
-                appendMessage(chat, chat.nguoi_gui_id);
+    // Hiển thị tin nhắn nếu nó thuộc về cuộc trò chuyện hiện tại
+    if (chat.nguoi_gui_id === receiver_id) {
+        appendMessage(chat, chat.nguoi_gui_id);
+
+        // Đánh dấu tin nhắn là đã đọc nếu đang ở trong khung chat
+        fetch(`/mark-as-read/${receiver_id}`, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': "{{ csrf_token() }}",
+                'Content-Type': 'application/json'
             }
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Mark as read response:", data);
+                updateUserList(); // Cập nhật danh sách người dùng để làm mới unread_count
+            })
+            .catch(error => console.error("Lỗi khi đánh dấu tin nhắn là đã đọc:", error));
+    } else {
+        // Cập nhật danh sách người dùng nếu tin nhắn từ người khác
+        updateUserList();
+    }
+});
 
-            // Cập nhật danh sách người dùng bất kể tin nhắn từ ai
-            updateUserList();
-        });
+function bindChannel(nguoi_gui_id, nguoi_nhan_id) {
+    var channel = pusher.subscribe("chat." + nguoi_nhan_id);
+    console.log(`Subscribed to channel: chat.${nguoi_nhan_id}`);
 
-        function bindChannel(nguoi_gui_id, nguoi_nhan_id) {
-            var channel = pusher.subscribe("chat." + nguoi_nhan_id);
-            console.log(`Subscribed to channel: chat.${nguoi_nhan_id}`);
+    channel.bind("send-chat", function (data) {
+        console.log("Received new message on user channel:", data);
+        const chat = data.chat;
 
-            channel.bind("send-chat", function (data) {
-                console.log("Received new message on user channel:", data);
-                const chat = data.chat;
+        // Hiển thị tin nhắn nếu nó thuộc về cuộc trò chuyện hiện tại
+        if (chat.nguoi_gui_id === receiver_id || chat.nguoi_nhan_id === receiver_id) {
+            appendMessage(chat, chat.nguoi_gui_id);
 
-                // Hiển thị tin nhắn nếu nó thuộc về cuộc trò chuyện hiện tại
-                if (chat.nguoi_gui_id === receiver_id || chat.nguoi_nhan_id === receiver_id) {
-                    appendMessage(chat, chat.nguoi_gui_id);
+            // Đánh dấu tin nhắn là đã đọc nếu đang ở trong khung chat
+            fetch(`/mark-as-read/${receiver_id}`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': "{{ csrf_token() }}",
+                    'Content-Type': 'application/json'
                 }
-
-                // Cập nhật danh sách người dùng
-                updateUserList();
-            });
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Mark as read response:", data);
+                    updateUserList(); // Cập nhật danh sách người dùng để làm mới unread_count
+                })
+                .catch(error => console.error("Lỗi khi đánh dấu tin nhắn là đã đọc:", error));
         }
+
+        // Cập nhật danh sách người dùng
+        updateUserList();
+    });
+}
     </script>
 
     <!-- customizer js -->

@@ -19,7 +19,7 @@ class ChatController extends Controller
     public function getChatUsers()
     {
         $user_id = Auth::user()->id;
-    
+
         // Lấy danh sách người dùng mà Admin đã từng trò chuyện (dù là người gửi hoặc người nhận)
         $users = User::select('users.id', 'users.username')
             ->whereIn('users.id', function ($query) use ($user_id) {
@@ -36,7 +36,7 @@ class ChatController extends Controller
             })
             ->distinct()
             ->get();
-    
+
         // Thêm số lượng tin nhắn chưa đọc
         $users->each(function ($user) use ($user_id) {
             $user->unread_count = Chat::where('nguoi_gui_id', $user->id)
@@ -44,7 +44,7 @@ class ChatController extends Controller
                 ->where('trang_thai', false)
                 ->count();
         });
-    
+
         return response()->json($users)->header('Cache-Control', 'no-cache, no-store, must-revalidate');
     }
 
@@ -63,18 +63,18 @@ class ChatController extends Controller
             ->orderBy('created_at', 'asc')
             ->get();
 
-            return response()->json($messages)->header('Cache-Control', 'no-cache, no-store, must-revalidate');
+        return response()->json($messages)->header('Cache-Control', 'no-cache, no-store, must-revalidate');
     }
 
     public function sendChat(Request $request)
     {
         $nguoiGui = User::find($request->input('nguoi_gui_id'));
         $nguoiNhan = User::find($request->input('nguoi_nhan_id'));
-    
+
         if (!$nguoiGui || !$nguoiNhan) {
             return response()->json(['message' => 'Người gửi hoặc người nhận không tồn tại'], 404);
         }
-    
+
         $hinhAnh = null;
         if ($request->hasFile('media')) {
             $file = $request->file('media');
@@ -82,11 +82,11 @@ class ChatController extends Controller
             $duongDan = $file->storeAs('uploads/chats', $tenTep, 'public');
             $hinhAnh = asset('storage/' . $duongDan);
         }
-    
+
         if (!$request->input('noi_dung') && !$hinhAnh) {
             return response()->json(['message' => 'Vui lòng gửi tin nhắn hoặc hình ảnh'], 400);
         }
-    
+
         $chat = Chat::create([
             'nguoi_gui_id' => $nguoiGui->id,
             'nguoi_nhan_id' => $nguoiNhan->id,
@@ -98,7 +98,7 @@ class ChatController extends Controller
             'trang_thai' => false,
             'created_at' => now(),
         ]);
-    
+
         \Log::info('Broadcasting ChatEvent', [
             'chat' => $chat->toArray(),
             'channels' => [
@@ -106,9 +106,9 @@ class ChatController extends Controller
                 'to_nguoi_gui' => 'chat.' . $chat->nguoi_gui_id,
             ]
         ]);
-    
+
         broadcast(new ChatEvent($chat))->toOthers();
-    
+
         return response()->json([
             'chat' => [
                 'id' => $chat->id,
@@ -125,26 +125,25 @@ class ChatController extends Controller
     }
 
 
-public function markAsRead($partner_id)
-{
-    $user_id = Auth::id();
+    public function markAsRead($partner_id)
+    {
+        $user_id = Auth::id();
 
-    // Đánh dấu tất cả tin nhắn từ partner_id gửi đến user_id là đã đọc
-    $updated = Chat::where('nguoi_gui_id', $partner_id)
-        ->where('nguoi_nhan_id', $user_id)
-        ->where('trang_thai', false)
-        ->update(['trang_thai' => true]);
+        // Đánh dấu tất cả tin nhắn từ partner_id gửi đến user_id là đã đọc
+        $updated = Chat::where('nguoi_gui_id', $partner_id)
+            ->where('nguoi_nhan_id', $user_id)
+            ->where('trang_thai', false)
+            ->update(['trang_thai' => true]);
 
-    \Log::info('Mark as read called', [
-        'user_id' => $user_id,
-        'partner_id' => $partner_id,
-        'updated_rows' => $updated
-    ]);
+        \Log::info('Mark as read called', [
+            'user_id' => $user_id,
+            'partner_id' => $partner_id,
+            'updated_rows' => $updated
+        ]);
 
-    return response()->json([
-        'message' => 'Tin nhắn đã được đánh dấu là đã đọc',
-        'updated_rows' => $updated
-    ]);
-}
-
+        return response()->json([
+            'message' => 'Tin nhắn đã được đánh dấu là đã đọc',
+            'updated_rows' => $updated
+        ]);
+    }
 }
