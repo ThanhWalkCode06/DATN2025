@@ -302,3 +302,4 @@ Route::patch('/thongbao/{id}/da-doc', [ThongBaoController::class, 'daDoc'])->nam
 Route::get('/thong-bao/fetchAll', [ThongBaoController::class, 'fetchAll'])->name('thongbao.fetchAll');
 
 Route::post('/san-pham/them-danh-gia-don-hang', [DanhGiaClientsController::class, 'themDanhGiaDonHang'])->name('sanphams.themdanhgiadonhang');
+Route::post('/mark-as-read/{partner_id}', [ChatController::class, 'markAsRead']);

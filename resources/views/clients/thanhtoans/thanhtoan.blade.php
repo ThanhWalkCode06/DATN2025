@@ -441,6 +441,8 @@
 @endsection
 
 @section('js')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     {{-- điều khoản --}}
     {{-- <script>
   document.addEventListener('DOMContentLoaded', function () {
@@ -699,7 +701,7 @@
                 console.log("Phương thức thanh toán đã chọn:", paymentMethodId);
             });
 
-            $("#btnDatHang").click(function(e) {
+            $("#btnDatHang").click(async function(e) {
                 // xử lý điều khoản
                 // const selected = document.querySelector('input[name="flexRadioDefault"]:checked');
                 //     if (!selected) {
@@ -721,13 +723,22 @@
                 const paymentMethod = $('#hiddenPaymentMethod').val();
                 // Nếu là thanh toán bằng ví (ID = 3)
                 if (paymentMethod === "3") {
+                    const result = await Swal.fire({
+                        title: 'Xác nhận?',
+                        text: 'Bạn có chắc chắn muốn trừ tiền trong ví không?',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Đồng ý',
+                        cancelButtonText: 'Hủy',
+                        reverseButtons: true
+                    });
 
-                    const confirmed = confirm(`Xác nhận trừ tiền trong ví?`);
-                    if (!confirmed) {
-                        // ❌ Nếu người dùng bấm Hủy thì dừng lại
+                    if (!result.isConfirmed) {
                         return;
                     }
-                }
+                 }
+
+   
                 //  confirm
                 // Lấy dữ liệu từ form
                 var formData = {

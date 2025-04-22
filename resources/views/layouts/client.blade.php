@@ -72,7 +72,8 @@
         }
 
         .notify-alert-custom {
-            background-color: #e74c3c !important; /* Màu đỏ cho ẩn bình luận */
+            background-color: #e74c3c !important;
+            /* Màu đỏ cho ẩn bình luận */
             color: white !important;
             border: 1px solid #c0392b !important;
             border-radius: 6px;
@@ -82,19 +83,23 @@
         }
 
         .notify-alert-custom.success {
-            background-color: #28a745 !important; /* Màu xanh lá cây cho hiển thị bình luận */
-            border: 1px solid #218838 !important; /* Viền xanh đậm hơn */
+            background-color: #28a745 !important;
+            /* Màu xanh lá cây cho hiển thị bình luận */
+            border: 1px solid #218838 !important;
+            /* Viền xanh đậm hơn */
         }
 
         .notify-alert-custom .title {
             font-weight: 600;
-            color: #c0392b; /* Màu tiêu đề cho ẩn bình luận */
+            color: #c0392b;
+            /* Màu tiêu đề cho ẩn bình luận */
             font-size: 16px;
             margin-bottom: 5px;
         }
 
         .notify-alert-custom.success .title {
-            color: #218838; /* Màu tiêu đề xanh đậm cho hiển thị bình luận */
+            color: #218838;
+            /* Màu tiêu đề xanh đậm cho hiển thị bình luận */
         }
 
         .notify-alert-custom .message {
@@ -224,7 +229,7 @@
             }
 
             // Xử lý sự kiện hide-comment
-            channel.bind("hide-comment", function(data) {
+            channel.bind("hide-comment", function (data) {
                 console.log('Nhận sự kiện hide-comment:', data);
                 const productName = data.product_name ? capitalizeFirstLetter(data.product_name) : '';
                 const productText = productName ? `<strong>Sản phẩm: ${productName}</strong>` : '';
@@ -255,7 +260,7 @@
             });
 
             // Xử lý sự kiện show-comment
-            channel.bind("show-comment", function(data) {
+            channel.bind("show-comment", function (data) {
                 console.log('Nhận sự kiện show-comment:', data);
                 const productName = data.product_name ? capitalizeFirstLetter(data.product_name) : '';
                 const productText = productName ? `<strong>Sản phẩm: ${productName}</strong>` : '';
@@ -315,40 +320,74 @@
 
 
     @isset(Auth::user()->id)
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                const userId = {{ Auth::user()->id ?? 'null' }}; // Lấy id người dùng
-                const nguoiNhanId = 1; // ID người nhận (ví dụ là 1, có thể thay đổi tùy theo hệ thống của bạn)
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const userId = {{ Auth::user()->id ?? 'null' }};
+            const nguoiNhanId = 1; // Đối tác chat (admin ID = 1)
 
-                // Load tin nhắn khi trang được tải
-                fetch(`/messages/${nguoiNhanId}`)
+            // Hàm cập nhật số tin nhắn chưa đọc
+            function updateUnreadCount() {
+                fetch(`/messages/${nguoiNhanId}`, {
+                    headers: {
+                        'Cache-Control': 'no-cache'
+                    }
+                })
                     .then(response => response.json())
                     .then(messages => {
-                        const chatBox = document.getElementById("chat-box");
-                        chatBox.innerHTML = "";
-                        messages.forEach(chat => {
+                        const unreadCount = messages.filter(chat => chat.nguoi_nhan_id === userId && !chat.trang_thai).length;
+                        console.log('Unread messages:', messages);
+                        console.log('Unread count:', unreadCount);
+                        const notificationElement = document.getElementById("unread-notification");
+                        if (notificationElement) {
+                            notificationElement.innerHTML = unreadCount > 0 ? `<span class="badge bg-danger">${unreadCount}</span>` : '';
+                        }
+                    })
+                    .catch(error => console.error('Error updating unread count:', error));
+            }
+
+            // Gọi updateUnreadCount() khi trang tải
+            updateUnreadCount();
+
+            // Khi modal chat được mở
+            const chatModal = document.getElementById('chat-box-modal');
+            chatModal.addEventListener('shown.bs.modal', async function () {
+                try {
+                    const response = await fetch(`/messages/${nguoiNhanId}`, {
+                        headers: {
+                            'Cache-Control': 'no-cache'
+                        }
+                    });
+                    const messages = await response.json();
+
+                    const chatBox = document.getElementById("chat-box");
+                    chatBox.innerHTML = "";
+                    const messageIds = new Set();
+
+                    messages.forEach(chat => {
+                        if (!messageIds.has(chat.id)) {
+                            messageIds.add(chat.id);
                             let align = chat.nguoi_gui_id === userId ? "text-end" : "text-start";
                             let chatMessage = document.createElement("p");
                             chatMessage.classList.add(align);
+                            chatMessage.dataset.id = chat.id;
                             chatMessage.innerHTML = `<strong>${chat.ten_nguoi_gui}:</strong> ${chat.noi_dung || ''}`;
 
-                            // Thêm ảnh/video nếu có
                             if (chat.hinh_anh) {
-                                if (chat.hinh_anh.match(/\.(jpg|jpeg|png|gif|jfif)$/)) {
-                                    chatMessage.innerHTML += `<br><img src="${chat.hinh_anh}" style="max-width: 200px; height: auto; border-radius: 8px; margin-top: 5px;">`;
-                                } else if (chat.hinh_anh.match(/\.(mp4|webm|ogg)$/)) {
+                                const ext = chat.hinh_anh.split('.').pop().toLowerCase();
+                                if (['mp4', 'webm', 'ogg'].includes(ext)) {
                                     chatMessage.innerHTML += `
-                                    <br><video controls style="max-width: 200px; height: auto; border-radius: 8px; margin-top: 5px;">
-                                        <source src="${chat.hinh_anh}">
-                                        Trình duyệt không hỗ trợ video.
-                                    </video>`;
+                                        <br><video controls style="max-width: 200px; height: auto; border-radius: 8px; margin-top: 5px;">
+                                            <source src="${chat.hinh_anh}">
+                                            Trình duyệt không hỗ trợ video.
+                                        </video>`;
+                                } else {
+                                    chatMessage.innerHTML += `<br><img src="${chat.hinh_anh}" style="max-width: 200px; height: auto; border-radius: 8px; margin-top: 5px;">`;
                                 }
                             }
 
-                            // Thêm thời gian gửi tin nhắn
-                            const timeSent = new Date(chat.created_at); // Chuyển thời gian từ string sang Date
+                            const timeSent = new Date(chat.created_at);
                             const timeString = timeSent.toLocaleString('vi-VN', {
-                                weekday: 'short', // Thứ (T2, T3, ...)
+                                weekday: 'short',
                                 year: 'numeric',
                                 month: 'numeric',
                                 day: 'numeric',
@@ -358,129 +397,146 @@
                             chatMessage.innerHTML += `<br><small class="text-muted">${timeString}</small>`;
 
                             chatBox.appendChild(chatMessage);
-                        });
-                        chatBox.scrollTop = chatBox.scrollHeight; // Cuộn xuống tin nhắn mới nhất
-                    })
-                    .catch(error => console.error("Lỗi khi tải tin nhắn:", error));
+                        }
+                    });
+                    chatBox.scrollTop = chatBox.scrollHeight;
 
-                // Gửi tin nhắn khi form được submit
-                document.getElementById("chat-form").addEventListener("submit", function (e) {
-                    e.preventDefault();
+                    // Đánh dấu tin nhắn là đã đọc
+                    const markAsReadResponse = await fetch(`/mark-as-read/${nguoiNhanId}`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': "{{ csrf_token() }}",
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    const markAsReadResult = await markAsReadResponse.json();
+                    console.log('Mark as read response:', markAsReadResult);
 
-                    const noiDungInput = document.getElementById("noi_dung");
-                    const fileInput = document.getElementById("media");
-                    const file = fileInput.files[0];
-                    const noiDung = noiDungInput.value.trim();
+                    // Cập nhật số tin nhắn chưa đọc
+                    updateUnreadCount();
+                } catch (error) {
+                    console.error("Lỗi khi tải tin nhắn:", error);
+                }
+            });
 
-                    // Nếu không có nội dung và không có file, không gửi
-                    if (!noiDung && !file) {
+            // Gửi tin nhắn khi form được submit
+            document.getElementById("chat-form").addEventListener("submit", function (e) {
+                e.preventDefault();
+
+                const noiDungInput = document.getElementById("noi_dung");
+                const fileInput = document.getElementById("media");
+                const file = fileInput.files[0];
+                const noiDung = noiDungInput.value.trim();
+
+                if (!noiDung && !file) {
+                    document.getElementById("chat-error").classList.remove("d-none");
+                    document.getElementById("chat-error").innerText = "Vui lòng gửi tin nhắn hoặc hình ảnh/video!";
+                    return;
+                }
+
+                if (file) {
+                    const validImageTypes = ['image/jpg', 'image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/jfif'];
+                    const validVideoTypes = ['video/mp4', 'video/webm', 'video/ogg'];
+
+                    if (!validImageTypes.includes(file.type) && !validVideoTypes.includes(file.type)) {
                         document.getElementById("chat-error").classList.remove("d-none");
-                        document.getElementById("chat-error").innerText = "Vui lòng gửi tin nhắn hoặc hình ảnh/video!";
+                        document.getElementById("chat-error").innerText = "Định dạng file không hợp lệ! Chỉ hỗ trợ hình ảnh (JPG, JPEG, PNG, GIF, WEBP) và video (MP4, WEBM, OGG).";
                         return;
                     }
 
-                    // Kiểm tra nếu file không đúng định dạng
-                    if (file) {
-                        const validImageTypes = ['image/jpg', 'image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/jfif'];
-                        const validVideoTypes = ['video/mp4', 'video/webm', 'video/ogg'];
-
-                        // Kiểm tra xem file có phải là hình ảnh hoặc video hợp lệ không
-                        if (!validImageTypes.includes(file.type) && !validVideoTypes.includes(file.type)) {
-                            document.getElementById("chat-error").classList.remove("d-none");
-                            document.getElementById("chat-error").innerText = "Định dạng file không hợp lệ! Chỉ hỗ trợ hình ảnh (JPG, JPEG, PNG, GIF, WEBP) và video (MP4, WEBM, OGG).";
-                            return;
-                        }
-
-                    }
-                    // Kiểm tra dung lượng video (20MB)
-                    if (file && file.type.startsWith("video/") && file.size > 20 * 1024 * 1024) {
+                    if (file.type.startsWith("video/") && file.size > 20 * 1024 * 1024) {
                         document.getElementById("chat-error").classList.remove("d-none");
                         document.getElementById("chat-error").innerText = "Video không được vượt quá 20MB!";
                         return;
                     }
+                }
 
+                document.getElementById("chat-error").classList.add("d-none");
+                const formData = new FormData();
+                formData.append("nguoi_gui_id", userId);
+                formData.append("nguoi_nhan_id", nguoiNhanId);
+                formData.append("channel", userId);
+                if (noiDung) formData.append("noi_dung", noiDung);
+                if (file) formData.append("media", file);
 
-                    // Nếu không có lỗi, ẩn thông báo lỗi
-                    document.getElementById("chat-error").classList.add("d-none");
-                    // Tạo form data để gửi
-                    const formData = new FormData();
-                    formData.append("nguoi_gui_id", userId);
-                    formData.append("nguoi_nhan_id", nguoiNhanId);
-                    formData.append("channel", userId);
-
-                    // Nếu có nội dung
-                    if (noiDung) formData.append("noi_dung", noiDung);
-
-                    // Nếu có file media (hình ảnh/video)
-                    if (file) {
-                        formData.append("media", file);
-                    }
-
-                    // Gửi yêu cầu tới server
-                    fetch('/send-chat', {
-                        method: 'POST',
-                        headers: {
-                            'X-CSRF-TOKEN': "{{ csrf_token() }}"
-                        },
-                        body: formData
+                fetch('/send-chat', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                    },
+                    body: formData
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        noiDungInput.value = "";
+                        fileInput.value = "";
+                        updateUnreadCount();
                     })
-                        .then(response => response.json())
-                        .then(data => {
-                            noiDungInput.value = "";
-                            fileInput.value = "";
-                        })
-                        .catch(error => console.error("Lỗi khi gửi tin nhắn:", error));
-                });
+                    .catch(error => console.error("Lỗi khi gửi tin nhắn:", error));
+            });
 
-                // Kết nối Pusher và nhận tin nhắn realtime
-                Pusher.logToConsole = true;
+            // Nhận tin nhắn qua Pusher
+            Pusher.logToConsole = true;
+            const pusher = new Pusher("0ca5e8c271c25e1264d2", {
+                cluster: "ap1"
+            });
+            const channel = pusher.subscribe("chat." + userId);
 
-                const pusher = new Pusher("0ca5e8c271c25e1264d2", {
-                    cluster: "ap1"
-                });
+            channel.bind("send-chat", function (data) {
+                const chatBox = document.getElementById("chat-box");
+                const chat = data.chat;
+                let align = chat.nguoi_gui_id === userId ? "text-end" : "text-start";
 
-                const channel = pusher.subscribe("chat." + {{ Auth::user()->id }});
+                let chatMessage = document.createElement("p");
+                chatMessage.classList.add(align);
+                chatMessage.dataset.id = chat.id;
+                chatMessage.innerHTML = `<strong>${chat.ten_nguoi_gui}:</strong> ${chat.noi_dung || ''}`;
 
-                channel.bind("send-chat", function (data) {
-                    const chatBox = document.getElementById("chat-box");
-                    const chat = data.chat;
-                    let align = chat.nguoi_gui_id === userId ? "text-end" : "text-start";
-
-                    let chatMessage = document.createElement("p");
-                    chatMessage.classList.add(align);
-                    chatMessage.innerHTML = `<strong>${chat.ten_nguoi_gui}:</strong> ${chat.noi_dung || ''}`;
-
-                    // Thêm ảnh/video nếu có
-                    if (chat.hinh_anh) {
-                        if (chat.hinh_anh.match(/\.(jpg|jpeg|png|gif|jfif)$/)) {
-                            chatMessage.innerHTML += `<br><img src="${chat.hinh_anh}" style="max-width: 200px; height: auto; border-radius: 8px; margin-top: 5px;">`;
-                        } else if (chat.hinh_anh.match(/\.(mp4|webm|ogg)$/)) {
-                            chatMessage.innerHTML += `
+                if (chat.hinh_anh) {
+                    const ext = chat.hinh_anh.split('.').pop().toLowerCase();
+                    if (['mp4', 'webm', 'ogg'].includes(ext)) {
+                        chatMessage.innerHTML += `
                             <br><video controls style="max-width: 200px; height: auto; border-radius: 8px; margin-top: 5px;">
                                 <source src="${chat.hinh_anh}">
                                 Trình duyệt không hỗ trợ video.
                             </video>`;
-                        }
+                    } else {
+                        chatMessage.innerHTML += `<br><img src="${chat.hinh_anh}" style="max-width: 200px; height: auto; border-radius: 8px; margin-top: 5px;">`;
                     }
+                }
 
-                    // Thêm thời gian gửi tin nhắn
-                    const timeSent = new Date(chat.created_at);
-                    const timeString = timeSent.toLocaleString('vi-VN', {
-                        weekday: 'short',
-                        year: 'numeric',
-                        month: 'numeric',
-                        day: 'numeric',
-                        hour: 'numeric',
-                        minute: 'numeric',
-                    });
-                    chatMessage.innerHTML += `<br><small class="text-muted">${timeString}</small>`;
-
-                    chatBox.appendChild(chatMessage);
-                    chatBox.scrollTop = chatBox.scrollHeight; // Cuộn xuống tin nhắn mới nhất
+                const timeSent = new Date(chat.created_at);
+                const timeString = timeSent.toLocaleString('vi-VN', {
+                    weekday: 'short',
+                    year: 'numeric',
+                    month: 'numeric',
+                    day: 'numeric',
+                    hour: 'numeric',
+                    minute: 'numeric',
                 });
+                chatMessage.innerHTML += `<br><small class="text-muted">${timeString}</small>`;
+
+                chatBox.appendChild(chatMessage);
+                chatBox.scrollTop = chatBox.scrollHeight;
+                updateUnreadCount();
             });
-        </script>
-    @endisset
+
+            // Xử lý nút Back to Top
+            window.addEventListener('scroll', function () {
+                const backToTopButton = document.getElementById('back-to-top');
+                if (window.scrollY > 300) {
+                    backToTopButton.style.display = 'block';
+                } else {
+                    backToTopButton.style.display = 'none';
+                }
+            });
+
+            document.getElementById('back-to-top').addEventListener('click', function () {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+    </script>
+@endisset
 
 
 
