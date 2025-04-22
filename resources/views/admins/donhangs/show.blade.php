@@ -344,8 +344,6 @@
     <!-- Plugins js -->
     <script src="{{ asset('assets/js/sidebar-menu.js') }}"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
     <script>
         function updateConfirmation(e) {
             e.preventDefault();
