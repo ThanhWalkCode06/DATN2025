@@ -84,6 +84,29 @@
         let currentChannel = null; // Biến để theo dõi kênh hiện tại
 
         // Hàm cập nhật danh sách người dùng và số tin nhắn chưa đọc
+        //  function updateUserList() {
+        //     fetch('/admin/chat-users', {
+        //         headers: {
+        //             'Cache-Control': 'no-cache' // Chống cache để lấy dữ liệu mới nhất
+        //         }
+        //     })
+        //         .then(response => response.json())
+        //         .then(users => {
+        //             console.log('Updated user list:', users);
+        //             let userList = document.getElementById("chat-users");
+        //             userList.innerHTML = '';
+        //             users.forEach(user => {
+        //                 let li = document.createElement("li");
+        //                 li.classList.add("list-group-item", "user-item");
+        //                 li.dataset.id = user.id;
+        //                 li.innerHTML = `${user.username} ${user.unread_count > 0 ? `<span class="badge bg-danger">${user.unread_count}</span>` : ''}`;
+        //                 li.addEventListener("click", () => loadChat(user.id, user.username));
+        //                 userList.appendChild(li);
+        //             });
+        //         })
+        //         .catch(error => console.error("Lỗi khi cập nhật danh sách người dùng:", error));
+        // }
+
         function updateUserList() {
             fetch('/admin/chat-users', {
                 headers: {
@@ -102,10 +125,17 @@
                         li.innerHTML = `${user.username} ${user.unread_count > 0 ? `<span class="badge bg-danger">${user.unread_count}</span>` : ''}`;
                         li.addEventListener("click", () => loadChat(user.id, user.username));
                         userList.appendChild(li);
+                        // Log thêm thời gian tin nhắn mới nhất để kiểm tra
+                        console.log(`User: ${user.username}, Latest message time: ${user.latest_message_time || 'N/A'}`);
                     });
                 })
                 .catch(error => console.error("Lỗi khi cập nhật danh sách người dùng:", error));
         }
+
+        // Gọi updateUserList khi trang được tải
+        document.addEventListener("DOMContentLoaded", function () {
+            updateUserList();
+        });
 
         // Gọi updateUserList khi trang được tải
         document.addEventListener("DOMContentLoaded", function () {
@@ -161,57 +191,57 @@
         }
 
         function appendMessage(chat, nguoi_gui_id) {
-    let chatBox = document.getElementById("chat-box");
+            let chatBox = document.getElementById("chat-box");
 
-    // Kiểm tra tin nhắn trùng lặp dựa trên created_at
-    let existingMessages = chatBox.querySelectorAll(`div[data-created-at="${chat.created_at}"]`);
-    if (existingMessages.length > 0) {
-        console.log(`Tin nhắn trùng lặp, bỏ qua: ${chat.noi_dung}`);
-        return;
-    }
+            // Kiểm tra tin nhắn trùng lặp dựa trên created_at
+            let existingMessages = chatBox.querySelectorAll(`div[data-created-at="${chat.created_at}"]`);
+            if (existingMessages.length > 0) {
+                console.log(`Tin nhắn trùng lặp, bỏ qua: ${chat.noi_dung}`);
+                return;
+            }
 
-    // Sửa logic căn chỉnh: so sánh với user_id (Admin) thay vì nguoi_gui_id
-    let align = chat.nguoi_gui_id === user_id ? "text-end" : "text-start";
-    let wrapper = document.createElement("div");
-    wrapper.classList.add("m-2", align);
-    wrapper.setAttribute("data-created-at", chat.created_at);
+            // Sửa logic căn chỉnh: so sánh với user_id (Admin) thay vì nguoi_gui_id
+            let align = chat.nguoi_gui_id === user_id ? "text-end" : "text-start";
+            let wrapper = document.createElement("div");
+            wrapper.classList.add("m-2", align);
+            wrapper.setAttribute("data-created-at", chat.created_at);
 
-    let content = `<strong>${chat.nguoi_gui_id === user_id ? "Admin" : chat.ten_nguoi_gui}:</strong>`;
-    if (chat.noi_dung) {
-        content += `${chat.noi_dung}`;
-    }
+            let content = `<strong>${chat.nguoi_gui_id === user_id ? "Admin" : chat.ten_nguoi_gui}:</strong>`;
+            if (chat.noi_dung) {
+                content += `${chat.noi_dung}`;
+            }
 
-    if (chat.hinh_anh) {
-        let fileUrl = chat.hinh_anh;
-        const extension = fileUrl.split('.').pop().toLowerCase();
-        if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'jfif'].includes(extension)) {
-            content += `<div><img src="${fileUrl}" alt="Ảnh" style="max-width: 200px; border-radius: 8px; margin-top: 5px;"></div>`;
-        } else if (['mp4', 'webm', 'ogg'].includes(extension)) {
-            content += `
-                <div>
-                    <video controls style="max-width: 300px; border-radius: 8px; margin-top: 5px;">
-                        <source src="${fileUrl}" type="video/${extension}">
-                        Trình duyệt không hỗ trợ video.
-                    </video>
-                </div>`;
+            if (chat.hinh_anh) {
+                let fileUrl = chat.hinh_anh;
+                const extension = fileUrl.split('.').pop().toLowerCase();
+                if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'jfif'].includes(extension)) {
+                    content += `<div><img src="${fileUrl}" alt="Ảnh" style="max-width: 200px; border-radius: 8px; margin-top: 5px;"></div>`;
+                } else if (['mp4', 'webm', 'ogg'].includes(extension)) {
+                    content += `
+                    <div>
+                        <video controls style="max-width: 300px; border-radius: 8px; margin-top: 5px;">
+                            <source src="${fileUrl}" type="video/${extension}">
+                            Trình duyệt không hỗ trợ video.
+                        </video>
+                    </div>`;
+                }
+            }
+
+            const timeSent = new Date(chat.created_at);
+            const timeString = timeSent.toLocaleString('vi-VN', {
+                weekday: 'short',
+                year: 'numeric',
+                month: 'numeric',
+                day: 'numeric',
+                hour: 'numeric',
+                minute: 'numeric',
+            });
+            content += `<div><small class="text-muted" style="font-size: 0.8em; margin-top: 5px;">${timeString}</small></div>`;
+
+            wrapper.innerHTML = content;
+            chatBox.appendChild(wrapper);
+            chatBox.scrollTop = chatBox.scrollHeight;
         }
-    }
-
-    const timeSent = new Date(chat.created_at);
-    const timeString = timeSent.toLocaleString('vi-VN', {
-        weekday: 'short',
-        year: 'numeric',
-        month: 'numeric',
-        day: 'numeric',
-        hour: 'numeric',
-        minute: 'numeric',
-    });
-    content += `<div><small class="text-muted" style="font-size: 0.8em; margin-top: 5px;">${timeString}</small></div>`;
-
-    wrapper.innerHTML = content;
-    chatBox.appendChild(wrapper);
-    chatBox.scrollTop = chatBox.scrollHeight;
-}
 
         document.getElementById("chat-form").addEventListener("submit", function (e) {
             e.preventDefault();
@@ -275,68 +305,68 @@
             cluster: "ap1"
         });
 
-       // Lắng nghe tin nhắn mới trên kênh của admin
-var adminChannel = pusher.subscribe("chat." + user_id);
-adminChannel.bind("send-chat", function (data) {
-    console.log("Received new message on admin channel:", data);
-    const chat = data.chat;
+        // Lắng nghe tin nhắn mới trên kênh của admin
+        var adminChannel = pusher.subscribe("chat." + user_id);
+        adminChannel.bind("send-chat", function (data) {
+            console.log("Received new message on admin channel:", data);
+            const chat = data.chat;
 
-    // Hiển thị tin nhắn nếu nó thuộc về cuộc trò chuyện hiện tại
-    if (chat.nguoi_gui_id === receiver_id) {
-        appendMessage(chat, chat.nguoi_gui_id);
+            // Hiển thị tin nhắn nếu nó thuộc về cuộc trò chuyện hiện tại
+            if (chat.nguoi_gui_id === receiver_id) {
+                appendMessage(chat, chat.nguoi_gui_id);
 
-        // Đánh dấu tin nhắn là đã đọc nếu đang ở trong khung chat
-        fetch(`/mark-as-read/${receiver_id}`, {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': "{{ csrf_token() }}",
-                'Content-Type': 'application/json'
-            }
-        })
-            .then(response => response.json())
-            .then(data => {
-                console.log("Mark as read response:", data);
-                updateUserList(); // Cập nhật danh sách người dùng để làm mới unread_count
-            })
-            .catch(error => console.error("Lỗi khi đánh dấu tin nhắn là đã đọc:", error));
-    } else {
-        // Cập nhật danh sách người dùng nếu tin nhắn từ người khác
-        updateUserList();
-    }
-});
-
-function bindChannel(nguoi_gui_id, nguoi_nhan_id) {
-    var channel = pusher.subscribe("chat." + nguoi_nhan_id);
-    console.log(`Subscribed to channel: chat.${nguoi_nhan_id}`);
-
-    channel.bind("send-chat", function (data) {
-        console.log("Received new message on user channel:", data);
-        const chat = data.chat;
-
-        // Hiển thị tin nhắn nếu nó thuộc về cuộc trò chuyện hiện tại
-        if (chat.nguoi_gui_id === receiver_id || chat.nguoi_nhan_id === receiver_id) {
-            appendMessage(chat, chat.nguoi_gui_id);
-
-            // Đánh dấu tin nhắn là đã đọc nếu đang ở trong khung chat
-            fetch(`/mark-as-read/${receiver_id}`, {
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': "{{ csrf_token() }}",
-                    'Content-Type': 'application/json'
-                }
-            })
-                .then(response => response.json())
-                .then(data => {
-                    console.log("Mark as read response:", data);
-                    updateUserList(); // Cập nhật danh sách người dùng để làm mới unread_count
+                // Đánh dấu tin nhắn là đã đọc nếu đang ở trong khung chat
+                fetch(`/mark-as-read/${receiver_id}`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': "{{ csrf_token() }}",
+                        'Content-Type': 'application/json'
+                    }
                 })
-                .catch(error => console.error("Lỗi khi đánh dấu tin nhắn là đã đọc:", error));
-        }
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log("Mark as read response:", data);
+                        updateUserList(); // Cập nhật danh sách người dùng để làm mới unread_count
+                    })
+                    .catch(error => console.error("Lỗi khi đánh dấu tin nhắn là đã đọc:", error));
+            } else {
+                // Cập nhật danh sách người dùng nếu tin nhắn từ người khác
+                updateUserList();
+            }
+        });
 
-        // Cập nhật danh sách người dùng
-        updateUserList();
-    });
-}
+        function bindChannel(nguoi_gui_id, nguoi_nhan_id) {
+            var channel = pusher.subscribe("chat." + nguoi_nhan_id);
+            console.log(`Subscribed to channel: chat.${nguoi_nhan_id}`);
+
+            channel.bind("send-chat", function (data) {
+                console.log("Received new message on user channel:", data);
+                const chat = data.chat;
+
+                // Hiển thị tin nhắn nếu nó thuộc về cuộc trò chuyện hiện tại
+                if (chat.nguoi_gui_id === receiver_id || chat.nguoi_nhan_id === receiver_id) {
+                    appendMessage(chat, chat.nguoi_gui_id);
+
+                    // Đánh dấu tin nhắn là đã đọc nếu đang ở trong khung chat
+                    fetch(`/mark-as-read/${receiver_id}`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': "{{ csrf_token() }}",
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log("Mark as read response:", data);
+                            updateUserList(); // Cập nhật danh sách người dùng để làm mới unread_count
+                        })
+                        .catch(error => console.error("Lỗi khi đánh dấu tin nhắn là đã đọc:", error));
+                }
+
+                // Cập nhật danh sách người dùng
+                updateUserList();
+            });
+        }
     </script>
 
     <!-- customizer js -->
