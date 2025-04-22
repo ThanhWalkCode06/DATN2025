@@ -5,6 +5,43 @@
 @endsection
 
 @section('css')
+
+<style>
+    /* Modal phóng to ảnh */
+    .image-zoom-modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.8);
+        justify-content: center;
+        align-items: center;
+    }
+    
+    /* Nội dung ảnh trong modal */
+    .image-zoom-content {
+        width: 600px; /* Kích thước cố định cho chiều rộng */
+        height: 600px; /* Kích thước cố định cho chiều cao */
+        max-width: 90%; /* Giới hạn tối đa để phù hợp với màn hình nhỏ */
+        max-height: 90%; /* Giới hạn tối đa để phù hợp với màn hình nhỏ */
+        object-fit: contain; /* Giữ tỷ lệ ảnh, không bị méo */
+        border-radius: 8px;
+    }
+    
+    /* Nút đóng modal */
+    .close-zoom-modal {
+        position: absolute;
+        top: 20px;
+        right: 30px;
+        color: white;
+        font-size: 40px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+    </style>
     <!-- remixicon css -->
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/remixicon.css') }}">
 
@@ -42,6 +79,11 @@
 
 @section('content')
     <div class="col-sm-12">
+        <!-- Modal phóng to ảnh -->
+<div id="imageZoomModal" class="image-zoom-modal">
+    <span class="close-zoom-modal">&times;</span>
+    <img class="image-zoom-content" id="zoomedImage">
+</div>
         <div class="row">
             <!-- Sidebar Danh sách người đã chat -->
             <div class="col-md-3 border-end" id="user-list" style="height: 500px; overflow-y: auto;">
@@ -84,6 +126,29 @@
         let currentChannel = null; // Biến để theo dõi kênh hiện tại
 
         // Hàm cập nhật danh sách người dùng và số tin nhắn chưa đọc
+        //  function updateUserList() {
+        //     fetch('/admin/chat-users', {
+        //         headers: {
+        //             'Cache-Control': 'no-cache' // Chống cache để lấy dữ liệu mới nhất
+        //         }
+        //     })
+        //         .then(response => response.json())
+        //         .then(users => {
+        //             console.log('Updated user list:', users);
+        //             let userList = document.getElementById("chat-users");
+        //             userList.innerHTML = '';
+        //             users.forEach(user => {
+        //                 let li = document.createElement("li");
+        //                 li.classList.add("list-group-item", "user-item");
+        //                 li.dataset.id = user.id;
+        //                 li.innerHTML = `${user.username} ${user.unread_count > 0 ? `<span class="badge bg-danger">${user.unread_count}</span>` : ''}`;
+        //                 li.addEventListener("click", () => loadChat(user.id, user.username));
+        //                 userList.appendChild(li);
+        //             });
+        //         })
+        //         .catch(error => console.error("Lỗi khi cập nhật danh sách người dùng:", error));
+        // }
+
         function updateUserList() {
             fetch('/admin/chat-users', {
                 headers: {
@@ -102,10 +167,17 @@
                         li.innerHTML = `${user.username} ${user.unread_count > 0 ? `<span class="badge bg-danger">${user.unread_count}</span>` : ''}`;
                         li.addEventListener("click", () => loadChat(user.id, user.username));
                         userList.appendChild(li);
+                        // Log thêm thời gian tin nhắn mới nhất để kiểm tra
+                        console.log(`User: ${user.username}, Latest message time: ${user.latest_message_time || 'N/A'}`);
                     });
                 })
                 .catch(error => console.error("Lỗi khi cập nhật danh sách người dùng:", error));
         }
+
+        // Gọi updateUserList khi trang được tải
+        document.addEventListener("DOMContentLoaded", function () {
+            updateUserList();
+        });
 
         // Gọi updateUserList khi trang được tải
         document.addEventListener("DOMContentLoaded", function () {
@@ -161,31 +233,32 @@
         }
 
         function appendMessage(chat, nguoi_gui_id) {
-    let chatBox = document.getElementById("chat-box");
+            let chatBox = document.getElementById("chat-box");
 
-    // Kiểm tra tin nhắn trùng lặp dựa trên created_at
-    let existingMessages = chatBox.querySelectorAll(`div[data-created-at="${chat.created_at}"]`);
-    if (existingMessages.length > 0) {
-        console.log(`Tin nhắn trùng lặp, bỏ qua: ${chat.noi_dung}`);
-        return;
-    }
+            // Kiểm tra tin nhắn trùng lặp dựa trên created_at
+            let existingMessages = chatBox.querySelectorAll(`div[data-created-at="${chat.created_at}"]`);
+            if (existingMessages.length > 0) {
+                console.log(`Tin nhắn trùng lặp, bỏ qua: ${chat.noi_dung}`);
+                return;
+            }
 
-    // Sửa logic căn chỉnh: so sánh với user_id (Admin) thay vì nguoi_gui_id
-    let align = chat.nguoi_gui_id === user_id ? "text-end" : "text-start";
-    let wrapper = document.createElement("div");
-    wrapper.classList.add("m-2", align);
-    wrapper.setAttribute("data-created-at", chat.created_at);
+            // Sửa logic căn chỉnh: so sánh với user_id (Admin) thay vì nguoi_gui_id
+            let align = chat.nguoi_gui_id === user_id ? "text-end" : "text-start";
+            let wrapper = document.createElement("div");
+            wrapper.classList.add("m-2", align);
+            wrapper.setAttribute("data-created-at", chat.created_at);
 
-    let content = `<strong>${chat.nguoi_gui_id === user_id ? "Admin" : chat.ten_nguoi_gui}:</strong>`;
-    if (chat.noi_dung) {
-        content += `${chat.noi_dung}`;
-    }
+            let content = `<strong>${chat.nguoi_gui_id === user_id ? "Admin" : chat.ten_nguoi_gui}:</strong>`;
+            if (chat.noi_dung) {
+                content += `${chat.noi_dung}`;
+            }
 
-    if (chat.hinh_anh) {
+            if (chat.hinh_anh) {
         let fileUrl = chat.hinh_anh;
         const extension = fileUrl.split('.').pop().toLowerCase();
         if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'jfif'].includes(extension)) {
-            content += `<div><img src="${fileUrl}" alt="Ảnh" style="max-width: 200px; border-radius: 8px; margin-top: 5px;"></div>`;
+            // Thêm lớp zoomable-image cho ảnh
+            content += `<div><img class="zoomable-image" src="${fileUrl}" alt="Ảnh" style="max-width: 200px; border-radius: 8px; margin-top: 5px; cursor: pointer;"></div>`;
         } else if (['mp4', 'webm', 'ogg'].includes(extension)) {
             content += `
                 <div>
@@ -197,21 +270,21 @@
         }
     }
 
-    const timeSent = new Date(chat.created_at);
-    const timeString = timeSent.toLocaleString('vi-VN', {
-        weekday: 'short',
-        year: 'numeric',
-        month: 'numeric',
-        day: 'numeric',
-        hour: 'numeric',
-        minute: 'numeric',
-    });
-    content += `<div><small class="text-muted" style="font-size: 0.8em; margin-top: 5px;">${timeString}</small></div>`;
+            const timeSent = new Date(chat.created_at);
+            const timeString = timeSent.toLocaleString('vi-VN', {
+                weekday: 'short',
+                year: 'numeric',
+                month: 'numeric',
+                day: 'numeric',
+                hour: 'numeric',
+                minute: 'numeric',
+            });
+            content += `<div><small class="text-muted" style="font-size: 0.8em; margin-top: 5px;">${timeString}</small></div>`;
 
-    wrapper.innerHTML = content;
-    chatBox.appendChild(wrapper);
-    chatBox.scrollTop = chatBox.scrollHeight;
-}
+            wrapper.innerHTML = content;
+            chatBox.appendChild(wrapper);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
 
         document.getElementById("chat-form").addEventListener("submit", function (e) {
             e.preventDefault();
@@ -275,68 +348,87 @@
             cluster: "ap1"
         });
 
-       // Lắng nghe tin nhắn mới trên kênh của admin
-var adminChannel = pusher.subscribe("chat." + user_id);
-adminChannel.bind("send-chat", function (data) {
-    console.log("Received new message on admin channel:", data);
-    const chat = data.chat;
+        // Lắng nghe tin nhắn mới trên kênh của admin
+        var adminChannel = pusher.subscribe("chat." + user_id);
+        adminChannel.bind("send-chat", function (data) {
+            console.log("Received new message on admin channel:", data);
+            const chat = data.chat;
 
-    // Hiển thị tin nhắn nếu nó thuộc về cuộc trò chuyện hiện tại
-    if (chat.nguoi_gui_id === receiver_id) {
-        appendMessage(chat, chat.nguoi_gui_id);
+            // Hiển thị tin nhắn nếu nó thuộc về cuộc trò chuyện hiện tại
+            if (chat.nguoi_gui_id === receiver_id) {
+                appendMessage(chat, chat.nguoi_gui_id);
 
-        // Đánh dấu tin nhắn là đã đọc nếu đang ở trong khung chat
-        fetch(`/mark-as-read/${receiver_id}`, {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': "{{ csrf_token() }}",
-                'Content-Type': 'application/json'
+                // Đánh dấu tin nhắn là đã đọc nếu đang ở trong khung chat
+                fetch(`/mark-as-read/${receiver_id}`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': "{{ csrf_token() }}",
+                        'Content-Type': 'application/json'
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log("Mark as read response:", data);
+                        updateUserList(); // Cập nhật danh sách người dùng để làm mới unread_count
+                    })
+                    .catch(error => console.error("Lỗi khi đánh dấu tin nhắn là đã đọc:", error));
+            } else {
+                // Cập nhật danh sách người dùng nếu tin nhắn từ người khác
+                updateUserList();
             }
-        })
-            .then(response => response.json())
-            .then(data => {
-                console.log("Mark as read response:", data);
-                updateUserList(); // Cập nhật danh sách người dùng để làm mới unread_count
-            })
-            .catch(error => console.error("Lỗi khi đánh dấu tin nhắn là đã đọc:", error));
-    } else {
-        // Cập nhật danh sách người dùng nếu tin nhắn từ người khác
-        updateUserList();
+        });
+
+        function bindChannel(nguoi_gui_id, nguoi_nhan_id) {
+            var channel = pusher.subscribe("chat." + nguoi_nhan_id);
+            console.log(`Subscribed to channel: chat.${nguoi_nhan_id}`);
+
+            channel.bind("send-chat", function (data) {
+                console.log("Received new message on user channel:", data);
+                const chat = data.chat;
+
+                // Hiển thị tin nhắn nếu nó thuộc về cuộc trò chuyện hiện tại
+                if (chat.nguoi_gui_id === receiver_id || chat.nguoi_nhan_id === receiver_id) {
+                    appendMessage(chat, chat.nguoi_gui_id);
+
+                    // Đánh dấu tin nhắn là đã đọc nếu đang ở trong khung chat
+                    fetch(`/mark-as-read/${receiver_id}`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': "{{ csrf_token() }}",
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log("Mark as read response:", data);
+                            updateUserList(); // Cập nhật danh sách người dùng để làm mới unread_count
+                        })
+                        .catch(error => console.error("Lỗi khi đánh dấu tin nhắn là đã đọc:", error));
+                }
+
+                // Cập nhật danh sách người dùng
+                updateUserList();
+            });
+        }
+
+
+        // Xử lý phóng to ảnh khi nhấn
+document.addEventListener('click', function (e) {
+    if (e.target.classList.contains('zoomable-image')) {
+        const modal = document.getElementById('imageZoomModal');
+        const zoomedImage = document.getElementById('zoomedImage');
+        zoomedImage.src = e.target.src; // Gán nguồn ảnh vào modal
+        modal.style.display = 'flex'; // Hiển thị modal
     }
 });
 
-function bindChannel(nguoi_gui_id, nguoi_nhan_id) {
-    var channel = pusher.subscribe("chat." + nguoi_nhan_id);
-    console.log(`Subscribed to channel: chat.${nguoi_nhan_id}`);
-
-    channel.bind("send-chat", function (data) {
-        console.log("Received new message on user channel:", data);
-        const chat = data.chat;
-
-        // Hiển thị tin nhắn nếu nó thuộc về cuộc trò chuyện hiện tại
-        if (chat.nguoi_gui_id === receiver_id || chat.nguoi_nhan_id === receiver_id) {
-            appendMessage(chat, chat.nguoi_gui_id);
-
-            // Đánh dấu tin nhắn là đã đọc nếu đang ở trong khung chat
-            fetch(`/mark-as-read/${receiver_id}`, {
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': "{{ csrf_token() }}",
-                    'Content-Type': 'application/json'
-                }
-            })
-                .then(response => response.json())
-                .then(data => {
-                    console.log("Mark as read response:", data);
-                    updateUserList(); // Cập nhật danh sách người dùng để làm mới unread_count
-                })
-                .catch(error => console.error("Lỗi khi đánh dấu tin nhắn là đã đọc:", error));
-        }
-
-        // Cập nhật danh sách người dùng
-        updateUserList();
-    });
-}
+// Đóng modal khi nhấn nút đóng hoặc bên ngoài ảnh
+document.addEventListener('click', function (e) {
+    const modal = document.getElementById('imageZoomModal');
+    if (e.target.classList.contains('close-zoom-modal') || e.target === modal) {
+        modal.style.display = 'none'; // Ẩn modal
+    }
+});
     </script>
 
     <!-- customizer js -->

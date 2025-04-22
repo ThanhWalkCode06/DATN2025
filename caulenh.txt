@@ -20,3 +20,4 @@
 -php artisan make:request AdminSanPhamRequest  : Tạo 1 file  request để thực hiện validate
 -php artisan make:model Tên --all  : tạo tất cả
 -php artisan make:resource Tên : tạo 1 file để hiển thị dữ liệu api
+-php artisan queue:work   : chạy realtime

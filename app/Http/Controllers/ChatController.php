@@ -16,37 +16,92 @@ class ChatController extends Controller
         return view('admins.chat');
     }
 
+    // public function getChatUsers()
+    // {
+    //     $user_id = Auth::user()->id;
+
+    //     // Lấy danh sách người dùng mà Admin đã từng trò chuyện (dù là người gửi hoặc người nhận)
+    //     $users = User::select('users.id', 'users.username')
+    //         ->whereIn('users.id', function ($query) use ($user_id) {
+    //             $query->select('nguoi_gui_id')
+    //                 ->from('chats')
+    //                 ->where('nguoi_nhan_id', $user_id)
+    //                 ->where('nguoi_gui_id', '!=', $user_id)
+    //                 ->union(
+    //                     \DB::table('chats')
+    //                         ->select('nguoi_nhan_id')
+    //                         ->where('nguoi_gui_id', $user_id)
+    //                         ->where('nguoi_nhan_id', '!=', $user_id)
+    //                 );
+    //         })
+    //         ->distinct()
+    //         ->get();
+
+    //     // Thêm số lượng tin nhắn chưa đọc
+    //     $users->each(function ($user) use ($user_id) {
+    //         $user->unread_count = Chat::where('nguoi_gui_id', $user->id)
+    //             ->where('nguoi_nhan_id', $user_id)
+    //             ->where('trang_thai', false)
+    //             ->count();
+    //     });
+
+    //     return response()->json($users)->header('Cache-Control', 'no-cache, no-store, must-revalidate');
+    // }
+
     public function getChatUsers()
-    {
-        $user_id = Auth::user()->id;
+{
+    $user_id = Auth::user()->id;
 
-        // Lấy danh sách người dùng mà Admin đã từng trò chuyện (dù là người gửi hoặc người nhận)
-        $users = User::select('users.id', 'users.username')
-            ->whereIn('users.id', function ($query) use ($user_id) {
-                $query->select('nguoi_gui_id')
-                    ->from('chats')
-                    ->where('nguoi_nhan_id', $user_id)
-                    ->where('nguoi_gui_id', '!=', $user_id)
-                    ->union(
-                        \DB::table('chats')
-                            ->select('nguoi_nhan_id')
-                            ->where('nguoi_gui_id', $user_id)
-                            ->where('nguoi_nhan_id', '!=', $user_id)
-                    );
-            })
-            ->distinct()
-            ->get();
-
-        // Thêm số lượng tin nhắn chưa đọc
-        $users->each(function ($user) use ($user_id) {
-            $user->unread_count = Chat::where('nguoi_gui_id', $user->id)
+    // Lấy danh sách người dùng mà Admin đã từng trò chuyện (dù là người gửi hoặc người nhận)
+    $users = User::select('users.id', 'users.username')
+        ->whereIn('users.id', function ($query) use ($user_id) {
+            $query->select('nguoi_gui_id')
+                ->from('chats')
                 ->where('nguoi_nhan_id', $user_id)
-                ->where('trang_thai', false)
-                ->count();
-        });
+                ->where('nguoi_gui_id', '!=', $user_id)
+                ->union(
+                    \DB::table('chats')
+                        ->select('nguoi_nhan_id')
+                        ->where('nguoi_gui_id', $user_id)
+                        ->where('nguoi_nhan_id', '!=', $user_id)
+                );
+        })
+        ->distinct()
+        ->get();
 
-        return response()->json($users)->header('Cache-Control', 'no-cache, no-store, must-revalidate');
-    }
+    // Thêm số lượng tin nhắn chưa đọc và thời gian tin nhắn mới nhất
+    $users->each(function ($user) use ($user_id) {
+        // Đếm số tin nhắn chưa đọc từ người dùng này gửi đến admin
+        $user->unread_count = Chat::where('nguoi_gui_id', $user->id)
+            ->where('nguoi_nhan_id', $user_id)
+            ->where('trang_thai', false)
+            ->count();
+
+        // Lấy thời gian tin nhắn mới nhất giữa admin và người dùng này
+        $latest_message = Chat::where(function ($query) use ($user_id, $user) {
+                $query->where('nguoi_gui_id', $user_id)
+                      ->where('nguoi_nhan_id', $user->id);
+            })
+            ->orWhere(function ($query) use ($user_id, $user) {
+                $query->where('nguoi_gui_id', $user->id)
+                      ->where('nguoi_nhan_id', $user_id);
+            })
+            ->orderBy('created_at', 'desc')
+            ->first();
+
+        $user->latest_message_time = $latest_message ? $latest_message->created_at->toDateTimeString() : null;
+    });
+
+    // Sắp xếp danh sách người dùng theo thời gian tin nhắn mới nhất (giảm dần)
+    $users = $users->sortByDesc('latest_message_time')->values();
+
+    \Log::info('Chat users fetched', [
+        'user_id' => $user_id,
+        'users' => $users->toArray(),
+    ]);
+
+    return response()->json($users)->header('Cache-Control', 'no-cache, no-store, must-revalidate');
+}
 
     public function getMessages($nguoi_nhan_id)
     {

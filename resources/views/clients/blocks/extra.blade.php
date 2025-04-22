@@ -132,6 +132,52 @@
         margin-top: 5px;
     }
 </style>
+<style>
+    /* Modal phóng to ảnh cho client */
+    .client-image-zoom-modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.8);
+        justify-content: center;
+        align-items: center;
+    }
+    
+    /* Nội dung ảnh trong modal */
+    .client-image-zoom-content {
+        width: 600px; /* Kích thước cố định cho chiều rộng */
+        height: 600px; /* Kích thước cố định cho chiều cao */
+        max-width: 90%; /* Giới hạn tối đa để phù hợp với màn hình nhỏ */
+        max-height: 90%; /* Giới hạn tối đa để phù hợp với màn hình nhỏ */
+        object-fit: contain; /* Giữ tỷ lệ ảnh, không bị méo */
+        border-radius: 8px;
+    }
+    
+    /* Nút đóng modal */
+    .client-close-zoom-modal {
+        position: absolute;
+        top: 20px;
+        right: 30px;
+        color: white;
+        font-size: 40px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+    
+    /* Đảm bảo ảnh trong khung chat có kích thước đồng nhất */
+    .client-chat-image {
+        max-width: 200px;
+        max-height: 200px;
+        object-fit: contain;
+        border-radius: 8px;
+        margin-top: 5px;
+        cursor: pointer;
+    }
+    </style>
 <!-- Quick View Modal Box Start -->
 <div class="modal fade theme-modal view-modal" id="view" tabindex="-1">
     <form id="form-cart-post">
@@ -300,6 +346,11 @@
 <div class="modal fade" id="chat-box-modal" tabindex="-1" aria-labelledby="chatModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content rounded-4 shadow-lg">
+            <!-- Modal phóng to ảnh cho client -->
+<div id="clientImageZoomModal" class="client-image-zoom-modal">
+    <span class="client-close-zoom-modal">×</span>
+    <img class="client-image-zoom-content" id="clientZoomedImage">
+</div>
             <div class="modal-header border-bottom-0">
                 <h5 class="modal-title" id="chatModalLabel">💬 Chat với Admin</h5>
                 
