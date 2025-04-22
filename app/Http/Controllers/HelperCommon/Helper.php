@@ -101,7 +101,7 @@ public static function checkQuantity($userID){
 
 public static function generateOrderCode()
 {
-    return 'DH' . date('YmdHis') . strtoupper(Str::random(5));
+    return 'DH' . date('His') . strtoupper(Str::random(5));
 }
 public static function checkVoucher($codeVoucher,$idUser)
 {
