@@ -757,7 +757,7 @@
                                                                     {{-- <h4 class="fw-bold">Đánh giá sản phẩm này</h4> --}}
                                                                     {{-- <p>Hãy cho chúng tôi biết đánh giá của bạn</p> --}}
                                                                     @if($chophep_danhgia)
-                                                                    <button class="btn" type="button" data-bs-toggle="modal" data-bs-target="#writereview">Viết đánh giá</button>
+                                                                    {{-- <button class="btn" type="button" data-bs-toggle="modal" data-bs-target="#writereview">Viết đánh giá</button> --}}
                                                                 @else
                                                                     <p style="background-color: #fff3cd; color: #dc3545; padding: 10px; border-radius: 5px; text-align: center;">
                                                                         Vui lòng mua sản phẩm để đánh giá
@@ -991,13 +991,13 @@
                                      style="width:100%; height:100%;" alt="{{ $sanPhams->ten_san_pham }}">
                             </div>
                             <div class="product-content">
-                                <h5 class="name">{{ $sanPhams->ten_san_pham }}</h5>
-                                <div class="product-review-rating">
+                                {{-- <h5 class="name">{{ $sanPhams->ten_san_pham }}</h5> --}}
+                                {{-- <div class="product-review-rating">
                                     <div class="product-rating">
                                         <span class="theme-color">{{ number_format($sanPhams->giaThapNhatCuaSP(), 0, ',', '.') }} ₫</span>
                                         <del>{{ number_format($sanPhams->gia_cu, 0, ',', '.') }} ₫</del>
                                     </div>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
     
