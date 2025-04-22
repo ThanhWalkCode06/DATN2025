@@ -145,37 +145,40 @@ class DonHangController extends Controller
     public function update(UpdateDonHangRequest $request, DonHang $donhang)
     {
         if ($request->doi_trang_thai) {
-            $data = [
-                'trang_thai_don_hang' => $request->trang_thai
-            ];
+            $trangThaiHienTai = $donhang->trang_thai_don_hang;
+            if ($trangThaiHienTai != -1) {
+                $data = [
+                    'trang_thai_don_hang' => $request->trang_thai
+                ];
 
-            $lichSuDonHang = [
-                'don_hang_id' => $donhang->id,
-                'trang_thai' => $request->trang_thai
-            ];
+                $lichSuDonHang = [
+                    'don_hang_id' => $donhang->id,
+                    'trang_thai' => $request->trang_thai
+                ];
 
-            if ($request->trang_thai == 3) {
-                $data['trang_thai_thanh_toan'] = 1;
-                $data['updated_at'] = now();
-            }
+                if ($request->trang_thai == 3) {
+                    $data['trang_thai_thanh_toan'] = 1;
+                    $data['updated_at'] = now();
+                }
 
-            DonHang::where("id", $donhang->id)->update($data);
-            LichSuDonHang::create($lichSuDonHang);
+                DonHang::where("id", $donhang->id)->update($data);
+                LichSuDonHang::create($lichSuDonHang);
 
-            // Gửi email
-            if (in_array($request->trang_thai, [1, 2, 3])) {
-                $trangThai = (int) $request->trang_thai;
+                // Gửi email
+                if (in_array($request->trang_thai, [1, 2, 3])) {
+                    $trangThai = (int) $request->trang_thai;
 
-                $trangThaiText = match ($trangThai) {
-                    1 => 'Đang xử lý',
-                    2 => 'Đang giao',
-                    3 => 'Đã giao',
-                    default => 'Đã cập nhật'
-                };
+                    $trangThaiText = match ($trangThai) {
+                        1 => 'Đang xử lý',
+                        2 => 'Đang giao',
+                        3 => 'Đã giao',
+                        default => 'Đã cập nhật'
+                    };
 
-                $user = User::find($donhang->user_id);
+                    $user = User::find($donhang->user_id);
 
-                Mail::to($user->email)->send(new UpdateTrangThaiDonHangMail($donhang, $trangThaiText, $user));
+                    Mail::to($user->email)->send(new UpdateTrangThaiDonHangMail($donhang, $trangThaiText, $user));
+                }
             }
         }
 
