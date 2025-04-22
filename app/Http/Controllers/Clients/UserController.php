@@ -173,7 +173,7 @@ class UserController extends Controller
 
             // trả hàng
             if ($request->trang_thai == 5) {
-                if ($donHang->trang_thai_don_hang >= 3) {
+                if ($donHang->trang_thai_don_hang == 3) {
                     // Trả hàng vào kho
                     $chiTietDonHangs = ChiTietDonHang::where('don_hang_id', $donHang->id)->get();
                     foreach ($chiTietDonHangs as $chiTiet) {
