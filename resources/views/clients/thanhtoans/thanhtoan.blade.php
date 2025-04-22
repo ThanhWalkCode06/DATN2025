@@ -410,7 +410,7 @@
 
                                                         <button type="button"
                                                             class="badge bg-success d-inline-block py-2 px-4 fw-bold text-white position-absolute btn-dung-ngay"
-                                                            style="bottom: 1rem; right: 1rem; font-size: 0.95rem; border-radius: 20px;"
+                                                            style="bottom: 1rem; right: 1rem; font-size: 0.95rem; border-radius: 20px; border: none"
                                                             onclick="copyMaPhieu('{{ $phieu->ma_phieu }}')">
                                                             Sao chép mã
                                                         </button>
@@ -547,8 +547,6 @@
 
     <script>
         let phiVanChuyen = document.getElementById("phi-van-chuyen");
-
-
         let originalDiscount = parseFloat($("#giam-gia").text().replace(/\D/g, "")); // Lấy giảm giá ban đầu
         let voucherCode = $("#voucherCode").val().trim();
 
@@ -614,7 +612,7 @@
                     },
                     error: function(xhr) {
                         // let errorMessage = "Lỗi server! Vui lòng thử lại sau.";
-                        console.log(xhr)
+                        // console.log(xhr)
                         if (xhr.status === 403 && xhr.responseJSON && xhr.responseJSON
                             .message) {
                             errorMessage = xhr.responseJSON.message;
@@ -690,15 +688,15 @@
                 $('#hiddenGiamGia').val(giamGia);
                 $('#hiddenVoucherCode').val(voucherCode);
 
-                console.log("Tổng tiền:", tongTien);
-                console.log("Giảm giá:", giamGia);
-                console.log("Mã giảm giá:", voucherCode);
+                // console.log("Tổng tiền:", tongTien);
+                // console.log("Giảm giá:", giamGia);
+                // console.log("Mã giảm giá:", voucherCode);
             }
 
             $('input[name="flexRadioDefault"]').on('change', function() {
                 let paymentMethodId = $(this).data('id'); // Lấy ID từ thuộc tính data-id
                 $('#hiddenPaymentMethod').val(paymentMethodId); // Gán vào input ẩn
-                console.log("Phương thức thanh toán đã chọn:", paymentMethodId);
+                // console.log("Phương thức thanh toán đã chọn:", paymentMethodId);
             });
 
             $("#btnDatHang").click(async function(e) {
@@ -759,7 +757,7 @@
                     type: "POST",
                     data: formData,
                     success: function(response) {
-                        console.log(response)
+                        // console.log(response)
                         if (response.status === "vnpay") {
                             window.location.href = response.vnpay_url;
                         } else if (response.status === "success") {
@@ -880,7 +878,12 @@
         function copyMaPhieu(maPhieu) {
             navigator.clipboard.writeText(maPhieu)
                 .then(function() {
-                    alert('Đã sao chép mã: ' + maPhieu);
+                    Swal.fire({
+                        icon: "success",
+                        title: "Thành công!",
+                        text: 'Đã sao chép mã',
+                        confirmButtonText: "OK"
+                    });
                 })
                 .catch(function(error) {
                     console.error('Lỗi sao chép: ', error);
