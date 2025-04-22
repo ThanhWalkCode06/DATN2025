@@ -302,6 +302,7 @@
         <div class="modal-content rounded-4 shadow-lg">
             <div class="modal-header border-bottom-0">
                 <h5 class="modal-title" id="chatModalLabel">💬 Chat với Admin</h5>
+                
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -333,8 +334,11 @@
 <!-- Tap to top button start -->
 <div class="theme-option">
     @isset(Auth::user()->id)
+    {{-- <div id="unread-notification" class="ms-2"></div> <!-- Đặt ở đây --> --}}
         <button class="btn setting-button bg-theme" data-bs-toggle="modal" data-bs-target="#chat-box-modal">
             <i style="color:white;" class="fa-solid fa-message"></i>
+            <!-- Đặt unread-notification bên trong nút và định vị bằng position: absolute -->
+            <div id="unread-notification" class="position-absolute" style="top: -5px; right: -5px;"></div>
         </button>
     @endisset
 
