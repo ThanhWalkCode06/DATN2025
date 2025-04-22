@@ -5,6 +5,43 @@
 @endsection
 
 @section('css')
+
+<style>
+    /* Modal phóng to ảnh */
+    .image-zoom-modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.8);
+        justify-content: center;
+        align-items: center;
+    }
+    
+    /* Nội dung ảnh trong modal */
+    .image-zoom-content {
+        width: 600px; /* Kích thước cố định cho chiều rộng */
+        height: 600px; /* Kích thước cố định cho chiều cao */
+        max-width: 90%; /* Giới hạn tối đa để phù hợp với màn hình nhỏ */
+        max-height: 90%; /* Giới hạn tối đa để phù hợp với màn hình nhỏ */
+        object-fit: contain; /* Giữ tỷ lệ ảnh, không bị méo */
+        border-radius: 8px;
+    }
+    
+    /* Nút đóng modal */
+    .close-zoom-modal {
+        position: absolute;
+        top: 20px;
+        right: 30px;
+        color: white;
+        font-size: 40px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+    </style>
     <!-- remixicon css -->
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/remixicon.css') }}">
 
@@ -42,6 +79,11 @@
 
 @section('content')
     <div class="col-sm-12">
+        <!-- Modal phóng to ảnh -->
+<div id="imageZoomModal" class="image-zoom-modal">
+    <span class="close-zoom-modal">&times;</span>
+    <img class="image-zoom-content" id="zoomedImage">
+</div>
         <div class="row">
             <!-- Sidebar Danh sách người đã chat -->
             <div class="col-md-3 border-end" id="user-list" style="height: 500px; overflow-y: auto;">
@@ -212,20 +254,21 @@
             }
 
             if (chat.hinh_anh) {
-                let fileUrl = chat.hinh_anh;
-                const extension = fileUrl.split('.').pop().toLowerCase();
-                if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'jfif'].includes(extension)) {
-                    content += `<div><img src="${fileUrl}" alt="Ảnh" style="max-width: 200px; border-radius: 8px; margin-top: 5px;"></div>`;
-                } else if (['mp4', 'webm', 'ogg'].includes(extension)) {
-                    content += `
-                    <div>
-                        <video controls style="max-width: 300px; border-radius: 8px; margin-top: 5px;">
-                            <source src="${fileUrl}" type="video/${extension}">
-                            Trình duyệt không hỗ trợ video.
-                        </video>
-                    </div>`;
-                }
-            }
+        let fileUrl = chat.hinh_anh;
+        const extension = fileUrl.split('.').pop().toLowerCase();
+        if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'jfif'].includes(extension)) {
+            // Thêm lớp zoomable-image cho ảnh
+            content += `<div><img class="zoomable-image" src="${fileUrl}" alt="Ảnh" style="max-width: 200px; border-radius: 8px; margin-top: 5px; cursor: pointer;"></div>`;
+        } else if (['mp4', 'webm', 'ogg'].includes(extension)) {
+            content += `
+                <div>
+                    <video controls style="max-width: 300px; border-radius: 8px; margin-top: 5px;">
+                        <source src="${fileUrl}" type="video/${extension}">
+                        Trình duyệt không hỗ trợ video.
+                    </video>
+                </div>`;
+        }
+    }
 
             const timeSent = new Date(chat.created_at);
             const timeString = timeSent.toLocaleString('vi-VN', {
@@ -367,6 +410,25 @@
                 updateUserList();
             });
         }
+
+
+        // Xử lý phóng to ảnh khi nhấn
+document.addEventListener('click', function (e) {
+    if (e.target.classList.contains('zoomable-image')) {
+        const modal = document.getElementById('imageZoomModal');
+        const zoomedImage = document.getElementById('zoomedImage');
+        zoomedImage.src = e.target.src; // Gán nguồn ảnh vào modal
+        modal.style.display = 'flex'; // Hiển thị modal
+    }
+});
+
+// Đóng modal khi nhấn nút đóng hoặc bên ngoài ảnh
+document.addEventListener('click', function (e) {
+    const modal = document.getElementById('imageZoomModal');
+    if (e.target.classList.contains('close-zoom-modal') || e.target === modal) {
+        modal.style.display = 'none'; // Ẩn modal
+    }
+});
     </script>
 
     <!-- customizer js -->

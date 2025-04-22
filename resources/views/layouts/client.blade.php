@@ -124,6 +124,7 @@
             opacity: 1;
         }
     </style>
+    
 </head>
 
 <body class="bg-effect">
@@ -384,21 +385,21 @@
                     }
 
                     if (chat.hinh_anh) {
-                        let fileUrl = chat.hinh_anh;
-                        const extension = fileUrl.split('.').pop().toLowerCase();
-                        if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'jfif'].includes(extension)) {
-                            content += `<div><img src="${fileUrl}" alt="Ảnh" style="max-width: 200px; border-radius: 8px; margin-top: 5px;" onerror="console.error('Error loading image: ${fileUrl}'); this.style.display='none'; this.nextElementSibling.style.display='block'"><div style="display:none; color: red;">Hình ảnh không tồn tại</div></div>`;
-                        } else if (['mp4', 'webm', 'ogg'].includes(extension)) {
-                            content += `
-                                <div>
-                                    <video controls preload="metadata" style="max-width: 200px; border-radius: 8px; margin-top: 5px;" onerror="handleVideoError(this, '${fileUrl}')">
-                                        <source src="${fileUrl}" type="video/${extension}">
-                                        Trình duyệt không hỗ trợ video.
-                                    </video>
-                                    <div style="display:none; color: red;">Video không tồn tại</div>
-                                </div>`;
-                        }
-                    }
+        let fileUrl = chat.hinh_anh;
+        const extension = fileUrl.split('.').pop().toLowerCase();
+        if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'jfif'].includes(extension)) {
+            content += `<div><img class="client-zoomable-image client-chat-image" src="${fileUrl}" alt="Ảnh" style="max-width: 200px; onerror="console.error('Error loading image: ${fileUrl}'); this.style.display='none'; this.nextElementSibling.style.display='block'"><div style="display:none; color: red;">Hình ảnh không tồn tại</div></div>`;
+        } else if (['mp4', 'webm', 'ogg'].includes(extension)) {
+            content += `
+                <div>
+                    <video controls preload="metadata" style="max-width: 200px; border-radius: 8px; margin-top: 5px;" onerror="handleVideoError(this, '${fileUrl}')">
+                        <source src="${fileUrl}" type="video/${extension}">
+                        Trình duyệt không hỗ trợ video.
+                    </video>
+                    <div style="display:none; color: red;">Video không tồn tại</div>
+                </div>`;
+        }
+    }
 
                     const timeSent = new Date(chat.created_at);
                     const timeString = timeSent.toLocaleString('vi-VN', {
@@ -596,6 +597,24 @@
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                 });
             });
+
+            // Xử lý phóng to ảnh khi nhấn (phía client)
+document.addEventListener('click', function (e) {
+    if (e.target.classList.contains('client-zoomable-image')) {
+        const modal = document.getElementById('clientImageZoomModal');
+        const zoomedImage = document.getElementById('clientZoomedImage');
+        zoomedImage.src = e.target.src; // Gán nguồn ảnh vào modal
+        modal.style.display = 'flex'; // Hiển thị modal
+    }
+});
+
+// Đóng modal khi nhấn nút đóng hoặc bên ngoài ảnh (phía client)
+document.addEventListener('click', function (e) {
+    const modal = document.getElementById('clientImageZoomModal');
+    if (e.target.classList.contains('client-close-zoom-modal') || e.target === modal) {
+        modal.style.display = 'none'; // Ẩn modal
+    }
+});
         </script>
     @endisset
 
