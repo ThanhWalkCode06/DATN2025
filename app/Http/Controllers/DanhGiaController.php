@@ -134,8 +134,8 @@ class DanhGiaController extends Controller
 
             // Lưu thông báo vào bảng thong_baos
             $noiDung = $newStatus == 0
-                ? 'Bình luận của bạn đã bị ẩn bởi quản trị viên.'
-                : 'Bình luận của bạn đã được hiển thị lại bởi quản trị viên.';
+                ? 'Đánh giá của bạn đã bị ẩn bởi quản trị viên.'
+                : 'Đánh giá của bạn đã được hiển thị lại bởi quản trị viên.';
             $thongBao = ThongBao::create([
                 'user_id' => $danhGia->user_id,
                 'id_dinh_kem' => $danhGia->id,
