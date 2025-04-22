@@ -19,6 +19,7 @@ return new class extends Migration
             $table->text('ten_nguoi_nhan');
             $table->text('noi_dung');
             $table->string('hinh_anh')->nullable();
+            $table->boolean('trang_thai')->default(false);
             $table->unsignedBigInteger('channel');
             $table->timestamps();
 
