@@ -64,7 +64,7 @@
                                     alt="">
                                 <div class="home-detail p-center-left home-p-sm w-75">
                                     <div>
-                                        <h3 class="theme-color">Bộ Sưu Tập Áo Hoodio</h3>
+                                        <h3 class="theme-color">Bộ Sưu Tập Áo Hoodie</h3>
                                         <p class="w-75">Chúng tôi mang đến những bộ trang phục thể thao chất lượng, thoải
                                             mái và phong cách.</p>
                                         <a href='/sanpham/?danh_muc_id=1' class="shop-button">Mua ngay <i

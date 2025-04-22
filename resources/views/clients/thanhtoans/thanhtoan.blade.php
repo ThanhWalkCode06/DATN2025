@@ -399,10 +399,10 @@
                                                             <div class="flex-grow-1">
                                                                 @if ($phieu->trang_thai == 1)
                                                                     <span class="badge bg-success"
-                                                                        style="border-radius: 0%;">Hoạt động</span>
+                                                                        >Hoạt động</span>
                                                                 @else
                                                                     <span class="badge bg-danger"
-                                                                        style="border-radius: 0%;">Không hoạt động</span>
+                                                                        >Không hoạt động</span>
                                                                 @endif
                                                             </div>
                                                         </div>

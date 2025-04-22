@@ -23,7 +23,7 @@ class UserController extends Controller
         // dd($user);
         $donHangsPaginate = $user->donHangs()
             ->orderBy('id', 'desc')
-            ->paginate(5);
+            ->paginate(8);
 
         $i = 0;
         if ($user) {

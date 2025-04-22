@@ -116,7 +116,7 @@
                             @php $trangThai = $donHang->trang_thai_don_hang; @endphp
 
                             @if ($trangThai == 0 || $trangThai == 1)
-                                <form style="margin-left: 10px" id="cancel-form-{{ $donHang->id }}"
+                                <form id="cancel-form-{{ $donHang->id }}"
                                     action="{{ route('order.updateTrangThai', $donHang->id) }}" method="POST"
                                     onsubmit="return false;">
                                     @csrf
@@ -159,7 +159,7 @@
                         <div class="modal fade" id="lyDoModal" tabindex="-1" aria-labelledby="lyDoModalLabel"
                             aria-hidden="true">
                             <div class="modal-dialog">
-                                <form id="ly-do-form" method="POST"
+                                <form style="margin-top: 25% !important" id="ly-do-form" method="POST"
                                     action="{{ route('order.updateTrangThai', $donHang->id) }}">
                                     @csrf
                                     <input type="hidden" name="trang_thai" id="modal-trang-thai">

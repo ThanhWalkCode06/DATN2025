@@ -113,6 +113,16 @@
         .animated.fadeOutUp {
             animation: fadeOutUp 0.5s;
         }
+
+        .notify-alert-custom .close {
+            color: #fff;
+            opacity: 0.8;
+            transition: opacity 0.2s;
+        }
+
+        .notify-alert-custom .close:hover {
+            opacity: 1;
+        }
     </style>
 </head>
 
@@ -223,7 +233,7 @@
         if (userId !== 'null') {
             var channel = pusher.subscribe("comment-hidden-" + userId);
 
-            // Hàm hỗ trợ viết hoa chữ cái đầu
+            // Hàm hỗ \n hỗ trợ viết hoa chữ cái đầu
             function capitalizeFirstLetter(string) {
                 return string.charAt(0).toUpperCase() + string.slice(1);
             }
@@ -237,7 +247,7 @@
 
                 $.notify({
                     title: "<strong>Thông báo từ hệ thống:</strong><br>",
-                    message: `Bình luận ở ${productText} của bạn đã bị ẩn bởi quản trị viên.${reasonText}`
+                    message: `Đánh giá ở ${productText} của bạn đã bị ẩn bởi quản trị viên.${reasonText}`
                 }, {
                     element: "body",
                     type: "danger",
@@ -253,8 +263,9 @@
                         exit: "animated fadeOutUp"
                     },
                     template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert notify-alert-custom" role="alert">' +
-                        '    <span data-notify="title">{1}</span>' +
-                        '    <span data-notify="message">{2}</span>' +
+                        '<button type="button" class="close" data-notify="dismiss" style="position: absolute; top: 5px; right: 5px; background: none; border: none; font-size: 16px; cursor: pointer;">&times;</button>' +
+                        '<span data-notify="title">{1}</span>' +
+                        '<span data-notify="message">{2}</span>' +
                         '</div>'
                 });
             });
@@ -267,7 +278,7 @@
 
                 $.notify({
                     title: "<strong>Thông báo từ hệ thống:</strong><br>",
-                    message: `Bình luận ở ${productText} của bạn đã được hiển thị lại bởi quản trị viên.`
+                    message: `Đánh giá ở ${productText} của bạn đã được hiển thị lại bởi quản trị viên.`
                 }, {
                     element: "body",
                     type: "success",
@@ -283,8 +294,9 @@
                         exit: "animated fadeOutUp"
                     },
                     template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert notify-alert-custom success" role="alert">' +
-                        '    <span data-notify="title">{1}</span>' +
-                        '    <span data-notify="message">{2}</span>' +
+                        '<button type="button" class="close" data-notify="dismiss" style="position: absolute; top: 5px; right: 5px; background: none; border: none; font-size: 16px; cursor: pointer;">&times;</button>' +
+                        '<span data-notify="title">{1}</span>' +
+                        '<span data-notify="message">{2}</span>' +
                         '</div>'
                 });
             });
@@ -295,7 +307,7 @@
 
     @if (session('success'))
         <script>
-            document.addEventListener("DOMContentLoaded", function () {
+            document.addEventListener("DOMContentLoaded", function() {
                 Swal.fire({
                     title: "Thành công!",
                     text: "{{ session('success') }}",
@@ -307,7 +319,7 @@
     @endif
     @if (session('error'))
         <script>
-            document.addEventListener("DOMContentLoaded", function () {
+            document.addEventListener("DOMContentLoaded", function() {
                 Swal.fire({
                     title: "Thất bại",
                     text: "{{ session('error') }}",
@@ -420,7 +432,7 @@
                 });
 
                 // Gửi tin nhắn khi form được submit
-                document.getElementById("chat-form").addEventListener("submit", function (e) {
+                document.getElementById("chat-form").addEventListener("submit", function(e) {
                     e.preventDefault();
 
                     const noiDungInput = document.getElementById("noi_dung");
@@ -430,17 +442,21 @@
 
                     if (!noiDung && !file) {
                         document.getElementById("chat-error").classList.remove("d-none");
-                        document.getElementById("chat-error").innerText = "Vui lòng gửi tin nhắn hoặc hình ảnh/video!";
+                        document.getElementById("chat-error").innerText =
+                            "Vui lòng gửi tin nhắn hoặc hình ảnh/video!";
                         return;
                     }
 
                     if (file) {
-                        const validImageTypes = ['image/jpg', 'image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/jfif'];
+                        const validImageTypes = ['image/jpg', 'image/jpeg', 'image/png', 'image/gif',
+                            'image/webp', 'image/jfif'
+                        ];
                         const validVideoTypes = ['video/mp4', 'video/webm', 'video/ogg'];
 
                         if (!validImageTypes.includes(file.type) && !validVideoTypes.includes(file.type)) {
                             document.getElementById("chat-error").classList.remove("d-none");
-                            document.getElementById("chat-error").innerText = "Định dạng file không hợp lệ! Chỉ hỗ trợ hình ảnh (JPG, JPEG, PNG, GIF, WEBP) và video (MP4, WEBM, OGG).";
+                            document.getElementById("chat-error").innerText =
+                                "Định dạng file không hợp lệ! Chỉ hỗ trợ hình ảnh (JPG, JPEG, PNG, GIF, WEBP) và video (MP4, WEBM, OGG).";
                             return;
                         }
 
@@ -460,12 +476,12 @@
                     if (file) formData.append("media", file);
 
                     fetch('/send-chat', {
-                        method: 'POST',
-                        headers: {
-                            'X-CSRF-TOKEN': "{{ csrf_token() }}"
-                        },
-                        body: formData
-                    })
+                            method: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                            },
+                            body: formData
+                        })
                         .then(response => response.json())
                         .then(data => {
                             noiDungInput.value = "";
@@ -482,7 +498,7 @@
                 });
                 const channel = pusher.subscribe("chat." + userId);
 
-                channel.bind("send-chat", function (data) {
+                channel.bind("send-chat", function(data) {
                     const chatBox = document.getElementById("chat-box");
                     const chat = data.chat;
                     let align = chat.nguoi_gui_id === userId ? "text-end" : "text-start";
@@ -591,8 +607,8 @@
     }
 </script>
 <script>
-    $(document).ready(function () {
-        $(".notifi-wishlist").on("click", function (e) {
+    $(document).ready(function() {
+        $(".notifi-wishlist").on("click", function(e) {
             e.preventDefault(); // Ngăn chặn load lại trang
 
             var button = $(this); // Lưu nút đang bấm
@@ -603,7 +619,7 @@
                 url: form.attr("action"),
                 type: "POST",
                 data: formData,
-                success: function (response) {
+                success: function(response) {
                     $.notify({
                         icon: "fa fa-check",
                         title: "Sản phẩm đã được thêm vào danh sách yêu thích.",
@@ -628,7 +644,7 @@
                     // Đổi màu icon thành đỏ (đã yêu thích)
                     button.find("i").css("color", "red");
                 },
-                error: function (xhr) {
+                error: function(xhr) {
                     if (xhr.status === 401) {
                         Swal.fire({
                             icon: "error",
