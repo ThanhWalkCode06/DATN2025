@@ -19,20 +19,33 @@ class ChatController extends Controller
     public function getChatUsers()
     {
         $user_id = Auth::user()->id;
-        $users = Chat::select('users.id', 'users.username')
-            ->where('nguoi_nhan_id', '=', $user_id)
-            ->join('users', 'nguoi_gui_id', '=', 'users.id')
+    
+        // Lấy danh sách người dùng mà Admin đã từng trò chuyện (dù là người gửi hoặc người nhận)
+        $users = User::select('users.id', 'users.username')
+            ->whereIn('users.id', function ($query) use ($user_id) {
+                $query->select('nguoi_gui_id')
+                    ->from('chats')
+                    ->where('nguoi_nhan_id', $user_id)
+                    ->where('nguoi_gui_id', '!=', $user_id)
+                    ->union(
+                        \DB::table('chats')
+                            ->select('nguoi_nhan_id')
+                            ->where('nguoi_gui_id', $user_id)
+                            ->where('nguoi_nhan_id', '!=', $user_id)
+                    );
+            })
             ->distinct()
             ->get();
-        // Thêm số lượng tin nhắn chưa đọc cho mỗi người dùng
-    $users->each(function ($user) use ($user_id) {
-        $user->unread_count = Chat::where('nguoi_gui_id', $user->id)
-            ->where('nguoi_nhan_id', $user_id)
-            ->where('trang_thai', false)
-            ->count();
-    });
-
-        return response()->json($users);
+    
+        // Thêm số lượng tin nhắn chưa đọc
+        $users->each(function ($user) use ($user_id) {
+            $user->unread_count = Chat::where('nguoi_gui_id', $user->id)
+                ->where('nguoi_nhan_id', $user_id)
+                ->where('trang_thai', false)
+                ->count();
+        });
+    
+        return response()->json($users)->header('Cache-Control', 'no-cache, no-store, must-revalidate');
     }
 
     public function getMessages($nguoi_nhan_id)
@@ -58,6 +71,10 @@ class ChatController extends Controller
         $nguoiGui = User::find($request->input('nguoi_gui_id'));
         $nguoiNhan = User::find($request->input('nguoi_nhan_id'));
     
+        if (!$nguoiGui || !$nguoiNhan) {
+            return response()->json(['message' => 'Người gửi hoặc người nhận không tồn tại'], 404);
+        }
+    
         $hinhAnh = null;
         if ($request->hasFile('media')) {
             $file = $request->file('media');
@@ -75,23 +92,35 @@ class ChatController extends Controller
             'nguoi_nhan_id' => $nguoiNhan->id,
             'ten_nguoi_gui' => $nguoiGui->username,
             'ten_nguoi_nhan' => $nguoiNhan->username,
-            'noi_dung' => $request->noi_dung ?? '',
+            'noi_dung' => $request->input('noi_dung') ?? '',
             'hinh_anh' => $hinhAnh,
             'channel' => $request->input('channel'),
             'trang_thai' => false,
-            'created_at' => now()
+            'created_at' => now(),
         ]);
     
         \Log::info('Broadcasting ChatEvent', [
             'chat' => $chat->toArray(),
-            'channel' => 'chat.' . $chat->nguoi_nhan_id
+            'channels' => [
+                'to_nguoi_nhan' => 'chat.' . $chat->nguoi_nhan_id,
+                'to_nguoi_gui' => 'chat.' . $chat->nguoi_gui_id,
+            ]
         ]);
     
         broadcast(new ChatEvent($chat))->toOthers();
     
         return response()->json([
-            'chat' => $chat,
-            'created_at' => $chat->created_at->toDateTimeString(),
+            'chat' => [
+                'id' => $chat->id,
+                'nguoi_gui_id' => $chat->nguoi_gui_id,
+                'nguoi_nhan_id' => $chat->nguoi_nhan_id,
+                'ten_nguoi_gui' => $chat->ten_nguoi_gui,
+                'ten_nguoi_nhan' => $chat->ten_nguoi_nhan,
+                'noi_dung' => $chat->noi_dung,
+                'hinh_anh' => $chat->hinh_anh,
+                'created_at' => $chat->created_at->toDateTimeString(),
+            ],
+            'message' => 'Tin nhắn đã được gửi thành công',
         ]);
     }
 
