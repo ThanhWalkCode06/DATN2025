@@ -46,12 +46,10 @@
         .btn-dung-ngay {
             transition: all 0.2s ease;
             background-color: #198754;
-            /* màu bg-success */
         }
 
         .btn-dung-ngay:hover {
             background-color: #157347;
-            /* xanh đậm hơn khi hover */
             text-decoration: none;
         }
 
@@ -68,8 +66,125 @@
             font-weight: bold;
         }
 
-    </style>
+        .voucher-card {
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            background: #fff;
+        }
 
+        .voucher-discount {
+            font-size: 1.2rem;
+            padding: 0.9rem 1.2rem;
+            min-width: 65px;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+
+        .voucher-title {
+            font-size: 1rem;
+            margin-bottom: 0.1rem;
+            /* Giảm khoảng cách dưới của Tên phiếu */
+        }
+
+        .voucher-details {
+            font-size: 0.85rem;
+            margin-bottom: 0.1rem;
+            /* Giảm khoảng cách dưới của Mã, Ngày, Tối thiểu */
+            line-height: 1.2;
+            /* Giảm khoảng cách giữa các dòng trong voucher-details */
+        }
+
+        .voucher-details br {
+            margin-bottom: 0.2rem;
+            /* Giảm khoảng cách của các thẻ <br> */
+        }
+
+        /* Điều chỉnh khoảng cách trên của liên kết Xem mô tả */
+        .voucher-details+a {
+            margin-top: 0.2rem !important;
+            /* Giảm khoảng cách trên của Xem mô tả */
+        }
+
+        .btn-copy {
+            font-size: 0.8rem;
+            padding: 0.35rem 0.75rem;
+            border-radius: 12px;
+        }
+
+        .ribbon-new {
+            width: 75px;
+            height: 75px;
+            overflow: hidden;
+            position: absolute;
+            top: -3px;
+            right: -3px;
+            z-index: 1;
+        }
+
+        .ribbon-new span {
+            position: absolute;
+            display: block;
+            width: 80px;
+            padding: 5px 0;
+            background: #f11b3f;
+            color: #fff;
+            font-size: 8px;
+            font-weight: bold;
+            text-align: center;
+            transform: rotate(45deg);
+            top: 10px;
+            right: -22px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .badge {
+            font-size: 0.7rem;
+            padding: 4px 10px;
+            border-radius: 12px;
+        }
+
+        .btn-copy {
+            font-size: 0.8rem;
+            padding: 6px 16px;
+            border-radius: 20px;
+            background-color: #198754;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border: none;
+        }
+
+        .d-flex.flex-column.align-items-center {
+            width: 100px;
+            position: relative;
+        }
+
+        .btn-copy.align-with-minimum {
+            width: 100%;
+            text-align: center;
+            position: absolute;
+            top: 58px;
+        }
+
+        .minimum-maximum-line {
+            display: inline-block;
+            line-height: 1.2;
+        }
+
+        .modal-title-custom {
+            background-color: #0da487;
+            color: white;
+            font-weight: bold;
+            font-size: 1.25rem;
+            padding: 0.75rem 1rem;
+            border-radius: 0.25rem;
+            text-align: center;
+            width: 100%;
+            display: block;
+        }
     </style>
 @endsection
 
@@ -330,9 +445,9 @@
                         <div class="modal-dialog" style="max-width: 600px;">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h4 class="modal-title">Danh sách phiếu giảm giá</h4>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
+                                    <!-- Sửa tiêu đề modal -->
+                                    <h4 class="modal-title-custom">Danh sách phiếu giảm giá</h4>
+
                                 </div>
                                 <div class="modal-body px-4 pt-2 pb-4">
                                     <div class="d-flex flex-column gap-3">
@@ -343,87 +458,70 @@
                                                 );
                                             @endphp
 
-                                            <div class="card shadow-sm border-0 w-100 position-relative">
+                                            <div class="card shadow-sm border-0 w-100 position-relative voucher-card">
                                                 @if ($laMoi)
                                                     <div class="ribbon-new">
                                                         <span>Mới</span>
                                                     </div>
                                                 @endif
+
                                                 <div
-                                                    class="card-body d-flex flex-column flex-md-row justify-content-between align-items-start position-relative">
-                                                    <div
-                                                        class="card-body d-flex flex-column flex-md-row justify-content-between align-items-start">
-                                                        <!-- Cột trái: thông tin chính -->
-                                                        <div class="d-flex align-items-start flex-grow-1">
-                                                            <div class="bg-danger text-white rounded p-2 me-3 text-center"
-                                                                style="min-width: 55px;">
-                                                                <strong
-                                                                    style="font-size: 1.2rem;">{{ $phieu->gia_tri }}%</strong>
+                                                    class="card-body d-flex flex-row justify-content-between align-items-start p-2">
+                                                    <div class="d-flex flex-row align-items-start flex-grow-1">
+                                                        <div
+                                                            class="bg-danger text-white rounded text-center voucher-discount me-3">
+                                                            <strong>{{ $phieu->gia_tri }}%</strong>
+                                                        </div>
+
+                                                        <div>
+                                                            <div class="voucher-title fw-bold">{{ $phieu->ten_phieu }}
                                                             </div>
-
-                                                            <div>
-                                                                <h5 class="fw-bold mb-1" style="font-size: 1.1rem;">
-                                                                    {{ $phieu->ten_phieu }}</h5>
-                                                                <div class="text-muted mb-1 fw-semibold">Mã: <span
-                                                                        class="text-dark">{{ $phieu->ma_phieu }}</span>
-                                                                </div>
-                                                                <div class="text-muted small mb-1">
-                                                                    {{ date('d/m/Y', strtotime($phieu->ngay_bat_dau)) }} -
-                                                                    {{ date('d/m/Y', strtotime($phieu->ngay_ket_thuc)) }}
-                                                                </div>
-
-                                                                <div class="text-muted small mb-1">
-                                                                    Đơn tối thiểu:
-                                                                    <strong>{{ number_format($phieu->muc_gia_toi_thieu, 0, ',', '.') }}đ</strong><br>
-                                                                    Giảm tối đa:
+                                                            <div class="voucher-details text-muted">
+                                                                Mã: <span
+                                                                    class="text-dark">{{ $phieu->ma_phieu }}</span><br>
+                                                                {{ date('d/m/Y', strtotime($phieu->ngay_bat_dau)) }} -
+                                                                {{ date('d/m/Y', strtotime($phieu->ngay_ket_thuc)) }}<br>
+                                                                <span class="minimum-maximum-line">
+                                                                    Tối thiểu:
+                                                                    <strong>{{ number_format($phieu->muc_gia_toi_thieu, 0, ',', '.') }}đ</strong>
+                                                                    |
+                                                                    Tối đa:
                                                                     <strong>{{ number_format($phieu->muc_giam_toi_da, 0, ',', '.') }}đ</strong>
-                                                                </div>
+                                                                </span>
+                                                            </div>
 
-                                                                <a class="text-primary small d-inline-block mt-1"
-                                                                    data-bs-toggle="collapse"
-                                                                    href="#description{{ $key }}" role="button"
-                                                                    aria-expanded="false"
-                                                                    aria-controls="description{{ $key }}">
-                                                                    Xem mô tả
-                                                                </a>
+                                                            <a class="text-primary small d-inline-block mt-1"
+                                                                data-bs-toggle="collapse"
+                                                                href="#description{{ $key }}" role="button"
+                                                                aria-expanded="false"
+                                                                aria-controls="description{{ $key }}">
+                                                                Xem mô tả
+                                                            </a>
 
-                                                                <div class="collapse mt-1"
-                                                                    id="description{{ $key }}">
-                                                                    <p class="small mb-0">{{ $phieu->mo_ta }}</p>
-                                                                </div>
+                                                            <div class="collapse mt-1"
+                                                                id="description{{ $key }}">
+                                                                <p class="small mb-0">{{ $phieu->mo_ta }}</p>
                                                             </div>
                                                         </div>
+                                                    </div>
 
-                                                        <div class="d-flex flex-column justify-content-between align-items-end ms-md-3 mt-2 mt-md-0"
-                                                            style="min-width: 90px;">
-                                                            <div class="flex-grow-1">
-                                                                @if ($phieu->trang_thai == 1)
-                                                                    <span class="badge bg-success"
-                                                                        >Hoạt động</span>
-                                                                @else
-                                                                    <span class="badge bg-danger"
-                                                                        >Không hoạt động</span>
-                                                                @endif
-                                                            </div>
-                                                        </div>
-
-
+                                                    <div
+                                                        class="d-flex flex-column align-items-center justify-content-start gap-2 ms-3">
+                                                        <span
+                                                            class="badge bg-{{ $phieu->trang_thai == 1 ? 'success' : 'danger' }}">
+                                                            {{ $phieu->trang_thai == 1 ? 'Hoạt động' : 'Không hoạt động' }}
+                                                        </span>
                                                         <button type="button"
-                                                            class="badge bg-success d-inline-block py-2 px-4 fw-bold text-white position-absolute btn-dung-ngay"
-                                                            style="bottom: 1rem; right: 1rem; font-size: 0.95rem; border-radius: 20px; border: none"
+                                                            class="btn btn-success btn-copy align-with-minimum"
                                                             onclick="copyMaPhieu('{{ $phieu->ma_phieu }}')">
                                                             Sao chép mã
                                                         </button>
-
-
                                                     </div>
                                                 </div>
                                             </div>
                                         @endforeach
                                     </div>
                                 </div>
-
-
 
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-light" data-bs-dismiss="modal">Đóng</button>
@@ -441,7 +539,7 @@
 @endsection
 
 @section('js')
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     {{-- điều khoản --}}
     {{-- <script>
@@ -734,9 +832,9 @@
                     if (!result.isConfirmed) {
                         return;
                     }
-                 }
+                }
 
-   
+
                 //  confirm
                 // Lấy dữ liệu từ form
                 var formData = {
@@ -879,15 +977,44 @@
             navigator.clipboard.writeText(maPhieu)
                 .then(function() {
                     Swal.fire({
-                        icon: "success",
-                        title: "Thành công!",
-                        text: 'Đã sao chép mã',
-                        confirmButtonText: "OK"
+                        icon: 'success',
+                        title: 'Đã sao chép mã: ' + maPhieu,
+                        timer: 2000,
+                        timerProgressBar: true,
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        customClass: {
+                            popup: 'swal2-custom-toast',
+                            title: 'swal2-custom-title'
+                        }
                     });
                 })
                 .catch(function(error) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi!',
+                        text: 'Không thể sao chép mã. Vui lòng thử lại!',
+                        confirmButtonText: 'OK'
+                    });
                     console.error('Lỗi sao chép: ', error);
                 });
         }
     </script>
+
+    <style>
+        .swal2-custom-toast {
+            background-color: #0da487 !important;
+            color: white !important;
+            border-radius: 8px !important;
+            padding: 10px !important;
+        }
+
+        .swal2-custom-title {
+            font-size: 16px !important;
+            font-weight: bold !important;
+            color: white !important;
+            margin-bottom: 5px !important;
+        }
+    </style>
 @endsection
