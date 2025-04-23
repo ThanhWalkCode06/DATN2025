@@ -167,13 +167,23 @@
             text-align: center;
             position: absolute;
             top: 58px;
-            /* Có thể cần điều chỉnh lại nếu các dòng bên trái thay đổi chiều cao */
         }
 
         .minimum-maximum-line {
             display: inline-block;
             line-height: 1.2;
-            /* Giảm khoảng cách dòng trong Tối thiểu/Tối đa */
+        }
+
+        .modal-title-custom {
+            background-color: #0da487;
+            color: white;
+            font-weight: bold;
+            font-size: 1.25rem;
+            padding: 0.75rem 1rem;
+            border-radius: 0.25rem;
+            text-align: center;
+            width: 100%;
+            display: block;
         }
     </style>
 @endsection
@@ -435,9 +445,9 @@
                         <div class="modal-dialog" style="max-width: 600px;">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h4 class="modal-title">Danh sách phiếu giảm giá</h4>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
+                                    <!-- Sửa tiêu đề modal -->
+                                    <h4 class="modal-title-custom">Danh sách phiếu giảm giá</h4>
+
                                 </div>
                                 <div class="modal-body px-4 pt-2 pb-4">
                                     <div class="d-flex flex-column gap-3">
@@ -504,7 +514,7 @@
                                                         <button type="button"
                                                             class="btn btn-success btn-copy align-with-minimum"
                                                             onclick="copyMaPhieu('{{ $phieu->ma_phieu }}')">
-                                                            Sao chép
+                                                            Sao chép mã
                                                         </button>
                                                     </div>
                                                 </div>
