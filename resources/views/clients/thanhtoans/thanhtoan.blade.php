@@ -46,12 +46,10 @@
         .btn-dung-ngay {
             transition: all 0.2s ease;
             background-color: #198754;
-            /* màu bg-success */
         }
 
         .btn-dung-ngay:hover {
             background-color: #157347;
-            /* xanh đậm hơn khi hover */
             text-decoration: none;
         }
 
@@ -87,12 +85,27 @@
 
         .voucher-title {
             font-size: 1rem;
-            margin-bottom: 0.25rem;
+            margin-bottom: 0.1rem;
+            /* Giảm khoảng cách dưới của Tên phiếu */
         }
 
         .voucher-details {
             font-size: 0.85rem;
-            margin-bottom: 0.15rem;
+            margin-bottom: 0.1rem;
+            /* Giảm khoảng cách dưới của Mã, Ngày, Tối thiểu */
+            line-height: 1.2;
+            /* Giảm khoảng cách giữa các dòng trong voucher-details */
+        }
+
+        .voucher-details br {
+            margin-bottom: 0.2rem;
+            /* Giảm khoảng cách của các thẻ <br> */
+        }
+
+        /* Điều chỉnh khoảng cách trên của liên kết Xem mô tả */
+        .voucher-details+a {
+            margin-top: 0.2rem !important;
+            /* Giảm khoảng cách trên của Xem mô tả */
         }
 
         .btn-copy {
@@ -143,21 +156,24 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             border: none;
         }
+
         .d-flex.flex-column.align-items-center {
-            width: 100px; /* Đặt chiều rộng cố định để căn chỉnh sát bên phải */
+            width: 100px;
             position: relative;
         }
 
         .btn-copy.align-with-minimum {
-            width: 100%; /* Đảm bảo nút Sao chép chiếm toàn bộ chiều rộng của cột */
+            width: 100%;
             text-align: center;
             position: absolute;
-            top: 58px; /* Điều chỉnh giá trị này để thẳng hàng với dòng Tối thiểu */
+            top: 58px;
+            /* Có thể cần điều chỉnh lại nếu các dòng bên trái thay đổi chiều cao */
         }
 
         .minimum-maximum-line {
             display: inline-block;
-            line-height: 1.5; /* Đảm bảo chiều cao dòng phù hợp */
+            line-height: 1.2;
+            /* Giảm khoảng cách dòng trong Tối thiểu/Tối đa */
         }
     </style>
 @endsection
