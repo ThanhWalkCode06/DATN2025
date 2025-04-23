@@ -978,11 +978,45 @@
         function copyMaPhieu(maPhieu) {
             navigator.clipboard.writeText(maPhieu)
                 .then(function() {
-                    alert('Đã sao chép mã: ' + maPhieu);
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Đã sao chép mã: ' + maPhieu,
+                        timer: 2000,
+                        timerProgressBar: true,
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        customClass: {
+                            popup: 'swal2-custom-toast',
+                            title: 'swal2-custom-title'
+                        }
+                    });
                 })
                 .catch(function(error) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi!',
+                        text: 'Không thể sao chép mã. Vui lòng thử lại!',
+                        confirmButtonText: 'OK'
+                    });
                     console.error('Lỗi sao chép: ', error);
                 });
         }
     </script>
+
+    <style>
+        .swal2-custom-toast {
+            background-color: #0da487 !important;
+            color: white !important;
+            border-radius: 8px !important;
+            padding: 10px !important;
+        }
+
+        .swal2-custom-title {
+            font-size: 16px !important;
+            font-weight: bold !important;
+            color: white !important;
+            margin-bottom: 5px !important;
+        }
+    </style>
 @endsection
