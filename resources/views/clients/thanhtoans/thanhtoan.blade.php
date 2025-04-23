@@ -645,8 +645,6 @@
 
     <script>
         let phiVanChuyen = document.getElementById("phi-van-chuyen");
-
-
         let originalDiscount = parseFloat($("#giam-gia").text().replace(/\D/g, "")); // Lấy giảm giá ban đầu
         let voucherCode = $("#voucherCode").val().trim();
 
@@ -712,7 +710,7 @@
                     },
                     error: function(xhr) {
                         // let errorMessage = "Lỗi server! Vui lòng thử lại sau.";
-                        console.log(xhr)
+                        // console.log(xhr)
                         if (xhr.status === 403 && xhr.responseJSON && xhr.responseJSON
                             .message) {
                             errorMessage = xhr.responseJSON.message;
@@ -788,15 +786,15 @@
                 $('#hiddenGiamGia').val(giamGia);
                 $('#hiddenVoucherCode').val(voucherCode);
 
-                console.log("Tổng tiền:", tongTien);
-                console.log("Giảm giá:", giamGia);
-                console.log("Mã giảm giá:", voucherCode);
+                // console.log("Tổng tiền:", tongTien);
+                // console.log("Giảm giá:", giamGia);
+                // console.log("Mã giảm giá:", voucherCode);
             }
 
             $('input[name="flexRadioDefault"]').on('change', function() {
                 let paymentMethodId = $(this).data('id'); // Lấy ID từ thuộc tính data-id
                 $('#hiddenPaymentMethod').val(paymentMethodId); // Gán vào input ẩn
-                console.log("Phương thức thanh toán đã chọn:", paymentMethodId);
+                // console.log("Phương thức thanh toán đã chọn:", paymentMethodId);
             });
 
             $("#btnDatHang").click(async function(e) {
@@ -857,7 +855,7 @@
                     type: "POST",
                     data: formData,
                     success: function(response) {
-                        console.log(response)
+                        // console.log(response)
                         if (response.status === "vnpay") {
                             window.location.href = response.vnpay_url;
                         } else if (response.status === "success") {
