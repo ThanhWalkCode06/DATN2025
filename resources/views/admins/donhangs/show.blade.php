@@ -216,6 +216,7 @@
                                                 </td>
                                                 <td>
                                                     <p>Tên sản phẩm</p>
+                                                    <h5>{{ $chiTietDonHang->ten_san_pham }}</h5>
                                                     <h5>{{ $chiTietDonHang->ten_bien_the }}</h5>
                                                 </td>
                                                 <td>
