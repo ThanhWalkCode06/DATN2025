@@ -36,12 +36,13 @@
         white-space: nowrap;
     }
     #hideReasonModal .modal-dialog {
-            display: flex;
-            align-items: center;
-            min-height: calc(100vh - 60px); /* Đảm bảo căn giữa theo chiều dọc */
-            margin: 0 auto; /* Căn giữa theo chiều ngang */
-        }
-   
+        display: flex;
+        align-items: center;
+        min-height: calc(100vh - 60px);
+        /* Đảm bảo căn giữa theo chiều dọc */
+        margin: 0 auto;
+        /* Căn giữa theo chiều ngang */
+    }
 </style>
 @section('content')
     <div class="col-sm-12">
@@ -53,13 +54,45 @@
                 </div>
 
                 <!-- Form lọc theo sản phẩm -->
-                <form method="GET" action="{{ route('danhgias.index') }}" class="d-flex gap-2 mb-3">
+                {{-- <form method="GET" action="{{ route('danhgias.index') }}" class="d-flex gap-2 mb-3">
                     <input type="text" name="keyword" value="{{ request('keyword') }}" class="form-control"
                         placeholder="Tìm theo tên người người dùng hoặc sản phẩm">
                     <button type="submit" class="btn btn-success">Tìm Kiếm</button>
                     <a href="{{ route('danhgias.index') }}" class="btn btn-secondary" id="resetButton">Làm mới</a>
-                </form>
+                </form> --}}
 
+                <form method="GET" action="{{ route('danhgias.index') }}" class="d-flex gap-2 mb-3 align-items-end">
+                    <div class="form-group">
+                        <label for="san_pham_id">Sản phẩm</label>
+                        <select name="san_pham_id" class="form-control">
+                            <option value="">Tất cả sản phẩm</option>
+                            @foreach ($sanPhams as $sanPham)
+                                <option value="{{ $sanPham->id }}"
+                                    {{ request('san_pham_id') == $sanPham->id ? 'selected' : '' }}>
+                                    {{ $sanPham->ten_san_pham }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="start_date">Từ ngày</label>
+                        <input type="date" name="start_date" value="{{ request('start_date') }}" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="end_date">Đến ngày</label>
+                        <input type="date" name="end_date" value="{{ request('end_date') }}" class="form-control">
+                    </div>
+                    <button type="submit" class="btn btn-success">Lọc</button>
+                    <a href="{{ route('danhgias.index') }}" class="btn btn-secondary" id="resetButton">Làm mới</a>
+                </form>
+                {{-- <form method="GET" action="{{ route('danhgias.index') }}" class="d-flex gap-2 mb-3 align-items-end">
+    <div class="form-group">
+        <label for="search_keyword">Tìm kiếm</label>
+        <input type="text" name="search_keyword" value="{{ request('search_keyword') }}" class="form-control"
+               placeholder="Tên người dùng hoặc nội dung nhận xét">
+    </div>
+    <button type="submit" class="btn btn-success">Tìm Kiếm</button>
+</form> --}}
                 <div class="modal fade" id="hideReasonModal" tabindex="-1" aria-labelledby="hideReasonModalLabel"
                     aria-hidden="true">
                     <div class="modal-dialog">
@@ -104,8 +137,8 @@
                                             <label class="form-check-label">Vi phạm chính sách cộng đồng</label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="reasons[]" value="Khác"
-                                                id="otherReasonCheckbox">
+                                            <input class="form-check-input" type="checkbox" name="reasons[]"
+                                                value="Khác" id="otherReasonCheckbox">
                                             <label class="form-check-label">Khác</label>
                                         </div>
                                         <div id="otherReasonContainer" style="display: none;">
@@ -129,8 +162,8 @@
                 <div>
                     <div class="table-responsive">
                         <table class="user-table ticket-table review-table theme-table table" id="table_id">
-                            <thead>          
-                                <tr>               
+                            <thead>
+                                <tr>
                                     <th>Tên khách hàng</th>
                                     <th>Tên sản phẩm</th>
                                     <th>Đánh giá</th>
@@ -143,7 +176,8 @@
                             <tbody>
                                 @if ($danhGias->isEmpty() && !is_null($message))
                                     <tr>
-                                        <td colspan="7" class="text-center" style="color: red;">{{ $message }}</td>
+                                        <td colspan="7" class="text-center" style="color: red;">{{ $message }}
+                                        </td>
                                     </tr>
                                 @else
                                     @foreach ($danhGias as $danhGia)
@@ -173,7 +207,7 @@
                                                 @endif
                                             </td>
                                             <td>{{ $danhGia->ly_do_an ?? 'Không có' }} <br></td>
-                                            <td> 
+                                            <td>
                                                 <button
                                                     class="toggleStatus btn btn-sm d-block mx-auto {{ $danhGia->trang_thai == 1 ? 'btn-danger' : 'btn-primary' }}"
                                                     data-id="{{ $danhGia->id }}">
@@ -302,7 +336,7 @@
                         if (response.success) {
                             let statusCell = button.closest("tr").find(".status-icon");
                             let lyDoAnCell = button.closest("tr").find(
-                            "td:nth-child(6)"); // Cột lý do ẩn
+                                "td:nth-child(6)"); // Cột lý do ẩn
 
                             if (response.status == 1) {
                                 button.removeClass('btn-primary').addClass('btn-danger').text('Ẩn');
