@@ -35,6 +35,7 @@
     form.d-flex button {
         white-space: nowrap;
     }
+
     #hideReasonModal .modal-dialog {
         display: flex;
         align-items: center;
@@ -42,6 +43,17 @@
         /* Đảm bảo căn giữa theo chiều dọc */
         margin: 0 auto;
         /* Căn giữa theo chiều ngang */
+    }
+
+    .user-table th:nth-child(5),
+    .user-table td:nth-child(5) {
+        display: none;
+    }
+
+    .user-table td:nth-child(6) {
+        white-space: normal;
+        word-wrap: break-word;
+        line-height: 1.5;
     }
 </style>
 @section('content')
@@ -329,23 +341,25 @@
                     type: "POST",
                     data: {
                         id: danhGiaId,
-                        reasons: reasons, // Gửi danh sách lý do
+                        reasons: reasons,
                         _token: "{{ csrf_token() }}"
                     },
                     success: function(response) {
                         if (response.success) {
                             let statusCell = button.closest("tr").find(".status-icon");
-                            let lyDoAnCell = button.closest("tr").find(
-                                "td:nth-child(6)"); // Cột lý do ẩn
+                            let lyDoAnCell = button.closest("tr").find("td:nth-child(6)");
 
                             if (response.status == 1) {
                                 button.removeClass('btn-primary').addClass('btn-danger').text('Ẩn');
                                 statusCell.html('<i class="ri-checkbox-circle-line text-success"></i>');
-                                lyDoAnCell.text('Không có'); // Xóa lý do khi hiện
+                                lyDoAnCell.html('Không có');
                             } else {
                                 button.removeClass('btn-danger').addClass('btn-primary').text('Hiện');
                                 statusCell.html('<i class="ri-close-circle-line text-danger"></i>');
-                                lyDoAnCell.text(reasons.join(', ')); // Hiển thị lý do khi ẩn
+                                // Hiển thị mỗi lý do trên một dòng
+                                let reasonsHtml = reasons.length > 0 ? reasons.map(reason =>
+                                    `<div>${reason}</div>`).join('') : 'Không có';
+                                lyDoAnCell.html(reasonsHtml);
                             }
                         } else {
                             alert(response.message);
@@ -356,6 +370,39 @@
                     }
                 });
             }
+            // function toggleDanhGiaStatus(button, danhGiaId, reasons = []) {
+            //     $.ajax({
+            //         url: "{{ route('danhgias.trangthaidanhgia') }}",
+            //         type: "POST",
+            //         data: {
+            //             id: danhGiaId,
+            //             reasons: reasons, // Gửi danh sách lý do
+            //             _token: "{{ csrf_token() }}"
+            //         },
+            //         success: function(response) {
+            //             if (response.success) {
+            //                 let statusCell = button.closest("tr").find(".status-icon");
+            //                 let lyDoAnCell = button.closest("tr").find(
+            //                     "td:nth-child(6)"); // Cột lý do ẩn
+
+            //                 if (response.status == 1) {
+            //                     button.removeClass('btn-primary').addClass('btn-danger').text('Ẩn');
+            //                     statusCell.html('<i class="ri-checkbox-circle-line text-success"></i>');
+            //                     lyDoAnCell.text('Không có'); // Xóa lý do khi hiện
+            //                 } else {
+            //                     button.removeClass('btn-danger').addClass('btn-primary').text('Hiện');
+            //                     statusCell.html('<i class="ri-close-circle-line text-danger"></i>');
+            //                     lyDoAnCell.text(reasons.join(', ')); // Hiển thị lý do khi ẩn
+            //                 }
+            //             } else {
+            //                 alert(response.message);
+            //             }
+            //         },
+            //         error: function() {
+            //             alert("Lỗi khi cập nhật trạng thái.");
+            //         }
+            //     });
+            // }
         });
     </script>
 

@@ -485,7 +485,7 @@
                         showCancelButton: true,
                         confirmButtonColor: '#0da487', // Màu nút "Có" (xanh)
                         cancelButtonColor: '#ff4c3b', // Màu nút "Không" (đỏ)
-                        confirmButtonText: 'Có!',
+                        confirmButtonText: 'Có',
                         cancelButtonText: 'Không',
                         reverseButtons: false, // Nút "Có!" ở bên trái, "Không" ở bên phải
                         customClass: {
@@ -594,7 +594,7 @@
                             showCancelButton: true,
                             confirmButtonColor: '#0da487', // Màu nút "Có" (phù hợp với theme xanh của bạn)
                             cancelButtonColor: '#ff4c3b', // Màu nút "Không" (phù hợp với theme đỏ)
-                            confirmButtonText: 'Có!',
+                            confirmButtonText: 'Có',
                             cancelButtonText: 'Không',
                             reverseButtons: false, // Đặt nút "Có!" trước (bên trái) nút "Không"
                             customClass: {
