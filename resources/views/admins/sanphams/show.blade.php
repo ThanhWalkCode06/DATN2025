@@ -242,7 +242,7 @@
                             <th>Nhận xét</th>
                             <th>Biến thể</th>
                             <th>Trạng thái</th>
-                            <th>lý do ẩn</th>
+                            <th>Lý do ẩn</th>
                             <th>Hành động</th>
                         </tr>
                     </thead>
@@ -260,8 +260,6 @@
                                         {!! nl2br(e($danhGia->nhan_xet)) !!}
                                     </div>
                                 </td>
-                                
-                                
                                 <td>
                                     @if($danhGia->bienThe?->anh_bien_the)
                                         <img src="{{ asset('storage/' . $danhGia->bienThe->anh_bien_the) }}" width="100" class="img-thumbnail">
@@ -436,7 +434,7 @@
                             } else {
                                 button.removeClass('btn-danger').addClass('btn-primary').text('Hiện');
                                 statusCell.html('<i class="ri-close-circle-line text-danger"></i>');
-                                lyDoAnCell.text(reasons.join(', '));
+                                lyDoAnCell.html(reasons.join('<br>')); // Hiển thị mỗi lý do trên một dòng
                             }
                         } else {
                             alert(response.message);
