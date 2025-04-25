@@ -206,6 +206,18 @@
                                     </thead>
 
                                     <tbody>
+                                        <tr class="border-bottom">
+                                            <td></td>
+                                            <td>
+                                                <p>Tên sản phẩm</p>
+                                            </td>
+                                            <td>
+                                                <p>Số lượng</p>
+                                            </td>
+                                            <td>
+                                                <p>Giá</p>
+                                            </td>
+                                        </tr>
                                         @foreach ($chiTietDonHangs as $chiTietDonHang)
                                             <tr class="table-order">
                                                 <td>
@@ -215,16 +227,13 @@
                                                     </a>
                                                 </td>
                                                 <td>
-                                                    <p>Tên sản phẩm</p>
                                                     <h5>{{ $chiTietDonHang->ten_san_pham }}</h5>
                                                     <h5>{{ $chiTietDonHang->ten_bien_the }}</h5>
                                                 </td>
                                                 <td>
-                                                    <p>Số lượng</p>
                                                     <h5>{{ $chiTietDonHang->so_luong }}</h5>
                                                 </td>
                                                 <td>
-                                                    <p>Giá</p>
                                                     <h5>{{ number_format($chiTietDonHang->gia_ban, 0, '', '.') }}đ</h5>
                                                 </td>
                                             </tr>
