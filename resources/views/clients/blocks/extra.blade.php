@@ -58,7 +58,7 @@
 
     /* Modal Chat Styling */
     #chat-box-modal .modal-dialog {
-        max-width: 90%;
+        max-width: 50%;
     }
 
     #chat-box-modal .modal-content {
@@ -374,7 +374,7 @@
                 <div id="preview" style="margin-bottom: 100px" class="position-absolute bottom-0 start-0"></div>
                 <form id="chat-form" enctype="multipart/form-data" class="mt-3">
                     <div class="input-group mb-3">
-                        <div class="d-flex align-items-center border rounded px-2 py-1 col-11">
+                        <div class="d-flex align-items-center border rounded px-2 py-1 col-10">
                             <input type="text" id="noi_dung" name="noi_dung" class="form-control border-0"
                                 placeholder="Nhập tin nhắn..." autocomplete="off">
 
@@ -387,7 +387,7 @@
                             </label>
                         </div>
 
-                        <div class="col-1">
+                        <div class="col-2">
                             <button
                                 class="btn btn-primary text-light float-end d-flex align-items-center justify-content-center w-75 h-100"
                                 type="submit" title="Gửi tin nhắn">
