@@ -290,32 +290,6 @@
             }
         });
 
-        // Nút tăng số lượng
-        function increaseValue() {
-            event.preventDefault();
-            let input = $("#quantity");
-            let value = parseInt(input.val(), 10) || 1;
-            let maxQuantity = matchedVariant ? matchedVariant.so_luong : Infinity;
-
-            if (value < maxQuantity) {
-                input.val(value + 1);
-            }
-        }
-
-        // Nút giảm số lượng
-        function decreaseValue() {
-            event.preventDefault();
-            let input = $("#quantity");
-            let value = parseInt(input.val(), 10) || 1;
-
-            if (value > 1) {
-                input.val(value - 1);
-            }
-        }
-
-        // Gán sự kiện nút tăng/giảm số lượng
-        $(document).on("click", ".number-input button:first-child", decreaseValue);
-        $(document).on("click", ".number-input button:last-child", increaseValue);
 
         // Reset dữ liệu khi đóng modal để tránh lỗi hiển thị sai
         $("#view").on("hidden.bs.modal", function() {
