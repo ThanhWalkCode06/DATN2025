@@ -247,14 +247,27 @@ class SanPhamController extends Controller
     /**
      * Display the specified resource.
      */
+    // public function show($id)
+    // {
+    //     $sanPham = SanPham::with(['danhMuc', 'bienThes'])->findOrFail($id);
+
+    //     return view('admins.sanphams.show', compact('sanPham'));
+    // }
+
     public function show($id)
     {
-        $sanPham = SanPham::with(['danhMuc', 'bienThes'])->findOrFail($id);
-
+        $sanPham = SanPham::with([
+            'danhMuc',
+            'bienThes',
+            'danhGias' => function ($query) {
+                $query->orderBy('created_at', 'desc'); // Sắp xếp đánh giá mới nhất lên đầu
+            },
+            'danhGias.user', // Lấy thông tin người dùng
+            'danhGias.bienThe' // Lấy thông tin biến thể
+        ])->findOrFail($id);
+    
         return view('admins.sanphams.show', compact('sanPham'));
     }
-
-
 
 
 
