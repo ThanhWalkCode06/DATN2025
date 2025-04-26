@@ -147,6 +147,94 @@
             font-weight: bold;
             border: none;
         }
+
+        .upload-box {
+            flex: 1;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .upload-box:hover {
+            background-color: #f8f9fa;
+        }
+
+        .upload-label {
+            display: block;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .upload-label i {
+            font-size: 2rem;
+        }
+
+        .upload-label p {
+            margin: 0;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .d-none {
+            display: none !important;
+        }
+
+        .image-preview img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            position: relative;
+        }
+
+        .image-preview .preview-item {
+            position: relative;
+        }
+
+        .image-preview .remove-btn {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #ff4d4f;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            line-height: 20px;
+            text-align: center;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .video-preview video {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+
+        .video-preview .preview-item {
+            position: relative;
+        }
+
+        .video-preview .remove-btn {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #ff4d4f;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            line-height: 20px;
+            text-align: center;
+            cursor: pointer;
+            font-size: 12px;
+        }
     </style>
 @endsection
 
@@ -263,8 +351,8 @@
                             @endif
 
                             @if ($trangThai == 3)
-                                <form id="formXacNhan" style="margin-left: 10px" action="{{ route('order.updateTrangThai', $donHang->id) }}"
-                                    method="POST">
+                                <form id="formXacNhan" style="margin-left: 10px"
+                                    action="{{ route('order.updateTrangThai', $donHang->id) }}" method="POST">
                                     @csrf
                                     <input type="hidden" name="trang_thai" value="4">
                                     <button style="border: none" type="button" class="btn-primary btn-sm" id="xacNhanDon">
@@ -597,30 +685,30 @@
 
         <!-- Order Table Section Start -->
         @if (session('success'))
-        <script>
-            document.addEventListener("DOMContentLoaded", function() {
-                Swal.fire({
-                    title: "Thành công!",
-                    text: "{{ session('success') }}",
-                    icon: "success",
-                    confirmButtonText: "OK"
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    Swal.fire({
+                        title: "Thành công!",
+                        text: "{{ session('success') }}",
+                        icon: "success",
+                        confirmButtonText: "OK"
+                    });
                 });
-            });
-        </script>
-    @endif
+            </script>
+        @endif
 
-    @if (session('error_binhluan'))
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            Swal.fire({
-                title: "Lỗi!",
-                text: "{{ session('error_binhluan') }}",
-                icon: "error",
-                confirmButtonText: "OK"
-            });
-        });
-    </script>
-@endif
+        @if (session('error_binhluan'))
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    Swal.fire({
+                        title: "Lỗi!",
+                        text: "{{ session('error_binhluan') }}",
+                        icon: "error",
+                        confirmButtonText: "OK"
+                    });
+                });
+            </script>
+        @endif
         <section class="order-table-section section-b-space">
             <div class="container-fluid-lg">
                 <div class="row">
@@ -656,17 +744,18 @@
                                                 {{ number_format($item['gia_ban'], 0, '', '.') }} đ</td>
                                             <td>{{ $item['so_luong'] }}</td>
                                             @if ($statusChart == 4)
-                                            <td>
-                                                <button type="button" class="btn-primary btn-sm btn-review-product"
-                                                        data-bs-toggle="modal" data-bs-target="#reviewModal{{ $item['bien_the_id'] }}"
+                                                <td>
+                                                    <button type="button" class="btn-primary btn-sm btn-review-product"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#reviewModal{{ $item['bien_the_id'] }}"
                                                         data-product-id="{{ $item['id_san_pham'] }}"
                                                         data-variant-id="{{ $item['bien_the_id'] }}"
                                                         data-product-name="{{ $item['ten_bien_the'] }}"
                                                         data-product-image="{{ Storage::url($item['anh_bien_the']) }}">
-                                                    Đánh giá sản phẩm
-                                                </button>
-                                            </td>
-                                        @endif
+                                                        Đánh giá sản phẩm
+                                                    </button>
+                                                </td>
+                                            @endif
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -679,8 +768,9 @@
         </section>
         <!-- Order Table Section End -->
 
-<!-- Review Modal -->
-@foreach ($bienThesList as $item)
+        <!-- Review Modal -->
+        <!-- Modified Review Modal Upload Section -->
+        @foreach ($bienThesList as $item)
             <div class="modal fade theme-modal" id="reviewModal{{ $item['bien_the_id'] }}" tabindex="-1">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
@@ -728,23 +818,33 @@
                                         placeholder="Viết nhận xét của bạn..."></textarea>
                                 </div>
 
-                                <div class="review-box">
-                                    <label for="hinh_anh_{{ $item['bien_the_id'] }}" class="form-label">Hình ảnh (tối đa
-                                        5 ảnh)</label>
-                                    <input type="file" id="hinh_anh_{{ $item['bien_the_id'] }}"
-                                        name="hinh_anh_danh_gia[]" class="form-control"
-                                        accept="image/jpeg,image/png,image/jpg,image/gif" multiple>
-                                    <small class="text-muted">Chỉ chấp nhận định dạng jpeg, png, jpg, gif. Tối đa 2MB mỗi
-                                        ảnh.</small>
-                                </div>
+                                <div class="review-box d-flex gap-3 align-items-start">
+                                    <!-- Image Upload -->
+                                    <div class="upload-box text-center">
+                                        <label for="hinh_anh_{{ $item['bien_the_id'] }}" class="upload-label">
+                                            <i class="fa-solid fa-image fa-2x" style="color: #1abc9c;"></i>
+                                            <p class="mt-2">Tải ảnh (tối đa 5)</p>
+                                        </label>
+                                        <input type="file" id="hinh_anh_{{ $item['bien_the_id'] }}"
+                                            name="hinh_anh_danh_gia[]" class="d-none"
+                                            accept="image/jpeg,image/png,image/jpg,image/gif" multiple>
+                                        
+                                        <div class="image-preview mt-2 d-flex flex-wrap gap-2"
+                                            id="image-preview-{{ $item['bien_the_id'] }}"></div>
+                                    </div>
 
-                                <div class="review-box">
-                                    <label for="video_{{ $item['bien_the_id'] }}" class="form-label">Video (1 video dưới 30
-                                        giây)</label>
-                                    <input type="file" id="video_{{ $item['bien_the_id'] }}" name="video"
-                                        class="form-control" accept="video/mp4,video/mpeg,video/quicktime">
-                                    <small class="text-muted">Chỉ chấp nhận định dạng mp4, mpeg, quicktime. Tối đa
-                                        20MB.</small>
+                                    <!-- Video Upload -->
+                                    <div class="upload-box text-center">
+                                        <label for="video_{{ $item['bien_the_id'] }}" class="upload-label">
+                                            <i class="fa-solid fa-video fa-2x" style="color: #1abc9c;"></i>
+                                            <p class="mt-2">Tải video (tối đa 1)</p>
+                                        </label>
+                                        <input type="file" id="video_{{ $item['bien_the_id'] }}" name="video"
+                                            class="d-none" accept="video/mp4,video/mpeg,video/quicktime">
+                                        
+                                        <div class="video-preview mt-2" id="video-preview-{{ $item['bien_the_id'] }}">
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div class="modal-footer">
@@ -760,83 +860,204 @@
             </div>
         @endforeach
 
-<!-- End Review Modal -->
+        <!-- End Review Modal -->
     </body>
 @endsection
 
 
 @section('js')
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        document.querySelectorAll('.rating').forEach(ratingContainer => {
-            const stars = ratingContainer.querySelectorAll('i');
-            const soSaoInput = ratingContainer.closest('form').querySelector('.so_sao');
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            @foreach ($bienThesList as $item)
+                const input{{ $item['bien_the_id'] }} = document.getElementById(
+                    'hinh_anh_{{ $item['bien_the_id'] }}');
+                const preview{{ $item['bien_the_id'] }} = document.getElementById(
+                    'image-preview-{{ $item['bien_the_id'] }}');
 
-            stars.forEach(star => {
-                star.addEventListener('click', function() {
-                    const rating = this.getAttribute('data-value');
-                    soSaoInput.value = rating;
+                let selectedFiles{{ $item['bien_the_id'] }} = [];
 
-                    stars.forEach(s => {
-                        if (s.getAttribute('data-value') <= rating) {
-                            s.classList.add('selected');
-                        } else {
-                            s.classList.remove('selected');
+                input{{ $item['bien_the_id'] }}.addEventListener('change', function(event) {
+                    const files = Array.from(event.target.files);
+
+                    if ((selectedFiles{{ $item['bien_the_id'] }}.length + files.length) > 5) {
+                        Swal.fire({
+                            title: "Lỗi!",
+                            text: "Bạn chỉ được tải lên tối đa 5 hình ảnh!",
+                            icon: "error",
+                            confirmButtonText: "OK"
+                        });
+                        input{{ $item['bien_the_id'] }}.value = '';
+                        return;
+                    }
+
+                    files.forEach((file, index) => {
+                        if (!file.type.startsWith('image/')) {
+                            Swal.fire({
+                                title: "Lỗi!",
+                                text: `File ${file.name} không phải là hình ảnh hợp lệ!`,
+                                icon: "error",
+                                confirmButtonText: "OK"
+                            });
+                            return;
                         }
+                        if (file.size > 2 * 1024 * 1024) {
+                            Swal.fire({
+                                title: "Lỗi!",
+                                text: `File ${file.name} vượt quá 2MB!`,
+                                icon: "error",
+                                confirmButtonText: "OK"
+                            });
+                            return;
+                        }
+
+                        selectedFiles{{ $item['bien_the_id'] }}.push(file);
+
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            const previewItem = document.createElement('div');
+                            previewItem.classList.add('preview-item');
+                            previewItem.style.position = 'relative';
+                            previewItem.innerHTML = `
+                            <img src="${e.target.result}" style="width:80px;height:80px;object-fit:cover;border-radius:5px;box-shadow:0 2px 5px rgba(0,0,0,0.1);">
+                            <span class="remove-btn" style="position:absolute;top:-8px;right:-8px;background:red;color:white;border-radius:50%;padding:2px 6px;cursor:pointer;font-size:12px;">×</span>
+                        `;
+                            preview{{ $item['bien_the_id'] }}.appendChild(previewItem);
+
+                            // Xử lý khi nhấn nút xóa
+                            previewItem.querySelector('.remove-btn').addEventListener('click',
+                                function() {
+                                    const indexToRemove = Array.from(
+                                            preview{{ $item['bien_the_id'] }}.children)
+                                        .indexOf(previewItem);
+                                    selectedFiles{{ $item['bien_the_id'] }}.splice(
+                                        indexToRemove, 1);
+                                    previewItem.remove();
+                                    updateInputFiles{{ $item['bien_the_id'] }}();
+                                });
+                        };
+                        reader.readAsDataURL(file);
+                    });
+
+                    updateInputFiles{{ $item['bien_the_id'] }}();
+                });
+
+                function updateInputFiles{{ $item['bien_the_id'] }}() {
+                    const dataTransfer = new DataTransfer();
+                    selectedFiles{{ $item['bien_the_id'] }}.forEach(file => {
+                        dataTransfer.items.add(file);
+                    });
+                    input{{ $item['bien_the_id'] }}.files = dataTransfer.files;
+                }
+            @endforeach
+        });
+    </script>
+
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Script rating hiện tại (giữ nguyên)
+            document.querySelectorAll('.rating').forEach(ratingContainer => {
+                const stars = ratingContainer.querySelectorAll('i');
+                const soSaoInput = ratingContainer.closest('form').querySelector('.so_sao');
+
+                stars.forEach(star => {
+                    star.addEventListener('click', function() {
+                        const rating = this.getAttribute('data-value');
+                        soSaoInput.value = rating;
+
+                        stars.forEach(s => {
+                            if (s.getAttribute('data-value') <= rating) {
+                                s.classList.add('selected');
+                            } else {
+                                s.classList.remove('selected');
+                            }
+                        });
                     });
                 });
             });
-        });
 
-        // Kiểm tra số lượng hình ảnh và video
-        document.querySelectorAll('input[type="file"][name="hinh_anh_danh_gia[]"]').forEach(input => {
-            input.addEventListener('change', function() {
-                if (this.files.length > 5) {
-                    alert('Bạn chỉ được tải lên tối đa 5 hình ảnh!');
-                    this.value = '';
-                }
-            });
-        });
+            // Xử lý preview video (giữ nguyên)
+            document.querySelectorAll('input[type="file"][name="video"]').forEach(input => {
+                input.addEventListener('change', function() {
+                    const previewContainer = document.getElementById(
+                        `video-preview-${this.id.split('_')[1]}`);
+                    previewContainer.innerHTML = ''; // Xóa preview trước đó
 
-        document.querySelectorAll('input[type="file"][name="video"]').forEach(input => {
-            input.addEventListener('change', function() {
-                const file = this.files[0];
-                if (file) {
-                    const video = document.createElement('video');
-                    video.src = URL.createObjectURL(file);
-                    video.onloadedmetadata = function() {
-                        if (video.duration > 30) {
-                            alert('Video phải dưới 30 giây!');
-                            input.value = '';
+                    const file = this.files[0];
+                    if (file) {
+                        if (!file.type.match('video/mp4|video/mpeg|video/quicktime') || file.size >
+                            20 * 1024 * 1024) {
+                            Swal.fire({
+                                title: "Lỗi!",
+                                text: "Video phải là mp4, mpeg, quicktime và dưới 20MB!",
+                                icon: "error",
+                                confirmButtonText: "OK"
+                            });
+                            this.value = '';
+                            return;
                         }
-                        URL.revokeObjectURL(video.src);
-                    };
-                }
-            });
-        });
-    });
-</script>
-@endsection
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        let btnxacNhan = document.querySelector("#xacNhanDon");
-            btnxacNhan.addEventListener("click", function () {
-                Swal.fire({
-                    title: `Bạn đã nhận được hàng chưa ?`,
-                    text: "Hành động này không thể hoàn tác!",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#3085d6",
-                    cancelButtonColor: "#d33",
-                    confirmButtonText: "Tôi đã nhận được",
-                    cancelButtonText: "Chưa"
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        document.getElementById('formXacNhan').submit();
+
+                        const video = document.createElement('video');
+                        video.src = URL.createObjectURL(file);
+                        video.onloadedmetadata = function() {
+                            if (video.duration < 3 || video.duration > 60) {
+                                Swal.fire({
+                                    title: "Lỗi!",
+                                    text: "Video phải từ 3 đến 60 giây!",
+                                    icon: "error",
+                                    confirmButtonText: "OK"
+                                });
+                                input.value = '';
+                                URL.revokeObjectURL(video.src);
+                                return;
+                            }
+
+                            const previewItem = document.createElement('div');
+                            previewItem.classList.add('preview-item');
+                            previewItem.innerHTML = `
+                                    <video src="${video.src}" controls></video>
+                                    <span class="remove-btn">×</span>
+                                `;
+                            previewContainer.appendChild(previewItem);
+
+                            // Xóa video khi nhấn nút remove
+                            previewItem.querySelector('.remove-btn').addEventListener('click',
+                                function() {
+                                    previewItem.remove();
+                                    input.value = '';
+                                });
+
+                            URL.revokeObjectURL(video.src);
+                        };
                     }
                 });
             });
         });
+    </script>
+@endsection
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        let btnxacNhan = document.querySelector("#xacNhanDon");
+        btnxacNhan.addEventListener("click", function() {
+            Swal.fire({
+                title: `Bạn đã nhận được hàng chưa ?`,
+                text: "Hành động này không thể hoàn tác!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Tôi đã nhận được",
+                cancelButtonText: "Chưa"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('formXacNhan').submit();
+                }
+            });
+        });
+    });
 </script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
