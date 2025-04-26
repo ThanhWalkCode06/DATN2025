@@ -57,13 +57,7 @@
                         <thead>
                             <tr>
                                 <th>
-                                    <div class="check-box-contain">
-                                        <span class="form-check user-checkbox">
-                                            <input class="checkbox_animated checkall"
-                                                type="checkbox" value="">
-                                        </span>
-                                        <span>STT</span>
-                                    </div>
+                                STT
                                 </th>
                                 <th>Tên vai trò</th>
                                 <th>Hành động</th>
@@ -74,14 +68,8 @@
                         @if($lists->isNotEmpty())
                             @foreach ( $lists as $key => $item)
                                 <tr class="justify-content-center">
-                                    <td>
-                                        <div class="check-box-contain">
-                                            <span class="form-check user-checkbox">
-                                                <input class="checkbox_animated check-it"
-                                                    type="checkbox" value="">
-                                            </span>
-                                            <span>{{ ++$key }}</span>
-                                        </div>
+                                    <td style="text-align:center">
+                                        {{ ++$key }}
                                     </td>
 
                                     <td>{{ $item->name }}</td>

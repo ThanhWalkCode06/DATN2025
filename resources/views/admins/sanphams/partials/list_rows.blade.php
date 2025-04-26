@@ -19,7 +19,7 @@
             @endif
         </td>
 
-        <td>
+        {{-- <td>
             <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#variant_{{ $sanpham->id }}">
                 Xem biến thể
             </button>
@@ -85,7 +85,7 @@
                     </div><!-- /.modal-content -->
                 </div><!-- /.modal-dialog -->
             </div><!-- /.modal -->
-        </td>
+        </td> --}}
 
         <td>
             <ul>

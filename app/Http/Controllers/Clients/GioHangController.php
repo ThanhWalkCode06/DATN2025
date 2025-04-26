@@ -158,7 +158,6 @@ public function nhapvoucher(Request $request){
             ],403);
         }
 
-
         if((empty($voucher->ngay_ket_thuc) && empty($voucher->ngay_bat_dau) &&  $voucher->trang_thai == 1) || ($voucher->ngay_ket_thuc > now() && $voucher->trang_thai == 1)) {
             $discount = $voucher->gia_tri;
             $discountAmount = $currentTotal * ($discount / 100);
