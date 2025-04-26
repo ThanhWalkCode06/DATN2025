@@ -4,130 +4,150 @@
 @endsection
 
 @section('css')
-<style>
-    .rating i {
-        font-size: 24px;
-        cursor: pointer;
-        color: #ccc;
-    }
-    .rating i.selected {
-        color: #f39c12;
-    }
-    .alert {
-        margin-bottom: 20px;
-        padding: 15px;
-        border-radius: 5px;
-        font-size: 16px;
-    }
-    .alert-success {
-        background-color: #d4edda;
-        color: #155724;
-        border-color: #c3e6cb;
-    }
-    .alert-danger {
-        background-color: #f8d7da;
-        color: #721c24;
-        border-color: #f5c6cb;
-    }
-    .product-wrapper {
-        /* display: flex; */
-        align-items: center;
-        justify-content: space-between;
-        gap: 20px;
-        padding: 10px;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-    }
-    .product-image img {
-        width: 500px !important;
-        height: 300px !important;
-        object-fit: cover;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-    .product-content {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        text-align: center;
-    }
-    .product-content .name {
-        font-size: 16px;
-        font-weight: bold;
-        margin: 0;
-        color: #333;
-    }
-    .product-review-rating {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        flex-wrap: wrap;
-        gap: 5px;
-    }
-    .product-rating {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        text-align: left;
-        gap: 5px;
-    }
-    .theme-color {
-        color: #009970;
-        font-weight: bold;
-        font-size: 16px;
-    }
-    .review-box {
-        margin: 15px 0;
-    }
-    .review-box label {
-        font-size: 14px;
-        font-weight: 500;
-        color: #333;
-    }
-    .form-control {
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        padding: 10px;
-        font-size: 14px;
-    }
-    .modal-content {
-        border-radius: 8px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    }
-    .modal-header {
-        border-bottom: 1px solid #ddd;
-        padding: 15px 20px;
-    }
-    .modal-title {
-        font-size: 18px;
-        font-weight: bold;
-        color: #333;
-    }
-    .modal-footer {
-        border-top: 1px solid #ddd;
-        padding: 15px 20px;
-        display: flex;
-        justify-content: flex-end;
-        gap: 10px;
-    }
-    .btn-theme-outline {
-        border: 1px solid #1abc9c;
-        color: #1abc9c;
-        background: transparent;
-        padding: 8px 20px;
-        border-radius: 5px;
-        font-weight: bold;
-    }
-    .theme-bg-color {
-        background: #1abc9c;
-        color: #fff;
-        padding: 8px 20px;
-        border-radius: 5px;
-        font-weight: bold;
-        border: none;
-    }
-</style>
+    <style>
+        .rating i {
+            font-size: 24px;
+            cursor: pointer;
+            color: #ccc;
+        }
+
+        .rating i.selected {
+            color: #f39c12;
+        }
+
+        .alert {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border-color: #c3e6cb;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            border-color: #f5c6cb;
+        }
+
+        .product-wrapper {
+            /* display: flex; */
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .product-image img {
+            width: 500px !important;
+            height: 300px !important;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .product-content .name {
+            font-size: 16px;
+            font-weight: bold;
+            margin: 0;
+            color: #333;
+        }
+
+        .product-review-rating {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .product-rating {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            text-align: left;
+            gap: 5px;
+        }
+
+        .theme-color {
+            color: #009970;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .review-box {
+            margin: 15px 0;
+        }
+
+        .review-box label {
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .form-control {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 14px;
+        }
+
+        .modal-content {
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-header {
+            border-bottom: 1px solid #ddd;
+            padding: 15px 20px;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .modal-footer {
+            border-top: 1px solid #ddd;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .btn-theme-outline {
+            border: 1px solid #1abc9c;
+            color: #1abc9c;
+            background: transparent;
+            padding: 8px 20px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .theme-bg-color {
+            background: #1abc9c;
+            color: #fff;
+            padding: 8px 20px;
+            border-radius: 5px;
+            font-weight: bold;
+            border: none;
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -661,65 +681,84 @@
 
 <!-- Review Modal -->
 @foreach ($bienThesList as $item)
-    <div class="modal fade theme-modal" id="reviewModal{{ $item['bien_the_id'] }}" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Viết đánh giá sản phẩm</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
-                </div>
-                <div class="modal-body pt-0">
-                    <form class="review-form" method="POST" action="{{ route('sanphams.themdanhgiadonhang') }}">
-                        @csrf
-                        <input type="hidden" name="san_pham_id" value="{{ $item['id_san_pham'] }}">
-                        <input type="hidden" name="bien_the_id" value="{{ $item['bien_the_id'] }}">
-                        <input type="hidden" name="so_sao" class="so_sao" value="5">
+            <div class="modal fade theme-modal" id="reviewModal{{ $item['bien_the_id'] }}" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Viết đánh giá sản phẩm</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+                        <div class="modal-body pt-0">
+                            <form class="review-form" method="POST" action="{{ route('sanphams.themdanhgiadonhang') }}"
+                                enctype="multipart/form-data">
+                                @csrf
+                                <input type="hidden" name="san_pham_id" value="{{ $item['id_san_pham'] }}">
+                                <input type="hidden" name="bien_the_id" value="{{ $item['bien_the_id'] }}">
+                                <input type="hidden" name="so_sao" class="so_sao" value="5">
 
-                        <div class="product-wrapper">
-                            <div class="product-image">
-                                <img src="{{ Storage::url($item['anh_bien_the']) }}" class="img-fluid rounded shadow-sm"
-                                     style="width:100%; height:100%;" alt="{{ $item['ten_bien_the'] }}">
-                            </div>
-                            <br>
-                            <div class="product-content">
-                                <h5 class="name">Sản phẩm: {{ $item['ten_bien_the'] }}</h5>
-                                {{-- <div class="product-review-rating">
-                                    <div class="product-rating">
-                                        <span class="theme-color">Giá: {{ number_format($item['gia_ban'], 0, ',', '.') }} ₫</span>
+                                <div class="product-wrapper">
+                                    <div class="product-image">
+                                        <img src="{{ Storage::url($item['anh_bien_the']) }}"
+                                            class="img-fluid rounded shadow-sm" style="width:100%; height:100%;"
+                                            alt="{{ $item['ten_bien_the'] }}">
                                     </div>
-                                </div> --}}
-                            </div>
-                        </div>
+                                    <br>
+                                    <div class="product-content">
+                                        <h5 class="name">Sản phẩm: {{ $item['ten_bien_the'] }}</h5>
+                                    </div>
+                                </div>
 
-                        <div class="review-box mt-3">
-                            <label>Đánh giá của bạn *</label>
-                            <div class="rating" data-variant-id="{{ $item['bien_the_id'] }}">
-                                <i class="fa fa-star selected" data-value="1"></i>
-                                <i class="fa fa-star selected" data-value="2"></i>
-                                <i class="fa fa-star selected" data-value="3"></i>
-                                <i class="fa fa-star selected" data-value="4"></i>
-                                <i class="fa fa-star selected" data-value="5"></i>
-                            </div>
-                        </div>
+                                <div class="review-box mt-3">
+                                    <label>Đánh giá của bạn *</label>
+                                    <div class="rating" data-variant-id="{{ $item['bien_the_id'] }}">
+                                        <i class="fa fa-star selected" data-value="1"></i>
+                                        <i class="fa fa-star selected" data-value="2"></i>
+                                        <i class="fa fa-star selected" data-value="3"></i>
+                                        <i class="fa fa-star selected" data-value="4"></i>
+                                        <i class="fa fa-star selected" data-value="5"></i>
+                                    </div>
+                                </div>
 
-                        <div class="review-box">
-                            <label for="nhan_xet_{{ $item['bien_the_id'] }}" class="form-label">Nhận xét của bạn *</label>
-                            <textarea id="nhan_xet_{{ $item['bien_the_id'] }}" name="nhan_xet" rows="3" class="form-control"
-                                      placeholder="Viết nhận xét của bạn..."></textarea>
-                        </div>
+                                <div class="review-box">
+                                    <label for="nhan_xet_{{ $item['bien_the_id'] }}" class="form-label">Nhận xét của bạn
+                                        *</label>
+                                    <textarea id="nhan_xet_{{ $item['bien_the_id'] }}" name="nhan_xet" rows="3" class="form-control"
+                                        placeholder="Viết nhận xét của bạn..."></textarea>
+                                </div>
 
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-md btn-theme-outline fw-bold" data-bs-dismiss="modal">Đóng</button>
-                            <button type="submit" class="btn btn-md fw-bold text-light theme-bg-color">Gửi</button>
+                                <div class="review-box">
+                                    <label for="hinh_anh_{{ $item['bien_the_id'] }}" class="form-label">Hình ảnh (tối đa
+                                        5 ảnh)</label>
+                                    <input type="file" id="hinh_anh_{{ $item['bien_the_id'] }}"
+                                        name="hinh_anh_danh_gia[]" class="form-control"
+                                        accept="image/jpeg,image/png,image/jpg,image/gif" multiple>
+                                    <small class="text-muted">Chỉ chấp nhận định dạng jpeg, png, jpg, gif. Tối đa 2MB mỗi
+                                        ảnh.</small>
+                                </div>
+
+                                <div class="review-box">
+                                    <label for="video_{{ $item['bien_the_id'] }}" class="form-label">Video (1 video dưới 30
+                                        giây)</label>
+                                    <input type="file" id="video_{{ $item['bien_the_id'] }}" name="video"
+                                        class="form-control" accept="video/mp4,video/mpeg,video/quicktime">
+                                    <small class="text-muted">Chỉ chấp nhận định dạng mp4, mpeg, quicktime. Tối đa
+                                        20MB.</small>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-md btn-theme-outline fw-bold"
+                                        data-bs-dismiss="modal">Đóng</button>
+                                    <button type="submit"
+                                        class="btn btn-md fw-bold text-light theme-bg-color">Gửi</button>
+                                </div>
+                            </form>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-@endforeach
+        @endforeach
 
 <!-- End Review Modal -->
     </body>
@@ -746,6 +785,33 @@
                         }
                     });
                 });
+            });
+        });
+
+        // Kiểm tra số lượng hình ảnh và video
+        document.querySelectorAll('input[type="file"][name="hinh_anh_danh_gia[]"]').forEach(input => {
+            input.addEventListener('change', function() {
+                if (this.files.length > 5) {
+                    alert('Bạn chỉ được tải lên tối đa 5 hình ảnh!');
+                    this.value = '';
+                }
+            });
+        });
+
+        document.querySelectorAll('input[type="file"][name="video"]').forEach(input => {
+            input.addEventListener('change', function() {
+                const file = this.files[0];
+                if (file) {
+                    const video = document.createElement('video');
+                    video.src = URL.createObjectURL(file);
+                    video.onloadedmetadata = function() {
+                        if (video.duration > 30) {
+                            alert('Video phải dưới 30 giây!');
+                            input.value = '';
+                        }
+                        URL.revokeObjectURL(video.src);
+                    };
+                }
             });
         });
     });

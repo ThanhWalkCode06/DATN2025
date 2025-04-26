@@ -18,7 +18,9 @@ class DanhGia extends Model
         'bien_the_id',
         'so_sao',
         'nhan_xet',
-        'trang_thai'
+        'trang_thai',
+        'hinh_anh_danh_gia',
+        'video',
     ];
 
     // Liên kết với User
@@ -42,4 +44,15 @@ class DanhGia extends Model
     {
         return $this->belongsTo(BienThe::class, 'bien_the_id'); // nhớ đúng tên cột
     }
+     // Accessor để lấy danh sách hình ảnh dưới dạng mảng
+     public function getHinhAnhDanhGiaAttribute($value)
+     {
+         return $value ? json_decode($value, true) : [];
+     }
+ 
+     // Mutator để lưu hình ảnh dưới dạng JSON
+     public function setHinhAnhDanhGiaAttribute($value)
+     {
+         $this->attributes['hinh_anh_danh_gia'] = json_encode($value);
+     }
 }

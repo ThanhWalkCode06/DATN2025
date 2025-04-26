@@ -340,6 +340,23 @@
             filter: brightness(1.1);
             /* Làm ảnh sáng lên một chút */
         }
+        .review-images img:hover {
+    transform: scale(1.1);
+    transition: transform 0.3s ease;
+}
+.review-video {
+    margin-top: 10px;
+    max-width: 200px; /* Giảm kích thước tối đa của video */
+}
+
+.review-video video {
+    width: 100%;
+    height: auto;
+    max-height: 150px; /* Giới hạn chiều cao video */
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    object-fit: cover; /* Đảm bảo video không bị méo */
+}
     </style>
 @endsection
 
@@ -780,13 +797,12 @@
                                                                             <div>
                                                                                 <div class="people-image people-text">
                                                                                     <img alt="user" class="img-fluid"
-                                                                                        src="{{ $danhGia->nguoiDung->anh_dai_dien ?? asset('default-avatar.jpg') }}">
+                                                                                         src="{{ $danhGia->nguoiDung->anh_dai_dien ?? asset('default-avatar.jpg') }}">
                                                                                 </div>
                                                                             </div>
                                                                             <div class="people-comment">
                                                                                 <div class="people-name">
-                                                                                    <a href="javascript:void(0)"
-                                                                                        class="name">
+                                                                                    <a href="javascript:void(0)" class="name">
                                                                                         {{ $danhGia->nguoiDung->ten_nguoi_dung }}
                                                                                     </a>
                                                                                     <div class="date-time">
@@ -798,31 +814,46 @@
                                                                                                 @for ($i = 1; $i <= 5; $i++)
                                                                                                     <li>
                                                                                                         <i data-feather="star"
-                                                                                                            class="{{ $i <= $danhGia->so_sao ? 'fill' : '' }}">
+                                                                                                           class="{{ $i <= $danhGia->so_sao ? 'fill' : '' }}">
                                                                                                         </i>
                                                                                                     </li>
                                                                                                 @endfor
-
                                                                                             </ul>
                                                                                             <ul>
                                                                                                 @if ($danhGia->bienThe)
-                                                                                                    <p
-                                                                                                        class="text-muted mb-1">
+                                                                                                    <p class="text-muted mb-1">
                                                                                                         <small>
-                                                                                                            Biến thể:
-                                                                                                            {{ $danhGia->bienThe->ten_bien_the ?? 'Không rõ' }}
+                                                                                                            Biến thể: {{ $danhGia->bienThe->ten_bien_the ?? 'Không rõ' }}
                                                                                                             <br>
                                                                                                         </small>
                                                                                                     </p>
                                                                                                 @endif
                                                                                             </ul>
                                                                                         </div>
-
                                                                                     </div>
-
                                                                                 </div>
                                                                                 <div class="reply">
                                                                                     <p>{{ $danhGia->nhan_xet }}</p>
+                                                                                    <!-- Hiển thị hình ảnh đánh giá -->
+                                                                                    @if (!empty($danhGia->hinh_anh_danh_gia))
+                                                                                        <div class="review-images mt-2 d-flex flex-wrap gap-2">
+                                                                                            @foreach ($danhGia->hinh_anh_danh_gia as $image)
+                                                                                                <a href="{{ Storage::url($image) }}" target="_blank">
+                                                                                                    <img src="{{ Storage::url($image) }}" class="img-fluid rounded"
+                                                                                                         style="width: 100px; height: 100px; object-fit: cover;" alt="Hình ảnh đánh giá">
+                                                                                                </a>
+                                                                                            @endforeach
+                                                                                        </div>
+                                                                                    @endif
+                                                                                    <!-- Hiển thị video đánh giá -->
+                                                                                    @if ($danhGia->video)
+                                                                                    <div class="review-video">
+                                                                                        <video controls playsinline>
+                                                                                            <source src="{{ Storage::url($danhGia->video) }}" type="video/mp4">
+                                                                                            Trình duyệt của bạn không hỗ trợ video.
+                                                                                        </video>
+                                                                                    </div>
+                                                                                @endif
                                                                                 </div>
                                                                             </div>
                                                                         </div>
