@@ -16,6 +16,7 @@ class DanhGia extends Model
         'user_id',
         'san_pham_id',
         'bien_the_id',
+        'don_hang_id',
         'so_sao',
         'nhan_xet',
         'trang_thai',
@@ -43,6 +44,11 @@ class DanhGia extends Model
     public function bienThe()
     {
         return $this->belongsTo(BienThe::class, 'bien_the_id'); // nhớ đúng tên cột
+    }
+    // Liên kết với Đơn hàng
+    public function donHang()
+    {
+        return $this->belongsTo(DonHang::class, 'don_hang_id');
     }
      // Accessor để lấy danh sách hình ảnh dưới dạng mảng
      public function getHinhAnhDanhGiaAttribute($value)

@@ -786,6 +786,8 @@
                                 @csrf
                                 <input type="hidden" name="san_pham_id" value="{{ $item['id_san_pham'] }}">
                                 <input type="hidden" name="bien_the_id" value="{{ $item['bien_the_id'] }}">
+                                <input type="hidden" name="don_hang_id" value="{{ $donHang->id }}">
+                                <!-- Thêm don_hang_id -->
                                 <input type="hidden" name="so_sao" class="so_sao" value="5">
 
                                 <div class="product-wrapper">
@@ -828,7 +830,7 @@
                                         <input type="file" id="hinh_anh_{{ $item['bien_the_id'] }}"
                                             name="hinh_anh_danh_gia[]" class="d-none"
                                             accept="image/jpeg,image/png,image/jpg,image/gif" multiple>
-                                        
+
                                         <div class="image-preview mt-2 d-flex flex-wrap gap-2"
                                             id="image-preview-{{ $item['bien_the_id'] }}"></div>
                                     </div>
@@ -841,7 +843,7 @@
                                         </label>
                                         <input type="file" id="video_{{ $item['bien_the_id'] }}" name="video"
                                             class="d-none" accept="video/mp4,video/mpeg,video/quicktime">
-                                        
+
                                         <div class="video-preview mt-2" id="video-preview-{{ $item['bien_the_id'] }}">
                                         </div>
                                     </div>
