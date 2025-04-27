@@ -39,52 +39,40 @@
             font-size: 12px;
             padding: 4px 8px;
         }
+        .cart-list {
+    max-height: 300px; /* Giới hạn chiều cao của danh sách giỏ hàng */
+    overflow-y: auto; /* Bật thanh cuộn dọc khi nội dung vượt quá chiều cao */
+    width: 100%; /* Giữ chiều rộng 100% */
+    padding-right: 10px; /* Thêm padding để tránh nội dung bị che bởi thanh cuộn */
+}
 
-        .mark-all-read,
-        .delete-all {
-            display: inline-block;
-            margin-bottom: 10px;
-            margin-right: 10px;
-        }
+/* Tùy chỉnh thanh cuộn (nếu muốn) */
+.cart-list::-webkit-scrollbar {
+    width: 3px; /* Chiều rộng thanh cuộn */
+}
 
-        .delete-button {
-            position: absolute;
-            top: -2px;
-            /* Adjusted from 10px to 14px to move the "x" down */
-            right: -3px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: #ff4c3b;
-            font-size: 14px;
-        }
+.cart-list::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Màu nền của thanh cuộn */
+}
 
-        .notification-actions {
-            display: flex;
-            justify-content: flex-end;
-            /* padding: 5px;
-            border-top: 1px solid #eee; */
-        }
+.cart-list::-webkit-scrollbar-thumb {
+    background: #888; /* Màu của thanh cuộn */
+    border-radius: 4px; /* Bo góc thanh cuộn */
+}
 
-        .notification-actions .btn-link {
-            margin-left: 10px;
-            margin-top: 20px;
-            color: black;
-            font-size: 13px;
-            padding: 0;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        .notification-actions .btn-link:hover {
-            color: #ff4c3b;
-        }
-
-        .notification-actions .mark-all-read,
-        .notification-actions .delete-all {
-            margin-bottom: 0;
-            margin-right: 0;
-        }
+.cart-list::-webkit-scrollbar-thumb:hover {
+    background: #555; /* Màu khi hover */
+}
+#delete-cart-header{
+    border: none; /* Loại bỏ border */
+    background: none; /* Loại bỏ background mặc định */
+    padding: 0; /* Loại bỏ padding mặc định */
+    cursor: pointer; /* Giữ con trỏ chuột dạng pointer khi hover */
+    float: right;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}
     </style>
     <div class="header-top">
         <div class="container-fluid-lg">
@@ -272,60 +260,49 @@
                                         </button>
                                         <div class="onhover-div">
                                             <ul style="width: 100%" class="cart-list">
-                                                @foreach ($gioHang->take(4) as $item)
-                                                    <li style="width: 100%" class=" raffle-box-contain">
+                                                @if ($gioHang->isEmpty())
+                                                    <li style="width: 100%" class="raffle-box-contain">
                                                         <div class="drop-cart">
-                                                            <a href="{{ route('sanphams.chitiet', $item->bienThe->SanPham->id) }}"
-                                                                class="drop-image">
-                                                                <img src="{{ Storage::url($item->bienThe->anh_bien_the) }}"
-                                                                    class="blur-up lazyload" alt="">
-                                                            </a>
-                                                            <div class="dropcontain">
-                                                                <a
-                                                                    href="{{ route('sanphams.chitiet', $item->bienThe->SanPham->id) }}">
-                                                                    <h5>{{ $item->bienThe->sanPham->ten_san_pham }}
-                                                                    </h5>
-                                                                    <h6>{{ $item->bienThe->ten_bien_the }}</h6>
-                                                                </a>
-                                                                <h6><span>{{ $item->so_luong }} x</span>
-                                                                    {{ number_format($item->bienThe->gia_ban, 0, '', '.') }}
-                                                                    đ
-                                                                </h6>
-                                                                <style>
-                                                                    .hidden-delete {
-                                                                        visibility: hidden;
-                                                                    }
-                                                                </style>
-                                                                @if (!request()->is('giohang', 'thanhtoan'))
-                                                                    <button
-                                                                        class="close-button close_button delete-cart-item"
-                                                                        data-id="{{ $item->id }}">
-                                                                        <i class="fa-solid fa-xmark"></i>
-                                                                    </button>
-                                                                @else
-                                                                    <button
-                                                                        class="close-button close_button delete-cart-item hidden-delete"
-                                                                        data-id="{{ $item->id }}">
-                                                                        <i class="fa-solid fa-xmark"></i>
-                                                                    </button>
-                                                                @endif
-                                                            </div>
+                                                            <p>Giỏ hàng trống</p>
                                                         </div>
                                                     </li>
-                                                @endforeach
+                                                @else
+                                                    @foreach ($gioHang as $item)
+                                                        <li style="width: 100%" class="raffle-box-contain">
+                                                            <div class="drop-cart">
+                                                                <a href="{{ route('sanphams.chitiet', $item->bienThe->SanPham->id) }}" class="drop-image">
+                                                                    <img src="{{ Storage::url($item->bienThe->anh_bien_the) }}" class="blur-up lazyload" alt="">
+                                                                </a>
+                                                                <div style="width: 100%" class="dropcontain">
+                                                                    <a href="{{ route('sanphams.chitiet', $item->bienThe->SanPham->id) }}">
+                                                                        <h5>{{ $item->bienThe->sanPham->ten_san_pham }}</h5>
+                                                                        <h6>{{ $item->bienThe->ten_bien_the }}</h6>
+                                                                    </a>
+                                                                    <h6><span>{{ $item->so_luong }} x</span> {{ number_format($item->bienThe->gia_ban, 0, '', '.') }} đ</h6>
+                                                                    @if (!request()->is('giohang', 'thanhtoan'))
+                                                                        <button style="text-align: top;" id="delete-cart-header"
+                                                                            class="close-button close_button delete-cart-item"
+                                                                            data-id="{{ $item->id }}">
+                                                                            <i class="fa-solid fa-xmark"></i>
+                                                                        </button>
+                                                                    @else
+                                                                        {{-- <button class="close-button close_button delete-cart-item hidden-delete" data-id="{{ $item->id }}">
+                                                                            <i class="fa-solid fa-xmark"></i>
+                                                                        </button> --}}
+                                                                    @endif
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                    @endforeach
+                                                @endif
                                             </ul>
                                             <div class="price-box">
                                                 <h5>Tổng tiền :</h5>
-                                                <h4 class="theme-color fw-bold total-price">
-                                                    {{ number_format($total, 0, '', '.') }} đ
-                                                </h4>
+                                                <h4 class="theme-color fw-bold total-price">{{ number_format($total, 0, '', '.') }} đ</h4>
                                             </div>
                                             <div class="button-group">
-                                                <a href="{{ route('giohang') }}" class="btn btn-sm cart-button">Xem
-                                                    giỏ hàng</a>
-                                                <a href="{{ route('thanhtoans.thanhtoan') }}"
-                                                    class="btn btn-sm cart-button theme-bg-color text-white">Thanh
-                                                    toán</a>
+                                                <a href="{{ route('giohang') }}" class="btn btn-sm cart-button">Xem giỏ hàng</a>
+                                                <a href="{{ route('thanhtoans.thanhtoan') }}" class="btn btn-sm cart-button theme-bg-color text-white">Thanh toán</a>
                                             </div>
                                         </div>
                                     </div>
