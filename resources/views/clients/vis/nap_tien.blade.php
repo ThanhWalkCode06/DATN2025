@@ -1,5 +1,5 @@
 @extends('layouts.client')
-
+@section('title', 'Nạp tiền')
 @section('content')
     <div class="container py-5">
         <h2 class="text-center mb-4" style="color: #009688;">NẠP TIỀN</h2>

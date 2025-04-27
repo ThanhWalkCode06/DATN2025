@@ -35,7 +35,7 @@
                             <h5>Đơn hàng #{{ $donHang->ma_don_hang }}</h5>
                         </div>
                         <div class="col-6">
-                            <form action="{{ route('donhangs.update', $donHang->id) }}" method="post">
+                            <form action="{{ route('donhangs.update', $donHang->id) }}" method="post" id="trangThaiForm">
                                 @csrf
                                 @method('PUT')
                                 <div class="card-footer text-end border-0 m-0 p-0 d-flex justify-content-end">
@@ -56,16 +56,9 @@
                                                 @if ($donHang->trang_thai_don_hang != 2) disabled @endif value="3">Đã giao
                                             </option>
                                         </select>
-                                        <input class="btn btn-primary mx-3" type="submit" name="doi_trang_thai"
-                                            value="Đổi trạng thái" onclick="return confirm('Xác nhận đổi trạng thái?');">
-                                        {{-- @if ($donHang->trang_thai_thanh_toan == 0)
-                                            <input class="btn btn-primary me-3" type="submit" name="xac_nhan_thanh_toan"
-                                                value="Xác nhận thanh toán" onclick="return confirm('Xác nhận thanh toán?');">
-                                        @endif --}}
-                                        {{-- @if ($donHang->trang_thai_thanh_toan == 0 && $donHang->trang_thai_don_hang <= 1)
-                                            <input class="btn btn-danger me-3" type="submit" name="huy_don_hang" value="Hủy đơn hàng"
-                                                onclick="return confirm('Xác nhận hủy đơn hàng?');">
-                                        @endif --}}
+                                        <input type="hidden" name="doi_trang_thai" value="1">
+                                        <input class="btn btn-primary mx-3" type="submit" value="Đổi trạng thái"
+                                            onclick="updateConfirmation(event)">
                                     @endif
                                     <a href="{{ route('donhangs.index') }}" class="btn btn-outline">Quay lại</a>
                                 </div>
@@ -213,6 +206,18 @@
                                     </thead>
 
                                     <tbody>
+                                        <tr class="border-bottom">
+                                            <td></td>
+                                            <td>
+                                                <p>Tên sản phẩm</p>
+                                            </td>
+                                            <td>
+                                                <p>Số lượng</p>
+                                            </td>
+                                            <td>
+                                                <p>Giá</p>
+                                            </td>
+                                        </tr>
                                         @foreach ($chiTietDonHangs as $chiTietDonHang)
                                             <tr class="table-order">
                                                 <td>
@@ -222,15 +227,13 @@
                                                     </a>
                                                 </td>
                                                 <td>
-                                                    <p>Tên sản phẩm</p>
+                                                    <h5>{{ $chiTietDonHang->ten_san_pham }}</h5>
                                                     <h5>{{ $chiTietDonHang->ten_bien_the }}</h5>
                                                 </td>
                                                 <td>
-                                                    <p>Số lượng</p>
                                                     <h5>{{ $chiTietDonHang->so_luong }}</h5>
                                                 </td>
                                                 <td>
-                                                    <p>Giá</p>
                                                     <h5>{{ number_format($chiTietDonHang->gia_ban, 0, '', '.') }}đ</h5>
                                                 </td>
                                             </tr>
@@ -350,4 +353,25 @@
 
     <!-- Plugins js -->
     <script src="{{ asset('assets/js/sidebar-menu.js') }}"></script>
+
+    <script>
+        function updateConfirmation(e) {
+            e.preventDefault();
+
+            Swal.fire({
+                title: 'Đổi trạng thái',
+                text: "Bạn có chắc chắn muốn đổi trạng thái đơn hàng này?",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Có',
+                cancelButtonText: 'Không',
+                confirmButtonColor: '#009688',
+                cancelButtonColor: '#dc3545'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('trangThaiForm').submit();
+                }
+            });
+        }
+    </script>
 @endsection

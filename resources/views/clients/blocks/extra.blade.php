@@ -58,7 +58,7 @@
 
     /* Modal Chat Styling */
     #chat-box-modal .modal-dialog {
-        max-width: 90%;
+        max-width: 50%;
     }
 
     #chat-box-modal .modal-content {
@@ -130,6 +130,57 @@
         max-height: 300px;
         border-radius: 8px;
         margin-top: 5px;
+    }
+</style>
+<style>
+    /* Modal phóng to ảnh cho client */
+    .client-image-zoom-modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.8);
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* Nội dung ảnh trong modal */
+    .client-image-zoom-content {
+        width: 600px;
+        /* Kích thước cố định cho chiều rộng */
+        height: 600px;
+        /* Kích thước cố định cho chiều cao */
+        max-width: 90%;
+        /* Giới hạn tối đa để phù hợp với màn hình nhỏ */
+        max-height: 90%;
+        /* Giới hạn tối đa để phù hợp với màn hình nhỏ */
+        object-fit: contain;
+        /* Giữ tỷ lệ ảnh, không bị méo */
+        border-radius: 8px;
+    }
+
+    /* Nút đóng modal */
+    .client-close-zoom-modal {
+        position: absolute;
+        top: 20px;
+        right: 30px;
+        color: white;
+        font-size: 40px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    /* Đảm bảo ảnh trong khung chat có kích thước đồng nhất */
+    .client-chat-image {
+        max-width: 200px;
+        max-height: 200px;
+        object-fit: contain;
+        border-radius: 8px;
+        margin-top: 5px;
+        cursor: pointer;
     }
 </style>
 <!-- Quick View Modal Box Start -->
@@ -267,14 +318,16 @@
                             <li class="list-{{ ++$index }}">
                                 <div class="deal-offer-contain">
                                     <div>
-                                        <a href="{{ route('sanphams.chitiet', $item->sanPham->id) }}" class="deal-image">
+                                        <a href="{{ route('sanphams.chitiet', $item->sanPham->id) }}"
+                                            class="deal-image">
                                             <img src="{{ Storage::url($item->sanPham->hinh_anh) ?? 'images/sanpham-default.png' }}"
                                                 class="blur-up lazyload" alt="">
                                         </a>
                                     </div>
 
                                     <div style="min-width: 220px">
-                                        <a href="{{ route('sanphams.chitiet', $item->sanPham->id) }}" class="deal-contain">
+                                        <a href="{{ route('sanphams.chitiet', $item->sanPham->id) }}"
+                                            class="deal-contain">
                                             <h5>{{ $item->sanPham->ten_san_pham }}</h5>
                                             <h6>{{ number_format($item->sanPham->giaThapNhatCuaSP(), 0, '', '.') }}đ
                                                 <del>{{ number_format($item->sanPham->gia_cu, 0, '', '.') }}đ</del>
@@ -300,9 +353,14 @@
 <div class="modal fade" id="chat-box-modal" tabindex="-1" aria-labelledby="chatModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content rounded-4 shadow-lg">
+            <!-- Modal phóng to ảnh cho client -->
+            <div id="clientImageZoomModal" class="client-image-zoom-modal">
+                <span class="client-close-zoom-modal">×</span>
+                <img class="client-image-zoom-content" id="clientZoomedImage">
+            </div>
             <div class="modal-header border-bottom-0">
                 <h5 class="modal-title" id="chatModalLabel">💬 Chat với Admin</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                {{-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> --}}
             </div>
             <div class="modal-body">
                 <!-- Thông báo lỗi -->
@@ -313,13 +371,29 @@
                     style="height: 400px; overflow-y: auto; padding: 15px; background-color: #f9f9f9; border-radius: 8px;">
                     <!-- Chat messages will be inserted here -->
                 </div>
+                <div id="preview" style="margin-bottom: 100px" class="position-absolute bottom-0 start-0"></div>
                 <form id="chat-form" enctype="multipart/form-data" class="mt-3">
                     <div class="input-group mb-3">
-                        <input type="text" id="noi_dung" name="noi_dung" class="form-control"
-                            placeholder="Nhập tin nhắn..." autocomplete="off">
-                        <input type="file" id="media" name="media" accept="image/*,video/*" class="form-control"
-                            style="max-width: 180px;">
-                        <button class="btn btn-primary" type="submit">Gửi</button>
+                        <div class="d-flex align-items-center border rounded px-2 py-1 col-10">
+                            <input type="text" id="noi_dung" name="noi_dung" class="form-control border-0"
+                                placeholder="Nhập tin nhắn..." autocomplete="off">
+
+                            <input type="file" id="media" name="media" accept="image/*,video/*"
+                                class="d-none">
+
+                            <label for="media" class="btn btn-link m-0 px-2 text-dark"
+                                title="Tải ảnh hoặc video lên">
+                                <i class="fas fa-camera fs-5"></i>
+                            </label>
+                        </div>
+
+                        <div class="col-2">
+                            <button
+                                class="btn btn-primary text-light float-end d-flex align-items-center justify-content-center w-75 h-100"
+                                type="submit" title="Gửi tin nhắn">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -333,8 +407,11 @@
 <!-- Tap to top button start -->
 <div class="theme-option">
     @isset(Auth::user()->id)
+        {{-- <div id="unread-notification" class="ms-2"></div> <!-- Đặt ở đây --> --}}
         <button class="btn setting-button bg-theme" data-bs-toggle="modal" data-bs-target="#chat-box-modal">
             <i style="color:white;" class="fa-solid fa-message"></i>
+            <!-- Đặt unread-notification bên trong nút và định vị bằng position: absolute -->
+            <div id="unread-notification" class="position-absolute" style="top: -5px; right: -5px;"></div>
         </button>
     @endisset
 
@@ -380,8 +457,7 @@
 
                 <form>
                     <div class="form-floating mb-4 theme-form-floating">
-                        <textarea class="form-control" placeholder="Leave a comment here" id="address"
-                            style="height: 100px"></textarea>
+                        <textarea class="form-control" placeholder="Leave a comment here" id="address" style="height: 100px"></textarea>
                         <label for="address">Enter Address</label>
                     </div>
                 </form>
@@ -405,7 +481,8 @@
 
 <!-- Edit Profile Start -->
 @if (isset($user))
-    <form id="myForm" action="{{ route('users.updateClient', $user->id) }}" method="post" enctype="multipart/form-data">
+    <form id="myForm" action="{{ route('users.updateClient', $user->id) }}" method="post"
+        enctype="multipart/form-data">
         @csrf
         @method('PUT')
         <div class="modal fade theme-modal" id="editProfile" tabindex="-1">
@@ -422,8 +499,10 @@
                             <div class="col-xxl-12">
 
                                 <div class="form-floating theme-form-floating">
-                                    <input type="text" class="form-control @error('ten_nguoi_dung') is-invalid @enderror"
-                                        name="ten_nguoi_dung" id="pname" value="{{ $user->ten_nguoi_dung ?? '' }}">
+                                    <input type="text"
+                                        class="form-control @error('ten_nguoi_dung') is-invalid @enderror"
+                                        name="ten_nguoi_dung" id="pname"
+                                        value="{{ $user->ten_nguoi_dung ?? '' }}">
                                     <label for="pname">Họ và tên</label>
                                 </div>
                                 @error('ten_nguoi_dung')
@@ -447,9 +526,10 @@
                             <div class="col-xxl-6">
 
                                 <div class="form-floating theme-form-floating">
-                                    <input class="form-control @error('so_dien_thoai') is-invalid @enderror" type="tel"
-                                        value="{{ $user->so_dien_thoai ?? '' }}" name="so_dien_thoai" id="mobile"
-                                        maxlength="10" oninput="javascript: if (this.value.length > this.maxLength) this.value =
+                                    <input class="form-control @error('so_dien_thoai') is-invalid @enderror"
+                                        type="tel" value="{{ $user->so_dien_thoai ?? '' }}" name="so_dien_thoai"
+                                        id="mobile" maxlength="10"
+                                        oninput="javascript: if (this.value.length > this.maxLength) this.value =
                                                 this.value.slice(0, this.maxLength);">
                                     <label for="mobile">Số điện thoại</label>
                                 </div>
@@ -496,10 +576,11 @@
                                 </div>
                             @endif
 
-                            @if(empty($user->ngay_sinh))
+                            @if (empty($user->ngay_sinh))
                                 <div class="col-xxl-4">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="date" class="form-control @error('ngay_sinh') is-invalid @enderror"
+                                        <input type="date"
+                                            class="form-control @error('ngay_sinh') is-invalid @enderror"
                                             id="address3" value="{{ $user->ngay_sinh }}" name="ngay_sinh">
                                         <label for="address3">Ngày sinh</label>
                                     </div>
@@ -512,7 +593,8 @@
                             @else
                                 <div class="col-xxl-4">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="date" class="form-control @error('ngay_sinh') is-invalid @enderror"
+                                        <input type="date"
+                                            class="form-control @error('ngay_sinh') is-invalid @enderror"
                                             id="address3" value="{{ $user->ngay_sinh }}" name="ngay_sinh" readonly>
                                         <label for="address3">Ngày sinh</label>
                                     </div>
@@ -521,7 +603,8 @@
 
                             <div class="col-xxl-4">
                                 <div class="form-floating theme-form-floating">
-                                    <input type="file" class="form-control @error('anh_dai_dien') is-invalid @enderror"
+                                    <input type="file"
+                                        class="form-control @error('anh_dai_dien') is-invalid @enderror"
                                         id="address3" name="anh_dai_dien">
                                     <label for="address3">Ảnh đại diện</label>
                                 </div>
@@ -532,7 +615,8 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">Đóng</button>
+                        <button type="button" class="btn btn-animation btn-md fw-bold"
+                            data-bs-dismiss="modal">Đóng</button>
                         <button type="submit" class="btn theme-bg-color btn-md fw-bold text-light">Lưu thay
                             đổi</button>
 
@@ -594,7 +678,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-animation btn-md fw-bold"
+                    data-bs-dismiss="modal">Cancel</button>
                 <button type="button" class="btn theme-bg-color btn-md fw-bold text-light">Update Card</button>
             </div>
         </div>
@@ -650,8 +735,8 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-    $(document).ready(function () {
-        $("#myForm").submit(function (e) {
+    $(document).ready(function() {
+        $("#myForm").submit(function(e) {
             e.preventDefault(); // Ngăn reload trang
 
             let formData = new FormData(this);
@@ -663,17 +748,17 @@
                 data: formData,
                 processData: false,
                 contentType: false,
-                success: function (response) {
+                success: function(response) {
                     $(".text-danger").remove(); // Xóa lỗi cũ
                     $("#editProfile").modal("hide"); // Đóng modal
                     location.reload(); // Tải lại trang để thấy cập nhật mới
                 },
-                error: function (xhr) {
+                error: function(xhr) {
                     $(".text-danger").remove(); // Xóa lỗi cũ
 
                     let errors = xhr.responseJSON.errors;
                     if (errors) {
-                        $.each(errors, function (field, messages) {
+                        $.each(errors, function(field, messages) {
                             let input = $(`[name="${field}"]`);
                             let errorHtml =
                                 `<p class="text-danger">${messages[0]}</p>`;
@@ -688,19 +773,19 @@
 </script>
 
 <script>
-    $(document).ready(function () {
+    $(document).ready(function() {
         let selectedAttributes = {}; // Lưu thuộc tính đã chọn
         let bienTheList = []; // Lưu danh sách biến thể
         let matchedVariant = null; // Biến toàn cục để lưu biến thể phù hợp
 
         // Xử lý khi bấm vào nút "Xem nhanh"
-        $(".btn-quick-view").click(function () {
+        $(".btn-quick-view").click(function() {
             let productId = $(this).data("id");
 
             $.ajax({
                 url: 'http://127.0.0.1:8000/quick-view?id=' + productId,
                 method: 'GET',
-                success: function (response) {
+                success: function(response) {
                     // Reset dữ liệu khi mở modal mới
                     selectedAttributes = {};
                     bienTheList = response.bien_the;
@@ -717,7 +802,7 @@
                     $('#view .gia_cu').text(response.gia_cu + ' đ');
 
                     document.getElementById("btnChiTiet").addEventListener("click",
-                        function () {
+                        function() {
                             location.href = '/sanpham/' + response.id;
                         });
 
@@ -727,7 +812,7 @@
                         'fill': 'none',
                         'stroke': '#ffc107'
                     });
-                    $('#view .rating li').each(function (index) {
+                    $('#view .rating li').each(function(index) {
                         if (index < so_sao) {
                             $(this).find('svg').css({
                                 'fill': '#ffc107',
@@ -766,14 +851,14 @@
 
                     $('.variant-section').html(thuocTinhHtml); // Thêm thuộc tính vào UI
                 },
-                error: function () {
+                error: function() {
                     // alert('Không tìm thấy sản phẩm!');
                 }
             });
         });
 
         // Xử lý khi chọn thuộc tính
-        $(document).on("click", ".option", function () {
+        $(document).on("click", ".option", function() {
             let thuocTinh = $(this).data("thuoc-tinh");
             let giaTri = $(this).data("gia-tri");
 
@@ -837,7 +922,7 @@
 
 
         // Chặn nhập số vượt quá tồn kho
-        $("#quantity").on("input", function () {
+        $("#quantity").on("input", function() {
             let input = $(this);
             let value = parseInt(input.val(), 10) || 1;
 
@@ -897,8 +982,8 @@
     // add-cart-button
 </script>
 <script>
-    $(document).ready(function () {
-        $("#form-cart-post").submit(function (event) {
+    $(document).ready(function() {
+        $("#form-cart-post").submit(function(event) {
             event.preventDefault();
 
             let bienTheId = $("#id_bienthe").val();
@@ -917,7 +1002,7 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
                     'Accept': 'application/json'
                 },
-                success: function (response) {
+                success: function(response) {
                     console.log("Cart response:", response); // Kiểm tra dữ liệu
 
                     if (response.cart) {
@@ -985,7 +1070,7 @@
                             '</div>'
                     });
                 },
-                error: function (xhr) {
+                error: function(xhr) {
                     if (xhr.status === 403 && xhr.responseJSON && xhr.responseJSON
                         .message) {
                         errorMessage = xhr.responseJSON.message;
@@ -1000,7 +1085,7 @@
 
         });
     });
-    $(document).on("click", ".delete-cart-item", function () {
+    $(document).on("click", ".delete-cart-item", function() {
         let cartItemId = $(this).data("id"); // Lấy ID sản phẩm trong giỏ hàng
 
         $.ajax({
@@ -1012,7 +1097,7 @@
             headers: {
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
             },
-            success: function (response) {
+            success: function(response) {
                 console.log("Response từ server:", response); // Debug dữ liệu
                 if (response.status === "success") {
                     $(".header-wishlist .badge").text(response.totalItem); // Cập nhật số sản phẩm
@@ -1024,7 +1109,7 @@
                     let total = 0;
                     let totalItem = response.totalItem;
                     let totalPrice = response.totalPrice;
-                    $(".cart-list li").each(function () {
+                    $(".cart-list li").each(function() {
                         let text = $(this).find("h6").text();
                         let matches = text.match(/(\d+)\s*x\s*([\d\.]+)/);
 
@@ -1044,9 +1129,39 @@
                     Swal.fire("Lỗi", "Không thể xóa sản phẩm", "error");
                 }
             },
-            error: function () {
+            error: function() {
                 Swal.fire("Lỗi", "Bạn chưa đăng nhập!", "error");
             },
+        });
+    });
+</script>
+
+{{-- Preview ảnh --}}
+<script>
+    const input = document.getElementById('media');
+    const preview = document.getElementById('preview');
+
+    input.addEventListener('change', function() {
+        preview.innerHTML = ''; // Clear preview cũ
+
+        const files = input.files;
+
+        if (files.length === 0) return;
+
+        Array.from(files).forEach(file => {
+            if (!file.type.startsWith('image/')) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.classList.add('rounded'); // Optional styling
+                img.style.maxWidth = '120px';
+                img.style.maxHeight = '120px';
+                img.style.objectFit = 'cover';
+                preview.appendChild(img);
+            };
+            reader.readAsDataURL(file);
         });
     });
 </script>

@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Lịch sửví người dùng')
+@section('title', 'Lịch sử ví người dùng')
 
 @section('content')
     @if ($errors->any())
@@ -11,7 +11,7 @@
     <div class="container mt-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h4 style="color: #009688; font-weight: 700;">Lịch sử ví -
-                <span class="text-dark">{{  $user->username }}</span>
+                <span class="text-dark">{{ $user->username }}</span>
             </h4>
             <span class="badge rounded-pill px-3 py-2 fs-6" style="background-color: #009688; color: white;">
                 💰 Số dư: {{ number_format($user->vi->so_du ?? 0, 0, ',', '.') }} VNĐ
@@ -19,53 +19,59 @@
 
         </div>
 
-       {{-- Bộ lọc trạng thái --}}
-<div class="card shadow mb-4 rounded-4">
-    <div class="card-body">
-        <form method="GET" class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-3 align-items-end">
-            {{-- Trạng thái --}}
-            <div>
-                <label for="trang_thai" class="form-label fw-semibold">Trạng thái</label>
-                <select name="trang_thai" id="trang_thai" class="form-select" onchange="this.form.submit()">
-                    <option value="">Tất cả</option>
-                    <option value="1" {{ request('trang_thai') === '1' ? 'selected' : '' }}>✅ Thành công</option>
-                    <option value="0" {{ request('trang_thai') === '0' ? 'selected' : '' }}>⏳ Chờ xử lý</option>
-                    <option value="2" {{ request('trang_thai') === '2' ? 'selected' : '' }}>❌ Huỷ</option>
-                </select>
+        {{-- Bộ lọc trạng thái --}}
+        <div class="card shadow mb-4 rounded-4">
+            <div class="card-body">
+                <form method="GET" class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-3 align-items-end">
+                    {{-- Trạng thái --}}
+                    <div>
+                        <label for="trang_thai" class="form-label fw-semibold">Trạng thái</label>
+                        <select name="trang_thai" id="trang_thai" class="form-select" onchange="this.form.submit()">
+                            <option value="">Tất cả</option>
+                            <option value="1" {{ request('trang_thai') === '1' ? 'selected' : '' }}>✅ Thành công
+                            </option>
+                            <option value="0" {{ request('trang_thai') === '0' ? 'selected' : '' }}>⏳ Chờ xử lý
+                            </option>
+                            <option value="2" {{ request('trang_thai') === '2' ? 'selected' : '' }}>❌ Huỷ</option>
+                        </select>
+                    </div>
+
+                    {{-- Loại giao dịch --}}
+                    <div>
+                        <label for="loai" class="form-label fw-semibold">Loại giao dịch</label>
+                        <select name="loai" id="loai" class="form-select" onchange="this.form.submit()">
+                            <option value="">Tất cả</option>
+                            <option value="Nạp tiền" {{ request('loai') === 'Nạp tiền' ? 'selected' : '' }}>💰 Nạp tiền
+                            </option>
+                            <option value="Rút tiền" {{ request('loai') === 'Rút tiền' ? 'selected' : '' }}>🏧 Rút tiền
+                            </option>
+                            <option value="Hoàn tiền" {{ request('loai') === 'Hoàn tiền' ? 'selected' : '' }}>↩️ Hoàn tiền
+                            </option>
+                            <option value="Mua hàng" {{ request('loai') === 'Mua hàng' ? 'selected' : '' }}>🛒 Mua hàng
+                            </option>
+                        </select>
+                    </div>
+
+                    {{-- Từ ngày --}}
+                    <div>
+                        <label for="tu_ngay" class="form-label fw-semibold">Từ ngày</label>
+                        <input type="date" name="tu_ngay" id="tu_ngay" class="form-control"
+                            value="{{ request('tu_ngay') }}" onchange="this.form.submit()">
+                    </div>
+
+                    {{-- Đến ngày --}}
+                    <div>
+                        <label for="den_ngay" class="form-label fw-semibold">Đến ngày</label>
+                        <input type="date" name="den_ngay" id="den_ngay" class="form-control"
+                            value="{{ request('den_ngay') }}" onchange="this.form.submit()">
+                    </div>
+                </form>
             </div>
-
-            {{-- Loại giao dịch --}}
-            <div>
-                <label for="loai" class="form-label fw-semibold">Loại giao dịch</label>
-                <select name="loai" id="loai" class="form-select" onchange="this.form.submit()">
-                    <option value="">Tất cả</option>
-                    <option value="Nạp tiền" {{ request('loai') === 'Nạp tiền' ? 'selected' : '' }}>💰 Nạp tiền</option>
-                    <option value="Rút tiền" {{ request('loai') === 'Rút tiền' ? 'selected' : '' }}>🏧 Rút tiền</option>
-                    <option value="Hoàn tiền" {{ request('loai') === 'Hoàn tiền' ? 'selected' : '' }}>↩️ Hoàn tiền</option>
-                    <option value="Mua hàng" {{ request('loai') === 'Mua hàng' ? 'selected' : '' }}>🛒 Mua hàng</option>
-                </select>
-            </div>
-
-            {{-- Từ ngày --}}
-            <div>
-                <label for="tu_ngay" class="form-label fw-semibold">Từ ngày</label>
-                <input type="date" name="tu_ngay" id="tu_ngay" class="form-control" value="{{ request('tu_ngay') }}" onchange="this.form.submit()">
-            </div>
-
-            {{-- Đến ngày --}}
-            <div>
-                <label for="den_ngay" class="form-label fw-semibold">Đến ngày</label>
-                <input type="date" name="den_ngay" id="den_ngay" class="form-control" value="{{ request('den_ngay') }}" onchange="this.form.submit()">
-            </div>
-        </form>
-    </div>
-</div>
-
-
-
+        </div>
 
         {{-- Cập nhật trạng thái --}}
-        <form method="POST" id="form-cap-nhat-trang-thai" action="{{ route('admin.vis.updateTrangThai') }}">
+        <form method="POST" id="form-cap-nhat-trang-thai" action="{{ route('admin.vis.updateTrangThai') }}"
+            onsubmit="return handleCapNhat(event)">
             @csrf
             <div class="card shadow mb-4" style="border-radius: 16px;">
                 <div class="card-body">
@@ -133,25 +139,33 @@
                                     <td><input type="checkbox" name="ids[]" value="{{ $gd->id }}"></td>
                                     <td class="text-center">{{ $gd->ma_giao_dich }}</td>
                                     <td>
-                                        @if(in_array($gd->loai, ['Rút tiền', 'Mua hàng', 'Thanh toán']))
-                                            @if($gd->trang_thai == 1)
-                                                <span class="text-danger">-{{ number_format(abs($gd->so_tien), 0, ',', '.') }} VNĐ</span>
+                                        @if (in_array($gd->loai, ['Rút tiền', 'Mua hàng', 'Thanh toán']))
+                                            @if ($gd->trang_thai == 1)
+                                                <span
+                                                    class="text-danger">-{{ number_format(abs($gd->so_tien), 0, ',', '.') }}
+                                                    VNĐ</span>
                                             @else
-                                                <span class="text-warning">{{ number_format(abs($gd->so_tien), 0, ',', '.') }} VNĐ</span>
+                                                <span
+                                                    class="text-warning">{{ number_format(abs($gd->so_tien), 0, ',', '.') }}
+                                                    VNĐ</span>
                                             @endif
                                         @elseif(in_array($gd->loai, ['Nạp tiền', 'Hoàn tiền']))
-                                            @if($gd->trang_thai == 2)
-                                                <span class="text-warning">{{ number_format($gd->so_tien, 0, ',', '.') }} VNĐ</span>
+                                            @if ($gd->trang_thai == 2)
+                                                <span class="text-warning">{{ number_format($gd->so_tien, 0, ',', '.') }}
+                                                    VNĐ</span>
                                             @else
-                                                <span class="text-success">+{{ number_format($gd->so_tien, 0, ',', '.') }} VNĐ</span>
+                                                <span class="text-success">+{{ number_format($gd->so_tien, 0, ',', '.') }}
+                                                    VNĐ</span>
                                             @endif
                                         @else
-                                            <span class="text-dark">{{ number_format($gd->so_tien, 0, ',', '.') }} VNĐ</span>
+                                            <span class="text-dark">{{ number_format($gd->so_tien, 0, ',', '.') }}
+                                                VNĐ</span>
                                         @endif
                                     </td>
 
                                     <td>
-                                        <span class="badge bg-light border border-1 text-dark px-2">{{ $gd->loai }}</span>
+                                        <span
+                                            class="badge bg-light border border-1 text-dark px-2">{{ $gd->loai }}</span>
                                     </td>
                                     <td>
                                         {!! nl2br(e($gd->mo_ta)) !!}
@@ -165,7 +179,7 @@
                                     </td>
 
                                     <td class="text-center">
-                                        @if($gd->trang_thai == 1)
+                                        @if ($gd->trang_thai == 1)
                                             <span
                                                 style="background-color: #28a745; color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.85rem;">
                                                 ✔ Thành công
@@ -179,7 +193,8 @@
                                                 <div class="d-flex gap-1">
                                                     {{-- Nút duyệt --}}
 
-                                                    <a href="#" onclick="duyetLe({{ $gd->id }}, '{{ $gd->ma_giao_dich }}')"
+                                                    <a href="#"
+                                                        onclick="duyetLe({{ $gd->id }}, '{{ $gd->ma_giao_dich }}')"
                                                         class="btn btn-success btn-sm">✅</a>
 
                                                     {{-- <form id="form-duyet-{{ $gd->id }}"
@@ -193,8 +208,9 @@
 
 
                                                     {{-- Nút huỷ mở modal --}}
-                                                    <button type="button" class="btn btn-danger btn-sm px-2 py-1" data-bs-toggle="modal"
-                                                        data-bs-target="#huyModal" data-id="{{ $gd->id }}">
+                                                    <button type="button" class="btn btn-danger btn-sm px-2 py-1"
+                                                        data-bs-toggle="modal" data-bs-target="#huyModal"
+                                                        data-id="{{ $gd->id }}">
                                                         ❌
                                                     </button>
 
@@ -217,7 +233,6 @@
                                 <tr>
                                     <td colspan="6" class="text-center text-muted">Không có giao dịch nào</td>
                                 </tr>
-
                             @endforelse
                         @endif
                     </tbody>
@@ -257,16 +272,8 @@
             </div>
         </div>
     </div>
-
-
-
-
-
-
-
 @endsection
 @section('js')
-
     {{--
     <script>
         function duyetLe(id, ma_giao_dich) {
@@ -277,49 +284,56 @@
     </script> --}}
     <script>
         function duyetLe(id, ma_giao_dich) {
-            if (!confirm(`Bạn có chắc muốn duyệt giao dịch ${ma_giao_dich}?`)) return;
-
-            fetch(`/vi/cap-nhat-tung-giao-dich/${id}`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
-                },
-                body: JSON.stringify({
-                    id: id,
-                    trang_thai: 1
-                })
-            })
-                .then(res => res.json())
-                .then(data => {
-                    if (data.status === 'success') {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Thành công!',
-                            text: data.message,
-                            confirmButtonColor: '#009688'
-                        }).then(() => location.reload());
-                    } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Lỗi!',
-                            text: data.message
+            Swal.fire({
+                title: `Xác nhận duyệt giao dịch`,
+                text: `Bạn có chắc muốn duyệt giao dịch ${ma_giao_dich}?`,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: '✔ Duyệt',
+                cancelButtonText: 'Huỷ',
+                confirmButtonColor: '#009688',
+                cancelButtonColor: '#dc3545'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch(`/vi/cap-nhat-tung-giao-dich/${id}`, {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                            },
+                            body: JSON.stringify({
+                                id: id,
+                                trang_thai: 1
+                            })
+                        })
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.status === 'success') {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Thành công!',
+                                    text: data.message,
+                                    confirmButtonColor: '#009688'
+                                }).then(() => location.reload());
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Lỗi!',
+                                    text: data.message
+                                }).then(() => location.reload());
+                            }
                         });
-                    }
-                })
-
+                }
+            });
         }
     </script>
 
-
-
-
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             // Khi modal mở, gán ID vào input ẩn
             const huyModal = document.getElementById('huyModal');
             if (huyModal) {
-                huyModal.addEventListener('show.bs.modal', function (event) {
+                huyModal.addEventListener('show.bs.modal', function(event) {
                     const button = event.relatedTarget;
                     const giaoDichId = button.getAttribute('data-id');
                     document.getElementById('modal_gd_id').value = giaoDichId;
@@ -329,26 +343,27 @@
             // Bắt sự kiện submit form huỷ
             const huyForm = document.getElementById('huyForm');
             if (huyForm) {
-                huyForm.addEventListener('submit', function (e) {
+                huyForm.addEventListener('submit', function(e) {
                     e.preventDefault();
 
                     const id = document.getElementById('modal_gd_id').value;
                     const ly_do = document.getElementById('modal_ly_do').value;
 
                     fetch(`/vi/cap-nhat-tung-giao-dich/${id}`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                        },
-                        body: JSON.stringify({
-                            id: id,
-                            trang_thai: 2,
-                            ly_do: ly_do
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            },
+                            body: JSON.stringify({
+                                id: id,
+                                trang_thai: 2,
+                                ly_do: ly_do
+                            })
                         })
-                    })
                         .then(async res => {
-                            const data = await res.json().catch(() => ({})); // tránh lỗi khi không phải JSON
+                            const data = await res.json().catch(() =>
+                                ({})); // tránh lỗi khi không phải JSON
                             if (res.ok && data.success === 'success') {
                                 Swal.fire({
                                     icon: 'success',
@@ -361,7 +376,7 @@
                                     icon: 'error',
                                     title: 'Lỗi!',
                                     text: data.message || 'Đã xảy ra lỗi.'
-                                });
+                                }).then(() => location.reload()); // ⚠️ Reload trang ngay cả khi lỗi
                             }
                         })
                         .catch(() => {
@@ -381,7 +396,7 @@
 
     {{-- Check All --}}
     <script>
-        document.getElementById('checkAll').addEventListener('click', function () {
+        document.getElementById('checkAll').addEventListener('click', function() {
             document.querySelectorAll('input[name="ids[]"]').forEach(el => el.checked = this.checked);
         });
     </script>
@@ -401,24 +416,39 @@
             }
         }
 
-        function handleCapNhat() {
+        function handleCapNhat(e) {
             const trangThai = document.getElementById('trang_thai_moi').value;
+
             if (trangThai === "1") {
-                const confirmed = confirm("Bạn có chắc chắn muốn duyệt yêu cầu này?");
-                if (!confirmed) {
-                    return false; // Ngăn submit
-                }
+                e.preventDefault(); // Ngăn form gửi đi
+
+                Swal.fire({
+                    title: 'Xác nhận duyệt yêu cầu',
+                    text: 'Bạn có chắc chắn muốn duyệt yêu cầu này?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: '✔ Duyệt',
+                    cancelButtonText: 'Huỷ',
+                    confirmButtonColor: '#009688',
+                    cancelButtonColor: '#dc3545'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        document.getElementById('form-cap-nhat-trang-thai').submit(); // Submit lại form thủ công
+                    }
+                });
+
+                return false; // Không cho submit ngay lập tức
             }
-            return true; // Cho phép submit
+
+            return true; // Nếu trạng thái khác, cho submit bình thường
         }
 
-
-        document.getElementById('checkAll')?.addEventListener('click', function () {
+        document.getElementById('checkAll')?.addEventListener('click', function() {
             const checkboxes = document.querySelectorAll('input.trang_thai_gd');
             checkboxes.forEach(cb => cb.checked = this.checked);
         });
 
-        document.querySelector('form-cap-nhat-trang-thai').addEventListener('submit', function (e) {
+        document.querySelector('form-cap-nhat-trang-thai').addEventListener('submit', function(e) {
             const selected = document.querySelectorAll('input.trang_thai_gd:checked');
             if (selected.length === 0) {
                 alert('Vui lòng chọn ít nhất một giao dịch.');
@@ -448,10 +478,6 @@
 
         document.addEventListener('DOMContentLoaded', toggleLyDo);
     </script>
-
-
-
-
 
     </script>
     <!-- customizer js -->

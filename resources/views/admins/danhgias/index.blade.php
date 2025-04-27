@@ -28,82 +28,140 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css') }}">
 @endsection
 <style>
-        form.d-flex input {
-            max-width: 400px;
-        }
+    form.d-flex input {
+        max-width: 400px;
+    }
 
-        form.d-flex button {
-            white-space: nowrap;
-        }
+    form.d-flex button {
+        white-space: nowrap;
+    }
 
-        /* Thêm CSS để căn giữa modal */
-        #hideReasonModal .modal-dialog {
-            display: flex;
-            align-items: center;
-            min-height: calc(100vh - 60px); /* Đảm bảo căn giữa theo chiều dọc */
-            margin: 0 auto; /* Căn giữa theo chiều ngang */
-        }
-    </style>
+    #hideReasonModal .modal-dialog {
+        display: flex;
+        align-items: center;
+        min-height: calc(100vh - 60px);
+        /* Đảm bảo căn giữa theo chiều dọc */
+        margin: 0 auto;
+        /* Căn giữa theo chiều ngang */
+    }
+
+    .user-table th:nth-child(5),
+    .user-table td:nth-child(5) {
+        display: none;
+    }
+
+    .user-table td:nth-child(6) {
+        white-space: normal;
+        word-wrap: break-word;
+        line-height: 1.5;
+    }
+</style>
 @section('content')
     <div class="col-sm-12">
-        <div class="card card-table">   
+        <div class="card card-table">
             <!-- Table Start -->
             <div class="card-body">
                 <div class="title-header option-title">
                     <h5>Đánh giá sản phẩm</h5>
                 </div>
-                
+
                 <!-- Form lọc theo sản phẩm -->
-                <form method="GET" action="{{ route('danhgias.index') }}" class="d-flex gap-2 mb-3">
-                    <input type="text" name="keyword" value="{{ request('keyword') }}" class="form-control" placeholder="Tìm theo tên người người dùng hoặc sản phẩm">
+                {{-- <form method="GET" action="{{ route('danhgias.index') }}" class="d-flex gap-2 mb-3">
+                    <input type="text" name="keyword" value="{{ request('keyword') }}" class="form-control"
+                        placeholder="Tìm theo tên người người dùng hoặc sản phẩm">
                     <button type="submit" class="btn btn-success">Tìm Kiếm</button>
+                    <a href="{{ route('danhgias.index') }}" class="btn btn-secondary" id="resetButton">Làm mới</a>
+                </form> --}}
+
+                <form method="GET" action="{{ route('danhgias.index') }}" class="d-flex gap-2 mb-3 align-items-end">
+                    <div class="form-group">
+                        <label for="san_pham_id">Sản phẩm</label>
+                        <select name="san_pham_id" class="form-control">
+                            <option value="">Tất cả sản phẩm</option>
+                            @foreach ($sanPhams as $sanPham)
+                                <option value="{{ $sanPham->id }}"
+                                    {{ request('san_pham_id') == $sanPham->id ? 'selected' : '' }}>
+                                    {{ $sanPham->ten_san_pham }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="start_date">Từ ngày</label>
+                        <input type="date" name="start_date" value="{{ request('start_date') }}" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="end_date">Đến ngày</label>
+                        <input type="date" name="end_date" value="{{ request('end_date') }}" class="form-control">
+                    </div>
+                    <button type="submit" class="btn btn-success">Lọc</button>
+                    <a href="{{ route('danhgias.index') }}" class="btn btn-secondary" id="resetButton">Làm mới</a>
                 </form>
-                
-                <div class="modal fade" id="hideReasonModal" tabindex="-1" aria-labelledby="hideReasonModalLabel" aria-hidden="true">
+                {{-- <form method="GET" action="{{ route('danhgias.index') }}" class="d-flex gap-2 mb-3 align-items-end">
+    <div class="form-group">
+        <label for="search_keyword">Tìm kiếm</label>
+        <input type="text" name="search_keyword" value="{{ request('search_keyword') }}" class="form-control"
+               placeholder="Tên người dùng hoặc nội dung nhận xét">
+    </div>
+    <button type="submit" class="btn btn-success">Tìm Kiếm</button>
+</form> --}}
+                <div class="modal fade" id="hideReasonModal" tabindex="-1" aria-labelledby="hideReasonModalLabel"
+                    aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="hideReasonModalLabel">Chọn lý do ẩn đánh giá</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
                                 <form id="hideReasonForm">
                                     <div class="mb-3">
                                         <label class="form-label">Vui lòng chọn ít nhất một lý do:</label>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="reasons[]" value="Nội dung không phù hợp">
+                                            <input class="form-check-input" type="checkbox" name="reasons[]"
+                                                value="Nội dung không phù hợp">
                                             <label class="form-check-label">Nội dung không phù hợp</label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="reasons[]" value="Ngôn ngữ xúc phạm">
+                                            <input class="form-check-input" type="checkbox" name="reasons[]"
+                                                value="Ngôn ngữ xúc phạm">
                                             <label class="form-check-label">Ngôn ngữ xúc phạm</label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="reasons[]" value="Thông tin sai lệch">
+                                            <input class="form-check-input" type="checkbox" name="reasons[]"
+                                                value="Thông tin sai lệch">
                                             <label class="form-check-label">Thông tin sai lệch</label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="reasons[]" value="Đánh giá không liên quan đến sản phẩm">
+                                            <input class="form-check-input" type="checkbox" name="reasons[]"
+                                                value="Đánh giá không liên quan đến sản phẩm">
                                             <label class="form-check-label">Đánh giá không liên quan đến sản phẩm</label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="reasons[]" value="Nghi ngờ đánh giá giả mạo">
+                                            <input class="form-check-input" type="checkbox" name="reasons[]"
+                                                value="Nghi ngờ đánh giá giả mạo">
                                             <label class="form-check-label">Nghi ngờ đánh giá giả mạo</label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="reasons[]" value="Vi phạm chính sách cộng đồng">
+                                            <input class="form-check-input" type="checkbox" name="reasons[]"
+                                                value="Vi phạm chính sách cộng đồng">
                                             <label class="form-check-label">Vi phạm chính sách cộng đồng</label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="reasons[]" value="Khác" id="otherReasonCheckbox">
+                                            <input class="form-check-input" type="checkbox" name="reasons[]"
+                                                value="Khác" id="otherReasonCheckbox">
                                             <label class="form-check-label">Khác</label>
                                         </div>
                                         <div id="otherReasonContainer" style="display: none;">
-                                            <textarea id="otherReasonText" class="form-control mt-2" placeholder="Vui lòng nhập lý do cụ thể (tối đa 150 ký tự)" maxlength="150" rows="3"></textarea>
-                                            <small class="text-muted">Còn lại <span id="charCount">150</span> ký tự</small>
+                                            <textarea id="otherReasonText" class="form-control mt-2" placeholder="Vui lòng nhập lý do cụ thể (tối đa 150 ký tự)"
+                                                maxlength="150" rows="3"></textarea>
+                                            <small class="text-muted">Còn lại <span id="charCount">150</span> ký
+                                                tự</small>
                                         </div>
                                     </div>
-                                    <div id="reasonError" class="text-danger" style="display: none;">Vui lòng chọn ít nhất một lý do!</div>
+                                    <div id="reasonError" class="text-danger" style="display: none;">Vui lòng chọn ít
+                                        nhất một lý do!</div>
                                 </form>
                             </div>
                             <div class="modal-footer">
@@ -128,47 +186,54 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($danhGias as $danhGia)
+                                @if ($danhGias->isEmpty() && !is_null($message))
                                     <tr>
-                                        <td>{{ $danhGia->ten_nguoi_dung }}</td>
-                                        <td>{{ $danhGia->ten_san_pham }}</td>
-                                        <td>
-                                            <ul class="rating">
-                                                @for ($i = 0; $i < $danhGia->so_sao; $i++)
-                                                    <li>
-                                                        <i class="fas fa-star theme-color"></i>
-                                                    </li>
-                                                @endfor
-                                                @for ($i = 0; $i < 5 - $danhGia->so_sao; $i++)
-                                                    <li>
-                                                        <i class="fas fa-star"></i>
-                                                    </li>
-                                                @endfor
-                                            </ul>
-                                        </td>
-                                        <td class="text-wrap">{{ $danhGia->nhan_xet }}</td>
-                                        <td class="status-icon">
-                                            @if ($danhGia->trang_thai == 1)
-                                                <i class="ri-checkbox-circle-line text-success"></i>
-                                            @else
-                                                <i class="ri-close-circle-line text-danger"></i>
-                                            @endif
-                                        </td>
-                                        <td>{{ $danhGia->ly_do_an ?? 'Không có' }}</td> <!-- Hiển thị lý do ẩn -->
-                                        <td>
-                                            <button
-                                                class="toggleStatus btn btn-sm d-block mx-auto {{ $danhGia->trang_thai == 1 ? 'btn-danger' : 'btn-primary' }}"
-                                                data-id="{{ $danhGia->id }}">
-                                                {{ $danhGia->trang_thai == 1 ? 'Ẩn' : 'Hiện' }}
-                                            </button>
+                                        <td colspan="7" class="text-center" style="color: red;">{{ $message }}
                                         </td>
                                     </tr>
-                                @endforeach
+                                @else
+                                    @foreach ($danhGias as $danhGia)
+                                        <tr>
+                                            <td>{{ $danhGia->ten_nguoi_dung }}</td>
+                                            <td>{{ $danhGia->ten_san_pham }}</td>
+                                            <td>
+                                                <ul class="rating">
+                                                    @for ($i = 0; $i < $danhGia->so_sao; $i++)
+                                                        <li>
+                                                            <i class="fas fa-star theme-color"></i>
+                                                        </li>
+                                                    @endfor
+                                                    @for ($i = 0; $i < 5 - $danhGia->so_sao; $i++)
+                                                        <li>
+                                                            <i class="fas fa-star"></i>
+                                                        </li>
+                                                    @endfor
+                                                </ul>
+                                            </td>
+                                            <td class="text-wrap">{{ $danhGia->nhan_xet }}</td>
+                                            <td class="status-icon">
+                                                @if ($danhGia->trang_thai == 1)
+                                                    <i class="ri-checkbox-circle-line text-success"></i>
+                                                @else
+                                                    <i class="ri-close-circle-line text-danger"></i>
+                                                @endif
+                                            </td>
+                                            <td>{{ $danhGia->ly_do_an ?? 'Không có' }} <br></td>
+                                            <td>
+                                                <button
+                                                    class="toggleStatus btn btn-sm d-block mx-auto {{ $danhGia->trang_thai == 1 ? 'btn-danger' : 'btn-primary' }}"
+                                                    data-id="{{ $danhGia->id }}">
+                                                    {{ $danhGia->trang_thai == 1 ? 'Ẩn' : 'Hiện' }}
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @endif
                             </tbody>
                         </table>
                     </div>
                 </div>
-                
+
                 <!-- Phân trang -->
                 <div class="pagination-wrapper">
                     {{ $danhGias->links('pagination::bootstrap-5') }}
@@ -177,7 +242,6 @@
             <!-- Table End -->
         </div>
     </div>
-   
 @endsection
 
 @section('js')
@@ -277,22 +341,25 @@
                     type: "POST",
                     data: {
                         id: danhGiaId,
-                        reasons: reasons, // Gửi danh sách lý do
+                        reasons: reasons,
                         _token: "{{ csrf_token() }}"
                     },
                     success: function(response) {
                         if (response.success) {
                             let statusCell = button.closest("tr").find(".status-icon");
-                            let lyDoAnCell = button.closest("tr").find("td:nth-child(6)"); // Cột lý do ẩn
+                            let lyDoAnCell = button.closest("tr").find("td:nth-child(6)");
 
                             if (response.status == 1) {
                                 button.removeClass('btn-primary').addClass('btn-danger').text('Ẩn');
                                 statusCell.html('<i class="ri-checkbox-circle-line text-success"></i>');
-                                lyDoAnCell.text('Không có'); // Xóa lý do khi hiện
+                                lyDoAnCell.html('Không có');
                             } else {
                                 button.removeClass('btn-danger').addClass('btn-primary').text('Hiện');
                                 statusCell.html('<i class="ri-close-circle-line text-danger"></i>');
-                                lyDoAnCell.text(reasons.join(', ')); // Hiển thị lý do khi ẩn
+                                // Hiển thị mỗi lý do trên một dòng
+                                let reasonsHtml = reasons.length > 0 ? reasons.map(reason =>
+                                    `<div>${reason}</div>`).join('') : 'Không có';
+                                lyDoAnCell.html(reasonsHtml);
                             }
                         } else {
                             alert(response.message);
@@ -303,6 +370,39 @@
                     }
                 });
             }
+            // function toggleDanhGiaStatus(button, danhGiaId, reasons = []) {
+            //     $.ajax({
+            //         url: "{{ route('danhgias.trangthaidanhgia') }}",
+            //         type: "POST",
+            //         data: {
+            //             id: danhGiaId,
+            //             reasons: reasons, // Gửi danh sách lý do
+            //             _token: "{{ csrf_token() }}"
+            //         },
+            //         success: function(response) {
+            //             if (response.success) {
+            //                 let statusCell = button.closest("tr").find(".status-icon");
+            //                 let lyDoAnCell = button.closest("tr").find(
+            //                     "td:nth-child(6)"); // Cột lý do ẩn
+
+            //                 if (response.status == 1) {
+            //                     button.removeClass('btn-primary').addClass('btn-danger').text('Ẩn');
+            //                     statusCell.html('<i class="ri-checkbox-circle-line text-success"></i>');
+            //                     lyDoAnCell.text('Không có'); // Xóa lý do khi hiện
+            //                 } else {
+            //                     button.removeClass('btn-danger').addClass('btn-primary').text('Hiện');
+            //                     statusCell.html('<i class="ri-close-circle-line text-danger"></i>');
+            //                     lyDoAnCell.text(reasons.join(', ')); // Hiển thị lý do khi ẩn
+            //                 }
+            //             } else {
+            //                 alert(response.message);
+            //             }
+            //         },
+            //         error: function() {
+            //             alert("Lỗi khi cập nhật trạng thái.");
+            //         }
+            //     });
+            // }
         });
     </script>
 

@@ -5,6 +5,43 @@
 @endsection
 
 @section('css')
+
+<style>
+    /* Modal phóng to ảnh */
+    .image-zoom-modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.8);
+        justify-content: center;
+        align-items: center;
+    }
+    
+    /* Nội dung ảnh trong modal */
+    .image-zoom-content {
+        width: 600px; /* Kích thước cố định cho chiều rộng */
+        height: 600px; /* Kích thước cố định cho chiều cao */
+        max-width: 90%; /* Giới hạn tối đa để phù hợp với màn hình nhỏ */
+        max-height: 90%; /* Giới hạn tối đa để phù hợp với màn hình nhỏ */
+        object-fit: contain; /* Giữ tỷ lệ ảnh, không bị méo */
+        border-radius: 8px;
+    }
+    
+    /* Nút đóng modal */
+    .close-zoom-modal {
+        position: absolute;
+        top: 20px;
+        right: 30px;
+        color: white;
+        font-size: 40px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+    </style>
     <!-- remixicon css -->
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/remixicon.css') }}">
 
@@ -42,6 +79,11 @@
 
 @section('content')
     <div class="col-sm-12">
+        <!-- Modal phóng to ảnh -->
+<div id="imageZoomModal" class="image-zoom-modal">
+    <span class="close-zoom-modal">&times;</span>
+    <img class="image-zoom-content" id="zoomedImage">
+</div>
         <div class="row">
             <!-- Sidebar Danh sách người đã chat -->
             <div class="col-md-3 border-end" id="user-list" style="height: 500px; overflow-y: auto;">
@@ -79,33 +121,105 @@
 
 @section('js')
     <script>
-        let user_id = {{ Auth::user()->id }}
-            let receiver_id = null
+        let user_id = {{ Auth::user()->id }};
+        let receiver_id = null;
+        let currentChannel = null; // Biến để theo dõi kênh hiện tại
 
-        fetch('/admin/chat-users')
-            .then(response => response.json())
-            .then(users => {
-                let userList = document.getElementById("chat-users");
-                users.forEach(user => {
-                    let li = document.createElement("li");
-                    li.classList.add("list-group-item", "user-item");
-                    li.innerText = user.username;
-                    li.dataset.id = user.id;
+        // Hàm cập nhật danh sách người dùng và số tin nhắn chưa đọc
+        //  function updateUserList() {
+        //     fetch('/admin/chat-users', {
+        //         headers: {
+        //             'Cache-Control': 'no-cache' // Chống cache để lấy dữ liệu mới nhất
+        //         }
+        //     })
+        //         .then(response => response.json())
+        //         .then(users => {
+        //             console.log('Updated user list:', users);
+        //             let userList = document.getElementById("chat-users");
+        //             userList.innerHTML = '';
+        //             users.forEach(user => {
+        //                 let li = document.createElement("li");
+        //                 li.classList.add("list-group-item", "user-item");
+        //                 li.dataset.id = user.id;
+        //                 li.innerHTML = `${user.username} ${user.unread_count > 0 ? `<span class="badge bg-danger">${user.unread_count}</span>` : ''}`;
+        //                 li.addEventListener("click", () => loadChat(user.id, user.username));
+        //                 userList.appendChild(li);
+        //             });
+        //         })
+        //         .catch(error => console.error("Lỗi khi cập nhật danh sách người dùng:", error));
+        // }
 
-                    li.addEventListener("click", () => loadChat(user.id, user.username));
-                    userList.appendChild(li);
-                });
-            });
+        function updateUserList() {
+            fetch('/admin/chat-users', {
+                headers: {
+                    'Cache-Control': 'no-cache' // Chống cache để lấy dữ liệu mới nhất
+                }
+            })
+                .then(response => response.json())
+                .then(users => {
+                    console.log('Updated user list:', users);
+                    let userList = document.getElementById("chat-users");
+                    userList.innerHTML = '';
+                    users.forEach(user => {
+                        let li = document.createElement("li");
+                        li.classList.add("list-group-item", "user-item");
+                        li.dataset.id = user.id;
+                        li.innerHTML = `${user.username} ${user.unread_count > 0 ? `<span class="badge bg-danger">${user.unread_count}</span>` : ''}`;
+                        li.addEventListener("click", () => loadChat(user.id, user.username));
+                        userList.appendChild(li);
+                        // Log thêm thời gian tin nhắn mới nhất để kiểm tra
+                        console.log(`User: ${user.username}, Latest message time: ${user.latest_message_time || 'N/A'}`);
+                    });
+                })
+                .catch(error => console.error("Lỗi khi cập nhật danh sách người dùng:", error));
+        }
+
+        // Gọi updateUserList khi trang được tải
+        document.addEventListener("DOMContentLoaded", function () {
+            updateUserList();
+        });
+
+        // Gọi updateUserList khi trang được tải
+        document.addEventListener("DOMContentLoaded", function () {
+            updateUserList();
+        });
 
         function loadChat(nguoi_nhan_id, ten_nguoi_nhan) {
-            receiver_id = nguoi_nhan_id; // Gắn user id của người gửi vào id người nhận khi admin gửi tin nhắn
-            bindChannel(user_id, nguoi_nhan_id);
-            console.log(receiver_id);
-
+            receiver_id = nguoi_nhan_id;
             document.getElementById("chat-header").innerText = "Chat với " + ten_nguoi_nhan;
             document.getElementById("receiver_id").value = nguoi_nhan_id;
 
-            fetch(`/messages/${nguoi_nhan_id}`)
+            // Hủy kênh hiện tại (nếu có)
+            if (currentChannel) {
+                pusher.unsubscribe(currentChannel);
+                console.log(`Unsubscribed from channel: ${currentChannel}`);
+            }
+
+            // Đăng ký kênh mới
+            currentChannel = `chat.${nguoi_nhan_id}`;
+            bindChannel(user_id, nguoi_nhan_id);
+
+            // Gọi API để đánh dấu tin nhắn là đã đọc
+            fetch(`/mark-as-read/${nguoi_nhan_id}`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': "{{ csrf_token() }}",
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Mark as read response:", data);
+                    updateUserList();
+                })
+                .catch(error => console.error("Lỗi khi đánh dấu tin nhắn là đã đọc:", error));
+
+            // Tải tin nhắn
+            fetch(`/messages/${nguoi_nhan_id}`, {
+                headers: {
+                    'Cache-Control': 'no-cache'
+                }
+            })
                 .then(response => response.json())
                 .then(messages => {
                     let chatBox = document.getElementById("chat-box");
@@ -114,48 +228,48 @@
                         appendMessage(chat, nguoi_nhan_id);
                     });
                     chatBox.scrollTop = chatBox.scrollHeight;
-                });
+                })
+                .catch(error => console.error("Lỗi khi tải tin nhắn:", error));
         }
 
         function appendMessage(chat, nguoi_gui_id) {
             let chatBox = document.getElementById("chat-box");
-            let align = chat.nguoi_gui_id === nguoi_gui_id ? "text-start" : "text-end";
 
+            // Kiểm tra tin nhắn trùng lặp dựa trên created_at
+            let existingMessages = chatBox.querySelectorAll(`div[data-created-at="${chat.created_at}"]`);
+            if (existingMessages.length > 0) {
+                console.log(`Tin nhắn trùng lặp, bỏ qua: ${chat.noi_dung}`);
+                return;
+            }
+
+            // Sửa logic căn chỉnh: so sánh với user_id (Admin) thay vì nguoi_gui_id
+            let align = chat.nguoi_gui_id === user_id ? "text-end" : "text-start";
             let wrapper = document.createElement("div");
             wrapper.classList.add("m-2", align);
+            wrapper.setAttribute("data-created-at", chat.created_at);
 
-            let content = `<strong>${chat.nguoi_gui_id === nguoi_gui_id ? chat.ten_nguoi_gui : "Admin"}:</strong>`;
-
+            let content = `<strong>${chat.nguoi_gui_id === user_id ? "Admin" : chat.ten_nguoi_gui}:</strong>`;
             if (chat.noi_dung) {
                 content += `${chat.noi_dung}`;
             }
 
-            content += `</span>`;
-
             if (chat.hinh_anh) {
-                let fileUrl = chat.hinh_anh; // Đảm bảo đây là đường dẫn đến ảnh hoặc video
+        let fileUrl = chat.hinh_anh;
+        const extension = fileUrl.split('.').pop().toLowerCase();
+        if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'jfif'].includes(extension)) {
+            // Thêm lớp zoomable-image cho ảnh
+            content += `<div><img class="zoomable-image" src="${fileUrl}" alt="Ảnh" style="max-width: 200px; border-radius: 8px; margin-top: 5px; cursor: pointer;"></div>`;
+        } else if (['mp4', 'webm', 'ogg'].includes(extension)) {
+            content += `
+                <div>
+                    <video controls style="max-width: 300px; border-radius: 8px; margin-top: 5px;">
+                        <source src="${fileUrl}" type="video/${extension}">
+                        Trình duyệt không hỗ trợ video.
+                    </video>
+                </div>`;
+        }
+    }
 
-                // Kiểm tra phần mở rộng file
-                const extension = fileUrl.split('.').pop().toLowerCase();
-
-                // Kiểm tra nếu là ảnh
-                if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'jfif'].includes(extension)) {
-                    content += `<div><img src="${fileUrl}" alt="Ảnh" style="max-width: 200px; border-radius: 8px; margin-top: 5px;"></div>`;
-                }
-                // Kiểm tra nếu là video
-                else if (['mp4', 'webm', 'ogg'].includes(extension)) {
-                    content += `
-                                        <div>
-                                            <video controls style="max-width: 300px; border-radius: 8px; margin-top: 5px;">
-                                                <source src="${fileUrl}" type="video/${extension}">
-                                                Trình duyệt không hỗ trợ video.
-                                            </video>
-                                        </div>`;
-                }
-            }
-
-
-            // Thêm thời gian gửi tin nhắn
             const timeSent = new Date(chat.created_at);
             const timeString = timeSent.toLocaleString('vi-VN', {
                 weekday: 'short',
@@ -165,9 +279,7 @@
                 hour: 'numeric',
                 minute: 'numeric',
             });
-         
-             // Chỉnh sửa để thời gian và tin nhắn nằm gần nhau
-    content += `<div><small class="text-muted" style="font-size: 0.8em; margin-top: 5px;">${timeString}</small></div>`;
+            content += `<div><small class="text-muted" style="font-size: 0.8em; margin-top: 5px;">${timeString}</small></div>`;
 
             wrapper.innerHTML = content;
             chatBox.appendChild(wrapper);
@@ -185,47 +297,34 @@
 
             let imageInput = document.getElementById("image");
             if (imageInput.files.length > 0) {
-                formData.append('media', imageInput.files[0]); // Sửa lại đúng tên
+                formData.append('media', imageInput.files[0]);
             }
 
             let file = imageInput.files.length > 0 ? imageInput.files[0] : null;
-
             let noiDung = document.getElementById("noi-dung").value.trim();
-            // Nếu không có nội dung và không có file, không gửi
+
             if (!noiDung && !file) {
                 document.getElementById("error-message").style.display = "block";
                 document.getElementById("error-message").innerHTML = "Vui lòng gửi tin nhắn hoặc hình ảnh/video!";
                 return;
             }
 
-            // Kiểm tra nếu file không đúng định dạng
             if (file) {
                 const validImageTypes = ['image/jpg', 'image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/jfif'];
                 const validVideoTypes = ['video/mp4', 'video/webm', 'video/ogg'];
-
-                // Kiểm tra xem file có phải là hình ảnh hoặc video hợp lệ không
                 if (!validImageTypes.includes(file.type) && !validVideoTypes.includes(file.type)) {
                     document.getElementById("error-message").style.display = "block";
                     document.getElementById("error-message").innerHTML = "Định dạng file không hợp lệ! Chỉ hỗ trợ hình ảnh (JPG, JPEG, PNG, GIF, WEBP) và video (MP4, WEBM, OGG).";
                     return;
                 }
-
-            }
-            // Kiểm tra nếu file là video và dung lượng vượt quá 20MB
-            if (file && file.type.startsWith("video/") && file.size > 20 * 1024 * 1024) {
-                // Nếu dung lượng video vượt quá 20MB, hiển thị thông báo lỗi
-                document.getElementById("error-message").style.display = "block";
-                document.getElementById("error-message").innerHTML = "Video không được vượt quá 20MB!";
-                return;
+                if (file.type.startsWith("video/") && file.size > 20 * 1024 * 1024) {
+                    document.getElementById("error-message").style.display = "block";
+                    document.getElementById("error-message").innerHTML = "Video không được vượt quá 20MB!";
+                    return;
+                }
             }
 
-
-
-
-            // Ẩn thông báo lỗi nếu dung lượng video hợp lệ
             document.getElementById("error-message").style.display = "none";
-
-
 
             fetch('/send-chat', {
                 method: 'POST',
@@ -238,63 +337,98 @@
                 .then(data => {
                     document.getElementById("noi-dung").value = "";
                     document.getElementById("image").value = "";
+                    updateUserList();
                 })
                 .catch(error => console.error("Lỗi:", error));
         });
 
-
         // Kết nối Pusher
         Pusher.logToConsole = true;
-
         var pusher = new Pusher("0ca5e8c271c25e1264d2", {
             cluster: "ap1"
         });
 
+        // Lắng nghe tin nhắn mới trên kênh của admin
+        var adminChannel = pusher.subscribe("chat." + user_id);
+        adminChannel.bind("send-chat", function (data) {
+            console.log("Received new message on admin channel:", data);
+            const chat = data.chat;
+
+            // Hiển thị tin nhắn nếu nó thuộc về cuộc trò chuyện hiện tại
+            if (chat.nguoi_gui_id === receiver_id) {
+                appendMessage(chat, chat.nguoi_gui_id);
+
+                // Đánh dấu tin nhắn là đã đọc nếu đang ở trong khung chat
+                fetch(`/mark-as-read/${receiver_id}`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': "{{ csrf_token() }}",
+                        'Content-Type': 'application/json'
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log("Mark as read response:", data);
+                        updateUserList(); // Cập nhật danh sách người dùng để làm mới unread_count
+                    })
+                    .catch(error => console.error("Lỗi khi đánh dấu tin nhắn là đã đọc:", error));
+            } else {
+                // Cập nhật danh sách người dùng nếu tin nhắn từ người khác
+                updateUserList();
+            }
+        });
+
         function bindChannel(nguoi_gui_id, nguoi_nhan_id) {
             var channel = pusher.subscribe("chat." + nguoi_nhan_id);
+            console.log(`Subscribed to channel: chat.${nguoi_nhan_id}`);
 
             channel.bind("send-chat", function (data) {
-                let chatBox = document.getElementById("chat-box");
+                console.log("Received new message on user channel:", data);
                 const chat = data.chat;
 
-                let align = chat.nguoi_gui_id === user_id ? "text-end" : "text-start";
-                let wrapper = document.createElement("div");
-                wrapper.classList.add("m-2", align);
+                // Hiển thị tin nhắn nếu nó thuộc về cuộc trò chuyện hiện tại
+                if (chat.nguoi_gui_id === receiver_id || chat.nguoi_nhan_id === receiver_id) {
+                    appendMessage(chat, chat.nguoi_gui_id);
 
-                let content = `<strong>${chat.ten_nguoi_gui}:</strong>`;
-
-                if (chat.noi_dung) {
-                    content += `${chat.noi_dung}`;
+                    // Đánh dấu tin nhắn là đã đọc nếu đang ở trong khung chat
+                    fetch(`/mark-as-read/${receiver_id}`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': "{{ csrf_token() }}",
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log("Mark as read response:", data);
+                            updateUserList(); // Cập nhật danh sách người dùng để làm mới unread_count
+                        })
+                        .catch(error => console.error("Lỗi khi đánh dấu tin nhắn là đã đọc:", error));
                 }
 
-                if (chat.hinh_anh) {
-                    const ext = chat.hinh_anh.split('.').pop().toLowerCase();
-                    if (['mp4', 'webm', 'ogg'].includes(ext)) {
-                        content += `<div><video src="${chat.hinh_anh}" controls style="max-width: 200px; margin-top: 5px; border-radius: 8px;"></video></div>`;
-                    } else {
-                        content += `<div><img src="${chat.hinh_anh}" alt="Ảnh" style="max-width: 200px; border-radius: 8px; margin-top: 5px;"></div>`;
-                    }
-                }
-
-                // Thêm thời gian gửi tin nhắn
-                const timeSent = new Date(chat.created_at);
-                const timeString = timeSent.toLocaleString('vi-VN', {
-                    weekday: 'short',
-                    year: 'numeric',
-                    month: 'numeric',
-                    day: 'numeric',
-                    hour: 'numeric',
-                    minute: 'numeric',
-                });
-                 content += `<div><small class="text-muted" style="font-size: 0.8em; margin-top: 5px;">${timeString}</small></div>`;
-
-
-                wrapper.innerHTML = content;
-                chatBox.appendChild(wrapper);
-                chatBox.scrollTop = chatBox.scrollHeight;
+                // Cập nhật danh sách người dùng
+                updateUserList();
             });
-
         }
+
+
+        // Xử lý phóng to ảnh khi nhấn
+document.addEventListener('click', function (e) {
+    if (e.target.classList.contains('zoomable-image')) {
+        const modal = document.getElementById('imageZoomModal');
+        const zoomedImage = document.getElementById('zoomedImage');
+        zoomedImage.src = e.target.src; // Gán nguồn ảnh vào modal
+        modal.style.display = 'flex'; // Hiển thị modal
+    }
+});
+
+// Đóng modal khi nhấn nút đóng hoặc bên ngoài ảnh
+document.addEventListener('click', function (e) {
+    const modal = document.getElementById('imageZoomModal');
+    if (e.target.classList.contains('close-zoom-modal') || e.target === modal) {
+        modal.style.display = 'none'; // Ẩn modal
+    }
+});
     </script>
 
     <!-- customizer js -->
