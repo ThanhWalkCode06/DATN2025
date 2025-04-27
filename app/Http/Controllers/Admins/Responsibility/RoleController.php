@@ -54,7 +54,7 @@ class RoleController extends Controller
         $permissions = Permission::all()->groupBy(function ($permission) {
             return explode('-', $permission->name)[0]; // Lấy phần đầu làm nhóm (order, product, user,...)
         });
-        // dd($permissions);
+        // dd($permissions->chunk(ceil(count($permissions) / 2)));
         return view('admins.vaitros.create',compact('permissions'));
     }
 

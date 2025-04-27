@@ -57,15 +57,7 @@ Danh sách quyền
                     <table class="table all-package theme-table" id="table_id">
                         <thead>
                             <tr>
-                                <th>
-                                    <div class="check-box-contain">
-                                        <span class="form-check user-checkbox">
-                                            <input class="checkbox_animated checkall"
-                                                type="checkbox" value="">
-                                        </span>
-                                        <span>STT</span>
-                                    </div>
-                                </th>
+                                <th style="text-align:left">STT</th>
                                 <th>Tên quyền</th>
                                 <th>Mô tả quyền</th>
                                 <th>Hành động</th>
@@ -78,13 +70,7 @@ Danh sách quyền
                             @foreach ( $lists as $key => $item)
                                 <tr class="justify-content-center">
                                     <td>
-                                        <div class="check-box-contain">
-                                            <span class="form-check user-checkbox">
-                                                <input class="checkbox_animated check-it"
-                                                    type="checkbox" value="">
-                                            </span>
-                                            <span>{{ ++$key }}</span>
-                                        </div>
+                                        {{ ++$key }}
                                     </td>
 
                                     <td>{{ $item->name }}</td>
