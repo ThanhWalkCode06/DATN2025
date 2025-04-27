@@ -45,3 +45,5 @@
 - php artisan make:resource TenResource -> tạo 1 file để hiện thị dữ liệu API
 - php artisan schedule:work : tự động hạy command theo lịch hẹn
 - php artisan queue:work: chạy queue
+
+- k sử dụng đc phân trang thì chạy câu lệnh sau: php artisan vendor:publish --tag=laravel-pagination
