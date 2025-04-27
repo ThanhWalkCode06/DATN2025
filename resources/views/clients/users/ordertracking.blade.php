@@ -235,6 +235,14 @@
             cursor: pointer;
             font-size: 12px;
         }
+        .pagination .page-item.active .page-link {
+        background-color: #1abc9c;
+        border-color: #1abc9c;
+    }
+    .pagination .page-link:hover {
+        background-color: #e9f7f4;
+        border-color: #1abc9c;
+    }
     </style>
 @endsection
 
@@ -730,7 +738,8 @@
                                 <tbody>
                                     @foreach ($bienThesList as $index => $item)
                                         <tr>
-                                            <td>{{ $index + 1 }}</td>
+                                            <td>{{ $index + 1 + ($bienThesPaginated->currentPage() - 1) * $bienThesPaginated->perPage() }}
+                                            </td>
                                             <td>
                                                 <img style="width: 100px;"
                                                     src="{{ Storage::url($item['anh_bien_the']) }}" alt="">
@@ -760,11 +769,17 @@
                                     @endforeach
                                 </tbody>
                             </table>
+                            <div class="pagination-area mt-3">
+                                {{ $bienThesPaginated->links('vendor.pagination.bootstrap-5') }}
+                            </div>
+                            {{-- <div class="pagination-wrapper">
+                                {{ $bienThesPaginated->links('pagination::bootstrap-5') }}
+                            </div> --}}
                         </div>
+
                     </div>
                 </div>
             </div>
-
         </section>
         <!-- Order Table Section End -->
 

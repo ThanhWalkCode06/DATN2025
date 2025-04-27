@@ -60,9 +60,11 @@ class UserController extends Controller
             $lichSuDonHangs = LichSuDonHang::where('don_hang_id', '=', $id)->get();
             if ($donHang) {
                 $checkVoucher = PhieuGiamGiaTaiKhoan::with('phieuGiamGia')->where('order_id', $donHang->id)->first();
-                // dd($donHang);
                 $bienThes = DonHang::where('id', $id)->with('bienThes')->first();
                 $bienThesPaginated = $bienThes->bienThes()->paginate(5);
+
+                // Debug dữ liệu
+                // dd($bienThesPaginated);
 
                 $bienThesList = $bienThesPaginated->map(fn($bienThe) => [
                     'bien_the_id' => $bienThe->id,
