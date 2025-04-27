@@ -15,9 +15,12 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('san_pham_id');
-            $table->unsignedBigInteger('bien_the_id')->nullable(); // Thêm dòng này
+            $table->unsignedBigInteger('bien_the_id')->nullable(); 
+            $table->unsignedBigInteger('don_hang_id')->nullable();// Thêm dòng này
             $table->tinyInteger('so_sao');
             $table->text('nhan_xet')->nullable();
+            $table->json('hinh_anh_danh_gia')->nullable();
+            $table->string('video')->nullable();
             $table->boolean('trang_thai')->default(1);
             $table->text('ly_do_an')->nullable();
             $table->timestamps();
