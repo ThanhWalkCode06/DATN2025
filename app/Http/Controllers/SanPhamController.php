@@ -137,7 +137,7 @@ class SanPhamController extends Controller
         }
 
         $sanPham = SanPham::create($data);
-        Helper::uploadAlbum($sanPham->id, $token = false,'hihi');
+        Helper::uploadAlbum($sanPham->id, $token = false, 'hihi');
 
         // Xóa session sau khi lưu
         session()->forget('uploaded_files');
@@ -265,7 +265,7 @@ class SanPhamController extends Controller
             'danhGias.user', // Lấy thông tin người dùng
             'danhGias.bienThe' // Lấy thông tin biến thể
         ])->findOrFail($id);
-    
+
         return view('admins.sanphams.show', compact('sanPham'));
     }
 
@@ -284,8 +284,8 @@ class SanPhamController extends Controller
             $checkedTT[] = array_unique(explode(' - ', $ten->ten_bien_the));
         }
         $attribute = [];
-        foreach($sanpham->bienThes as $item){
-            foreach($item->tt as $i){
+        foreach ($sanpham->bienThes as $item) {
+            foreach ($item->tt as $i) {
                 $attribute[] = $i->id;
             }
         }
@@ -312,26 +312,25 @@ class SanPhamController extends Controller
 
         // Lấy bien_the_id từ ChiTietGioHang
         $cartBienTheIds = ChiTietGioHang::whereIn('bien_the_id', $bienThesId)
-        ->pluck('bien_the_id')
-        ->toArray();
+            ->pluck('bien_the_id')
+            ->toArray();
 
         // Lấy bien_the_id từ ChiTietDonHang
         $orderBienTheIds = ChiTietDonHang::whereIn('bien_the_id', $bienThesId)
-        ->pluck('bien_the_id')
-        ->toArray();
+            ->pluck('bien_the_id')
+            ->toArray();
 
         $allBienTheIds = array_unique(array_merge($cartBienTheIds, $orderBienTheIds));
 
-        $checkBienThe = BienThe::whereIn('id',$allBienTheIds)->get();
+        $checkBienThe = BienThe::whereIn('id', $allBienTheIds)->get();
         // dd($allBienTheIds,$checkBienThe);
 
         if ($hasOrder || $hasCart) {
-            foreach($sanPham->toArray() as $key => $item){
-                foreach($request->validated() as $k => $ex){
-                    if($k == $key && $item != $ex){
+            foreach ($sanPham->toArray() as $key => $item) {
+                foreach ($request->validated() as $k => $ex) {
+                    if ($k == $key && $item != $ex) {
                         return redirect()->back()->with('error', 'Thông tin sản phẩm không thể chỉnh sửa do đã có đơn hàng hoặc giỏ hàng!');
                     }
-
                 }
             }
             $selected_values = is_array($request->selected_values) ? $request->selected_values : json_decode($request->selected_values, true) ?? [];
@@ -347,16 +346,16 @@ class SanPhamController extends Controller
                     foreach ($request->selected_values as $key => $tenBienThe) {
                         $hinhAnhBienThe = null;
                         // dd($request->gia_ban,$request->so_luong);
-                        foreach($checkBienThe as $k => $item){
-                            if($tenBienThe == $item->ten_bien_the){
-                                if($request->gia_ban[$key] != $item->gia_ban || $request->so_luong[$key] != $item->so_luong){
+                        foreach ($checkBienThe as $k => $item) {
+                            if ($tenBienThe == $item->ten_bien_the) {
+                                if ($request->gia_ban[$key] != $item->gia_ban || $request->so_luong[$key] != $item->so_luong) {
                                     $error[] = $item->ten_bien_the;
                                     // return redirect()->back()->with('error', "Biến thể ".$item->ten_bien_the." không thể chỉnh sửa do đã có đơn hàng!");
                                 }
                             }
                         }
                         // dd($error);
-                        if(!empty($error)){
+                        if (!empty($error)) {
                             $errorMessage = "Biến thể " . implode(", ", $error) . " không thể chỉnh sửa do đã có đơn hàng hoặc giỏ hàng!";
                             return redirect()->back()->with('error', $errorMessage);
                         }
@@ -436,7 +435,7 @@ class SanPhamController extends Controller
                 return redirect()->back()->with('error', 'Vui lòng chọn thuộc tính !');
             }
             // return redirect()->back()->with('error', 'Sản phẩm không thể sửa hoặc xóa do đã có đơn hàng!');
-        }else{
+        } else {
             if ($request->hasFile('hinh_anh')) {
                 if ($sanPham->hinh_anh && Storage::exists('public', $sanPham->hinh_anh) && !Storage::exists('public/images')) {
                     Storage::delete('public/' . $sanPham->hinh_anh);
@@ -544,7 +543,7 @@ class SanPhamController extends Controller
                 return redirect()->back()->with('error', 'Vui lòng chọn thuộc tính !');
             }
 
-            Helper::uploadAlbum($sanPham->id, $token = true,json_decode($request->input('deleted_images'), true));
+            Helper::uploadAlbum($sanPham->id, $token = true, json_decode($request->input('deleted_images'), true));
         }
 
 
@@ -579,5 +578,39 @@ class SanPhamController extends Controller
             ->where('id', $id)
             ->update(['deleted_at' => Carbon::now()]);
         return redirect()->route('sanphams.index')->with('success', 'Sản phẩm đã được xóa thành công!');
+    }
+    public function searchDanhGias(Request $request, $id)
+    {
+        $query = SanPham::findOrFail($id)->danhGias()
+            ->with(['user', 'bienThe'])
+            ->orderBy('created_at', 'desc');
+
+        // Lọc theo tên người dùng
+        if ($request->has('user') && $request->user) {
+            $query->whereHas('user', function ($q) use ($request) {
+                $q->where('ten_nguoi_dung', 'like', '%' . $request->user . '%');
+            });
+        }
+
+        // Lọc theo thời gian
+        if ($request->has('date') && $request->date) {
+            $query->whereDate('created_at', $request->date);
+        }
+
+        // Lọc theo ID đơn hàng
+        if ($request->has('order_id') && $request->order_id) {
+            $query->where('don_hang_id', 'like', '%' . $request->order_id . '%');
+        }
+
+        // Lọc theo số sao
+        if ($request->has('sao') && $request->sao !== 'all') {
+            $query->where('so_sao', $request->sao);
+        }
+
+        $danhGias = $query->get();
+
+        return response()->json([
+            'html' => view('admins.sanphams.partials.review_rows', compact('danhGias'))->render()
+        ]);
     }
 }
