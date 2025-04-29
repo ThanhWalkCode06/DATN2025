@@ -235,14 +235,16 @@
             cursor: pointer;
             font-size: 12px;
         }
+
         .pagination .page-item.active .page-link {
-        background-color: #1abc9c;
-        border-color: #1abc9c;
-    }
-    .pagination .page-link:hover {
-        background-color: #e9f7f4;
-        border-color: #1abc9c;
-    }
+            background-color: #1abc9c;
+            border-color: #1abc9c;
+        }
+
+        .pagination .page-link:hover {
+            background-color: #e9f7f4;
+            border-color: #1abc9c;
+        }
     </style>
 @endsection
 
@@ -832,9 +834,9 @@
                                     <label for="nhan_xet_{{ $item['bien_the_id'] }}" class="form-label">Nhận xét của bạn
                                         *</label>
                                     <textarea id="nhan_xet_{{ $item['bien_the_id'] }}" name="nhan_xet" rows="3" class="form-control"
-                                        placeholder="Viết nhận xét của bạn..."></textarea>
+                                        placeholder="Viết nhận xét của bạn..." maxlength="50"></textarea>
                                 </div>
-
+                                
                                 <div class="review-box d-flex gap-3 align-items-start">
                                     <!-- Image Upload -->
                                     <div class="upload-box text-center">
@@ -970,7 +972,28 @@
         });
     </script>
 
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelectorAll('textarea[name="nhan_xet"]').forEach(textarea => {
+                const maxLength = 50;
+                const charCount = document.createElement('div');
+                charCount.className = 'char-count';
+                charCount.style.fontSize = '12px';
+                charCount.style.color = '#666';
+                textarea.parentNode.appendChild(charCount);
+                charCount.textContent = `Còn lại ${maxLength - textarea.value.length} ký tự`;
 
+                textarea.addEventListener('input', function() {
+                    const remaining = maxLength - this.value.length;
+                    charCount.textContent = `Còn lại ${remaining} ký tự`;
+                    if (remaining < 0) {
+                        this.value = this.value.substring(0, maxLength);
+                        charCount.textContent = `Còn lại 0 ký tự`;
+                    }
+                });
+            });
+        });
+    </script>
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {

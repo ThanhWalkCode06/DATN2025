@@ -426,7 +426,7 @@
                                                         data-video="{{ $video }}" data-bs-toggle="modal"
                                                         data-bs-target="#mediaModal"></i>
                                                 @else
-                                                    Không có media
+                                                    Không có
                                                 @endif
                                             </td>
                                             <td>

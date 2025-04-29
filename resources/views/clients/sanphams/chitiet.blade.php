@@ -379,6 +379,17 @@
             object-fit: contain;
             border-radius: 8px;
         }
+
+        .people-comment .reply p {
+            word-break: break-word;
+            /* Đảm bảo từ dài sẽ bị ngắt để xuống dòng */
+            overflow-wrap: break-word;
+            /* Hỗ trợ xuống dòng tự động */
+            max-width: 100%;
+            /* Giới hạn chiều rộng tối đa bằng chiều rộng của phần tử cha */
+            margin: 0;
+            /* Loại bỏ margin mặc định nếu cần */
+        }
     </style>
 @endsection
 
