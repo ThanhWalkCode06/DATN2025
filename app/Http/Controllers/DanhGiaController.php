@@ -45,7 +45,7 @@ class DanhGiaController extends Controller
     //     return view('admins.danhgias.index', compact('danhGias', 'sanPhams', 'message'));
     // }
 
-        public function index(Request $request)
+    public function index(Request $request)
     {
         $sanPhams = SanPham::all();
 
@@ -66,18 +66,23 @@ class DanhGiaController extends Controller
             $query->whereDate('danh_gias.created_at', '<=', $request->end_date);
         }
 
+        // Thêm logic lọc theo don_hang_id
+        if ($request->has('don_hang_id') && !empty($request->don_hang_id)) {
+            $query->where('danh_gias.don_hang_id', $request->don_hang_id);
+        }
+        // Kết thúc phần thêm
+
         $query->orderBy('danh_gias.created_at', 'desc');
 
         $danhGias = $query->paginate(10)->appends($request->all());
 
         $message = null;
-        if (($request->has('san_pham_id') || $request->has('start_date') || $request->has('end_date')) && $danhGias->isEmpty()) {
-            $message = 'Không tìm thấy đánh giá cho sản phẩm trong khoảng thời gian này';
+        if (($request->has('san_pham_id') || $request->has('start_date') || $request->has('end_date') || $request->has('don_hang_id')) && $danhGias->isEmpty()) {
+            $message = 'Không tìm thấy đánh giá trong khoảng thời gian này';
         }
 
         return view('admins.danhgias.index', compact('danhGias', 'sanPhams', 'message'));
     }
-    
     /**
      * Show the form for creating a new resource.
      */

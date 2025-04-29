@@ -118,6 +118,7 @@ public function fetchAll()
                         'ten_san_pham' => $thongBao->danhGia->sanPham->ten_san_pham,
                     ] : null,
                     'ly_do_an' => $thongBao->danhGia->ly_do_an,
+                    'don_hang_id' => $thongBao->danhGia->don_hang_id,
                 ] : null,
                 'nhan_xet' => $thongBao->danhGia ? $thongBao->danhGia->nhan_xet : null,
             ];

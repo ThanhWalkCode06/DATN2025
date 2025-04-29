@@ -265,6 +265,10 @@
                                                                 id="notification-{{ $thongBao->id }}">
                                                                 <div class="notification-content">
                                                                     <h6>{{ $thongBao->noi_dung }}</h6>
+                                                                    @if ($thongBao->danhGia && $thongBao->danhGia->don_hang_id)
+                                                                        <p>Đơn hàng ID:
+                                                                            {{ $thongBao->danhGia->don_hang_id }}</p>
+                                                                    @endif
                                                                     <p>Sản phẩm:
                                                                         {{ $thongBao->danhGia->sanPham->ten_san_pham ?? 'Không xác định' }}
                                                                     </p>
@@ -890,29 +894,23 @@
                     pusher.unsubscribe('notifications-' + userId);
                 }
                 channel = pusher.subscribe('notifications-' + userId);
-
                 channel.bind('new-notification', function(data) {
                     console.log('Nhận thông báo mới:', data);
-
-                    // Cập nhật số lượng thông báo
                     updateNotificationCount();
-
-                    // Thêm thông báo mới vào đầu danh sách
                     const notificationList = document.querySelector('.notification-list');
                     if (notificationList.querySelector('p')?.textContent === 'Không có thông báo mới.') {
                         notificationList.innerHTML = '';
                     }
-
                     const notificationItem = document.createElement('li');
                     notificationItem.classList.add('notification-box');
                     notificationItem.id = 'notification-' + data.id;
                     notificationItem.innerHTML = `
                 <div class="notification-content">
                     <h6>${data.noi_dung}</h6>
+                    ${data.don_hang_id ? `<p>Đơn hàng: ${data.don_hang_id}</p>` : ''}
                     <p>Sản phẩm: ${data.product_name}</p>
                     ${data.nhan_xet ? `<p>Nhận xét: ${data.nhan_xet}</p>` : ''}
                     ${data.ly_do_an ? `<p>Lý do: ${data.ly_do_an}</p>` : ''}
-                    
                     <small class="d-block">${data.created_at_full}</small>
                 </div>
                 <button class="delete-button" data-id="${data.id}" data-url="/thongbao/${data.id}/delete">
@@ -920,8 +918,6 @@
                 </button>
             `;
                     notificationList.prepend(notificationItem);
-
-                    // Gắn sự kiện cho nút xóa mới
                     attachDeleteButtonListeners();
                 });
             }
@@ -938,8 +934,7 @@
                     })
                     .then(response => response.json())
                     .then(notifications => {
-                        updateNotificationCount(); // Cập nhật badge
-
+                        updateNotificationCount();
                         const notificationList = document.querySelector('.notification-list');
                         if (notifications.length > 0) {
                             notificationList.innerHTML = '';
@@ -955,10 +950,10 @@
                                 notificationItem.innerHTML = `
                             <div class="notification-content">
                                 <h6>${thongBao.noi_dung}</h6>
+                                ${thongBao.danh_gia?.don_hang_id ? `<p>Đơn hàng: ${thongBao.danh_gia.don_hang_id}</p>` : ''} 
                                 <p>Sản phẩm: ${thongBao.danh_gia?.san_pham?.ten_san_pham ?? 'Không xác định'}</p>
                                 ${thongBao.danh_gia?.ly_do_an ? `<p>Lý do: ${thongBao.danh_gia.ly_do_an}</p>` : ''}
-                                ${thongBao.nhan_xet ? `<p>Nhận xét: ${thongBao.nhan_xet}</p>` : ''}
-                                
+                                ${thongBao.nhan_xet ? `<p>Nhận xét: ${thongBao.nhan_xet}</p>` : ''}         
                                 <small class="d-block">${thongBao.created_at_full}</small>
                             </div>
                             <button class="delete-button" data-id="${thongBao.id}" data-url="/thongbao/${thongBao.id}/delete">
@@ -971,7 +966,6 @@
                             notificationList.innerHTML =
                                 '<li class="notification-box"><p>Không có thông báo mới.</p></li>';
                         }
-
                         attachDeleteButtonListeners();
                     })
                     .catch(error => console.error('Lỗi khi tải danh sách thông báo:', error));

@@ -340,23 +340,45 @@
             filter: brightness(1.1);
             /* Làm ảnh sáng lên một chút */
         }
-        .review-images img:hover {
-    transform: scale(1.1);
-    transition: transform 0.3s ease;
-}
-.review-video {
-    margin-top: 10px;
-    max-width: 200px; /* Giảm kích thước tối đa của video */
-}
 
-.review-video video {
-    width: 100%;
-    height: auto;
-    max-height: 150px; /* Giới hạn chiều cao video */
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    object-fit: cover; /* Đảm bảo video không bị méo */
-}
+        .review-images img:hover {
+            transform: scale(1.1);
+            transition: transform 0.3s ease;
+        }
+
+        .review-video {
+            margin-top: 10px;
+            max-width: 200px;
+            /* Giảm kích thước tối đa của video */
+        }
+
+        .review-video video {
+            width: 100%;
+            height: auto;
+            max-height: 150px;
+            /* Giới hạn chiều cao video */
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            object-fit: cover;
+            /* Đảm bảo video không bị méo */
+        }
+
+        #imagePreviewModal .modal-content {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        #imagePreviewModal .modal-body {
+            padding: 0;
+        }
+
+        #previewImage {
+            width: 100%;
+            max-height: 70vh;
+            object-fit: contain;
+            border-radius: 8px;
+        }
     </style>
 @endsection
 
@@ -607,17 +629,7 @@
                                         </li>
                                     </ul>
                                 </div>
-
                             </div>
-
-
-
-
-
-
-
-
-
                         </div>
                     </div>
                 </div>
@@ -626,10 +638,6 @@
                     <div class="right-sidebar-box">
                         <div class="vendor-box">
                             <div class="vendor-contain">
-
-
-
-
                                 <div class="vendor-list">
                                     <ul>
                                         <li>
@@ -653,8 +661,6 @@
                                                 </iframe>
                                             </div>
                                         </li>
-
-
                                     </ul>
                                 </div>
                             </div>
@@ -773,13 +779,14 @@
                                                                 <div class="review-title-2">
                                                                     {{-- <h4 class="fw-bold">Đánh giá sản phẩm này</h4> --}}
                                                                     {{-- <p>Hãy cho chúng tôi biết đánh giá của bạn</p> --}}
-                                                                    @if($chophep_danhgia)
-                                                                    {{-- <button class="btn" type="button" data-bs-toggle="modal" data-bs-target="#writereview">Viết đánh giá</button> --}}
-                                                                @else
-                                                                    <p style="background-color: #fff3cd; color: #dc3545; padding: 10px; border-radius: 5px; text-align: center;">
-                                                                        Vui lòng mua sản phẩm để đánh giá
-                                                                    </p>
-                                                                @endif
+                                                                    @if ($chophep_danhgia)
+                                                                        {{-- <button class="btn" type="button" data-bs-toggle="modal" data-bs-target="#writereview">Viết đánh giá</button> --}}
+                                                                    @else
+                                                                        <p
+                                                                            style="background-color: #fff3cd; color: #dc3545; padding: 10px; border-radius: 5px; text-align: center;">
+                                                                            Vui lòng mua sản phẩm để đánh giá
+                                                                        </p>
+                                                                    @endif
                                                                 </div>
                                                             </div>
 
@@ -797,12 +804,13 @@
                                                                             <div>
                                                                                 <div class="people-image people-text">
                                                                                     <img alt="user" class="img-fluid"
-                                                                                         src="{{ $danhGia->nguoiDung->anh_dai_dien ?? asset('default-avatar.jpg') }}">
+                                                                                        src="{{ $danhGia->nguoiDung->anh_dai_dien ?? asset('default-avatar.jpg') }}">
                                                                                 </div>
                                                                             </div>
                                                                             <div class="people-comment">
                                                                                 <div class="people-name">
-                                                                                    <a href="javascript:void(0)" class="name">
+                                                                                    <a href="javascript:void(0)"
+                                                                                        class="name">
                                                                                         {{ $danhGia->nguoiDung->ten_nguoi_dung }}
                                                                                     </a>
                                                                                     <div class="date-time">
@@ -814,16 +822,18 @@
                                                                                                 @for ($i = 1; $i <= 5; $i++)
                                                                                                     <li>
                                                                                                         <i data-feather="star"
-                                                                                                           class="{{ $i <= $danhGia->so_sao ? 'fill' : '' }}">
+                                                                                                            class="{{ $i <= $danhGia->so_sao ? 'fill' : '' }}">
                                                                                                         </i>
                                                                                                     </li>
                                                                                                 @endfor
                                                                                             </ul>
                                                                                             <ul>
                                                                                                 @if ($danhGia->bienThe)
-                                                                                                    <p class="text-muted mb-1">
+                                                                                                    <p
+                                                                                                        class="text-muted mb-1">
                                                                                                         <small>
-                                                                                                            Biến thể: {{ $danhGia->bienThe->ten_bien_the ?? 'Không rõ' }}
+                                                                                                            Biến thể:
+                                                                                                            {{ $danhGia->bienThe->ten_bien_the ?? 'Không rõ' }}
                                                                                                             <br>
                                                                                                         </small>
                                                                                                     </p>
@@ -835,7 +845,7 @@
                                                                                 <div class="reply">
                                                                                     <p>{{ $danhGia->nhan_xet }}</p>
                                                                                     <!-- Hiển thị hình ảnh đánh giá -->
-                                                                                    @if (!empty($danhGia->hinh_anh_danh_gia))
+                                                                                    {{-- @if (!empty($danhGia->hinh_anh_danh_gia))
                                                                                         <div class="review-images mt-2 d-flex flex-wrap gap-2">
                                                                                             @foreach ($danhGia->hinh_anh_danh_gia as $image)
                                                                                                 <a href="{{ Storage::url($image) }}" target="_blank">
@@ -844,16 +854,33 @@
                                                                                                 </a>
                                                                                             @endforeach
                                                                                         </div>
+                                                                                    @endif --}}
+                                                                                    @if (!empty($danhGia->hinh_anh_danh_gia))
+                                                                                        <div
+                                                                                            class="review-images mt-2 d-flex flex-wrap gap-2">
+                                                                                            @foreach ($danhGia->hinh_anh_danh_gia as $image)
+                                                                                                <img src="{{ Storage::url($image) }}"
+                                                                                                    class="img-fluid rounded review-image"
+                                                                                                    style="width: 100px; height: 100px; object-fit: cover; cursor: pointer;"
+                                                                                                    data-bs-toggle="modal"
+                                                                                                    data-bs-target="#imagePreviewModal"
+                                                                                                    data-image="{{ Storage::url($image) }}"
+                                                                                                    alt="Hình ảnh đánh giá">
+                                                                                            @endforeach
+                                                                                        </div>
                                                                                     @endif
                                                                                     <!-- Hiển thị video đánh giá -->
                                                                                     @if ($danhGia->video)
-                                                                                    <div class="review-video">
-                                                                                        <video controls playsinline>
-                                                                                            <source src="{{ Storage::url($danhGia->video) }}" type="video/mp4">
-                                                                                            Trình duyệt của bạn không hỗ trợ video.
-                                                                                        </video>
-                                                                                    </div>
-                                                                                @endif
+                                                                                        <div class="review-video">
+                                                                                            <video controls playsinline>
+                                                                                                <source
+                                                                                                    src="{{ Storage::url($danhGia->video) }}"
+                                                                                                    type="video/mp4">
+                                                                                                Trình duyệt của bạn không hỗ
+                                                                                                trợ video.
+                                                                                            </video>
+                                                                                        </div>
+                                                                                    @endif
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -988,38 +1015,39 @@
                 @endif
                 <div class="modal-body pt-0">
                     <form id="reviewForm" method="POST"
-                          action="{{ route('sanphams.themdanhgia', ['san_pham_id' => $sanPhams->id]) }}">
+                        action="{{ route('sanphams.themdanhgia', ['san_pham_id' => $sanPhams->id]) }}">
                         @csrf
                         <input type="hidden" name="san_pham_id" id="san_pham_id" value="{{ $sanPhams->id }}">
                         <input type="hidden" name="so_sao" id="so_sao" value="5">
-    
+
                         {{-- Nếu có biến thể đã mua, hiển thị danh sách để chọn --}}
                         @if ($chophep_danhgia && !empty($bienTheDaMua))
-                        @if (count($bienTheDaMua) > 1)
-                            <div class="review-box mt-3">
-                                <label for="bien_the_id" class="form-label">Chọn biến thể đã mua *</label>
-                                <select name="bien_the_id" id="bien_the_id" class="form-select" required>
-                                    @foreach ($bienTheDaMua as $bienTheId => $soLanMua)
-                                        @php
-                                            $bienThe = App\Models\BienThe::find($bienTheId);
-                                        @endphp
-                                        @if ($bienThe)
-                                            <option value="{{ $bienTheId }}">{{ $bienThe->ten_bien_the }}</option>
-                                        @endif
-                                    @endforeach
-                                </select>
-                            </div>
+                            @if (count($bienTheDaMua) > 1)
+                                <div class="review-box mt-3">
+                                    <label for="bien_the_id" class="form-label">Chọn biến thể đã mua *</label>
+                                    <select name="bien_the_id" id="bien_the_id" class="form-select" required>
+                                        @foreach ($bienTheDaMua as $bienTheId => $soLanMua)
+                                            @php
+                                                $bienThe = App\Models\BienThe::find($bienTheId);
+                                            @endphp
+                                            @if ($bienThe)
+                                                <option value="{{ $bienTheId }}">{{ $bienThe->ten_bien_the }}</option>
+                                            @endif
+                                        @endforeach
+                                    </select>
+                                </div>
+                            @else
+                                <input type="hidden" name="bien_the_id" value="{{ array_key_first($bienTheDaMua) }}">
+                            @endif
                         @else
-                            <input type="hidden" name="bien_the_id" value="{{ array_key_first($bienTheDaMua) }}">
+                            <p style="background-color: #fff3cd; color: #dc3545; padding: 10px; border-radius: 5px;">Vui
+                                lòng mua sản phẩm để đánh giá.</p>
                         @endif
-                    @else
-                        <p style="background-color: #fff3cd; color: #dc3545; padding: 10px; border-radius: 5px;">Vui lòng mua sản phẩm để đánh giá.</p>
-                    @endif
-    
+
                         <div class="product-wrapper">
                             <div class="product-image">
                                 <img src="{{ Storage::url($sanPhams->hinh_anh) }}" class="img-fluid rounded shadow-sm"
-                                     style="width:100%; height:100%;" alt="{{ $sanPhams->ten_san_pham }}">
+                                    style="width:100%; height:100%;" alt="{{ $sanPhams->ten_san_pham }}">
                             </div>
                             <div class="product-content">
                                 {{-- <h5 class="name">{{ $sanPhams->ten_san_pham }}</h5> --}}
@@ -1031,7 +1059,7 @@
                                 </div> --}}
                             </div>
                         </div>
-    
+
                         <div class="review-box">
                             <label>Đánh giá của bạn *</label>
                             <div class="rating" id="ratingStars">
@@ -1042,16 +1070,16 @@
                                 <i class="fa fa-star" data-value="5"></i>
                             </div>
                         </div>
-    
+
                         <div class="review-box">
                             <label for="nhan_xet" class="form-label">Nhận xét của bạn *</label>
                             <textarea id="nhan_xet" name="nhan_xet" rows="3" class="form-control"
-                                      placeholder="Viết nhận xét của bạn..."></textarea>
+                                placeholder="Viết nhận xét của bạn..."></textarea>
                         </div>
-    
+
                         <div class="modal-footer">
                             <button type="button" class="btn btn-md btn-theme-outline fw-bold"
-                                    data-bs-dismiss="modal">Đóng</button>
+                                data-bs-dismiss="modal">Đóng</button>
                             <button type="submit" class="btn btn-md fw-bold text-light theme-bg-color">Gửi</button>
                         </div>
                     </form>
@@ -1060,7 +1088,22 @@
         </div>
     </div>
 
-
+    <!-- Image Preview Modal -->
+    <div class="modal fade" id="imagePreviewModal" tabindex="-1" aria-labelledby="imagePreviewModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="imagePreviewModalLabel">Xem ảnh đánh giá</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img id="previewImage" src="" class="img-fluid"
+                        style="max-height: 70vh; object-fit: contain;" alt="Ảnh đánh giá">
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Review Modal End -->
 @endsection
@@ -1378,6 +1421,23 @@
         });
     </script>
 
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Chọn tất cả ảnh đánh giá
+            const reviewImages = document.querySelectorAll('.review-image');
+            const previewImage = document.getElementById('previewImage');
+
+            // Thêm sự kiện click cho từng ảnh
+            reviewImages.forEach(image => {
+                image.addEventListener('click', function() {
+                    // Lấy URL ảnh từ data-image
+                    const imageUrl = this.getAttribute('data-image');
+                    // Cập nhật src của ảnh trong modal
+                    previewImage.src = imageUrl;
+                });
+            });
+        });
+    </script>
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
@@ -1524,5 +1584,4 @@
             });
         </script>
     @endif
-
 @endsection
