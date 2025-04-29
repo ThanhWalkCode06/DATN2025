@@ -54,7 +54,7 @@ class UserRequest extends FormRequest
             'anh_dai_dien.required' => 'Vui lòng chọn hình ảnh',
 
             'ten_nguoi_dung.required' => 'Vui lòng nhập tên ',
-            'dia_chi.required' => 'Vui lòng nhập địa chỉ dùng',
+            'dia_chi.required' => 'Vui lòng nhập địa chỉ',
             'ngay_sinh.required' => 'Vui lòng nhập ngày sinh ',
             'ngay_sinh.before_or_equal' => 'Chưa đủ 18 tuổi',
             'gioi_tinh.required' => 'Vui lòng chọn giới tính ',
