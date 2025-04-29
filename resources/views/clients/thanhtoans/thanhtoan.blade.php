@@ -235,7 +235,7 @@
                                         </div>
 
                                         <div class="checkout-detail">
-                                            <form action="{{ route('thanhtoans.xuLy') }}" method="POST" id="checkoutForm">
+                                            <form action="{{ route('thanhtoans.xuLy') }}" method="POST" id="checkoutForm" novalidate>
                                                 @csrf
                                                 <input type="hidden" name="voucher_code" id="hiddenVoucherCode">
                                                 <input type="hidden" name="tong_tien" id="hiddenTongTien">
@@ -880,12 +880,11 @@
                                 confirmButtonText: "OK"
                             });
                         } else {
+                            let errors = Object.values(xhr.responseJSON.errors).flat();
                             Swal.fire({
-                                icon: "error",
-                                title: "Lỗi!",
-                                text: response.message ||
-                                    "Có lỗi xảy ra, vui lòng thử lại!",
-                                confirmButtonText: "OK"
+                                icon: 'error',
+                                title: 'Lỗi!!',
+                                html: '<ul>' + errors.map(err => `<li style="font-size: 1.2rem" >${err}</li><br>`).join('') + '</ul>'
                             });
                         }
                     }
@@ -894,72 +893,80 @@
         });
     </script>
 
-    <script>
+{{-- <script>
         document.addEventListener("DOMContentLoaded", function() {
-            document.getElementById("checkoutForm").addEventListener("submit", function(event) {
-                let isValid = true;
+    const form = document.getElementById("checkoutForm");
 
-                // Lấy giá trị của các trường
-                let ten = document.querySelector("[name='ten_nguoi_nhan']").value.trim();
-                let email = document.querySelector("[name='email_nguoi_nhan']").value.trim();
-                let sdt = document.querySelector("[name='sdt_nguoi_nhan']").value.trim();
-                let diaChi = document.querySelector("[name='dia_chi_nguoi_nhan']").value.trim();
+    // Vô hiệu hóa validate HTML5 mặc định
+    form.setAttribute("novalidate", "novalidate");
 
-                // Reset lỗi cũ
-                document.querySelectorAll(".error-message").forEach(el => el.remove());
+    form.addEventListener("submit", function(event) {
+        let isValid = true;
+        let errors = [];
 
-                // Kiểm tra Họ và tên
-                if (ten === "") {
-                    showError("[name='ten_nguoi_nhan']", "Vui lòng nhập họ và tên");
+        // Lấy giá trị của các trường
+        let ten = document.querySelector("[name='ten_nguoi_nhan']").value.trim();
+        let email = document.querySelector("[name='email_nguoi_nhan']").value.trim();
+        let sdt = document.querySelector("[name='sdt_nguoi_nhan']").value.trim();
+        let diaChi = document.querySelector("[name='dia_chi_nguoi_nhan']").value.trim();
+
+        // Reset lỗi cũ
+        document.querySelectorAll(".error-message").forEach(el => el.remove());
+
+        // Kiểm tra Họ và tên
+        if (ten === "") {
+            errors.push("Vui lòng nhập họ và tên");
+            isValid = false;
+        }
+
+        // Kiểm tra Email
+        if (email === "") {
+            errors.push("Vui lòng nhập email");
+            isValid = false;
+        } else if (!validateEmail(email)) {
+            errors.push("Email không hợp lệ");
+            isValid = false;
+        }
+
+        // Kiểm tra Địa chỉ
+        if (diaChi === "") {
+                    errors.push("Vui lòng nhập địa chỉ");
                     isValid = false;
                 }
 
-                // Kiểm tra Email
-                if (email === "") {
-                    showError("[name='email_nguoi_nhan']", "Vui lòng nhập email");
-                    isValid = false;
-                } else if (!validateEmail(email)) {
-                    showError("[name='email_nguoi_nhan']", "Email không hợp lệ");
-                    isValid = false;
-                }
+        // Kiểm tra Số điện thoại
+        if (sdt === "") {
+            errors.push("Vui lòng nhập số điện thoại");
+            isValid = false;
+        } else if (!/^\d{10,11}$/.test(sdt)) {
+            errors.push("Số điện thoại phải có 10-11 số");
+            isValid = false;
+        }
 
-                // Kiểm tra Số điện thoại
-                if (sdt === "") {
-                    showError("[name='sdt_nguoi_nhan']", "Vui lòng nhập số điện thoại");
-                    isValid = false;
-                } else if (!/^\d{10,11}$/.test(sdt)) {
-                    showError("[name='sdt_nguoi_nhan']", "Số điện thoại phải có 10-11 số");
-                    isValid = false;
-                }
 
-                // Kiểm tra Địa chỉ
-                if (diaChi === "") {
-                    showError("[name='dia_chi_nguoi_nhan']", "Vui lòng nhập địa chỉ");
-                    isValid = false;
-                }
 
-                // Nếu có lỗi, ngăn không cho submit
-                if (!isValid) {
-                    event.preventDefault();
-                }
+        // Hiển thị tất cả lỗi trong popup SweetAlert
+        if (errors.length > 0) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Lỗi!!',
+                html: '<ul>' + errors.map(err => `<li>${err}</li>`).join('') + '</ul>'
             });
 
-            // Hàm hiển thị lỗi
-            function showError(selector, message) {
-                let inputField = document.querySelector(selector);
-                let errorDiv = document.createElement("div");
-                errorDiv.className = "error-message text-danger mt-1";
-                errorDiv.textContent = message;
-                inputField.parentNode.appendChild(errorDiv);
-            }
+            // Ngăn submit và các xử lý khác
+            event.preventDefault();
+            event.stopImmediatePropagation(); // Ngăn các listener khác chạy
+            return false;
+        }
+    }, { capture: true }); // Chạy ở capture phase để ưu tiên
 
-            // Hàm kiểm tra email hợp lệ
-            function validateEmail(email) {
-                let re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                return re.test(email);
-            }
-        });
-    </script>
+    // Hàm kiểm tra email hợp lệ
+    function validateEmail(email) {
+        let re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(email);
+    }
+});
+    </script> --}}
     <script>
         function chonMaPhieu(maPhieu) {
             document.getElementById('voucherCode').value = maPhieu;
@@ -1016,5 +1023,6 @@
             color: white !important;
             margin-bottom: 5px !important;
         }
+
     </style>
 @endsection

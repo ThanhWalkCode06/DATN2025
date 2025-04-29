@@ -27,10 +27,11 @@ class ThanhToanRequest extends FormRequest
                 'required','email',
             ],
             'ten_nguoi_nhan' => 'required',
-            'dia_chi_nguoi_nhan' => 'required',
             'sdt_nguoi_nhan' => [
                 'required','digits:10'
             ],
+            'dia_chi_nguoi_nhan' => 'required',
+
             'tong_tien' => 'required',
             'giam_gia' => 'nullable',
             'voucher_code' => 'nullable',
@@ -41,10 +42,10 @@ class ThanhToanRequest extends FormRequest
     public function messages(): array
     {
         return [
+            'email_nguoi_nhan.required' => 'Vui lòng nhập email',
             'email_nguoi_nhan.email' => 'Vui lòng nhập email đúng định dạng',
-
-            'ten_nguoi_nhan.required' => 'Vui lòng nhập tên ',
-            'dia_chi_nguoi_nhan.required' => 'Vui lòng nhập địa chỉ dùng',
+            'ten_nguoi_nhan.required' => 'Vui lòng nhập họ và tên ',
+            'dia_chi_nguoi_nhan.required' => 'Vui lòng nhập địa chỉ nhận hàng',
             'phuong_thuc_thanh_toan_id.required' => 'Vui lòng chọn phương thức thanh toán',
 
             'sdt_nguoi_nhan.required' => 'Vui lòng nhập số điện thoại',
