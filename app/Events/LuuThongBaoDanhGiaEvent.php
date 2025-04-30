@@ -40,6 +40,7 @@ class LuuThongBaoDanhGiaEvent implements ShouldBroadcast
             'created_at_full' => $this->thongBao->created_at->format('d/m/Y H:i'), // Ngày tháng đầy đủ: "19/04/2025 14:30"
             'product_name' => optional($this->thongBao->danhGia->sanPham)->ten_san_pham ?? 'Không xác định',
             'ly_do_an' => $this->thongBao->danhGia->ly_do_an ?? null,
+            'don_hang_id' => $this->thongBao->danhGia->don_hang_id ?? null,
         ];
     }
 }

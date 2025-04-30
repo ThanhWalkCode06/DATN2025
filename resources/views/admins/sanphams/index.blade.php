@@ -36,15 +36,19 @@
 
         }
 
-        .table-product td:nth-child(6) {
+        /* .table-product td:nth-child(6) {
             display: flex;
             justify-content: center;
             align-items: center;
-        }
+        } */
 
         .btn-primary {
             background-color: purple !important;
             border-color: purple !important;
+        }
+        .all-package thead tr th {
+            min-width: 50px;
+
         }
     </style>
     <div class="col-sm-12">
@@ -142,7 +146,7 @@
                                     <th>Danh mục</th>
                                     <th>Hình ảnh</th>
                                     <th>Trạng thái</th>
-                                    <th>Biến thể</th>
+                                    {{-- <th>Biến thể</th> --}}
                                     <th>Hành động</th>
                                 </tr>
                             </thead>

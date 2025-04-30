@@ -54,7 +54,7 @@
                                 <label class="form-label-title col-sm-3 mb-0">Tên vai trò: <span
                                         class="theme-color">*</span></label>
                                 <div class="col-sm-5">
-                                    <input class="form-control @error('name') is-invalid @enderror" type="text" placeholder="Author Name"
+                                    <input class="form-control @error('name') is-invalid @enderror" type="text" placeholder="Tên vai trò"
                                     name="name" value="{{ old('name') }}"/>
                                     @error('name')
                                     <p class="text-danger">{{ $message }}</p>

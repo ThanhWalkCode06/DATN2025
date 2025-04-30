@@ -307,3 +307,5 @@ Route::post('/san-pham/them-danh-gia-don-hang', [DanhGiaClientsController::class
 Route::post('/mark-as-read/{partner_id}', [ChatController::class, 'markAsRead']);
 Route::delete('/thongbao/delete-all', [ThongBaoController::class, 'deleteAll'])->name('thongbao.delete_all');
 Route::delete('/thongbao/{id}/delete', [ThongBaoController::class, 'delete'])->name('thongbao.delete');
+
+Route::get('/sanphams/{id}/danhgias/search', [SanPhamController::class, 'searchDanhGias'])->name('danhgias.search');

@@ -63,7 +63,7 @@ class SendBirthdayCoupons extends Command
 
             $coupon = PhieuGiamGia::create([
                 'ma_phieu' => $couponCode,
-                'ten_phieu' => "Mừng Sinh nhật ".$user->username.". $today->year",
+                'ten_phieu' => "Mừng Sinh nhật ".$user->username." $today->year",
                 'ngay_bat_dau' => now(),
                 'ngay_ket_thuc' => $today->copy()->addDays(7),
                 'gia_tri' => 30,
