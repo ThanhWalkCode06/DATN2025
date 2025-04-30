@@ -128,11 +128,11 @@
                     </thead>
 
                     <tbody>
-                        @if (!$user->vi)
+                        {{-- @if (!$user->vi)
                             <tr>
                                 <td colspan="6" class="text-center text-danger">Người dùng chưa có ví</td>
                             </tr>
-                        @else
+                        @else --}}
                             @forelse ($giaodichs as $gd)
                                 <tr>
 
@@ -234,7 +234,7 @@
                                     <td colspan="6" class="text-center text-muted">Không có giao dịch nào</td>
                                 </tr>
                             @endforelse
-                        @endif
+                        {{-- @endif --}}
                     </tbody>
                 </table>
             </div>

@@ -37,9 +37,41 @@ class AdminViController extends Controller
                 }
                 return true;
             })
-            ->sortByDesc(function ($user) {
-                return $user->vi->so_du ?? 0; // Sắp xếp giảm dần theo số dư ví
+            // ->sortByDesc(function ($user) {
+            //     $hasPendingWithdrawal = $user->vi && $user->vi->giaodichs()
+            //         ->where('loai', 'Rút tiền')
+            //         ->where('trang_thai', 0)
+            //         ->exists();
+            
+            //     // Trả về mảng: ưu tiên rút tiền trước, rồi theo số dư
+            //     return [
+            //         $hasPendingWithdrawal ? 1 : 0,  // Ưu tiên rút tiền
+            //         $user->vi->so_du ?? 0          // Số dư ví
+            //     ];
+            // });
+            ->sortBy(function ($user) {
+                // Nếu có yêu cầu rút tiền chưa duyệt → ưu tiên theo created_at (cũ đến mới)
+                if ($user->vi) {
+                    $withdrawRequest = $user->vi->giaodichs()
+                        ->where('loai', 'Rút tiền')
+                        ->where('trang_thai', 0)
+                        ->orderBy('created_at', 'asc')
+                        ->first();
+            
+                    if ($withdrawRequest) {
+                        // Ưu tiên 1: Có yêu cầu rút tiền, sắp xếp theo thời gian tăng dần
+                        return [0, $withdrawRequest->created_at, 0];
+                    }
+            
+                    // Ưu tiên 2: Không có yêu cầu rút, nhưng có ví → sắp theo số dư (giảm dần)
+                    return [1, now(), -($user->vi->so_du ?? 0)];
+                }
+            
+                // Ưu tiên 3: Không có ví → sắp theo thời gian tạo ví (mới đến cũ)
+                return [2, now()->subYears(100), now()->timestamp - strtotime($user->created_at)];
             });
+            
+            
 
         // Phân trang thủ công
         $page = Paginator::resolveCurrentPage('page');
@@ -87,9 +119,14 @@ class AdminViController extends Controller
             }
 
             // 👉 Ưu tiên trạng thái Chờ xử lý (0), sau đó theo thời gian
-            $giaodichsQuery->orderByRaw("trang_thai = 0 DESC")
-                ->orderBy('created_at', 'desc');
+            // $giaodichsQuery->orderByRaw("trang_thai = 0 DESC")
+            //     ->orderBy('created_at', 'asc');
 
+            $giaodichsQuery->orderByRaw("
+                CASE WHEN trang_thai = 0 THEN 0 ELSE 1 END ASC,
+                CASE WHEN trang_thai = 0 THEN created_at END ASC,
+                CASE WHEN trang_thai != 0 THEN created_at END DESC
+            ");
 
             $giaodichs = $giaodichsQuery->paginate(10);
         } else {
