@@ -879,7 +879,17 @@
                                 html: message, // Dùng html để hiển thị danh sách sản phẩm
                                 confirmButtonText: "OK"
                             });
-                        } else {
+                        }// Xử lý lỗi chung từ server (bao gồm lỗi số dư ví không đủ)
+                            else if (response && response.status === 'error' && response.message) {
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "Lỗi!",
+                                    text: response.message,
+                                    confirmButtonText: "OK"
+                                });
+                            } 
+                        
+                        else {
                             let errors = Object.values(xhr.responseJSON.errors).flat();
                             Swal.fire({
                                 icon: 'error',
