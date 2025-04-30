@@ -10,11 +10,11 @@
     <div class="container py-5">
         <h2 class="text-center mb-4" style="color: #009688;">RÚT TIỀN VỀ NGÂN HÀNG</h2>
 
-        @if(session('error'))
+        {{-- @if(session('error'))
             <div class="alert alert-danger text-center">{{ session('error') }}</div>
         @elseif(session('success'))
             <div class="alert alert-success text-center">{{ session('success') }}</div>
-        @endif
+        @endif --}}
 
         <form method="POST" onsubmit="return validateForm()" action="{{ route('rut-tien.xuly') }}" class="card p-4 shadow"
             style="max-width: 600px; margin: 0 auto; border-radius: 16px;">
@@ -78,7 +78,7 @@
 
             <!-- Tên người nhận -->
             <div class="mb-3">
-                <label for="ten_nguoi_nhan" class="form-label">Tên người nhận</label>
+                <label for="ten_nguoi_nhan" class="form-label">Tên người nhận (ví dụ: NGUYEN VAN A)</label>
                 <input type="text" name="ten_nguoi_nhan" id="ten_nguoi_nhan" class="form-control" >
                 <div class="invalid-feedback" id="ten_nguoi_nhan_error"></div> <!-- Thông báo lỗi -->
             </div>
@@ -86,7 +86,7 @@
             <!-- Số tiền -->
             <div class="mb-3">
                 <label for="so_tien" class="form-label">Số tiền muốn rút (VNĐ)</label>
-                <input type="number" name="so_tien" id="so_tien" class="form-control"  min="10000">
+                <input type="number" name="so_tien" id="so_tien" class="form-control"  >
                 <div class="invalid-feedback" id="so_tien_error"></div> <!-- Thông báo lỗi -->
             </div>
 
@@ -149,17 +149,59 @@ if (tenNganHang === '') {
         document.getElementById('so_tai_khoan').classList.remove('is-invalid');
     }
 
-    // Kiểm tra tên người nhận
-    const tenNguoiNhan = document.getElementById('ten_nguoi_nhan').value.trim();
-    if (tenNguoiNhan === '') {
-        document.getElementById('ten_nguoi_nhan_error').textContent = 'Vui lòng nhập tên người nhận.';
-        document.getElementById('ten_nguoi_nhan_error').style.display = 'block';
-        document.getElementById('ten_nguoi_nhan').classList.add('is-invalid');
-        isValid = false;
-    } else {
-        document.getElementById('ten_nguoi_nhan').classList.remove('is-invalid');
-    }
+   // Kiểm tra tên người nhận
+const tenNguoiNhan = document.getElementById('ten_nguoi_nhan').value.trim();
+const tenNguoiNhanError = document.getElementById('ten_nguoi_nhan_error');
+const tenNguoiNhanInput = document.getElementById('ten_nguoi_nhan');
 
+// Biểu thức chính quy cho chữ cái tiếng Anh (không dấu, chỉ a-z, A-Z và khoảng trắng)
+const regexChiChuaChuTiengAnh = /^[a-zA-Z\s]+$/;
+
+// Biểu thức chính quy yêu cầu ít nhất một nguyên âm (a, e, i, o, u, y)
+const regexCoNguyenAm = /[aeiouy]/i;
+
+// Kiểm tra tên người nhận
+if (tenNguoiNhan === '') {
+    tenNguoiNhanError.textContent = 'Vui lòng nhập tên người nhận.';
+    tenNguoiNhanError.style.display = 'block';
+    tenNguoiNhanInput.classList.add('is-invalid');
+    isValid = false;
+} else if (!regexChiChuaChuTiengAnh.test(tenNguoiNhan)) {
+    tenNguoiNhanError.textContent = 'Tên người nhận chỉ được chứa chữ cái (không dấu).';
+    tenNguoiNhanError.style.display = 'block';
+    tenNguoiNhanInput.classList.add('is-invalid');
+    isValid = false;
+} else if (tenNguoiNhan.length < 2 || tenNguoiNhan.length > 50) {
+    tenNguoiNhanError.textContent = 'Tên người nhận phải từ 2 đến 50 ký tự.';
+    tenNguoiNhanError.style.display = 'block';
+    tenNguoiNhanInput.classList.add('is-invalid');
+    isValid = false;
+} else if (!tenNguoiNhan.includes(' ') || tenNguoiNhan.split(/\s+/).filter(word => word).length < 2) {
+    tenNguoiNhanError.textContent = 'Tên người nhận phải bao gồm họ và tên (ít nhất hai từ).';
+    tenNguoiNhanError.style.display = 'block';
+    tenNguoiNhanInput.classList.add('is-invalid');
+    isValid = false;
+}else if (tenNguoiNhan.split(/\s+/).some(word => /(.)\1{1,}/.test(word))) {
+    tenNguoiNhanError.textContent = 'Tên người nhận không được chứa ký tự lặp lại liên tiếp trong cùng một từ (ví dụ: KK).';
+    tenNguoiNhanError.style.display = 'block';
+    tenNguoiNhanInput.classList.add('is-invalid');
+    isValid = false;
+} else if (tenNguoiNhan !== tenNguoiNhan.toUpperCase()) {
+    tenNguoiNhanError.textContent = 'Tên người nhận phải được viết in hoa toàn bộ (ví dụ: NGUYEN VAN A).';
+    tenNguoiNhanError.style.display = 'block';
+    tenNguoiNhanInput.classList.add('is-invalid');
+    isValid = false;
+} else if (!regexCoNguyenAm.test(tenNguoiNhan)) {
+    tenNguoiNhanError.textContent = 'Tên người nhận phải chứa ít nhất một nguyên âm (A, E, I, O, U, Y).';
+    tenNguoiNhanError.style.display = 'block';
+    tenNguoiNhanInput.classList.add('is-invalid');
+    isValid = false;
+} 
+
+else {
+    tenNguoiNhanError.style.display = 'none';
+    tenNguoiNhanInput.classList.remove('is-invalid');
+}
     // Kiểm tra số tiền
     const soTien = document.getElementById('so_tien').value.trim();
     if (soTien < 10000) {

@@ -173,7 +173,7 @@
                                         @if ($gd->trang_thai == 1 && $gd->updated_at)
                                             <br>
                                             <strong class="text-muted">
-                                                Thời gian xử lý 🕒 {{ $gd->updated_at->format('d/m/Y H:i') }}
+                                                Thời gian xử lý 🕒 {{ $gd->updated_at->format('H:i d/m/Y ') }}
                                             </strong>
                                         @endif
                                     </td>
@@ -227,7 +227,7 @@
 
 
 
-                                    <td>{{ $gd->created_at->format('d/m/Y H:i') }}</td>
+                                    <td>{{ $gd->created_at->format('H:i d/m/Y ') }}</td>
                                 </tr>
                             @empty
                                 <tr>
