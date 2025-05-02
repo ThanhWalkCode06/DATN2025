@@ -126,7 +126,7 @@
         .review-table td:nth-child(6) {
             /* Trạng thái (ẩn) */
             width: 0;
-            display: none;
+            /* display: none; */
         }
 
         .review-table th:nth-child(7),
@@ -146,8 +146,8 @@
             /* Hành động */
             width: 15%;
         }
-        
-        
+
+
         /* Giới hạn chiều cao và thêm cuộn dọc cho cột nhận xét và lý do ẩn */
         .review-table td:nth-child(4),
         .review-table td:nth-child(7) {
@@ -393,26 +393,26 @@
 
             <div class="px-3 py-2">
                 <h4 class="text-success mb-3">Tìm kiếm đánh giá</h4>
-                <div class="row g-3">
+                <div class="row g-3 d-flex align-items-end">
                     <!-- Lọc theo tên người dùng -->
-                    <div class="col-md-4">
+                    <div class="col-md-auto">
                         <label for="filter-user" class="form-label fw-bold">Tên người dùng:</label>
                         <input type="text" id="filter-user" class="form-control" placeholder="Nhập tên người dùng"
                             onkeyup="filterReviews()">
                     </div>
                     <!-- Lọc theo thời gian -->
-                    <div class="col-md-4">
+                    <div class="col-md-auto">
                         <label for="filter-date" class="form-label fw-bold">Thời gian:</label>
                         <input type="date" id="filter-date" class="form-control" onchange="filterReviews()">
                     </div>
                     <!-- Lọc theo ID đơn hàng -->
-                    <div class="col-md-4">
+                    <div class="col-md-auto">
                         <label for="filter-order-id" class="form-label fw-bold">ID đơn hàng:</label>
                         <input type="text" id="filter-order-id" class="form-control" placeholder="Nhập ID đơn hàng"
                             onkeyup="filterReviews()">
                     </div>
-                    <!-- Lọc theo số sao (đã có sẵn) -->
-                    <div class="col-md-4">
+                    <!-- Lọc theo số sao -->
+                    <div class="col-md-auto">
                         <label for="filter-sao" class="form-label fw-bold">Số sao:</label>
                         <select id="filter-sao" class="form-select" onchange="filterReviews()">
                             <option value="all">Tất cả</option>
@@ -420,6 +420,10 @@
                                 <option value="{{ $i }}">{{ $i }} sao</option>
                             @endfor
                         </select>
+                    </div>
+                    <!-- Nút Reset -->
+                    <div class="col-md-auto">
+                        <button type="button" class="btn btn-secondary" onclick="resetFilters()">Reset</button>
                     </div>
                 </div>
             </div>
@@ -527,7 +531,7 @@
                                 <th>Số sao</th>
                                 <th>Nhận xét</th>
                                 <th>Biến thể</th>
-                                <th style="display: none">Trạng thái</th>
+                                <th>Trạng thái</th>
                                 <th>Lý do ẩn</th>
                                 <th>Ảnh/video</th>
                                 <th>Hành động</th>
@@ -539,6 +543,9 @@
                             ])
                         </tbody>
                     </table>
+                    <div id="no-results-message" class="text-danger text-center mt-3" style="display: none;">
+                        Không tìm thấy nội dung của bạn yêu cầu, vui lòng thử lại
+                    </div>
                 </div>
             @else
                 <p class="text-muted px-3">Chưa có đánh giá nào cho sản phẩm này.</p>
@@ -792,6 +799,22 @@
         }
     </script>
     <script>
+        // Hàm reset bộ lọc
+        function resetFilters() {
+            // Xóa giá trị các input và select
+            document.getElementById("filter-user").value = "";
+            document.getElementById("filter-date").value = "";
+            document.getElementById("filter-order-id").value = "";
+            document.getElementById("filter-sao").value = "all";
+
+            // Ẩn thông báo không tìm thấy
+            document.getElementById("no-results-message").style.display = "none";
+
+            // Gọi lại hàm filterReviews để tải lại toàn bộ đánh giá
+            filterReviews();
+        }
+
+        // Hàm tìm kiếm đánh giá
         function filterReviews() {
             const userFilter = document.getElementById("filter-user").value;
             const dateFilter = document.getElementById("filter-date").value;
@@ -810,6 +833,13 @@
                 },
                 success: function(response) {
                     $("#review-table-body").html(response.html);
+                    // Hiển thị hoặc ẩn thông báo dựa trên nội dung trả về
+                    const noResultsMessage = document.getElementById("no-results-message");
+                    if (response.html.trim() === "") {
+                        noResultsMessage.style.display = "block";
+                    } else {
+                        noResultsMessage.style.display = "none";
+                    }
                     // Gắn lại sự kiện cho các nút toggleStatus
                     $(".toggleStatus").click(function() {
                         let button = $(this);

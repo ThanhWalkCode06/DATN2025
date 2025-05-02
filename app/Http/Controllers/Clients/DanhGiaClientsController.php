@@ -16,29 +16,30 @@ class DanhGiaClientsController extends Controller
 {
     // public function danhSachDanhGia($san_pham_id)
     // {
-    //     // Lấy thông tin sản phẩm
-    //     $sanPham = SanPham::findOrFail($san_pham_id);
-
-    //     // Lấy danh sách đánh giá đã duyệt
     //     $danhGias = DanhGia::where('san_pham_id', $san_pham_id)
-    //         ->where('trang_thai', 1) // Chỉ lấy đánh giá đã được duyệt
-    //         ->with('nguoiDung') // Nếu model có quan hệ 'nguoiDung'
-    //         ->latest()
+    //         ->where('trang_thai', 1) // Chỉ lấy đánh giá có trạng thái hiển thị
+    //         // ->with(['nguoiDung', 'bienThe'])
+    //         ->orderBy('created_at', 'desc')
     //         ->get();
 
-    //     // Trả về view chitiet.blade.php và truyền dữ liệu
-    //     return view('clients.sanphams.chitiet', compact('sanPham', 'danhGias'));
+    //     return response()->json($danhGias);
     // }
-
-    public function danhSachDanhGia($san_pham_id)
+    public function danhSachDanhGia($san_pham_id, Request $request)
     {
+        $perPage = 10; // Số bản ghi mỗi trang
         $danhGias = DanhGia::where('san_pham_id', $san_pham_id)
-            ->where('trang_thai', 1) // Chỉ lấy đánh giá có trạng thái hiển thị
-            // ->with(['nguoiDung', 'bienThe'])
+            ->where('trang_thai', 1)
+            ->with(['nguoiDung', 'bienThe'])
             ->orderBy('created_at', 'desc')
-            ->get();
+            ->paginate($perPage);
 
-        return response()->json($danhGias);
+        return response()->json([
+            'danhGias' => $danhGias->items(),
+            'current_page' => $danhGias->currentPage(),
+            'last_page' => $danhGias->lastPage(),
+            'total' => $danhGias->total(),
+            'per_page' => $danhGias->perPage(),
+        ]);
     }
 
     public function kiemTraQuyenDanhGia($san_pham_id, $don_hang_id = null)
