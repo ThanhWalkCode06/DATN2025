@@ -60,10 +60,10 @@
     }
     .select2-container {
     position: relative; /* Đảm bảo container của select2 có position */
-    z-index: 10000; /* Cao hơn z-index của modal */
+    /* z-index: 10000; Cao hơn z-index của modal */
 }
     .select2-search__field{
-        z-index: 9999999999;
+        /* z-index: 9999999999; */
     }
 </style>
 

@@ -27,7 +27,7 @@ class UserRequest extends FormRequest
                 'required','email',
                 Rule::unique('users', 'email')->ignore($this->route('id'))
             ],
-            'anh_dai_dien' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'anh_dai_dien' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'ten_nguoi_dung' => 'required',
             'dia_chi' => 'required',
             'ngay_sinh' => ['required','date'

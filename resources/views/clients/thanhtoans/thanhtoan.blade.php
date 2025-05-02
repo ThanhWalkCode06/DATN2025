@@ -887,8 +887,8 @@
                                     text: response.message,
                                     confirmButtonText: "OK"
                                 });
-                            } 
-                        
+                            }
+
                         else {
                             let errors = Object.values(xhr.responseJSON.errors).flat();
                             Swal.fire({

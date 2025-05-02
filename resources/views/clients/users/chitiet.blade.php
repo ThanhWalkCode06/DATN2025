@@ -226,7 +226,7 @@
                                                     </div>
                                                 @else
                                                     @foreach ($donHangsPaginate->chunk(ceil(count($donHangsPaginate) / 2)) as $chunk)
-                                                        <div style="width: 46%" class="col-md-6">
+                                                        <div style="width: 47%" class="col-md-6">
                                                             @foreach ($chunk as $item)
                                                                 <div style="padding: 0px;"
                                                                     class="order-box dashboard-bg-box">
