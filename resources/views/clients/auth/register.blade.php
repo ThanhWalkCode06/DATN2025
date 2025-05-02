@@ -58,6 +58,17 @@
                                     @csrf
                                     <div class="col-12">
                                         <div class="form-floating theme-form-floating">
+                                            <input name="ten_nguoi_dung" type="text"
+                                                class="form-control @error('ten_nguoi_dung') is-invalid @enderror" id="fullname"
+                                                placeholder="Họ và tên" value="{{ old('ten_nguoi_dung') }}">
+                                            <label for="fullname">Họ và tên</label>
+                                        </div>
+                                        @error('ten_nguoi_dung')
+                                            <p class="text-danger">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-floating theme-form-floating">
                                             <input name="username" type="text"
                                                 class="form-control @error('username') is-invalid @enderror" id="fullname"
                                                 placeholder="Tên tài khoản" value="{{ old('username') }}">

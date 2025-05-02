@@ -42,16 +42,16 @@
                     <div class="media-body p-0">
                         <span class="m-0">Tổng doanh thu</span>
                         <h4 class="mb-0 counter">
-                            {{ number_format($tongDoanhThu, 0, ',', '.') }}
+                            {{ number_format($tongDoanhThu, 0, ',', '.') }} ₫
                             <span class="badge badge-light-primary grow">
                                 <i class="fas fa-money-bill-wave"></i>
-                                @if ($phanTramTangGiamDoanhThu > 0)
+                                {{-- @if ($phanTramTangGiamDoanhThu > 0)
                                     <span class="text-success">+{{ number_format($phanTramTangGiamDoanhThu) }}%</span>
                                 @elseif ($phanTramTangGiamDoanhThu < 0)
                                     <span class="text-danger">{{ number_format($phanTramTangGiamDoanhThu) }}%</span>
                                 @else
                                     <span class="text-muted">0%</span>
-                                @endif
+                                @endif --}}
                             </span>
                         </h4>
                     </div>
@@ -70,11 +70,11 @@
                         <span class="m-0">Số lượng đơn hàng</span>
                         <h4 class="mb-0 counter">
                             {{ $tongDonHang }}
-                            <span
+                            {{-- <span
                                 class="badge {{ $phanTramThayDoiDonHang >= 0 ? 'badge-light-success' : 'badge-light-danger' }} grow">
                                 <i data-feather="{{ $phanTramThayDoiDonHang >= 0 ? 'trending-up' : 'trending-down' }}"></i>
                                 {{ number_format($phanTramThayDoiDonHang) }}%
-                            </span>
+                            </span> --}}
                         </h4>
                     </div>
                     <div class="align-self-center text-center">
@@ -115,12 +115,12 @@
                         <span class="m-0">Tổng số lượng khách hàng</span>
                         <h4 class="mb-0 counter">
                             {{ $tongKhachHangHoatDong }}
-                            <span
+                            {{-- <span
                                 class="badge {{ $phanTramThayDoiKhachHang >= 0 ? 'badge-light-success' : 'badge-light-danger' }} grow">
                                 <i
                                     data-feather="{{ $phanTramThayDoiKhachHang >= 0 ? 'trending-up' : 'trending-down' }}"></i>
                                 {{ number_format($phanTramThayDoiKhachHang) }}%
-                            </span>
+                            </span> --}}
                         </h4>
                     </div>
                     <div class="align-self-center text-center">
@@ -325,15 +325,15 @@
                 <div class="card-header-title">
                     <h4>Đơn hàng</h4>
                 </div>
-
+        
                 <div class="best-selling-box d-sm-flex d-none">
                     <span>Sắp xếp theo:</span>
                     <div class="dropdown">
-                        <button class="btn p-0 dropdown-toggle" type="button" id="dropdownMenuButton2"
-                            data-bs-toggle="dropdown" data-bs-auto-close="true">Trạng thái</button>
+                        <button class="btn p-0 dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" data-bs-auto-close="true">
+                            Trạng thái
+                        </button>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
-                            <li><a class="dropdown-item" href="#" data-trang-thai="chua_xac_nhan">Chưa xác nhận</a>
-                            </li>
+                            <li><a class="dropdown-item" href="#" data-trang-thai="chua_xac_nhan">Chưa xác nhận</a></li>
                             <li><a class="dropdown-item" href="#" data-trang-thai="dang_xu_ly">Đang xử lý</a></li>
                             <li><a class="dropdown-item" href="#" data-trang-thai="dang_giao">Đang giao</a></li>
                             <li><a class="dropdown-item" href="#" data-trang-thai="da_giao">Đã giao</a></li>
@@ -343,10 +343,7 @@
                         </ul>
                     </div>
                 </div>
-
-
             </div>
-
             <div class="card-body p-0">
                 <div>
                     <div class="table-responsive">
@@ -366,37 +363,30 @@
                                     <tr>
                                         <td>{{ $donHang->ma_don_hang }}</td>
                                         <td>{{ $donHang->ten_nguoi_nhan }}</td>
-                                        <td>{{ number_format($donHang->tong_tien, 0, ',', '.') }} VNĐ</td>
+                                        <td>{{ number_format($donHang->tong_tien, 0, ',', '.') }} ₫</td>
                                         <td>
                                             @switch($donHang->trang_thai_don_hang)
                                                 @case(-1)
                                                     <span class="text-danger">Đã hủy</span>
                                                 @break
-
                                                 @case(0)
                                                     <span class="text-danger">Chờ xác nhận</span>
                                                 @break
-
                                                 @case(1)
                                                     <span class="text-primary">Đang xử lý</span>
                                                 @break
-
                                                 @case(2)
                                                     <span class="text-primary">Đang giao</span>
                                                 @break
-
                                                 @case(3)
                                                     <span class="text-success">Đã giao</span>
                                                 @break
-
                                                 @case(4)
                                                     <span class="text-success">Hoàn thành</span>
                                                 @break
-
                                                 @case(5)
                                                     <span class="text-danger">Trả hàng</span>
                                                 @break
-
                                                 @default
                                                     <span>Trạng thái không hợp lệ</span>
                                             @endswitch
@@ -408,26 +398,23 @@
                                             </a>
                                         </td>
                                     </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="6" class="text-center text-muted">
-                                                <span class="text-danger">Không có đơn hàng nào.</span>
-                                            </td>
-                                        </tr>
-                                    @endforelse
-                                </tbody>
-
-
-                            </table>
-                            <div class="d-flex justify-content-center mt-3">
-                                {{ $donHangs->appends(request()->all())->links('pagination::bootstrap-5') }}
-                            </div>
-
+                                @empty
+                                    <tr>
+                                        <td colspan="6" class="text-center text-muted">
+                                            <span class="text-danger">Không có đơn hàng nào.</span>
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                        <div class="d-flex justify-content-center mt-3">
+                            {{ $donHangs->appends(request()->all())->links('pagination::bootstrap-5') }}
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        
 
     @endsection
 

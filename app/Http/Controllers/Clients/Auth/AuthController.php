@@ -70,14 +70,17 @@ class AuthController extends Controller
     {
         $data = $request->validate(
             [
+                'ten_nguoi_dung' => 'required',
                 'username' => 'required|unique:users,username',
                 'email' => 'required|email|unique:users,email',
                 'password' => 'required|min:6',
+
             ],
             [
+                'ten_nguoi_dung.required' => 'Vui lòng nhập họ tên',
                 'username.required' => 'Vui lòng nhập tên đăng nhập',
                 'password.required' => 'Vui lòng nhập mật khẩu',
-                'password.required' => 'Vui lòng nhập mật khẩu dài ít nhất 6 kí tự',
+                'password.min' => 'Vui lòng nhập mật khẩu dài ít nhất 6 kí tự',
                 'email.required' => 'Vui lòng nhập email',
                 'email.email' => 'Vui lòng nhập đúng định dạng email',
                 'email.unique' => 'Email đã tồn tại',

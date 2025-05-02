@@ -41,8 +41,8 @@
                         <div class="row">
                             <div class="col-xl-12">
                                 <div class="contact-image">
-                                    <img src="../assets/images/inner-page/contact-us.png"
-                                        class="img-fluid blur-up lazyloaded" alt="">
+                                    {{-- <img src="../assets/images/inner-page/contact-us.png"
+                                        class="img-fluid blur-up lazyloaded" alt=""> --}}
                                 </div>
                             </div>
                             <div class="col-xl-12">
@@ -78,7 +78,7 @@
                                                     <p>starsseven.2025@gmail.com</p>
                                                 </div>
                                             </div>
-                                        </div>                                    
+                                        </div>
                                     </div>
                                 </div>
                             </div>

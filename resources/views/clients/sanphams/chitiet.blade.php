@@ -390,40 +390,6 @@
             margin: 0;
             /* Loại bỏ margin mặc định nếu cần */
         }
-
-        .pagination {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
-
-        .pagination .page-item {
-            margin: 0 5px;
-        }
-
-        .pagination .page-link {
-            color: #009970;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 8px 10px;
-            cursor: pointer;
-        }
-
-        .pagination .page-link:hover {
-            background-color: #009970;
-            color: #fff;
-        }
-
-        .pagination .active .page-link {
-            background-color: #009970;
-            color: #fff;
-            border-color: #009970;
-        }
-
-        .pagination .disabled .page-link {
-            color: #ccc;
-            cursor: not-allowed;
-        }
     </style>
 @endsection
 
@@ -641,38 +607,25 @@
                                     <div class="product-title">
                                         <h4>Phương thức thanh toán</h4>
                                     </div>
-                                    <ul>
+                                    <ul class="payment-methods d-flex gap-3 align-items-center">
                                         <li>
-                                            <a href="javascript:void(0)">
-                                                <img src="https://themes.pixelstrap.com/fastkart/assets/images/product/payment/1.svg"
-                                                    class="blur-up lazyload" alt="">
+                                            <a href="javascript:void(0)" title="Thanh toán qua VNPAY">
+                                                <img src="https://static.cdnlogo.com/logos/v/99/vnpay.svg" alt="VNPAY" class="payment-logo" />
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="javascript:void(0)">
-                                                <img src="https://themes.pixelstrap.com/fastkart/assets/images/product/payment/2.svg"
-                                                    class="blur-up lazyload" alt="">
+                                            <a href="javascript:void(0)" title="Ví của trang web">
+                                                <img src="https://static.vecteezy.com/ti/vetor-gratis/p1/42147641-cartao-forma-de-pagamento-e-transacao-icone-vetor.jpg" alt="Ví điện tử" class="payment-logo" />
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="javascript:void(0)">
-                                                <img src="https://themes.pixelstrap.com/fastkart/assets/images/product/payment/3.svg"
-                                                    class="blur-up lazyload" alt="">
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)">
-                                                <img src="https://themes.pixelstrap.com/fastkart/assets/images/product/payment/4.svg"
-                                                    class="blur-up lazyload" alt="">
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)">
-                                                <img src="https://themes.pixelstrap.com/fastkart/assets/images/product/payment/5.svg"
-                                                    class="blur-up lazyload" alt="">
+                                            <a href="javascript:void(0)" title="Thanh toán khi nhận hàng (COD)">
+                                                <img src="https://img.freepik.com/premium-vector/free-shipping-delivery-truck-icon_342036-1710.jpg?w=360" alt="Thanh toán khi nhận hàng" class="payment-logo" />
                                             </a>
                                         </li>
                                     </ul>
+                                    
+                                    
                                 </div>
                             </div>
                         </div>
