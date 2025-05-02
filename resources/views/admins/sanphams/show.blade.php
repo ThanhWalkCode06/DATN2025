@@ -126,7 +126,7 @@
         .review-table td:nth-child(6) {
             /* Trạng thái (ẩn) */
             width: 0;
-            /* display: none; */
+            /* /* display: none; */ */
         }
 
         .review-table th:nth-child(7),
@@ -423,7 +423,7 @@
                     </div>
                     <!-- Nút Reset -->
                     <div class="col-md-auto">
-                        <button type="button" class="btn btn-secondary" onclick="resetFilters()">Reset</button>
+                        <button type="button" class="btn btn-secondary" onclick="resetFilters()">Làm mới</button>
                     </div>
                 </div>
             </div>

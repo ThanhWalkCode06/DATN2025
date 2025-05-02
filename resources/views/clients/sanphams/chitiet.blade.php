@@ -1075,16 +1075,32 @@
 
 @section('js')
     <script>
-            function formatDateTime(dateString) {
-                const date = new Date(dateString);
-                return date.toLocaleString('vi-VN', {
-                    day: '2-digit',
-                    month: '2-digit',
-                    year: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit'
-                });
-            }
+        function formatDateTime(dateString) {
+            const date = new Date(dateString);
+
+            // Lấy ngày, tháng, năm
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0'); // Tháng bắt đầu từ 0
+            const year = date.getFullYear();
+
+            // Lấy giờ, phút
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+
+            // Trả về định dạng "ngày trước giờ sau": 02/05/2025 14:30
+            return `${day}/${month}/${year} ${hours}:${minutes}`;
+
+            // const date = new Date(dateString);
+            // return date.toLocaleString('vi-VN', {
+            //     day: '2-digit',
+            //     month: '2-digit',
+            //     year: 'numeric',
+            //     hour: '2-digit',
+            //     minute: '2-digit'
+            // });
+            // const [time, datePart] = formatted.split(' ');
+            // return `${datePart} ${time}`;
+        }
 
         function loadReviews(page = 1) {
             fetch(`/san-pham/{{ $sanPhams->id }}/danh-gia?page=${page}`)
@@ -1133,7 +1149,7 @@
                                 <div>
                                     <div class="people-image people-text">
                                         <img alt="user" class="img-fluid"
-                                             src="${danhGia.nguoi_dung?.anh_dai_dien ? '/storage/' + danhGia.nguoi_dung.anh_dai_dien : '/default-avatar.jpg'}">
+                                             src="${danhGia.nguoi_dung?.anh_dai_dien ? `/storage/${danhGia.nguoi_dung.anh_dai_dien}` : '/default-avatar.jpg'}">
                                     </div>
                                 </div>
                                 <div class="people-comment">
@@ -1281,7 +1297,6 @@
             loadReviews(1);
         });
     </script>
-    
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             let colorOptions = document.querySelectorAll(".color-option");
@@ -1658,7 +1673,7 @@
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
-    <script>
+    {{-- <script>
         function themDanhGia() {
             let sanPhamId = document.getElementById("san_pham_id").value;
             let soSao = document.getElementById("so_sao").value;
@@ -1703,7 +1718,7 @@
 
         // Gọi load danh sách đánh giá khi trang được load
         document.addEventListener("DOMContentLoaded", loadDanhGias);
-    </script>
+    </script> --}}
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const stars = document.querySelectorAll("#ratingStars i");
