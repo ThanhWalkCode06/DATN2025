@@ -189,9 +189,9 @@
                 <h6 class="text-content">©2025 {{ $globalSetting->name_website ?? 'Tên website chưa cập nhật' }}</h6>
             </div>
 
-            <div class="payment">
+            {{-- <div class="payment">
                 <img src="../assets/client/images/payment/1.png" class="blur-up lazyload" alt="">
-            </div>
+            </div> --}}
 
             <div class="social-link">
                 <h6 class="text-content">Kết nối với chúng tôi:</h6>

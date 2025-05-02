@@ -99,7 +99,7 @@
                 <div class="col-xxl-4 col-xl-5 col-lg-6 col-sm-8 mx-auto">
                     <div class="log-in-box">
                         <div class="log-in-title">
-                            <h3>Welcome To Admin Seven Stars</h3>
+                            <h3>Chào mừng tới Admin Seven Stars</h3>
                             <h4>Đổi mật khẩu</h4>
                         </div>
 
