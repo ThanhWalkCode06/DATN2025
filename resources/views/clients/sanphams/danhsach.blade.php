@@ -520,10 +520,22 @@
                 });
             });
 
-            // ===== Load mặc định =====
-            fetchFilteredProducts(1);
+            // KHÔNG gọi fetchFilteredProducts(1); tự động nữa!
+            // Chỉ gọi thủ công nếu KHÔNG có bộ lọc nào được chọn sẵn
+            let shouldAutoFetch = true;
+
+            // Nếu có filter nào đang được chọn (giá, danh mục, sort...), thì KHÔNG auto fetch
+            $('input.filter-input').each(function() {
+                if ($(this).is(':checked') || $(this).val()) {
+                    shouldAutoFetch = false;
+                    return false; // break loop
+                }
+            });
+
+            // Nếu KHÔNG có filter nào được chọn => fetch
+            if (shouldAutoFetch) {
+                fetchFilteredProducts(1);
+            }
         });
     </script>
-
-    
 @endsection

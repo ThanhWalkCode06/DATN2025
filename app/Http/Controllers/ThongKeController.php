@@ -103,20 +103,16 @@ class ThongKeController extends Controller
 
 
         // Tổng doanh thu
-        $tongDoanhThu = DB::table('chi_tiet_don_hangs')
-            ->join('bien_thes', 'bien_thes.id', '=', 'chi_tiet_don_hangs.bien_the_id')
-            ->join('don_hangs', 'don_hangs.id', '=', 'chi_tiet_don_hangs.don_hang_id')
-            ->where('don_hangs.trang_thai_thanh_toan', 1)
-            ->whereBetween('don_hangs.created_at', [$startDate, $endDate])
-            ->sum(DB::raw('chi_tiet_don_hangs.so_luong * bien_thes.gia_ban'));
+        $tongDoanhThu = DB::table('don_hangs')
+            ->where('trang_thai_thanh_toan', 1)
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->sum('tong_tien');
 
         // Tổng doanh thu hôm qua
-        $tongDoanhThuHomQua = DB::table('chi_tiet_don_hangs')
-            ->join('bien_thes', 'bien_thes.id', '=', 'chi_tiet_don_hangs.bien_the_id')
-            ->join('don_hangs', 'don_hangs.id', '=', 'chi_tiet_don_hangs.don_hang_id')
-            ->where('don_hangs.trang_thai_thanh_toan', 1)
-            ->whereBetween('don_hangs.created_at', [$yesterdayStart, $yesterdayEnd])
-            ->sum(DB::raw('chi_tiet_don_hangs.so_luong * bien_thes.gia_ban'));
+        $tongDoanhThuHomQua = DB::table('don_hangs')
+            ->where('trang_thai_thanh_toan', 1)
+            ->whereBetween('created_at', [$yesterdayStart, $yesterdayEnd])
+            ->sum('tong_tien');
 
         // Tính phần trăm tăng giảm doanh thu
         if ($tongDoanhThuHomQua == 0) {
@@ -127,21 +123,22 @@ class ThongKeController extends Controller
 
         // Top doanh thu
         $topDoanhThu = DB::table('chi_tiet_don_hangs')
-            ->join('bien_thes', 'bien_thes.id', '=', 'chi_tiet_don_hangs.bien_the_id')
-            ->join('san_phams', 'san_phams.id', '=', 'bien_thes.san_pham_id')
-            ->join('don_hangs', 'don_hangs.id', '=', 'chi_tiet_don_hangs.don_hang_id')
-            ->select(
-                'san_phams.id',
-                'san_phams.ten_san_pham',
-                'san_phams.hinh_anh',
-                DB::raw('SUM(chi_tiet_don_hangs.so_luong * bien_thes.gia_ban) as tong_doanh_thu')
-            )
-            ->where('don_hangs.trang_thai_thanh_toan', 1)
-            ->whereBetween('don_hangs.created_at', [$startDate, $endDate])
-            ->groupBy('san_phams.id', 'san_phams.ten_san_pham', 'san_phams.hinh_anh')
-            ->orderByDesc('tong_doanh_thu')
-            ->take(5)
-            ->get();
+        ->join('bien_thes', 'bien_thes.id', '=', 'chi_tiet_don_hangs.bien_the_id')
+        ->join('san_phams', 'san_phams.id', '=', 'bien_thes.san_pham_id')
+        ->join('don_hangs', 'don_hangs.id', '=', 'chi_tiet_don_hangs.don_hang_id')
+        ->select(
+            'san_phams.id',
+            'san_phams.ten_san_pham',
+            'san_phams.hinh_anh',
+            DB::raw('SUM(don_hangs.tong_tien) as tong_doanh_thu') // Sửa phần tính doanh thu theo tổng tiền của đơn hàng
+        )
+        ->where('don_hangs.trang_thai_thanh_toan', 1)
+        ->whereBetween('don_hangs.created_at', [$startDate, $endDate])
+        ->groupBy('san_phams.id', 'san_phams.ten_san_pham', 'san_phams.hinh_anh')
+        ->orderByDesc('tong_doanh_thu')
+        ->take(5)
+        ->get();
+    
 
         // Top sản phẩm bán chạy
         $topBanChay = DB::table('chi_tiet_don_hangs')
@@ -163,27 +160,31 @@ class ThongKeController extends Controller
 
         // Top khách hàng
         $topKhachHang = DB::table('don_hangs')
-            ->join('users', 'users.id', '=', 'don_hangs.user_id')
-            ->select(
-                'users.id',
-                'users.ten_nguoi_dung',
-                'users.anh_dai_dien',
-                DB::raw('COUNT(don_hangs.id) as so_luong_don_hang')
-            )
-            ->where('don_hangs.trang_thai_thanh_toan', 1)
-            ->whereBetween('don_hangs.created_at', [$startDate, $endDate])
-            ->groupBy('users.id', 'users.ten_nguoi_dung', 'users.anh_dai_dien')
-            ->orderByDesc('so_luong_don_hang')
-            ->take(5)
-            ->get();
-
+        ->join('users', 'users.id', '=', 'don_hangs.user_id')
+        ->select(
+            'users.id',
+            'users.ten_nguoi_dung',
+            'users.anh_dai_dien',
+            DB::raw('COUNT(don_hangs.id) as so_luong_don_hang'),
+            DB::raw('SUM(don_hangs.tong_tien) as tong_tien_don_hang') // Tính tổng tiền của đơn hàng
+        )
+        ->where('don_hangs.trang_thai_thanh_toan', 1)
+        ->whereBetween('don_hangs.created_at', [$startDate, $endDate])
+        ->groupBy('users.id', 'users.ten_nguoi_dung', 'users.anh_dai_dien')
+        ->orderByDesc('so_luong_don_hang') // Sắp xếp theo số lượng đơn hàng
+        ->orderByDesc('tong_tien_don_hang') // Thêm điều kiện sắp xếp theo tổng tiền của đơn hàng
+        ->take(5)
+        ->get();
+    
+        // Kiểm tra nếu ngày bắt đầu và ngày kết thúc là cùng một ngày
         if ($startDate->toDateString() === $endDate->toDateString()) {
-            $doanhThuTheoGio = DB::table('chi_tiet_don_hangs')
+            // Tính doanh thu theo giờ
+            $doanhThuTheoGio = DB::table('don_hangs')
+                ->join('chi_tiet_don_hangs', 'chi_tiet_don_hangs.don_hang_id', '=', 'don_hangs.id')
                 ->join('bien_thes', 'bien_thes.id', '=', 'chi_tiet_don_hangs.bien_the_id')
-                ->join('don_hangs', 'don_hangs.id', '=', 'chi_tiet_don_hangs.don_hang_id')
                 ->select(
                     DB::raw('HOUR(don_hangs.created_at) as gio'),
-                    DB::raw('SUM(bien_thes.gia_ban * chi_tiet_don_hangs.so_luong) as doanh_thu')
+                    DB::raw('SUM(don_hangs.tong_tien) as doanh_thu') // Tính doanh thu từ tổng tiền của đơn hàng
                 )
                 ->whereBetween('don_hangs.created_at', [$startDate, $endDate])
                 ->where('don_hangs.trang_thai_thanh_toan', 1)
@@ -192,20 +193,21 @@ class ThongKeController extends Controller
                 ->pluck('doanh_thu', 'gio')
                 ->toArray();
 
-            $dataChart = array_fill(0, 24, 0);
+            $dataChart = array_fill(0, 24, 0); // Khởi tạo mảng doanh thu theo giờ
             foreach ($doanhThuTheoGio as $gio => $doanhThu) {
-                $dataChart[$gio] = $doanhThu;
+                $dataChart[$gio] = $doanhThu; // Lưu giá trị doanh thu cho từng giờ
             }
-            $categoriesChart = array_map(fn($i) => "$i" . 'h', range(0, 23));
+            $categoriesChart = array_map(fn($i) => "$i" . 'h', range(0, 23)); // Danh mục giờ
         } else {
+            // Nếu số ngày lớn hơn 31 thì tính doanh thu theo tháng
             $soNgay = $startDate->diffInDays($endDate);
             if ($soNgay > 31) {
-                $doanhThuTheoThang = DB::table('chi_tiet_don_hangs')
+                $doanhThuTheoThang = DB::table('don_hangs')
+                    ->join('chi_tiet_don_hangs', 'chi_tiet_don_hangs.don_hang_id', '=', 'don_hangs.id')
                     ->join('bien_thes', 'bien_thes.id', '=', 'chi_tiet_don_hangs.bien_the_id')
-                    ->join('don_hangs', 'don_hangs.id', '=', 'chi_tiet_don_hangs.don_hang_id')
                     ->select(
                         DB::raw('DATE_FORMAT(don_hangs.created_at, "%Y-%m") as thang'),
-                        DB::raw('SUM(bien_thes.gia_ban * chi_tiet_don_hangs.so_luong) as doanh_thu')
+                        DB::raw('SUM(don_hangs.tong_tien) as doanh_thu') // Tính doanh thu từ tổng tiền của đơn hàng
                     )
                     ->whereBetween('don_hangs.created_at', [$startDate, $endDate])
                     ->where('don_hangs.trang_thai_thanh_toan', 1)
@@ -214,22 +216,24 @@ class ThongKeController extends Controller
                     ->pluck('doanh_thu', 'thang')
                     ->toArray();
 
+                // Tạo danh sách tháng trong khoảng thời gian
                 $period = CarbonPeriod::create($startDate->copy()->startOfMonth(), '1 month', $endDate->copy()->startOfMonth());
                 $dataChart = [];
                 $categoriesChart = [];
 
                 foreach ($period as $month) {
                     $thang = $month->format('Y-m');
-                    $dataChart[] = $doanhThuTheoThang[$thang] ?? 0;
-                    $categoriesChart[] = $month->format('m/Y');
+                    $dataChart[] = $doanhThuTheoThang[$thang] ?? 0; // Thêm giá trị doanh thu cho tháng
+                    $categoriesChart[] = $month->format('m/Y'); // Thêm tên tháng vào danh mục
                 }
             } else {
-                $doanhThuTheoNgay = DB::table('chi_tiet_don_hangs')
+                // Nếu số ngày nhỏ hơn hoặc bằng 31 thì tính doanh thu theo ngày
+                $doanhThuTheoNgay = DB::table('don_hangs')
+                    ->join('chi_tiet_don_hangs', 'chi_tiet_don_hangs.don_hang_id', '=', 'don_hangs.id')
                     ->join('bien_thes', 'bien_thes.id', '=', 'chi_tiet_don_hangs.bien_the_id')
-                    ->join('don_hangs', 'don_hangs.id', '=', 'chi_tiet_don_hangs.don_hang_id')
                     ->select(
                         DB::raw('DATE(don_hangs.created_at) as ngay'),
-                        DB::raw('SUM(bien_thes.gia_ban * chi_tiet_don_hangs.so_luong) as doanh_thu')
+                        DB::raw('SUM(don_hangs.tong_tien) as doanh_thu') // Tính doanh thu từ tổng tiền của đơn hàng
                     )
                     ->whereBetween('don_hangs.created_at', [$startDate, $endDate])
                     ->where('don_hangs.trang_thai_thanh_toan', 1)
@@ -238,18 +242,18 @@ class ThongKeController extends Controller
                     ->pluck('doanh_thu', 'ngay')
                     ->toArray();
 
+                // Tạo danh sách ngày trong khoảng thời gian
                 $period = CarbonPeriod::create($startDate, $endDate);
                 $dataChart = [];
                 $categoriesChart = [];
 
                 foreach ($period as $date) {
                     $ngay = $date->format('Y-m-d');
-                    $dataChart[] = $doanhThuTheoNgay[$ngay] ?? 0;
-                    $categoriesChart[] = $date->format('d/m');
+                    $dataChart[] = $doanhThuTheoNgay[$ngay] ?? 0; // Thêm giá trị doanh thu cho ngày
+                    $categoriesChart[] = $date->format('d/m'); // Thêm ngày vào danh mục
                 }
             }
         }
-
 
         return view('admins.index', compact(
             'tongDoanhThu',
