@@ -390,6 +390,40 @@
             margin: 0;
             /* Loại bỏ margin mặc định nếu cần */
         }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .pagination .page-item {
+            margin: 0 5px;
+        }
+
+        .pagination .page-link {
+            color: #009970;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 8px 10px;
+            cursor: pointer;
+        }
+
+        .pagination .page-link:hover {
+            background-color: #009970;
+            color: #fff;
+        }
+
+        .pagination .active .page-link {
+            background-color: #009970;
+            color: #fff;
+            border-color: #009970;
+        }
+
+        .pagination .disabled .page-link {
+            color: #ccc;
+            cursor: not-allowed;
+        }
     </style>
 @endsection
 
@@ -807,100 +841,10 @@
 
                                                 <div class="col-xl-7">
                                                     <div class="review-people">
-                                                        <ul class="review-list">
-                                                            @if ($sanPhams->danhGias->where('trang_thai', 1)->count() > 0)
-                                                                @foreach ($sanPhams->danhGias->where('trang_thai', 1)->sortByDesc('created_at') as $danhGia)
-                                                                    <li>
-                                                                        <div class="people-box">
-                                                                            <div>
-                                                                                <div class="people-image people-text">
-                                                                                    <img alt="user" class="img-fluid"
-                                                                                        src="{{ $danhGia->nguoiDung->anh_dai_dien ?? asset('default-avatar.jpg') }}">
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="people-comment">
-                                                                                <div class="people-name">
-                                                                                    <a href="javascript:void(0)"
-                                                                                        class="name">
-                                                                                        {{ $danhGia->nguoiDung->ten_nguoi_dung }}
-                                                                                    </a>
-                                                                                    <div class="date-time">
-                                                                                        <h6 class="text-content">
-                                                                                            {{ \Carbon\Carbon::parse($danhGia->created_at)->format('d/m/Y H:i') }}
-                                                                                        </h6>
-                                                                                        <div class="product-rating">
-                                                                                            <ul class="rating">
-                                                                                                @for ($i = 1; $i <= 5; $i++)
-                                                                                                    <li>
-                                                                                                        <i data-feather="star"
-                                                                                                            class="{{ $i <= $danhGia->so_sao ? 'fill' : '' }}">
-                                                                                                        </i>
-                                                                                                    </li>
-                                                                                                @endfor
-                                                                                            </ul>
-                                                                                            <ul>
-                                                                                                @if ($danhGia->bienThe)
-                                                                                                    <p
-                                                                                                        class="text-muted mb-1">
-                                                                                                        <small>
-                                                                                                            Biến thể:
-                                                                                                            {{ $danhGia->bienThe->ten_bien_the ?? 'Không rõ' }}
-                                                                                                            <br>
-                                                                                                        </small>
-                                                                                                    </p>
-                                                                                                @endif
-                                                                                            </ul>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="reply">
-                                                                                    <p>{{ $danhGia->nhan_xet }}</p>
-                                                                                    <!-- Hiển thị hình ảnh đánh giá -->
-                                                                                    {{-- @if (!empty($danhGia->hinh_anh_danh_gia))
-                                                                                        <div class="review-images mt-2 d-flex flex-wrap gap-2">
-                                                                                            @foreach ($danhGia->hinh_anh_danh_gia as $image)
-                                                                                                <a href="{{ Storage::url($image) }}" target="_blank">
-                                                                                                    <img src="{{ Storage::url($image) }}" class="img-fluid rounded"
-                                                                                                         style="width: 100px; height: 100px; object-fit: cover;" alt="Hình ảnh đánh giá">
-                                                                                                </a>
-                                                                                            @endforeach
-                                                                                        </div>
-                                                                                    @endif --}}
-                                                                                    @if (!empty($danhGia->hinh_anh_danh_gia))
-                                                                                        <div
-                                                                                            class="review-images mt-2 d-flex flex-wrap gap-2">
-                                                                                            @foreach ($danhGia->hinh_anh_danh_gia as $image)
-                                                                                                <img src="{{ Storage::url($image) }}"
-                                                                                                    class="img-fluid rounded review-image"
-                                                                                                    style="width: 100px; height: 100px; object-fit: cover; cursor: pointer;"
-                                                                                                    data-bs-toggle="modal"
-                                                                                                    data-bs-target="#imagePreviewModal"
-                                                                                                    data-image="{{ Storage::url($image) }}"
-                                                                                                    alt="Hình ảnh đánh giá">
-                                                                                            @endforeach
-                                                                                        </div>
-                                                                                    @endif
-                                                                                    <!-- Hiển thị video đánh giá -->
-                                                                                    @if ($danhGia->video)
-                                                                                        <div class="review-video">
-                                                                                            <video controls playsinline>
-                                                                                                <source
-                                                                                                    src="{{ Storage::url($danhGia->video) }}"
-                                                                                                    type="video/mp4">
-                                                                                                Trình duyệt của bạn không hỗ
-                                                                                                trợ video.
-                                                                                            </video>
-                                                                                        </div>
-                                                                                    @endif
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </li>
-                                                                @endforeach
-                                                            @else
-                                                                <p style="color: red">Chưa có đánh giá nào.</p>
-                                                            @endif
-                                                        </ul>
+                                                        <ul class="review-list" id="review-list"></ul>
+                                                        <nav aria-label="Page navigation" id="pagination">
+                                                            <ul class="pagination"></ul>
+                                                        </nav>
                                                     </div>
                                                 </div>
 
@@ -1120,6 +1064,213 @@
 @endsection
 
 @section('js')
+    <script>
+        function formatDateTime(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleString('vi-VN', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        function loadReviews(page = 1) {
+            fetch(`/san-pham/{{ $sanPhams->id }}/danh-gia?page=${page}`)
+                .then(response => response.json())
+                .then(data => {
+                    const reviewList = document.getElementById('review-list');
+                    reviewList.innerHTML = '';
+
+                    if (data.danhGias.length === 0) {
+                        reviewList.innerHTML = '<p style="color: red">Chưa có đánh giá nào.</p>';
+                    } else {
+                        data.danhGias.forEach(danhGia => {
+                            let stars = '';
+                            for (let i = 1; i <= 5; i++) {
+                                stars +=
+                                    `<li><i data-feather="star" class="${i <= danhGia.so_sao ? 'fill' : ''}"></i></li>`;
+                            }
+
+                            let images = '';
+                            if (danhGia.hinh_anh_danh_gia && danhGia.hinh_anh_danh_gia.length > 0) {
+                                images = `<div class="review-images mt-2 d-flex flex-wrap gap-2">`;
+                                danhGia.hinh_anh_danh_gia.forEach(image => {
+                                    images += `
+                                <img src="/storage/${image}" class="img-fluid rounded review-image"
+                                     style="width: 100px; height: 100px; object-fit: cover; cursor: pointer;"
+                                     data-bs-toggle="modal" data-bs-target="#imagePreviewModal"
+                                     data-image="/storage/${image}" alt="Hình ảnh đánh giá">`;
+                                });
+                                images += `</div>`;
+                            }
+
+                            let video = '';
+                            if (danhGia.video) {
+                                video = `
+                            <div class="review-video">
+                                <video controls playsinline>
+                                    <source src="/storage/${danhGia.video}" type="video/mp4">
+                                    Trình duyệt của bạn không hỗ trợ video.
+                                </video>
+                            </div>`;
+                            }
+
+                            reviewList.innerHTML += `
+                        <li>
+                            <div class="people-box">
+                                <div>
+                                    <div class="people-image people-text">
+                                        <img alt="user" class="img-fluid"
+     src="${danhGia.nguoi_dung?.anh_dai_dien ? `/storage/${danhGia.nguoi_dung.anh_dai_dien}` : '/default-avatar.jpg'}">
+                                    </div>
+                                </div>
+                                <div class="people-comment">
+                                    <div class="people-name">
+                                        <a href="javascript:void(0)" class="name">${danhGia.nguoi_dung?.ten_nguoi_dung || 'Ẩn danh'}</a>
+                                        <ul class="rating">${stars}</ul>
+                                        <div class="date-time">
+                                            <h6 class="text-content">${formatDateTime(danhGia.created_at)}</h6>
+                                            <div class="product-rating">
+                                                <ul>
+                                                    ${danhGia.bien_the ? `<p class="text-muted mb-1">Biến thể: ${danhGia.bien_the.ten_bien_the}</p>` : ''}
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="reply">
+                                        <p>${danhGia.nhan_xet}</p>
+                                        ${images}
+                                        ${video}
+                                    </div>
+                                </div>
+                            </div>
+                        </li>`;
+                        });
+                    }
+
+                    feather.replace();
+
+                    const reviewImages = document.querySelectorAll('.review-image');
+                    const previewImage = document.getElementById('previewImage');
+                    reviewImages.forEach(image => {
+                        image.addEventListener('click', function() {
+                            const imageUrl = this.getAttribute('data-image');
+                            previewImage.src = imageUrl;
+                        });
+                    });
+
+                    updatePagination(data.current_page, data.last_page);
+                })
+                .catch(error => {
+                    console.error('Error loading reviews:', error);
+                    document.getElementById('review-list').innerHTML =
+                        '<p style="color: red">Lỗi khi tải đánh giá.</p>';
+                });
+        }
+
+        function updatePagination(currentPage, lastPage) {
+            const pagination = document.getElementById('pagination').querySelector('.pagination');
+            pagination.innerHTML = '';
+
+            // Previous Page Link
+            pagination.innerHTML += `
+        <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+            <a class="page-link" href="javascript:void(0)" onclick="loadReviews(${currentPage - 1})">«</a>
+        </li>`;
+
+            // Nếu tổng số trang <= 12, hiển thị tất cả các trang
+            if (lastPage <= 12) {
+                for (let i = 1; i <= lastPage; i++) {
+                    pagination.innerHTML += `
+                <li class="page-item ${i === currentPage ? 'active' : ''}" aria-current="${i === currentPage ? 'page' : ''}">
+                    <a class="page-link" href="javascript:void(0)" onclick="loadReviews(${i})">${i}</a>
+                </li>`;
+                }
+            } else {
+                // Nếu currentPage < 8, hiển thị 10 trang đầu + dấu ba chấm + 2 trang cuối
+                if (currentPage < 8) {
+                    for (let i = 1; i <= 10; i++) {
+                        pagination.innerHTML += `
+                    <li class="page-item ${i === currentPage ? 'active' : ''}" aria-current="${i === currentPage ? 'page' : ''}">
+                        <a class="page-link" href="javascript:void(0)" onclick="loadReviews(${i})">${i}</a>
+                    </li>`;
+                    }
+                    // Dấu ba chấm
+                    pagination.innerHTML += `
+                <li class="page-item disabled">
+                    <span class="page-link dots">...</span>
+                </li>`;
+                    // 2 trang cuối
+                    for (let i = lastPage - 1; i <= lastPage; i++) {
+                        pagination.innerHTML += `
+                    <li class="page-item ${i === currentPage ? 'active' : ''}" aria-current="${i === currentPage ? 'page' : ''}">
+                        <a class="page-link" href="javascript:void(0)" onclick="loadReviews(${i})">${i}</a>
+                    </li>`;
+                    }
+                } else {
+                    // Hiển thị trang 1, 2
+                    for (let i = 1; i <= 2; i++) {
+                        pagination.innerHTML += `
+                    <li class="page-item ${i === currentPage ? 'active' : ''}" aria-current="${i === currentPage ? 'page' : ''}">
+                        <a class="page-link" href="javascript:void(0)" onclick="loadReviews(${i})">${i}</a>
+                    </li>`;
+                    }
+                    // Dấu ba chấm
+                    pagination.innerHTML += `
+                <li class="page-item disabled">
+                    <span class="page-link dots">...</span>
+                </li>`;
+
+                    // Tính toán khối 8 trang lân cận
+                    let startPage = Math.max(3, currentPage - 4); // Bắt đầu từ currentPage - 4, nhưng không nhỏ hơn 3
+                    let endPage = Math.min(lastPage - 2, startPage +
+                        7); // Kết thúc sau 7 trang, nhưng không vượt quá lastPage - 2
+
+                    // Nếu endPage gần lastPage - 2, điều chỉnh startPage để giữ khối 8 trang
+                    if (endPage >= lastPage - 2) {
+                        endPage = lastPage - 2;
+                        startPage = Math.max(3, endPage - 7);
+                    }
+
+                    // Hiển thị khối 8 trang
+                    for (let i = startPage; i <= endPage; i++) {
+                        pagination.innerHTML += `
+                    <li class="page-item ${i === currentPage ? 'active' : ''}" aria-current="${i === currentPage ? 'page' : ''}">
+                        <a class="page-link" href="javascript:void(0)" onclick="loadReviews(${i})">${i}</a>
+                    </li>`;
+                    }
+
+                    // Dấu ba chấm nếu endPage < lastPage - 2
+                    if (endPage < lastPage - 2) {
+                        pagination.innerHTML += `
+                    <li class="page-item disabled">
+                        <span class="page-link dots">...</span>
+                    </li>`;
+                    }
+
+                    // Hiển thị 2 trang cuối
+                    for (let i = lastPage - 1; i <= lastPage; i++) {
+                        pagination.innerHTML += `
+                    <li class="page-item ${i === currentPage ? 'active' : ''}" aria-current="${i === currentPage ? 'page' : ''}">
+                        <a class="page-link" href="javascript:void(0)" onclick="loadReviews(${i})">${i}</a>
+                    </li>`;
+                    }
+                }
+            }
+
+            // Next Page Link
+            pagination.innerHTML += `
+        <li class="page-item ${currentPage === lastPage ? 'disabled' : ''}">
+            <a class="page-link" href="javascript:void(0)" onclick="loadReviews(${currentPage + 1})">»</a>
+        </li>`;
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            loadReviews(1);
+        });
+    </script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             let colorOptions = document.querySelectorAll(".color-option");
@@ -1503,7 +1654,7 @@
 
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
-    <script>
+    {{-- <script>
         function themDanhGia() {
             let sanPhamId = document.getElementById("san_pham_id").value;
             let soSao = document.getElementById("so_sao").value;
@@ -1548,7 +1699,7 @@
 
         // Gọi load danh sách đánh giá khi trang được load
         document.addEventListener("DOMContentLoaded", loadDanhGias);
-    </script>
+    </script> --}}
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const stars = document.querySelectorAll("#ratingStars i");
