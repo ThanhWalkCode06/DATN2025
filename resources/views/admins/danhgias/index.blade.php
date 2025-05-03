@@ -141,7 +141,7 @@
     .user-table th:nth-child(2),
     .user-table td:nth-child(2) {
         /* Tên sản phẩm */
-        width: 15%;
+        width: 25%;
     }
 
     .user-table th:nth-child(3),

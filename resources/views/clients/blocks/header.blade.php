@@ -907,7 +907,7 @@
                     notificationItem.innerHTML = `
                 <div class="notification-content">
                     <h6>${data.noi_dung}</h6>
-                    ${data.don_hang_id ? `<p>Đơn hàng: ${data.don_hang_id}</p>` : ''}
+                    ${data.don_hang_id ? `<p>Mã: ${data.don_hang_id}</p>` : ''}
                     <p>Sản phẩm: ${data.product_name}</p>
                     ${data.nhan_xet ? `<p>Nhận xét: ${data.nhan_xet}</p>` : ''}
                     ${data.ly_do_an ? `<p>Lý do: ${data.ly_do_an}</p>` : ''}
@@ -950,10 +950,10 @@
                                 notificationItem.innerHTML = `
                             <div class="notification-content">
                                 <h6>${thongBao.noi_dung}</h6>
-                                ${thongBao.danh_gia?.don_hang_id ? `<p>Đơn hàng: ${thongBao.danh_gia.don_hang_id}</p>` : ''} 
+                                ${thongBao.danh_gia?.don_hang_id ? `<p>Mã: ${thongBao.danh_gia.don_hang_id}</p>` : ''} 
                                 <p>Sản phẩm: ${thongBao.danh_gia?.san_pham?.ten_san_pham ?? 'Không xác định'}</p>
+                                ${thongBao.nhan_xet ? `<p>Nhận xét: ${thongBao.nhan_xet}</p>` : ''}  
                                 ${thongBao.danh_gia?.ly_do_an ? `<p>Lý do: ${thongBao.danh_gia.ly_do_an}</p>` : ''}
-                                ${thongBao.nhan_xet ? `<p>Nhận xét: ${thongBao.nhan_xet}</p>` : ''}         
                                 <small class="d-block">${thongBao.created_at_full}</small>
                             </div>
                             <button class="delete-button" data-id="${thongBao.id}" data-url="/thongbao/${thongBao.id}/delete">
