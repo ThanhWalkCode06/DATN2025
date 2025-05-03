@@ -444,6 +444,10 @@
             color: #ccc;
             cursor: not-allowed;
         }
+
+        .gap-2{
+            gap: .4rem !important;
+        }
     </style>
 @endsection
 
