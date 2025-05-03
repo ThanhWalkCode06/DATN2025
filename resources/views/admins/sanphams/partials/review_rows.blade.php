@@ -19,7 +19,7 @@
             <br>
             {{ $danhGia->bienThe->ten_bien_the ?? 'Không rõ biến thể' }}
         </td>
-        <td class="status-icon" style="display: none;">
+        <td class="status-icon">
             @if ($danhGia->trang_thai == 1)
                 <i class="ri-checkbox-circle-line text-success"></i>
             @else
