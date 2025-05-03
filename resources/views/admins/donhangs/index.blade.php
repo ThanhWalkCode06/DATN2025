@@ -146,32 +146,48 @@
             let newStatus = $('#bulkStatus').val();
 
             if (selectedIds.length === 0) {
-                alert('Vui lòng chọn ít nhất một đơn hàng.');
+                Swal.fire('Chú ý', 'Vui lòng chọn ít nhất một đơn hàng.', 'warning');
                 return;
             }
 
             if (!newStatus) {
-                alert('Vui lòng chọn trạng thái mới.');
+                Swal.fire('Chú ý', 'Vui lòng chọn trạng thái mới.', 'warning');
                 return;
             }
 
-            // Gửi AJAX cập nhật
-            $.ajax({
-                url: "{{ route('donhangs.bulkUpdate') }}",
-                method: 'POST',
-                data: {
-                    _token: "{{ csrf_token() }}",
-                    ids: selectedIds,
-                    trang_thai_don_hang: newStatus
-                },
-                success: function(res) {
-                    alert(res.message);
-                    fetchOrders(); // Tải lại danh sách
-                    $('#checkAll').prop('checked', false);
-                    $('#bulk-action-wrapper').hide();
-                },
-                error: function() {
-                    alert('Đã xảy ra lỗi. Vui lòng thử lại.');
+            // Xác nhận trước khi gửi AJAX
+            Swal.fire({
+                title: 'Xác nhận cập nhật',
+                text: `Bạn có chắc chắn muốn cập nhật ${selectedIds.length} đơn hàng này?`,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Có',
+                cancelButtonText: 'Hủy'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "{{ route('donhangs.bulkUpdate') }}",
+                        method: 'POST',
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                            ids: selectedIds,
+                            trang_thai_don_hang: newStatus
+                        },
+                        success: function(res) {
+                            Swal.fire({
+                                title: "Cập nhật thành công",
+                                text: res.message,
+                                icon: "success"
+                            });
+
+                            fetchOrders(); // Tải lại danh sách
+                            $('#checkAll').prop('checked', false);
+                            $('#bulk-action-wrapper').hide();
+                        },
+                        error: function() {
+                            Swal.fire('Lỗi', 'Đã xảy ra lỗi. Vui lòng thử lại.', 'error');
+                        }
+                    });
                 }
             });
         });
