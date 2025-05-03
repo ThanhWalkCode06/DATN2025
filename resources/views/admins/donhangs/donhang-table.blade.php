@@ -1,5 +1,7 @@
 @if ($donHangs->count() > 0)
-    {{ $donHangs->appends(request()->query())->links('pagination::bootstrap-5') }}
+    <div class="mb-2 float-end">
+        {{ $donHangs->appends(request()->query())->links('pagination::bootstrap-5') }}
+    </div>
     <table style="table-layout: fixed; width: 100%;" class="table order-table theme-table my-2">
         @foreach ($donHangs as $donHang)
             <thead>
@@ -89,7 +91,9 @@
             </tbody>
         @endforeach
     </table>
-    {{ $donHangs->appends(request()->query())->links('pagination::bootstrap-5') }}
+    <div class="float-end">
+        {{ $donHangs->appends(request()->query())->links('pagination::bootstrap-5') }}
+    </div>
 @else
     <p>Không tìm thấy đơn hàng</p>
 @endif
