@@ -30,7 +30,7 @@
 
 - php artisan migrate:fresh --seed -> vừa reset,migrate và seeder
 
-- php artisan make:controller UserController -> tạo 1 controller mới
+- php artisan make:php UserController -> tạo 1 controller mới
 
 - php artisan make:controller Admins/AdminSanPhamController --resource
 
