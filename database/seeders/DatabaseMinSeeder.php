@@ -17,6 +17,11 @@ class DatabaseMinSeeder extends Seeder
             AddPermissionAndRoleSeeder::class,
             AdminSeeder::class,
             AltUserSeeder::class,
+            DanhMucSanPhamSeeder::class,
+            PhuongThucThanhToanSeeder::class,
+            ThuocTinhSeeder::class,
+            GiaTriThuocTinhSeeder::class,
+            DanhMucBaiVietSeeder::class,
         ]);
     }
 }
