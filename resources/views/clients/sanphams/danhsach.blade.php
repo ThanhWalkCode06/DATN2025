@@ -305,10 +305,10 @@
 
             const filterNames = {
                 "danh_muc_id": {
-                    "1": "Áo Hoodio",
-                    "2": "Thời Trang",
-                    "3": "Thể thao",
-                    "4": "Áo"
+                    "1": "Quần nam",
+                    "2": "Quần nữ",
+                    "3": "Áo nam",
+                    "4": "Áo nữ"
                 },
                 "so_sao": {
                     "5": "(5 sao)",
