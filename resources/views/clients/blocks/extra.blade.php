@@ -371,7 +371,7 @@
                     style="height: 400px; overflow-y: auto; padding: 15px; background-color: #f9f9f9; border-radius: 8px;">
                     <!-- Chat messages will be inserted here -->
                 </div>
-                <div id="preview" style="margin-bottom: 100px" class="position-absolute bottom-0 start-0"></div>
+                {{-- <div id="preview" style="margin-bottom: 100px" class="position-absolute bottom-0 start-0"></div> --}}
                 <form id="chat-form" enctype="multipart/form-data" class="mt-3">
                     <div class="input-group mb-3">
                         <div class="d-flex align-items-center border rounded px-2 py-1 col-10">
@@ -1137,7 +1137,7 @@
 </script>
 
 {{-- Preview ảnh --}}
-<script>
+{{-- <script>
     const input = document.getElementById('media');
     const preview = document.getElementById('preview');
 
@@ -1163,5 +1163,33 @@
             };
             reader.readAsDataURL(file);
         });
+    });
+</script> --}}
+
+<script>
+    const mediaInput = document.getElementById('media');
+    const textInput = document.getElementById('noi_dung');
+    const form = document.getElementById('chat-form');
+    const defaultPlaceholder = textInput.placeholder;
+
+    // Khi người dùng chọn file
+    mediaInput.addEventListener('change', function() {
+        if (mediaInput.files.length > 0) {
+            textInput.placeholder = mediaInput.files[0].name;
+        } else {
+            textInput.placeholder = defaultPlaceholder;
+        }
+    });
+
+    // Sau khi gửi form
+    form.addEventListener('submit', function(e) {
+        // Nếu bạn xử lý form bằng Ajax thì giữ lại dòng e.preventDefault()
+        // e.preventDefault();
+
+        // Reset placeholder sau một chút thời gian để gửi xong
+        setTimeout(() => {
+            textInput.placeholder = defaultPlaceholder;
+            mediaInput.value = ''; // reset file input nếu cần
+        }, 100); // thời gian nhỏ để đảm bảo submit xong
     });
 </script>
