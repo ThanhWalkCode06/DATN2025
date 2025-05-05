@@ -1004,7 +1004,9 @@
                         @if ($chophep_danhgia && !empty($bienTheDaMua))
                             @if (count($bienTheDaMua) > 1)
                                 <div class="review-box mt-3">
-                                    <label for="bien_the_id" class="form-label">Chọn biến thể đã mua *</label>
+                                    <label for="bien_the_id" 
+                                    
+                                    class="form-label">Chọn biến thể đã mua *</label>
                                     <select name="bien_the_id" id="bien_the_id" class="form-select" required>
                                         @foreach ($bienTheDaMua as $bienTheId => $soLanMua)
                                             @php
@@ -1175,7 +1177,7 @@
                                         <h6 class="text-content">${formatDateTime(danhGia.created_at)}</h6>
                                         <div class="product-rating">
                                             <ul>
-                                                ${danhGia.bien_the ? `<p class="text-muted mb-1">Biến thể: ${danhGia.bien_the.ten_bien_the}</p>` : ''}
+                                                ${danhGia.bien_the ? `<p class="text-muted mb-1"> ${danhGia.bien_the.ten_bien_the}</p>` : ''}
                                             </ul>
                                         </div>
                                     </div>
