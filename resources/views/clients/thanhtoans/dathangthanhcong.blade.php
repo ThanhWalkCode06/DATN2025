@@ -107,7 +107,8 @@
                                         <tr>
                                             <td class="product-detail">
                                                 <div class="product border-0">
-                                                    <div>
+                                                    <div class="product-detail">
+                                                        <h4 style="display:hidenn" class="table-title text-content">Ảnh Sản Phẩm</h4>
                                                         <a href="{{ route('sanphams.chitiet', $chiTietDonHang->bienThe->sanPham->id) }}"
                                                             class="product-image">
                                                             <img width="100px"
@@ -120,7 +121,7 @@
                                                         <ul>
                                                             <li class="name">
                                                                 <a
-                                                                    href="{{ route('sanphams.chitiet', $chiTietDonHang->id) }}">{{ $chiTietDonHang->bienThe->sanPham->ten_san_pham }}</a>
+                                                                    href="{{ route('sanphams.chitiet', $chiTietDonHang->bienThe->sanPham->id) }}">{{ $chiTietDonHang->bienThe->sanPham->ten_san_pham }}</a>
                                                             </li>
 
                                                             <li class="text-content">{{ $chiTietDonHang->bienThe->ten_bien_the }}

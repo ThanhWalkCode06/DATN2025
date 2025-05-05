@@ -34,12 +34,28 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
+        width: 55px;
+        height: 55px;
+        border-radius: 50%;
+        border: 2px solid #ddd;
+        color: #333;
+        font-size: 12px;
+        /* font-weight: bold; */
+        cursor: pointer;
+        margin: 5px;
+        transition: all 0.3s ease-in-out;
+    }
+
+    #thuoc_tinh_Color > .option {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
         width: 60px;
         height: 60px;
         border-radius: 50%;
         border: 2px solid #ddd;
         color: #333;
-        font-size: 12px;
+        font-size: 10px;
         /* font-weight: bold; */
         cursor: pointer;
         margin: 5px;

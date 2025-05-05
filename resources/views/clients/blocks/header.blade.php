@@ -156,7 +156,7 @@
                                     </h6>
                                 </div>
                             </div>
-                            @if (Auth::check())
+                            {{-- @if (Auth::check())
                                 <div>
                                     <div class="timer-notification">
                                         <h6>Mã giảm giá cho người mới:
@@ -164,7 +164,7 @@
                                         </h6>
                                     </div>
                                 </div>
-                            @endif
+                            @endif --}}
                             <div>
                                 <div class="timer-notification">
                                     <h6>Mua hàng ngay thôi nào!
@@ -950,9 +950,9 @@
                                 notificationItem.innerHTML = `
                             <div class="notification-content">
                                 <h6>${thongBao.noi_dung}</h6>
-                                ${thongBao.danh_gia?.don_hang_id ? `<p>Mã: ${thongBao.danh_gia.don_hang_id}</p>` : ''} 
+                                ${thongBao.danh_gia?.don_hang_id ? `<p>Mã: ${thongBao.danh_gia.don_hang_id}</p>` : ''}
                                 <p>Sản phẩm: ${thongBao.danh_gia?.san_pham?.ten_san_pham ?? 'Không xác định'}</p>
-                                ${thongBao.nhan_xet ? `<p>Nhận xét: ${thongBao.nhan_xet}</p>` : ''}  
+                                ${thongBao.nhan_xet ? `<p>Nhận xét: ${thongBao.nhan_xet}</p>` : ''}
                                 ${thongBao.danh_gia?.ly_do_an ? `<p>Lý do: ${thongBao.danh_gia.ly_do_an}</p>` : ''}
                                 <small class="d-block">${thongBao.created_at_full}</small>
                             </div>
