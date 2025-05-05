@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Models\PhieuGiamGiaTaiKhoan;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use App\Http\Controllers\HelperCommon\Helper;
 use App\Http\Requests\Client\ThanhToanRequest;
@@ -212,6 +213,25 @@ class ThanhToanController extends Controller
 
         // Thanh toán bằng ví
         if ($request->phuong_thuc_thanh_toan_id === "3") {
+              // Kiểm tra mật khẩu tài khoản
+                // Kiểm tra hash hợp lệ
+            if (!preg_match('/^\$2[ayb]\$.{56}$/', $user->password)) {
+                Log::error('Invalid password hash for user ID: ' . $user->id);
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Lỗi hệ thống: Mật khẩu tài khoản không hợp lệ.'
+                ], 500);
+            }
+
+            // Kiểm tra mật khẩu tài khoản
+            if (!Hash::check(trim($request->password), $user->password)) {
+                Log::error('Password verification failed for user ID: ' . $user->id);
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Mật khẩu tài khoản không đúng.'
+                ], 400);
+            }
+            //
             $soDu = $user->vi->so_du ?? 0;
             $tongTien = $request->tong_tien;
 
