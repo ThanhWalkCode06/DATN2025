@@ -446,9 +446,10 @@ class ThanhToanController extends Controller
         //     ->join('don_hangs', 'don_hangs.id', '=', 'bien_thes.san_pham_id')
         //     ->where('don_hang_id', '=', $donHang->id)
         //     ->get();
-        $chiTietDonHangs = ChiTietDonHang::with('bienThe.sanPham','sanPham')->where('id',$donHang->id)->get();
 
-            // dd($donHang,$chiTietDonHangs,$donHang->id);
+        $chiTietDonHangs = ChiTietDonHang::with('bienThe.sanPham','sanPham')->where('don_hang_id',$donHang->id)->get();
+
+            // dd($donHang,$chiTietDonHangs);
         return view('clients.thanhtoans.dathangthanhcong', compact('donHang', 'chiTietDonHangs', 'voucher'));
     }
 
