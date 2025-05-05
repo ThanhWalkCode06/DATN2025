@@ -45,6 +45,29 @@
 
         .color-option {
             transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            border: 1px solid  #16A085;
+            border-radius: 50%;
+            font-size: 12px;
+            /* nhỏ lại để không bị tràn */
+            line-height: 1.2;
+            font-weight: bold;
+            text-align: center;
+            padding: 4px;
+            /* giữ khoảng cách đều */
+            box-sizing: border-box;
+            white-space: normal;
+            /* cho xuống dòng nếu cần */
+        }
+
+        .color-option.active {
+            background-color:  #16A085;
+            color: white;
+            border-color:  #16A085;
         }
 
         .color-option:hover {
@@ -58,21 +81,9 @@
 
 
         .color-option input[type="radio"]:checked {
-            border: 3px solid #009970;
+            border: 3px solid  #1abc9c;
             /* Thêm viền màu khi được chọn */
         }
-
-        .color-option .color-name {
-            transition: all 0.3s ease;
-            color: #333;
-            font-weight: bold;
-        }
-
-        .color-option:hover .color-name {
-            color: #009970;
-            /* Màu chữ thay đổi khi hover */
-        }
-
 
         /* Hộp chứa sản phẩm */
         .product-box-3 {
@@ -409,44 +420,6 @@
 
         .payment-logo:hover {
             transform: scale(1.1);
-        }
-
-        .pagination {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
-
-        .pagination .page-item {
-            margin: 0 5px;
-        }
-
-        .pagination .page-link {
-            color: #009970;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 8px 10px;
-            cursor: pointer;
-        }
-
-        .pagination .page-link:hover {
-            background-color: #009970;
-            color: #fff;
-        }
-
-        .pagination .active .page-link {
-            background-color: #009970;
-            color: #fff;
-            border-color: #009970;
-        }
-
-        .pagination .disabled .page-link {
-            color: #ccc;
-            cursor: not-allowed;
-        }
-
-        .gap-2{
-            gap: .4rem !important;
         }
     </style>
 @endsection
@@ -855,10 +828,100 @@
 
                                                 <div class="col-xl-7">
                                                     <div class="review-people">
-                                                        <ul class="review-list" id="review-list"></ul>
-                                                        <nav aria-label="Page navigation" id="pagination">
-                                                            <ul class="pagination"></ul>
-                                                        </nav>
+                                                        <ul class="review-list">
+                                                            @if ($sanPhams->danhGias->where('trang_thai', 1)->count() > 0)
+                                                                @foreach ($sanPhams->danhGias->where('trang_thai', 1)->sortByDesc('created_at') as $danhGia)
+                                                                    <li>
+                                                                        <div class="people-box">
+                                                                            <div>
+                                                                                <div class="people-image people-text">
+                                                                                    <img alt="user" class="img-fluid"
+                                                                                        src="{{ $danhGia->nguoiDung->anh_dai_dien ?? asset('default-avatar.jpg') }}">
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="people-comment">
+                                                                                <div class="people-name">
+                                                                                    <a href="javascript:void(0)"
+                                                                                        class="name">
+                                                                                        {{ $danhGia->nguoiDung->ten_nguoi_dung }}
+                                                                                    </a>
+                                                                                    <div class="date-time">
+                                                                                        <h6 class="text-content">
+                                                                                            {{ \Carbon\Carbon::parse($danhGia->created_at)->format('d/m/Y H:i') }}
+                                                                                        </h6>
+                                                                                        <div class="product-rating">
+                                                                                            <ul class="rating">
+                                                                                                @for ($i = 1; $i <= 5; $i++)
+                                                                                                    <li>
+                                                                                                        <i data-feather="star"
+                                                                                                            class="{{ $i <= $danhGia->so_sao ? 'fill' : '' }}">
+                                                                                                        </i>
+                                                                                                    </li>
+                                                                                                @endfor
+                                                                                            </ul>
+                                                                                            <ul>
+                                                                                                @if ($danhGia->bienThe)
+                                                                                                    <p
+                                                                                                        class="text-muted mb-1">
+                                                                                                        <small>
+                                                                                                            Biến thể:
+                                                                                                            {{ $danhGia->bienThe->ten_bien_the ?? 'Không rõ' }}
+                                                                                                            <br>
+                                                                                                        </small>
+                                                                                                    </p>
+                                                                                                @endif
+                                                                                            </ul>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="reply">
+                                                                                    <p>{{ $danhGia->nhan_xet }}</p>
+                                                                                    <!-- Hiển thị hình ảnh đánh giá -->
+                                                                                    {{-- @if (!empty($danhGia->hinh_anh_danh_gia))
+                                                                                        <div class="review-images mt-2 d-flex flex-wrap gap-2">
+                                                                                            @foreach ($danhGia->hinh_anh_danh_gia as $image)
+                                                                                                <a href="{{ Storage::url($image) }}" target="_blank">
+                                                                                                    <img src="{{ Storage::url($image) }}" class="img-fluid rounded"
+                                                                                                         style="width: 100px; height: 100px; object-fit: cover;" alt="Hình ảnh đánh giá">
+                                                                                                </a>
+                                                                                            @endforeach
+                                                                                        </div>
+                                                                                    @endif --}}
+                                                                                    @if (!empty($danhGia->hinh_anh_danh_gia))
+                                                                                        <div
+                                                                                            class="review-images mt-2 d-flex flex-wrap gap-2">
+                                                                                            @foreach ($danhGia->hinh_anh_danh_gia as $image)
+                                                                                                <img src="{{ Storage::url($image) }}"
+                                                                                                    class="img-fluid rounded review-image"
+                                                                                                    style="width: 100px; height: 100px; object-fit: cover; cursor: pointer;"
+                                                                                                    data-bs-toggle="modal"
+                                                                                                    data-bs-target="#imagePreviewModal"
+                                                                                                    data-image="{{ Storage::url($image) }}"
+                                                                                                    alt="Hình ảnh đánh giá">
+                                                                                            @endforeach
+                                                                                        </div>
+                                                                                    @endif
+                                                                                    <!-- Hiển thị video đánh giá -->
+                                                                                    @if ($danhGia->video)
+                                                                                        <div class="review-video">
+                                                                                            <video controls playsinline>
+                                                                                                <source
+                                                                                                    src="{{ Storage::url($danhGia->video) }}"
+                                                                                                    type="video/mp4">
+                                                                                                Trình duyệt của bạn không hỗ
+                                                                                                trợ video.
+                                                                                            </video>
+                                                                                        </div>
+                                                                                    @endif
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </li>
+                                                                @endforeach
+                                                            @else
+                                                                <p style="color: red">Chưa có đánh giá nào.</p>
+                                                            @endif
+                                                        </ul>
                                                     </div>
                                                 </div>
 
@@ -1079,253 +1142,28 @@
 
 @section('js')
     <script>
-        function formatDateTime(dateString) {
-            const date = new Date(dateString);
-
-            // Lấy ngày, tháng, năm
-            const day = String(date.getDate()).padStart(2, '0');
-            const month = String(date.getMonth() + 1).padStart(2, '0'); // Tháng bắt đầu từ 0
-            const year = date.getFullYear();
-
-            // Lấy giờ, phút
-            const hours = String(date.getHours()).padStart(2, '0');
-            const minutes = String(date.getMinutes()).padStart(2, '0');
-
-            // Trả về định dạng "ngày trước giờ sau": 02/05/2025 14:30
-            return `${day}/${month}/${year} ${hours}:${minutes}`;
-
-            // const date = new Date(dateString);
-            // return date.toLocaleString('vi-VN', {
-            //     day: '2-digit',
-            //     month: '2-digit',
-            //     year: 'numeric',
-            //     hour: '2-digit',
-            //     minute: '2-digit'
-            // });
-            // const [time, datePart] = formatted.split(' ');
-            // return `${datePart} ${time}`;
-        }
-
-        function loadReviews(page = 1) {
-            fetch(`/san-pham/{{ $sanPhams->id }}/danh-gia?page=${page}`)
-                .then(response => response.json())
-                .then(data => {
-                    const reviewList = document.getElementById('review-list');
-                    reviewList.innerHTML = '';
-
-                    if (data.danhGias.length === 0) {
-                        reviewList.innerHTML = '<p style="color: red">Chưa có đánh giá nào.</p>';
-                    } else {
-                        data.danhGias.forEach(danhGia => {
-                            let stars = '';
-                            for (let i = 1; i <= 5; i++) {
-                                stars +=
-                                    `<li><i data-feather="star" class="${i <= danhGia.so_sao ? 'fill' : ''}"></i></li>`;
-                            }
-
-                            let images = '';
-                            if (danhGia.hinh_anh_danh_gia && danhGia.hinh_anh_danh_gia.length > 0) {
-                                images = `<div class="review-images mt-2 d-flex flex-wrap gap-2">`;
-                                danhGia.hinh_anh_danh_gia.forEach(image => {
-                                    images += `
-                                <img src="/storage/${image}" class="img-fluid rounded review-image"
-                                     style="width: 100px; height: 100px; object-fit: cover; cursor: pointer;"
-                                     data-bs-toggle="modal" data-bs-target="#imagePreviewModal"
-                                     data-image="/storage/${image}" alt="Hình ảnh đánh giá">`;
-                                });
-                                images += `</div>`;
-                            }
-
-                            let video = '';
-                            if (danhGia.video) {
-                                video = `
-                            <div class="review-video">
-                                <video controls playsinline>
-                                    <source src="/storage/${danhGia.video}" type="video/mp4">
-                                    Trình duyệt của bạn không hỗ trợ video.
-                                </video>
-                            </div>`;
-                            }
-
-                            reviewList.innerHTML += `
-                        <li>
-                            <div class="people-box">
-                                <div>
-                                    <div class="people-image people-text">
-                                        <img alt="user" class="img-fluid"
-                                             src="${danhGia.nguoi_dung?.anh_dai_dien ? `/storage/${danhGia.nguoi_dung.anh_dai_dien}` : '/default-avatar.jpg'}">
-                                    </div>
-                                </div>
-                                <div class="people-comment">
-                                    <div class="people-name">
-                                        <a href="javascript:void(0)" class="name">${danhGia.nguoi_dung?.ten_nguoi_dung || 'Ẩn danh'}</a>
-                                        <ul class="rating">${stars}</ul>
-                                        <div class="date-time">
-                                            <h6 class="text-content">${formatDateTime(danhGia.created_at)}</h6>
-                                            <div class="product-rating">
-                                                <ul>
-                                                    ${danhGia.bien_the ? `<p class="text-muted mb-1">Biến thể: ${danhGia.bien_the.ten_bien_the}</p>` : ''}
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="reply">
-                                        <p>${danhGia.nhan_xet}</p>
-                                        ${images}
-                                        ${video}
-                                    </div>
-                                </div>
-                            </div>
-                        </li>`;
-                        });
-                    }
-
-                    feather.replace();
-
-                    const reviewImages = document.querySelectorAll('.review-image');
-                    const previewImage = document.getElementById('previewImage');
-                    reviewImages.forEach(image => {
-                        image.addEventListener('click', function() {
-                            const imageUrl = this.getAttribute('data-image');
-                            previewImage.src = imageUrl;
-                        });
-                    });
-
-                    updatePagination(data.current_page, data.last_page);
-                })
-                .catch(error => {
-                    console.error('Error loading reviews:', error);
-                    document.getElementById('review-list').innerHTML =
-                        '<p style="color: red">Lỗi khi tải đánh giá.</p>';
-                });
-        }
-
-        function updatePagination(currentPage, lastPage) {
-            const pagination = document.getElementById('pagination').querySelector('.pagination');
-            pagination.innerHTML = '';
-
-            // Previous Page Link
-            pagination.innerHTML += `
-        <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
-            <a class="page-link" href="javascript:void(0)" onclick="loadReviews(${currentPage - 1})">«</a>
-        </li>`;
-
-            // Nếu tổng số trang <= 12, hiển thị tất cả các trang
-            if (lastPage <= 12) {
-                for (let i = 1; i <= lastPage; i++) {
-                    pagination.innerHTML += `
-                <li class="page-item ${i === currentPage ? 'active' : ''}" aria-current="${i === currentPage ? 'page' : ''}">
-                    <a class="page-link" href="javascript:void(0)" onclick="loadReviews(${i})">${i}</a>
-                </li>`;
-                }
-            } else {
-                // Nếu currentPage < 8, hiển thị 10 trang đầu + dấu ba chấm + 2 trang cuối
-                if (currentPage < 8) {
-                    for (let i = 1; i <= 10; i++) {
-                        pagination.innerHTML += `
-                    <li class="page-item ${i === currentPage ? 'active' : ''}" aria-current="${i === currentPage ? 'page' : ''}">
-                        <a class="page-link" href="javascript:void(0)" onclick="loadReviews(${i})">${i}</a>
-                    </li>`;
-                    }
-                    // Dấu ba chấm
-                    pagination.innerHTML += `
-                <li class="page-item disabled">
-                    <span class="page-link dots">...</span>
-                </li>`;
-                    // 2 trang cuối
-                    for (let i = lastPage - 1; i <= lastPage; i++) {
-                        pagination.innerHTML += `
-                    <li class="page-item ${i === currentPage ? 'active' : ''}" aria-current="${i === currentPage ? 'page' : ''}">
-                        <a class="page-link" href="javascript:void(0)" onclick="loadReviews(${i})">${i}</a>
-                    </li>`;
-                    }
-                } else {
-                    // Hiển thị trang 1, 2
-                    for (let i = 1; i <= 2; i++) {
-                        pagination.innerHTML += `
-                    <li class="page-item ${i === currentPage ? 'active' : ''}" aria-current="${i === currentPage ? 'page' : ''}">
-                        <a class="page-link" href="javascript:void(0)" onclick="loadReviews(${i})">${i}</a>
-                    </li>`;
-                    }
-                    // Dấu ba chấm
-                    pagination.innerHTML += `
-                <li class="page-item disabled">
-                    <span class="page-link dots">...</span>
-                </li>`;
-
-                    // Tính toán khối 8 trang lân cận
-                    let startPage = Math.max(3, currentPage - 4); // Bắt đầu từ currentPage - 4, nhưng không nhỏ hơn 3
-                    let endPage = Math.min(lastPage - 2, startPage +
-                        7); // Kết thúc sau 7 trang, nhưng không vượt quá lastPage - 2
-
-                    // Nếu endPage gần lastPage - 2, điều chỉnh startPage để giữ khối 8 trang
-                    if (endPage >= lastPage - 2) {
-                        endPage = lastPage - 2;
-                        startPage = Math.max(3, endPage - 7);
-                    }
-
-                    // Hiển thị khối 8 trang
-                    for (let i = startPage; i <= endPage; i++) {
-                        pagination.innerHTML += `
-                    <li class="page-item ${i === currentPage ? 'active' : ''}" aria-current="${i === currentPage ? 'page' : ''}">
-                        <a class="page-link" href="javascript:void(0)" onclick="loadReviews(${i})">${i}</a>
-                    </li>`;
-                    }
-
-                    // Dấu ba chấm nếu endPage < lastPage - 2
-                    if (endPage < lastPage - 2) {
-                        pagination.innerHTML += `
-                    <li class="page-item disabled">
-                        <span class="page-link dots">...</span>
-                    </li>`;
-                    }
-
-                    // Hiển thị 2 trang cuối
-                    for (let i = lastPage - 1; i <= lastPage; i++) {
-                        pagination.innerHTML += `
-                    <li class="page-item ${i === currentPage ? 'active' : ''}" aria-current="${i === currentPage ? 'page' : ''}">
-                        <a class="page-link" href="javascript:void(0)" onclick="loadReviews(${i})">${i}</a>
-                    </li>`;
-                    }
-                }
-            }
-
-            // Next Page Link
-            pagination.innerHTML += `
-        <li class="page-item ${currentPage === lastPage ? 'disabled' : ''}">
-            <a class="page-link" href="javascript:void(0)" onclick="loadReviews(${currentPage + 1})">»</a>
-        </li>`;
-        }
-
         document.addEventListener("DOMContentLoaded", function() {
-            loadReviews(1);
-        });
-    </script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            let colorOptions = document.querySelectorAll(".color-option");
-            let sizeContainer = document.querySelector("#size-options");
-            let priceDisplay = document.querySelector("#product-price");
-            let quantityDisplay = document.querySelector("#product-quantity");
-            let priceLabel = document.querySelector(".price-label");
-            let defaultPrice = document.querySelector("#default-price");
-            let defaultOldPrice = document.querySelector("#default-old-price");
-            let selectedColorText = document.querySelector("#selected-color");
-            let productImage = document.querySelector("#main-image"); // Main image
-            let discountLabel = document.querySelector(".offer-top");
-            let selectedSizeValue = null; // Biến lưu size đã chọn
+            const colorOptions = document.querySelectorAll(".color-option");
+            const sizeContainer = document.querySelector("#size-options");
+            const priceDisplay = document.querySelector("#product-price");
+            const quantityDisplay = document.querySelector("#product-quantity");
+            const priceLabel = document.querySelector(".price-label");
+            const defaultPrice = document.querySelector("#default-price");
+            const defaultOldPrice = document.querySelector("#default-old-price");
+            const selectedColorSpan = document.getElementById("selected-color");
+            const productImage = document.querySelector("#main-image");
+            const discountLabel = document.querySelector(".offer-top");
 
             function formatCurrency(value) {
                 return new Intl.NumberFormat("vi-VN").format(value) + "₫";
             }
 
             function updatePriceAndQuantity() {
-                let selectedSize = document.querySelector(".variant-size-selector:checked");
+                const selectedSize = document.querySelector(".variant-size-selector:checked");
                 if (selectedSize) {
-                    selectedSizeValue = selectedSize.getAttribute("data-size"); // Lưu size đang chọn
-                    let sizePrice = parseFloat(selectedSize.getAttribute("data-price"));
-                    let oldPrice = parseFloat(defaultOldPrice.innerText.replace("₫", "").replace(/\./g, ""));
-                    let variantImage = selectedSize.getAttribute("data-image");
+                    const sizePrice = parseFloat(selectedSize.getAttribute("data-price"));
+                    const oldPrice = parseFloat(defaultOldPrice.innerText.replace("₫", "").replace(/\./g, ""));
+                    const variantImage = selectedSize.getAttribute("data-image");
 
                     priceDisplay.textContent = formatCurrency(sizePrice);
                     quantityDisplay.textContent = selectedSize.getAttribute("data-quantity");
@@ -1335,7 +1173,7 @@
                     priceDisplay.style.display = "inline";
 
                     if (oldPrice > 0 && sizePrice < oldPrice) {
-                        let discountPercent = Math.round(100 - (sizePrice / oldPrice) * 100);
+                        const discountPercent = Math.round(100 - (sizePrice / oldPrice) * 100);
                         discountLabel.textContent = `Giảm giá ${discountPercent}% `;
                         discountLabel.style.visibility = "visible";
                     } else {
@@ -1349,7 +1187,7 @@
                 }
             }
 
-            function updateSizes(bienThes) {
+            function updateSizes(bienThes, previousSizeValue = null) {
                 sizeContainer.innerHTML = "";
 
                 if (bienThes.length === 0) {
@@ -1369,35 +1207,38 @@
                 bienThes.sort((a, b) => (sizeOrder[a.gia_tri] || 99) - (sizeOrder[b.gia_tri] || 99));
 
                 bienThes.forEach(size => {
-                    let label = document.createElement("label");
+                    const label = document.createElement("label");
                     label.classList.add("option", "size-option");
                     label.style.cursor = "pointer";
                     label.innerHTML = `
-                <input type="radio" name="size" class="d-none variant-size-selector"
-                    value="${size.id}" data-price="${size.gia_ban}"
-                    data-quantity="${size.so_luong}"
-                    data-image="${size.anh}"
-                    data-size="${size.gia_tri}">
-                <span class="option-box">${size.gia_tri}</span>
-            `;
+                    <input type="radio" name="size" class="d-none variant-size-selector"
+                        value="${size.id}" data-price="${size.gia_ban}"
+                        data-quantity="${size.so_luong}" data-image="${size.anh}"
+                        data-size="${size.gia_tri}">
+                    <span class="option-box">${size.gia_tri}</span>
+                `;
                     sizeContainer.appendChild(label);
                 });
 
                 attachSizeEvents();
 
-                // Nếu đã chọn size trước đó, chọn lại size khi đổi màu
-                if (selectedSizeValue) {
-                    let previousSelectedSize = Array.from(document.querySelectorAll(".variant-size-selector"))
-                        .find(input => input.getAttribute("data-size") === selectedSizeValue);
-                    if (previousSelectedSize) {
-                        previousSelectedSize.checked = true;
-                        previousSelectedSize.dispatchEvent(new Event("change"));
+                // Nếu có previousSizeValue (S, M, L...) thì chọn lại size tương ứng
+                if (previousSizeValue) {
+                    const reselectInput = sizeContainer.querySelector(
+                        `.variant-size-selector[data-size="${previousSizeValue}"]`);
+                    if (reselectInput) {
+                        reselectInput.checked = true;
+                        reselectInput.closest("label").classList.add("selected");
+                        updatePriceAndQuantity();
+
+                        const addToCartBtn = document.querySelector(".btn-add-cart");
+                        addToCartBtn.setAttribute("data-id", reselectInput.value);
                     }
                 }
             }
 
             function attachSizeEvents() {
-                let sizeInputs = document.querySelectorAll(".variant-size-selector");
+                const sizeInputs = document.querySelectorAll(".variant-size-selector");
 
                 sizeInputs.forEach(input => {
                     input.addEventListener("change", function() {
@@ -1408,30 +1249,49 @@
                         this.closest("label").classList.add("selected");
                         updatePriceAndQuantity();
 
-                        let addToCartBtn = document.querySelector(".btn-add-cart");
+                        const addToCartBtn = document.querySelector(".btn-add-cart");
                         addToCartBtn.setAttribute("data-id", this.value);
                     });
                 });
             }
 
+            // Xử lý chọn màu
             colorOptions.forEach(option => {
-                option.addEventListener("click", function() {
-                    colorOptions.forEach(opt => opt.classList.remove("selected"));
-                    this.classList.add("selected");
+                const input = option.querySelector("input");
 
-                    let colorName = this.getAttribute("data-color-name") || "Không xác định";
-                    selectedColorText.innerText = colorName;
+                // Nếu radio đã checked lúc load
+                if (input.checked) {
+                    option.classList.add("selected", "active");
+                    selectedColorSpan.textContent = input.dataset.mau || "Không xác định";
 
-                    let bienThes = JSON.parse(this.querySelector("input[type='radio']")
-                        .getAttribute("data-bienthes"));
-
+                    const bienThes = JSON.parse(input.getAttribute("data-bienthes"));
                     updateSizes(bienThes);
+                }
+
+                option.addEventListener("click", function() {
+                    // Lưu lại size hiện tại trước khi chuyển
+                    const selectedSizeInput = document.querySelector(
+                        ".variant-size-selector:checked");
+                    const previousSizeValue = selectedSizeInput?.getAttribute("data-size");
+
+                    colorOptions.forEach(opt => opt.classList.remove("selected", "active"));
+                    this.classList.add("selected", "active");
+
+                    selectedColorSpan.textContent = input.dataset.mau || "Không xác định";
+                    input.checked = true;
+
+                    const bienThes = JSON.parse(input.getAttribute("data-bienthes"));
+                    updateSizes(bienThes, previousSizeValue);
                 });
             });
 
+            // Hiển thị size table
+            sizeContainer.style.display = "block";
             priceDisplay.style.display = "none";
         });
     </script>
+
+
 
     <script>
         $(document).on("click", ".btn-add-cart", function() {
@@ -1553,6 +1413,7 @@
             });
         });
     </script>
+
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
@@ -1676,8 +1537,14 @@
         });
     </script>
 
+
+
+
+
+
+
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
-    {{-- <script>
+    <script>
         function themDanhGia() {
             let sanPhamId = document.getElementById("san_pham_id").value;
             let soSao = document.getElementById("so_sao").value;
@@ -1722,7 +1589,7 @@
 
         // Gọi load danh sách đánh giá khi trang được load
         document.addEventListener("DOMContentLoaded", loadDanhGias);
-    </script> --}}
+    </script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const stars = document.querySelectorAll("#ratingStars i");

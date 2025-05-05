@@ -320,46 +320,7 @@
     <!-- Review Section End -->
 
 
-    <!-- Blog Section Start -->
-    <section class="section-lg-space">
-        <div class="container-fluid-lg">
-            <div class="about-us-title text-center">
-                <h4 class="text-content">Bài viết</h4>
-                <h2 class="center">Blog mới nhất của chúng tôi</h2>
-            </div>
-            <div class="row">
-                <div class="col-12">
-                    <div class="slider-5 ratio_87">
-                        @if (isset($baiViets) && $baiViets->count() > 0)
-                            @foreach ($baiViets as $baiViet)
-                                <div>
-                                    <div class="blog-box">
-                                        <div class="blog-box-image">
-                                            <div class="blog-image">
-                                                <a href="{{ route('baiviets.chitiet', $baiViet->id) }}" class="rounded-3">
-                                                    <img src="{{ asset(Storage::url($baiViet->anh_bia)) }}"
-                                                        class="bg-img blur-up lazyload" alt="{{ $baiViet->tieu_de }}">
-                                                </a>
-                                            </div>
-                                        </div>
 
-                                        <a href="{{ route('baiviets.chitiet', $baiViet->id) }}"
-                                            class="blog-detail d-block">
-                                            <h6>{{ $baiViet->danhMuc->ten_danh_muc ?? 'Chưa có danh mục' }}</h6>
-                                            <h5>{{ $baiViet->tieu_de }}</h5>
-                                        </a>
-                                    </div>
-                                </div>
-                            @endforeach
-                        @else
-                            <p class="text-center">Chưa có bài viết nào.</p>
-                        @endif
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- Blog Section End -->
 @endsection
 
 @section('js')
