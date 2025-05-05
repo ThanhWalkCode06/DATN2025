@@ -105,13 +105,13 @@
 
                         <div class="ratio_156 section-t-space">
                             <div class="home-contain hover-effect">
-                                <img src="{{ asset('assets/client/images/banner/10.webp') }}" class="bg-img blur-up lazyload"
+                                <img src="{{ asset('assets/client/images/banner/6.png') }}" class="bg-img blur-up lazyload"
                                     alt="">
                                 <div class="home-detail p-top-left home-p-medium">
                                     <div>
                                         <h6 class="text-yellow home-banner">Áo Nữ</h6>
                                         <h3 class="text-uppercase fw-normal"><span class="theme-color fw-bold">Sản
-                                                Phẩm</span> Mới Nhất</h3>
+                                                Phẩm</span> <br> Mới Nhất</h3>
                                         <h3 class="fw-light">Cập Nhật Liên Tục</h3>
                                         {{-- <button onclick="location.href = '/clientsanpham';"
                                             class="btn btn-animation btn-md mend-auto">Mua Ngay <i
