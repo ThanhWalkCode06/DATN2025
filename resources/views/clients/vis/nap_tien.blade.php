@@ -21,7 +21,7 @@
 
             </div>
 
-            <button type="submit" class="btn btn-success w-100" style="background-color: #009688; border: none;">
+            <button type="submit" class="btn btn-success w-100" style="background-color: #009688; border: none;color: white;">
                 <i class="fas fa-wallet me-2"></i> Nạp tiền qua VNPAY
             </button>
         </form>
