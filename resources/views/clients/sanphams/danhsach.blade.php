@@ -78,6 +78,38 @@
             background: linear-gradient(135deg, #ff4b2b);
             transform: translateY(-3px);
         }
+
+        /* Vùng lọc giá */
+        #filter-price-section .price-filter-option {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            color: #333;
+            font-size: 14px;
+            padding: 6px 12px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            line-height: 1.2;
+        }
+
+        /* Hover: dịu nhẹ */
+        #filter-price-section .price-filter-option:hover {
+            background-color: #e9ecef;
+            color: #000;
+        }
+
+        /* Khi được chọn (radio checked) mới hiện màu active */
+        #filter-price-section .btn-check:checked+.price-filter-option {
+            background-color: #e0f6f3;
+            border-color: #17a589;
+            color: #121212;
+            font-weight: 600;
+        }
+
+        /* Loại bỏ hiệu ứng viền xanh mặc định của Bootstrap */
+        #filter-price-section .btn-check:focus+.price-filter-option {
+            outline: none !important;
+            box-shadow: none !important;
+        }
     </style>
 @endsection
 
@@ -174,20 +206,26 @@
                                         </button>
                                     </h2>
                                     <div id="collapseThree" class="accordion-collapse collapse show">
-                                        <div class="accordion-body">
-                                            @foreach ([['0-100000', 'Giá dưới 100.000đ'], ['100000-200000', '100.000đ - 200.000đ'], ['200000-300000', '200.000đ - 300.000đ'], ['300000-500000', '300.000đ - 500.000đ'], ['500000-1000000', '500.000đ - 1.000.000đ'], ['1000000-999999999', 'Giá trên 1.000.000đ']] as [$value, $label])
-                                                <div class="form-check">
-                                                    <input class="form-check-input filter-input" type="radio"
-                                                        name="price_range" value="{{ $value }}"
-                                                        id="price-{{ $loop->index }}">
-                                                    <label class="form-check-label" for="price-{{ $loop->index }}">
-                                                        {{ $label }}
-                                                    </label>
-                                                </div>
-                                            @endforeach
+                                        <div class="accordion-body" id="filter-price-section">
+                                            <div class="row g-2">
+                                                @foreach ([['0-100000', 'Dưới 100.000đ'], ['100000-200000', '100.000đ - 200.000đ'], ['200000-300000', '200.000đ - 300.000đ'], ['300000-500000', '300.000đ - 500.000đ'], ['500000-1000000', '500.000đ - 1.000.000đ'], ['1000000-999999999', 'Trên 1.000.000đ']] as [$value, $label])
+                                                    <div class="col-12">
+                                                        <input type="radio" class="btn-check filter-input"
+                                                            name="price_range" id="price-{{ $loop->index }}"
+                                                            autocomplete="off" value="{{ $value }}"
+                                                            {{ request('price_range') == $value ? 'checked' : '' }}>
+                                                        <label
+                                                            class="btn w-100 text-start price-filter-option {{ request('price_range') == $value ? 'active' : '' }}"
+                                                            for="price-{{ $loop->index }}">
+                                                            {{ $label }}
+                                                        </label>
+                                                    </div>
+                                                @endforeach
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+
 
 
 
@@ -307,7 +345,7 @@
                 "danh_muc_id": {
                     "1": "Quần nam",
                     "2": "Quần nữ",
-                    "3": "Áo nam",
+                    "3": "Áo Nam",
                     "4": "Áo nữ"
                 },
                 "so_sao": {
@@ -536,6 +574,11 @@
             if (shouldAutoFetch) {
                 fetchFilteredProducts(1);
             }
+        });
+    </script>
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            document.activeElement?.blur();
         });
     </script>
 @endsection

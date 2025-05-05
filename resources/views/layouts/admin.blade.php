@@ -309,7 +309,7 @@
                         html += '<li><a href="#">Không có thông báo mới</a></li>';
                     }
 
-                    html += '<li><a class="btn btn-primary" href="/thong-bao">Xem toàn bộ</a></li>';
+                    html += '<li><a class="btn btn-primary" href="/admin/donhangs">Xem toàn bộ</a></li>';
 
                     $('.notification-dropdown').html(html);
                     if (data.length > 0) {
