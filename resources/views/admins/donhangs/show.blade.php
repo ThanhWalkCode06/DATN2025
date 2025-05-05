@@ -220,13 +220,12 @@
                                         </tr>
                                         @foreach ($chiTietDonHangs as $chiTietDonHang)
                                             <tr class="table-order">
-                                                <td>
-                                                    <a href="javascript:void(0)">
-                                                        <img src="{{ Storage::url($chiTietDonHang->hinh_anh) }}"
-                                                            class="img-fluid blur-up lazyload" alt="">
-                                                    </a>
+                                                <td class="d-flex justify-content-center">
+                                                    <img style="height: 160px"
+                                                        src="{{ Storage::url($chiTietDonHang->hinh_anh) }}"
+                                                        class="object-fit-cover blur-up lazyload" alt="">
                                                 </td>
-                                                <td>
+                                                <td style="max-width: 200px; word-wrap: break-word; white-space: normal;">
                                                     <h5>{{ $chiTietDonHang->ten_san_pham }}</h5>
                                                     <h5>{{ $chiTietDonHang->ten_bien_the }}</h5>
                                                 </td>
