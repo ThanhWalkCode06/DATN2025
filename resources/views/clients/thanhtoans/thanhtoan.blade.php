@@ -818,23 +818,48 @@
                 // Lấy giá trị phương thức thanh toán từ input hoặc hidden field
                 const paymentMethod = $('#hiddenPaymentMethod').val();
                 // Nếu là thanh toán bằng ví (ID = 3)
+                // if (paymentMethod === "3") {
+                //     const result = await Swal.fire({
+                //         title: 'Xác nhận?',
+                //         text: 'Bạn có chắc chắn muốn trừ tiền trong ví không?',
+                //         icon: 'warning',
+                //         showCancelButton: true,
+                //         confirmButtonText: 'Đồng ý',
+                //         cancelButtonText: 'Hủy',
+                //         reverseButtons: true
+                //     });
+
+                //     if (!result.isConfirmed) {
+                //         return;
+                //     }
+                // }
+
+// nhập mk 
+                let password = '';
                 if (paymentMethod === "3") {
                     const result = await Swal.fire({
-                        title: 'Xác nhận?',
-                        text: 'Bạn có chắc chắn muốn trừ tiền trong ví không?',
-                        icon: 'warning',
+                        title: 'Nhập mật khẩu tài khoản',
+                        input: 'password',
+                        inputLabel: 'Vui lòng nhập mật khẩu tài khoản để xác nhận thanh toán bằng ví',
+                        inputPlaceholder: 'Mật khẩu tài khoản',
                         showCancelButton: true,
-                        confirmButtonText: 'Đồng ý',
+                        confirmButtonText: 'Xác nhận',
                         cancelButtonText: 'Hủy',
-                        reverseButtons: true
+                        inputValidator: (value) => {
+                            if (!value) {
+                                return 'Vui lòng nhập mật khẩu tài khoản!';
+                            }
+                        }
                     });
 
                     if (!result.isConfirmed) {
                         return;
                     }
+
+                    password = result.value;
                 }
 
-
+//nhập mk
                 //  confirm
                 // Lấy dữ liệu từ form
                 var formData = {
@@ -848,6 +873,7 @@
                     sdt_nguoi_nhan: $('input[name="sdt_nguoi_nhan"]').val(),
                     dia_chi_nguoi_nhan: $('input[name="dia_chi_nguoi_nhan"]').val(),
                     ghi_chu: $('input[name="ghi_chu"]').val(),
+                    password: password
                 };
                 // Gửi request AJAX
                 $.ajax({
