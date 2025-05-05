@@ -99,15 +99,19 @@
                                     @php
                                         $total = 0;
                                     @endphp
+                                    @php
+                                        // dd($chiTietDonHangs,$donHang);
+                                    @endphp
+
                                     @foreach ($chiTietDonHangs as $chiTietDonHang)
                                         <tr>
                                             <td class="product-detail">
                                                 <div class="product border-0">
                                                     <div>
-                                                        <a href="{{ route('sanphams.chitiet', $chiTietDonHang->id) }}"
+                                                        <a href="{{ route('sanphams.chitiet', $chiTietDonHang->bienThe->sanPham->id) }}"
                                                             class="product-image">
                                                             <img width="100px"
-                                                                src="{{ Storage::url($chiTietDonHang->anh_bien_the) }}"
+                                                                src="{{ Storage::url($chiTietDonHang->bienThe->anh_bien_the) }}"
                                                                 class="img-fluid blur-up lazyload" alt="">
                                                         </a>
                                                     </div>
@@ -116,10 +120,10 @@
                                                         <ul>
                                                             <li class="name">
                                                                 <a
-                                                                    href="{{ route('sanphams.chitiet', $chiTietDonHang->id) }}">{{ $chiTietDonHang->ten_san_pham }}</a>
+                                                                    href="{{ route('sanphams.chitiet', $chiTietDonHang->id) }}">{{ $chiTietDonHang->bienThe->sanPham->ten_san_pham }}</a>
                                                             </li>
 
-                                                            <li class="text-content">{{ $chiTietDonHang->ten_bien_the }}
+                                                            <li class="text-content">{{ $chiTietDonHang->bienThe->ten_bien_the }}
                                                             </li>
                                                         </ul>
                                                     </div>
@@ -129,7 +133,7 @@
                                             <td class="price">
                                                 <h4 class="table-title text-content">Giá</h4>
                                                 <h6 class="theme-color">
-                                                    {{ number_format($chiTietDonHang->gia_ban, 0, '', '.') }}đ</h6>
+                                                    {{ number_format($chiTietDonHang->bienThe->gia_ban, 0, '', '.') }}đ</h6>
                                             </td>
 
                                             <td class="quantity">
@@ -139,12 +143,12 @@
 
                                             <td class="subtotal">
                                                 <h4 class="table-title text-content">Tổng</h4>
-                                                <h5>{{ number_format($chiTietDonHang->gia_ban * $chiTietDonHang->so_luong, 0, '', '.') }}đ
+                                                <h5>{{ number_format($chiTietDonHang->bienThe->gia_ban * $chiTietDonHang->so_luong, 0, '', '.') }}đ
                                                 </h5>
                                             </td>
                                         </tr>
                                         @php
-                                            $total += $chiTietDonHang->gia_ban * $chiTietDonHang->so_luong;
+                                            $total += $chiTietDonHang->bienThe->gia_ban * $chiTietDonHang->so_luong;
                                         @endphp
                                     @endforeach
                                 </tbody>

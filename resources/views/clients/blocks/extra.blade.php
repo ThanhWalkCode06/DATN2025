@@ -34,12 +34,12 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        width: 40px;
-        height: 40px;
+        width: 60px;
+        height: 60px;
         border-radius: 50%;
         border: 2px solid #ddd;
         color: #333;
-        font-size: 14px;
+        font-size: 12px;
         /* font-weight: bold; */
         cursor: pointer;
         margin: 5px;

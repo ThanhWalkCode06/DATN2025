@@ -429,24 +429,26 @@ class ThanhToanController extends Controller
 
         $voucher = PhieuGiamGiaTaiKhoan::with('phieuGiamGia')->where('order_id', $id)->first();
         // dd($voucher->phieuGiamGia->ma_phieu);
-        $chiTietDonHangs = ChiTietDonHang::select(
-            'chi_tiet_don_hangs.*',
-            'san_phams.ten_san_pham',
-            'san_phams.id',
-            'san_phams.san_pham_slug',
-            'san_phams.gia_cu',
-            'bien_thes.gia_ban',
-            'san_phams.hinh_anh',
-            'bien_thes.ten_bien_the',
-            'bien_thes.anh_bien_the',
-            'don_hangs.created_at'
-        )
-            ->join('bien_thes', 'bien_thes.id', '=', 'bien_the_id')
-            ->join('san_phams', 'san_phams.id', '=', 'bien_thes.san_pham_id')
-            ->join('don_hangs', 'don_hangs.id', '=', 'bien_thes.san_pham_id')
-            ->where('don_hang_id', '=', $donHang->id)
-            ->get();
+        // $chiTietDonHangs = ChiTietDonHang::select(
+        //     'chi_tiet_don_hangs.*',
+        //     'san_phams.ten_san_pham',
+        //     'san_phams.id',
+        //     'san_phams.san_pham_slug',
+        //     'san_phams.gia_cu',
+        //     'bien_thes.gia_ban',
+        //     'san_phams.hinh_anh',
+        //     'bien_thes.ten_bien_the',
+        //     'bien_thes.anh_bien_the',
+        //     'don_hangs.created_at'
+        // )
+        //     ->join('bien_thes', 'bien_thes.id', '=', 'bien_the_id')
+        //     ->join('san_phams', 'san_phams.id', '=', 'bien_thes.san_pham_id')
+        //     ->join('don_hangs', 'don_hangs.id', '=', 'bien_thes.san_pham_id')
+        //     ->where('don_hang_id', '=', $donHang->id)
+        //     ->get();
+        $chiTietDonHangs = ChiTietDonHang::with('bienThe.sanPham','sanPham')->where('id',$donHang->id)->get();
 
+            // dd($donHang,$chiTietDonHangs,$donHang->id);
         return view('clients.thanhtoans.dathangthanhcong', compact('donHang', 'chiTietDonHangs', 'voucher'));
     }
 

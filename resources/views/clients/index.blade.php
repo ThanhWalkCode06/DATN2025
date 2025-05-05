@@ -64,7 +64,7 @@
                                     alt="">
                                 <div class="home-detail p-center-left home-p-sm w-75">
                                     <div>
-                                        <h3 class="theme-color">Bộ Sưu Tập Quần Nam</h3>
+                                        <h3 class="theme-color">Quần thể thao Nam</h3>
                                         <p class="w-75">Mang đến những trang phục thoải
                                             mái và tinh tế.</p>
                                         <a href='/sanpham/?danh_muc_id=1' class="shop-button">Mua ngay <i
@@ -82,8 +82,8 @@
                                 <div class="home-detail p-center-left home-p-sm w-75">
                                     <div>
                                         <h3 class="mt-0 theme-color fw-bold">Áo Nữ</h3>
-                                        <h4 class="text-danger">Bộ Sưu Tập Mới</h4>
-                                        <p class="organic">Bắt đầu ngày mới cùng chiếc cánh mới.</p>
+                                        <h4 class="text-danger">Thể thao</h4>
+                                        <p class="organic">Bắt đầu ngày mới với chiếc cánh mới.</p>
                                         <a href='/sanpham/?danh_muc_id=2' class="shop-button">Mua ngay <i
                                                 class="fa-solid fa-right-long"></i></a>
                                     </div>
