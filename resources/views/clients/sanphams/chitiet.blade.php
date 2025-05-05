@@ -834,10 +834,14 @@
                                                                     <li>
                                                                         <div class="people-box">
                                                                             <div>
-                                                                                <div class="people-image people-text">
-                                                                                    <img alt="user" class="img-fluid"
-                                                                                        src="{{ $danhGia->nguoiDung->anh_dai_dien ?? asset('default-avatar.jpg') }}">
-                                                                                </div>
+                                                                        
+                                                                            <div class="people-image people-text">
+    <img alt="user" class="img-fluid" 
+         src="{{ asset('storage/' . ($danhGia->nguoiDung->anh_dai_dien ?? 'default-avatar.jpg')) }}">
+</div>
+
+
+
                                                                             </div>
                                                                             <div class="people-comment">
                                                                                 <div class="people-name">
@@ -864,7 +868,7 @@
                                                                                                     <p
                                                                                                         class="text-muted mb-1">
                                                                                                         <small>
-                                                                                                            Biến thể:
+                                                                                                            
                                                                                                             {{ $danhGia->bienThe->ten_bien_the ?? 'Không rõ' }}
                                                                                                             <br>
                                                                                                         </small>

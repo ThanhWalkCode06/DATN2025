@@ -8,9 +8,6 @@ use Illuminate\Database\Seeder;
 
 class BaiVietSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
         $user = BaiViet::insert(
@@ -79,6 +76,5 @@ class BaiVietSeeder extends Seeder
                 ]
             ]
         );
-        // BaiViet::factory()->count(20)->create();
     }
 }
