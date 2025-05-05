@@ -503,7 +503,7 @@
                     const noiDung = noiDungInput.value.trim();
                     const preview = document.getElementById('preview');
 
-                    preview.innerHTML = '';
+                    // preview.innerHTML = '';
 
                     if (!noiDung && !file) {
                         document.getElementById("chat-error").classList.remove("d-none");
