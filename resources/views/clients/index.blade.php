@@ -42,7 +42,7 @@
                         <div class="home-detail p-center-left w-75">
                             <div>
                                 <h6>Ưu đãi đặc biệt</h6>
-                                <h1 class="text-uppercase">Ở nhà & nhận ngay <span class="daily">Trang phục <br> thể
+                                <h1 class="text-uppercase">Ở nhà & nhận ngay <span class="daily">Áo Nam <br> thể
                                         thao</span>
                                 </h1>
                                 <p class="w-75 d-none d-sm-block">Những bộ quần áo thể thao thoải mái, phong cách giúp bạn
@@ -64,9 +64,9 @@
                                     alt="">
                                 <div class="home-detail p-center-left home-p-sm w-75">
                                     <div>
-                                        <h3 class="theme-color">Bộ Sưu Tập Áo Hoodie</h3>
-                                        <p class="w-75">Chúng tôi mang đến những bộ trang phục thể thao chất lượng, thoải
-                                            mái và phong cách.</p>
+                                        <h3 class="theme-color">Bộ Sưu Tập Quần Nam</h3>
+                                        <p class="w-75">Mang đến những trang phục thoải
+                                            mái và tinh tế.</p>
                                         <a href='/sanpham/?danh_muc_id=1' class="shop-button">Mua ngay <i
                                                 class="fa-solid fa-right-long"></i></a>
                                     </div>
@@ -77,14 +77,13 @@
 
                         <div class="col-xl-12 col-md-6">
                             <div class="home-contain">
-                                <img src="{{ asset('assets/client/images/banner/3.png') }}" class="bg-img blur-up lazyload"
+                                <img src="{{ asset('assets/client/images/banner/7.png') }}" class="bg-img blur-up lazyload"
                                     alt="">
                                 <div class="home-detail p-center-left home-p-sm w-75">
                                     <div>
-                                        <h3 class="mt-0 theme-color fw-bold">Bộ Đồ Thời Trang</h3>
+                                        <h3 class="mt-0 theme-color fw-bold">Áo Nữ</h3>
                                         <h4 class="text-danger">Bộ Sưu Tập Mới</h4>
-                                        <p class="organic">Bắt đầu ngày mới với những bộ trang phục
-                                            thoải mái.</p>
+                                        <p class="organic">Bắt đầu ngày mới cùng chiếc cánh mới.</p>
                                         <a href='/sanpham/?danh_muc_id=2' class="shop-button">Mua ngay <i
                                                 class="fa-solid fa-right-long"></i></a>
                                     </div>
@@ -106,11 +105,11 @@
 
                         <div class="ratio_156 section-t-space">
                             <div class="home-contain hover-effect">
-                                <img src="{{ asset('assets/client/images/banner/4.png') }}" class="bg-img blur-up lazyload"
+                                <img src="{{ asset('assets/client/images/banner/10.webp') }}" class="bg-img blur-up lazyload"
                                     alt="">
                                 <div class="home-detail p-top-left home-p-medium">
                                     <div>
-                                        <h6 class="text-yellow home-banner">Áo khoác gió</h6>
+                                        <h6 class="text-yellow home-banner">Áo Nữ</h6>
                                         <h3 class="text-uppercase fw-normal"><span class="theme-color fw-bold">Sản
                                                 Phẩm</span> Mới Nhất</h3>
                                         <h3 class="fw-light">Cập Nhật Liên Tục</h3>
