@@ -198,6 +198,26 @@
         margin-top: 5px;
         cursor: pointer;
     }
+    .theme-option .setting-button {
+        border-radius: 50%;
+        width: 60px;
+        /* Điều chỉnh kích thước nếu cần */
+        height: 40px;
+        /* Bằng với chiều rộng để tạo hình tròn hoàn hảo */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        /* Xóa padding mặc định */
+    }
+
+    /* Đảm bảo biểu tượng bên trong được căn giữa */
+    .theme-option .setting-button i {
+        font-size: 18px;
+        /* Điều chỉnh kích thước biểu tượng nếu cần */
+        line-height: 1;
+        
+    }
 </style>
 <!-- Quick View Modal Box Start -->
 <div class="modal fade theme-modal view-modal" id="view" tabindex="-1">
