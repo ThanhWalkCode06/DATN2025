@@ -125,7 +125,7 @@ Route::prefix('admin')->middleware(['auth', 'checkStatus'])->group(function () {
 
         Route::get('/test', function () {
             dd(1);
-        })->name('hihi');
+        })->name('visit');
     });
 });
 

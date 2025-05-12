@@ -386,7 +386,7 @@
                                                 aria-label="Đóng"></button>
                                         </div>
                                         <div class="modal-body">
-                                            <textarea class="form-control" name="ly_do" id="modal-ly-do" rows="4" placeholder="Nhập lý do tại đây..."></textarea>
+                                            <textarea class="form-control" name="ly_do" id="modal-ly-do" rows="4" placeholder="Nhập lý do tại đây..." maxlength="255"></textarea>
                                         </div>
                                         <div class="modal-footer">
                                             <button style="border:none" type="button" class="btn-secondary btn-sm"
@@ -836,7 +836,7 @@
                                     <textarea id="nhan_xet_{{ $item['bien_the_id'] }}" name="nhan_xet" rows="3" class="form-control"
                                         placeholder="Viết nhận xét của bạn..." maxlength="50"></textarea>
                                 </div>
-                                
+
                                 <div class="review-box d-flex gap-3 align-items-start">
                                     <!-- Image Upload -->
                                     <div class="upload-box text-center">
@@ -1146,3 +1146,12 @@
         });
     });
 </script>
+{{-- <script>
+    const textarea = document.getElementById('modal-ly-do');
+    const charCount = document.getElementById('char-count');
+
+    textarea.addEventListener('input', () => {
+        const remaining = 255 - textarea.value.length;
+        charCount.textContent = `Còn lại: ${remaining} ký tự`;
+    });
+</script> --}}
