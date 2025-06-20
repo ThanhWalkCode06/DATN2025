@@ -5,22 +5,24 @@ namespace App\Http\Controllers;
 
 use App\Models\BienThe;
 use App\Models\DonHang;
+use App\Models\GioHang;
 use App\Models\SanPham;
 use App\Models\ThuocTinh;
 use App\Models\AnhSanPham;
 use Illuminate\Http\Request;
+use App\Exports\GenericExport;
 use App\Models\ChiTietDonHang;
+use App\Models\ChiTietGioHang;
 use App\Models\DanhMucSanPham;
 use Illuminate\Support\Carbon;
 use App\Models\GiaTriThuocTinh;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\StoreSanPhamRequest;
 use App\Http\Requests\UpdateSanPhamRequest;
 use App\Http\Controllers\HelperCommon\Helper;
-use App\Models\ChiTietGioHang;
-use App\Models\GioHang;
 
 class SanPhamController extends Controller
 {
@@ -43,9 +45,6 @@ class SanPhamController extends Controller
                 'pagination' => $sanPhams->appends($request->except('page'))->links('pagination::bootstrap-5')->render()
             ]);
         }
-        // $bienThes = BienThe::select('san_pham_id','ten_bien_the')->where('san_pham_id',52)->distinct()->get();
-
-        // $danhMucs = DanhMucSanPham::all();
 
         return view('admins.sanphams.index', compact('sanPhams'));
     }
@@ -64,18 +63,44 @@ class SanPhamController extends Controller
         return view('admins.sanphams.index', compact('sanPhams'));
     }
 
-    public function sanPhamTopDanhGia()
+    public function exportExcel()
     {
-        $sanPhams = SanPham::select('san_phams.*')
-            ->join('danh_gias', 'san_phams.id', '=', 'danh_gias.san_pham_id')
-            ->selectRaw('AVG(danh_gias.so_sao) as avg_rating')
-            ->groupBy('san_phams.id')
-            ->orderByDesc('avg_rating')
-            ->limit(4)
-            ->get();
+        $products = SanPham::with('bienthes','danhMuc')->get();
+        foreach ($products as $product) {
+            foreach ($product->bienthes as $bienthe) {
+                // dd(number_format($bienthe->gia_ban,0,'.',''));
+                $data[] = [
+                    $product->ten_san_pham,
+                    $product->ma_san_pham,
+                    number_format($product->gia_cu,0,'','.').' vnđ',
+                    $product->danhMuc->ten_danh_muc,
+                    $bienthe->ten_bien_the,
+                    number_format($bienthe->gia_ban,0,'','.').' vnđ',
+                    $bienthe->so_luong,
+                    $product->trang_thai === 1 ? 'Còn hàng' : 'Hết hàng' ,
+                    $product->created_at,
+                ];
+            }
+        }
 
-        return view('clients.index', compact('sanPhams'));
+        $headings = ['Tên sản phẩm','Mã sản phẩm','Giá cũ','Danh mục','Tên biến thể',
+        'Giá biến thế', 'Số lượng', 'Trạng thái', 'Ngày tạo',];
+
+        return Excel::download(new GenericExport($data, $headings), 'products.xlsx');
     }
+
+    // public function sanPhamTopDanhGia()
+    // {
+    //     $sanPhams = SanPham::select('san_phams.*')
+    //         ->join('danh_gias', 'san_phams.id', '=', 'danh_gias.san_pham_id')
+    //         ->selectRaw('AVG(danh_gias.so_sao) as avg_rating')
+    //         ->groupBy('san_phams.id')
+    //         ->orderByDesc('avg_rating')
+    //         ->limit(4)
+    //         ->get();
+
+    //     return view('clients.index', compact('sanPhams'));
+    // }
     /**
      * Show the form for creating a new resource.
      */
@@ -189,7 +214,7 @@ class SanPhamController extends Controller
                     }
                 }
             } else {
-
+                dd($request->all());
                 foreach ($request->selected_values as $key => $tenBienThe) {
                     $hinhAnhBienThe = null;
 
@@ -277,7 +302,6 @@ class SanPhamController extends Controller
      */
     public function edit($id)
     {
-
         $sanpham = SanPham::with('bienThes', 'anhSP')->findOrFail($id);
         $checkedTT = [];
         foreach ($sanpham->bienThes->unique('ten_bien_the') as $ten) {
@@ -291,7 +315,7 @@ class SanPhamController extends Controller
         }
         $album = AnhSanPham::where('san_pham_id', $id)->get();
         $thuocTinhs = ThuocTinh::with('giaTriThuocTinhs')->get();
-
+        dd($checkedTT,$attribute);
         $danhMucs = DanhMucSanPham::all();
         return view('admins.sanphams.edit', compact('sanpham', 'danhMucs', 'thuocTinhs', 'album', 'checkedTT'));
     }

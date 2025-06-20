@@ -147,6 +147,56 @@
         border-radius: 8px;
         margin-top: 5px;
     }
+    /* Tùy chỉnh giao diện Select2 */
+    .select2-container .select2-selection--single {
+        height: 38px;
+        border: 1px solid #ced4da;
+        border-radius: 0.375rem;
+        padding: 0.375rem 0.75rem;
+        font-size: 1rem;
+        line-height: 1.5;
+        z-index: 9999;
+    }
+    .select2-container--bootstrap-5 .select2-selection--single .select2-selection__rendered {
+        line-height: 1.5;
+    }
+    .select2-container--bootstrap-5 .select2-selection--single .select2-selection__arrow {
+        height: 38px;
+        right: 10px;
+    }
+    .select2-container--bootstrap-5 .select2-dropdown {
+        border: 1px solid #ced4da;
+        border-radius: 0.375rem;
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    }
+    .select2-container--bootstrap-5 .select2-results__option {
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
+    }
+    .select2-container--bootstrap-5 .select2-results__option--highlighted {
+        background-color: #0d6efd;
+        color: white;
+    }
+    .select2-container {
+        width: 100% !important;
+    }
+    .select2-container--bootstrap-5 .select2-results__option {
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
+        width: 100%;
+        /* background-color: #0da487; */
+    }.select2-search--dropdown .select2-search__field {
+        padding: 4px;
+        width: 100%;
+        box-sizing: border-box;
+        border: none;
+    }
+    .select2-container--bootstrap-5 .select2-results__option--highlighted {
+        background-color: #0da487 !important;
+    }
+    .select2-container--bootstrap-5 .select2-dropdown {
+    z-index: 1056 !important; /* modal Bootstrap z-index là 1055 */
+    }
 </style>
 <style>
     /* Modal phóng to ảnh cho client */
@@ -216,7 +266,7 @@
         font-size: 18px;
         /* Điều chỉnh kích thước biểu tượng nếu cần */
         line-height: 1;
-        
+
     }
 </style>
 <!-- Quick View Modal Box Start -->
@@ -311,36 +361,13 @@
         </div>
     </form>
 </div>
-<!-- Quick View Modal Box End -->
-
-<!-- Cookie Bar Box Start -->
-{{-- <div class="cookie-bar-box">
-    <div class="cookie-box">
-        <div class="cookie-image">
-            <img src="../assets/client/images/cookie-bar.png" class="blur-up lazyload" alt="">
-            <h2>Cookies!</h2>
-        </div>
-
-        <div class="cookie-contain">
-            <h5 class="text-content">We use cookies to make your experience better</h5>
-        </div>
-    </div>
-
-    <div class="button-group">
-        <button class="btn privacy-button">Privacy Policy</button>
-        <button class="btn ok-button">OK</button>
-    </div>
-</div> --}}
-<!-- Cookie Bar Box End -->
-
-<!-- Deal Box Modal Start -->
 <div class="modal fade theme-modal deal-modal" id="deal-box" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
         <div class="modal-content">
             <div class="modal-header">
                 <div>
-                    <h5 class="modal-title w-100" id="deal_today">Top sản phẩm hôm nay</h5>
-                    <p class="mt-1 text-content">Giới thiệu cho bạn những sản phẩm hot hôm nay.</p>
+                    <h5 class="modal-title w-100" id="deal_today">{{ __('client/trang_chu.topOrders') }}</h5>
+                    <p class="mt-1 text-content">{{ __('client/trang_chu.topOrders.descript') }}</p>
                 </div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal">
                     <i class="fa-solid fa-xmark"></i>
@@ -521,6 +548,11 @@
         enctype="multipart/form-data">
         @csrf
         @method('PUT')
+
+        <input type="hidden" id="oldProvince" value="{{ $user->province }}">
+        <input type="hidden" id="oldDistrict" value="{{ $user->district }}">
+        <input type="hidden" id="oldWard" value="{{ $user->ward }}">
+
         <div class="modal fade theme-modal" id="editProfile" tabindex="-1">
             <div class="modal-dialog modal-lg modal-dialog-centered modal-fullscreen-sm-down">
                 <div class="modal-content">
@@ -548,19 +580,14 @@
                             </div>
 
                             <div class="col-xxl-6">
-
                                 <div class="form-floating theme-form-floating">
                                     <input type="email" class="form-control @error('email') is-invalid @enderror"
                                         id="email1" name="email" value="{{ $user->email ?? '' }}">
                                     <label for="email1">Địa chỉ email</label>
                                 </div>
-                                @error('email')
-                                    <p class="text-danger">{{ $message }}</p>
-                                @enderror
                             </div>
 
                             <div class="col-xxl-6">
-
                                 <div class="form-floating theme-form-floating">
                                     <input class="form-control @error('so_dien_thoai') is-invalid @enderror"
                                         type="tel" value="{{ $user->so_dien_thoai ?? '' }}" name="so_dien_thoai"
@@ -573,6 +600,8 @@
                                     <p class="text-danger">{{ $message }}</p>
                                 @enderror
                             </div>
+
+                            @include('clients.blocks.dia_chi')
 
                             <div class="col-12">
 
@@ -587,14 +616,6 @@
 
                             </div>
 
-                            {{-- <div class="col-12">
-
-                                <div class="form-floating theme-form-floating">
-                                    <input type="text" class="form-control" id="address2" value="CA 94080">
-                                    <label for="address2">Add Address 2</label>
-                                </div>
-
-                            </div> --}}
                             @if (isset($user))
                                 <div class="col-xxl-4">
 
@@ -666,108 +687,6 @@
 
 <!-- Edit Profile End -->
 
-<!-- Edit Card Start -->
-<div class="modal fade theme-modal" id="editCard" tabindex="-1">
-    <div class="modal-dialog modal-lg modal-dialog-centered modal-fullscreen-sm-down">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel8">Edit Card</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="row g-4">
-                    <div class="col-xxl-6">
-                        <form>
-                            <div class="form-floating theme-form-floating">
-                                <input type="text" class="form-control" id="finame" value="Mark">
-                                <label for="finame">First Name</label>
-                            </div>
-                        </form>
-                    </div>
-
-                    <div class="col-xxl-6">
-                        <form>
-                            <div class="form-floating theme-form-floating">
-                                <input type="text" class="form-control" id="laname" value="Jecno">
-                                <label for="laname">Last Name</label>
-                            </div>
-                        </form>
-                    </div>
-
-                    <div class="col-xxl-4">
-                        <form>
-                            <div class="form-floating theme-form-floating">
-                                <select class="form-select" id="floatingSelect12">
-                                    <option selected>Card Type</option>
-                                    <option value="kingdom">Visa Card</option>
-                                    <option value="states">MasterCard Card</option>
-                                    <option value="fra">RuPay Card</option>
-                                    <option value="china">Contactless Card</option>
-                                    <option value="spain">Maestro Card</option>
-                                </select>
-                                <label for="floatingSelect12">Card Type</label>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-animation btn-md fw-bold"
-                    data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn theme-bg-color btn-md fw-bold text-light">Update Card</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Edit Card End -->
-
-<!-- Remove Profile Modal Start -->
-<div class="modal fade theme-modal remove-profile" id="removeProfile" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
-        <div class="modal-content">
-            <div class="modal-header d-block text-center">
-                <h5 class="modal-title w-100" id="exampleModalLabel22">Are You Sure ?</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="remove-box">
-                    <p>The permission for the use/group, preview is inherited from the object, object will create a
-                        new permission for this object</p>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
-                <button type="button" class="btn theme-bg-color btn-md fw-bold text-light"
-                    data-bs-target="#removeAddress" data-bs-toggle="modal">Yes</button>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="modal fade theme-modal remove-profile" id="removeAddress" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title text-center" id="exampleModalLabel12">Done!</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="remove-box text-center">
-                    <h4 class="text-content">It's Removed.</h4>
-                </div>
-            </div>
-            <div class="modal-footer pt-0">
-                <button type="button" class="btn theme-bg-color btn-md fw-bold text-light"
-                    data-bs-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
@@ -777,6 +696,10 @@
 
             let formData = new FormData(this);
             formData.append("_method", "PUT"); // Laravel yêu cầu thêm _method=PUT khi gửi bằng POST
+
+            formData.set("province", $("#province option:selected").text());
+            formData.set("district", $("#district option:selected").text());
+            formData.set("ward", $("#ward option:selected").text());
 
             $.ajax({
                 url: $(this).attr("action"),
@@ -790,6 +713,7 @@
                     location.reload(); // Tải lại trang để thấy cập nhật mới
                 },
                 error: function(xhr) {
+                    console.error("Toàn bộ lỗi từ Laravel:", xhr.responseJSON);
                     $(".text-danger").remove(); // Xóa lỗi cũ
 
                     let errors = xhr.responseJSON.errors;
@@ -1172,36 +1096,6 @@
     });
 </script>
 
-{{-- Preview ảnh --}}
-{{-- <script>
-    const input = document.getElementById('media');
-    const preview = document.getElementById('preview');
-
-    input.addEventListener('change', function() {
-        preview.innerHTML = ''; // Clear preview cũ
-
-        const files = input.files;
-
-        if (files.length === 0) return;
-
-        Array.from(files).forEach(file => {
-            if (!file.type.startsWith('image/')) return;
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const img = document.createElement('img');
-                img.src = e.target.result;
-                img.classList.add('rounded'); // Optional styling
-                img.style.maxWidth = '120px';
-                img.style.maxHeight = '120px';
-                img.style.objectFit = 'cover';
-                preview.appendChild(img);
-            };
-            reader.readAsDataURL(file);
-        });
-    });
-</script> --}}
-
 <script>
     const mediaInput = document.getElementById('media');
     const textInput = document.getElementById('noi_dung');
@@ -1229,3 +1123,5 @@
         }, 100); // thời gian nhỏ để đảm bảo submit xong
     });
 </script>
+
+

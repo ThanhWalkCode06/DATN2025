@@ -4,7 +4,7 @@
         <td>{{ $phieuGiamGia->ma_phieu }}</td>
         <td>{{ date('d-m-Y', strtotime($phieuGiamGia->ngay_bat_dau)) }}</td>
         <td>{{ date('d-m-Y', strtotime($phieuGiamGia->ngay_ket_thuc)) }}</td>
-        <td class="theme-color">{{ $phieuGiamGia->gia_tri }}%</td>
+        <td class="theme-color">{{ number_format($phieuGiamGia->gia_tri,0,'','.') }}{{ $phieuGiamGia->kieu_giam === 'co_dinh' ? 'Đ' : '%'  }}</td>
         <td class="menu-status">
             @if ($phieuGiamGia->trang_thai == 1)
                 <span class="badge bg-success">Kích hoạt</span>

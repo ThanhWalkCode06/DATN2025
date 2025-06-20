@@ -22,6 +22,9 @@ return new class extends Migration
             $table->string('anh_dai_dien')->nullable()->default('images/user-default.png');
             $table->date('ngay_sinh')->nullable();
             $table->string('so_dien_thoai')->unique()->nullable();
+            $table->string('ward')->nullable(); // Phường/xã
+            $table->string('district')->nullable(); // 	Quận/huyện
+            $table->string('province')->nullable(); // Tỉnh
             $table->string('dia_chi')->nullable();
             $table->boolean('trang_thai')->default(1);
             $table->rememberToken();

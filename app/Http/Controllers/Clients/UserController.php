@@ -40,7 +40,6 @@ class UserController extends Controller
     {
         $data = $request->all();
         $user = User::findOrFail($id);
-        // dd(file_exists(storage_path("app/public/user".Auth::user()->anh_dai_dien)));
         if ($request->hasFile('anh_dai_dien')) {
             if (Auth::user()->anh_dai_dien && file_exists(storage_path("app/public/" . Auth::user()->anh_dai_dien)) && !file_exists(storage_path("app/public/images"))) {
                 unlink(storage_path('app/public/' . Auth::user()->anh_dai_dien));

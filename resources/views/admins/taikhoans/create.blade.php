@@ -53,7 +53,7 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                         <div class="mb-4 row align-items-center">
-                                            <label class="form-label-title col-lg-2 col-md-3 mb-0">Tên tài khoản</label>
+                                            <label class="form-label-title ">Tên tài khoản</label>
                                             <div class="col-md-9 col-lg-10">
                                                 <input style="border: 1px solid #ced4da;"
                                                     class="form-control @error('name') is-invalid @enderror" type="text"
@@ -66,7 +66,7 @@
                                         </div>
 
                                         <div class="mb-4 row align-items-center">
-                                            <label class="form-label-title col-lg-2 col-md-3 mb-0">Họ và tên</label>
+                                            <label class="form-label-title ">Họ và tên</label>
                                             <div class="col-md-9 col-lg-10">
                                                 <input style="border: 1px solid #ced4da;"
                                                     class="form-control @error('ten_nguoi_dung') is-invalid @enderror"
@@ -80,7 +80,7 @@
                                         </div>
 
                                         <div class="mb-4 row align-items-center">
-                                            <label class="col-lg-2 col-md-3 col-form-label form-label-title">Email
+                                            <label class=" form-label-title">Email
                                             </label>
                                             <div class="col-md-9 col-lg-10">
                                                 <input style="border: 1px solid #ced4da;"
@@ -94,7 +94,7 @@
                                         </div>
 
                                         <div class="mb-4 row align-items-center">
-                                            <label class="col-lg-2 col-md-3 col-form-label form-label-title">Số điện thoại
+                                            <label class=" form-label-title">Số điện thoại
                                             </label>
                                             <div class="col-md-9 col-lg-10">
                                                 <input style="border: 1px solid #ced4da;"
@@ -108,7 +108,7 @@
                                         </div>
 
                                         <div class="mb-4 row align-items-center">
-                                            <label class="col-lg-2 col-md-3 col-form-label form-label-title">Ngày sinh
+                                            <label class=" form-label-title">Ngày sinh
                                             </label>
                                             <div class="col-md-9 col-lg-10">
                                                 <input style="border: 1px solid #ced4da;" class="form-control "
@@ -120,7 +120,7 @@
 
                                         </div>
                                         <div class="mb-4 row align-items-center">
-                                            <label class="col-lg-2 col-md-3 col-form-label form-label-title">Trạng
+                                            <label class=" form-label-title">Trạng
                                                 thái</label>
                                             <div class="col-lg-10 col-md-9 d-flex gap-3">
                                                 <div class="form-check">
@@ -148,7 +148,7 @@
                                     </div>
                                     <div class="col-6">
                                         <div class="mb-4 row align-items-center">
-                                            <label class="col-lg-2 col-md-3 col-form-label form-label-title">Địa chỉ
+                                            <label class=" form-label-title">Địa chỉ
                                             </label>
                                             <div class="col-md-9 col-lg-10">
                                                 <input style="border: 1px solid #ced4da;"
@@ -162,7 +162,7 @@
                                         </div>
 
                                         <div class="mb-4 row align-items-center">
-                                            <label class="col-lg-2 col-md-3 col-form-label form-label-title">Giới
+                                            <label class=" form-label-title">Giới
                                                 tính</label>
                                             <div class="col-lg-10 col-md-9 d-flex gap-3">
                                                 <div class="form-check">
@@ -186,7 +186,7 @@
 
 
                                         <div class="mb-4 row align-items-center">
-                                            <label class="col-lg-2 col-md-3 col-form-label form-label-title">Hình ảnh
+                                            <label class=" form-label-title">Hình ảnh
                                             </label>
                                             <div class="col-md-9 col-lg-10">
                                                 <input style="border: 1px solid #ced4da;"
@@ -203,7 +203,7 @@
 
 
                                         <div class="mb-4 row align-items-center">
-                                            <label class="col-lg-2 col-md-3 col-form-label form-label-title">Chức vụ
+                                            <label class=" form-label-title">Chức vụ
                                             </label>
                                             <div class="col-md-9 col-lg-10">
                                                 <select name="role"
@@ -224,7 +224,7 @@
                                         </div>
 
                                         <div class="mb-4 row align-items-center">
-                                            <label class="col-lg-2 col-md-3 col-form-label form-label-title">Mật
+                                            <label class=" form-label-title">Mật
                                                 khẩu</label>
                                             <div class="col-md-9 col-lg-10">
                                                 <input style="border: 1px solid #ced4da;"
@@ -238,7 +238,7 @@
                                         </div>
 
                                         <div class="row align-items-center">
-                                            <label class="col-lg-2 col-md-3 col-form-label form-label-title">Xác nhận mật
+                                            <label class=" form-label-title">Xác nhận mật
                                                 khẩu</label>
                                             <div class="col-md-9 col-lg-10">
                                                 <input style="border: 1px solid #ced4da;"

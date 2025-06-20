@@ -38,7 +38,10 @@ class UserRequest extends FormRequest
                 'required','digits:10',
                 Rule::unique('users', 'so_dien_thoai')->ignore($this->route('id'))
             ],
-            'trang_thai' => ''
+            'trang_thai' => '',
+            'ward' => 'required',
+            'district' => 'required',
+            'province' => 'required',
         ];
     }
 
@@ -54,6 +57,10 @@ class UserRequest extends FormRequest
             'anh_dai_dien.required' => 'Vui lòng chọn hình ảnh',
 
             'ten_nguoi_dung.required' => 'Vui lòng nhập tên ',
+
+            'province.required' => 'Vui lòng chọn tỉnh',
+            'district.required' => 'Vui lòng chọn quận huyện',
+            'ward.required' => 'Vui lòng chọn phường xã',
             'dia_chi.required' => 'Vui lòng nhập địa chỉ',
             'ngay_sinh.required' => 'Vui lòng nhập ngày sinh ',
             'ngay_sinh.before_or_equal' => 'Chưa đủ 18 tuổi',

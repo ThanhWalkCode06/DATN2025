@@ -98,22 +98,22 @@ class AddPermissionAndRoleSeeder extends Seeder
             ],
             [
                 'name' => 'users-view',
-                'description' => 'Xem tài khoản khuyến mãi',
+                'description' => 'Xem tài khoản',
                 'guard_name' => 'web',
             ],
             [
                 'name' => 'users-add',
-                'description' => 'Thêm tài khoản khuyến mãi',
+                'description' => 'Thêm tài khoản',
                 'guard_name' => 'web',
             ],
             [
                 'name' => 'users-update',
-                'description' => 'Sửa tài khoản khuyến mãi',
+                'description' => 'Sửa tài khoản',
                 'guard_name' => 'web',
             ],
             [
                 'name' => 'users-delete',
-                'description' => 'Xóa tài khoản khuyến mãi',
+                'description' => 'Xóa tài khoản',
                 'guard_name' => 'web',
             ],
             [

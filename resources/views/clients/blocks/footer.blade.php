@@ -9,7 +9,7 @@
                                 <i class="fa-solid fa-shirt custom-icon"></i> <!-- Icon áo -->
                             </div>
                             <div class="service-detail">
-                                <h5>Mẫu "hot trend" mỗi ngày</h5>
+                                <h5>{{ __('client/trang_chu.footer.title.one') }}</h5>
                             </div>
                         </div>
                         <style>
@@ -27,7 +27,7 @@
                             </div>
 
                             <div class="service-detail">
-                                <h5>Giao hàng nhanh chóng</h5>
+                                <h5>{{ __('client/trang_chu.footer.title.two') }}</h5>
                             </div>
                         </div>
 
@@ -37,7 +37,7 @@
                             </div>
 
                             <div class="service-detail">
-                                <h5>Giảm giá mỗi ngày</h5>
+                                <h5>{{ __('client/trang_chu.footer.title.three') }}</h5>
                             </div>
                         </div>
 
@@ -47,7 +47,7 @@
                             </div>
 
                             <div class="service-detail">
-                                <h5>Giá tốt nhất trên thị trường</h5>
+                                <h5>{{ __('client/trang_chu.footer.title.four') }}</h5>
                             </div>
                         </div>
                     </div>
@@ -67,8 +67,7 @@
                         </div>
 
                         <div class="footer-logo-contain">
-                            <p>Chúng tôi chuyên cung cấp quần áo thể thao chất lượng cao, giúp bạn tự tin và thoải mái
-                                trong mọi hoạt động.</p>
+                            <p>{{ __('client/trang_chu.footer.content') }}.</p>
                             <ul class="address">
                                 <li>
                                     <i data-feather="home"></i>
@@ -84,7 +83,7 @@
                 </div>
                 <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
                     <div class="footer-title">
-                        <h4>Danh mục sản phẩm</h4>
+                        <h4>{{ __('client/trang_chu.allCategories') }}</h4>
                     </div>
 
                     <div class="footer-contain">
@@ -109,25 +108,25 @@
 
                 <div class="col-xl col-lg-2 col-sm-3">
                     <div class="footer-title">
-                        <h4>Mục khác</h4>
+                        <h4>{{ __('client/trang_chu.footer.content.two') }}</h4>
                     </div>
 
                     <div class="footer-contain">
                         <ul>
                             <li>
-                                <a href="{{ route('home') }}" class="text-content">Trang chủ</a>
+                                <a href="{{ route('home') }}" class="text-content">{{ __('client/trang_chu.home') }}</a>
                             </li>
                             <li>
-                                <a href="{{ route('sanphams.danhsach') }}" class="text-content">Cửa hàng</a>
+                                <a href="{{ route('sanphams.danhsach') }}" class="text-content">{{ __('client/trang_chu.product') }}</a>
                             </li>
                             <li>
-                                <a href="{{ route('gioithieu') }}" class="text-content">Về chúng tôi</a>
+                                <a href="{{ route('gioithieu') }}" class="text-content">{{ __('client/trang_chu.introduce') }}</a>
                             </li>
                             <li>
-                                <a href="{{ route('baiviets.danhsach') }}" class="text-content">Tin tức</a>
+                                <a href="{{ route('baiviets.danhsach') }}" class="text-content">{{ __('client/trang_chu.article') }}</a>
                             </li>
                             <li>
-                                <a href="{{ route('lienhe.home') }}" class="text-content">Liên hệ</a>
+                                <a href="{{ route('lienhe.home') }}" class="text-content">{{ __('client/trang_chu.contact') }}</a>
                             </li>
                         </ul>
                     </div>
@@ -136,7 +135,7 @@
 
                 <div class="col-xl-2 col-sm-3">
                     <div class="footer-title">
-                        <h4>Hỗ trợ</h4>
+                        <h4>{{ __('client/trang_chu.footer.content.three') }}</h4>
                     </div>
 
                     <div class="footer-contain">
@@ -152,7 +151,7 @@
 
                 <div class="col-xl-3 col-lg-4 col-sm-6">
                     <div class="footer-title">
-                        <h4>Liên hệ với chúng tôi</h4>
+                        <h4>{{ __('client/trang_chu.footer.content.contact') }}</h4>
                     </div>
 
                     <div class="footer-contact">
@@ -171,7 +170,7 @@
                                 <div class="footer-number">
                                     <i data-feather="mail"></i>
                                     <div class="contact-number">
-                                        <h6 class="text-content">Địa chỉ email :</h6>
+                                        <h6 class="text-content">Email :</h6>
                                         <h5>{{ $globalSetting->email_owner ?? 'Chưa cập nhật' }}</h5>
                                     </div>
                                 </div>
@@ -194,7 +193,7 @@
             </div> --}}
 
             <div class="social-link">
-                <h6 class="text-content">Kết nối với chúng tôi:</h6>
+                <h6 class="text-content">{{ __('client/trang_chu.footer.content.connect') }}:</h6>
                 <ul>
                     <li>
                         <a href="https://www.facebook.com/" target="_blank">

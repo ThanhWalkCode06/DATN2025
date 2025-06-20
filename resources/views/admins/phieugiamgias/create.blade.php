@@ -28,6 +28,13 @@ Thêm mới sản phẩm
     .form-control{
         border: 1px solid #ccc !important;
     }
+    label{
+        font-size: 14px !important;
+    }
+    .select2-selection--single{
+            border: 1px solid #ccc !important;
+            border-radius: 4px;
+        }
 </style>
 
 
@@ -47,8 +54,8 @@ Thêm mới sản phẩm
                                 @csrf
                                 <div class="row">
                                     <!-- Tên phiếu giảm giá -->
-                                    <div class="mb-4 row align-items-center">
-                                        <label class="form-label-title col-lg-2 col-md-3 mb-0">Tên phiếu giảm giá</label>
+                                    <div class="col-md-6 mb-4 row align-items-center">
+                                        <label class="form-label-title  mb-0">Tên phiếu</label>
                                         <div class="col-md-9 col-lg-10">
                                             <input class="form-control @error('ten_phieu') is-invalid @enderror" type="text" name="ten_phieu" value="{{ old('ten_phieu') }}">
                                             @error('ten_phieu')
@@ -57,8 +64,8 @@ Thêm mới sản phẩm
                                         </div>
                                     </div>
                                     <!-- Mã Giảm giá -->
-                                    <div class="mb-4 row align-items-center">
-                                        <label class="col-lg-2 col-md-3 col-form-label form-label-title">Mã Giảm giá</label>
+                                    <div class="col-md-6 mb-4 row align-items-center">
+                                        <label class=" col-form-label form-label-title">Mã </label>
                                         <div class="col-md-9 col-lg-10">
                                             <input class="form-control @error('ma_phieu') is-invalid @enderror" type="text" name="ma_phieu" value="{{ old('ma_phieu') }}">
                                             @error('ma_phieu')
@@ -68,8 +75,8 @@ Thêm mới sản phẩm
                                     </div>
 
                                     <!-- Ngày bắt đầu -->
-                                    <div class="mb-4 row align-items-center">
-                                        <label class="col-lg-2 col-md-3 col-form-label form-label-title">Ngày bắt đầu</label>
+                                    <div class="col-md-6 mb-4 row align-items-center">
+                                        <label class=" col-form-label form-label-title">Ngày bắt đầu</label>
                                         <div class="col-md-9 col-lg-10">
                                             <input class="form-control @error('ngay_bat_dau') is-invalid @enderror" type="date" name="ngay_bat_dau" value="{{ old('ngay_bat_dau') }}">
                                             @error('ngay_bat_dau')
@@ -79,8 +86,8 @@ Thêm mới sản phẩm
                                     </div>
 
                                     <!-- Ngày kết thúc -->
-                                    <div class="mb-4 row align-items-center">
-                                        <label class="col-lg-2 col-md-3 col-form-label form-label-title">Ngày kết thúc</label>
+                                    <div class="col-md-6 mb-4 row align-items-center">
+                                        <label class=" col-form-label form-label-title">Ngày kết thúc</label>
                                         <div class="col-md-9 col-lg-10">
                                             <input class="form-control @error('ngay_ket_thuc') is-invalid  @enderror" type="date" name="ngay_ket_thuc" value="{{ old('ngay_ket_thuc') }}">
                                             @error('ngay_ket_thuc')
@@ -89,9 +96,34 @@ Thêm mới sản phẩm
                                         </div>
                                     </div>
 
+                                        <div class="col-md-6 mb-4 row align-items-center">
+                                        <label class="form-label-title">Danh mục</label>
+                                        <div class="col-md-9 col-lg-10">
+                                        <select class="form-control js-example-basic-single w-5" name="danh_muc_id">
+                                            <option selected value="">Chọn tất cả</option>
+                                            @foreach ($danhMucs as $danhMuc)
+                                                <option {{ $danhMuc->id == old('danh_muc_id') ? 'selected' : '' }}
+                                                    value="{{ $danhMuc->id }}">
+                                                    {{ $danhMuc->ten_danh_muc }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6 mb-4 row align-items-center">
+                                        <label class="form-label-title">Kiểu giảm giá</label>
+                                        <div class="col-md-9 col-lg-10">
+                                        <select class="form-control js-example-basic-single w-100" name="kieu_giam">
+                                            <option selected value="co_dinh">Giảm cố định</option>
+                                            <option  value="phan_tram">Giảm theo phần trăm</option>
+                                        </select>
+                                        </div>
+                                    </div>
+
                                     <!-- Giá trị giảm giá -->
-                                    <div class="mb-4 row align-items-center">
-                                        <label class="col-lg-2 col-md-3 col-form-label form-label-title">Giá trị giảm giá</label>
+                                    <div class="col-md-4 mb-4 row align-items-center">
+                                        <label class=" col-form-label form-label-title">Giá trị giảm giá</label>
                                         <div class="col-md-9 col-lg-10">
                                             <input class="form-control @error('gia_tri') is-invalid  @enderror" type="number" name="gia_tri" step="0.01" value="{{ old('gia_tri') }}">
                                             @error('gia_tri')
@@ -101,8 +133,8 @@ Thêm mới sản phẩm
                                     </div>
 
                                     <!-- Giá trị giảm giá -->
-                                    <div class="mb-4 row align-items-center">
-                                        <label class="col-lg-2 col-md-3 col-form-label form-label-title">Mức giảm tối đa:</label>
+                                    <div class="col-md-4 mb-4 row align-items-center">
+                                        <label class=" col-form-label form-label-title">Giảm tối đa:</label>
                                         <div class="col-md-9 col-lg-10">
                                             <input class="form-control @error('muc_giam_toi_da') is-invalid  @enderror" type="number" name="muc_giam_toi_da" step="0.01" value="{{ old('muc_giam_toi_da') }}">
                                             @error('muc_giam_toi_da')
@@ -112,8 +144,8 @@ Thêm mới sản phẩm
                                     </div>
 
                                     <!-- Giá trị giảm giá -->
-                                    <div class="mb-4 row align-items-center">
-                                        <label class="col-lg-2 col-md-3 col-form-label form-label-title">Mức giá tối thiểu áp dụng:</label>
+                                    <div class="col-md-4 mb-4 row align-items-center">
+                                        <label class=" col-form-label form-label-title">Giá tối thiểu áp dụng:</label>
                                         <div class="col-md-9 col-lg-10">
                                             <input class="form-control @error('muc_gia_toi_thieu') is-invalid  @enderror" type="number" name="muc_gia_toi_thieu" step="0.01" value="{{ old('muc_gia_toi_thieu') }}">
                                             @error('muc_gia_toi_thieu')
@@ -123,8 +155,8 @@ Thêm mới sản phẩm
                                     </div>
 
 
-                                    <div class="mb-4 row align-items-center">
-                                        <label class="col-lg-2 col-md-3 col-form-label form-label-title">Mô tả</label>
+                                    <div class="col-md-12 mb-4 row align-items-center">
+                                        <label class=" form-label-title">Mô tả</label>
                                         <div class="col-md-9 col-lg-10">
                                             <input class="form-control @error('mo_ta') is-invalid  @enderror" type="text" name="mo_ta"  value="{{ old('mo_ta') }}">
                                             @error('mo_ta')
@@ -132,9 +164,10 @@ Thêm mới sản phẩm
                                             @enderror
                                         </div>
                                     </div>
+
                                     <!-- Trạng thái -->
-                                    <div class="mb-4 row align-items-center">
-                                        <label class="col-lg-2 col-md-3 col-form-label form-label-title">Trạng thái</label>
+                                    <div class="col-md-12 mb-4 row align-items-center">
+                                        <label class=" col-form-label form-label-title">Trạng thái</label>
                                         <div class="col-lg-10 col-md-9 d-flex gap-3">
                                             <div class="form-check">
                                                 <input type="radio" class="form-check-input" id="trang_thai_kich_hoat" name="trang_thai" value="1" {{ old('trang_thai', 1) == 1 ? 'checked' : '' }}>
@@ -146,6 +179,7 @@ Thêm mới sản phẩm
                                             </div>
                                         </div>
                                     </div>
+
 
                                     <div class="mt-4 d-flex gap-3">
                                         <a href="{{ route('phieugiamgias.index') }}" class="btn btn-light">Quay lại</a>

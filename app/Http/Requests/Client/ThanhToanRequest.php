@@ -36,6 +36,9 @@ class ThanhToanRequest extends FormRequest
             'giam_gia' => 'nullable',
             'voucher_code' => 'nullable',
             'phuong_thuc_thanh_toan_id' => 'required',
+            'ward' => 'required',
+            'district' => 'required',
+            'province' => 'required',
         ];
     }
 
@@ -45,6 +48,9 @@ class ThanhToanRequest extends FormRequest
             'email_nguoi_nhan.required' => 'Vui lòng nhập email',
             'email_nguoi_nhan.email' => 'Vui lòng nhập email đúng định dạng',
             'ten_nguoi_nhan.required' => 'Vui lòng nhập họ và tên ',
+            'province.required' => 'Vui lòng chọn tỉnh',
+            'district.required' => 'Vui lòng chọn quận huyện',
+            'ward.required' => 'Vui lòng chọn phường xã',
             'dia_chi_nguoi_nhan.required' => 'Vui lòng nhập địa chỉ nhận hàng',
             'phuong_thuc_thanh_toan_id.required' => 'Vui lòng chọn phương thức thanh toán',
 

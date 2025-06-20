@@ -248,8 +248,6 @@
                                         @enderror
                                     </div>
 
-
-
                                     <div class="mb-4">
                                         <label class="form-label-title">Danh mục</label>
                                         <select class="form-control js-example-basic-single w-100" name="danh_muc_id">

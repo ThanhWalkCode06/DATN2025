@@ -89,7 +89,7 @@ class ThanhToanController extends Controller
                 'ten_nguoi_nhan' => $request->ten_nguoi_nhan,
                 'email_nguoi_nhan' => $request->email_nguoi_nhan,
                 'sdt_nguoi_nhan' => $request->sdt_nguoi_nhan,
-                'dia_chi_nguoi_nhan' => $request->dia_chi_nguoi_nhan,
+                'dia_chi_nguoi_nhan' => $request->province.', '.$request->district.', '.$request->ward.', '.$request->dia_chi_nguoi_nhan,
                 'tong_tien' => $request->tong_tien,
                 'ghi_chu' => $request->ghi_chu,
                 'phuong_thuc_thanh_toan_id' => 1,

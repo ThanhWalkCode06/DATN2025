@@ -6,6 +6,16 @@
 
 @section('css')
     <!-- Themify icon css-->
+    <style>
+        .select2-selection--single{
+            border: 1px solid #ccc !important;
+            border-radius: 4px;
+        }
+        .selection{
+            border: 1px solid #ccc !important;
+            border-radius: 4px;
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -325,7 +335,7 @@
                 <div class="card-header-title">
                     <h4>Đơn hàng</h4>
                 </div>
-        
+
                 <div class="best-selling-box d-sm-flex d-none">
                     <span>Sắp xếp theo:</span>
                     <div class="dropdown">
@@ -414,7 +424,7 @@
                 </div>
             </div>
         </div>
-        
+
 
     @endsection
 
@@ -500,5 +510,5 @@
             });
         </script>
 
-    
+
     @endsection

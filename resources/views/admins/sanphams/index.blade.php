@@ -56,21 +56,18 @@
             <div class="card-body">
                 <div class="title-header option-title d-sm-flex d-block">
                     <h5>Danh sách sản phẩm</h5>
-                    <div class="right-options">
-                        <ul>
-
-                            <li>
-                                <a class="btn btn-solid" href="{{ route('sanphams.create') }}">Thêm Mới</a>
-                            </li>
-                        </ul>
-                        <br>
-                        {{-- <form action="{{ route('sanphams.index') }}" method="GET">
-                            <div class="input-group mb-3">
-                                <input type="text" name="search" class="form-control"
-                                    placeholder="Tìm kiếm theo tên hoặc mã sản phẩm" value="{{ request('search') }}">
-                                <button class="btn btn-solid btn-sm" type="submit">Tìm kiếm</button>
-                            </div>
-                        </form> --}}
+                    <div class="row">
+                        <div class="col-6">
+                            <a href="{{route('sanphams.create')}}" class="align-items-center btn btn-theme d-flex">
+                                <i data-feather="plus-square"></i>Thêm Mới
+                            </a>
+                        </div>
+                        <div class="col-6">
+                            <form action="{{ route('export.sanPham') }}" method="POST">
+                                @csrf
+                                <button type="submit" class="align-items-center btn btn-theme d-flex">Xuất Excel</button>
+                            </form>
+                        </div>
 
                     </div>
                 </div>

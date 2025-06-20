@@ -60,7 +60,8 @@
                         </div>
                         <div class="col-6">
                             <a href="{{route('users.create')}}" class=" btn btn-theme d-flex ">
-Tạo tài khoản                            </a>
+                                Tạo tài khoản
+                            </a>
                         </div>
 
                     </div>

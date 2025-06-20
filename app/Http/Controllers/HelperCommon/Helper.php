@@ -12,13 +12,12 @@ use App\Models\ChiTietGioHang;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 
 class Helper extends Controller{
     public static function uploadAlbum($sanPhamId, $token,$deletedImages)
 {
-    // if(is_array(request()->file('album_anh'))){
-        // dd(1,$token);
         if($token === false){
             if(is_array(request()->file('album_anh'))){
                 foreach (request()->file('album_anh') as $file) {
@@ -121,6 +120,11 @@ public static function checkVoucher($codeVoucher,$idUser)
     }
 }
 
-
+public static function changLang(Request $request){
+    // return response()->json(['message' => $request->lang]);
+    $lang = $request->lang ?? 'vi';
+    session(['lang' => $lang]);
+    return response()->json(['message' => session('lang')]);
+}
 
 }

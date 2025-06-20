@@ -7,7 +7,10 @@ use Illuminate\Http\Request;
 use App\Models\ChiTietGioHang;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\HelperCommon\Helper;
+use App\Models\DanhMucSanPham;
+use App\Models\GioHang;
 use App\Models\PhieuGiamGia;
+use App\Models\PhieuGiamGiaTaiKhoan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
@@ -136,7 +139,8 @@ public function nhapvoucher(Request $request){
     $code = $request->code;
     $currentTotal = (int) $request->total;
     $voucher = PhieuGiamGia::where('ma_phieu', $code)->first();
-
+    $voucherUsed = PhieuGiamGiaTaiKhoan::where('user_id', Auth::user()->id)->first();
+    $cart = ChiTietGioHang::where('user_id',Auth::user()->id)->get();
     $check = Helper::checkVoucher($code,Auth::user()->id);
     if($check != ''){
         return response()->json([
@@ -148,7 +152,8 @@ public function nhapvoucher(Request $request){
     }
 
     if($voucher) {
-        // $toiThieu = $voucher->muc_gia_toi_thieu;
+
+
         if(($currentTotal - 10000) < $voucher->muc_gia_toi_thieu){
             return response()->json([
                 'success' => false,
@@ -159,12 +164,26 @@ public function nhapvoucher(Request $request){
         }
 
         if((empty($voucher->ngay_ket_thuc) && empty($voucher->ngay_bat_dau) &&  $voucher->trang_thai == 1) || ($voucher->ngay_ket_thuc > now() && $voucher->trang_thai == 1)) {
+            if(!empty($voucher->danh_muc_id)){
+                $dm = DanhMucSanPham::where('id',$voucher->danh_muc_id)->first();
+                foreach($cart as $item){
+                    if($item->bienThe->sanPham->danhMuc->id != $voucher->danh_muc_id){
+                        return response()->json([
+                            'success' => false,
+                            'message' => 'Mã giảm giá chỉ áp dụng cho danh mục '.$dm->ten_danh_muc,
+                            'discount' => 0,
+                            'newTotal' => $currentTotal
+                        ],403);
+                    };
+                }
+            }
+            $type = $voucher->kieu_giam;
             $discount = $voucher->gia_tri;
-            $discountAmount = $currentTotal * ($discount / 100);
+            $discountAmount = $type == 'phan_tram' ? $currentTotal * ($discount / 100) : $discount;
             if($discountAmount >= $voucher->muc_giam_toi_da){
                 $discountAmount = $voucher->muc_giam_toi_da;
             }
-            $newTotal =  max(0, $currentTotal - $discountAmount);
+            $newTotal = $type == 'phan_tram' ? max(0, $currentTotal - $discountAmount) : max(0, $currentTotal - $discount);
 
             return response()->json([
                 'success' => true,
