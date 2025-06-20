@@ -184,11 +184,11 @@
                                     <li class="list-total">
                                         <h6>Mã giảm giá:  </h6>
                                         @if (!empty($voucher))
-                                        <h4 class="price"> {{ number_format(-$countPrice, 0, '', '.') }}đ</h4>
+                                        <h4 class="price"> {{ number_format(- $countPrice, 0, '', '.') }}đ</h4>
                                         @endif
                                     </li>
                                     @if (!empty($voucher))
-                                        <span class="ms-auto theme-color" style="color:">{{ $voucher->phieuGiamGia->ma_phieu ?? '' }} {{ -$voucher->phieuGiamGia->gia_tri."%"  ?? '' }}</span>
+                                        <span class="ms-auto theme-color" style="color:">{{ $voucher->phieuGiamGia->ma_phieu ?? '' }} </span>
                                     @endif
 
 

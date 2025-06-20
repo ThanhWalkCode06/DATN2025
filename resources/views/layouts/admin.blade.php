@@ -60,12 +60,9 @@
     @yield('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/load.css') }}">
     <style>
-        /* .form-control {
-        border: 1px solid #ccc !important;
-    }
-        select{
-            border: 1px solid #ccc !important;
-        } */
+        label{
+            font-size: 14px !important;
+        }
     </style>
 
 

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 
 class ViController extends Controller
@@ -255,7 +256,11 @@ class ViController extends Controller
             'so_tai_khoan' => 'required|string|max:255',
             'ten_nguoi_nhan' => 'required|string|max:255',
         ]);
-
+/// nhập mk
+if (!Hash::check($request->password, $user->password)) {
+    return back()->withErrors(['password' => 'Mật khẩu không chính xác.'])->withInput();
+}
+// nhập mk
         $soTienRut = (int) $request->so_tien;
         $vi = $user->layHoacTaoVi();
 

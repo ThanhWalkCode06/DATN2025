@@ -34,7 +34,7 @@
                             <span>Tổng quan</span>
                         </a>
                     </li>
-                    
+
 
                     @haspermission('users-view')
                         <li class="sidebar-list">
@@ -124,6 +124,15 @@
                         <a class="sidebar-link sidebar-title link-nav" href="{{ route('phuongthucthanhtoans.index') }}">
                             <i class="ri-wallet-3-line"></i>
                             <span>Phương thức thanh toán</span>
+                        </a>
+                    </li>
+
+                    <li class="sidebar-list">
+                        <a class="sidebar-link sidebar-title link-nav"
+                        href="{{ route('bannerAdmin.index') }}"
+                        >
+                            <i class="ri-list-settings-line"></i>
+                            <span>Banner</span>
                         </a>
                     </li>
 

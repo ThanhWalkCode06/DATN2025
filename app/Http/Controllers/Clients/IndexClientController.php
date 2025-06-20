@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers\Clients;
 
-use App\Http\Controllers\Controller;
+use App\Models\User;
+use App\Models\Banner;
 use App\Models\BaiViet;
 use App\Models\DanhGia;
-use App\Models\DanhMucSanPham;
 use App\Models\SanPham;
-use App\Models\User;
 use Illuminate\Http\Request;
+use App\Models\DanhMucSanPham;
+use App\Http\Controllers\Controller;
+use SebastianBergmann\Diff\Chunk;
 
 class IndexClientController extends Controller
 {
@@ -22,12 +24,6 @@ class IndexClientController extends Controller
             ->orderByDesc('danh_gias_avg_so_sao') // Sắp xếp theo số sao trung bình giảm dần
             ->take(8)
             ->get()->toArray();
-
-//         foreach ($sanPhamFollowComments as $sanPham) {
-//         dd("Giá thấp nhất của SP".$sanPham->giaThapNhatCuaSP());
-// }
-//         $sanPham = SanPham::where('id', 1)->first(); // Dùng first() để lấy object thay vì get() (mảng)
-//         dd($sanPham->giaThapNhatCuaSP());
 
         $sanPhamFollowTopOrders = SanPham::with('bienThes')->select('san_phams.*')
             ->selectRaw('COUNT(chi_tiet_don_hangs.id) as so_luong_don_hang') // Đếm số đơn hàng
@@ -74,7 +70,60 @@ class IndexClientController extends Controller
             ->first()
             ->toArray();
 
-        // dd($bestComment);
+        $now = now();
+
+        $mainBanner = Banner::with('bannerImgs')
+            ->where('position', 'homepage')
+            ->where('status', 1)
+            ->where(function ($query) use ($now) {
+                $query->whereNull('start_date')
+                    ->orWhere('start_date', '<=', $now);
+            })
+            ->where(function ($query) use ($now) {
+                $query->whereNull('end_date')
+                    ->orWhere('end_date', '>=', $now);
+            })
+            ->orderByDesc('priority')
+            ->orderByDesc('created_at')
+            ->first();
+
+        $subBanner = Banner::with('bannerImgs')
+            ->where('position', 'secondary')
+            ->where('status', 1)
+            ->where(function ($query) use ($now) {
+                $query->whereNull('start_date')
+                    ->orWhere('start_date', '<=', $now);
+            })
+            ->where(function ($query) use ($now) {
+                $query->whereNull('end_date')
+                    ->orWhere('end_date', '>=', $now);
+            })
+            ->orderByDesc('priority')
+            ->orderByDesc('created_at')
+            ->take(2)
+            ->get();
+
+        $sideBarBanner = Banner::with('bannerImgs')
+            ->where('position', 'sidebar')
+            ->where('status', 1)
+            ->where(function ($query) use ($now) {
+                $query->whereNull('start_date')
+                    ->orWhere('start_date', '<=', $now);
+            })
+            ->where(function ($query) use ($now) {
+                $query->whereNull('end_date')
+                    ->orWhere('end_date', '>=', $now);
+            })
+            ->orderByDesc('priority')
+            ->orderByDesc('created_at')
+            ->take(1)
+            ->get();
+
+        // Gán từng banner một cách an toàn
+        $banner1 = $subBanner[0]->bannerImgs ?? null;
+        $banner2 = $subBanner[1]->bannerImgs ?? null;
+
+        // dd($sideBarBanner[0]->bannerImgs[0]);
         return view('clients.index', compact(
             'danhMucAll',
             'sanPhamFollowComments',
@@ -83,7 +132,8 @@ class IndexClientController extends Controller
             'part3',
             'baiViets',
             'bestUser',
-            'bestComment'
+            'bestComment','mainBanner',
+            'banner1','banner2','sideBarBanner'
         ));
     }
 }

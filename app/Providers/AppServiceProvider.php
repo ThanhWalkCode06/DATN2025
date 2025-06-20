@@ -13,6 +13,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Models\ClientDanhMucSanPham;
+use App\Models\PhieuGiamGiaTaiKhoan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -71,11 +72,11 @@ class AppServiceProvider extends ServiceProvider
             $view->with(compact('topOrderProducts'));
         });
 
-        View::composer('*', function ($view) {
+        View::composer('clients.thanhtoans.thanhtoan', function ($view) {
             $userId = Auth::user();
             $phieuGiamGiaThanhToans = collect();
             if ($userId) {
-                $phieuGiamGiaThanhToans = PhieuGiamGia::where('trang_thai', 1)
+                $phieuGiamGiaThanhToan = PhieuGiamGia::where('trang_thai', 1)
                     ->where(function ($query) use ($userId) {
                         $query->where(function ($q) {
                             $q->where('ngay_bat_dau', '<=', now())
@@ -84,8 +85,15 @@ class AppServiceProvider extends ServiceProvider
                         })->orWhere('ma_phieu', 'like', "BIRTHDAY" . Str::upper($userId->username) . "%");
                     })
                     ->get();
+                $userUsed = PhieuGiamGiaTaiKhoan::where('user_id',$userId->id)->get();
+                $usedIds = $userUsed->pluck('phieu_giam_gia_id')->toArray();
+
+                // Lọc ra các phiếu chưa được sử dụng
+                $phieuGiamGiaThanhToans = $phieuGiamGiaThanhToan->reject(function ($item) use ($usedIds) {
+                    return in_array($item->id, $usedIds);
+                })->values();
             }
-            $view->with('phieuGiamGiaThanhToans', $phieuGiamGiaThanhToans);
+            $view->with(compact('phieuGiamGiaThanhToans','userUsed'));
         });
 
 

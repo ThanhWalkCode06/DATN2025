@@ -151,23 +151,14 @@
                         <div class="notification-slider">
                             <div>
                                 <div class="timer-notification">
-                                    <h6><strong class="me-1">Chào mừng tới
+                                    <h6><strong class="me-1">{{ __('client/trang_chu.welcome') }}
                                             {{ $globalSetting->name_website ?? 'Seven Stars' }}</strong>
                                     </h6>
                                 </div>
                             </div>
-                            {{-- @if (Auth::check())
-                                <div>
-                                    <div class="timer-notification">
-                                        <h6>Mã giảm giá cho người mới:
-                                            <strong class="me-1">COD1234567</strong>
-                                        </h6>
-                                    </div>
-                                </div>
-                            @endif --}}
                             <div>
                                 <div class="timer-notification">
-                                    <h6>Mua hàng ngay thôi nào!
+                                    <h6>{{ __('client/trang_chu.welcome.content') }}
                                         <a href="{{ route('sanphams.danhsach') }}" class="text-white">Mua ngay!</a>
                                     </h6>
                                 </div>
@@ -198,7 +189,7 @@
                                 <form action="{{ route('sanphams.danhsach') }}" method="GET">
                                     <div class="input-group">
                                         <input type="search" name="query" id="searchInput" class="form-control"
-                                            placeholder="Tìm kiếm sản phẩm" value="{{ request('query') }}">
+                                            placeholder="{{ __('client/trang_chu.search') }}" value="{{ request('query') }}">
                                         <button class="btn" type="submit" id="button-addon2">
                                             <i data-feather="search"></i>
                                         </button>
@@ -309,6 +300,11 @@
                                     </li>
                                 @endif
                                 <li class="right-side">
+                                    <a href="#" class="lang-switch" data-lang="{{ app()->getLocale() == 'vi' ? 'en' : 'vi'   }}">
+                                        <img src="{{ app()->getLocale() == 'en' ? 'https://flagcdn.com/w40/vn.png' : 'https://flagcdn.com/w40/gb.png' }}" alt="Tiếng Việt">
+                                    </a>
+                                </li>
+                                <li class="right-side">
                                     <a href="{{ route('sanphams.sanphamyeuthich') }}"
                                         class="btn p-0 position-relative header-wishlist">
                                         <i data-feather="heart"></i>
@@ -328,7 +324,7 @@
                                                 @if ($gioHang->isEmpty())
                                                     <li style="width: 100%" class="raffle-box-contain">
                                                         <div class="drop-cart">
-                                                            <p>Giỏ hàng trống</p>
+                                                            <p>{{ __('client/trang_chu.cart.empty') }}</p>
                                                         </div>
                                                     </li>
                                                 @else
@@ -369,16 +365,14 @@
                                                 @endif
                                             </ul>
                                             <div class="price-box">
-                                                <h5>Tổng tiền :</h5>
+                                                <h5>{{ __('client/trang_chu.cart.totalMoney') }} :</h5>
                                                 <h4 class="theme-color fw-bold total-price">
                                                     {{ number_format($total, 0, '', '.') }} đ</h4>
                                             </div>
                                             <div class="button-group">
-                                                <a href="{{ route('giohang') }}" class="btn btn-sm cart-button">Xem
-                                                    giỏ hàng</a>
+                                                <a href="{{ route('giohang') }}" class="btn btn-sm cart-button">{{ __('client/trang_chu.cart.seeCart') }}</a>
                                                 <a href="{{ route('thanhtoans.thanhtoan') }}"
-                                                    class="btn btn-sm cart-button theme-bg-color text-white">Thanh
-                                                    toán</a>
+                                                    class="btn btn-sm cart-button theme-bg-color text-white">{{ __('client/trang_chu.cart.pay') }}</a>
                                             </div>
                                         </div>
                                     </div>
@@ -430,7 +424,7 @@
                     <div class="header-nav-left">
                         <button class="dropdown-category">
                             <i data-feather="align-left"></i>
-                            <span>Tất cả danh mục</span>
+                            <span>{{ __('client/trang_chu.allCategories') }}</span>
                         </button>
                         <div class="category-dropdown">
                             <div class="category-title">
@@ -467,23 +461,22 @@
                                 <div class="offcanvas-body">
                                     <ul class="navbar-nav">
                                         <li class="nav-item">
-                                            <a class="nav-link" href="{{ route('home') }}">Trang chủ</a>
+                                            <a class="nav-link" href="{{ route('home') }}">{{ __('client/trang_chu.home') }}</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="{{ route('sanphams.danhsach') }}">Sản phẩm</a>
+                                            <a class="nav-link" href="{{ route('sanphams.danhsach') }}">{{ __('client/trang_chu.product') }}</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="{{ route('baiviets.danhsach') }}">Bài viết</a>
+                                            <a class="nav-link" href="{{ route('baiviets.danhsach') }}">{{ __('client/trang_chu.article') }}</a>
                                         </li>
                                         <li class="nav-item dropdown">
-                                            <a class="nav-link" href="{{ route('huongdans.danhsach') }}">Hướng
-                                                dẫn</a>
+                                            <a class="nav-link" href="{{ route('huongdans.danhsach') }}">{{ __('client/trang_chu.guide') }}</a>
                                         </li>
                                         <li class="nav-item dropdown">
-                                            <a class="nav-link" href="{{ route('gioithieu.home') }}">Giới thiệu</a>
+                                            <a class="nav-link" href="{{ route('gioithieu.home') }}">{{ __('client/trang_chu.introduce') }}</a>
                                         </li>
                                         <li class="nav-item dropdown">
-                                            <a class="nav-link" href="{{ route('lienhe.home') }}">Liên hệ</a>
+                                            <a class="nav-link" href="{{ route('lienhe.home') }}">{{ __('client/trang_chu.contact') }}</a>
                                         </li>
                                     </ul>
                                 </div>
@@ -493,7 +486,7 @@
                     <div class="header-nav-right">
                         <button class="btn deal-button" data-bs-toggle="modal" data-bs-target="#deal-box">
                             <i data-feather="zap"></i>
-                            <span>Top sản phẩm hôm nay</span>
+                            <span>{{ __('client/trang_chu.topOrders') }}</span>
                         </button>
                     </div>
                 </div>

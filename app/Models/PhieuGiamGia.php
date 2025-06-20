@@ -12,10 +12,12 @@ class PhieuGiamGia extends Model
     use HasFactory, SoftDeletes, SuperFilterable;
 
     protected $fillable = [
+        'danh_muc_id',
         'ma_phieu',
         'ten_phieu',
         'ngay_bat_dau',
         'ngay_ket_thuc',
+        'kieu_giam',
         'gia_tri',
         'trang_thai',
         'mo_ta',

@@ -5,6 +5,7 @@
 @endsection
 
 @section('css')
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <style>
         .product-box-slider .slick-track {
             display: flex;
@@ -22,6 +23,15 @@
             border-radius: 10px;
             padding: 0 14px;
         }
+        .swiper-button-next{
+            color: #0da487;
+        }
+        .swiper-button-prev{
+            color: #0da487;
+        }
+        .swiper-pagination-bullet-active {
+            background-color: #0da487; /* màu đỏ */
+        }
     </style>
 @endsection
 
@@ -34,63 +44,131 @@
         <div class="container-fluid-lg">
             <div class="row g-4">
                 <div class="col-xl-8 ratio_65">
-                    <div class="home-contain h-100">
-                        <div class="h-100">
-                            <img src="{{ asset('assets/client/images/banner/1.png') }}" class="bg-img blur-up lazyload"
-                                alt="">
-                        </div>
-                        <div class="home-detail p-center-left w-75">
-                            <div>
-                                <h6>Ưu đãi đặc biệt</h6>
-                                <h1 class="text-uppercase">Ở nhà & nhận ngay <span class="daily">Áo Nam <br> thể
-                                        thao</span>
-                                </h1>
-                                <p class="w-75 d-none d-sm-block">Những bộ quần áo thể thao thoải mái, phong cách giúp bạn
-                                    tự tin vận động mỗi ngày.</p>
-                                <button onclick="location.href = '/sanpham/?danh_muc_id=3';"
-                                    class="btn btn-animation mt-xxl-4 mt-2 home-button mend-auto">Mua ngay <i
-                                        class="fa-solid fa-right-long icon"></i></button>
-                            </div>
+
+                    <div class="swiper home-slider">
+                        <div class="swiper-wrapper">
+
+                            @if(!empty($mainBanner))
+                            @foreach ($mainBanner->bannerImgs as $banner)
+                                    @php
+                                        $url = null;
+                                        if ($banner->link_type == 'danhmuc') {
+                                            $url = '/sanpham/?danh_muc_id=' . $banner->link_url;
+                                        } elseif ($banner->link_type == 'sanpham') {
+                                            $url = '/sanpham/' . $banner->link_url;
+                                        } else {
+                                            $url = $banner->link_url;
+                                        }
+                                    @endphp
+                                    <div class="swiper-slide">
+                                        <div class="home-contain h-100">
+                                            <a href="{{ $url }}">
+                                            <div class="h-100">
+                                                <img src="{{ Storage::url($banner->image_url) }}"
+                                                    class="bg-img blur-up lazyload" alt="">
+                                            </div>
+                                            <div class="home-detail p-center-left w-75">
+                                                <div>
+                                                    <h6>{{ $banner->title }}</h6>
+                                                    <strong><h1 class="text-uppercase">{{ $banner->content }}</h1></strong>
+                                                    <p class="w-75 d-none d-sm-block">{{ $banner->descript }}</p>
+                                                    @if ($banner->status_button == 1)
+                                                        <button onclick="location.href = '{{ $url }}';"
+                                                        class="btn btn-animation mt-xxl-4 mt-2 home-button mend-auto">
+                                                        {{ $banner->content_button != '' ? $banner->content_button : 'Mua ngay' }} <i class="fa-solid fa-right-long icon"></i>
+                                                    </button>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            @endif
                         </div>
 
+                        <!-- Nút điều hướng -->
+                        <div class="swiper-button-next"></div>
+                        <div class="swiper-button-prev"></div>
+
+                        <!-- Dấu chấm slide -->
+                        <div class="swiper-pagination"></div>
                     </div>
+
                 </div>
+
 
                 <div class="col-xl-4 ratio_65">
                     <div class="row g-4">
-                        <div class="col-xl-12 col-md-6">
-                            <div class="home-contain">
-                                <img src="{{ asset('assets/client/images/banner/2.png') }}" class="bg-img blur-up lazyload"
-                                    alt="">
-                                <div class="home-detail p-center-left home-p-sm w-75">
-                                    <div>
-                                        <h3 class="theme-color">Quần thể thao Nam</h3>
-                                        <p class="w-75">Mang đến những trang phục thoải
-                                            mái và tinh tế.</p>
-                                        <a href='/sanpham/?danh_muc_id=1' class="shop-button">Mua ngay <i
-                                                class="fa-solid fa-right-long"></i></a>
+                        @if (isset($banner1))
+                            @php
+                                $url1 = null;
+                                if ($banner1[0]->link_type == 'danhmuc') {
+                                    $url1 = '/sanpham/?danh_muc_id=' . $banner1[0]->link_url;
+                                } elseif ($banner1[0]->link_type == 'sanpham') {
+                                    $url1 = '/sanpham/' . $banner1[0]->link_url;
+                                } else {
+                                    $url1 = $banner1[0]->link_url;
+                                }
+                            @endphp
+                            <div class="col-xl-12 col-md-6">
+                                <a href="{{ $url1 }}">
+                                    <div class="home-contain">
+                                        <img src="{{ Storage::url($banner1[0]->image_url) }}"
+                                            class="bg-img blur-up lazyload" alt="">
+                                        <div class="home-detail p-center-left home-p-sm w-75">
+                                            <div>
+                                                <h3 class="theme-color">{{ $banner1[0]->title }}</h3>
+                                                <h4 class="text-danger">{{ $banner1[0]->content }}</h4>
+                                                <p class="w-75">{{ $banner1[0]->descript }}</p>
+                                                @if ($banner1[0]->status_button === 1)
+                                                    <a href='{{ $url1 }}'
+                                                        class="shop-button">{{ $banner1[0]->content_button != '' ? $banner1[0]->content_button : 'Mua ngay' }}
+                                                        <i class="fa-solid fa-right-long"></i></a>
+                                                @endif
+                                            </div>
+
+                                        </div>
                                     </div>
-
-                                </div>
+                                </a>
                             </div>
-                        </div>
+                        @endif
 
-                        <div class="col-xl-12 col-md-6">
-                            <div class="home-contain">
-                                <img src="{{ asset('assets/client/images/banner/7.png') }}" class="bg-img blur-up lazyload"
-                                    alt="">
-                                <div class="home-detail p-center-left home-p-sm w-75">
-                                    <div>
-                                        <h3 class="mt-0 theme-color fw-bold">Áo Nữ</h3>
-                                        <h4 class="text-danger">Thể thao</h4>
-                                        <p class="organic">Bắt đầu ngày mới với chiếc cánh mới.</p>
-                                        <a href='/sanpham/?danh_muc_id=2' class="shop-button">Mua ngay <i
-                                                class="fa-solid fa-right-long"></i></a>
+                        @if (isset($banner2))
+                            @php
+                                $url2 = null;
+                                if ($banner2[0]->link_type == 'danhmuc') {
+                                    $url2 = '/sanpham/?danh_muc_id=' . $banner2[0]->link_url;
+                                } elseif ($banner2[0]->link_type == 'sanpham') {
+                                    $url2 = '/sanpham/' . $banner2[0]->link_url;
+                                } else {
+                                    $url2 = $banner2[0]->link_url;
+                                }
+                            @endphp
+                            <div class="col-xl-12 col-md-6">
+                                <a href="{{ $url2 }}">
+                                    <div class="home-contain">
+                                        <img src="{{ Storage::url($banner2[0]->image_url) }}"
+                                            class="bg-img blur-up lazyload" alt="">
+                                        <div class="home-detail p-center-left home-p-sm w-75">
+                                            <div>
+                                                <h3 class="theme-color">{{ $banner2[0]->title }}</h3>
+                                                <h4 class="text-danger">{{ $banner2[0]->content }}</h4>
+                                                <p class="w-75">{{ $banner2[0]->descript }}</p>
+                                                @if ($banner2[0]->status_button === 1)
+                                                    <a href='{{ $url2 }}'
+                                                        class="shop-button">{{ $banner2[0]->content_button != '' ? $banner2[0]->content_button : 'Mua ngay' }}
+                                                        <i class="fa-solid fa-right-long"></i></a>
+                                                @endif
+                                            </div>
+
+                                        </div>
                                     </div>
-
-                                </div>
+                                </a>
                             </div>
-                        </div>
+                        @endif
+
+
                     </div>
                 </div>
             </div>
@@ -104,21 +182,37 @@
 
 
                         <div class="ratio_156 section-t-space">
-                            <div class="home-contain hover-effect">
-                                <img src="{{ asset('assets/client/images/banner/10.webp') }}" class="bg-img blur-up lazyload"
-                                    alt="">
-                                <div class="home-detail p-top-left home-p-medium">
-                                    <div>
-                                        <h6 class="text-yellow home-banner">Áo Nữ</h6>
-                                        <h3 class="text-uppercase fw-normal"><span class="theme-color fw-bold">Sản
-                                                Phẩm</span> Mới Nhất</h3>
-                                        <h3 class="fw-light">Cập Nhật Liên Tục</h3>
-                                        {{-- <button onclick="location.href = '/clientsanpham';"
-                                            class="btn btn-animation btn-md mend-auto">Mua Ngay <i
-                                                class="fa-solid fa-arrow-right icon"></i></button> --}}
+                            @if (!empty($sideBarBanner) && isset($sideBarBanner[0]))
+                                @php
+                                    $url3 = null;
+                                    if ($sideBarBanner[0]->bannerImgs[0]->link_type == 'danhmuc') {
+                                        $url3 = '/sanpham/?danh_muc_id=' . $sideBarBanner[0]->bannerImgs[0]->link_url;
+                                    } elseif ($sideBarBanner[0]->bannerImgs[0]->link_type == 'sanpham') {
+                                        $url3 = '/sanpham/' . $sideBarBanner[0]->bannerImgs[0]->link_url;
+                                    } else {
+                                        $url3 = $sideBarBanner[0]->bannerImgs[0]->link_url;
+                                    }
+                                @endphp
+                                <div class="home-contain hover-effect">
+                                    <a href="{{ $url3 }}">
+                                    <img src="{{ Storage::url($sideBarBanner[0]->bannerImgs[0]->image_url) }}"
+                                        class="bg-img blur-up lazyload" alt="">
+                                    <div class="home-detail p-top-left home-p-medium">
+                                        <div>
+                                            <h6 class="text-yellow home-banner">{{ $sideBarBanner[0]->bannerImgs[0]->title }}</h6>
+                                            <h3 class="text-uppercase fw-normal"><span
+                                                    class="theme-color fw-bold">{{ $sideBarBanner[0]->bannerImgs[0]->content }}</h3>
+                                            <h3 class="fw-light">{{ $sideBarBanner[0]->bannerImgs[0]->descript }}</h3>
+                                            @if ($sideBarBanner[0]->bannerImgs[0]->status_button == 1)
+                                                <button onclick="location.href = '{{ $url3 }}';"
+                                                    class="btn btn-animation btn-md mend-auto">{{ $sideBarBanner[0]->bannerImgs[0]->content_button != '' ? $sideBarBanner[0]->content_button : 'Mua ngay' }}
+                                                    <i class="fa-solid fa-arrow-right icon"></i></button>
+                                            @endif
+                                        </div>
                                     </div>
+                                    </a>
                                 </div>
-                            </div>
+                            @endif
                         </div>
 
                         <div class="ratio_medium section-t-space">
@@ -140,11 +234,11 @@
 
                         <div class="section-t-space">
                             <div class="category-menu">
-                                <h3>Khách Hàng Đánh Giá</h3>
+                                <h3>{{ __('client/trang_chu.clientJudge') }}</h3>
 
                                 <div class="review-box">
                                     <div class="review-contain">
-                                        <h5 class="w-75">Chúng Tôi Luôn Quan Tâm Đến Trải Nghiệm Của Bạn</h5>
+                                        <h5 class="w-75">{{ __('client/trang_chu.clientJudge.content') }}</h5>
                                         <p>"{{ $bestComment['nhan_xet'] }}"</p>
                                     </div>
 
@@ -155,7 +249,7 @@
                                         </div>
                                         <div class="review-detail">
                                             <h5>{{ $bestUser['ten_nguoi_dung'] }}</h5>
-                                            <h6>Khách Hàng Thân Thiết</h6>
+                                            <h6>{{ __('client/trang_chu.loyalCustomer') }}</h6>
                                         </div>
                                     </div>
                                 </div>
@@ -168,10 +262,10 @@
                 <div class="col-xxl-9 col-xl-8">
                     <div class="title title-flex">
                         <div>
-                            <h2>Sản phẩm được nhiều người đánh giá cao</h2>
+                            <h2>{{ __('client/trang_chu.topProduct.byUser') }}</h2>
                             <span class="title-leaf">
                             </span>
-                            <p>Đừng bỏ lỡ cơ hội này với mức giá đặc biệt.</p>
+                            <p>{{ __('client/trang_chu.topProduct.byUser.content') }}</p>
                         </div>
                     </div>
 
@@ -282,10 +376,10 @@
 
 
                     <div class="title">
-                        <h2>Danh Mục Nổi Bật</h2>
+                        <h2>{{ __('client/trang_chu.topCategories') }}</h2>
                         <span class="title-leaf">
                         </span>
-                        <p>Danh mục hàng đầu</p>
+                        <p>{{ __('client/trang_chu.topCategories.descript') }}</p>
                     </div>
 
                     <div class="category-slider-2 product-wrapper no-arrow">
@@ -305,10 +399,10 @@
 
                     <div class="title d-block">
                         <div>
-                            <h2>Sản phẩm bán chạy</h2>
+                            <h2>{{ __('client/trang_chu.topProduct.mostSell') }}</h2>
                             <span class="title-leaf">
                             </span>
-                            <p>Những sản phẩm được mua nhiều nhất của chúng tôi</p>
+                            <p>{{ __('client/trang_chu.topProduct.mostSell.descript') }}</p>
                         </div>
                     </div>
 
@@ -531,10 +625,10 @@
 
 
                     <div class="title section-t-space">
-                        <h2>Bài viết</h2>
+                        <h2>{{ __('client/trang_chu.article') }}</h2>
                         <span class="title-leaf">
                         </span>
-                        <p>Bài viết mới nhất</p>
+                        <p>{{ __('client/trang_chu.article.descript') }}</p>
                     </div>
 
                     <div class="slider-3-blog ratio_65 no-arrow product-wrapper">
@@ -566,213 +660,21 @@
 @endsection
 
 @section('js')
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script>
+        const swiper = new Swiper('.home-slider', {
+            loop: true,
+            autoplay: {
+                delay: 4000,
+            },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+        });
+    </script>
 @endsection
-{{-- <script>
-    $(document).ready(function() {
-        let selectedAttributes = {}; // Lưu thuộc tính đã chọn
-        let bienTheList = []; // Lưu danh sách biến thể
-        let matchedVariant = null; // Biến toàn cục để lưu biến thể phù hợp
-
-        // Xử lý khi bấm vào nút "Xem nhanh"
-        $(".btn-quick-view").click(function() {
-            let productId = $(this).data("id");
-
-            $.ajax({
-                url: 'http://127.0.0.1:8000/quick-view?id=' + productId,
-                method: 'GET',
-                success: function(response) {
-                    // Reset dữ liệu khi mở modal mới
-                    selectedAttributes = {};
-                    bienTheList = response.bien_the;
-                    matchedVariant = null;
-
-                    // Cập nhật thông tin sản phẩm
-                    $('#view .title-name').text(response.ten_san_pham);
-                    $('#view .slider-image img').attr('src', response.hinh_anh);
-                    $('#view .danh_muc').text(response.danh_muc);
-                    $('#view .mo_ta').html(response.mo_ta);
-
-                    $('#view .danh_gia').text(response.danh_gia + ' lượt đánh giá');
-                    $('#view .gia_moi').text(response.gia_moi + ' đ');
-                    $('#view .gia_cu').text(response.gia_cu + ' đ');
-
-                    document.getElementById("btnChiTiet").addEventListener("click",
-                        function() {
-                            location.href = '/sanpham/' + response.id;
-                        });
-
-                    // Hiển thị số sao đánh giá
-                    let so_sao = response.so_sao;
-                    $('#view .rating li svg').css({
-                        'fill': 'none',
-                        'stroke': '#ffc107'
-                    });
-                    $('#view .rating li').each(function(index) {
-                        if (index < so_sao) {
-                            $(this).find('svg').css({
-                                'fill': '#ffc107',
-                                'stroke': '#ffc107'
-                            });
-                        }
-                    });
-
-                    // Gom nhóm thuộc tính từ biến thể
-                    let thuocTinhMap = {};
-                    response.bien_the.forEach(bienThe => {
-                        bienThe.thuoc_tinh_gia_tri.forEach(thuocTinh => {
-                            if (!thuocTinhMap[thuocTinh.ten]) {
-                                thuocTinhMap[thuocTinh.ten] = new Set();
-                            }
-                            thuocTinhMap[thuocTinh.ten].add(thuocTinh
-                                .gia_tri);
-                        });
-                    });
-
-                    // Hiển thị danh sách thuộc tính
-                    let thuocTinhHtml = "";
-                    Object.keys(thuocTinhMap).forEach(tenThuocTinh => {
-                        thuocTinhHtml += `<h4>${tenThuocTinh}</h4>`;
-                        thuocTinhHtml +=
-                            `<div id="thuoc_tinh_${tenThuocTinh.replace(/\s+/g, '_')}" class="thuoc-tinh-group">`;
-                        thuocTinhMap[tenThuocTinh].forEach(giaTri => {
-                            thuocTinhHtml += `
-                            <span class="option" data-thuoc-tinh="${tenThuocTinh}" data-gia-tri="${giaTri}">
-                                ${giaTri}
-                            </span>
-                        `;
-                        });
-                        thuocTinhHtml += `</div>`;
-                    });
-
-                    $('.variant-section').html(thuocTinhHtml); // Thêm thuộc tính vào UI
-                },
-                error: function() {
-                    // alert('Không tìm thấy sản phẩm!');
-                }
-            });
-        });
-
-        // Xử lý khi chọn thuộc tính
-        $(document).on("click", ".option", function() {
-            let thuocTinh = $(this).data("thuoc-tinh");
-            let giaTri = $(this).data("gia-tri");
-
-            // Cập nhật giá trị thuộc tính đã chọn
-            selectedAttributes[thuocTinh] = giaTri;
-
-            // Bỏ chọn tất cả option cùng nhóm
-            $(`.option[data-thuoc-tinh='${thuocTinh}']`).removeClass("selected");
-            $(this).addClass("selected");
-
-            // Cập nhật ảnh và giá biến thể
-            updateVariantImage();
-        });
-
-        // Hàm cập nhật ảnh và giá dựa trên biến thể được chọn
-        function updateVariantImage() {
-            matchedVariant = null; // Đặt lại biến thể phù hợp
-
-            bienTheList.forEach(variant => {
-                let isMatch = Object.keys(selectedAttributes).length >
-                    0; // Đảm bảo có thuộc tính được chọn
-
-                variant.thuoc_tinh_gia_tri.forEach(attr => {
-                    if (selectedAttributes[attr.ten] !== attr.gia_tri) {
-                        isMatch = false;
-                    }
-                });
-
-                if (isMatch) {
-                    matchedVariant = variant;
-                }
-            });
-
-            if (matchedVariant) {
-                $("#view .slider-image img").attr("src", matchedVariant.anh_bien_the);
-                $("#view .gia_moi").text(matchedVariant.gia_ban + ' đ');
-                $("#view .so_luong").text("Tồn kho: " + matchedVariant.so_luong);
-                $("#quantity").val(1).attr("max", matchedVariant.so_luong); // Cập nhật max quantity
-
-                // Kiểm tra tồn kho để khóa/mở nút "Thêm vào giỏ hàng"
-                if (matchedVariant.so_luong > 0) {
-                    $("#addToCartBtn").prop("disabled", false); // Mở khóa nút
-                } else {
-                    $("#addToCartBtn").prop("disabled", true); // Khóa nút
-                }
-            } else {
-                $("#view .slider-image img").attr("src", "/storage/uploads/sanphams/default.png");
-                $("#view .gia_moi").text("Chọn thuộc tính để xem giá");
-                $("#view .so_luong").text("Tồn kho: ");
-                $("#quantity").val(1).attr("max", ""); // Xóa giới hạn khi chưa chọn biến thể
-
-                $("#addToCartBtn").prop("disabled", true); // Khóa nút nếu chưa chọn biến thể
-            }
-
-            if (matchedVariant) {
-                $("#id_bienthe").val(matchedVariant.id); // Cập nhật ID biến thể
-            } else {
-                $("#id_bienthe").val(""); // Xóa ID nếu chưa chọn đầy đủ
-            }
-        }
-
-
-        // Chặn nhập số vượt quá tồn kho
-        $("#quantity").on("input", function() {
-            let input = $(this);
-            let value = parseInt(input.val(), 10) || 1;
-
-            let maxQuantity = matchedVariant ? matchedVariant.so_luong : Infinity;
-
-            if (isNaN(value) || value < 1) {
-                input.val(1);
-            } else if (value > maxQuantity) {
-                input.val(maxQuantity); // Chặn vượt số lượng tồn kho
-            }
-        });
-
-        // Nút tăng số lượng
-        function increaseValue() {
-            event.preventDefault();
-            let input = $("#quantity");
-            let value = parseInt(input.val(), 10) || 1;
-            let maxQuantity = matchedVariant ? matchedVariant.so_luong : Infinity;
-            console.log(maxQuantity,value);
-            if (value < maxQuantity) {
-                input.val(value + 1);
-            }
-        }
-
-        // Nút giảm số lượng
-        function decreaseValue() {
-            event.preventDefault();
-            let input = $("#quantity");
-            let value = parseInt(input.val(), 10) || 1;
-
-            if (value > 1) {
-                input.val(value - 1);
-            }
-        }
-
-        // Gán sự kiện nút tăng/giảm số lượng
-        $(document).on("click", ".number-input button:first-child", decreaseValue);
-        $(document).on("click", ".number-input button:last-child", increaseValue);
-
-        // Reset dữ liệu khi đóng modal để tránh lỗi hiển thị sai
-        $("#view").on("hidden.bs.modal", function() {
-            $("#addToCartBtn").prop("disabled", true);
-            selectedAttributes = {}; // Xóa thuộc tính đã chọn
-            bienTheList = []; // Xóa danh sách biến thể
-            matchedVariant = null; // Reset biến thể
-            $(".variant-section").html(""); // Xóa giao diện thuộc tính
-            $(".option").removeClass("selected"); // Bỏ chọn option cũ
-            $("#view .gia_moi").text("Chọn thuộc tính để xem giá"); // Reset giá
-            $("#view .so_luong").text("Số lượng: --"); // Reset số lượng
-            $("#view .slider-image img").attr("src",
-                "/storage/uploads/sanphams/default.png"); // Reset ảnh
-            $("#quantity").val(1).attr("max", ""); // Reset số lượng về mặc định
-        });
-
-
-    });
-    // add-cart-button
-</script> --}}

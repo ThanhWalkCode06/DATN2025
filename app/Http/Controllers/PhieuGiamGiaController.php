@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DanhMucSanPham;
 use App\Models\PhieuGiamGia;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -45,7 +46,8 @@ class PhieuGiamGiaController extends Controller
      */
     public function create()
     {
-        return view('admins.phieugiamgias.create');
+        $danhMucs = DanhMucSanPham::get();
+        return view('admins.phieugiamgias.create',compact('danhMucs'));
     }
 
     /**
@@ -53,6 +55,7 @@ class PhieuGiamGiaController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->all());
         $request->validate([
             'ten_phieu' => [
                 'required',
@@ -68,9 +71,25 @@ class PhieuGiamGiaController extends Controller
             ],
             'ngay_bat_dau' => 'required|date|after_or_equal:today',
             'ngay_ket_thuc' => 'required|date|after:ngay_bat_dau',
-            'gia_tri' => 'required|numeric|min:0|min:0|max:100',
+            'gia_tri' => [
+                'required',
+                'numeric',
+                function ($attribute, $value, $fail) use ($request) {
+                    if ($request->kieu_giam === 'phan_tram') {
+                        if ($value <= 0 || $value > 100) {
+                            $fail('Giá trị phần trăm phải lớn hơn 0 và nhỏ hơn hoặc bằng 100%.');
+                        }
+                    } elseif ($request->kieu_giam === 'co_dinh') {
+                        if ($value < 5000) {
+                            $fail('Giá trị cố định phải lớn hơn hoặc bằng 5.000 đ.');
+                        }
+                    }
+                },
+            ],
             'muc_giam_toi_da' => 'numeric|min:5000',
             'muc_gia_toi_thieu' => 'numeric|min:0',
+            'danh_muc_id' => 'nullable',
+            'kieu_giam' => 'nullable',
         ], [
             'ten_phieu.required' => 'Tên phiếu bắt buộc phải nhập.',
             'ten_phieu.unique' => 'Tên phiếu giảm giá đã tồn tại.',
@@ -127,7 +146,8 @@ class PhieuGiamGiaController extends Controller
     public function edit($id)
     {
         $phieuGiamGia = PhieuGiamGia::findOrFail($id);
-        return view('admins.phieugiamgias.edit', compact('phieuGiamGia'));
+        $danhMucs = DanhMucSanPham::get();
+        return view('admins.phieugiamgias.edit', compact('phieuGiamGia','danhMucs'));
     }
 
     /**
@@ -144,7 +164,23 @@ class PhieuGiamGiaController extends Controller
                 'ma_phieu' => 'required|string|max:50',
                 'ngay_bat_dau' => 'required|date|after_or_equal:today',
                 'ngay_ket_thuc' => 'required|date|after:ngay_bat_dau',
-                'gia_tri' => 'required|numeric|min:1|max:99.99',
+                'gia_tri' => [
+                    'required',
+                    'numeric',
+                    function ($attribute, $value, $fail) use ($request) {
+                        if ($request->kieu_giam === 'phan_tram') {
+                            if ($value <= 0 || $value > 100) {
+                                $fail('Giá trị phần trăm phải lớn hơn 0 và nhỏ hơn hoặc bằng 100%.');
+                            }
+                        } elseif ($request->kieu_giam === 'co_dinh') {
+                            if ($value < 5000) {
+                                $fail('Giá trị cố định phải lớn hơn hoặc bằng 5.000 đ.');
+                            }
+                        }
+                    },
+                ],
+                'danh_muc_id' => 'nullable',
+                'kieu_giam' => 'nullable',
                 'trang_thai' => 'required|in:0,1',
                 'muc_giam_toi_da' => 'numeric|min:5000',
                 'muc_gia_toi_thieu' => 'numeric|min:0',

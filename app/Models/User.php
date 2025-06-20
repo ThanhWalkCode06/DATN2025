@@ -32,6 +32,9 @@ class User extends Authenticatable
         'trang_thai',
         'email',
         'username',
+        'ward',
+        'district',
+        'province',
     ];
 
     public function sanPhamYeuThichs()

@@ -89,7 +89,15 @@
                 <input type="number" name="so_tien" id="so_tien" class="form-control"  >
                 <div class="invalid-feedback" id="so_tien_error"></div> <!-- Thông báo lỗi -->
             </div>
-
+            <!-- Password -->
+            <div class="mb-3">
+                <label for="password" class="form-label">Mật khẩu tài khoản</label>
+                <input type="password" name="password" id="password" class="form-control @error('password') is-invalid @enderror" value="">
+                <div class="invalid-feedback" id="password_error"></div>
+                @error('password')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
             <!-- Checkbox xác nhận -->
             <div class="form-check mb-3">
                 <input class="form-check-input" type="checkbox" id="xac_nhan" >
@@ -101,7 +109,7 @@
 
 
             <!-- Nút xác nhận -->
-            <button type="submit" class="btn btn-success w-100" style="background-color: #009688; border: none;">
+            <button type="submit" class="btn btn-success w-100" style="background-color: #009688; border: none; color: white;">
                 <i class="fas fa-paper-plane me-2"></i> Gửi yêu cầu rút tiền
             </button>
 
@@ -213,6 +221,16 @@ else {
         document.getElementById('so_tien').classList.remove('is-invalid');
     }
 
+    // Validate password
+    const password = document.getElementById('password').value.trim();
+            if (password === '') {
+                document.getElementById('password_error').textContent = 'Vui lòng nhập mật khẩu.';
+                document.getElementById('password_error').style.display = 'block';
+                document.getElementById('password').classList.add('is-invalid');
+                isValid = false;
+            } else {
+                document.getElementById('password').classList.remove('is-invalid');
+            }
     // Kiểm tra checkbox xác nhận
     const checkbox = document.getElementById('xac_nhan');
     if (!checkbox.checked) {
@@ -226,6 +244,13 @@ else {
 
     return isValid;
 }
+
+
+
+//nhập mk   
+
+
+
 
 </script>
 

@@ -5,6 +5,10 @@
 @endsection
 
 @section('css')
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
+    <!-- Select2 Bootstrap 5 theme -->
+    <link href="https://cdn.jsdelivr.net/npm/@ttskch/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" rel="stylesheet">
+
     <style>
         .checkbox_animated:after {
             content: "";
@@ -74,7 +78,7 @@
 
         .voucher-discount {
             font-size: 1.2rem;
-            padding: 0.9rem 1.2rem;
+            padding: 0.9rem 2rem;
             min-width: 65px;
             border-radius: 0.5rem;
             display: flex;
@@ -185,6 +189,52 @@
             width: 100%;
             display: block;
         }
+        /* Tùy chỉnh giao diện Select2 */
+        .select2-container .select2-selection--single {
+            height: 38px;
+            border: 1px solid #ced4da;
+            border-radius: 0.375rem;
+            padding: 0.375rem 0.75rem;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+        .select2-container--bootstrap-5 .select2-selection--single .select2-selection__rendered {
+            line-height: 1.5;
+        }
+        .select2-container--bootstrap-5 .select2-selection--single .select2-selection__arrow {
+            height: 38px;
+            right: 10px;
+        }
+        .select2-container--bootstrap-5 .select2-dropdown {
+            border: 1px solid #ced4da;
+            border-radius: 0.375rem;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        }
+        .select2-container--bootstrap-5 .select2-results__option {
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+        }
+        .select2-container--bootstrap-5 .select2-results__option--highlighted {
+            background-color: #0d6efd;
+            color: white;
+        }
+        .select2-container {
+            width: 100% !important;
+        }
+        .select2-container--bootstrap-5 .select2-results__option {
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            width: 100%;
+            /* background-color: #0da487; */
+        }.select2-search--dropdown .select2-search__field {
+            padding: 4px;
+            width: 100%;
+            box-sizing: border-box;
+            border: none;
+        }
+        .select2-container--bootstrap-5 .select2-results__option--highlighted {
+            background-color: #0da487 !important;
+        }
     </style>
 @endsection
 
@@ -240,6 +290,10 @@
                                                 <input type="hidden" name="voucher_code" id="hiddenVoucherCode">
                                                 <input type="hidden" name="tong_tien" id="hiddenTongTien">
                                                 <input type="hidden" name="giam_gia" id="hiddenGiamGia">
+                                                <input type="hidden" id="oldProvince" value="{{ Auth::user()->province }}">
+                                                <input type="hidden" id="oldDistrict" value="{{ Auth::user()->district }}">
+                                                <input type="hidden" id="oldWard" value="{{ Auth::user()->ward }}">
+
                                                 <input type="hidden" name="phuong_thuc_thanh_toan_id"
                                                     id="hiddenPaymentMethod" value="1">
                                                 <div class="mt-3">
@@ -252,13 +306,38 @@
                                                     <input class="form-control" type="text" name="email_nguoi_nhan"
                                                         value="{{ Auth::user()->email ?? '' }}">
                                                 </div>
+
                                                 <div class="mt-3">
                                                     <label for="">Số điện thoại:</label>
                                                     <input class="form-control" type="number" name="sdt_nguoi_nhan"
                                                         value="{{ Auth::user()->so_dien_thoai ?? '' }}">
                                                 </div>
-                                                <div class="mt-3">
-                                                    <label for="">Địa chỉ:</label>
+
+                                                <div class="row justify-content-center">
+                                                    <div class="col-md-4 mt-3 justify-content-center">
+                                                        <label for="">Tỉnh thành:</label>
+                                                        <select id="province" onchange="loadDistricts(this.value)" class=" select2 form-select" name="province_code" required>
+                                                            <option value="">Chọn tỉnh/thành</option>
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="col-md-4 mt-3">
+                                                        <label for="">Quận / Huyện:</label>
+                                                        <select id="district" onchange="loadWards(this.value)" class=" select2 form-select" name="district_code">
+                                                            <option value="">Chọn quận/huyện</option>
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="col-md-4 mt-3">
+                                                        <label for="">Phường / Xã:</label>
+                                                        <select id="ward" class=" select2 form-select" name="ward">
+                                                            <option value="">Chọn phường/xã</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div>
+                                                    <label for="">Địa chỉ cụ thể:</label>
                                                     <input class="form-control" type="text" name="dia_chi_nguoi_nhan"
                                                         value="{{ Auth::user()->dia_chi ?? '' }}">
                                                 </div>
@@ -329,34 +408,6 @@
                                                             VNĐ</strong>
                                                     </div>
                                                 @endif
-                                                {{-- Hiện số dư --}}
-
-                                                <!-- Modal Điều Khoản -->
-                                                {{-- <div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
-                                                    <div class="modal-dialog modal-dialog-centered">
-                                                    <div class="modal-content shadow">
-                                                        <div class="modal-header">
-                                                        <h5 class="modal-title" id="termsModalLabel">Điều khoản thanh toán</h5>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                        <p>Khi thanh toán online bằng VNPAY hoặc bằng Ví, nếu quý khách huỷ hàng hoặc trả hàng thì tiền sẽ được trả về Ví của quý khách.</p>
-                                                        <p>Số tiền đó <strong>chỉ dùng để mua hàng</strong> trong cửa hàng của chúng tôi, Ví đó <strong>không thể nạp cũng như không thể rút tiền</strong> </p>
-                                                        <p>Nếu không đồng ý điều khoản bạn chỉ có thể mua hàng và thanh toán bằng tiền mặt. Trân trọng!</p>
-                                                        <div class="form-check mt-3">
-                                                            <input class="form-check-input" type="checkbox" id="agreeTerms">
-                                                            <label class="form-check-label" for="agreeTerms">
-                                                            Tôi đồng ý với điều khoản mua hàng
-                                                            </label>
-                                                        </div>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                                                        <button type="button" class="btn btn-primary" id="acceptTerms" disabled>Chấp nhận</button>
-                                                        </div>
-                                                    </div>
-                                                    </div>
-                                                </div> --}}
 
 
                                             </div>
@@ -457,7 +508,6 @@
                                                     now()->subDays(3),
                                                 );
                                             @endphp
-
                                             <div class="card shadow-sm border-0 w-100 position-relative voucher-card">
                                                 @if ($laMoi)
                                                     <div class="ribbon-new">
@@ -467,10 +517,10 @@
 
                                                 <div
                                                     class="card-body d-flex flex-row justify-content-between align-items-start p-2">
-                                                    <div class="d-flex flex-row align-items-start flex-grow-1">
+                                                    <div class="d-flex flex-row align-items-start flex-grow-2">
                                                         <div
                                                             class="bg-danger text-white rounded text-center voucher-discount me-3">
-                                                            <strong>{{ $phieu->gia_tri }}%</strong>
+                                                            <strong>{{ number_format($phieu->gia_tri,0,'','.') }}{{ $phieu->kieu_giam === 'co_dinh' ? 'Đ' : '%'  }}</strong>
                                                         </div>
 
                                                         <div>
@@ -482,10 +532,11 @@
                                                                 {{ date('d/m/Y', strtotime($phieu->ngay_bat_dau)) }} -
                                                                 {{ date('d/m/Y', strtotime($phieu->ngay_ket_thuc)) }}<br>
                                                                 <span class="minimum-maximum-line">
-                                                                    Tối thiểu:
+                                                                    Đơn tối thiểu:
                                                                     <strong>{{ number_format($phieu->muc_gia_toi_thieu, 0, ',', '.') }}đ</strong>
-                                                                    |
-                                                                    Tối đa:
+                                                                </span>
+                                                                <span class="minimum-maximum-line">
+                                                                    Giảm tối đa:
                                                                     <strong>{{ number_format($phieu->muc_giam_toi_da, 0, ',', '.') }}đ</strong>
                                                                 </span>
                                                             </div>
@@ -539,83 +590,8 @@
 @endsection
 
 @section('js')
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-    {{-- điều khoản --}}
-    {{-- <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    let accepted = false;
-    const acceptTermsButton = document.getElementById('acceptTerms');
-    const agreeCheckbox = document.getElementById('agreeTerms');
-    const termsModalEl = document.getElementById('termsModal');
-    const termsModal = new bootstrap.Modal(termsModalEl);
-    const form = document.querySelector('form');
-    const btnDatHang = document.getElementById('btnDatHang');
-
-    // Khi chọn VNPAY hoặc Ví
-    document.querySelectorAll('input[name="flexRadioDefault"]').forEach(input => {
-        input.addEventListener('change', function () {
-            if (this.dataset.id === '2' || this.dataset.id === '3') {
-                accepted = false;
-                agreeCheckbox.checked = false;
-                acceptTermsButton.disabled = true;
-                termsModal.show();
-            } else {
-                accepted = true;
-            }
-        });
-    });
-
-    // Tick checkbox thì bật nút chấp nhận
-    agreeCheckbox.addEventListener('change', function () {
-        acceptTermsButton.disabled = !this.checked;
-    });
-
-    // Bấm nút "Chấp nhận"
-    acceptTermsButton.addEventListener('click', function () {
-        accepted = true;
-        termsModal.hide();
-    });
-
-    // Nếu đóng modal mà chưa chấp nhận → bỏ chọn radio
-    termsModalEl.addEventListener('hidden.bs.modal', function () {
-        if (!accepted) {
-            document.querySelectorAll('input[name="flexRadioDefault"]').forEach(input => {
-                if (input.dataset.id === '2' || input.dataset.id === '3') {
-                    input.checked = false;
-                }
-            });
-        }
-    });
-
-    // Khi bấm nút Đặt hàng
-    btnDatHang.addEventListener('click', function (e) {
-        const selected = document.querySelector('input[name="flexRadioDefault"]:checked');
-        if ((selected && (selected.dataset.id === '2' || selected.dataset.id === '3')) && !accepted) {
-            e.preventDefault(); // Chặn gửi nếu chưa chấp nhận điều khoản
-            termsModal.show();
-            return;
-        }
-    });
-
-    // Nếu submit form mà chưa chấp nhận điều khoản → chặn luôn
-    form.addEventListener('submit', function (e) {
-        const selected = document.querySelector('input[name="flexRadioDefault"]:checked');
-        if ((selected && (selected.dataset.id === '2' || selected.dataset.id === '3')) && !accepted) {
-            e.preventDefault();
-            termsModal.show();
-        }
-    });
-});
-
-</script> --}}
-
-    {{-- điều khoản  --}}
-
-
-
-    {{-- Hiện số dư --}}
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const radios = document.querySelectorAll('input[name="flexRadioDefault"]');
@@ -639,9 +615,6 @@
     </script>
 
     {{-- Hiện số dư --}}
-
-
-
 
     <script>
         let phiVanChuyen = document.getElementById("phi-van-chuyen");
@@ -731,6 +704,16 @@
                     }
                 });
             });
+
+             $('#checkoutForm').on('submit', function(e) {
+                    const province = $('#province').val();
+                    const district = $('#district').val();
+                    const ward = $('#ward').val();
+                    if (!province || !district || !ward) {
+                        e.preventDefault(); // chặn submit
+                        alert('Vui lòng chọn đầy đủ tỉnh/thành, quận/huyện và phường/xã.');
+                    }
+                });
         });
 
 
@@ -785,10 +768,6 @@
                 $('#hiddenTongTien').val(tongTien);
                 $('#hiddenGiamGia').val(giamGia);
                 $('#hiddenVoucherCode').val(voucherCode);
-
-                // console.log("Tổng tiền:", tongTien);
-                // console.log("Giảm giá:", giamGia);
-                // console.log("Mã giảm giá:", voucherCode);
             }
 
             $('input[name="flexRadioDefault"]').on('change', function() {
@@ -799,42 +778,35 @@
 
             $("#btnDatHang").click(async function(e) {
                 // xử lý điều khoản
-                // const selected = document.querySelector('input[name="flexRadioDefault"]:checked');
-                //     if (!selected) {
-                //         e.preventDefault();
-                //         Swal.fire({
-                //             icon: "warning",
-                //             title: "Chưa chọn phương thức thanh toán",
-                //             text: "Vui lòng chọn phương thức thanh toán để tiếp tục.",
-                //             confirmButtonText: "OK"
-                //         });
-                //         return;
-                //     }
-                // xử lý điều khoản
                 e.preventDefault(); // Ngăn chặn load lại trang
                 updateHiddenInputs();
 
                 //  confirm
                 // Lấy giá trị phương thức thanh toán từ input hoặc hidden field
                 const paymentMethod = $('#hiddenPaymentMethod').val();
-                // Nếu là thanh toán bằng ví (ID = 3)
+                let password = '';
                 if (paymentMethod === "3") {
                     const result = await Swal.fire({
-                        title: 'Xác nhận?',
-                        text: 'Bạn có chắc chắn muốn trừ tiền trong ví không?',
-                        icon: 'warning',
+                        title: 'Nhập mật khẩu tài khoản',
+                        input: 'password',
+                        inputLabel: 'Vui lòng nhập mật khẩu tài khoản để xác nhận thanh toán bằng ví',
+                        inputPlaceholder: 'Mật khẩu tài khoản',
                         showCancelButton: true,
-                        confirmButtonText: 'Đồng ý',
+                        confirmButtonText: 'Xác nhận',
                         cancelButtonText: 'Hủy',
-                        reverseButtons: true
+                        inputValidator: (value) => {
+                            if (!value) {
+                                return 'Vui lòng nhập mật khẩu tài khoản!';
+                            }
+                        }
                     });
 
                     if (!result.isConfirmed) {
                         return;
                     }
+
+                    password = result.value;
                 }
-
-
                 //  confirm
                 // Lấy dữ liệu từ form
                 var formData = {
@@ -846,9 +818,27 @@
                     ten_nguoi_nhan: $('input[name="ten_nguoi_nhan"]').val(),
                     email_nguoi_nhan: $('input[name="email_nguoi_nhan"]').val(),
                     sdt_nguoi_nhan: $('input[name="sdt_nguoi_nhan"]').val(),
+                    province: $('#province option:selected').text(),
+                    district: $('#district option:selected').text(),
+                    ward: $('#ward option:selected').text(),
                     dia_chi_nguoi_nhan: $('input[name="dia_chi_nguoi_nhan"]').val(),
                     ghi_chu: $('input[name="ghi_chu"]').val(),
+                    password: password
                 };
+
+                const province = $('#province').val();
+                const district = $('#district').val();
+                const ward = $('#ward').val();
+                if (!province || !district || !ward) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Lỗi!",
+                        html: 'Vui lòng chọn đầy đủ tỉnh/thành, quận/huyện và phường/xã.', // Dùng html để hiển thị danh sách sản phẩm
+                        confirmButtonText: "OK"
+                    });
+                    return;
+                }
+
                 // Gửi request AJAX
                 $.ajax({
                     url: "{{ route('thanhtoans.xuLy') }}", // Đường dẫn đến route xử lý thanh toán
@@ -903,80 +893,6 @@
         });
     </script>
 
-{{-- <script>
-        document.addEventListener("DOMContentLoaded", function() {
-    const form = document.getElementById("checkoutForm");
-
-    // Vô hiệu hóa validate HTML5 mặc định
-    form.setAttribute("novalidate", "novalidate");
-
-    form.addEventListener("submit", function(event) {
-        let isValid = true;
-        let errors = [];
-
-        // Lấy giá trị của các trường
-        let ten = document.querySelector("[name='ten_nguoi_nhan']").value.trim();
-        let email = document.querySelector("[name='email_nguoi_nhan']").value.trim();
-        let sdt = document.querySelector("[name='sdt_nguoi_nhan']").value.trim();
-        let diaChi = document.querySelector("[name='dia_chi_nguoi_nhan']").value.trim();
-
-        // Reset lỗi cũ
-        document.querySelectorAll(".error-message").forEach(el => el.remove());
-
-        // Kiểm tra Họ và tên
-        if (ten === "") {
-            errors.push("Vui lòng nhập họ và tên");
-            isValid = false;
-        }
-
-        // Kiểm tra Email
-        if (email === "") {
-            errors.push("Vui lòng nhập email");
-            isValid = false;
-        } else if (!validateEmail(email)) {
-            errors.push("Email không hợp lệ");
-            isValid = false;
-        }
-
-        // Kiểm tra Địa chỉ
-        if (diaChi === "") {
-                    errors.push("Vui lòng nhập địa chỉ");
-                    isValid = false;
-                }
-
-        // Kiểm tra Số điện thoại
-        if (sdt === "") {
-            errors.push("Vui lòng nhập số điện thoại");
-            isValid = false;
-        } else if (!/^\d{10,11}$/.test(sdt)) {
-            errors.push("Số điện thoại phải có 10-11 số");
-            isValid = false;
-        }
-
-
-
-        // Hiển thị tất cả lỗi trong popup SweetAlert
-        if (errors.length > 0) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Lỗi!!',
-                html: '<ul>' + errors.map(err => `<li>${err}</li>`).join('') + '</ul>'
-            });
-
-            // Ngăn submit và các xử lý khác
-            event.preventDefault();
-            event.stopImmediatePropagation(); // Ngăn các listener khác chạy
-            return false;
-        }
-    }, { capture: true }); // Chạy ở capture phase để ưu tiên
-
-    // Hàm kiểm tra email hợp lệ
-    function validateEmail(email) {
-        let re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return re.test(email);
-    }
-});
-    </script> --}}
     <script>
         function chonMaPhieu(maPhieu) {
             document.getElementById('voucherCode').value = maPhieu;
@@ -989,6 +905,7 @@
             modal.hide();
         }
     </script>
+
     <script>
         function copyMaPhieu(maPhieu) {
             navigator.clipboard.writeText(maPhieu)
@@ -1035,4 +952,107 @@
         }
 
     </style>
+
+    <script>
+    $(document).ready(function() {
+
+        $('.select2').select2({
+            theme: 'bootstrap-5',
+         });
+        // Load provinces
+        $.ajax({
+            url: '/provinces',
+            method: 'GET',
+            success: function(data) {
+                console.log('Provinces:', data); // Debug
+                $.each(data, function(index, province) {
+                    $('#province').append(`<option value="${province.code}">${province.name}</option>`);
+                });
+
+                const oldProvince = $('#oldProvince').val();
+                if (oldProvince) {
+                    const matchedProvince = $('#province option').filter(function () {
+                        return $(this).text().trim() === oldProvince.trim();
+                    });
+
+                    if (matchedProvince.length > 0) {
+                        $('#province').val(matchedProvince.val()).trigger('change');
+                    }
+                }
+            },
+            error: function(xhr) {
+                console.error('Lỗi khi lấy tỉnh/thành:', xhr.responseText);
+            }
+        });
+
+    });
+
+    function loadDistricts(provinceId) {
+        $('#district').html('<option value="">Chọn quận/huyện</option>');
+        $('#ward').html('<option value="">Chọn phường/xã</option>');
+        if (provinceId) {
+            $.ajax({
+                url: `/districts/${provinceId}`,
+                method: 'GET',
+                success: function(data) {
+                    console.log('Districts:', data); // Debug
+                    if (data.length === 0) {
+                        console.warn('Không có quận/huyện cho provinceId:', provinceId);
+                    }
+                    $.each(data, function(index, district) {
+                        $('#district').append(`<option value="${district.code}">${district.name}</option>`);
+                    });
+
+                    const oldDistrict = $('#oldDistrict').val();
+                    console.log(oldDistrict);
+                    if (oldDistrict) {
+                    const matchedDistrict = $('#district option').filter(function () {
+                        return $(this).text().trim() === oldDistrict.trim();
+                    });
+
+                    if (matchedDistrict.length > 0) {
+                        $('#district').val(matchedDistrict.val()).trigger('change');
+                    }
+                }
+                },
+                error: function(xhr) {
+                    console.error('Lỗi khi lấy quận/huyện:', xhr.responseText);
+                }
+            });
+        }
+    }
+
+    function loadWards(districtId) {
+        $('#ward').html('<option value="">Chọn phường/xã</option>');
+        if (districtId) {
+            $.ajax({
+                url: `/wards/${districtId}`,
+                method: 'GET',
+                success: function(data) {
+                    console.log('Wards:', data); // Debug
+                    if (data.length === 0) {
+                        console.warn('Không có phường/xã cho districtId:', districtId);
+                    }
+                    $.each(data, function(index, ward) {
+                        $('#ward').append(`<option value="${ward.code}">${ward.name}</option>`);
+                    });
+
+                    const oldWard = $('#oldWard').val();
+                    if (oldWard) {
+                        const matchedWard = $('#ward option').filter(function () {
+                            return $(this).text().trim() === oldWard.trim();
+                        });
+
+                        if (matchedWard.length > 0) {
+                            $('#ward').val(matchedWard.val()).trigger('change');
+                        }
+                    }
+                },
+                error: function(xhr) {
+                    console.error('Lỗi khi lấy phường/xã:', xhr.responseText);
+                }
+            });
+        }
+    }
+</script>
 @endsection

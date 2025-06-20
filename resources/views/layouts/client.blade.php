@@ -43,6 +43,15 @@
 
     <!-- Pusher -->
     <script src="https://js.pusher.com/8.4.0/pusher.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
+    <!-- Select2 Bootstrap 5 theme -->
+    <link href="https://cdn.jsdelivr.net/npm/@ttskch/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" rel="stylesheet">
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Select2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     @yield('css')
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/iconly@1.0.0/css/iconly.min.css">
@@ -221,6 +230,7 @@
     <script src="{{ asset('assets/client/js/theme-setting.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     @yield('js')
     <script>
         // Pusher.logToConsole = true; // Bật debug Pusher
@@ -740,51 +750,28 @@
     });
 </script>
 
-</html>
-
-{{--
 <script>
-    $(".delete-cart-item").click(function () {
-        console.log('hi')
-        let itemId = $(this).data("id");
-        let button = $(this);
+    $('.lang-switch').on('click', function(e){
+        e.preventDefault();
 
         $.ajax({
-            url: "/xoa-gio-hang",
-            method: "POST",
-            data: { id: itemId },
-            headers: {
-                "X-CSRF-TOKEN": $("meta[name='csrf-token']").attr("content")
+            url: '/change-lang',
+            method: 'POST',
+            data: {
+                lang: $(this).data('lang'),
+                _token: '{{ csrf_token() }}',
             },
-            success: function (response) {
-                console.log("Response từ server:", response);
-
-                // Xóa sản phẩm khỏi giao diện
-                button.closest("li.product-box-contain").remove();
-
-                // Tính lại tổng tiền
-                let total = 0;
-                let totalItem = response.totalItem;
-                $(".cart-list li").each(function () {
-                    let text = $(this).find("h6").text();
-                    let matches = text.match(/(\d+)\s*x\s*([\d\.]+)/);
-
-                    if (matches) {
-                        let soLuong = parseInt(matches[1]);  // Số lượng
-                        let giaBan = parseInt(matches[2].replace(/\./g, "")); // Giá (loại bỏ dấu chấm)
-
-                        total += soLuong * giaBan;
-                    }
-                });
-
-                $(".header-wishlist .badge").text(totalItem);
-                // Cập nhật tổng tiền
-                $(".total-price").text(total.toLocaleString("vi-VN") + " đ");
+            success: function(response) {
+                location.reload();
+                console.log('Thành công:', response.message);
             },
-            error: function (xhr) {
-                console.log("Lỗi:", xhr.responseText);
+            error: function(xhr, status, error) {
+                console.error('Lỗi:', error);
+                console.log('Status:', status);
+                console.log('Response:', xhr.responseText);
             }
-        });
-    });
+        })
+    })
+</script>
 
-</script> --}}
+</html>
